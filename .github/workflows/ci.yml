@@ -1,0 +1,35 @@
+name: OpenMRS CI
+
+on:
+  workflow_dispatch: # temporary, for debugging
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types:
+      - created
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    uses: openmrs/openmrs-contrib-gha-workflows/.github/workflows/build-frontend-module.yml@main
+    with:
+      enable_turborepo_cache: true
+      verify_command: 'yarn verify --concurrency=5'
+
+  release:
+    needs: build
+    uses: openmrs/openmrs-contrib-gha-workflows/.github/workflows/release-frontend-module.yml@main
+    with:
+      enable_turborepo_cache: true
+      pre_release_version_command: 'yarn workspaces foreach --worktree --topological --exclude @openmrs/esm-core version "$PRERELEASE_VERSION"'
+      pre_release_publish_command: 'yarn run ci:publish-next'
+      release_publish_command: 'yarn run ci:publish'
+      artifact_path: 'packages/**/dist'
+    secrets:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      BOT_PAT: ${{ secrets.OMRS_BOT_GH_TOKEN }}

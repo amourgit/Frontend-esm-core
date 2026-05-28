@@ -1,0 +1,12 @@
+name: 🔄 Push Translations to Transifex
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [$default-branch]
+
+jobs:
+  push-translations:
+    uses: openmrs/openmrs-contrib-gha-workflows/.github/workflows/tx-push.yml@main
+    secrets:
+      TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}

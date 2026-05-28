@@ -1,0 +1,218 @@
+name: E2E Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  TURBO_API: 'http://127.0.0.1:9080'
+  TURBO_TOKEN: 'turbo-token'
+  TURBO_TEAM: ${{ github.repository_owner }}
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      test-changes: ${{ steps.changes.outputs.test-sources }}
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v6
+
+      - name: 🔍 Check if any source code has changed
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            test-sources:
+              - 'packages/**/src/**/*!(.test).ts'
+              - 'packages/**/src/**/*!(.test).tsx'
+              - 'packages/**/src/**/*!(.test).js'
+              - 'packages/**/src/**/*!(.test).jsx'
+              - 'packages/**/src/**/*.scss'
+              - 'packages/**/src/routes.json'
+              - 'package.json'
+              - 'playwright.config.ts'
+              - 'e2e/**/*.ts'
+              - 'e2e/**/*.js'
+              - 'e2e/support/github/**/*.*'
+              - 'example.env'
+              - '.github/workflows/e2e.yml'
+
+  run-e2e-on-esm-core:
+    needs: changes
+    if: ${{ needs.changes.outputs.test-changes == 'true' }}
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v6
+
+      - name: 📄 Copy test environment variables
+        run: cp example.env .env
+
+      - name: 🛠️ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: 💾 Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v5
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: 📦 Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
+      - name: 🚀 Setup local cache server for Turborepo
+        uses: felixmosh/turborepo-gh-artifacts@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ env.TURBO_TOKEN }}
+
+      - name: 🏗️ Build apps
+        run: yarn turbo run build --color --concurrency=5
+
+      - name: 💾 Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/yarn.lock') }}
+
+      - name: 🎭 Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: 🖥️ Start dev server and wait for backend
+        run: bash e2e/support/github/run-e2e-docker-env.sh
+
+      - name: 🧪 Run E2E tests
+        run: yarn playwright test
+
+      - name: 📤 Upload Report
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: report-esm-core
+          path: playwright-report/
+          retention-days: 30
+
+  run-e2e-on-other-repos:
+    needs: changes
+    if: ${{ needs.changes.outputs.test-changes == 'true' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo:
+          - openmrs-esm-patient-management
+          - openmrs-esm-patient-chart
+          - openmrs-esm-form-builder
+      fail-fast: false
+
+    steps:
+      - name: 📥 Checkout esm-core repo
+        uses: actions/checkout@v6
+
+      - name: 🛠️ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: 💾 Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v5
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: 📦 Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
+      - name: 🚀 Setup local cache server for Turborepo
+        uses: felixmosh/turborepo-gh-artifacts@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ env.TURBO_TOKEN }}
+
+      - name: 🏗️ Build apps
+        run: yarn turbo run build --color --concurrency=5
+
+      - name: 🖥️ Start dev server and wait for backend
+        run: bash e2e/support/github/run-e2e-docker-env.sh
+
+      - name: 📥 Checkout to the ${{ matrix.repo }} main branch
+        uses: actions/checkout@v6
+        with:
+          repository: openmrs/${{ matrix.repo }}
+          ref: main
+          path: e2e_repo
+
+      - name: 📄 Copy test environment variables for ${{ matrix.repo }}
+        run: cp example.env .env
+        working-directory: e2e_repo
+
+      - name: 💾 Cache dependencies for ${{ matrix.repo }}
+        id: cache-other-repo-dependencies
+        uses: actions/cache@v5
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-${{ hashFiles('e2e_repo/**/yarn.lock') }}
+
+      - name: 📦 Install dependencies for ${{ matrix.repo }}
+        if: steps.cache-other-repo-dependencies.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+        working-directory: e2e_repo
+
+      - name: 💾 Cache Playwright Browsers for ${{ matrix.repo }}
+        id: playwright-cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('e2e_repo/**/yarn.lock') }}
+
+      - name: 🎭 Install Playwright Browsers for ${{ matrix.repo }}
+        run: yarn playwright install --with-deps
+        working-directory: e2e_repo
+
+      - name: 🧪 Run E2E tests for ${{ matrix.repo }}
+        run: yarn playwright test
+        working-directory: e2e_repo
+
+      - name: 📤 Upload Report for ${{ matrix.repo }}
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: report-${{ matrix.repo }}
+          path: e2e_repo/playwright-report/
+          retention-days: 30
+
+      - name: 📝 Capture Server Logs
+        if: always()
+        uses: jwalton/gh-docker-logs@v2
+        with:
+          dest: "./logs"
+
+      - name: 📤 Upload Logs as Artifact
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: server-logs-${{ matrix.repo }}
+          path: "./logs"
+          retention-days: 2
+          overwrite: true
