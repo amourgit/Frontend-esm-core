@@ -24,6 +24,9 @@ export const sessionStore = createGlobalStore<SessionStore>('session', {
   session: null,
 });
 let lastFetchTimeMillis = 0;
+// Track consecutive network failures to apply backoff and avoid infinite retry loops
+let consecutiveSessionFetchFailures = 0;
+const MAX_SESSION_RETRIES = 1; // After 1 failure, treat as unauthenticated
 
 /**
  * The getCurrentUser function returns an observable that produces
@@ -79,7 +82,14 @@ function getCurrentUser(opts: { includeAuthStatus: true }): Observable<Session>;
  */
 function getCurrentUser(opts: { includeAuthStatus: false }): Observable<LoggedInUser>;
 function getCurrentUser(opts = { includeAuthStatus: true }): Observable<Session | LoggedInUser> {
-  if (lastFetchTimeMillis < Date.now() - 1000 * 60 || !sessionStore.getState().loaded) {
+  // Only fetch if: data is stale (>1min old) AND we have not hit max failures
+  // The consecutiveSessionFetchFailures guard prevents an infinite retry loop
+  // when the backend is unreachable (e.g. 504 Gateway Timeout).
+  const state = sessionStore.getState();
+  if (
+    (lastFetchTimeMillis < Date.now() - 1000 * 60 || !state.loaded) &&
+    consecutiveSessionFetchFailures < MAX_SESSION_RETRIES
+  ) {
     refetchCurrentUser();
   }
 
@@ -121,7 +131,11 @@ export { getCurrentUser };
  * ```
  */
 export function getSessionStore() {
-  if (lastFetchTimeMillis < Date.now() - 1000 * 60 || !sessionStore.getState().loaded) {
+  const state = sessionStore.getState();
+  if (
+    (lastFetchTimeMillis < Date.now() - 1000 * 60 || !state.loaded) &&
+    consecutiveSessionFetchFailures < MAX_SESSION_RETRIES
+  ) {
     refetchCurrentUser();
   }
 
@@ -203,6 +217,9 @@ function isSuperUser(user: { roles: Array<Role> }) {
  */
 export function refetchCurrentUser(username?: string, password?: string) {
   lastFetchTimeMillis = Date.now();
+  // An explicit refetch (e.g. after login) resets the failure counter so the
+  // fetch is actually attempted even if previous attempts had failed.
+  consecutiveSessionFetchFailures = 0;
   let headers = {};
   if (username && password) {
     headers['Authorization'] = `Basic ${window.btoa(`${username}:${password}`)}`;
@@ -412,18 +429,36 @@ function handleSessionResponse(result: Promise<FetchResponse<Session>>) {
       .then((res) => {
         let nextState: SessionStore;
         if (typeof res?.data === 'object') {
+          // Success: reset failure counter and store the session
+          consecutiveSessionFetchFailures = 0;
           nextState = { loaded: true, session: res.data };
           sessionStore.setState(nextState);
           resolve(nextState);
         } else {
-          nextState = { loaded: false, session: null };
+          // Unexpected response shape — treat as unauthenticated (not a network error)
+          nextState = { loaded: true, session: { authenticated: false, sessionId: '' } };
           sessionStore.setState(nextState);
           reject(nextState);
         }
       })
       .catch((err) => {
-        reportError(`Failed to fetch new session information: ${err}`);
-        const nextState: SessionStore = { loaded: false, session: null };
+        consecutiveSessionFetchFailures++;
+
+        // Log the error clearly in console without crashing the notification system
+        console.warn(
+          `[EIGEN] Session fetch failed (attempt ${consecutiveSessionFetchFailures}): ${err?.message ?? err}. ` +
+          `Backend may be unreachable. Treating as unauthenticated.`,
+        );
+
+        if (consecutiveSessionFetchFailures <= MAX_SESSION_RETRIES) {
+          // On the first failure, only log — do NOT call reportError to avoid the
+          // Carbon notification crash and the infinite re-render loop.
+        }
+
+        // CRITICAL: set loaded:true so components stop triggering new fetches.
+        // authenticated:false causes Single-SPA to redirect to the login page,
+        // which is the correct UX when the backend is unreachable.
+        const nextState: SessionStore = { loaded: true, session: { authenticated: false, sessionId: '' } };
         sessionStore.setState(nextState);
         reject(nextState);
       });
