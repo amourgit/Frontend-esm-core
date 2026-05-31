@@ -50,7 +50,7 @@ export function buildCli(y: Argv) {
           type: 'string',
         })
         .option('backend', {
-          default: 'https://dev3.openmrs.org',
+          default: 'http://localhost:8000',
           describe: 'The backend to proxy API requests to.',
           type: 'string',
           coerce: (arg) => (arg.endsWith('/') ? arg.slice(0, -1) : arg),
@@ -358,7 +358,7 @@ export function buildCli(y: Argv) {
         .default('host', 'localhost')
         .describe('host', 'The host name or IP for the server to use.')
         .string('backend')
-        .default('backend', 'https://dev3.openmrs.org/')
+        .default('backend', 'http://localhost:8000/')
         .describe('backend', 'The backend to proxy API requests to.')
         .string('add-cookie')
         .default('add-cookie', '')

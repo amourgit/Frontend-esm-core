@@ -14,17 +14,22 @@ async function readImportmap(path: string, backend?: string, spaPath?: string) {
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return fetchRemoteImportmap(path);
   } else if (path === 'importmap.json') {
+    // Try the configured backend first (local dev server only)
     if (backend && spaPath) {
       try {
         return await fetchRemoteImportmap(`${backend}${spaPath}importmap.json`);
       } catch (e) {
         logWarn(
-          `Could not read importmap from ${backend}${spaPath}importmap.json. Falling back to import map from https://dev3.openmrs.org/openmrs/spa/importmap.json: ${e}`,
+          `Could not read importmap from ${backend}${spaPath}importmap.json. ` +
+          `Using empty importmap — only locally-built apps will be loaded.`,
         );
       }
     }
 
-    return fetchRemoteImportmap('https://dev3.openmrs.org/openmrs/spa/importmap.json');
+    // No fallback to any remote server. Return an empty importmap.
+    // Locally-built apps are loaded via coreImportmap in rspack.config.js.
+    logInfo('Using empty importmap. Locally-built core apps will still load.');
+    return '{"imports":{}}';
   }
 
   return '{"imports":{}}';
@@ -34,17 +39,22 @@ async function readRoutes(path: string, backend?: string, spaPath?: string) {
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return fetchRemoteRoutes(path);
   } else if (path === 'routes.registry.json') {
+    // Try the configured backend first (local dev server only)
     if (backend && spaPath) {
       try {
         return await fetchRemoteRoutes(`${backend}${spaPath}routes.registry.json`);
       } catch (e) {
         logWarn(
-          `Could not read routes registry from ${backend}${spaPath}routes.registry.json. Falling back to routes registry from https://dev3.openmrs.org/openmrs/spa/routes.registry.json: ${e}`,
+          `Could not read routes registry from ${backend}${spaPath}routes.registry.json. ` +
+          `Using local routes only — routes from locally-built apps will still load.`,
         );
       }
     }
 
-    return fetchRemoteRoutes('https://dev3.openmrs.org/openmrs/spa/routes.registry.json');
+    // No fallback to any remote server. Return empty routes.
+    // Locally-built apps inject their own routes via coreRoutes in rspack.config.js.
+    logInfo('Using empty routes registry. Locally-built core apps will still register their routes.');
+    return '{}';
   }
 
   return '{}';
