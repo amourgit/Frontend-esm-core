@@ -140,7 +140,7 @@ const LocationPickerView: React.FC<LocationPickerProps> = ({ hideWelcomeMessage,
           </div>
           <LocationPicker
             selectedLocationUuid={activeLocation}
-            defaultLocationUuid={userProperties.defaultLocation}
+            defaultLocationUuid={userProperties?.defaultLocation}
             locationTag={chooseLocation.useLoginLocationTag && 'Login Location'}
             onChange={(locationUuid) => setActiveLocation(locationUuid)}
           />

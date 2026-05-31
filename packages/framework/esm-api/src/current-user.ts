@@ -438,29 +438,36 @@ function handleSessionResponse(result: Promise<FetchResponse<Session>>) {
           // Unexpected response shape — treat as unauthenticated (not a network error)
           nextState = { loaded: true, session: { authenticated: false, sessionId: '' } };
           sessionStore.setState(nextState);
-          reject(nextState);
+          // Reject with a proper Error so catch blocks can use `error instanceof Error`
+          // and display `error.message` safely as a string in React components.
+          // Never reject with a plain object like {loaded, session} — React would crash
+          // trying to render it as a child node.
+          reject(new Error('Unexpected session response shape from server.'));
         }
       })
       .catch((err) => {
         consecutiveSessionFetchFailures++;
 
-        // Log the error clearly in console without crashing the notification system
-        console.warn(
-          `[EIGEN] Session fetch failed (attempt ${consecutiveSessionFetchFailures}): ${err?.message ?? err}. ` +
-          `Backend may be unreachable. Treating as unauthenticated.`,
-        );
+        // Ensure err is always a proper Error object before rejecting.
+        // Rejecting with a plain object (e.g. {loaded, session}) would crash
+        // React components that try to render the rejection value as a child.
+        const wrappedError =
+          err instanceof Error
+            ? err
+            : new Error(
+                typeof err === 'string'
+                  ? err
+                  : `Session fetch failed (attempt ${consecutiveSessionFetchFailures}). Backend may be unreachable.`,
+              );
 
-        if (consecutiveSessionFetchFailures <= MAX_SESSION_RETRIES) {
-          // On the first failure, only log — do NOT call reportError to avoid the
-          // Carbon notification crash and the infinite re-render loop.
-        }
+        console.warn(`[ESM] Session fetch failed (attempt ${consecutiveSessionFetchFailures}): ${wrappedError.message}`);
 
         // CRITICAL: set loaded:true so components stop triggering new fetches.
         // authenticated:false causes Single-SPA to redirect to the login page,
         // which is the correct UX when the backend is unreachable.
         const nextState: SessionStore = { loaded: true, session: { authenticated: false, sessionId: '' } };
         sessionStore.setState(nextState);
-        reject(nextState);
+        reject(wrappedError);
       });
   });
 }
