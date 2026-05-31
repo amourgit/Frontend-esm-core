@@ -192,7 +192,7 @@ Changer les valeurs par défaut :
 
 // Après
 .option('backend', {
-  default: 'http://localhost:8000',   // ← Ton backend FastAPI EIGEN
+  default: 'http://localhost:8080',   // ← Ton backend FastAPI EIGEN
   describe: 'The EIGEN backend to proxy API requests to.',
 })
 .option('spa-path', {

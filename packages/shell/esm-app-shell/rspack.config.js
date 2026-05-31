@@ -28,7 +28,7 @@ const openmrsAddCookie = process.env.OMRS_ADD_COOKIE;
 const openmrsApiUrl = removeTrailingSlash(process.env.OMRS_API_URL || '/openmrs');
 const openmrsPublicPath = removeTrailingSlash(process.env.OMRS_PUBLIC_PATH || '/openmrs/spa');
 // Default proxy target is localhost. Set OMRS_PROXY_TARGET in .env to point to your EIGEN backend.
-const openmrsProxyTarget = process.env.OMRS_PROXY_TARGET || 'http://localhost:8000/';
+const openmrsProxyTarget = process.env.OMRS_PROXY_TARGET || 'http://localhost:8080/';
 const openmrsPageTitle = process.env.OMRS_PAGE_TITLE || 'OpenMRS';
 const openmrsFavicon = process.env.OMRS_FAVICON || `${openmrsPublicPath}/favicon.ico`;
 /**
