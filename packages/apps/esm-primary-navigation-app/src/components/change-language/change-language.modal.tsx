@@ -20,6 +20,29 @@ interface ChangeLanguageModalProps {
   close(): void;
 }
 
+/**
+ * Normalizes an OpenMRS locale string to a valid BCP 47 language tag.
+ * OpenMRS stores locales with underscores (e.g. "en_GB", "fr_FR") but the
+ * Web Intl API requires hyphens (e.g. "en-GB", "fr-FR"). Passing an underscore
+ * form directly to `new Intl.DisplayNames(...)` throws a RangeError.
+ */
+function toBCP47(locale: string): string {
+  return locale.replace(/_/g, '-');
+}
+
+/**
+ * Safely resolves the display name for a locale using Intl.DisplayNames.
+ * Falls back to the raw locale string if the tag is still unrecognized.
+ */
+function getDisplayName(locale: string): string {
+  const tag = toBCP47(locale);
+  try {
+    return new Intl.DisplayNames([tag], { type: 'language' }).of(tag) ?? locale;
+  } catch {
+    return locale;
+  }
+}
+
 export default function ChangeLanguageModal({ close }: ChangeLanguageModalProps) {
   const { t } = useTranslation();
   const session = useSession();
@@ -53,7 +76,7 @@ export default function ChangeLanguageModal({ close }: ChangeLanguageModalProps)
   const languageNames = useMemo(
     () =>
       Object.fromEntries(
-        allowedLocales.map((locale) => [locale, new Intl.DisplayNames([locale], { type: 'language' }).of(locale)]),
+        allowedLocales.map((locale) => [locale, capitalize(getDisplayName(locale))]),
       ),
     [allowedLocales],
   );
@@ -75,7 +98,7 @@ export default function ChangeLanguageModal({ close }: ChangeLanguageModalProps)
                 key={`locale-option-${locale}-${i}`}
                 id={`locale-option-${locale}-${i}`}
                 name={locale}
-                labelText={capitalize(languageNames[locale])}
+                labelText={languageNames[locale]}
                 value={locale}
               />
             ))}

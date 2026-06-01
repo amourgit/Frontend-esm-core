@@ -90,7 +90,10 @@ function getCurrentUser(opts = { includeAuthStatus: true }): Observable<Session 
     (lastFetchTimeMillis < Date.now() - 1000 * 60 || !state.loaded) &&
     consecutiveSessionFetchFailures < MAX_SESSION_RETRIES
   ) {
-    refetchCurrentUser();
+    // Fire-and-forget: callers of getCurrentUser() don't await the fetch.
+    // We must absorb the rejection here to prevent an UnhandledPromiseRejection.
+    // The sessionStore is updated inside handleSessionResponse regardless of outcome.
+    refetchCurrentUser().catch(() => {});
   }
 
   return new Observable((subscriber) => {
@@ -136,7 +139,9 @@ export function getSessionStore() {
     (lastFetchTimeMillis < Date.now() - 1000 * 60 || !state.loaded) &&
     consecutiveSessionFetchFailures < MAX_SESSION_RETRIES
   ) {
-    refetchCurrentUser();
+    // Fire-and-forget: getSessionStore() is synchronous — callers don't await this fetch.
+    // Absorb the rejection to prevent an UnhandledPromiseRejection surfacing in the console.
+    refetchCurrentUser().catch(() => {});
   }
 
   return sessionStore;
