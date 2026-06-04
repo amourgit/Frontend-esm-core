@@ -38,45 +38,45 @@ const config: StorybookConfig = {
           // Replace framework peer dependency imports with Storybook-compatible mocks.
           // These mocks provide plain-function implementations (no vi.fn() / jest.fn())
           // that return sensible defaults.
-          '@openmrs/esm-react-utils': path.resolve(mocksRoot, 'esm-react-utils.ts'),
-          '@openmrs/esm-translations': path.resolve(mocksRoot, 'esm-translations.ts'),
-          '@openmrs/esm-config': path.resolve(mocksRoot, 'esm-config.ts'),
-          '@openmrs/esm-api': path.resolve(mocksRoot, 'esm-api.ts'),
-          '@openmrs/esm-state': path.resolve(mocksRoot, 'esm-state.ts'),
-          '@openmrs/esm-extensions': path.resolve(mocksRoot, 'esm-extensions.ts'),
-          '@openmrs/esm-emr-api': path.resolve(mocksRoot, 'esm-emr-api.ts'),
-          '@openmrs/esm-globals': path.resolve(mocksRoot, 'esm-globals.ts'),
-          '@openmrs/esm-navigation': path.resolve(mocksRoot, 'esm-navigation.ts'),
-          '@openmrs/esm-error-handling': path.resolve(mocksRoot, 'esm-error-handling.ts'),
+          '@egen/esm-react-utils': path.resolve(mocksRoot, 'esm-react-utils.ts'),
+          '@egen/esm-translations': path.resolve(mocksRoot, 'esm-translations.ts'),
+          '@egen/esm-config': path.resolve(mocksRoot, 'esm-config.ts'),
+          '@egen/esm-api': path.resolve(mocksRoot, 'esm-api.ts'),
+          '@egen/esm-state': path.resolve(mocksRoot, 'esm-state.ts'),
+          '@egen/esm-extensions': path.resolve(mocksRoot, 'esm-extensions.ts'),
+          '@egen/esm-emr-api': path.resolve(mocksRoot, 'esm-emr-api.ts'),
+          '@egen/esm-globals': path.resolve(mocksRoot, 'esm-globals.ts'),
+          '@egen/esm-navigation': path.resolve(mocksRoot, 'esm-navigation.ts'),
+          '@egen/esm-error-handling': path.resolve(mocksRoot, 'esm-error-handling.ts'),
 
-          // Barrel re-export mock so that `import { X } from '@openmrs/esm-framework'`
+          // Barrel re-export mock so that `import { X } from '@egen/esm-framework'`
           // resolves through our mocks instead of pulling in the real framework.
-          '@openmrs/esm-framework': path.resolve(mocksRoot, 'esm-framework.ts'),
+          '@egen/esm-framework': path.resolve(mocksRoot, 'esm-framework.ts'),
 
           // Direct source-path aliases that bypass package.json exports
           // restrictions. Needed because mocks and preview setup import
           // specific source files from framework packages.
-          '@openmrs/esm-translations/src/translations': path.resolve(
+          '@egen/esm-translations/src/translations': path.resolve(
             frameworkRoot,
             'esm-translations/src/translations.ts',
           ),
-          '@openmrs/esm-styleguide/src/icons/icon-registration': path.resolve(
+          '@egen/esm-styleguide/src/icons/icon-registration': path.resolve(
             frameworkRoot,
             'esm-styleguide/src/icons/icon-registration.ts',
           ),
-          '@openmrs/esm-styleguide/src/pictograms/pictogram-registration': path.resolve(
+          '@egen/esm-styleguide/src/pictograms/pictogram-registration': path.resolve(
             frameworkRoot,
             'esm-styleguide/src/pictograms/pictogram-registration.ts',
           ),
-          '@openmrs/esm-styleguide/src/empty-card/empty-card-registration': path.resolve(
+          '@egen/esm-styleguide/src/empty-card/empty-card-registration': path.resolve(
             frameworkRoot,
             'esm-styleguide/src/empty-card/empty-card-registration.ts',
           ),
-          '@openmrs/esm-styleguide/src/config-schema': path.resolve(
+          '@egen/esm-styleguide/src/config-schema': path.resolve(
             frameworkRoot,
             'esm-styleguide/src/config-schema.ts',
           ),
-          '@openmrs/esm-styleguide/src/svg-utils': path.resolve(frameworkRoot, 'esm-styleguide/src/svg-utils.ts'),
+          '@egen/esm-styleguide/src/svg-utils': path.resolve(frameworkRoot, 'esm-styleguide/src/svg-utils.ts'),
         },
       },
       tools: {
@@ -92,13 +92,13 @@ const config: StorybookConfig = {
             type: 'asset/source',
           });
 
-          // Ensure @openmrs/esm-framework alias is applied at the rspack level.
+          // Ensure @egen/esm-framework alias is applied at the rspack level.
           // The rsbuild-level resolve.alias may not override workspace package
           // resolution for this barrel package.
           rspackConfig.resolve ??= {};
           rspackConfig.resolve.alias ??= {};
           if (typeof rspackConfig.resolve.alias === 'object' && !Array.isArray(rspackConfig.resolve.alias)) {
-            rspackConfig.resolve.alias['@openmrs/esm-framework$'] = path.resolve(mocksRoot, 'esm-framework.ts');
+            rspackConfig.resolve.alias['@egen/esm-framework$'] = path.resolve(mocksRoot, 'esm-framework.ts');
           }
 
           return rspackConfig;

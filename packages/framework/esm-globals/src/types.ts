@@ -16,11 +16,11 @@ declare global {
      */
     copyText(source: HTMLElement): void;
     /**
-     * Gets the OpenMRS SPA base path with a trailing slash.
+     * Gets the Egen SPA base path with a trailing slash.
      */
-    getOpenmrsSpaBase(): string;
+    getEgenSpaBase(): string;
     /**
-     * Starts the OpenMRS SPA application.
+     * Starts the Egen SPA application.
      * @param config The configuration to use for running.
      */
     initializeSpa(config: SpaConfig): void;
@@ -30,11 +30,11 @@ declare global {
      */
     offlineEnabled: boolean;
     /**
-     * Gets the API base path, e.g. /openmrs
+     * Gets the API base path, e.g. /egen
      */
-    openmrsBase: string;
+    egenBase: string;
     /**
-     * Gets the SPA base path, e.g. /openmrs/spa
+     * Gets the SPA base path, e.g. /egen/spa
      */
     spaBase: string;
     /**
@@ -48,7 +48,7 @@ declare global {
     /**
      * Gets the installed modules, which are tuples consisting of the module's name and exports.
      */
-    installedModules: Array<[string, OpenmrsAppRoutes]>;
+    installedModules: Array<[string, EgenAppRoutes]>;
     /**
      * The i18next instance for the app.
      */
@@ -67,7 +67,7 @@ export interface ImportMap {
  */
 export interface SpaConfig {
   /**
-   * The base path or URL for the OpenMRS API / endpoints.
+   * The base path or URL for the Egen API / endpoints.
    */
   apiUrl: string;
   /**
@@ -119,7 +119,7 @@ export type PageDefinition = {
    */
   offline?: boolean;
   /**
-   * If supplied, the page will be rendered within the DOM element with the specified ID. Defaults to "omrs-apps-container" if not supplied.
+   * If supplied, the page will be rendered within the DOM element with the specified ID. Defaults to "egen-apps-container" if not supplied.
    */
   containerDomId?: string;
 } & (
@@ -354,7 +354,7 @@ export interface FeatureFlagDefinition {
 }
 
 /** This interface describes the format of the routes provided by an app */
-export interface OpenmrsAppRoutes {
+export interface EgenAppRoutes {
   /** The version of this frontend module. */
   version?: string;
   /** A list of backend modules necessary for this frontend module and the corresponding required versions. */
@@ -398,7 +398,7 @@ export interface OpenmrsAppRoutes {
  * This interfaces describes the format of the overall routes.json loaded by the app shell.
  * Basically, this is the same as the app routes, with each routes definition keyed by the app's name
  */
-export type OpenmrsRoutes = Record<string, OpenmrsAppRoutes>;
+export type EgenRoutes = Record<string, EgenAppRoutes>;
 
 export interface ResourceLoader<T = any> {
   (): Promise<T>;

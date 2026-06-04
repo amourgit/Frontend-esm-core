@@ -4,7 +4,7 @@ import {
   getAsyncLifecycle,
   getSyncLifecycle,
   navigate,
-} from '@openmrs/esm-framework';
+} from '@egen/esm-framework';
 import { type Application } from 'single-spa';
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';
@@ -34,7 +34,7 @@ export function startupApp() {
 export const root = getSyncLifecycle(primaryNavRootComponent, options);
 
 export const redirect: Application = async () => ({
-  bootstrap: async () => navigate({ to: '${openmrsSpaBase}/home' }),
+  bootstrap: async () => navigate({ to: '${egenSpaBase}/home' }),
   mount: async () => undefined,
   unmount: async () => undefined,
 });

@@ -1,4 +1,4 @@
-import { type Concept, type OpenmrsResource } from '@openmrs/esm-api';
+import { type Concept, type EgenResource } from '@egen/esm-api';
 import { type Drug } from './drug-resource';
 
 export type FulfillerStatus =
@@ -15,28 +15,28 @@ export type OrderAction = 'DISCONTINUE' | 'NEW' | 'RENEW' | 'REVISE';
 
 export type OrderUrgency = 'ON_SCHEDULED_DATE' | 'ROUTINE' | 'STAT';
 
-export interface Order extends OpenmrsResource {
+export interface Order extends EgenResource {
   uuid: string;
   action: OrderAction;
   asNeeded: boolean;
   asNeededCondition?: string;
   autoExpireDate: string;
   brandName?: string;
-  careSetting: OpenmrsResource;
+  careSetting: EgenResource;
   commentToFulfiller: string;
   concept: Concept;
   dateActivated: string;
   dateStopped?: string | null;
   dispenseAsWritten: boolean;
   dose: number;
-  doseUnits: OpenmrsResource;
+  doseUnits: EgenResource;
   dosingInstructions: string | null;
-  dosingType?: 'org.openmrs.FreeTextDosingInstructions' | 'org.openmrs.SimpleDosingInstructions';
+  dosingType?: 'org.egen.FreeTextDosingInstructions' | 'org.egen.SimpleDosingInstructions';
   drug: Drug;
   duration: number;
-  durationUnits: OpenmrsResource;
-  encounter: OpenmrsResource;
-  frequency: OpenmrsResource;
+  durationUnits: EgenResource;
+  encounter: EgenResource;
+  frequency: EgenResource;
   instructions?: string | null;
   numRefills: number;
   orderNumber: string;
@@ -58,11 +58,11 @@ export interface Order extends OpenmrsResource {
     };
     uuid: string;
   };
-  patient: OpenmrsResource;
+  patient: EgenResource;
   previousOrder: { uuid: string; type: string; display: string } | null;
   quantity: number;
-  quantityUnits: OpenmrsResource;
-  route: OpenmrsResource;
+  quantityUnits: EgenResource;
+  route: EgenResource;
   urgency: OrderUrgency;
 
   // additional properties

@@ -12,7 +12,7 @@ import { useEffect } from 'react';
  *
  * @example
  * ```tsx
- * import { useBodyScrollLock } from '@openmrs/esm-framework';
+ * import { useBodyScrollLock } from '@egen/esm-framework';
  * function Modal({ isOpen }) {
  *   useBodyScrollLock(isOpen);
  *   return isOpen ? <div className="modal">...</div> : null;

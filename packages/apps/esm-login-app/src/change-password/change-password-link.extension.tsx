@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, SwitcherItem } from '@carbon/react';
-import { PasswordIcon, showModal } from '@openmrs/esm-framework';
+import { PasswordIcon, showModal } from '@egen/esm-framework';
 import styles from './change-password.scss';
 
 const ChangePasswordLink: React.FC = () => {

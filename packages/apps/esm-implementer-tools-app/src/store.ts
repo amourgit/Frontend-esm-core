@@ -1,4 +1,4 @@
-import { createGlobalStore } from '@openmrs/esm-framework';
+import { createGlobalStore } from '@egen/esm-framework';
 
 export interface ImplementerToolsStore {
   activeItemDescription: null | ActiveItemDescription;
@@ -78,33 +78,33 @@ implementerToolsStore.subscribe((state) => {
 });
 
 function getIsImplementerToolsOpen(): boolean {
-  return JSON.parse(localStorage.getItem('openmrs:openmrsImplementerToolsAreOpen') || 'false') ?? false;
+  return JSON.parse(localStorage.getItem('egen:egenImplementerToolsAreOpen') || 'false') ?? false;
 }
 
 function setIsImplementerToolsOpen(value: boolean): void {
-  localStorage.setItem('openmrs:openmrsImplementerToolsAreOpen', JSON.stringify(value));
+  localStorage.setItem('egen:egenImplementerToolsAreOpen', JSON.stringify(value));
 }
 
 function getIsConfigToolbarOpen(): boolean {
-  return JSON.parse(localStorage.getItem('openmrs:openmrsImplementerToolsConfigOpen') || 'true') ?? true;
+  return JSON.parse(localStorage.getItem('egen:egenImplementerToolsConfigOpen') || 'true') ?? true;
 }
 
 function setIsConfigToolbarOpen(value: boolean): void {
-  localStorage.setItem('openmrs:openmrsImplementerToolsConfigOpen', JSON.stringify(value));
+  localStorage.setItem('egen:egenImplementerToolsConfigOpen', JSON.stringify(value));
 }
 
 function getIsUIEditorEnabled(): boolean {
-  return JSON.parse(localStorage.getItem('openmrs:isUIEditorEnabled') || 'false') ?? false;
+  return JSON.parse(localStorage.getItem('egen:isUIEditorEnabled') || 'false') ?? false;
 }
 
 function setIsUIEditorEnabled(enabled: boolean) {
-  localStorage.setItem('openmrs:isUIEditorEnabled', JSON.stringify(enabled));
+  localStorage.setItem('egen:isUIEditorEnabled', JSON.stringify(enabled));
 }
 
 function getIsJsonModeEnabled(): boolean {
-  return JSON.parse(localStorage.getItem('openmrs:getIsJsonModeEnabled') || 'false') ?? false;
+  return JSON.parse(localStorage.getItem('egen:getIsJsonModeEnabled') || 'false') ?? false;
 }
 
 function setIsJsonModeEnabled(enabled: boolean) {
-  localStorage.setItem('openmrs:getIsJsonModeEnabled', JSON.stringify(enabled));
+  localStorage.setItem('egen:getIsJsonModeEnabled', JSON.stringify(enabled));
 }

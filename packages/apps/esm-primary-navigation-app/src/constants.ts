@@ -1,2 +1,2 @@
 export const userPropertyChange = 'user-property-change';
-export const moduleName = '@openmrs/esm-primary-navigation-app';
+export const moduleName = '@egen/esm-primary-navigation-app';

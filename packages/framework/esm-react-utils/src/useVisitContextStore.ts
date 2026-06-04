@@ -1,5 +1,5 @@
 import { useEffect, useId } from 'react';
-import { getVisitStore, type Visit, type VisitStoreState } from '@openmrs/esm-emr-api';
+import { getVisitStore, type Visit, type VisitStoreState } from '@egen/esm-emr-api';
 import { type Actions, useStoreWithActions } from './useStore';
 
 const visitContextStoreActions = {

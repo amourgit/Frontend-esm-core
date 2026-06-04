@@ -9,7 +9,7 @@ const ContactUs = () => {
   return (
     <Link
       className={styles.helpButton}
-      href="https://talk.openmrs.org"
+      href="https://talk.egen.org"
       rel="noopener noreferrer"
       renderIcon={ArrowUpRight}
       target="_blank"

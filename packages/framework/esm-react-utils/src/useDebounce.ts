@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
  *
  * @example
  * ```tsx
- * import { useDebounce } from "@openmrs/esm-framework";
+ * import { useDebounce } from "@egen/esm-framework";
  *
  * function MyComponent() {
  *   const [searchTerm, setSearchTerm] = useState('');

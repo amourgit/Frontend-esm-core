@@ -4,9 +4,9 @@
 
 > **saveVisit**(`payload`, `abortController`): `Promise`\<[`FetchResponse`](../interfaces/FetchResponse.md)\<[`Visit`](../interfaces/Visit.md)\>\>
 
-Defined in: [packages/framework/esm-emr-api/src/visit-utils.ts:134](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-emr-api/src/visit-utils.ts#L134)
+Defined in: [packages/framework/esm-emr-api/src/visit-utils.ts:134](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-emr-api/src/visit-utils.ts#L134)
 
-Creates a new visit by sending a POST request to the OpenMRS REST API.
+Creates a new visit by sending a POST request to the Egen REST API.
 
 ## Parameters
 
@@ -32,7 +32,7 @@ A Promise that resolves with the FetchResponse containing the created Visit.
 ## Example
 
 ```ts
-import { saveVisit } from '@openmrs/esm-framework';
+import { saveVisit } from '@egen/esm-framework';
 const abortController = new AbortController();
 const response = await saveVisit({
   patient: 'patient-uuid',

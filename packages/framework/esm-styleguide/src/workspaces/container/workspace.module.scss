@@ -10,7 +10,7 @@ $extraWideWorkspaceWidth: 48.25rem;
 
 .loader {
   display: flex;
-  background-color: $openmrs-background-grey;
+  background-color: $egen-background-grey;
   justify-content: center;
   min-height: layout.$spacing-09;
 }
@@ -26,7 +26,7 @@ $extraWideWorkspaceWidth: 48.25rem;
 }
 
 /* Desktop */
-:global(.omrs-breakpoint-gt-tablet) {
+:global(.egen-breakpoint-gt-tablet) {
   .workspaceContainerWithActionMenu {
     height: 100%;
 
@@ -95,7 +95,7 @@ $extraWideWorkspaceWidth: 48.25rem;
 
   .workspaceFixedContainer {
     position: fixed;
-    top: var(--omrs-navbar-height);
+    top: var(--egen-navbar-height);
     bottom: 0;
     border-left: 1px solid $text-03;
     z-index: 50;
@@ -181,7 +181,7 @@ $extraWideWorkspaceWidth: 48.25rem;
 }
 
 /* Tablet */
-:global(.omrs-breakpoint-lt-desktop) {
+:global(.egen-breakpoint-lt-desktop) {
   .header {
     position: relative;
     background-color: var(--brand-02);
@@ -256,7 +256,7 @@ $extraWideWorkspaceWidth: 48.25rem;
 
 // Overriding styles for RTL support
 html[dir='rtl'] {
-  :global(.omrs-breakpoint-gt-tablet) {
+  :global(.egen-breakpoint-gt-tablet) {
     .workspaceContainerWithActionMenu {
       .workspaceFixedContainer {
         right: unset;

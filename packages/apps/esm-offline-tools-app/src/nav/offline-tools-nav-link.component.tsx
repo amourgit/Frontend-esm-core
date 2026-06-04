@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ConfigurableLink } from '@openmrs/esm-framework';
+import { ConfigurableLink } from '@egen/esm-framework';
 import { routes } from '../constants';
 
 interface OfflineToolsNavLinkProps {
@@ -14,7 +14,7 @@ export default function OfflineToolsNavLink({ page, title }: OfflineToolsNavLink
   return (
     <div key={page}>
       <ConfigurableLink
-        to={'${openmrsSpaBase}/' + routes.offlineTools + (page ? `/${page}` : '')}
+        to={'${egenSpaBase}/' + routes.offlineTools + (page ? `/${page}` : '')}
         className="cds--side-nav__link"
       >
         {t(title)}

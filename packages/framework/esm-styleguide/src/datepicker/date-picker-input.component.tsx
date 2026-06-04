@@ -16,7 +16,7 @@ import {
 import { useDateFieldState } from 'react-stately';
 import { createCalendar } from '@internationalized/date';
 
-interface OpenmrsDateInputProps {
+interface EgenDateInputProps {
   id?: string;
 }
 
@@ -24,7 +24,7 @@ interface OpenmrsDateInputProps {
  * This is just the standard React Aria Components DatePickerInput with an added `onClick` handler to open
  * the calendar when the group is clicked. This is used to emulate Carbon's behaviour in the DatePicker.
  */
-export const DatePickerInput = /*#__PURE__*/ forwardRef<HTMLDivElement, DateInputProps & OpenmrsDateInputProps>(
+export const DatePickerInput = /*#__PURE__*/ forwardRef<HTMLDivElement, DateInputProps & EgenDateInputProps>(
   function DatePickerInput(props, ref) {
     const datePickerState = useContext(DatePickerStateContext)!;
     const [dateFieldProps, fieldRef] = useContextProps({ slot: props.slot }, ref, DateFieldContext);

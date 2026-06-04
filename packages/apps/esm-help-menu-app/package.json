@@ -1,13 +1,13 @@
 {
-  "name": "@openmrs/esm-help-menu-app",
+  "name": "@egen/esm-help-menu-app",
   "version": "9.0.2",
   "license": "MPL-2.0",
   "description": " A microfrontend that provides a help menu for O3",
-  "browser": "dist/openmrs-esm-help-menu-app.js",
+  "browser": "dist/egen-esm-help-menu-app.js",
   "main": "src/index.ts",
   "source": true,
   "scripts": {
-    "start": "openmrs develop",
+    "start": "egen develop",
     "serve": "rspack serve --mode=development",
     "debug": "npm run serve",
     "test": "cross-env TZ=UTC vitest run --passWithNoTests",
@@ -21,26 +21,26 @@
     "extract-translations": "i18next 'src/**/*.component.tsx' --config='../../../tools/i18next-parser.config.js'"
   },
   "keywords": [
-    "openmrs",
+    "egen",
     "microfrontends"
   ],
   "browserslist": [
-    "extends browserslist-config-openmrs"
+    "extends browserslist-config-egen"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-core.git"
+    "url": "git+https://github.com/egen/egen-esm-core.git"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-core/issues"
+    "url": "https://github.com/egen/egen-esm-core/issues"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-core#readme",
+  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "publishConfig": {
     "access": "public"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
-    "@openmrs/esm-framework": "9.x",
+    "@egen/esm-framework": "9.x",
     "react": "18.x",
     "react-dom": "18.x",
     "react-i18next": "16.x",
@@ -49,7 +49,7 @@
   "devDependencies": {
     "cross-env": "^10.1.0",
     "happy-dom": "^20.6.0",
-    "openmrs": "workspace:*",
+    "egen": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^16.0.0",

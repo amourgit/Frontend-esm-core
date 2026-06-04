@@ -12,7 +12,7 @@ export interface PageChanged {
    */
   cancelNavigation(val?: boolean | Promise<boolean> | (() => boolean | Promise<boolean>)): void;
   /**
-   * The name of the main content page that will be displayed, e.g., "@openmrs/esm-my-app-page-0".
+   * The name of the main content page that will be displayed, e.g., "@egen/esm-my-app-page-0".
    * May be undefined if the navigation will not result in a main content page.
    */
   newPage: string | undefined;
@@ -44,12 +44,12 @@ export interface EventTypes {
 /**
  * This type is the union of all supported events
  */
-export type OpenmrsEvent = keyof EventTypes;
+export type EgenEvent = keyof EventTypes;
 
 export type EventsWithoutPayload = {
-  [K in OpenmrsEvent]: EventTypes[K] extends undefined ? K : never;
-}[OpenmrsEvent];
+  [K in EgenEvent]: EventTypes[K] extends undefined ? K : never;
+}[EgenEvent];
 
 export type EventsWithPayload = {
-  [K in OpenmrsEvent]: EventTypes[K] extends undefined ? never : K;
-}[OpenmrsEvent];
+  [K in EgenEvent]: EventTypes[K] extends undefined ? never : K;
+}[EgenEvent];

@@ -4,7 +4,7 @@
 
 > **useBodyScrollLock**(`active`): `void`
 
-Defined in: [packages/framework/esm-react-utils/src/useBodyScrollLock.ts:22](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useBodyScrollLock.ts#L22)
+Defined in: [packages/framework/esm-react-utils/src/useBodyScrollLock.ts:22](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useBodyScrollLock.ts#L22)
 
 A React hook that prevents scrolling on the document body when active.
 Useful for modals, overlays, or any full-screen UI that should prevent
@@ -27,7 +27,7 @@ Whether to lock the body scroll. When `true`, sets
 ## Example
 
 ```tsx
-import { useBodyScrollLock } from '@openmrs/esm-framework';
+import { useBodyScrollLock } from '@egen/esm-framework';
 function Modal({ isOpen }) {
   useBodyScrollLock(isOpen);
   return isOpen ? <div className="modal">...</div> : null;

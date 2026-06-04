@@ -10,11 +10,11 @@ import { useEffect, useRef } from 'react';
  *
  * @example
  * ```tsx
- * import { useAbortController } from "@openmrs/esm-framework";
+ * import { useAbortController } from "@egen/esm-framework";
  *
  * function MyComponent() {
  *  const abortController = useAbortController();
- *  const { data } = useSWR(key, (key) => openmrsFetch(key, { signal: abortController.signal }));
+ *  const { data } = useSWR(key, (key) => egenFetch(key, { signal: abortController.signal }));
  *
  *  return (
  *    // render something with data

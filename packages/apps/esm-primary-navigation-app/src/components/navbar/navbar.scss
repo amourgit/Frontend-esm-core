@@ -1,5 +1,5 @@
 @use '@carbon/layout';
-@use '@openmrs/esm-styleguide/src/vars' as *;
+@use '@egen/esm-styleguide/src/vars' as *;
 
 .topNavActionsSlot {
   display: flex;
@@ -17,7 +17,7 @@
 }
 
 .topNavHeader {
-  top: var(--omrs-offline-banner-height);
+  top: var(--egen-offline-banner-height);
 }
 
 .activePanel {

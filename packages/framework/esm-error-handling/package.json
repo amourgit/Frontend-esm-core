@@ -1,5 +1,5 @@
 {
-  "name": "@openmrs/esm-error-handling",
+  "name": "@egen/esm-error-handling",
   "version": "9.0.2",
   "license": "MPL-2.0",
   "description": "An ES module to help with error handling",
@@ -23,7 +23,7 @@
     "lint": "eslint src --ext ts,tsx"
   },
   "keywords": [
-    "openmrs",
+    "egen",
     "microfrontends"
   ],
   "directories": {
@@ -31,24 +31,24 @@
     "src": "src"
   },
   "browserslist": [
-    "extends browserslist-config-openmrs"
+    "extends browserslist-config-egen"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-core.git"
+    "url": "git+https://github.com/egen/egen-esm-core.git"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-core/issues"
+    "url": "https://github.com/egen/egen-esm-core/issues"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-core#readme",
+  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "publishConfig": {
     "access": "public"
   },
   "peerDependencies": {
-    "@openmrs/esm-globals": "9.x"
+    "@egen/esm-globals": "9.x"
   },
   "devDependencies": {
-    "@openmrs/esm-globals": "workspace:*",
+    "@egen/esm-globals": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
     "@vitest/coverage-v8": "^4.1.2",

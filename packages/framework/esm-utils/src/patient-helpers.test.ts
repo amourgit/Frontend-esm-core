@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type NameUse } from '@openmrs/esm-globals';
+import { type NameUse } from '@egen/esm-globals';
 import { formatPatientName, getPatientName, selectPreferredName } from './patient-helpers';
 import {
   mockPatientWithNoName,

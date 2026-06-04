@@ -16,7 +16,7 @@ console.error = (...args: any[]) => {
 import { afterAll, afterEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import type {} from '@openmrs/esm-globals';
+import type {} from '@egen/esm-globals';
 
 declare global {
   interface Window {
@@ -43,9 +43,9 @@ Object.defineProperty(globalThis, 'IS_REACT_ACT_ENVIRONMENT', {
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-window.openmrsBase = '/openmrs';
+window.egenBase = '/egen';
 window.spaBase = '/spa';
-window.getOpenmrsSpaBase = () => '/openmrs/spa/';
+window.getEgenSpaBase = () => '/egen/spa/';
 const { getComputedStyle } = window;
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 

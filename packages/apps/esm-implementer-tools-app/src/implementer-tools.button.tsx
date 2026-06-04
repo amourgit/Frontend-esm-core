@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderGlobalAction } from '@carbon/react';
-import { CloseIcon, ToolsIcon, UserHasAccess, useStore } from '@openmrs/esm-framework';
+import { CloseIcon, ToolsIcon, UserHasAccess, useStore } from '@egen/esm-framework';
 import { implementerToolsStore, togglePopup } from './store';
 import styles from './implementer-tools.styles.scss';
 

@@ -1,4 +1,4 @@
-// Storybook-compatible mock for @openmrs/esm-emr-api.
+// Storybook-compatible mock for @egen/esm-emr-api.
 
 export function setCurrentVisit() {}
 export const attachmentUrl = '/ws/rest/v1/attachment';

@@ -4,13 +4,13 @@
 
 > **useFhirPagination**\<`T`\>(`url`, `pageSize`, `options`): `object`
 
-Defined in: [packages/framework/esm-react-utils/src/useFhirPagination.ts:27](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useFhirPagination.ts#L27)
+Defined in: [packages/framework/esm-react-utils/src/useFhirPagination.ts:27](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useFhirPagination.ts#L27)
 
 Fhir REST endpoints that return a list of objects, are server-side paginated.
 The server limits the max number of results being returned, and multiple requests are needed to get the full data set
 if its size exceeds this limit.
 
-This function is the FHIR counterpart of `useOpenmrsPagination`.
+This function is the FHIR counterpart of `useEgenPagination`.
 
 ## Type Parameters
 
@@ -123,7 +123,7 @@ The error object thrown by the fetcher function.
 
 ## See
 
-`useOpenmrsPagination
+`useEgenPagination
 @see `useFhirInfinite`
 @see `useFhirFetchAll`
 @see `usePagination` for pagination of client-side data`

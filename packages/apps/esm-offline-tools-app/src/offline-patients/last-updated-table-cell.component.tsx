@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@carbon/react';
 import { PendingFilled, WarningAltFilled, CheckmarkOutline } from '@carbon/react/icons';
-import type { DynamicOfflineDataSyncState } from '@openmrs/esm-framework';
-import { getDynamicOfflineDataHandlers, navigate } from '@openmrs/esm-framework';
+import type { DynamicOfflineDataSyncState } from '@egen/esm-framework';
+import { getDynamicOfflineDataHandlers, navigate } from '@egen/esm-framework';
 import styles from './last-updated-table-cell.scss';
 
 export interface LastUpdatedTableCellProps {
@@ -50,7 +50,7 @@ const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ patientUuid
           <Link
             onClick={() =>
               navigate({
-                to: `${window.getOpenmrsSpaBase()}offline-tools/patients/${patientUuid}/offline-data`,
+                to: `${window.getEgenSpaBase()}offline-tools/patients/${patientUuid}/offline-data`,
               })
             }
           >

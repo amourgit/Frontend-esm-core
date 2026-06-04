@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@carbon/react';
 import { Help } from '@carbon/react/icons';
-import { useAssignedExtensions, useSession } from '@openmrs/esm-framework';
+import { useAssignedExtensions, useSession } from '@egen/esm-framework';
 import HelpMenuPopup from './help-popup.component';
 import styles from './help.styles.scss';
 

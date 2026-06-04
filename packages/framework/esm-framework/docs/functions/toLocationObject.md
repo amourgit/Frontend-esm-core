@@ -2,13 +2,13 @@
 
 # Function: toLocationObject()
 
-> **toLocationObject**(`openmrsRestForm`): [`Location`](../interfaces/Location.md)
+> **toLocationObject**(`egenRestForm`): [`Location`](../interfaces/Location.md)
 
-Defined in: [packages/framework/esm-emr-api/src/location.ts:7](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-emr-api/src/location.ts#L7)
+Defined in: [packages/framework/esm-emr-api/src/location.ts:7](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-emr-api/src/location.ts#L7)
 
 ## Parameters
 
-### openmrsRestForm
+### egenRestForm
 
 `any`
 

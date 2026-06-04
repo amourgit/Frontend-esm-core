@@ -1,11 +1,11 @@
 import { vi } from 'vitest';
 import { of } from 'rxjs';
-import { createGlobalStore } from '@openmrs/esm-state/mock';
+import { createGlobalStore } from '@egen/esm-state/mock';
 import { type SessionStore } from './src/current-user';
 
 export const setSessionLocation = vi.fn(() => Promise.resolve());
-export const openmrsFetch = vi.fn((_url?: string) => new Promise(() => {}));
-export const openmrsObservableFetch = vi.fn(() => of({ data: { entry: [] } }));
+export const egenFetch = vi.fn((_url?: string) => new Promise(() => {}));
+export const egenObservableFetch = vi.fn(() => of({ data: { entry: [] } }));
 export function getCurrentUser() {
   return of({ authenticated: false });
 }

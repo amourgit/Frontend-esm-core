@@ -1,4 +1,4 @@
-import { type ConfigSchema } from '@openmrs/esm-config';
+import { type ConfigSchema } from '@egen/esm-config';
 
 export const mockConfig: ConfigSchema = {
   provider: {
@@ -16,7 +16,7 @@ export const mockConfig: ConfigSchema = {
     alt: 'Logo',
   },
   links: {
-    loginSuccess: '${openmrsSpaBase}/home',
+    loginSuccess: '${egenSpaBase}/home',
   },
   showPasswordOnSeparateScreen: true,
 };

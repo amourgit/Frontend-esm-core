@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import 'fake-indexeddb/auto';
-import { getLoggedInUser } from '@openmrs/esm-api';
+import { getLoggedInUser } from '@egen/esm-api';
 import type { QueueItemDescriptor } from './sync';
 import {
   getFullSynchronizationItems,
@@ -31,7 +31,7 @@ const defaultMockSyncItemDescriptor: QueueItemDescriptor = {
   patientUuid: '00000000-0000-0000-0000-000000000001',
 };
 
-vi.mock('@openmrs/esm-api', () => ({
+vi.mock('@egen/esm-api', () => ({
   getLoggedInUser: vi.fn(async () => ({ uuid: mockUserId })),
 }));
 

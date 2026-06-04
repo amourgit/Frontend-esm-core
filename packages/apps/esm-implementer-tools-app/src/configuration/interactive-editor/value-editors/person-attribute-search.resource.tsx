@@ -1,13 +1,13 @@
-import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
+import { egenFetch, restBaseUrl } from '@egen/esm-framework';
 
 export function fetchPersonAttributeTypeByUuid(personAttributeTypeUuid: string) {
-  return openmrsFetch(`${restBaseUrl}/personattributetype/${personAttributeTypeUuid}`, {
+  return egenFetch(`${restBaseUrl}/personattributetype/${personAttributeTypeUuid}`, {
     method: 'GET',
   });
 }
 
 export function performPersonAttributeTypeSearch(query: string) {
-  return openmrsFetch(`${restBaseUrl}/personattributetype/?q=${query}`, {
+  return egenFetch(`${restBaseUrl}/personattributetype/?q=${query}`, {
     method: 'GET',
   });
 }

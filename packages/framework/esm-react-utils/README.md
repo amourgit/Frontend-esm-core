@@ -1,3 +1,3 @@
-# openmrs-esm-react-utils
+# egen-esm-react-utils
 
-`openmrs-esm-react-utils` brings extended support for React into the OpenMRS frontend.
+`egen-esm-react-utils` brings extended support for React into the Egen frontend.

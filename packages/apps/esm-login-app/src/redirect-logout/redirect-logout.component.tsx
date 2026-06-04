@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { navigate, setUserLanguage, useConfig, useConnectivity, useSession } from '@openmrs/esm-framework';
-import { clearHistory } from '@openmrs/esm-framework/src/internal';
+import { navigate, setUserLanguage, useConfig, useConnectivity, useSession } from '@egen/esm-framework';
+import { clearHistory } from '@egen/esm-framework/src/internal';
 import { type ConfigSchema } from '../config-schema';
 import { performLogout } from './logout.resource';
 
@@ -17,7 +17,7 @@ const RedirectLogout: React.FC = () => {
       } else if (config.provider.type === 'oauth2') {
         // do nothing, do not redirect
       } else {
-        navigate({ to: '${openmrsSpaBase}/login' });
+        navigate({ to: '${egenSpaBase}/login' });
       }
     } else {
       performLogout()
@@ -35,7 +35,7 @@ const RedirectLogout: React.FC = () => {
           } else if (config.provider.type === 'oauth2') {
             // do nothing, do not redirect
           } else {
-            navigate({ to: '${openmrsSpaBase}/login' });
+            navigate({ to: '${egenSpaBase}/login' });
           }
         })
         .catch((error) => {

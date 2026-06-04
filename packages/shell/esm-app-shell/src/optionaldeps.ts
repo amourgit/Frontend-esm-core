@@ -1,10 +1,10 @@
 import {
   type FeatureFlagDefinition,
-  openmrsFetch,
+  egenFetch,
   registerFeatureFlag,
   setFeatureFlag,
   restBaseUrl,
-} from '@openmrs/esm-framework/src/internal';
+} from '@egen/esm-framework/src/internal';
 import { satisfies } from 'semver';
 
 export function setupOptionalDependencies() {
@@ -39,7 +39,7 @@ export function setupOptionalDependencies() {
   }, new Map());
 
   if (optionalDependencyFlags.size > 0) {
-    openmrsFetch<{ results: { uuid: string; version: string }[] }>(`${restBaseUrl}/module?v=custom:(uuid,version)`)
+    egenFetch<{ results: { uuid: string; version: string }[] }>(`${restBaseUrl}/module?v=custom:(uuid,version)`)
       .then((response) => {
         (response.data.results ?? []).forEach((backendModule) => {
           if (optionalDependencyFlags.has(backendModule.uuid)) {

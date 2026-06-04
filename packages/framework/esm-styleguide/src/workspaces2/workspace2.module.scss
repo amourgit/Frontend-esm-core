@@ -38,7 +38,7 @@ $extraWideWorkspaceWidth: 48.25rem;
 
     &.maximized {
       position: fixed !important;
-      top: var(--omrs-navbar-height) !important;
+      top: var(--egen-navbar-height) !important;
       inset-inline-start: 0 !important;
       inset-inline-end: var(--actionPanelOffset) !important;
       width: calc(100vw - var(--actionPanelOffset)) !important;
@@ -71,7 +71,7 @@ $extraWideWorkspaceWidth: 48.25rem;
   }
 
   // The spacer is responsible for taking up space and shrinking the width of the "main" content
-  // in omrs-apps-container when in non-overlay mode.
+  // in egen-apps-container when in non-overlay mode.
   // Note that the spacer takes up --workspaceWidth amount of space, but does
   // not grow when the workspace is maximized. In other words, it does not shrink the
   // "main" content further when workspace is maximized.
@@ -97,7 +97,7 @@ $extraWideWorkspaceWidth: 48.25rem;
 }
 
 /* Desktop */
-:global(.omrs-breakpoint-gt-tablet) {
+:global(.egen-breakpoint-gt-tablet) {
   .header {
     position: relative;
     box-sizing: content-box;
@@ -147,7 +147,7 @@ $extraWideWorkspaceWidth: 48.25rem;
 }
 
 /* Tablet */
-:global(.omrs-breakpoint-lt-desktop) {
+:global(.egen-breakpoint-lt-desktop) {
   .header {
     position: relative;
     background-color: var(--brand-02);
@@ -208,7 +208,7 @@ $extraWideWorkspaceWidth: 48.25rem;
 
 // Overriding styles for RTL support
 html[dir='rtl'] {
-  :global(.omrs-breakpoint-gt-tablet) {
+  :global(.egen-breakpoint-gt-tablet) {
     .workspaceContainerWithActionMenu {
       &.workspaceFixedContainer {
         right: unset;

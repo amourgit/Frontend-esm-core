@@ -2,15 +2,15 @@
 
 # Interface: ConceptClass
 
-Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:34](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/concept-resource.ts#L34)
+Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:34](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/concept-resource.ts#L34)
 
-Superclass for all Openmrs Resources, with strict typings.
+Superclass for all Egen Resources, with strict typings.
 If the subclass does not have all attributes (including optional ones)
-accounted for, use OpenmrsResource instead.
+accounted for, use EgenResource instead.
 
 ## Extends
 
-- [`OpenmrsResource`](OpenmrsResource.md)
+- [`EgenResource`](EgenResource.md)
 
 ## Indexable
 
@@ -22,11 +22,11 @@ accounted for, use OpenmrsResource instead.
 
 > `optional` **auditInfo**: [`AuditInfo`](AuditInfo.md)
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:16](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L16)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:16](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L16)
 
 #### Inherited from
 
-[`OpenmrsResource`](OpenmrsResource.md).[`auditInfo`](OpenmrsResource.md#auditinfo)
+[`EgenResource`](EgenResource.md).[`auditInfo`](EgenResource.md#auditinfo)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:16](https:
 
 > `optional` **description**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:36](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/concept-resource.ts#L36)
+Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:36](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/concept-resource.ts#L36)
 
 ***
 
@@ -42,11 +42,11 @@ Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:36](https:
 
 > `optional` **display**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:14](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L14)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:14](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L14)
 
 #### Inherited from
 
-[`OpenmrsResource`](OpenmrsResource.md).[`display`](OpenmrsResource.md#display)
+[`EgenResource`](EgenResource.md).[`display`](EgenResource.md#display)
 
 ***
 
@@ -54,11 +54,11 @@ Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:14](https:
 
 > `optional` **links**: [`Link`](Link.md)[]
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:15](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L15)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:15](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L15)
 
 #### Inherited from
 
-[`OpenmrsResource`](OpenmrsResource.md).[`links`](OpenmrsResource.md#links)
+[`EgenResource`](EgenResource.md).[`links`](EgenResource.md#links)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:15](https:
 
 > `optional` **name**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:35](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/concept-resource.ts#L35)
+Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:35](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/concept-resource.ts#L35)
 
 ***
 
@@ -74,11 +74,11 @@ Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:35](https:
 
 > `optional` **resourceVersion**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:17](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L17)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:17](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L17)
 
 #### Inherited from
 
-[`OpenmrsResource`](OpenmrsResource.md).[`resourceVersion`](OpenmrsResource.md#resourceversion)
+[`EgenResource`](EgenResource.md).[`resourceVersion`](EgenResource.md#resourceversion)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:17](https:
 
 > `optional` **retired**: `boolean`
 
-Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:37](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/concept-resource.ts#L37)
+Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:37](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/concept-resource.ts#L37)
 
 ***
 
@@ -94,8 +94,8 @@ Defined in: [packages/framework/esm-api/src/types/concept-resource.ts:37](https:
 
 > **uuid**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:13](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L13)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:13](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L13)
 
 #### Inherited from
 
-[`OpenmrsResource`](OpenmrsResource.md).[`uuid`](OpenmrsResource.md#uuid)
+[`EgenResource`](EgenResource.md).[`uuid`](EgenResource.md#uuid)

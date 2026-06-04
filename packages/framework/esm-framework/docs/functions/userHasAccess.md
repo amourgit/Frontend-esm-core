@@ -4,7 +4,7 @@
 
 > **userHasAccess**(`requiredPrivilege`, `user`): `boolean`
 
-Defined in: [packages/framework/esm-api/src/current-user.ts:255](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/current-user.ts#L255)
+Defined in: [packages/framework/esm-api/src/current-user.ts:255](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/current-user.ts#L255)
 
 Checks whether the given user has access based on the required privilege(s).
 A user has access if they have the required privilege(s) or if they are a
@@ -41,7 +41,7 @@ The user object containing their privileges and roles.
 ## Example
 
 ```ts
-import { userHasAccess } from '@openmrs/esm-api';
+import { userHasAccess } from '@egen/esm-api';
 const hasAccess = userHasAccess('View Patients', currentUser);
 const hasMultipleAccess = userHasAccess(['View Patients', 'Edit Patients'], currentUser);
 ```

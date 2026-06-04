@@ -1,7 +1,7 @@
-import { type OpenmrsResource } from './openmrs-resource';
+import { type EgenResource } from './egen-resource';
 
-// TODO: make this extends OpenmrsResourceStrict
-export interface Concept extends OpenmrsResource {
+// TODO: make this extends EgenResourceStrict
+export interface Concept extends EgenResource {
   name?: ConceptName;
   datatype?: ConceptDatatype;
   conceptClass?: ConceptClass;
@@ -9,7 +9,7 @@ export interface Concept extends OpenmrsResource {
   version?: string;
   retired?: boolean;
   names?: Array<ConceptName>;
-  descriptions?: Array<OpenmrsResource>;
+  descriptions?: Array<EgenResource>;
   // TODO: add better typings
   mappings?: any;
   answers?: any;
@@ -17,21 +17,21 @@ export interface Concept extends OpenmrsResource {
   attributes?: any;
 }
 
-export interface ConceptDatatype extends OpenmrsResource {
+export interface ConceptDatatype extends EgenResource {
   name?: string;
   description?: string;
   hl7Abbreviation?: string;
   retired?: boolean;
 }
 
-export interface ConceptName extends OpenmrsResource {
+export interface ConceptName extends EgenResource {
   name?: string;
   locale?: string;
   localPreferred?: boolean;
   conceptNameType?: 'FULLY_SPECIFIED' | 'SHORT' | 'INDEX_TERM';
 }
 
-export interface ConceptClass extends OpenmrsResource {
+export interface ConceptClass extends EgenResource {
   name?: string;
   description?: string;
   retired?: boolean;

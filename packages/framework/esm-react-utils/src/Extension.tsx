@@ -1,5 +1,5 @@
 /** @module @category Extension */
-import { renderExtension } from '@openmrs/esm-extensions';
+import { renderExtension } from '@egen/esm-extensions';
 import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { type Parcel } from 'single-spa';
 import { ComponentContext } from '.';

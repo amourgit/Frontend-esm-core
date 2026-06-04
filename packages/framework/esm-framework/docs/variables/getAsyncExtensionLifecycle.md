@@ -4,7 +4,7 @@
 
 > `const` **getAsyncExtensionLifecycle**: \<`T`\>(`lazy`, `options`) => () => `Promise`\<`ReactAppOrParcel`\<`T`\>\> = `getAsyncLifecycle`
 
-Defined in: [packages/framework/esm-react-utils/src/getLifecycle.ts:84](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/getLifecycle.ts#L84)
+Defined in: [packages/framework/esm-react-utils/src/getLifecycle.ts:84](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/getLifecycle.ts#L84)
 
 Creates a lazy-loading single-spa lifecycle for a React component. The component
 is loaded asynchronously via dynamic import only when it's needed, which helps
@@ -30,7 +30,7 @@ A function that returns a Promise resolving to a module with the
 
 `ComponentDecoratorOptions`
 
-Configuration options for the OpenMRS component decorator.
+Configuration options for the Egen component decorator.
 
 ## Returns
 
@@ -45,8 +45,8 @@ A function that returns a Promise resolving to a single-spa lifecycle object.
 ## Example
 
 ```ts
-import { getAsyncLifecycle } from '@openmrs/esm-framework';
-const options = { featureName: 'my-feature', moduleName: '@openmrs/esm-my-app' };
+import { getAsyncLifecycle } from '@egen/esm-framework';
+const options = { featureName: 'my-feature', moduleName: '@egen/esm-my-app' };
 export const root = getAsyncLifecycle(() => import('./root.component'), options);
 ```
 

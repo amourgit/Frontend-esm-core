@@ -4,7 +4,7 @@
 
 > **reportError**(`err`): `void`
 
-Defined in: [packages/framework/esm-error-handling/src/index.ts:43](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-error-handling/src/index.ts#L43)
+Defined in: [packages/framework/esm-error-handling/src/index.ts:43](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-error-handling/src/index.ts#L43)
 
 Reports an error to the global error handler. The error will be displayed
 to the user as a toast notification. This function ensures the error is
@@ -28,7 +28,7 @@ The error to report. Can be an Error object, string, or any other value.
 ## Example
 
 ```ts
-import { reportError } from '@openmrs/esm-framework';
+import { reportError } from '@egen/esm-framework';
 try {
   await riskyOperation();
 } catch (error) {

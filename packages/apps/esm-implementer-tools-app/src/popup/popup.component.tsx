@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { ContentSwitcher, IconButton, Switch, Theme } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
-import { CloseIcon } from '@openmrs/esm-framework';
+import { CloseIcon } from '@egen/esm-framework';
 import { Configuration } from '../configuration/configuration.component';
 import { FrontendModules } from '../frontend-modules/frontend-modules.component';
 import { BackendDependencies } from '../backend-dependencies/backend-dependencies.component';
 import { FeatureFlags } from '../feature-flags/feature-flags.component';
 import type { FrontendModule } from '../types';
-import type { ResolvedDependenciesModule } from '../backend-dependencies/openmrs-backend-dependencies';
+import type { ResolvedDependenciesModule } from '../backend-dependencies/egen-backend-dependencies';
 import styles from './popup.styles.scss';
 
 interface DevToolsPopupProps {

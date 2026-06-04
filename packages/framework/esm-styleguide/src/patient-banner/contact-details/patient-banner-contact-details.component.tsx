@@ -2,9 +2,9 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { InlineLoading } from '@carbon/react';
-import { type CoreTranslationKey, getCoreTranslation } from '@openmrs/esm-translations';
-import { ConfigurableLink, usePatient } from '@openmrs/esm-react-utils';
-import { parseDate } from '@openmrs/esm-utils';
+import { type CoreTranslationKey, getCoreTranslation } from '@egen/esm-translations';
+import { ConfigurableLink, usePatient } from '@egen/esm-react-utils';
+import { parseDate } from '@egen/esm-utils';
 import { usePatientContactAttributes } from './usePatientAttributes';
 import { usePatientListsForPatient } from './usePatientListsForPatient';
 import { useRelationships } from './useRelationships';

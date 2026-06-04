@@ -1,6 +1,6 @@
 /** @module @category API */
-import type { LoggedInUser } from '@openmrs/esm-api';
-import { getCurrentUser, userHasAccess } from '@openmrs/esm-api';
+import type { LoggedInUser } from '@egen/esm-api';
+import { getCurrentUser, userHasAccess } from '@egen/esm-api';
 import React, { useEffect, useState } from 'react';
 
 export interface UserHasAccessProps {

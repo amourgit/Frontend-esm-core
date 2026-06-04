@@ -12,25 +12,25 @@ import {
   setUserProperties,
   sessionStore,
 } from './current-user';
-import type * as openmrsFetchExport from './openmrs-fetch';
-import { openmrsFetch } from './openmrs-fetch';
-import { reportError } from '@openmrs/esm-error-handling';
+import type * as egenFetchExport from './egen-fetch';
+import { egenFetch } from './egen-fetch';
+import { reportError } from '@egen/esm-error-handling';
 import type { LoggedInUser, Privilege, Role, Session } from './types';
 
 // Mock only the function calls, not constants
-vi.mock('./openmrs-fetch', async () => {
-  const actual = await vi.importActual<typeof openmrsFetchExport>('./openmrs-fetch');
+vi.mock('./egen-fetch', async () => {
+  const actual = await vi.importActual<typeof egenFetchExport>('./egen-fetch');
   return {
     ...actual,
-    openmrsFetch: vi.fn(),
+    egenFetch: vi.fn(),
   };
 });
 
-vi.mock('@openmrs/esm-error-handling', () => ({
+vi.mock('@egen/esm-error-handling', () => ({
   reportError: vi.fn(),
 }));
 
-const mockOpenmrsFetch = vi.mocked(openmrsFetch);
+const mockEgenFetch = vi.mocked(egenFetch);
 const mockReportError = vi.mocked(reportError);
 
 // Helper to create mock fetch responses
@@ -318,9 +318,9 @@ describe('getCurrentUser', () => {
 
   beforeEach(() => {
     sessionStore.setState({ loaded: false, session: null });
-    mockOpenmrsFetch.mockClear();
-    // Mock openmrsFetch to prevent unhandled promise rejections
-    mockOpenmrsFetch.mockResolvedValue(
+    mockEgenFetch.mockClear();
+    // Mock egenFetch to prevent unhandled promise rejections
+    mockEgenFetch.mockResolvedValue(
       createMockFetchResponse({
         authenticated: false,
         sessionId: '',
@@ -511,7 +511,7 @@ describe('getCurrentUser', () => {
 describe('refetchCurrentUser', () => {
   beforeEach(() => {
     sessionStore.setState({ loaded: false, session: null });
-    mockOpenmrsFetch.mockClear();
+    mockEgenFetch.mockClear();
   });
 
   it('should fetch user without credentials', async () => {
@@ -521,11 +521,11 @@ describe('refetchCurrentUser', () => {
       user: {} as LoggedInUser,
     };
 
-    mockOpenmrsFetch.mockResolvedValue(createMockFetchResponse(mockSession));
+    mockEgenFetch.mockResolvedValue(createMockFetchResponse(mockSession));
 
     await refetchCurrentUser();
 
-    expect(mockOpenmrsFetch).toHaveBeenCalledWith(
+    expect(mockEgenFetch).toHaveBeenCalledWith(
       expect.stringContaining('/session'),
       expect.objectContaining({
         headers: {},
@@ -540,12 +540,12 @@ describe('refetchCurrentUser', () => {
       user: {} as LoggedInUser,
     };
 
-    mockOpenmrsFetch.mockResolvedValue(createMockFetchResponse(mockSession));
+    mockEgenFetch.mockResolvedValue(createMockFetchResponse(mockSession));
 
     await refetchCurrentUser('testuser', 'testpass');
 
     const expectedAuth = `Basic ${btoa('testuser:testpass')}`;
-    expect(mockOpenmrsFetch).toHaveBeenCalledWith(
+    expect(mockEgenFetch).toHaveBeenCalledWith(
       expect.stringContaining('/session'),
       expect.objectContaining({
         headers: {
@@ -576,7 +576,7 @@ describe('refetchCurrentUser', () => {
       user: mockUser,
     };
 
-    mockOpenmrsFetch.mockResolvedValue(createMockFetchResponse(mockSession));
+    mockEgenFetch.mockResolvedValue(createMockFetchResponse(mockSession));
 
     await refetchCurrentUser();
 
@@ -586,7 +586,7 @@ describe('refetchCurrentUser', () => {
   });
 
   it('should handle fetch failure', async () => {
-    mockOpenmrsFetch.mockRejectedValue(new Error('Network error'));
+    mockEgenFetch.mockRejectedValue(new Error('Network error'));
 
     await expect(refetchCurrentUser()).rejects.toMatchObject({
       loaded: false,
@@ -599,7 +599,7 @@ describe('refetchCurrentUser', () => {
 
 describe('setSessionLocation', () => {
   beforeEach(() => {
-    mockOpenmrsFetch.mockClear();
+    mockEgenFetch.mockClear();
   });
 
   it('should set session location with AbortController', async () => {
@@ -614,11 +614,11 @@ describe('setSessionLocation', () => {
       user: {} as LoggedInUser,
     };
 
-    mockOpenmrsFetch.mockResolvedValue(createMockFetchResponse(mockSession));
+    mockEgenFetch.mockResolvedValue(createMockFetchResponse(mockSession));
 
     await setSessionLocation(locationUuid, abortController);
 
-    expect(mockOpenmrsFetch).toHaveBeenCalledWith(
+    expect(mockEgenFetch).toHaveBeenCalledWith(
       expect.stringContaining('/session'),
       expect.objectContaining({
         method: 'POST',
@@ -644,7 +644,7 @@ describe('setSessionLocation', () => {
       user: {} as LoggedInUser,
     };
 
-    mockOpenmrsFetch.mockResolvedValue(createMockFetchResponse(mockSession));
+    mockEgenFetch.mockResolvedValue(createMockFetchResponse(mockSession));
 
     await setSessionLocation(locationUuid, abortController);
 
@@ -656,7 +656,7 @@ describe('setSessionLocation', () => {
 
 describe('setUserProperties', () => {
   beforeEach(() => {
-    mockOpenmrsFetch.mockClear();
+    mockEgenFetch.mockClear();
   });
 
   it('should set user properties and refetch session', async () => {
@@ -666,7 +666,7 @@ describe('setUserProperties', () => {
       favoriteColor: 'blue',
     };
 
-    mockOpenmrsFetch
+    mockEgenFetch
       .mockResolvedValueOnce(createMockFetchResponse({})) // First call to update properties
       .mockResolvedValueOnce(
         createMockFetchResponse({
@@ -682,7 +682,7 @@ describe('setUserProperties', () => {
 
     await setUserProperties(userUuid, userProperties);
 
-    expect(mockOpenmrsFetch).toHaveBeenNthCalledWith(
+    expect(mockEgenFetch).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining(`/user/${userUuid}`),
       expect.objectContaining({
@@ -695,7 +695,7 @@ describe('setUserProperties', () => {
     );
 
     // Should refetch session after updating
-    expect(mockOpenmrsFetch).toHaveBeenCalledTimes(2);
+    expect(mockEgenFetch).toHaveBeenCalledTimes(2);
   });
 
   it('should use provided AbortController', async () => {
@@ -703,7 +703,7 @@ describe('setUserProperties', () => {
     const userProperties = { defaultLocale: 'fr-FR' };
     const abortController = new AbortController();
 
-    mockOpenmrsFetch.mockResolvedValueOnce(createMockFetchResponse({})).mockResolvedValueOnce(
+    mockEgenFetch.mockResolvedValueOnce(createMockFetchResponse({})).mockResolvedValueOnce(
       createMockFetchResponse({
         authenticated: true,
         sessionId: 'test-session',
@@ -713,7 +713,7 @@ describe('setUserProperties', () => {
 
     await setUserProperties(userUuid, userProperties, abortController);
 
-    expect(mockOpenmrsFetch).toHaveBeenNthCalledWith(
+    expect(mockEgenFetch).toHaveBeenNthCalledWith(
       1,
       expect.anything(),
       expect.objectContaining({
@@ -726,7 +726,7 @@ describe('setUserProperties', () => {
     const userUuid = 'user-uuid-123';
     const userProperties = { defaultLocale: 'es-ES' };
 
-    mockOpenmrsFetch.mockResolvedValueOnce(createMockFetchResponse({})).mockResolvedValueOnce(
+    mockEgenFetch.mockResolvedValueOnce(createMockFetchResponse({})).mockResolvedValueOnce(
       createMockFetchResponse({
         authenticated: true,
         sessionId: 'test-session',
@@ -736,7 +736,7 @@ describe('setUserProperties', () => {
 
     await setUserProperties(userUuid, userProperties);
 
-    expect(mockOpenmrsFetch).toHaveBeenNthCalledWith(
+    expect(mockEgenFetch).toHaveBeenNthCalledWith(
       1,
       expect.anything(),
       expect.objectContaining({

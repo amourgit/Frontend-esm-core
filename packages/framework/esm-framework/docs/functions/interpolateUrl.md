@@ -4,31 +4,31 @@
 
 > **interpolateUrl**(`template`, `additionalParams?`): `string`
 
-Defined in: [packages/framework/esm-navigation/src/navigation/interpolate-string.ts:37](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-navigation/src/navigation/interpolate-string.ts#L37)
+Defined in: [packages/framework/esm-navigation/src/navigation/interpolate-string.ts:37](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-navigation/src/navigation/interpolate-string.ts#L37)
 
-Interpolates a string with openmrsBase and openmrsSpaBase.
+Interpolates a string with egenBase and egenSpaBase.
 
-Useful for accepting `${openmrsBase}` or `${openmrsSpaBase}`plus additional template
+Useful for accepting `${egenBase}` or `${egenSpaBase}`plus additional template
 parameters in configurable URLs.
 
 Example usage:
 ```js
-interpolateUrl("test ${openmrsBase} ${openmrsSpaBase} ok");
-   // will return "test /openmrs /openmrs/spa ok"
+interpolateUrl("test ${egenBase} ${egenSpaBase} ok");
+   // will return "test /egen /egen/spa ok"
 
-interpolateUrl("${openmrsSpaBase}/patient/${patientUuid}", {
+interpolateUrl("${egenSpaBase}/patient/${patientUuid}", {
    patientUuid: "4fcb7185-c6c9-450f-8828-ccae9436bd82",
-}); // will return "/openmrs/spa/patient/4fcb7185-c6c9-450f-8828-ccae9436bd82"
+}); // will return "/egen/spa/patient/4fcb7185-c6c9-450f-8828-ccae9436bd82"
 ```
 
 This can be used in conjunction with the `navigate` function like so
 ```js
 navigate({
  to: interpolateUrl(
-   "${openmrsSpaBase}/patient/${patientUuid}",
+   "${egenSpaBase}/patient/${patientUuid}",
    { patientUuid: patient.uuid }
  )
-}); // will navigate to "/openmrs/spa/patient/4fcb7185-c6c9-450f-8828-ccae9436bd82"
+}); // will navigate to "/egen/spa/patient/4fcb7185-c6c9-450f-8828-ccae9436bd82"
 ```
 
 ## Parameters

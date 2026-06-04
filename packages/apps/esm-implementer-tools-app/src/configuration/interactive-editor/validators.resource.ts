@@ -1,8 +1,8 @@
 import { type TOptions } from 'i18next';
-import { Type, type ConfigValue, type ConfigSchema, type Validator, translateFrom } from '@openmrs/esm-framework';
+import { Type, type ConfigValue, type ConfigSchema, type Validator, translateFrom } from '@egen/esm-framework';
 import type { CustomValueType } from './value-editor';
 
-const moduleName = '@openmrs/esm-implementer-tools-app';
+const moduleName = '@egen/esm-implementer-tools-app';
 const t = (key: string, fallback?: string, options?: Omit<TOptions, 'ns' | 'defaultValue'>) =>
   translateFrom(moduleName, key, fallback, options);
 

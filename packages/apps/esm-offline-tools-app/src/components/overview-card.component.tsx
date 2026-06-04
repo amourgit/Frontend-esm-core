@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TileProps } from '@carbon/react';
 import { Button, Layer, Tile } from '@carbon/react';
-import { ArrowRightIcon, navigate } from '@openmrs/esm-framework';
+import { ArrowRightIcon, navigate } from '@egen/esm-framework';
 import styles from './overview-card.styles.scss';
 
 export interface OverviewCardProps extends TileProps {
@@ -24,7 +24,7 @@ const OverviewCard: React.FC<OverviewCardProps> = ({ header, viewLink, children 
             kind="ghost"
             renderIcon={(props) => <ArrowRightIcon size={16} {...props} />}
             size="sm"
-            onClick={() => navigate({ to: `\${openmrsSpaBase}/${viewLink}` })}
+            onClick={() => navigate({ to: `\${egenSpaBase}/${viewLink}` })}
           >
             {t('homeOverviewCardView', 'View')}
           </Button>

@@ -2,7 +2,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Button, IconButton } from '@carbon/react';
-import { useLayoutType } from '@openmrs/esm-react-utils';
+import { useLayoutType } from '@egen/esm-react-utils';
 import { useWorkspaces } from '../workspaces';
 import styles from './action-menu-button.module.scss';
 
@@ -37,7 +37,7 @@ export interface ActionMenuButtonProps {
 
 /**
  * @depcreated migrate to workspace v2 and use ActionMenuButton2. See:
- * https://openmrs.atlassian.net/wiki/spaces/docs/pages/615677981/Workspace+v2+Migration+Guide
+ * https://egen.atlassian.net/wiki/spaces/docs/pages/615677981/Workspace+v2+Migration+Guide
  */
 export const ActionMenuButton: React.FC<ActionMenuButtonProps> = ({
   getIcon,

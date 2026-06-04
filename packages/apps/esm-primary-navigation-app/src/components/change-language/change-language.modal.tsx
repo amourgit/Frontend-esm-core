@@ -12,7 +12,7 @@ import {
   RadioButton,
   RadioButtonGroup,
 } from '@carbon/react';
-import { useAbortController, useSession } from '@openmrs/esm-framework';
+import { useAbortController, useSession } from '@egen/esm-framework';
 import { updateSessionLocale, updateUserProperties } from './change-language.resource';
 import styles from './change-language.scss';
 
@@ -21,8 +21,8 @@ interface ChangeLanguageModalProps {
 }
 
 /**
- * Normalizes an OpenMRS locale string to a valid BCP 47 language tag.
- * OpenMRS stores locales with underscores (e.g. "en_GB", "fr_FR") but the
+ * Normalizes an Egen locale string to a valid BCP 47 language tag.
+ * Egen stores locales with underscores (e.g. "en_GB", "fr_FR") but the
  * Web Intl API requires hyphens (e.g. "en-GB", "fr-FR"). Passing an underscore
  * form directly to `new Intl.DisplayNames(...)` throws a RangeError.
  */

@@ -7,7 +7,7 @@
 | Phase | Durée | Risque | Description |
 |-------|-------|--------|-------------|
 | **0** | 1 jour | Faible | Préparation, branches, cartographie |
-| **1** | 2 jours | **ÉLEVÉ** | Renommage namespace @openmrs → @eigen |
+| **1** | 2 jours | **ÉLEVÉ** | Renommage namespace @egen → @eigen |
 | **2** | 1 jour | Moyen | Déconnexion sources externes |
 | **3** | 3 jours | **ÉLEVÉ** | Adaptation API (Keycloak + FastAPI) |
 | **4** | 2 jours | Faible | Refonte visuelle |
@@ -71,8 +71,8 @@ find packages -name "dist" -type d -exec rm -rf {} +  # Supprimer tous les dist
 
 | Variable | Description | Défaut actuel |
 |----------|-------------|---------------|
-| `OMRS_OFFLINE` | Active le mode offline | `disable` en dev |
-| `OMRS_CLEAN_BEFORE_BUILD` | Nettoie avant build | `true` |
+| `EGEN_OFFLINE` | Active le mode offline | `disable` en dev |
+| `EGEN_CLEAN_BEFORE_BUILD` | Nettoie avant build | `true` |
 | `NODE_ENV` | Environnement | `development` |
 | `EIGEN_API_BASE` | URL de l'API EIGEN | `/api/v1` |
 | `EIGEN_IAM_URL` | URL Keycloak | `/auth/realms/eigen` |
@@ -124,7 +124,7 @@ Niveau 3 : LOGIQUE MÉTIER (dans le code)
 
 ---
 
-## CE QUI RESTE DE L'ARCHITECTURE OpenMRS QU'ON GARDE
+## CE QUI RESTE DE L'ARCHITECTURE Egen QU'ON GARDE
 
 ✅ **Single-SPA** — Architecture microfrontend parfaite pour la modularité  
 ✅ **Module Federation** — Partage de React/libs sans duplication  
@@ -139,9 +139,9 @@ Niveau 3 : LOGIQUE MÉTIER (dans le code)
 
 ---
 
-## MAPPING FINAL : OPENMRS → EIGEN
+## MAPPING FINAL : EGEN → EIGEN
 
-| OpenMRS | EIGEN | Notes |
+| Egen | EIGEN | Notes |
 |---------|-------|-------|
 | Patient | Apprenant | |
 | Visit | Inscription / Année scolaire | |
@@ -156,7 +156,7 @@ Niveau 3 : LOGIQUE MÉTIER (dans le code)
 | Concept | Matière scolaire | |
 | `/ws/rest/v1` | `/api/v1` (FastAPI EIGEN) | |
 | `/ws/fhir2/R4` | `/api/v1/fhir` (si nécessaire) | |
-| Session OpenMRS | JWT Keycloak | |
+| Session Egen | JWT Keycloak | |
 
 ---
 

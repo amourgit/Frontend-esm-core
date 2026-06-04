@@ -314,7 +314,7 @@
 /* Overflow menu */
 .cds--overflow-menu--flip {
   &.cds--overflow-menu-options {
-    background-color: $openmrs-background-grey;
+    background-color: $egen-background-grey;
     left: -6.025rem;
     min-width: 12.5rem;
     top: layout.$spacing-09;
@@ -681,14 +681,14 @@ html[dir='rtl'] {
     border-left: unset !important;
   }
 
-  .omrs-breakpoint-gt-tablet {
+  .egen-breakpoint-gt-tablet {
     main {
       & > section {
         margin-left: unset;
-        margin-right: var(--omrs-sidenav-width);
+        margin-right: var(--egen-sidenav-width);
 
         nav {
-          left: calc(100vw - var(--omrs-sidenav-width));
+          left: calc(100vw - var(--egen-sidenav-width));
           border-left: 1px solid #e0e0e0;
           border-right: unset;
         }
@@ -696,7 +696,7 @@ html[dir='rtl'] {
     }
   }
 
-  .omrs-breakpoint-lt-desktop {
+  .egen-breakpoint-lt-desktop {
     .cds--side-nav {
       left: unset !important;
     }
@@ -758,10 +758,10 @@ html[dir='rtl'] {
   color: #0f62fe;
 }
 
-.omrs-icon {
-  fill: var(--omrs-icon-fill, currentColor);
+.egen-icon {
+  fill: var(--egen-icon-fill, currentColor);
 }
 
-.cds--btn--ghost:not([disabled]) .omrs-icon {
-  fill: var(--omrs-icon-fill, currentColor);
+.cds--btn--ghost:not([disabled]) .egen-icon {
+  fill: var(--egen-icon-fill, currentColor);
 }

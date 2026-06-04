@@ -4,9 +4,9 @@
 
 > **ExtensionSlot**(`__namedParameters`): `Element`
 
-Defined in: [packages/framework/esm-react-utils/src/ExtensionSlot.tsx:71](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/ExtensionSlot.tsx#L71)
+Defined in: [packages/framework/esm-react-utils/src/ExtensionSlot.tsx:71](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/ExtensionSlot.tsx#L71)
 
-An [extension slot](https://o3-docs.openmrs.org/docs/extension-system).
+An [extension slot](https://o3-docs.egen.org/docs/extension-system).
 A place with a name. Extensions that get connected to that name
 will be rendered into this.
 

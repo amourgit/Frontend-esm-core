@@ -4,7 +4,7 @@
 
 > **ContextCallback**\<`T`\> = (`state`) => `void`
 
-Defined in: [packages/framework/esm-context/src/context.ts:103](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-context/src/context.ts#L103)
+Defined in: [packages/framework/esm-context/src/context.ts:103](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-context/src/context.ts#L103)
 
 ## Type Parameters
 

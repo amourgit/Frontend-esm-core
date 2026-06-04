@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Button } from '@carbon/react';
-import { CloseIcon, type ConfigSchema, type Config, getCoreTranslation, SaveIcon, Type } from '@openmrs/esm-framework';
+import { CloseIcon, type ConfigSchema, type Config, getCoreTranslation, SaveIcon, Type } from '@egen/esm-framework';
 import type { ConfigValueDescriptor } from './editable-value.component';
 import { ValueEditorField } from './value-editors/value-editor-field';
 import styles from './value-editor.styles.scss';

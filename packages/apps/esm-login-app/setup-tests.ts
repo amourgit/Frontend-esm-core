@@ -6,15 +6,15 @@ afterEach(cleanup);
 
 declare global {
   interface Window {
-    openmrsBase: string;
+    egenBase: string;
     spaBase: string;
-    getOpenmrsSpaBase: () => string;
+    getEgenSpaBase: () => string;
   }
 }
 
 const { getComputedStyle } = window;
 window.getComputedStyle = (element) => getComputedStyle(element);
-window.openmrsBase = '/openmrs';
+window.egenBase = '/egen';
 window.spaBase = '/spa';
-window.getOpenmrsSpaBase = () => '/openmrs/spa/';
+window.getEgenSpaBase = () => '/egen/spa/';
 window.HTMLElement.prototype.scrollIntoView = vi.fn();

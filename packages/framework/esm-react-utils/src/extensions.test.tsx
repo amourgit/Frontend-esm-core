@@ -4,18 +4,18 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import userEvent from '@testing-library/user-event';
 import { act, render, screen, waitFor, within } from '@testing-library/react';
-import { registerFeatureFlag, setFeatureFlag } from '@openmrs/esm-feature-flags';
+import { registerFeatureFlag, setFeatureFlag } from '@egen/esm-feature-flags';
 import {
   attach,
   getExtensionNameFromId,
   registerExtension,
   updateInternalExtensionStore,
-} from '@openmrs/esm-extensions';
+} from '@egen/esm-extensions';
 import {
   getSyncLifecycle,
   Extension,
   ExtensionSlot,
-  openmrsComponentDecorator,
+  egenComponentDecorator,
   useExtensionSlotMeta,
   useRenderableExtensions,
 } from '.';
@@ -35,7 +35,7 @@ describe('ExtensionSlot, Extension, and useExtensionSlotMeta', () => {
     registerSimpleExtension('English', 'esm-languages-app', EnglishExtension);
     attach('Box', 'English');
 
-    const App = openmrsComponentDecorator({
+    const App = egenComponentDecorator({
       moduleName: 'esm-languages-app',
       featureName: 'Languages',
       disableTranslations: true,
@@ -67,7 +67,7 @@ describe('ExtensionSlot, Extension, and useExtensionSlotMeta', () => {
     registerSimpleExtension('Haitian', 'esm-languages-app', HaitianCreoleExtension);
     attach('Box', 'Haitian');
 
-    const App = openmrsComponentDecorator({
+    const App = egenComponentDecorator({
       moduleName: 'esm-languages-app',
       featureName: 'Languages',
       disableTranslations: true,
@@ -120,7 +120,7 @@ describe('ExtensionSlot, Extension, and useExtensionSlotMeta', () => {
     });
     attach('Box', 'Spanish');
 
-    const App = openmrsComponentDecorator({
+    const App = egenComponentDecorator({
       moduleName: 'esm-languages-app',
       featureName: 'Languages',
       disableTranslations: true,
@@ -158,7 +158,7 @@ describe('ExtensionSlot, Extension, and useExtensionSlotMeta', () => {
 
     attach('Box', 'Swahili');
 
-    const App = openmrsComponentDecorator({
+    const App = egenComponentDecorator({
       moduleName: 'esm-languages-app',
       featureName: 'Languages',
       disableTranslations: true,
@@ -200,7 +200,7 @@ describe('ExtensionSlot, Extension, and useExtensionSlotMeta', () => {
     attach('Box', 'Urdu');
     attach('Box', 'Hindi');
 
-    const App = openmrsComponentDecorator({
+    const App = egenComponentDecorator({
       moduleName: 'esm-languages-app',
       featureName: 'Languages',
       disableTranslations: true,
@@ -241,7 +241,7 @@ describe('ExtensionSlot, Extension, and useExtensionSlotMeta', () => {
     registerFeatureFlag('kurdish', '', '');
     setFeatureFlag('turkic', true);
 
-    const App = openmrsComponentDecorator({
+    const App = egenComponentDecorator({
       moduleName: 'esm-languages-app',
       featureName: 'Languages',
       disableTranslations: true,
@@ -266,7 +266,7 @@ describe('ExtensionSlot, Extension, and useExtensionSlotMeta', () => {
       code: 'es',
     });
     attach('Box', 'Spanish');
-    const App = openmrsComponentDecorator({
+    const App = egenComponentDecorator({
       moduleName: 'esm-languages-app',
       featureName: 'Languages',
       disableTranslations: true,

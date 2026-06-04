@@ -1,4 +1,4 @@
-import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework/src/internal';
+import { egenFetch, restBaseUrl } from '@egen/esm-framework/src/internal';
 
 export type PostUserProperties = (
   userUuid: string,
@@ -11,7 +11,7 @@ export async function updateUserProperties(
   userProperties: Record<string, string>,
   abortController?: AbortController,
 ): Promise<void> {
-  await openmrsFetch(`${restBaseUrl}/user/${userUuid}`, {
+  await egenFetch(`${restBaseUrl}/user/${userUuid}`, {
     method: 'POST',
     body: { userProperties },
     headers: { 'Content-Type': 'application/json' },
@@ -23,7 +23,7 @@ export async function updateUserProperties(
 }
 
 export async function updateSessionLocale(locale: string, abortController?: AbortController): Promise<void> {
-  await openmrsFetch(`${restBaseUrl}/session`, {
+  await egenFetch(`${restBaseUrl}/session`, {
     method: 'POST',
     body: { locale },
     headers: { 'Content-Type': 'application/json' },

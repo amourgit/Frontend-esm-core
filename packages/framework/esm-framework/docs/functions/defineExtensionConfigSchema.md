@@ -4,7 +4,7 @@
 
 > **defineExtensionConfigSchema**(`extensionName`, `schema`): `void`
 
-Defined in: [packages/framework/esm-config/src/module-config/module-config.ts:266](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-config/src/module-config/module-config.ts#L266)
+Defined in: [packages/framework/esm-config/src/module-config/module-config.ts:266](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-config/src/module-config/module-config.ts#L266)
 
 This defines a configuration schema for an extension. When a schema is defined
 for an extension, that extension will receive the configuration corresponding
@@ -14,7 +14,7 @@ in which it is defined.
 The schema tells the configuration system how the module can be configured.
 It specifies what makes configuration valid or invalid.
 
-See [Configuration System](https://o3-docs.openmrs.org/docs/configuration-system)
+See [Configuration System](https://o3-docs.egen.org/docs/configuration-system)
 for more information about defining a config schema.
 
 ## Parameters

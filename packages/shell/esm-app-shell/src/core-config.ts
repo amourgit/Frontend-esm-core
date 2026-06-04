@@ -1,5 +1,5 @@
-import { defineConfigSchema, Type, getConfigStore } from '@openmrs/esm-framework';
-import { registerModuleLoad, featureFlagsStore } from '@openmrs/esm-framework/src/internal';
+import { defineConfigSchema, Type, getConfigStore } from '@egen/esm-framework';
+import { registerModuleLoad, featureFlagsStore } from '@egen/esm-framework/src/internal';
 import { appName } from './ui';
 
 /**

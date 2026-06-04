@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import AceEditor from 'react-ace';
 import { Button } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
-import { clearConfigErrors, temporaryConfigStore, useStore } from '@openmrs/esm-framework/src/internal';
+import { clearConfigErrors, temporaryConfigStore, useStore } from '@egen/esm-framework/src/internal';
 import styles from './json-editor.scss';
 
 import 'ace-builds/src-noconflict/mode-json';

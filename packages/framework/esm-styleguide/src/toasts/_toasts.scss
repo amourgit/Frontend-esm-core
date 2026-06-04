@@ -1,6 +1,6 @@
 @use '@carbon/layout';
 
-.omrs-toasts-container {
+.egen-toasts-container {
   display: flex;
   flex-direction: column;
   z-index: 100000;
@@ -11,12 +11,12 @@
   gap: layout.$spacing-03;
 }
 
-.omrs-toast-mounting,
-.omrs-toast-mounting > * {
+.egen-toast-mounting,
+.egen-toast-mounting > * {
   padding: 0;
 }
 
-.omrs-toast-closing,
-.omrs-toast-mounting {
+.egen-toast-closing,
+.egen-toast-mounting {
   opacity: 0;
 }

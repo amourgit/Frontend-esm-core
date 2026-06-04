@@ -1,6 +1,6 @@
 /** @module @category Extension */
 import React, { useRef, useMemo, useEffect } from 'react';
-import { updateInternalExtensionStore, type AssignedExtension } from '@openmrs/esm-extensions';
+import { updateInternalExtensionStore, type AssignedExtension } from '@egen/esm-extensions';
 import { ComponentContext } from './ComponentContext';
 import { Extension } from './Extension';
 import { useExtensionSlot } from './useExtensionSlot';
@@ -38,7 +38,7 @@ function defaultSelect(extensions: Array<AssignedExtension>) {
 }
 
 /**
- * An [extension slot](https://o3-docs.openmrs.org/docs/extension-system).
+ * An [extension slot](https://o3-docs.egen.org/docs/extension-system).
  * A place with a name. Extensions that get connected to that name
  * will be rendered into this.
  *

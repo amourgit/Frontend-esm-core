@@ -2,13 +2,13 @@ import React from 'react';
 import { vi, describe, it, expect } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
-import { useConfig } from '@openmrs/esm-framework';
+import { useConfig } from '@egen/esm-framework';
 import { type ConfigSchema } from '../../config-schema';
 import Logo from './logo.component';
 
-vi.mock('@openmrs/esm-framework', async (importOriginal) => {
+vi.mock('@egen/esm-framework', async (importOriginal) => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const actual = await importOriginal<typeof import('@openmrs/esm-framework')>();
+  const actual = await importOriginal<typeof import('@egen/esm-framework')>();
   return {
     ...actual,
     useConfig: vi.fn(),
@@ -18,7 +18,7 @@ vi.mock('@openmrs/esm-framework', async (importOriginal) => {
 const mockUseConfig = vi.mocked(useConfig);
 
 describe('Logo', () => {
-  it('should display the OpenMRS logo by default', () => {
+  it('should display the Egen logo by default', () => {
     const mockConfig = { logo: { src: null, alt: null, name: null } };
     mockUseConfig.mockReturnValue(mockConfig as ConfigSchema);
 

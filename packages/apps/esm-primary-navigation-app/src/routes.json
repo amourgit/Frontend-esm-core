@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json.openmrs.org/routes.schema.json",
+  "$schema": "https://json.egen.org/routes.schema.json",
   "backendDependencies": {
     "webservices.rest": ">=2.2.0"
   },
@@ -9,7 +9,7 @@
       "routeRegex": "^(?!(?:login|change-password)/?)",
       "online": true,
       "offline": true,
-      "containerDomId": "omrs-top-nav-app-container"
+      "containerDomId": "egen-top-nav-app-container"
     },
     {
       "component": "redirect",

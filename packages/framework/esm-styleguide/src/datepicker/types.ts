@@ -7,7 +7,7 @@ import { type CalendarDate, type CalendarDateTime, type ZonedDateTime } from '@i
 export type DateInputValue = CalendarDate | CalendarDateTime | ZonedDateTime | DayjsConfigType;
 
 /**
- * Common props shared by both OpenmrsDatePicker and OpenmrsDateRangePicker.
+ * Common props shared by both EgenDatePicker and EgenDateRangePicker.
  */
 export interface DatePickerBaseProps {
   /** Any CSS classes to add to the outer div of the date picker */

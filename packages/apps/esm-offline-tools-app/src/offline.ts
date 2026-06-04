@@ -1,9 +1,9 @@
 import {
   fetchCurrentPatient,
   makeUrl,
-  messageOmrsServiceWorker,
+  messageEgenServiceWorker,
   setupDynamicOfflineDataHandler,
-} from '@openmrs/esm-framework';
+} from '@egen/esm-framework';
 import { cacheForOfflineHeaders } from './constants';
 
 export function setupOffline() {
@@ -14,12 +14,12 @@ export function setupOffline() {
     async isSynced(identifier) {
       const expectedUrls = [`/ws/fhir2/R4/Patient/${identifier}`];
       const absoluteExpectedUrls = expectedUrls.map((url) => window.origin + makeUrl(url));
-      const cache = await caches.open('omrs-spa-cache-v1');
+      const cache = await caches.open('egen-spa-cache-v1');
       const keys = (await cache.keys()).map((key) => key.url);
       return absoluteExpectedUrls.every((url) => keys.includes(url));
     },
     async sync(identifier) {
-      await messageOmrsServiceWorker({
+      await messageEgenServiceWorker({
         type: 'registerDynamicRoute',
         pattern: `/ws/fhir2/R4/Patient/${identifier}`,
       });

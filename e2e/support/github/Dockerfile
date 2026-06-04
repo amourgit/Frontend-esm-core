@@ -11,10 +11,10 @@ COPY . .
 ARG CACHE_BUST
 
 RUN yarn install
-RUN node packages/tooling/openmrs/dist/cli.js assemble --manifest --mode config --config spa-assemble-config.json --target /app/spa
-RUN node packages/tooling/openmrs/dist/cli.js build --target /app/spa
+RUN node packages/tooling/egen/dist/cli.js assemble --manifest --mode config --config spa-assemble-config.json --target /app/spa
+RUN node packages/tooling/egen/dist/cli.js build --target /app/spa
 
-FROM --platform=$BUILDPLATFORM openmrs/openmrs-reference-application-3-frontend:nightly as frontend
+FROM --platform=$BUILDPLATFORM egen/egen-reference-application-3-frontend:nightly as frontend
 # clear out the already installed files
 RUN rm -rf /usr/share/nginx/html/*
 # add our custom build

@@ -1,6 +1,6 @@
-import { type OpenmrsResource } from '@openmrs/esm-api';
+import { type EgenResource } from '@egen/esm-api';
 
-export interface Location extends OpenmrsResource {
+export interface Location extends EgenResource {
   name?: string;
   description?: string;
   cityVillage?: string;
@@ -25,8 +25,8 @@ export interface Location extends OpenmrsResource {
   address13?: string;
   address14?: string;
   address15?: string;
-  tags?: Array<OpenmrsResource>;
-  attributes?: Array<OpenmrsResource>;
+  tags?: Array<EgenResource>;
+  attributes?: Array<EgenResource>;
   parentLocation?: Location;
   childLocation?: Location;
   retired?: boolean;

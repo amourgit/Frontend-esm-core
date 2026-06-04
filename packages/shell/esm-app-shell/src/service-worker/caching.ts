@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import type { ImportMap } from '@openmrs/esm-globals';
-import { retry } from '@openmrs/esm-utils';
-import { absoluteWbManifestUrls, omrsCacheName } from './constants';
+import type { ImportMap } from '@egen/esm-globals';
+import { retry } from '@egen/esm-utils';
+import { absoluteWbManifestUrls, egenCacheName } from './constants';
 import { fetchUrlsToCacheFromImportMap } from './import-map-utils';
 import { ServiceWorkerDb } from './storage';
 
@@ -13,7 +13,7 @@ import { ServiceWorkerDb } from './storage';
 export async function cacheImportMapReferences(importMap: ImportMap) {
   const urlsToCache = await fetchUrlsToCacheFromImportMap(importMap);
   await invalidateObsoleteCacheEntries(urlsToCache);
-  await addToOmrsCache(urlsToCache);
+  await addToEgenCache(urlsToCache);
 }
 
 /**
@@ -21,14 +21,14 @@ export async function cacheImportMapReferences(importMap: ImportMap) {
  * Only caches the "raw" app shell, not any MFs/any data coming from an import map.
  */
 export function precacheAppShell() {
-  return addToOmrsCache(absoluteWbManifestUrls);
+  return addToEgenCache(absoluteWbManifestUrls);
 }
 
 /**
  * Adds all of the given urls to the default app cache.
  * @param urls An array of URLs to be cached.
  */
-export async function addToOmrsCache(urls: Array<string>) {
+export async function addToEgenCache(urls: Array<string>) {
   if (urls.length === 0) {
     return;
   }
@@ -38,7 +38,7 @@ export async function addToOmrsCache(urls: Array<string>) {
   // we don't want the rest to fail.
   // It further allows us to log more granularly *which* URL couldn't be cached, so debugging
   // is easier.
-  const cache = await caches.open(omrsCacheName);
+  const cache = await caches.open(egenCacheName);
   const results = await Promise.all(
     urls.map(async (url) => {
       try {
@@ -57,7 +57,7 @@ export async function addToOmrsCache(urls: Array<string>) {
 
   if (cached.length > 0) {
     console.debug(
-      `[SW] Successfully added ${cached.length} URLs to the OMRS cache. URLs: `,
+      `[SW] Successfully added ${cached.length} URLs to the EGEN cache. URLs: `,
       cached.map((r) => r.url),
     );
   }
@@ -71,7 +71,7 @@ export async function addToOmrsCache(urls: Array<string>) {
 }
 
 async function invalidateObsoleteCacheEntries(newImportMapUrls: Array<string>) {
-  const cache = await caches.open(omrsCacheName);
+  const cache = await caches.open(egenCacheName);
   const cachedUrls = (await cache.keys()).map((x) => x.url);
   const dynamicRoutes = await new ServiceWorkerDb().dynamicRouteRegistrations.toArray();
 

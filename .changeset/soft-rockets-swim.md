@@ -1,5 +1,5 @@
 ---
-"@openmrs/esm-styleguide": patch
+"@egen/esm-styleguide": patch
 ---
 
-(fix) Avoid stray vertical line in OpenmrsDateRangePicker inputs
+(fix) Avoid stray vertical line in EgenDateRangePicker inputs

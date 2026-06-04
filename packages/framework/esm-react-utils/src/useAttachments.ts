@@ -1,8 +1,8 @@
 /** @module @category API */
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { openmrsFetch, type FetchResponse } from '@openmrs/esm-api';
-import { attachmentUrl, type AttachmentResponse } from '@openmrs/esm-emr-api';
+import { egenFetch, type FetchResponse } from '@egen/esm-api';
+import { attachmentUrl, type AttachmentResponse } from '@egen/esm-emr-api';
 
 /**
  * A React hook that fetches attachments for a patient using SWR for caching
@@ -20,7 +20,7 @@ import { attachmentUrl, type AttachmentResponse } from '@openmrs/esm-emr-api';
  *
  * @example
  * ```tsx
- * import { useAttachments } from '@openmrs/esm-framework';
+ * import { useAttachments } from '@egen/esm-framework';
  * function PatientAttachments({ patientUuid }) {
  *   const { data, isLoading, error } = useAttachments(patientUuid, true);
  *   if (isLoading) return <span>Loading...</span>;
@@ -32,7 +32,7 @@ import { attachmentUrl, type AttachmentResponse } from '@openmrs/esm-emr-api';
 export function useAttachments(patientUuid: string, includeEncounterless: boolean) {
   const { data, error, mutate, isLoading, isValidating } = useSWR<
     FetchResponse<{ results: Array<AttachmentResponse> }>
-  >(`${attachmentUrl}?patient=${patientUuid}&includeEncounterless=${includeEncounterless}`, openmrsFetch);
+  >(`${attachmentUrl}?patient=${patientUuid}&includeEncounterless=${includeEncounterless}`, egenFetch);
 
   const results = useMemo(
     () => ({

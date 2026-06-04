@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconButton } from '@carbon/react';
-import { CloseIcon, getCoreTranslation } from '@openmrs/esm-framework';
+import { CloseIcon, getCoreTranslation } from '@egen/esm-framework';
 import ImportMap from './import-map.component';
 import styles from './devtools-popup.styles.scss';
 

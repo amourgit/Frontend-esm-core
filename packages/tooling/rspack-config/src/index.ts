@@ -1,19 +1,19 @@
 /**
- * This is the base webpack config for all OpenMRS 3.x modules.
+ * This is the base webpack config for all Egen 3.x modules.
  *
  * ## Usage
  *
  * You can use it as simply as
  *
  * ```ts
- * module.exports = require('openmrs/default-webpack-config');
+ * module.exports = require('egen/default-webpack-config');
  * ```
  *
  * or you can customize the configuration using merges and overrides
  * like
  *
  * ```ts
- * const config = require('openmrs/default-webpack-config');
+ * const config = require('egen/default-webpack-config');
  * config.cssRuleConfig.rules = [myCustomRule];
  * module.exports = config;
  * ```
@@ -27,7 +27,7 @@
  * After you `yarn build --watch`, do something like
  * `watch "cp -R dist /path/to/packages/esm-patient-chart-app/webpack"`
  * and then change the webpack line from
- * `module.exports = require('openmrs/default-webpack-config');`
+ * `module.exports = require('egen/default-webpack-config');`
  * to
  * `module.exports = require('./webpack');`
  *
@@ -54,7 +54,7 @@ import rspack, {
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
 
-type OpenmrsRspackConfig = Omit<Partial<RspackConfiguration>, 'module'> & {
+type EgenRspackConfig = Omit<Partial<RspackConfiguration>, 'module'> & {
   module: ModuleOptions;
 };
 
@@ -64,7 +64,7 @@ const { ModuleFederationPlugin } = container;
 function getFrameworkVersion() {
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { version } = require('@openmrs/esm-framework/package.json');
+    const { version } = require('@egen/esm-framework/package.json');
     return `^${version}`;
   } catch {
     return '5.x';
@@ -100,14 +100,14 @@ function fileExistsSync(name: string) {
  * Array values will be concatenated with the existing array.
  * Make sure to modify this object and not reassign it.
  */
-export const overrides: Partial<OpenmrsRspackConfig> = {};
+export const overrides: Partial<EgenRspackConfig> = {};
 
 /**
  * The keys of this object will override the top-level keys
  * of the webpack config.
  * Make sure to modify this object and not reassign it.
  */
-export const additionalConfig: Partial<OpenmrsRspackConfig> = {};
+export const additionalConfig: Partial<EgenRspackConfig> = {};
 
 /**
  * This object will be merged into the webpack rule governing
@@ -142,21 +142,21 @@ export const assetRuleConfig: Partial<RuleSetRule> = {};
  * the watch options.
  * Make sure to modify this object and not reassign it.
  */
-export const watchConfig: Partial<OpenmrsRspackConfig['watchOptions']> = {};
+export const watchConfig: Partial<EgenRspackConfig['watchOptions']> = {};
 
 /**
  * This object will be merged with the webpack optimization
  * object.
  * Make sure to modify this object and not reassign it.
  */
-export const optimizationConfig: Partial<OpenmrsRspackConfig['optimization']> = {};
+export const optimizationConfig: Partial<EgenRspackConfig['optimization']> = {};
 
 export default (env: Record<string, string>, argv: Record<string, string> = {}) => {
   const root = process.cwd();
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { name, version, peerDependencies, browser, main, types } = require(resolve(root, 'package.json'));
   // this typing is provably incorrect, but actually works
-  const mode = (argv.mode || process.env.NODE_ENV || 'development') as OpenmrsRspackConfig['mode'];
+  const mode = (argv.mode || process.env.NODE_ENV || 'development') as EgenRspackConfig['mode'];
   const devServerPort = argv.port ? Number(argv.port) : undefined;
   const devServerHost = argv.host || 'localhost';
   const filename = basename(browser || main);
@@ -169,7 +169,7 @@ export default (env: Record<string, string>, argv: Record<string, string> = {}) 
 
   if (!hasRoutesDefined) {
     console.error(
-      'This app does not define a routes.json. This file is required for this app to be used by the OpenMRS 3 App Shell.',
+      'This app does not define a routes.json. This file is required for this app to be used by the Egen 3 App Shell.',
     );
     // key-smash error code
     // so this (hopefully) doesn't interfere with Webpack-specific exit codes
@@ -185,7 +185,7 @@ export default (env: Record<string, string>, argv: Record<string, string> = {}) 
     },
   };
 
-  const baseConfig: OpenmrsRspackConfig = {
+  const baseConfig: EgenRspackConfig = {
     // The only `entry` in the application is the app shell. Everything else is
     // a Webpack Module Federation "remote." This ensures that there is always
     // only one container context--i.e., if we had an entry point per module,
@@ -298,7 +298,7 @@ export default (env: Record<string, string>, argv: Record<string, string> = {}) 
         exposes: {
           './start': srcFile,
         },
-        shared: [...Object.keys(peerDependencies), '@openmrs/esm-framework/src/internal'].reduce((obj, depName) => {
+        shared: [...Object.keys(peerDependencies), '@egen/esm-framework/src/internal'].reduce((obj, depName) => {
           if (depName === 'swr') {
             // SWR is annoying with Module Federation
             // See: https://github.com/webpack/webpack/issues/16125 and https://github.com/vercel/swr/issues/2356
@@ -353,7 +353,7 @@ export default (env: Record<string, string>, argv: Record<string, string> = {}) 
     resolve: {
       extensions: ['.tsx', '.ts', '.jsx', '.js', '.scss', '.json'],
       alias: {
-        '@openmrs/esm-framework': '@openmrs/esm-framework/src/internal',
+        '@egen/esm-framework': '@egen/esm-framework/src/internal',
         'lodash.debounce': 'lodash-es/debounce',
         'lodash.findlast': 'lodash-es/findLast',
         'lodash.omit': 'lodash-es/omit',

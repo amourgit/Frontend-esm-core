@@ -10,7 +10,7 @@ vi.mock('swr', () => ({
 
 // Mock fetchCurrentPatient
 const mockFetchCurrentPatient = vi.fn();
-vi.mock('@openmrs/esm-emr-api', () => ({
+vi.mock('@egen/esm-emr-api', () => ({
   fetchCurrentPatient: (...args: any[]) => mockFetchCurrentPatient(...args),
 }));
 

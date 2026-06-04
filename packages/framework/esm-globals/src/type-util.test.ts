@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { isOpenmrsAppRoutes } from './type-utils';
+import { isEgenAppRoutes } from './type-utils';
 
-describe('isOpenmrsAppRoutes', () => {
+describe('isEgenAppRoutes', () => {
   it('should return true for a valid routes object', () => {
     expect(
-      isOpenmrsAppRoutes({
+      isEgenAppRoutes({
         backendDependencies: {
           fhir2: '^2.0.0',
           'webservices.rest': '^1.4.0',
@@ -40,7 +40,7 @@ describe('isOpenmrsAppRoutes', () => {
 
   it('should accept an object with only pages', () => {
     expect(
-      isOpenmrsAppRoutes({
+      isEgenAppRoutes({
         pages: [
           {
             component: 'root',
@@ -53,7 +53,7 @@ describe('isOpenmrsAppRoutes', () => {
 
   it('should accept an object with only extensions', () => {
     expect(
-      isOpenmrsAppRoutes({
+      isEgenAppRoutes({
         extensions: [
           {
             name: 'custom extension',
@@ -66,7 +66,7 @@ describe('isOpenmrsAppRoutes', () => {
 
   it('should accept an object with only modals', () => {
     expect(
-      isOpenmrsAppRoutes({
+      isEgenAppRoutes({
         modals: [
           {
             name: 'custom modal',
@@ -79,7 +79,7 @@ describe('isOpenmrsAppRoutes', () => {
 
   it('should accept an object with only workspaces', () => {
     expect(
-      isOpenmrsAppRoutes({
+      isEgenAppRoutes({
         workspaces: [
           {
             name: 'custom workspace',
@@ -91,6 +91,6 @@ describe('isOpenmrsAppRoutes', () => {
   });
 
   it('should report an empty object as valid', () => {
-    expect(isOpenmrsAppRoutes({})).toBe(true);
+    expect(isEgenAppRoutes({})).toBe(true);
   });
 });

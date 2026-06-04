@@ -105,5 +105,5 @@ jobs:
       cancel-in-progress: true
     uses: ./.github/workflows/docs-build.yml
     secrets:
-      OMRS_PR_BOT_CLIENT_ID: ${{ secrets.OMRS_PR_BOT_CLIENT_ID }}
-      OMRS_PR_BOT_PRIVATE_KEY: ${{ secrets.OMRS_PR_BOT_PRIVATE_KEY }}
+      EGEN_PR_BOT_CLIENT_ID: ${{ secrets.EGEN_PR_BOT_CLIENT_ID }}
+      EGEN_PR_BOT_PRIVATE_KEY: ${{ secrets.EGEN_PR_BOT_PRIVATE_KEY }}

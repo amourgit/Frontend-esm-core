@@ -14,7 +14,7 @@ import {
   PasswordInput,
   Stack,
 } from '@carbon/react';
-import { showSnackbar } from '@openmrs/esm-framework';
+import { showSnackbar } from '@egen/esm-framework';
 import { changeUserPassword } from './change-password.resource';
 import styles from './change-password-modal.scss';
 

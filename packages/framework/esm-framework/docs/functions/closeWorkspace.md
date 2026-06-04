@@ -4,7 +4,7 @@
 
 > **closeWorkspace**(`name`, `options`): `boolean`
 
-Defined in: [packages/framework/esm-styleguide/src/workspaces/workspaces.ts:453](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-styleguide/src/workspaces/workspaces.ts#L453)
+Defined in: [packages/framework/esm-styleguide/src/workspaces/workspaces.ts:453](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-styleguide/src/workspaces/workspaces.ts#L453)
 
 Function to close an opened workspace
 
@@ -29,4 +29,4 @@ Options to close workspace
 ## Deprecated
 
 migrate to workspace v2 and call closeWorkspace from Workspace2DefinitionProps instead. See:
-https://openmrs.atlassian.net/wiki/spaces/docs/pages/615677981/Workspace+v2+Migration+Guide
+https://egen.atlassian.net/wiki/spaces/docs/pages/615677981/Workspace+v2+Migration+Guide

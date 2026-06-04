@@ -11,7 +11,7 @@ const meta: Meta<typeof Snackbar> = {
   },
   decorators: [
     (Story) => (
-      <div className="omrs-snackbars-container">
+      <div className="egen-snackbars-container">
         <Story />
       </div>
     ),

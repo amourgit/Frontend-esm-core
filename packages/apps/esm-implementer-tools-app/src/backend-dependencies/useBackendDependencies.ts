@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import type { ResolvedDependenciesModule } from './openmrs-backend-dependencies';
-import { checkModules } from './openmrs-backend-dependencies';
+import type { ResolvedDependenciesModule } from './egen-backend-dependencies';
+import { checkModules } from './egen-backend-dependencies';
 
 export function useBackendDependencies() {
   const [modulesWithMissingBackendModules, setModulesWithMissingBackendModules] = useState<

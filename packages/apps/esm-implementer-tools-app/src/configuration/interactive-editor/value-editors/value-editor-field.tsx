@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import uniqueId from 'lodash-es/uniqueId';
 import { Checkbox, NumberInput, TextInput } from '@carbon/react';
-import { Type } from '@openmrs/esm-framework';
+import { Type } from '@egen/esm-framework';
 import type { ConfigValueDescriptor } from '../editable-value.component';
 import type { ValueType } from '../value-editor';
 import { ArrayEditor } from './array-editor';

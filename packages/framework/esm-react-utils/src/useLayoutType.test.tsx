@@ -5,9 +5,9 @@ import { useLayoutType, isDesktop, type LayoutType } from './useLayoutType';
 // Breakpoint class → layout mapping used across tests
 
 const LAYOUT_CASES: Array<[string, LayoutType]> = [
-  ['omrs-breakpoint-lt-tablet', 'phone'],
-  ['omrs-breakpoint-gt-tablet', 'small-desktop'],
-  ['omrs-breakpoint-gt-small-desktop', 'large-desktop'],
+  ['egen-breakpoint-lt-tablet', 'phone'],
+  ['egen-breakpoint-gt-tablet', 'small-desktop'],
+  ['egen-breakpoint-gt-small-desktop', 'large-desktop'],
 ];
 
 const ALL_BREAKPOINT_CLASSES = LAYOUT_CASES.map(([className]) => className);
@@ -46,13 +46,13 @@ describe('useLayoutType', () => {
     expect(result.current).toBe('tablet');
 
     act(() => {
-      setBreakpoint('omrs-breakpoint-lt-tablet');
+      setBreakpoint('egen-breakpoint-lt-tablet');
       window.dispatchEvent(new Event('resize'));
     });
     expect(result.current).toBe('phone');
 
     act(() => {
-      setBreakpoint('omrs-breakpoint-gt-small-desktop');
+      setBreakpoint('egen-breakpoint-gt-small-desktop');
       window.dispatchEvent(new Event('resize'));
     });
     expect(result.current).toBe('large-desktop');
@@ -62,7 +62,7 @@ describe('useLayoutType', () => {
     const { result } = renderHook(() => useLayoutType());
 
     act(() => {
-      setBreakpoint('omrs-breakpoint-gt-tablet');
+      setBreakpoint('egen-breakpoint-gt-tablet');
       window.dispatchEvent(new Event('resize'));
     });
     expect(result.current).toBe('small-desktop');
@@ -78,7 +78,7 @@ describe('useLayoutType', () => {
     const { result } = renderHook(() => useLayoutType());
 
     act(() => {
-      setBreakpoint('omrs-breakpoint-lt-tablet');
+      setBreakpoint('egen-breakpoint-lt-tablet');
       window.dispatchEvent(new Event('scroll'));
       window.dispatchEvent(new Event('click'));
     });

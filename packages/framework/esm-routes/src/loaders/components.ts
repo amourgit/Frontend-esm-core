@@ -7,7 +7,7 @@ import {
   registerWorkspaceGroups2,
   registerWorkspaces2,
   registerWorkspaceWindows2,
-} from '@openmrs/esm-extensions';
+} from '@egen/esm-extensions';
 import {
   type ExtensionDefinition,
   type FeatureFlagDefinition,
@@ -17,8 +17,8 @@ import {
   type WorkspaceGroupDefinition,
   type WorkspaceGroupDefinition2,
   type WorkspaceWindowDefinition2,
-} from '@openmrs/esm-globals';
-import { registerFeatureFlag } from '@openmrs/esm-feature-flags';
+} from '@egen/esm-globals';
+import { registerFeatureFlag } from '@egen/esm-feature-flags';
 import { loadLifeCycles } from './load-lifecycles';
 
 /**

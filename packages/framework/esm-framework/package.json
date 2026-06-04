@@ -1,5 +1,5 @@
 {
-  "name": "@openmrs/esm-framework",
+  "name": "@egen/esm-framework",
   "version": "9.0.2",
   "license": "MPL-2.0",
   "type": "module",
@@ -38,45 +38,45 @@
     "lint": "eslint src --ext ts,tsx"
   },
   "keywords": [
-    "openmrs",
+    "egen",
     "framework",
     "frontend",
     "ui",
     "microfrontends"
   ],
   "browserslist": [
-    "extends browserslist-config-openmrs"
+    "extends browserslist-config-egen"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-core.git"
+    "url": "git+https://github.com/egen/egen-esm-core.git"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-core/issues"
+    "url": "https://github.com/egen/egen-esm-core/issues"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-core#readme",
+  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@openmrs/esm-api": "workspace:*",
-    "@openmrs/esm-config": "workspace:*",
-    "@openmrs/esm-context": "workspace:*",
-    "@openmrs/esm-dynamic-loading": "workspace:*",
-    "@openmrs/esm-emr-api": "workspace:*",
-    "@openmrs/esm-error-handling": "workspace:*",
-    "@openmrs/esm-expression-evaluator": "workspace:*",
-    "@openmrs/esm-extensions": "workspace:*",
-    "@openmrs/esm-feature-flags": "workspace:*",
-    "@openmrs/esm-globals": "workspace:*",
-    "@openmrs/esm-navigation": "workspace:*",
-    "@openmrs/esm-offline": "workspace:*",
-    "@openmrs/esm-react-utils": "workspace:*",
-    "@openmrs/esm-routes": "workspace:*",
-    "@openmrs/esm-state": "workspace:*",
-    "@openmrs/esm-styleguide": "workspace:*",
-    "@openmrs/esm-translations": "workspace:*",
-    "@openmrs/esm-utils": "workspace:*"
+    "@egen/esm-api": "workspace:*",
+    "@egen/esm-config": "workspace:*",
+    "@egen/esm-context": "workspace:*",
+    "@egen/esm-dynamic-loading": "workspace:*",
+    "@egen/esm-emr-api": "workspace:*",
+    "@egen/esm-error-handling": "workspace:*",
+    "@egen/esm-expression-evaluator": "workspace:*",
+    "@egen/esm-extensions": "workspace:*",
+    "@egen/esm-feature-flags": "workspace:*",
+    "@egen/esm-globals": "workspace:*",
+    "@egen/esm-navigation": "workspace:*",
+    "@egen/esm-offline": "workspace:*",
+    "@egen/esm-react-utils": "workspace:*",
+    "@egen/esm-routes": "workspace:*",
+    "@egen/esm-state": "workspace:*",
+    "@egen/esm-styleguide": "workspace:*",
+    "@egen/esm-translations": "workspace:*",
+    "@egen/esm-utils": "workspace:*"
   },
   "peerDependencies": {
     "dayjs": "1.x",
@@ -89,7 +89,7 @@
     "swr": "2.x"
   },
   "devDependencies": {
-    "@openmrs/typedoc-plugin-file-categories": "workspace:*",
+    "@egen/typedoc-plugin-file-categories": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
     "@vitest/coverage-v8": "^4.1.2",

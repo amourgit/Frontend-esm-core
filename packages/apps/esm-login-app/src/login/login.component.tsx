@@ -8,11 +8,11 @@ import {
   getCoreTranslation,
   interpolateUrl,
   refetchCurrentUser,
-  navigate as openmrsNavigate,
+  navigate as egenNavigate,
   useConfig,
   useConnectivity,
   useSession,
-} from '@openmrs/esm-framework';
+} from '@egen/esm-framework';
 import { type ConfigSchema } from '../config-schema';
 import Logo from '../logo.component';
 import Footer from '../footer.component';
@@ -49,7 +49,7 @@ const Login: React.FC = () => {
   useEffect(() => {
     if (!user) {
       if (loginProvider.type === 'oauth2' || loginProvider.type === 'custom') {
-        openmrsNavigate({ to: loginProvider.loginUrl });
+        egenNavigate({ to: loginProvider.loginUrl });
       } else if (!username && location.pathname === '/login/confirm') {
         navigate('/login');
       }
@@ -127,13 +127,13 @@ const Login: React.FC = () => {
             let to = loginLinks?.loginSuccess || '/home';
             if (location?.state?.referrer) {
               if (location.state.referrer.startsWith('/')) {
-                to = `\${openmrsSpaBase}${location.state.referrer}`;
+                to = `\${egenSpaBase}${location.state.referrer}`;
               } else {
                 to = location.state.referrer;
               }
             }
 
-            openmrsNavigate({ to });
+            egenNavigate({ to });
           } else {
             navigate('/login/location');
           }

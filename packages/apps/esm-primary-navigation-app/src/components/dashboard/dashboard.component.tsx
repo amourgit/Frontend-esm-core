@@ -7,11 +7,11 @@ import {
   DashboardExtension,
   getCoreTranslation,
   useConfig,
-  openmrsComponentDecorator,
-  type OpenmrsReactComponentProps,
+  egenComponentDecorator,
+  type EgenReactComponentProps,
   Type,
   type IconId,
-} from '@openmrs/esm-framework/src/internal';
+} from '@egen/esm-framework/src/internal';
 
 export const dashboardConfigSchema = {
   title: {
@@ -54,7 +54,7 @@ export default function Dashboard({ basePath, moduleName }: DashboardProps) {
 
   const Component = useMemo(
     () =>
-      openmrsComponentDecorator<OpenmrsReactComponentProps>({
+      egenComponentDecorator<EgenReactComponentProps>({
         moduleName: module,
         featureName: 'dashboard',
       })(() => <DashboardInternal basePath={basePath} />),
@@ -76,7 +76,7 @@ export default function Dashboard({ basePath, moduleName }: DashboardProps) {
 
 // t('noPathInDashboardExtension', 'Cannot render the dashboard extension without the property "path" being set in the configuration schema')
 function DashboardInternal({ basePath }: { basePath: string }) {
-  const { t } = useTranslation('@openmrs/esm-primary-navigation-app');
+  const { t } = useTranslation('@egen/esm-primary-navigation-app');
   const config = useConfig<DashboardConfig>();
 
   if (!config.path) {

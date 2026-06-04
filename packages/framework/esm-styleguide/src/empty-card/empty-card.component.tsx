@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Layer, Tile } from '@carbon/react';
-import { useLayoutType } from '@openmrs/esm-react-utils';
-import { getCoreTranslation } from '@openmrs/esm-translations';
+import { useLayoutType } from '@egen/esm-react-utils';
+import { getCoreTranslation } from '@egen/esm-translations';
 import { CardHeader } from '../cards';
 import styles from './empty-card.module.scss';
 
@@ -17,7 +17,7 @@ export interface EmptyCardProps {
 export const EmptyCardIllustration = ({ width = '64', height = '64' }) => {
   return (
     <svg width={width} height={height} viewBox="0 0 64 64">
-      <use href={`#omrs-empty-data-illustration`} />
+      <use href={`#egen-empty-data-illustration`} />
     </svg>
   );
 };

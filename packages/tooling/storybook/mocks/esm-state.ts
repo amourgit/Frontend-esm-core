@@ -1,4 +1,4 @@
-// Storybook-compatible mock for @openmrs/esm-state.
+// Storybook-compatible mock for @egen/esm-state.
 
 const stores: Record<string, any> = {};
 

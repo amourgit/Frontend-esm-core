@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { compile, evaluate, evaluateAsBoolean, evaluateAsNumber, evaluateAsType, evaluateAsync } from './evaluator';
 
-describe('OpenMRS Expression Evaluator', () => {
+describe('Egen Expression Evaluator', () => {
   it('should evaluate a simple expression', () => {
     expect(evaluate('1 + 1')).toBe(2);
   });

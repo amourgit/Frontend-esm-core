@@ -2,8 +2,8 @@ import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 
-window.openmrsBase = '/openmrs';
+window.egenBase = '/egen';
 window.spaBase = '/spa';
-window.getOpenmrsSpaBase = vi.fn(() => '/openmrs/spa/');
+window.getEgenSpaBase = vi.fn(() => '/egen/spa/');
 
 afterEach(cleanup);

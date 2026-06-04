@@ -12,7 +12,7 @@ permissions: {}
 
 jobs:
   pr-title:
-    uses: openmrs/openmrs-contrib-gha-workflows/.github/workflows/frontend-pr-title-check.yml@main
+    uses: egen/egen-contrib-gha-workflows/.github/workflows/frontend-pr-title-check.yml@main
     with:
       pr-title: ${{ github.event.pull_request.title }}
       pr-author-login: ${{ github.event.pull_request.user.login }}

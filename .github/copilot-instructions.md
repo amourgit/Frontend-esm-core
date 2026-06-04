@@ -1,8 +1,8 @@
-# Copilot Cloud Agent Instructions for openmrs-esm-core
+# Copilot Cloud Agent Instructions for egen-esm-core
 
 ## Repository Overview
 
-This is the **OpenMRS 3.x (O3) Frontend Core** monorepo. It contains the core framework libraries, app shell, tooling, and foundational frontend modules for the OpenMRS microfrontend ecosystem. It is a TypeScript/React project using Yarn 4 workspaces, built with Rspack (apps) and SWC (framework libraries), tested with Vitest and Playwright, and linted with ESLint and Prettier.
+This is the **Egen 3.x (O3) Frontend Core** monorepo. It contains the core framework libraries, app shell, tooling, and foundational frontend modules for the Egen microfrontend ecosystem. It is a TypeScript/React project using Yarn 4 workspaces, built with Rspack (apps) and SWC (framework libraries), tested with Vitest and Playwright, and linted with ESLint and Prettier.
 
 **Trust these instructions.** Only search the codebase if the information here is incomplete or found to be in error.
 
@@ -11,7 +11,7 @@ This is the **OpenMRS 3.x (O3) Frontend Core** monorepo. It contains the core fr
 ```
 packages/
   apps/                  # Frontend module apps (login, devtools, primary-navigation, etc.)
-  framework/             # Core framework libraries aggregated into @openmrs/esm-framework
+  framework/             # Core framework libraries aggregated into @egen/esm-framework
     esm-api/             # Backend API helpers
     esm-config/          # Configuration system
     esm-react-utils/     # React hooks and utilities
@@ -21,7 +21,7 @@ packages/
     ...16 more sub-packages
   shell/esm-app-shell/   # The app shell that bootstraps the SPA
   tooling/
-    openmrs/             # CLI tooling
+    egen/             # CLI tooling
     rspack-config/       # Shared Rspack configuration
     webpack-config/      # Shared Webpack configuration (legacy)
     storybook/           # Storybook setup
@@ -57,7 +57,7 @@ yarn install
 yarn turbo run build
 
 # Build a single app (builds its framework dependencies first, ~28s cold)
-yarn turbo run build --filter="@openmrs/esm-login-app"
+yarn turbo run build --filter="@egen/esm-login-app"
 ```
 
 Framework packages must be built before apps. Turborepo handles this automatically via `dependsOn: ["^build"]` in `turbo.json`.
@@ -69,26 +69,26 @@ Framework packages must be built before apps. Turborepo handles this automatical
 yarn turbo run test
 
 # Run tests for one package (~4s)
-yarn turbo run test --filter="@openmrs/esm-login-app"
+yarn turbo run test --filter="@egen/esm-login-app"
 
 # Bypass turbo cache
 yarn turbo run test --force
 ```
 
-Tests use **Vitest** (not Jest) with `happy-dom` environment. Test files are `*.test.tsx` / `*.test.ts`. Each app has a `vitest.config.ts` that aliases `@openmrs/esm-framework` to its mock: `@openmrs/esm-framework/mock`.
+Tests use **Vitest** (not Jest) with `happy-dom` environment. Test files are `*.test.tsx` / `*.test.ts`. Each app has a `vitest.config.ts` that aliases `@egen/esm-framework` to its mock: `@egen/esm-framework/mock`.
 
 ### Lint (~2s per package)
 
 ```sh
 yarn turbo run lint
-yarn turbo run lint --filter="@openmrs/esm-login-app"
+yarn turbo run lint --filter="@egen/esm-login-app"
 ```
 
 ### TypeScript type checking (~12s, checks all framework deps)
 
 ```sh
 yarn turbo run typescript
-yarn turbo run typescript --filter="@openmrs/esm-login-app"
+yarn turbo run typescript --filter="@egen/esm-login-app"
 ```
 
 ### Full verification (lint + test + typecheck, same as CI)
@@ -107,7 +107,7 @@ yarn test-e2e
 
 ## CI Pipeline (What PRs Must Pass)
 
-The `OpenMRS CI` workflow (`.github/workflows/ci.yml`) runs on every PR to `main`:
+The `Egen CI` workflow (`.github/workflows/ci.yml`) runs on every PR to `main`:
 
 1. `yarn install --immutable`
 2. `yarn turbo run build --color --concurrency=5`
@@ -130,7 +130,7 @@ On push: `yarn verify` (full lint + test + typecheck).
 
 ## Coding Conventions
 
-Follow the conventions at https://o3-docs.openmrs.org/docs/coding-conventions/introduction. Key rules:
+Follow the conventions at https://o3-docs.egen.org/docs/coding-conventions/introduction. Key rules:
 
 **File naming:** Components use `*.component.tsx`, tests use `*.test.tsx`, styles use `*.module.scss`, data fetching uses `*.resource.ts`. Colocate related files in the same directory.
 
@@ -138,11 +138,11 @@ Follow the conventions at https://o3-docs.openmrs.org/docs/coding-conventions/in
 
 **Styling:** Use CSS Modules (`.module.scss`). Use Carbon design tokens for colors, spacing, typography. Use the `classnames` library for conditional classes.
 
-**Data fetching:** Place in `*.resource.ts` files. Use SWR hooks (`useSWR`, `useSWRImmutable`, `useOpenmrsSWR`). Name hooks `use<Resource>`. Always memoize return values and return `{ data, error, isLoading }`.
+**Data fetching:** Place in `*.resource.ts` files. Use SWR hooks (`useSWR`, `useSWRImmutable`, `useEgenSWR`). Name hooks `use<Resource>`. Always memoize return values and return `{ data, error, isLoading }`.
 
 **i18n:** Use `useTranslation()` hook. Call `t("key", "Default value")`. Run `extract-translations` to sync `en.json`. Never edit locale files directly (managed by Transifex).
 
-**Testing:** Use React Testing Library. Query via `screen` object. Test behavior, not implementation. Use `@testing-library/jest-dom` matchers. Use `query*` only to assert absence. The framework mock at `@openmrs/esm-framework/mock` is auto-aliased in `vitest.config.ts`.
+**Testing:** Use React Testing Library. Query via `screen` object. Test behavior, not implementation. Use `@testing-library/jest-dom` matchers. Use `query*` only to assert absence. The framework mock at `@egen/esm-framework/mock` is auto-aliased in `vitest.config.ts`.
 
 **Important:** If you change framework API surface (add/remove/modify exports from any `packages/framework/*` package), you must also update the mock files: `packages/framework/esm-framework/mock.tsx` and `packages/framework/esm-framework/mock-jest.tsx`.
 

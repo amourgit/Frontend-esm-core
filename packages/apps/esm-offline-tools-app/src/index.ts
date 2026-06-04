@@ -1,4 +1,4 @@
-import { defineConfigSchema, getSyncLifecycle, registerBreadcrumbs } from '@openmrs/esm-framework';
+import { defineConfigSchema, getSyncLifecycle, registerBreadcrumbs } from '@egen/esm-framework';
 import { routes } from './constants';
 import { createDashboardLink } from './createDashboardLink';
 import { dashboardMeta } from './dashboard.meta';
@@ -19,7 +19,7 @@ import OfflineToolsNavLink from './nav/offline-tools-nav-link.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
-const moduleName = '@openmrs/esm-offline-tools-app';
+const moduleName = '@egen/esm-offline-tools-app';
 const options = {
   featureName: 'offline-tools',
   moduleName,

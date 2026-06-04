@@ -1,7 +1,7 @@
 /** @module @category UI */
 import React, { useMemo, useId } from 'react';
 import classNames from 'classnames';
-import { getCoreTranslation } from '@openmrs/esm-translations';
+import { getCoreTranslation } from '@egen/esm-translations';
 import {
   calculateInterpretation,
   normalizeInterpretation,
@@ -79,10 +79,10 @@ export const NumericObservation: React.FC<NumericObservationProps> = ({
   const flaggedAbnormal = interpretation !== 'normal';
 
   const labelId = label
-    ? `omrs-numeric-obs-label-${label.replaceAll(/\s+/g, '-').toLowerCase()}-${generatedId}`
+    ? `egen-numeric-obs-label-${label.replaceAll(/\s+/g, '-').toLowerCase()}-${generatedId}`
     : undefined;
-  const valueId = `omrs-numeric-obs-value-${generatedId}`;
-  const unitId = `omrs-numeric-obs-unit-${generatedId}`;
+  const valueId = `egen-numeric-obs-value-${generatedId}`;
+  const unitId = `egen-numeric-obs-unit-${generatedId}`;
 
   const hasValue = value != null && value !== '';
   const displayValue = hasValue ? value : getCoreTranslation('notAvailable', 'Not available');

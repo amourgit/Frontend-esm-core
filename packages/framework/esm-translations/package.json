@@ -1,5 +1,5 @@
 {
-  "name": "@openmrs/esm-translations",
+  "name": "@egen/esm-translations",
   "version": "9.0.2",
   "license": "MPL-2.0",
   "description": "O3 Framework module for translation support",
@@ -32,7 +32,7 @@
     "extract-translations": "i18next src/translations.ts --config='i18next-parser.config.mjs'"
   },
   "keywords": [
-    "openmrs",
+    "egen",
     "microfrontends"
   ],
   "directories": {
@@ -40,16 +40,16 @@
     "src": "src"
   },
   "browserslist": [
-    "extends browserslist-config-openmrs"
+    "extends browserslist-config-egen"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-core.git"
+    "url": "git+https://github.com/egen/egen-esm-core.git"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-core/issues"
+    "url": "https://github.com/egen/egen-esm-core/issues"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-core#readme",
+  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "publishConfig": {
     "access": "public"
   },

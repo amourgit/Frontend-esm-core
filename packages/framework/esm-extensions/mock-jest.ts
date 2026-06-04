@@ -1,4 +1,4 @@
-import { getGlobalStore } from '@openmrs/esm-state/mock';
+import { getGlobalStore } from '@egen/esm-state/mock';
 
 export const attach = jest.fn();
 export const detach = jest.fn();

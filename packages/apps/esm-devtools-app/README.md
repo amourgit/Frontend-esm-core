@@ -1,6 +1,6 @@
-# openmrs-esm-devtools
+# egen-esm-devtools
 
-openmrs-esm-devtools is an in-browser javascript module that provides a UI for developers writing frontend code.
+egen-esm-devtools is an in-browser javascript module that provides a UI for developers writing frontend code.
 
 ![esm-devtools](https://user-images.githubusercontent.com/1031876/81030238-f5b9d500-8e3c-11ea-81b8-6c2a4938faf2.gif)
 
@@ -20,7 +20,7 @@ screen. The rectangular button will only show up if you run the following
 command in the browser console:
 
 ```js
-localStorage.setItem('openmrs:devtools', true)
+localStorage.setItem('egen:devtools', true)
 ```
 
 Now refresh the page and you'll see the rectangle. Note that when the rectangle is
@@ -28,7 +28,7 @@ red that it means that you have an active override.
 
 ## Implementation notes
 
-openmrs-esm-devtools is using
+egen-esm-devtools is using
 [import-map-overrides](https://github.com/single-spa/import-map-overrides)
 to accomplish this behavior.
 

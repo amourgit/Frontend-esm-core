@@ -21,7 +21,7 @@ export const mockConfig: ConfigSchema = {
     alt: 'Logo',
   },
   links: {
-    loginSuccess: '${openmrsSpaBase}/home',
+    loginSuccess: '${egenSpaBase}/home',
   },
   footer: {
     additionalLogos: [],

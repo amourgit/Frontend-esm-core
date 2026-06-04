@@ -1,5 +1,5 @@
 {
-  "name": "@openmrs/webpack-config",
+  "name": "@egen/webpack-config",
   "version": "9.0.2",
   "license": "MPL-2.0",
   "main": "dist/index.js",
@@ -14,21 +14,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-core.git"
+    "url": "git+https://github.com/egen/egen-esm-core.git"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-core/issues"
+    "url": "https://github.com/egen/egen-esm-core/issues"
   },
   "publishConfig": {
     "access": "public"
   },
   "keywords": [
-    "openmrs",
+    "egen",
     "microfrontends",
     "webpack",
     "config"
   ],
-  "homepage": "https://github.com/openmrs/openmrs-esm-core#readme",
+  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "dependencies": {
     "@swc/core": "1.15.21",
     "clean-webpack-plugin": "4.0.0",

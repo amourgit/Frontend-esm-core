@@ -1,17 +1,17 @@
 /** @module @category Offline */
-import type { ImportMap } from '@openmrs/esm-globals';
-import type { OmrsOfflineCachingStrategy } from './service-worker-http-headers';
-import { getOmrsServiceWorker } from './service-worker';
+import type { ImportMap } from '@egen/esm-globals';
+import type { EgenOfflineCachingStrategy } from './service-worker-http-headers';
+import { getEgenServiceWorker } from './service-worker';
 
 /**
  * Sends the specified message to the application's service worker.
  * @param message The message to be sent.
  * @returns A promise which completes when the message has been successfully processed by the Service Worker.
  */
-export async function messageOmrsServiceWorker(
-  message: KnownOmrsServiceWorkerMessages,
+export async function messageEgenServiceWorker(
+  message: KnownEgenServiceWorkerMessages,
 ): Promise<MessageServiceWorkerResult<any>> {
-  const sw = await getOmrsServiceWorker();
+  const sw = await getEgenServiceWorker();
   return sw
     ? await sw.messageSW(message)
     : {
@@ -22,24 +22,24 @@ export async function messageOmrsServiceWorker(
       };
 }
 
-export interface OmrsServiceWorkerMessage<MessageTypeTypeIdentifier extends string> {
+export interface EgenServiceWorkerMessage<MessageTypeTypeIdentifier extends string> {
   type: MessageTypeTypeIdentifier;
 }
 
-export interface OnImportMapChangedMessage extends OmrsServiceWorkerMessage<'onImportMapChanged'> {
+export interface OnImportMapChangedMessage extends EgenServiceWorkerMessage<'onImportMapChanged'> {
   importMap: ImportMap;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ClearDynamicRoutesMessage extends OmrsServiceWorkerMessage<'clearDynamicRoutes'> {}
+export interface ClearDynamicRoutesMessage extends EgenServiceWorkerMessage<'clearDynamicRoutes'> {}
 
-export interface RegisterDynamicRouteMessage extends OmrsServiceWorkerMessage<'registerDynamicRoute'> {
+export interface RegisterDynamicRouteMessage extends EgenServiceWorkerMessage<'registerDynamicRoute'> {
   pattern?: string;
   url?: string;
-  strategy?: OmrsOfflineCachingStrategy;
+  strategy?: EgenOfflineCachingStrategy;
 }
 
-export type KnownOmrsServiceWorkerMessages =
+export type KnownEgenServiceWorkerMessages =
   | OnImportMapChangedMessage
   | ClearDynamicRoutesMessage
   | RegisterDynamicRouteMessage;

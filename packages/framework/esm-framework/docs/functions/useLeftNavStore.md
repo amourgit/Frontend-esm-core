@@ -4,7 +4,7 @@
 
 > **useLeftNavStore**(): [`LeftNavStore`](../interfaces/LeftNavStore.md)
 
-Defined in: [packages/framework/esm-react-utils/src/useLeftNavStore.ts:20](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useLeftNavStore.ts#L20)
+Defined in: [packages/framework/esm-react-utils/src/useLeftNavStore.ts:20](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useLeftNavStore.ts#L20)
 
 A React hook that provides access to the left navigation store state.
 The component will re-render whenever the left navigation state changes.
@@ -18,7 +18,7 @@ The current state of the left navigation store.
 ## Example
 
 ```tsx
-import { useLeftNavStore } from '@openmrs/esm-framework';
+import { useLeftNavStore } from '@egen/esm-framework';
 function MyComponent() {
   const leftNavState = useLeftNavStore();
   return <div>Current nav: {leftNavState.activeNavName}</div>;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { SwitcherItem } from '@carbon/react';
-import { UserAvatarIcon, useSession } from '@openmrs/esm-framework';
+import { UserAvatarIcon, useSession } from '@egen/esm-framework';
 
 const UserPanelSwitcher: React.FC = () => {
   const session = useSession();

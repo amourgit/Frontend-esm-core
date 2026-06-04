@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Layer, Tile } from '@carbon/react';
 import { CheckmarkFilled, WarningFilled } from '@carbon/react/icons';
-import { getDynamicOfflineDataHandlers } from '@openmrs/esm-framework';
+import { getDynamicOfflineDataHandlers } from '@egen/esm-framework';
 import { useLastSyncStateOfPatient } from '../hooks/offline-patient-data-hooks';
 import SharedPageLayout from '../components/shared-page-layout.component';
 import styles from './offline-patient-sync-details.styles.scss';

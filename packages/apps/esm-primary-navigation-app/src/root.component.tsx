@@ -5,7 +5,7 @@ import styles from './root.scss';
 
 const Root: React.FC = () => {
   return (
-    <BrowserRouter basename={window.getOpenmrsSpaBase()}>
+    <BrowserRouter basename={window.getEgenSpaBase()}>
       <Routes>
         <Route path="login/*" element={null} />
         <Route path="logout/*" element={null} />

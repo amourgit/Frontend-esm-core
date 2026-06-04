@@ -31,7 +31,7 @@ import {
   syncDynamicOfflineData,
   useLayoutType,
   type DynamicOfflineDataSyncState,
-} from '@openmrs/esm-framework';
+} from '@egen/esm-framework';
 import { useOfflinePatientsWithEntries, useOfflineRegisteredPatients } from '../hooks/offline-patient-data-hooks';
 import EmptyState from './empty-state.component';
 import LastUpdatedTableCell from './last-updated-table-cell.component';

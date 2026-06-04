@@ -10,7 +10,7 @@ import {
   TableCell,
   TableContainer,
 } from '@carbon/react';
-import type { ResolvedDependenciesModule } from './openmrs-backend-dependencies';
+import type { ResolvedDependenciesModule } from './egen-backend-dependencies';
 import styles from './backend-dependencies.styles.scss';
 
 export interface BackendDependencies {

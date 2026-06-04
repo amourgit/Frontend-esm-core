@@ -19,7 +19,7 @@ $inverse-link: #78a9ff;
 $support-02: #24a148;
 $inverse-support-03: #f1c21b;
 $warning-background: #fff8e1;
-$openmrs-background-grey: #f4f4f4;
+$egen-background-grey: #f4f4f4;
 $danger: #da1e28;
 $interactive-01: #0f62fe;
 $field-01: #f4f4f4;
@@ -58,8 +58,8 @@ $brand-primary-100: #081a1c;
   --brand-03: #007d79;
   --bottom-nav-height: #{layout.$spacing-10};
   --workspace-header-height: #{layout.$spacing-09};
-  --tablet-workspace-window-height: calc(100vh - var(--omrs-navbar-height) - var(--bottom-nav-height));
-  --desktop-workspace-window-height: calc(100vh - var(--omrs-navbar-height) - var(--workspace-header-height));
+  --tablet-workspace-window-height: calc(100vh - var(--egen-navbar-height) - var(--bottom-nav-height));
+  --desktop-workspace-window-height: calc(100vh - var(--egen-navbar-height) - var(--workspace-header-height));
 }
 
 $breakpoint-phone-min: 0px;

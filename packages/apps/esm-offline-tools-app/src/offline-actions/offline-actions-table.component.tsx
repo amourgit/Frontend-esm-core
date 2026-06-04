@@ -28,7 +28,7 @@ import {
   useLayoutType,
   usePagination,
   type SyncItem,
-} from '@openmrs/esm-framework';
+} from '@egen/esm-framework';
 import styles from './offline-actions-table.styles.scss';
 
 export interface SyncItemWithPatient {
@@ -223,7 +223,7 @@ function PatientLink({ patientUuid, patientName }) {
     <Link
       onClick={() =>
         navigate({
-          to: `${window.getOpenmrsSpaBase()}patient/${patientUuid}/chart`,
+          to: `${window.getEgenSpaBase()}patient/${patientUuid}/chart`,
         })
       }
     >

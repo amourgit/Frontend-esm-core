@@ -2,8 +2,8 @@ import {
   type WorkspaceDefinition2,
   type WorkspaceGroupDefinition2,
   type WorkspaceWindowDefinition2,
-} from '@openmrs/esm-globals';
-import { createGlobalStore } from '@openmrs/esm-state';
+} from '@egen/esm-globals';
+import { createGlobalStore } from '@egen/esm-state';
 
 export interface OpenedWorkspace {
   workspaceName: string;

@@ -18,7 +18,7 @@ services:
       - test
 
   gateway:
-    image: openmrs/openmrs-reference-application-3-gateway:${TAG:-nightly}
+    image: egen/egen-reference-application-3-gateway:${TAG:-nightly}
     depends_on:
       - frontend
       - backend
@@ -28,10 +28,10 @@ services:
       - test
 
   frontend:
-    image: openmrs/openmrs-reference-application-3-frontend:${TAG:-nightly}
+    image: egen/egen-reference-application-3-frontend:${TAG:-nightly}
     environment:
-      SPA_PATH: /openmrs/spa
-      API_URL: /openmrs
+      SPA_PATH: /egen/spa
+      API_URL: /egen
       SPA_CONFIG_URLS:
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost/" ]
@@ -42,13 +42,13 @@ services:
       - test
 
   backend:
-    image: openmrs/openmrs-reference-application-3-backend:nightly-with-data
+    image: egen/egen-reference-application-3-backend:nightly-with-data
     depends_on:
       - db
     networks:
       - test
   db:
-    image: openmrs/openmrs-reference-application-3-db:nightly-with-data
+    image: egen/egen-reference-application-3-db:nightly-with-data
     networks:
       - test
 

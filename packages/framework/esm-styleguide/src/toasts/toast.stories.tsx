@@ -11,7 +11,7 @@ const meta: Meta<typeof Toast> = {
   },
   decorators: [
     (Story) => (
-      <div className="omrs-toasts-container">
+      <div className="egen-toasts-container">
         <Story />
       </div>
     ),

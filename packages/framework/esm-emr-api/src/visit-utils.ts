@@ -1,6 +1,6 @@
 /** @module @category API */
-import { openmrsFetch, restBaseUrl, type FetchResponse } from '@openmrs/esm-api';
-import { getGlobalStore } from '@openmrs/esm-state';
+import { egenFetch, restBaseUrl, type FetchResponse } from '@egen/esm-api';
+import { getGlobalStore } from '@egen/esm-state';
 import { BehaviorSubject } from 'rxjs';
 import { type NewVisitPayload, type UpdateVisitPayload, type Visit } from './types';
 
@@ -68,7 +68,7 @@ const initialState: VisitStoreState = getVisitSessionStorage() || {
  *
  * @example
  * ```ts
- * import { getVisitStore } from '@openmrs/esm-framework';
+ * import { getVisitStore } from '@egen/esm-framework';
  * const store = getVisitStore();
  * const unsubscribe = store.subscribe((state) => {
  *   console.log('Current patient:', state.patientUuid);
@@ -88,7 +88,7 @@ export function getVisitStore() {
  *
  * @example
  * ```ts
- * import { setCurrentVisit } from '@openmrs/esm-framework';
+ * import { setCurrentVisit } from '@egen/esm-framework';
  * setCurrentVisit('patient-uuid', 'visit-uuid');
  * ```
  */
@@ -101,19 +101,19 @@ getVisitStore().subscribe((state) => {
 });
 
 function setVisitSessionStorage(value: VisitStoreState) {
-  sessionStorage.setItem('openmrs:visitStoreState', JSON.stringify(value));
+  sessionStorage.setItem('egen:visitStoreState', JSON.stringify(value));
 }
 
 function getVisitSessionStorage(): VisitStoreState | null {
   try {
-    return JSON.parse(sessionStorage.getItem('openmrs:visitStoreState') || 'null');
+    return JSON.parse(sessionStorage.getItem('egen:visitStoreState') || 'null');
   } catch (e) {
     return null;
   }
 }
 
 /**
- * Creates a new visit by sending a POST request to the OpenMRS REST API.
+ * Creates a new visit by sending a POST request to the Egen REST API.
  *
  * @param payload The visit data to create, including patient UUID, visit type,
  *   start datetime, and other visit attributes.
@@ -122,7 +122,7 @@ function getVisitSessionStorage(): VisitStoreState | null {
  *
  * @example
  * ```ts
- * import { saveVisit } from '@openmrs/esm-framework';
+ * import { saveVisit } from '@egen/esm-framework';
  * const abortController = new AbortController();
  * const response = await saveVisit({
  *   patient: 'patient-uuid',
@@ -132,7 +132,7 @@ function getVisitSessionStorage(): VisitStoreState | null {
  * ```
  */
 export function saveVisit(payload: NewVisitPayload, abortController: AbortController): Promise<FetchResponse<Visit>> {
-  return openmrsFetch(`${restBaseUrl}/visit`, {
+  return egenFetch(`${restBaseUrl}/visit`, {
     signal: abortController.signal,
     method: 'POST',
     headers: {
@@ -143,7 +143,7 @@ export function saveVisit(payload: NewVisitPayload, abortController: AbortContro
 }
 
 /**
- * Updates an existing visit by sending a POST request to the OpenMRS REST API.
+ * Updates an existing visit by sending a POST request to the Egen REST API.
  *
  * @param uuid The UUID of the visit to update.
  * @param payload The visit data to update, such as stop datetime or attributes.
@@ -152,7 +152,7 @@ export function saveVisit(payload: NewVisitPayload, abortController: AbortContro
  *
  * @example
  * ```ts
- * import { updateVisit } from '@openmrs/esm-framework';
+ * import { updateVisit } from '@egen/esm-framework';
  * const abortController = new AbortController();
  * const response = await updateVisit('visit-uuid', {
  *   stopDatetime: new Date().toISOString()
@@ -164,7 +164,7 @@ export function updateVisit(
   payload: UpdateVisitPayload,
   abortController: AbortController,
 ): Promise<FetchResponse<Visit>> {
-  return openmrsFetch(`${restBaseUrl}/visit/${uuid}`, {
+  return egenFetch(`${restBaseUrl}/visit/${uuid}`, {
     signal: abortController.signal,
     method: 'POST',
     headers: {
@@ -184,7 +184,7 @@ export function getVisitsForPatient(
 ): Promise<FetchResponse<{ results: Array<Visit> }>> {
   const custom = v ?? defaultVisitCustomRepresentation;
 
-  return openmrsFetch(`${restBaseUrl}/visit?patient=${patientUuid}&v=${custom}`, {
+  return egenFetch(`${restBaseUrl}/visit?patient=${patientUuid}&v=${custom}`, {
     signal: abortController.signal,
     method: 'GET',
     headers: {

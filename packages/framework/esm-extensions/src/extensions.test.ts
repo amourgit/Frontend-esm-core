@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createGlobalStore } from '@openmrs/esm-state';
-import type { Session } from '@openmrs/esm-api';
+import { createGlobalStore } from '@egen/esm-state';
+import type { Session } from '@egen/esm-api';
 import {
   attach,
   detach,
@@ -17,7 +17,7 @@ import type { ExtensionInfo, ExtensionInternalStore, ExtensionRegistration } fro
 import { getExtensionInternalStore } from './store';
 
 // Minimal mocking - only what we need for fine-grained control
-vi.mock('@openmrs/esm-api', () => ({
+vi.mock('@egen/esm-api', () => ({
   sessionStore: createGlobalStore('mock-session-store', {
     loaded: false,
     session: null,
@@ -25,18 +25,18 @@ vi.mock('@openmrs/esm-api', () => ({
   userHasAccess: vi.fn(() => true),
 }));
 
-vi.mock('@openmrs/esm-utils', async (importOriginal) => {
+vi.mock('@egen/esm-utils', async (importOriginal) => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const actual = await importOriginal<typeof import('@openmrs/esm-utils')>();
+  const actual = await importOriginal<typeof import('@egen/esm-utils')>();
   return {
     ...actual,
     isOnline: vi.fn(() => true),
   };
 });
 
-vi.mock('@openmrs/esm-globals', async (importOriginal) => {
+vi.mock('@egen/esm-globals', async (importOriginal) => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const actual = await importOriginal<typeof import('@openmrs/esm-globals')>();
+  const actual = await importOriginal<typeof import('@egen/esm-globals')>();
   return {
     ...actual,
     subscribeConnectivityChanged: vi.fn(),

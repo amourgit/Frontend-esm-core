@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import last from 'lodash-es/last';
 import { BrowserRouter, useLocation } from 'react-router-dom';
-import { ConfigurableLink } from '@openmrs/esm-framework';
+import { ConfigurableLink } from '@egen/esm-framework';
 
 interface DashboardLinkConfig {
   basePath?: string;

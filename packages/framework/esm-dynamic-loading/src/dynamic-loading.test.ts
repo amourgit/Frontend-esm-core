@@ -20,11 +20,11 @@ vi.mock('./import-maps', () => ({
   resetImportMapOverrides: mockResetImportMapOverrides,
 }));
 
-vi.mock('@openmrs/esm-globals', () => ({
+vi.mock('@egen/esm-globals', () => ({
   dispatchToastShown: mockDispatchToastShown,
 }));
 
-vi.mock('@openmrs/esm-translations', () => ({
+vi.mock('@egen/esm-translations', () => ({
   getCoreTranslation: mockGetCoreTranslation,
 }));
 
@@ -59,7 +59,7 @@ describe('dynamic-loading', () => {
     localStorage.clear();
     document.head.querySelectorAll('script').forEach((el) => el.remove());
     (globalThis as any).__webpack_share_scopes__ = { default: {} };
-    (window as any).spaBase = '/openmrs/spa';
+    (window as any).spaBase = '/egen/spa';
     mockGetImportMapOverrideMap.mockReturnValue({ imports: {} });
   });
 
@@ -78,11 +78,11 @@ describe('dynamic-loading', () => {
     });
 
     it('replaces @ with underscores', () => {
-      expect(slugify('@openmrs/esm-foo')).toBe('_openmrs_esm_foo');
+      expect(slugify('@egen/esm-foo')).toBe('_egen_esm_foo');
     });
 
     it('handles a typical module name', () => {
-      expect(slugify('@openmrs/esm-patient-chart-app')).toBe('_openmrs_esm_patient_chart_app');
+      expect(slugify('@egen/esm-patient-chart-app')).toBe('_egen_esm_patient_chart_app');
     });
 
     it('returns the input unchanged when there are no special characters', () => {
@@ -101,26 +101,26 @@ describe('dynamic-loading', () => {
 
     it('throws when the package is not in the import map', async () => {
       mockGetCurrentPageMap.mockResolvedValue({ imports: {} });
-      await expect(preloadImport('@openmrs/esm-missing')).rejects.toThrow(
-        'Could not find the package @openmrs/esm-missing',
+      await expect(preloadImport('@egen/esm-missing')).rejects.toThrow(
+        'Could not find the package @egen/esm-missing',
       );
     });
 
     it('resolves immediately if the package is already loaded on window', async () => {
-      const slug = '_openmrs_esm_foo';
+      const slug = '_egen_esm_foo';
       (window as any)[slug] = { init: vi.fn(), get: vi.fn() };
 
-      await expect(preloadImport('@openmrs/esm-foo')).resolves.toBeUndefined();
+      await expect(preloadImport('@egen/esm-foo')).resolves.toBeUndefined();
 
       delete (window as any)[slug];
     });
 
     it('creates a script element and resolves on load', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost/foo.js' },
       });
 
-      const promise = preloadImport('@openmrs/esm-foo');
+      const promise = preloadImport('@egen/esm-foo');
       const script = await waitForScript('http://localhost/foo.js');
 
       expect(script.type).toBe('text/javascript');
@@ -133,10 +133,10 @@ describe('dynamic-loading', () => {
 
     it('rejects when the script fails to load', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost/foo.js' },
       });
 
-      const promise = preloadImport('@openmrs/esm-foo');
+      const promise = preloadImport('@egen/esm-foo');
       const script = await waitForScript('http://localhost/foo.js');
 
       script.dispatchEvent(new ErrorEvent('error', { message: 'net::ERR_CONNECTION_REFUSED' }));
@@ -146,13 +146,13 @@ describe('dynamic-loading', () => {
 
     it('shows a toast when an overridden script fails to load', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost:8080/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost:8080/foo.js' },
       });
       mockGetImportMapOverrideMap.mockReturnValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost:8080/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost:8080/foo.js' },
       });
 
-      const promise = preloadImport('@openmrs/esm-foo');
+      const promise = preloadImport('@egen/esm-foo');
       const script = await waitForScript('http://localhost:8080/foo.js');
 
       script.dispatchEvent(new ErrorEvent('error', { message: 'net::ERR_CONNECTION_REFUSED' }));
@@ -167,10 +167,10 @@ describe('dynamic-loading', () => {
 
     it('calls resetImportMapOverrides when the toast action button is clicked', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost:8080/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost:8080/foo.js' },
       });
       mockGetImportMapOverrideMap.mockReturnValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost:8080/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost:8080/foo.js' },
       });
 
       const reloadMock = vi.fn();
@@ -180,7 +180,7 @@ describe('dynamic-loading', () => {
         configurable: true,
       });
 
-      const promise = preloadImport('@openmrs/esm-foo');
+      const promise = preloadImport('@egen/esm-foo');
       const script = await waitForScript('http://localhost:8080/foo.js');
 
       script.dispatchEvent(new ErrorEvent('error', { message: 'fail' }));
@@ -194,9 +194,9 @@ describe('dynamic-loading', () => {
     });
 
     it('uses the provided import map instead of fetching one', async () => {
-      const importMap = { imports: { '@openmrs/esm-foo': 'http://localhost/foo.js' } };
+      const importMap = { imports: { '@egen/esm-foo': 'http://localhost/foo.js' } };
 
-      const promise = preloadImport('@openmrs/esm-foo', importMap);
+      const promise = preloadImport('@egen/esm-foo', importMap);
       const script = await waitForScript('http://localhost/foo.js');
 
       script.dispatchEvent(new Event('load'));
@@ -207,11 +207,11 @@ describe('dynamic-loading', () => {
 
     it('prepends spaBase to relative URLs starting with ./', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': './foo.js' },
+        imports: { '@egen/esm-foo': './foo.js' },
       });
 
-      const promise = preloadImport('@openmrs/esm-foo');
-      const script = await waitForScript('/openmrs/spa/foo.js');
+      const promise = preloadImport('@egen/esm-foo');
+      const script = await waitForScript('/egen/spa/foo.js');
 
       expect(script).not.toBeNull();
       script.dispatchEvent(new Event('load'));
@@ -222,28 +222,28 @@ describe('dynamic-loading', () => {
     it('does not reload a script that is already in the DOM and finished loading', async () => {
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost/foo.js' },
       });
 
       // First load
-      const firstPromise = preloadImport('@openmrs/esm-foo');
+      const firstPromise = preloadImport('@egen/esm-foo');
       const script = await waitForScript('http://localhost/foo.js');
       script.dispatchEvent(new Event('load'));
       await firstPromise;
 
       // Second load — script is in DOM but slug not on window, so it resolves with a warning
-      await expect(preloadImport('@openmrs/esm-foo')).resolves.toBeNull();
+      await expect(preloadImport('@egen/esm-foo')).resolves.toBeNull();
       expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('already loaded'));
     });
 
     it('resolves both callers when the same script is preloaded concurrently', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost/foo.js' },
       });
 
       // Two concurrent preloads for the same package
-      const first = preloadImport('@openmrs/esm-foo');
-      const second = preloadImport('@openmrs/esm-foo');
+      const first = preloadImport('@egen/esm-foo');
+      const second = preloadImport('@egen/esm-foo');
 
       const script = await waitForScript('http://localhost/foo.js');
       script.dispatchEvent(new Event('load'));
@@ -254,11 +254,11 @@ describe('dynamic-loading', () => {
 
     it('rejects both callers when a concurrently-loaded script fails', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost/foo.js' },
       });
 
-      const first = preloadImport('@openmrs/esm-foo');
-      const second = preloadImport('@openmrs/esm-foo');
+      const first = preloadImport('@egen/esm-foo');
+      const second = preloadImport('@egen/esm-foo');
 
       const script = await waitForScript('http://localhost/foo.js');
       script.dispatchEvent(new ErrorEvent('error', { message: 'net::ERR_FAILED' }));
@@ -271,10 +271,10 @@ describe('dynamic-loading', () => {
       vi.useFakeTimers();
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost/foo.js' },
       });
 
-      preloadImport('@openmrs/esm-foo');
+      preloadImport('@egen/esm-foo');
       await vi.advanceTimersByTimeAsync(1);
 
       expect(errorSpy).not.toHaveBeenCalled();
@@ -287,11 +287,11 @@ describe('dynamic-loading', () => {
 
     it('rejects with an empty string when the error event has no message', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@openmrs/esm-foo': 'http://localhost/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost/foo.js' },
       });
       vi.spyOn(console, 'error').mockImplementation(() => {});
 
-      const promise = preloadImport('@openmrs/esm-foo');
+      const promise = preloadImport('@egen/esm-foo');
       const script = await waitForScript('http://localhost/foo.js');
 
       script.dispatchEvent(new ErrorEvent('error'));
@@ -310,73 +310,73 @@ describe('dynamic-loading', () => {
     }
 
     afterEach(() => {
-      delete (window as any)['_openmrs_esm_foo'];
+      delete (window as any)['_egen_esm_foo'];
     });
 
     it('returns the module exports from a federated module', async () => {
       const moduleExports = { default: 'hello', namedExport: 42 };
-      setupFederatedModule('_openmrs_esm_foo', moduleExports);
+      setupFederatedModule('_egen_esm_foo', moduleExports);
 
-      const result = await importDynamic('@openmrs/esm-foo');
+      const result = await importDynamic('@egen/esm-foo');
       expect(result).toEqual(moduleExports);
     });
 
     it('calls container.init with the default webpack share scope', async () => {
       const initFn = vi.fn();
-      (window as any)['_openmrs_esm_foo'] = {
+      (window as any)['_egen_esm_foo'] = {
         init: initFn,
         get: vi.fn().mockResolvedValue(() => ({ default: true })),
       };
 
-      await importDynamic('@openmrs/esm-foo');
+      await importDynamic('@egen/esm-foo');
       expect(initFn).toHaveBeenCalledWith(__webpack_share_scopes__.default);
     });
 
     it('calls container.get with the specified share', async () => {
       const getFn = vi.fn().mockResolvedValue(() => ({ default: true }));
-      (window as any)['_openmrs_esm_foo'] = { init: vi.fn(), get: getFn };
+      (window as any)['_egen_esm_foo'] = { init: vi.fn(), get: getFn };
 
-      await importDynamic('@openmrs/esm-foo', './custom-share');
+      await importDynamic('@egen/esm-foo', './custom-share');
       expect(getFn).toHaveBeenCalledWith('./custom-share');
     });
 
     it('uses ./start as the default share', async () => {
       const getFn = vi.fn().mockResolvedValue(() => ({ default: true }));
-      (window as any)['_openmrs_esm_foo'] = { init: vi.fn(), get: getFn };
+      (window as any)['_egen_esm_foo'] = { init: vi.fn(), get: getFn };
 
-      await importDynamic('@openmrs/esm-foo');
+      await importDynamic('@egen/esm-foo');
       expect(getFn).toHaveBeenCalledWith('./start');
     });
 
     it('throws when the global is not a federated module', async () => {
-      (window as any)['_openmrs_esm_foo'] = 'not a module';
+      (window as any)['_egen_esm_foo'] = 'not a module';
 
-      await expect(importDynamic('@openmrs/esm-foo')).rejects.toThrow('does not refer to a federated module');
+      await expect(importDynamic('@egen/esm-foo')).rejects.toThrow('does not refer to a federated module');
     });
 
     it('throws when the factory returns null', async () => {
-      (window as any)['_openmrs_esm_foo'] = {
+      (window as any)['_egen_esm_foo'] = {
         init: vi.fn(),
         get: vi.fn().mockResolvedValue(() => null),
       };
 
-      await expect(importDynamic('@openmrs/esm-foo')).rejects.toThrow('did not return an ESM module');
+      await expect(importDynamic('@egen/esm-foo')).rejects.toThrow('did not return an ESM module');
     });
 
     it('throws when the factory returns a string', async () => {
-      (window as any)['_openmrs_esm_foo'] = {
+      (window as any)['_egen_esm_foo'] = {
         init: vi.fn(),
         get: vi.fn().mockResolvedValue(() => 'not a module'),
       };
 
-      await expect(importDynamic('@openmrs/esm-foo')).rejects.toThrow('did not return an ESM module');
+      await expect(importDynamic('@egen/esm-foo')).rejects.toThrow('did not return an ESM module');
     });
 
     it('rejects if preloading exceeds maxLoadingTime', async () => {
       vi.useFakeTimers();
       mockGetCurrentPageMap.mockReturnValue(new Promise(() => {}));
 
-      const promise = importDynamic('@openmrs/esm-foo', './start', { maxLoadingTime: 100 });
+      const promise = importDynamic('@egen/esm-foo', './start', { maxLoadingTime: 100 });
       // Attach a no-op handler so the rejection is tracked before the timer fires
       promise.catch(() => {});
 
@@ -392,7 +392,7 @@ describe('dynamic-loading', () => {
       vi.useFakeTimers();
       mockGetCurrentPageMap.mockReturnValue(new Promise(() => {}));
 
-      const promise = importDynamic('@openmrs/esm-foo');
+      const promise = importDynamic('@egen/esm-foo');
       promise.catch(() => {});
 
       // Just under 10 minutes — should not have rejected yet
@@ -412,7 +412,7 @@ describe('dynamic-loading', () => {
       vi.useFakeTimers();
       mockGetCurrentPageMap.mockReturnValue(new Promise(() => {}));
 
-      const promise = importDynamic('@openmrs/esm-foo', './start', { maxLoadingTime: -1 });
+      const promise = importDynamic('@egen/esm-foo', './start', { maxLoadingTime: -1 });
       promise.catch(() => {});
 
       vi.advanceTimersByTime(600_000);

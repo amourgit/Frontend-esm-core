@@ -45,7 +45,7 @@ jobs:
           server-token: ${{ env.TURBO_TOKEN }}
 
       - name: Build Storybook
-        run: yarn turbo run build --filter=@openmrs/storybook
+        run: yarn turbo run build --filter=@egen/storybook
         env:
           STORYBOOK_BASE_PATH: /${{ github.event.repository.name }}/storybook/
 

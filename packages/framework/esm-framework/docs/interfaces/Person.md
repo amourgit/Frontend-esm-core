@@ -2,15 +2,15 @@
 
 # Interface: Person
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:10](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L10)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:10](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L10)
 
-Superclass for all Openmrs Resources, with strict typings.
+Superclass for all Egen Resources, with strict typings.
 If the subclass does not have all attributes (including optional ones)
-accounted for, use OpenmrsResource instead.
+accounted for, use EgenResource instead.
 
 ## Extends
 
-- [`OpenmrsResourceStrict`](OpenmrsResourceStrict.md)
+- [`EgenResourceStrict`](EgenResourceStrict.md)
 
 ## Properties
 
@@ -18,7 +18,7 @@ accounted for, use OpenmrsResource instead.
 
 > `optional` **addresses**: [`PersonAddress`](PersonAddress.md)[]
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:21](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L21)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:21](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L21)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:21](https:/
 
 > `optional` **age**: `number`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:12](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L12)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:12](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L12)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:12](https:/
 
 > `optional` **attributes**: [`PersonAttribute`](PersonAttribute.md)[]
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:22](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L22)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:22](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L22)
 
 ***
 
@@ -42,11 +42,11 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:22](https:/
 
 > `optional` **auditInfo**: [`AuditInfo`](AuditInfo.md)
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:16](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L16)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:16](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L16)
 
 #### Inherited from
 
-[`OpenmrsResourceStrict`](OpenmrsResourceStrict.md).[`auditInfo`](OpenmrsResourceStrict.md#auditinfo)
+[`EgenResourceStrict`](EgenResourceStrict.md).[`auditInfo`](EgenResourceStrict.md#auditinfo)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:16](https:
 
 > `optional` **birthdate**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:13](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L13)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:13](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L13)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:13](https:/
 
 > `optional` **birthdateEstimated**: `boolean`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:14](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L14)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:14](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L14)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:14](https:/
 
 > `optional` **birthtime**: `null` \| `string`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:24](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L24)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:24](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L24)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:24](https:/
 
 > `optional` **causeOfDeath**: `null` \| [`Concept`](Concept.md)
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:17](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L17)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:17](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L17)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:17](https:/
 
 > `optional` **causeOfDeathNonCoded**: `null` \| `string`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:26](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L26)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:26](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L26)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:26](https:/
 
 > `optional` **dead**: `boolean`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:15](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L15)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:15](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L15)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:15](https:/
 
 > `optional` **deathDate**: `null` \| `string`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:16](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L16)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:16](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L16)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:16](https:/
 
 > `optional` **deathdateEstimated**: `boolean`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:25](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L25)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:25](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L25)
 
 ***
 
@@ -118,11 +118,11 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:25](https:/
 
 > `optional` **display**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:14](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L14)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:14](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L14)
 
 #### Inherited from
 
-[`OpenmrsResourceStrict`](OpenmrsResourceStrict.md).[`display`](OpenmrsResourceStrict.md#display)
+[`EgenResourceStrict`](EgenResourceStrict.md).[`display`](EgenResourceStrict.md#display)
 
 ***
 
@@ -130,7 +130,7 @@ Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:14](https:
 
 > `optional` **gender**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:11](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L11)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:11](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L11)
 
 ***
 
@@ -138,11 +138,11 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:11](https:/
 
 > `optional` **links**: [`Link`](Link.md)[]
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:15](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L15)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:15](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L15)
 
 #### Inherited from
 
-[`OpenmrsResourceStrict`](OpenmrsResourceStrict.md).[`links`](OpenmrsResourceStrict.md#links)
+[`EgenResourceStrict`](EgenResourceStrict.md).[`links`](EgenResourceStrict.md#links)
 
 ***
 
@@ -150,7 +150,7 @@ Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:15](https:
 
 > `optional` **names**: [`PersonName`](PersonName.md)[]
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:20](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L20)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:20](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L20)
 
 ***
 
@@ -158,7 +158,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:20](https:/
 
 > `optional` **preferredAddress**: [`PersonAddress`](PersonAddress.md)
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:19](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L19)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:19](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L19)
 
 ***
 
@@ -166,7 +166,7 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:19](https:/
 
 > `optional` **preferredName**: [`PersonName`](PersonName.md)
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:18](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L18)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:18](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L18)
 
 ***
 
@@ -174,11 +174,11 @@ Defined in: [packages/framework/esm-api/src/types/person-resource.ts:18](https:/
 
 > `optional` **resourceVersion**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:17](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L17)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:17](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L17)
 
 #### Inherited from
 
-[`OpenmrsResourceStrict`](OpenmrsResourceStrict.md).[`resourceVersion`](OpenmrsResourceStrict.md#resourceversion)
+[`EgenResourceStrict`](EgenResourceStrict.md).[`resourceVersion`](EgenResourceStrict.md#resourceversion)
 
 ***
 
@@ -186,11 +186,11 @@ Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:17](https:
 
 > **uuid**: `string`
 
-Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:13](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/openmrs-resource.ts#L13)
+Defined in: [packages/framework/esm-api/src/types/egen-resource.ts:13](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/egen-resource.ts#L13)
 
 #### Inherited from
 
-[`OpenmrsResourceStrict`](OpenmrsResourceStrict.md).[`uuid`](OpenmrsResourceStrict.md#uuid)
+[`EgenResourceStrict`](EgenResourceStrict.md).[`uuid`](EgenResourceStrict.md#uuid)
 
 ***
 
@@ -198,4 +198,4 @@ Defined in: [packages/framework/esm-api/src/types/openmrs-resource.ts:13](https:
 
 > `optional` **voided**: `boolean`
 
-Defined in: [packages/framework/esm-api/src/types/person-resource.ts:23](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L23)
+Defined in: [packages/framework/esm-api/src/types/person-resource.ts:23](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/types/person-resource.ts#L23)

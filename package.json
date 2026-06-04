@@ -1,5 +1,5 @@
 {
-  "name": "@openmrs/esm-core",
+  "name": "@egen/esm-core",
   "version": "9.0.2",
   "private": true,
   "workspaces": [
@@ -9,22 +9,22 @@
     "packages/tooling/*"
   ],
   "scripts": {
-    "run:omrs": "openmrs",
-    "run:shell": "yarn workspace @openmrs/esm-app-shell watch",
-    "ci:publish-next": "yarn workspaces foreach --all --topological --exclude @openmrs/esm-core --exclude @openmrs/storybook npm publish --tolerate-republish --access public --tag next",
-    "ci:publish": "yarn workspaces foreach --all --topological --exclude @openmrs/esm-core --exclude @openmrs/storybook npm publish --tolerate-republish --access public --tag latest",
+    "run:egen": "egen",
+    "run:shell": "yarn workspace @egen/esm-app-shell watch",
+    "ci:publish-next": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag next",
+    "ci:publish": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag latest",
     "release": "yarn workspaces foreach --all --topological version",
     "build": "turbo run build",
-    "build:apps": "turbo run build --filter='@openmrs/*-app'",
+    "build:apps": "turbo run build --filter='@egen/*-app'",
     "document": "turbo run document",
     "setup": "yarn install && turbo run build",
-    "start": "openmrs develop",
+    "start": "egen develop",
     "verify": "turbo run lint test typescript",
     "postinstall": "husky install",
     "test": "turbo run test",
     "test-e2e": "./e2e/support/github/run-e2e-docker-env.sh",
     "coverage": "turbo run test --coverage",
-    "storybook": "yarn workspace @openmrs/storybook storybook"
+    "storybook": "yarn workspace @egen/storybook storybook"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.1",
@@ -53,7 +53,7 @@
     "i18next-parser": "^9.3.0",
     "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^15.2.9",
-    "openmrs": "workspace:*",
+    "egen": "workspace:*",
     "prettier": "^3.1.0",
     "swc-loader": "0.2.7",
     "timezone-mock": "^1.2.2",
@@ -63,6 +63,5 @@
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix --max-warnings 0",
     "*.{css,scss,ts,tsx}": "prettier --write --list-different"
-  },
-  "packageManager": "yarn@4.10.3"
+  }
 }

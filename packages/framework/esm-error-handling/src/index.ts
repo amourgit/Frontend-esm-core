@@ -1,5 +1,5 @@
 /** @module @category Error Handling */
-import { dispatchToastShown } from '@openmrs/esm-globals';
+import { dispatchToastShown } from '@egen/esm-globals';
 
 window.onerror = function (error) {
   console.error('Unexpected error: ', error);
@@ -32,7 +32,7 @@ window.onunhandledrejection = function (event: PromiseRejectionEvent) {
  *
  * @example
  * ```ts
- * import { reportError } from '@openmrs/esm-framework';
+ * import { reportError } from '@egen/esm-framework';
  * try {
  *   await riskyOperation();
  * } catch (error) {
@@ -60,7 +60,7 @@ export function reportError(err: unknown) {
  *
  * @example
  * ```ts
- * import { createErrorHandler } from '@openmrs/esm-framework';
+ * import { createErrorHandler } from '@egen/esm-framework';
  * const handleError = createErrorHandler();
  * someAsyncOperation()
  *   .then(processResult)

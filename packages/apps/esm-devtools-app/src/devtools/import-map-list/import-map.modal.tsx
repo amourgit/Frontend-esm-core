@@ -9,7 +9,7 @@ import {
   isImportMapOverrideDisabled,
   removeImportMapOverride,
   removeRouteMapOverride,
-} from '@openmrs/esm-framework/src/internal';
+} from '@egen/esm-framework/src/internal';
 import type { Module } from './types';
 
 type ImportMapModalProps = ({ module: Module; isNew: false } | { module: never; isNew: true }) & { close: () => void };

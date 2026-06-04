@@ -108,8 +108,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
         with:
-          client-id: ${{ secrets.OMRS_PR_BOT_CLIENT_ID }}
-          private-key: ${{ secrets.OMRS_PR_BOT_PRIVATE_KEY }}
+          client-id: ${{ secrets.EGEN_PR_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.EGEN_PR_BOT_PRIVATE_KEY }}
 
       - name: Verify skip-docs provenance
         if: steps.labels.outputs.needs_provenance == 'true'
@@ -133,12 +133,12 @@ jobs:
             echo "verified=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          state=$(gh api "orgs/openmrs/teams/dev-5/memberships/${labeler}" --jq '.state' 2>/dev/null || echo "")
+          state=$(gh api "orgs/egen/teams/dev-5/memberships/${labeler}" --jq '.state' 2>/dev/null || echo "")
           if [ "${state}" = "active" ]; then
-            echo "skip-docs applied by ${labeler} (openmrs/dev-5); check passes."
+            echo "skip-docs applied by ${labeler} (egen/dev-5); check passes."
             echo "verified=true" >> "$GITHUB_OUTPUT"
           else
-            echo "skip-docs applied by ${labeler} (state=${state:-not-a-member}); not in openmrs/dev-5"
+            echo "skip-docs applied by ${labeler} (state=${state:-not-a-member}); not in egen/dev-5"
             echo "verified=false" >> "$GITHUB_OUTPUT"
           fi
 

@@ -15,5 +15,5 @@ export {
 } from './current-user';
 export * from './environment';
 export * from './types';
-export * from './openmrs-fetch';
-export * from './openmrs-backend-dependencies';
+export * from './egen-fetch';
+export * from './egen-backend-dependencies';

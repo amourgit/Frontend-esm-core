@@ -2,13 +2,13 @@
 
 # Function: toVisitTypeObject()
 
-> **toVisitTypeObject**(`openmrsRestForm`): [`VisitType`](../interfaces/VisitType.md)
+> **toVisitTypeObject**(`egenRestForm`): [`VisitType`](../interfaces/VisitType.md)
 
-Defined in: [packages/framework/esm-emr-api/src/visit-type.ts:7](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-emr-api/src/visit-type.ts#L7)
+Defined in: [packages/framework/esm-emr-api/src/visit-type.ts:7](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-emr-api/src/visit-type.ts#L7)
 
 ## Parameters
 
-### openmrsRestForm
+### egenRestForm
 
 `any`
 

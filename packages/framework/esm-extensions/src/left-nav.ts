@@ -1,5 +1,5 @@
-import type {} from '@openmrs/esm-globals';
-import { createGlobalStore } from '@openmrs/esm-state';
+import type {} from '@egen/esm-globals';
+import { createGlobalStore } from '@egen/esm-state';
 import { type ComponentConfig } from './types';
 import { type ExtensionSlotState } from './store';
 

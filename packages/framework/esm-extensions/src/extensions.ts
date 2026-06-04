@@ -8,7 +8,7 @@
  * - connected (computed from assigned using connectivity and online / offline)
  */
 
-import { type Session, type SessionStore, sessionStore, userHasAccess } from '@openmrs/esm-api';
+import { type Session, type SessionStore, sessionStore, userHasAccess } from '@egen/esm-api';
 import {
   type ExtensionSlotConfig,
   type ExtensionSlotsConfigStore,
@@ -19,11 +19,11 @@ import {
   getExtensionSlotConfigFromStore,
   getExtensionSlotsConfigStore,
   getExtensionsConfigStore,
-} from '@openmrs/esm-config';
-import { evaluateAsBoolean } from '@openmrs/esm-expression-evaluator';
-import { type FeatureFlagsStore, featureFlagsStore } from '@openmrs/esm-feature-flags';
-import { subscribeConnectivityChanged } from '@openmrs/esm-globals';
-import { isOnline as isOnlineFn } from '@openmrs/esm-utils';
+} from '@egen/esm-config';
+import { evaluateAsBoolean } from '@egen/esm-expression-evaluator';
+import { type FeatureFlagsStore, featureFlagsStore } from '@egen/esm-feature-flags';
+import { subscribeConnectivityChanged } from '@egen/esm-globals';
+import { isOnline as isOnlineFn } from '@egen/esm-utils';
 import { isEqual, merge } from 'lodash-es';
 import { checkStatusFor } from './helpers';
 import {

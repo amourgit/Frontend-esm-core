@@ -2,7 +2,7 @@ import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
-import { useConfig, usePrimaryIdentifierCode } from '@openmrs/esm-react-utils';
+import { useConfig, usePrimaryIdentifierCode } from '@egen/esm-react-utils';
 import PatientBannerPatientIdentifiers from './patient-banner-patient-identifiers.component';
 
 const mockUsePrimaryIdentifierCode = vi.mocked(usePrimaryIdentifierCode);
@@ -14,7 +14,7 @@ describe('PatientBannerPatientIdentifiers', () => {
       use: 'official',
       type: {
         coding: [{ code: '05a29f94-c0ed-11e2-94be-8c13b969e334' }],
-        text: 'OpenMRS ID',
+        text: 'Egen ID',
       },
       value: '100GEJ',
     },
@@ -42,7 +42,7 @@ describe('PatientBannerPatientIdentifiers', () => {
   it('renders the patient identifiers', async () => {
     render(<PatientBannerPatientIdentifiers identifiers={mockIdentifiers} showIdentifierLabel />);
 
-    expect(screen.getByText(/openmrs id/i)).toBeInTheDocument();
+    expect(screen.getByText(/egen id/i)).toBeInTheDocument();
     expect(screen.getByText(/100gej/i)).toBeInTheDocument();
     expect(screen.getByText(/national id/i)).toBeInTheDocument();
     expect(screen.getByText(/123456789/i)).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('PatientBannerPatientIdentifiers', () => {
   it('does not render identifier labels if showIdentifierLabel is false', () => {
     render(<PatientBannerPatientIdentifiers identifiers={mockIdentifiers} showIdentifierLabel={false} />);
 
-    expect(screen.queryByText(/openmrs id/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/egen id/i)).not.toBeInTheDocument();
     expect(screen.getByText(/100gej/i)).toBeInTheDocument();
     expect(screen.queryByText(/national id/i)).not.toBeInTheDocument();
     expect(screen.getByText(/123456789/i)).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe('PatientBannerPatientIdentifiers', () => {
 
     render(<PatientBannerPatientIdentifiers identifiers={mockIdentifiers} showIdentifierLabel />);
 
-    expect(screen.getByText(/openmrs id/i)).toBeInTheDocument();
+    expect(screen.getByText(/egen id/i)).toBeInTheDocument();
     expect(screen.queryByText(/national id/i)).not.toBeInTheDocument();
   });
 });

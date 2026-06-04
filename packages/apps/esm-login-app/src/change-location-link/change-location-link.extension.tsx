@@ -1,7 +1,7 @@
 import React from 'react';
 import { HeaderGlobalAction } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
-import { LocationIcon, navigate, useSession } from '@openmrs/esm-framework';
+import { LocationIcon, navigate, useSession } from '@egen/esm-framework';
 import styles from './change-location-link.scss';
 
 const ChangeLocationLink: React.FC = () => {
@@ -13,7 +13,7 @@ const ChangeLocationLink: React.FC = () => {
     // update=true is passed as a query param for updating the location preference,
     // The location picker won't redirect with default location on finding the update=true param.
     navigate({
-      to: `\${openmrsSpaBase}/login/location?returnToUrl=${window.location.pathname}&update=true`,
+      to: `\${egenSpaBase}/login/location?returnToUrl=${window.location.pathname}&update=true`,
     });
   };
 

@@ -1,4 +1,4 @@
-import type { OmrsOfflineCachingStrategy } from '@openmrs/esm-offline';
+import type { EgenOfflineCachingStrategy } from '@egen/esm-offline';
 import type { Table } from 'dexie';
 import Dexie from 'dexie';
 
@@ -19,7 +19,7 @@ export interface DynamicRouteRegistration {
    * Due to historical reasons, this value might be missing.
    * In such cases, `network-first` should be assumed (the historical default).
    */
-  strategy?: OmrsOfflineCachingStrategy;
+  strategy?: EgenOfflineCachingStrategy;
 }
 
 /**

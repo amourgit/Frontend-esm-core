@@ -4,9 +4,9 @@
 
 > **getVisitTypes**(): `Observable`\<[`VisitType`](../interfaces/VisitType.md)[]\>
 
-Defined in: [packages/framework/esm-emr-api/src/visit-type.ts:29](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-emr-api/src/visit-type.ts#L29)
+Defined in: [packages/framework/esm-emr-api/src/visit-type.ts:29](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-emr-api/src/visit-type.ts#L29)
 
-Fetches all available visit types from the OpenMRS REST API.
+Fetches all available visit types from the Egen REST API.
 
 ## Returns
 
@@ -18,7 +18,7 @@ An Observable that emits an array of VisitType objects and then completes.
 ## Example
 
 ```ts
-import { getVisitTypes } from '@openmrs/esm-framework';
+import { getVisitTypes } from '@egen/esm-framework';
 getVisitTypes().subscribe((visitTypes) => {
   console.log('Available visit types:', visitTypes);
 });

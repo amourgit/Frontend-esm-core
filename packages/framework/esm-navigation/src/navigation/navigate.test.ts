@@ -12,7 +12,7 @@ describe('navigate', () => {
   beforeAll(() => {
     delete (window as any).location;
     //@ts-ignore
-    window.location = { assign: vi.fn(), origin: 'https://o3.openmrs.org' };
+    window.location = { assign: vi.fn(), origin: 'https://o3.egen.org' };
     mockLocationAssign = window.location.assign as Mock<typeof window.location.assign>;
   });
 
@@ -38,32 +38,32 @@ describe('navigate', () => {
   });
 
   it('uses location.assign() to navigate to non-SPA interpolated path', () => {
-    navigate({ to: '${openmrsBase}/some/path' });
-    expect(window.location.assign).toHaveBeenCalledWith('/openmrs/some/path');
+    navigate({ to: '${egenBase}/some/path' });
+    expect(window.location.assign).toHaveBeenCalledWith('/egen/some/path');
     expect(navigateToUrl).not.toHaveBeenCalled();
   });
 
   it('uses single-spa navigateToUrl to navigate to SPA path literal', () => {
-    navigate({ to: '/openmrs/spa/foo/page' });
-    expect(navigateToUrl).toHaveBeenCalledWith('/openmrs/spa/foo/page');
+    navigate({ to: '/egen/spa/foo/page' });
+    expect(navigateToUrl).toHaveBeenCalledWith('/egen/spa/foo/page');
     expect(window.location.assign).not.toHaveBeenCalled();
   });
 
   it('uses single-spa navigateToUrl to navigate to interpolated SPA path', () => {
-    navigate({ to: '${openmrsSpaBase}/bar/page' });
-    expect(navigateToUrl).toHaveBeenCalledWith('/openmrs/spa/bar/page');
+    navigate({ to: '${egenSpaBase}/bar/page' });
+    expect(navigateToUrl).toHaveBeenCalledWith('/egen/spa/bar/page');
     expect(window.location.assign).not.toHaveBeenCalled();
   });
 
   it('tolerates an extra inital slash', () => {
-    navigate({ to: '/${openmrsSpaBase}/baz/page' });
-    expect(navigateToUrl).toHaveBeenCalledWith('/openmrs/spa/baz/page');
+    navigate({ to: '/${egenSpaBase}/baz/page' });
+    expect(navigateToUrl).toHaveBeenCalledWith('/egen/spa/baz/page');
     expect(window.location.assign).not.toHaveBeenCalled();
   });
 
   it('uses single-spa navigateToUrl if the URL has the current origin', () => {
-    navigate({ to: `${window.location.origin}/openmrs/spa/qux/page` });
-    expect(navigateToUrl).toHaveBeenCalledWith('/openmrs/spa/qux/page');
+    navigate({ to: `${window.location.origin}/egen/spa/qux/page` });
+    expect(navigateToUrl).toHaveBeenCalledWith('/egen/spa/qux/page');
     expect(window.location.assign).not.toHaveBeenCalled();
   });
 });

@@ -9,7 +9,7 @@ let workboxRegistration: Promise<Workbox> | undefined = undefined;
  * @param [registerOptions] The service worker options associated with this instance.
  * @returns A promise which resolves to the registered {@link Workbox} instance which manages the SW.
  */
-export function registerOmrsServiceWorker(scriptUrl: string, registerOptions?: object) {
+export function registerEgenServiceWorker(scriptUrl: string, registerOptions?: object) {
   if (workboxRegistration !== undefined) {
     console.warn(
       `The application's Service Worker has already been registered. The new service worker at ${scriptUrl} will not be registered.`,
@@ -34,6 +34,6 @@ export function registerOmrsServiceWorker(scriptUrl: string, registerOptions?: o
  * returns a promise which immediately resolves to `undefined`.
  * @returns A promise which either resolves to `undefined` or to the app's {@link Workbox} instance.
  */
-export function getOmrsServiceWorker(): Promise<Workbox | undefined> {
+export function getEgenServiceWorker(): Promise<Workbox | undefined> {
   return workboxRegistration ?? Promise.resolve(undefined);
 }

@@ -5,7 +5,7 @@ import { HomePage, LoginPage } from '../pages';
 test('View action buttons in the navbar', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
-  const topNav = page.getByRole('banner', { name: 'OpenMRS' });
+  const topNav = page.getByRole('banner', { name: 'Egen' });
 
   await test.step('When I log in as admin', async () => {
     await loginPage.goto();

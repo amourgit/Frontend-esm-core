@@ -1,4 +1,4 @@
-import { validators, Type, validator } from '@openmrs/esm-framework';
+import { validators, Type, validator } from '@egen/esm-framework';
 
 export const configSchema = {
   provider: {
@@ -12,7 +12,7 @@ export const configSchema = {
     },
     loginUrl: {
       _type: Type.String,
-      _default: '${openmrsSpaBase}/login',
+      _default: '${egenSpaBase}/login',
       _description: "The URL to use to login. This is only used if the login type is 'oauth2' or 'custom'.",
       _validators: [validators.isUrl],
     },
@@ -21,7 +21,7 @@ export const configSchema = {
     validator(
       (provider: { type: string; loginUrl: string }) => {
         if (provider.type === 'custom' || provider.type === 'oauth2') {
-          return provider.loginUrl !== '${openmrsSpaBase}/login';
+          return provider.loginUrl !== '${egenSpaBase}/login';
         }
         return true;
       },
@@ -59,7 +59,7 @@ export const configSchema = {
   links: {
     loginSuccess: {
       _type: Type.String,
-      _default: '${openmrsSpaBase}/home',
+      _default: '${egenSpaBase}/home',
       _description: 'The URL to redirect the user to after a successful login.',
       _validators: [validators.isUrl],
     },
@@ -69,7 +69,7 @@ export const configSchema = {
       _type: Type.String,
       _default: '',
       _description:
-        'The path or URL to the logo image. If set to an empty string, the default OpenMRS SVG sprite will be used.',
+        'The path or URL to the logo image. If set to an empty string, the default Egen SVG sprite will be used.',
       _validators: [validators.isUrl],
     },
     alt: {
@@ -96,7 +96,7 @@ export const configSchema = {
         },
       },
       _default: [],
-      _description: 'An array of logos to be displayed in the footer next to the OpenMRS logo.',
+      _description: 'An array of logos to be displayed in the footer next to the Egen logo.',
     },
   },
   showPasswordOnSeparateScreen: {
@@ -114,7 +114,7 @@ export const configSchema = {
       _type: Type.String,
       _default: '',
       _description:
-        'URL to a background image. Relative paths are interpolated via ${openmrsBase} / ${openmrsSpaBase}.',
+        'URL to a background image. Relative paths are interpolated via ${egenBase} / ${egenSpaBase}.',
       _validators: [validators.isUrl],
     },
     color: {

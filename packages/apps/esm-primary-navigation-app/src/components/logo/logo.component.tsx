@@ -1,5 +1,5 @@
 import React from 'react';
-import { interpolateUrl, useConfig } from '@openmrs/esm-framework';
+import { interpolateUrl, useConfig } from '@egen/esm-framework';
 import { type ConfigSchema } from '../../config-schema';
 import styles from './logo.scss';
 
@@ -17,8 +17,8 @@ const Logo: React.FC = () => {
       ) : logo?.name ? (
         logo.name
       ) : (
-        <svg aria-label="OpenMRS Logo" role="img" width={110} height={40}>
-          <use href="#omrs-logo-white" />
+        <svg aria-label="Egen Logo" role="img" width={110} height={40}>
+          <use href="#egen-logo-white" />
         </svg>
       )}
     </>

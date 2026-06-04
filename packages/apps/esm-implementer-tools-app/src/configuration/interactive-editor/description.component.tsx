@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './description.styles.scss';
-import { useStore } from '@openmrs/esm-framework';
+import { useStore } from '@egen/esm-framework';
 import { implementerToolsStore } from '../../store';
 import { useTranslation } from 'react-i18next';
 

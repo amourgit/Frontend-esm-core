@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FieldError, useForm, type SubmitHandler } from 'react-hook-form';
 import { Button, Form, PasswordInput, InlineLoading, Tile } from '@carbon/react';
-import { showSnackbar } from '@openmrs/esm-framework';
+import { showSnackbar } from '@egen/esm-framework';
 import { changeUserPassword } from './change-password.resource';
 import Logo from '../logo.component';
 import styles from './change-password.scss';

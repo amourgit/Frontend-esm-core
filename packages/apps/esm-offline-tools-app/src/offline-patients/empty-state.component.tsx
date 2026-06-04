@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Layer, Tile } from '@carbon/react';
-import { useLayoutType } from '@openmrs/esm-framework';
+import { useLayoutType } from '@egen/esm-framework';
 import { EmptyDataIllustration } from './empty-data-illustration.component';
 import styles from './empty-state.scss';
 

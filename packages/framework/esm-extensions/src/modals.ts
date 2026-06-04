@@ -1,5 +1,5 @@
 import { type LifeCycles } from 'single-spa';
-import { createGlobalStore } from '@openmrs/esm-state';
+import { createGlobalStore } from '@egen/esm-state';
 import { getExtensionRegistration } from '.';
 
 /** @internal */

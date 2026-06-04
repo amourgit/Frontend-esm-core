@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import GeoPattern from 'geopattern';
 import { SkeletonIcon } from '@carbon/react';
-import { getCoreTranslation } from '@openmrs/esm-translations';
+import { getCoreTranslation } from '@egen/esm-translations';
 import { usePatientPhoto } from './usePatientPhoto';
 import PlaceholderIcon from './placeholder-icon.component';
 import styles from './patient-photo.module.scss';

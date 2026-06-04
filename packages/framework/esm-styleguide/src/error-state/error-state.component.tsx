@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layer, Tile } from '@carbon/react';
-import { getCoreTranslation } from '@openmrs/esm-translations';
+import { getCoreTranslation } from '@egen/esm-translations';
 import styles from './error-state.module.scss';
 import { CardHeader } from '../cards';
 

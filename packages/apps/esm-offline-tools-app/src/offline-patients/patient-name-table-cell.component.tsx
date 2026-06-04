@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Tag } from '@carbon/react';
-import { navigate } from '@openmrs/esm-framework';
+import { navigate } from '@egen/esm-framework';
 import styles from './patient-name-table-cell.scss';
 
 export interface PatientNameTableCellProps {
@@ -18,7 +18,7 @@ const PatientNameTableCell: React.FC<PatientNameTableCellProps> = ({ patient, is
       <Link
         onClick={() =>
           navigate({
-            to: `${window.getOpenmrsSpaBase()}patient/${patient.id}/chart`,
+            to: `${window.getEgenSpaBase()}patient/${patient.id}/chart`,
           })
         }
       >

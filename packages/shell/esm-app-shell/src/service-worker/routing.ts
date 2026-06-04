@@ -3,23 +3,23 @@ import { registerRoute } from 'workbox-routing';
 import { getOrCreateDefaultRouter } from 'workbox-routing/utils/getOrCreateDefaultRouter';
 import { validMethods } from 'workbox-routing/utils/constants';
 import { CacheOnly, NetworkFirst, NetworkOnly } from 'workbox-strategies';
-import { indexUrl, omrsCacheName, omrsOfflineCachingStrategyHttpHeaderName } from './constants';
+import { indexUrl, egenCacheName, egenOfflineCachingStrategyHttpHeaderName } from './constants';
 import { ServiceWorkerDb } from './storage';
 import {
-  getOmrsHeader,
-  parseOmrsOfflineResponseBodyHeader,
-  parseOmrsOfflineResponseStatusHeader,
+  getEgenHeader,
+  parseEgenOfflineResponseBodyHeader,
+  parseEgenOfflineResponseStatusHeader,
 } from './http-header-utils';
-import type { OmrsOfflineCachingStrategy } from '@openmrs/esm-offline';
+import type { EgenOfflineCachingStrategy } from '@egen/esm-offline';
 import uniq from 'lodash-es/uniq';
 
 const networkOnly = new NetworkOnly();
-const cacheOnly = new CacheOnly({ cacheName: omrsCacheName });
-const networkFirst = new NetworkFirst({ cacheName: omrsCacheName });
+const cacheOnly = new CacheOnly({ cacheName: egenCacheName });
+const networkFirst = new NetworkFirst({ cacheName: egenCacheName });
 
-const defaultStrategy: OmrsOfflineCachingStrategy = 'network-only-or-cache-only';
+const defaultStrategy: EgenOfflineCachingStrategy = 'network-only-or-cache-only';
 const knownStrategyHandlers: Record<
-  OmrsOfflineCachingStrategy,
+  EgenOfflineCachingStrategy,
   (options: RouteHandlerCallbackOptions) => Promise<Response>
 > = {
   ['network-first']: (options) => networkFirst.handle(options),
@@ -35,11 +35,11 @@ const knownStrategyHandlers: Record<
 /**
  * Registers required Workbox routes used by the service worker to provide offline functionality.
  */
-export function registerAllOmrsRoutes() {
+export function registerAllEgenRoutes() {
   // Navigation requests are, when unresolvable via network (i.e. when offline), routed back
   // to the SPA's index (which should always be precached).
   // This ensures that the page loads correctly when a new navigation occurs to pages
-  // like `/openmrs/spa/anything/nested`.
+  // like `/egen/spa/anything/nested`.
   registerRoute(({ request }) => request.mode === 'navigate', navigationHandler);
 
   // Fallback routing behavior.
@@ -59,7 +59,7 @@ async function navigationHandler(options: RouteHandlerCallbackOptions) {
   try {
     return await networkOnly.handle(options);
   } catch (e) {
-    const cache = await caches.open(omrsCacheName);
+    const cache = await caches.open(egenCacheName);
     const response = await cache.match(indexUrl);
     return response ?? Response.error();
   }
@@ -75,8 +75,8 @@ async function defaultHandler(options: RouteHandlerCallbackOptions) {
   } catch (e) {
     console.warn('[SW] Could not handle the request to %s (using handler %s).', request.url, handlerKey, e);
 
-    return new Response(parseOmrsOfflineResponseBodyHeader(request.headers), {
-      status: parseOmrsOfflineResponseStatusHeader(request.headers),
+    return new Response(parseEgenOfflineResponseBodyHeader(request.headers), {
+      status: parseEgenOfflineResponseStatusHeader(request.headers),
     });
   }
 }
@@ -86,7 +86,7 @@ async function getHandlerKey({ request }: RouteHandlerCallbackOptions) {
 }
 
 function getHandlerKeyFromHeaders(headers: Headers) {
-  return getOmrsHeader(headers, omrsOfflineCachingStrategyHttpHeaderName);
+  return getEgenHeader(headers, egenOfflineCachingStrategyHttpHeaderName);
 }
 
 async function getHandlerKeyFromDynamicRouteRegistrations(url: string) {
@@ -103,7 +103,7 @@ async function getHandlerKeyFromDynamicRouteRegistrations(url: string) {
   } else {
     // Multiple routes can match the URL (multiple RegExps can match).
     // In that case, prioritize the available strategies. When in doubt, cache the resource again.
-    const priorities: Array<OmrsOfflineCachingStrategy> = ['network-first', 'network-only-or-cache-only'];
+    const priorities: Array<EgenOfflineCachingStrategy> = ['network-first', 'network-only-or-cache-only'];
 
     return (
       priorities.find((prioritizedStrategy) => strategies.some((strategy) => strategy === prioritizedStrategy)) ??

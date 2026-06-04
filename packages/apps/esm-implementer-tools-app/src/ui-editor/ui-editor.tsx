@@ -8,7 +8,7 @@ import {
   getExtensionInternalStore,
   useStore,
   useStoreWithActions,
-} from '@openmrs/esm-framework/src/internal';
+} from '@egen/esm-framework/src/internal';
 import { ExtensionOverlay } from './extension-overlay.component';
 import { Portal } from './portal';
 import { type ImplementerToolsStore, implementerToolsStore } from '../store';

@@ -1,27 +1,27 @@
 import React, { type PropsWithChildren } from 'react';
 import { vi } from 'vitest';
-import { openmrsFetch } from '@openmrs/esm-api/mock';
-import { configSchema } from '@openmrs/esm-config/mock';
-import { getExtensionInternalStore } from '@openmrs/esm-extensions/mock';
-import { createGlobalStore } from '@openmrs/esm-state/mock';
+import { egenFetch } from '@egen/esm-api/mock';
+import { configSchema } from '@egen/esm-config/mock';
+import { getExtensionInternalStore } from '@egen/esm-extensions/mock';
+import { createGlobalStore } from '@egen/esm-state/mock';
 import { isDesktop as realIsDesktop } from './src/useLayoutType';
 import { useFhirFetchAll as realUseFhirFetchAll } from './src/useFhirFetchAll';
 import { useFhirInfinite as realUseFhirInfinite } from './src/useFhirInfinite';
 import { useFhirPagination as realUseFhirPagination } from './src/useFhirPagination';
-import { useOpenmrsFetchAll as realUseOpenmrsFetchAll } from './src/useOpenmrsFetchAll';
-import { useOpenmrsInfinite as realUseOpenmrsInfinite } from './src/useOpenmrsInfinite';
-import { useOpenmrsPagination as realUseOpenmrsrPagination } from './src/useOpenmrsPagination';
+import { useEgenFetchAll as realUseEgenFetchAll } from './src/useEgenFetchAll';
+import { useEgenInfinite as realUseEgenInfinite } from './src/useEgenInfinite';
+import { useEgenPagination as realUseEgenrPagination } from './src/useEgenPagination';
 import { useVisitContextStore as realUseVisitContextStore } from './src/useVisitContextStore';
 import { usePagination as realUsePagination } from './src/usePagination';
 import { usePaginationInfo as realUsePaginationInfo } from './src/usePaginationInfo';
 export { ConfigurableLink } from './src/ConfigurableLink';
 export { RenderIfValueIsTruthy } from './src/RenderIfValueIsTruthy';
 export { useStore, useStoreWithActions, createUseStore } from './src/useStore';
-import * as utils from '@openmrs/esm-utils';
+import * as utils from '@egen/esm-utils';
 
 export const ComponentContext = React.createContext(null);
 
-export const openmrsComponentDecorator = vi.fn().mockImplementation(() => (component) => component);
+export const egenComponentDecorator = vi.fn().mockImplementation(() => (component) => component);
 
 export const useAttachments = vi.fn(() => ({
   isLoading: true,
@@ -32,7 +32,7 @@ export const useAttachments = vi.fn(() => ({
 }));
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-export const useConfig = vi.fn<typeof import('@openmrs/esm-react-utils').useConfig>(
+export const useConfig = vi.fn<typeof import('@egen/esm-react-utils').useConfig>(
   (options?: { externalModuleName?: string }) => {
     if (options?.externalModuleName) {
       console.warn(`Mock useConfig called with externalModuleName: ${options.externalModuleName}`);
@@ -82,9 +82,9 @@ export const useFeatureFlag = vi.fn().mockReturnValue(true);
 export const usePagination = vi.fn(realUsePagination);
 export const usePaginationInfo = vi.fn(realUsePaginationInfo);
 
-export const useOpenmrsPagination = vi.fn(realUseOpenmrsrPagination);
-export const useOpenmrsInfinite = vi.fn(realUseOpenmrsInfinite);
-export const useOpenmrsFetchAll = vi.fn(realUseOpenmrsFetchAll);
+export const useEgenPagination = vi.fn(realUseEgenrPagination);
+export const useEgenInfinite = vi.fn(realUseEgenInfinite);
+export const useEgenFetchAll = vi.fn(realUseEgenFetchAll);
 export const useFhirPagination = vi.fn(realUseFhirPagination);
 export const useFhirInfinite = vi.fn(realUseFhirInfinite);
 export const useFhirFetchAll = vi.fn(realUseFhirFetchAll);
@@ -114,8 +114,8 @@ export const useAbortController = vi.fn(() => {
   } as AbortController;
 });
 
-export const useOpenmrsSWR = vi.fn((key: string | Array<any>) => {
-  return { data: openmrsFetch(key.toString()) };
+export const useEgenSWR = vi.fn((key: string | Array<any>) => {
+  return { data: egenFetch(key.toString()) };
 });
 
 export const useDebounce = vi.fn((value) => value);
@@ -134,7 +134,7 @@ export const isDesktop = vi.fn(realIsDesktop);
 
 export const useLocations = vi.fn(() => []);
 
-export const toOmrsIsoString = vi.fn((date: Date) => date.toISOString());
+export const toEgenIsoString = vi.fn((date: Date) => date.toISOString());
 
 export const toDateObjectStrict = vi.fn((date: string) => new Date(date));
 

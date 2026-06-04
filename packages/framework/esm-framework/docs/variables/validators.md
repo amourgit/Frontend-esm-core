@@ -4,7 +4,7 @@
 
 > `const` **validators**: `object`
 
-Defined in: [packages/framework/esm-config/src/validators/validators.ts:69](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-config/src/validators/validators.ts#L69)
+Defined in: [packages/framework/esm-config/src/validators/validators.ts:69](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-config/src/validators/validators.ts#L69)
 
 ## Type declaration
 
@@ -21,7 +21,7 @@ parameters, plus any specified in `allowedTemplateParameters`.
 
 ###### allowedTemplateParameters
 
-To be added to `openmrsBase` and `openmrsSpaBase`
+To be added to `egenBase` and `egenSpaBase`
 
 `string`[] | readonly `string`[]
 

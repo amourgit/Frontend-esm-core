@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronDownIcon, ChevronUpIcon, UserHasAccess, useStore } from '@openmrs/esm-framework';
+import { ChevronDownIcon, ChevronUpIcon, UserHasAccess, useStore } from '@egen/esm-framework';
 import { implementerToolsStore, togglePopup } from './store';
 import styles from './implementer-tools.styles.scss';
 

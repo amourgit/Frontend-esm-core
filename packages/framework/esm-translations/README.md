@@ -1,4 +1,4 @@
-# @openmrs/esm-translations
+# @egen/esm-translations
 
 This framework library supports translations that can be used throughout the O3 application.
 

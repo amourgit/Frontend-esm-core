@@ -9,8 +9,8 @@ export default defineConfig({
     alias: {
       '^lodash-es$': 'lodash',
       '^lodash-es/(.*)$': 'lodash/$1',
-      '@openmrs/esm-framework/src/internal': '@openmrs/esm-framework/mock',
-      '@openmrs/esm-framework': '@openmrs/esm-framework/mock',
+      '@egen/esm-framework/src/internal': '@egen/esm-framework/mock',
+      '@egen/esm-framework': '@egen/esm-framework/mock',
     },
     coverage: {
       provider: 'v8',

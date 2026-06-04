@@ -1,5 +1,5 @@
 ---
-"@openmrs/esm-styleguide": patch
+"@egen/esm-styleguide": patch
 ---
 
 (fix) Small optimization to runtime SVG loading

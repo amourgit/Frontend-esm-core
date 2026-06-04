@@ -1,4 +1,4 @@
-import type { SpaConfig } from '@openmrs/esm-framework/src/internal';
+import type { SpaConfig } from '@egen/esm-framework/src/internal';
 
 function _createSpaBase(baseUrl: string) {
   return () => baseUrl;
@@ -27,7 +27,7 @@ function setupPaths(config: SpaConfig) {
   }
 
   // Object.defineProperty used to make these read-only
-  Object.defineProperty(window, 'openmrsBase', {
+  Object.defineProperty(window, 'egenBase', {
     value: config.apiUrl,
     writable: false,
     configurable: false,
@@ -49,7 +49,7 @@ function setupPaths(config: SpaConfig) {
   });
 
   const spaBaseWithSlash = window.spaBase.endsWith('/') ? window.spaBase : window.spaBase + '/';
-  Object.defineProperty(window, 'getOpenmrsSpaBase', {
+  Object.defineProperty(window, 'getEgenSpaBase', {
     value: _createSpaBase(spaBaseWithSlash),
     writable: false,
     configurable: false,
@@ -77,7 +77,7 @@ export function setupUtils() {
 
 function wireSpaPaths() {
   const baseElement = document.createElement('base');
-  const baseHref = window.getOpenmrsSpaBase();
+  const baseHref = window.getEgenSpaBase();
   baseElement.href = baseHref;
   document.head.appendChild(baseElement);
   __webpack_public_path__ = baseHref;
@@ -86,7 +86,7 @@ function wireSpaPaths() {
 let initPromise: Promise<void> | null = null;
 
 /**
- * Initializes the OpenMRS Frontend App Shell.
+ * Initializes the Egen Frontend App Shell.
  * @param config The global configuration to apply.
  */
 function initializeSpa(config: SpaConfig) {
@@ -100,10 +100,10 @@ function initializeSpa(config: SpaConfig) {
   initPromise = Promise.resolve(__webpack_init_sharing__('default')).then(async () => {
     const shareScope = __webpack_share_scopes__.default;
     // MF will deduplicate these as they're aliased at build time, but at runtime
-    // apps try to load `@openmrs/esm-framework`, so here we provide a runtime
+    // apps try to load `@egen/esm-framework`, so here we provide a runtime
     // alias that resolves to the "internal" copy of the framework
-    if (shareScope['@openmrs/esm-framework/src/internal'] && !shareScope['@openmrs/esm-framework']) {
-      shareScope['@openmrs/esm-framework'] = shareScope['@openmrs/esm-framework/src/internal'];
+    if (shareScope['@egen/esm-framework/src/internal'] && !shareScope['@egen/esm-framework']) {
+      shareScope['@egen/esm-framework'] = shareScope['@egen/esm-framework/src/internal'];
     }
 
     const { configUrls = [], offline = false } = config;

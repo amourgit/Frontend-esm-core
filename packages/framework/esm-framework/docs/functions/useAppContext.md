@@ -6,7 +6,7 @@
 
 > **useAppContext**\<`T`\>(`namespace`): `undefined` \| `Readonly`\<`T`\>
 
-Defined in: [packages/framework/esm-react-utils/src/useAppContext.ts:30](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useAppContext.ts#L30)
+Defined in: [packages/framework/esm-react-utils/src/useAppContext.ts:30](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useAppContext.ts#L30)
 
 This hook is used to access a namespace within the overall AppContext, so that a component can
 use any shared contextual values. A selector may be provided to further restrict the properties
@@ -53,7 +53,7 @@ const patientName = useAppContext<PatientContext, string | undefined>('patient',
 
 > **useAppContext**\<`T`, `U`\>(`namespace`, `selector`): `undefined` \| `Readonly`\<`U`\>
 
-Defined in: [packages/framework/esm-react-utils/src/useAppContext.ts:60](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useAppContext.ts#L60)
+Defined in: [packages/framework/esm-react-utils/src/useAppContext.ts:60](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useAppContext.ts#L60)
 
 This hook is used to access a namespace within the overall AppContext, so that a component can
 use any shared contextual values. A selector may be provided to further restrict the properties

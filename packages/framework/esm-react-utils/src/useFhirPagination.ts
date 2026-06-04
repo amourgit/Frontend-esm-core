@@ -1,19 +1,19 @@
 /** @module @category UI */
-import { type FetchResponse, makeUrl, openmrsFetch } from '@openmrs/esm-api';
+import { type FetchResponse, makeUrl, egenFetch } from '@egen/esm-api';
 import {
   type ServerPaginationHandlers,
   useServerPagination,
   type UseServerPaginationOptions,
-} from './useOpenmrsPagination';
+} from './useEgenPagination';
 
 /**
  * Fhir REST endpoints that return a list of objects, are server-side paginated.
  * The server limits the max number of results being returned, and multiple requests are needed to get the full data set
  * if its size exceeds this limit.
  *
- * This function is the FHIR counterpart of `useOpenmrsPagination`.
+ * This function is the FHIR counterpart of `useEgenPagination`.
  *
- * @see `useOpenmrsPagination
+ * @see `useEgenPagination
  * @see `useFhirInfinite`
  * @see `useFhirFetchAll`
  * @see `usePagination` for pagination of client-side data`

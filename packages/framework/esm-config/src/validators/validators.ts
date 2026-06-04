@@ -16,12 +16,12 @@ export const inRange = (min: number, max: number) => {
  * Verifies that a string contains only the default URL template
  * parameters, plus any specified in `allowedTemplateParameters`.
  *
- * @param allowedTemplateParameters To be added to `openmrsBase` and `openmrsSpaBase`
+ * @param allowedTemplateParameters To be added to `egenBase` and `egenSpaBase`
  * @returns A validator function that checks if a URL contains only allowed template parameters.
  * @category Navigation
  */
 export const isUrlWithTemplateParameters = (allowedTemplateParameters: Array<string> | readonly string[]) => {
-  const allowedParams = allowedTemplateParameters.concat(['openmrsBase', 'openmrsSpaBase']);
+  const allowedParams = allowedTemplateParameters.concat(['egenBase', 'egenSpaBase']);
   return validator(
     (val) => {
       if (!val || typeof val != 'string') {

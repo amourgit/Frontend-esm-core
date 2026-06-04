@@ -57,7 +57,7 @@
 }
 
 /* Desktop */
-:global(.omrs-breakpoint-gt-tablet) {
+:global(.egen-breakpoint-gt-tablet) {
   .active {
     border: layout.$spacing-01 solid;
     @include brand-03(border-color);
@@ -77,7 +77,7 @@
 }
 
 /* Tablet */
-:global(.omrs-breakpoint-lt-desktop) {
+:global(.egen-breakpoint-lt-desktop) {
   .container {
     margin-bottom: 0;
     margin-top: 0;

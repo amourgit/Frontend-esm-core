@@ -1,9 +1,9 @@
 ---
-"@openmrs/esm-app-shell": major
-"@openmrs/esm-devtools-app": major
-"@openmrs/esm-dynamic-loading": minor
-"@openmrs/esm-framework": major
-"@openmrs/esm-globals": major
+"@egen/esm-app-shell": major
+"@egen/esm-devtools-app": major
+"@egen/esm-dynamic-loading": minor
+"@egen/esm-framework": major
+"@egen/esm-globals": major
 ---
 
 (BREAKING): Drop IMO and don't load arbitrary content in production mode

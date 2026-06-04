@@ -1,5 +1,5 @@
 {
-  "name": "@openmrs/esm-routes",
+  "name": "@egen/esm-routes",
   "version": "9.0.2",
   "license": "MPL-2.0",
   "description": "Utilities for working with the routes registry",
@@ -24,7 +24,7 @@
     "lint": "eslint src --ext ts,tsx"
   },
   "keywords": [
-    "openmrs",
+    "egen",
     "microfrontends"
   ],
   "directories": {
@@ -32,35 +32,35 @@
     "src": "src"
   },
   "browserslist": [
-    "extends browserslist-config-openmrs"
+    "extends browserslist-config-egen"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-core.git"
+    "url": "git+https://github.com/egen/egen-esm-core.git"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-core/issues"
+    "url": "https://github.com/egen/egen-esm-core/issues"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-core#readme",
+  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "publishConfig": {
     "access": "public"
   },
   "peerDependencies": {
-    "@openmrs/esm-config": "9.x",
-    "@openmrs/esm-dynamic-loading": "9.x",
-    "@openmrs/esm-extensions": "9.x",
-    "@openmrs/esm-feature-flags": "9.x",
-    "@openmrs/esm-globals": "9.x",
-    "@openmrs/esm-utils": "9.x",
+    "@egen/esm-config": "9.x",
+    "@egen/esm-dynamic-loading": "9.x",
+    "@egen/esm-extensions": "9.x",
+    "@egen/esm-feature-flags": "9.x",
+    "@egen/esm-globals": "9.x",
+    "@egen/esm-utils": "9.x",
     "single-spa": "6.x"
   },
   "devDependencies": {
-    "@openmrs/esm-config": "workspace:*",
-    "@openmrs/esm-dynamic-loading": "workspace:*",
-    "@openmrs/esm-extensions": "workspace:*",
-    "@openmrs/esm-feature-flags": "workspace:*",
-    "@openmrs/esm-globals": "workspace:*",
-    "@openmrs/esm-utils": "workspace:*",
+    "@egen/esm-config": "workspace:*",
+    "@egen/esm-dynamic-loading": "workspace:*",
+    "@egen/esm-extensions": "workspace:*",
+    "@egen/esm-feature-flags": "workspace:*",
+    "@egen/esm-globals": "workspace:*",
+    "@egen/esm-utils": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
     "@vitest/coverage-v8": "^4.1.2",

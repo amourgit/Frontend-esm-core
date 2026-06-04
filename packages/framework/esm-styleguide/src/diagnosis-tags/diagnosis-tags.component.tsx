@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tag } from '@carbon/react';
-import { useConfig } from '@openmrs/esm-react-utils';
-import { type Diagnosis } from '@openmrs/esm-emr-api';
+import { useConfig } from '@egen/esm-react-utils';
+import { type Diagnosis } from '@egen/esm-emr-api';
 import { type StyleguideConfigObject } from '../config-schema';
 import styles from './diagnosis-tags.module.scss';
 
@@ -16,7 +16,7 @@ interface DiagnosisTagsProps {
  */
 export const DiagnosisTags: React.FC<DiagnosisTagsProps> = ({ diagnoses }) => {
   const { diagnosisTags } = useConfig<StyleguideConfigObject>({
-    externalModuleName: '@openmrs/esm-styleguide',
+    externalModuleName: '@egen/esm-styleguide',
   });
 
   return (

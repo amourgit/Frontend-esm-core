@@ -1,15 +1,15 @@
-import { type Concept, type ConceptClass, type OpenmrsResource } from '@openmrs/esm-api';
+import { type Concept, type ConceptClass, type EgenResource } from '@egen/esm-api';
 import { type Encounter } from './encounter-resource';
 import { type Patient } from './patient-resource';
 
-// TODO: make this extends OpenmrsResourceStrict
-export interface Diagnosis extends OpenmrsResource {
+// TODO: make this extends EgenResourceStrict
+export interface Diagnosis extends EgenResource {
   diagnosis?: {
     coded?: {
       uuid: string;
       display?: string;
       name?: Concept;
-      datatype?: OpenmrsResource;
+      datatype?: EgenResource;
       conceptClass?: ConceptClass;
     };
     nonCoded?: string;

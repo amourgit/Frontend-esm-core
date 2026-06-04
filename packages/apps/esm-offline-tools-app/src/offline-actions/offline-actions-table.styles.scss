@@ -1,5 +1,5 @@
 @use '@carbon/layout';
-@use '@openmrs/esm-styleguide/src/vars' as *;
+@use '@egen/esm-styleguide/src/vars' as *;
 
 .tableContainer {
   background-color: transparent;
@@ -24,7 +24,7 @@
   }
 }
 
-:global(.omrs-breakpoint-gt-tablet) .tableHeaderContainer {
+:global(.egen-breakpoint-gt-tablet) .tableHeaderContainer {
   grid-template-columns: 1fr 20% 250px auto;
 
   .tableSearch {

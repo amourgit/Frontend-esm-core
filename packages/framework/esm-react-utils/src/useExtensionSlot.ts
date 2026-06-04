@@ -3,7 +3,7 @@ import {
   type ExtensionSlotCustomState,
   registerExtensionSlot,
   updateExtensionSlotState,
-} from '@openmrs/esm-extensions';
+} from '@egen/esm-extensions';
 import { ComponentContext } from './ComponentContext';
 import { useAssignedExtensions } from './useAssignedExtensions';
 
@@ -13,7 +13,7 @@ export function useExtensionSlot(slotName: string, state?: ExtensionSlotCustomSt
   const isInitialRender = useRef(true);
 
   if (!moduleName) {
-    throw Error('ComponentContext has not been provided. This should come from @openmrs/esm-react-utils.');
+    throw Error('ComponentContext has not been provided. This should come from @egen/esm-react-utils.');
   }
 
   useEffect(() => {

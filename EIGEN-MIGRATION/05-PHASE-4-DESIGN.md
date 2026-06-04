@@ -9,10 +9,10 @@
 ## 4.1 Stratégie de design
 
 ### Ce qui CHANGE (identité visuelle)
-- Palette de couleurs (OpenMRS bleu/teal → EIGEN couleurs nationales)
+- Palette de couleurs (Egen bleu/teal → EIGEN couleurs nationales)
 - Logo (SVG EIGEN)
 - Typographie (optionnel)
-- Nom dans les UI textes ("OpenMRS" → "EIGEN")
+- Nom dans les UI textes ("Egen" → "EIGEN")
 - Textes des boutons, titres de pages
 - Page de login (layout, image de fond, message d'accueil)
 - Favicon et icônes PWA
@@ -82,15 +82,15 @@ Définir les couleurs officielles EIGEN. Exemple pour une plateforme éducative 
   --eigen-color-brand-or: #c8942a;
   --eigen-color-brand-blanc: #ffffff;
 
-  /* Compatibilité avec anciens --omrs-* (à garder pendant transition) */
-  --omrs-color-bg-high-contrast: var(--eigen-color-bg-high-contrast);
-  --omrs-color-bg-medium-contrast: var(--eigen-color-bg-medium-contrast);
-  --omrs-color-bg-low-contrast: var(--eigen-color-bg-low-contrast);
-  --omrs-color-ink-high-contrast: var(--eigen-color-ink-high-contrast);
-  --omrs-color-interaction: var(--eigen-color-primary);
-  --omrs-color-interaction-plus-one: var(--eigen-color-primary-dark);
-  --omrs-color-brand-orange: var(--eigen-color-accent);
-  --omrs-color-brand-teal: var(--eigen-color-secondary);
+  /* Compatibilité avec anciens --egen-* (à garder pendant transition) */
+  --egen-color-bg-high-contrast: var(--eigen-color-bg-high-contrast);
+  --egen-color-bg-medium-contrast: var(--eigen-color-bg-medium-contrast);
+  --egen-color-bg-low-contrast: var(--eigen-color-bg-low-contrast);
+  --egen-color-ink-high-contrast: var(--eigen-color-ink-high-contrast);
+  --egen-color-interaction: var(--eigen-color-primary);
+  --egen-color-interaction-plus-one: var(--eigen-color-primary-dark);
+  --egen-color-brand-orange: var(--eigen-color-accent);
+  --egen-color-brand-teal: var(--eigen-color-secondary);
 }
 ```
 
@@ -122,7 +122,7 @@ $support-04: #0a2463;         // Info
 
 ### Créer le SVG du logo EIGEN
 
-Remplacer les logos OpenMRS dans :
+Remplacer les logos Egen dans :
 - `packages/framework/esm-styleguide/src/logo/` → Sprites SVG
 - `packages/apps/esm-login-app/src/logo.component.tsx`
 - `packages/apps/esm-primary-navigation-app/src/components/logo/logo.component.tsx`
@@ -384,11 +384,11 @@ return (
 
 ---
 
-## 4.6 Remplacer les textes "OpenMRS" dans l'UI
+## 4.6 Remplacer les textes "Egen" dans l'UI
 
 ```bash
-# Chercher tous les textes "OpenMRS" dans les fichiers de traduction et composants
-grep -r "OpenMRS\|openmrs" packages/apps --include="*.json" --include="*.tsx" | grep -v "node_modules"
+# Chercher tous les textes "Egen" dans les fichiers de traduction et composants
+grep -r "Egen\|egen" packages/apps --include="*.json" --include="*.tsx" | grep -v "node_modules"
 ```
 
 ### Fichiers de traduction
@@ -398,7 +398,7 @@ Dans chaque app, modifier `translations/en.json` et `translations/fr.json` :
 **`packages/apps/esm-login-app/translations/fr.json`** :
 ```json
 {
-  "openmrsLogo": "Logo EIGEN",
+  "egenLogo": "Logo EIGEN",
   "loginHeader": "Connexion à EIGEN",
   "username": "Identifiant",
   "password": "Mot de passe",
@@ -455,6 +455,6 @@ Dans `packages/shell/esm-app-shell/src/index.ejs` :
 - [ ] SCSS login avec nouveau design
 - [ ] Couleur header navigation mise à jour
 - [ ] Fichiers de traduction FR créés pour toutes les apps
-- [ ] Tous les textes "OpenMRS" remplacés par "EIGEN"
+- [ ] Tous les textes "Egen" remplacés par "EIGEN"
 - [ ] Favicon et icônes PWA créés
 - [ ] Test visuel sur mobile + desktop

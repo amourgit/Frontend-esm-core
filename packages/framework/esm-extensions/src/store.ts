@@ -1,8 +1,8 @@
 /** @module @category Extension */
 import { isEqual } from 'lodash-es';
-import type { ConfigExtensionStoreElement, ConfigObject, ExtensionSlotConfig } from '@openmrs/esm-config';
-import { configExtensionStore } from '@openmrs/esm-config';
-import { createGlobalStore, getGlobalStore } from '@openmrs/esm-state';
+import type { ConfigExtensionStoreElement, ConfigObject, ExtensionSlotConfig } from '@egen/esm-config';
+import { configExtensionStore } from '@egen/esm-config';
+import { createGlobalStore, getGlobalStore } from '@egen/esm-state';
 import { type LifeCycles } from 'single-spa';
 
 export interface ExtensionMeta {

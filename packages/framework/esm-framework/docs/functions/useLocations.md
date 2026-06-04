@@ -4,9 +4,9 @@
 
 > **useLocations**(`tagUuidOrName`, `query`): [`Location`](../interfaces/Location.md)[]
 
-Defined in: [packages/framework/esm-react-utils/src/useLocations.tsx:29](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useLocations.tsx#L29)
+Defined in: [packages/framework/esm-react-utils/src/useLocations.tsx:29](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useLocations.tsx#L29)
 
-A React hook that fetches and returns locations from the OpenMRS server.
+A React hook that fetches and returns locations from the Egen server.
 Locations can be filtered by a tag UUID/name and/or a search query string.
 
 ## Parameters
@@ -35,7 +35,7 @@ An array of Location objects. Returns an empty array while loading
 ## Example
 
 ```tsx
-import { useLocations } from '@openmrs/esm-framework';
+import { useLocations } from '@egen/esm-framework';
 function LocationList() {
   const locations = useLocations('Login Location');
   return (

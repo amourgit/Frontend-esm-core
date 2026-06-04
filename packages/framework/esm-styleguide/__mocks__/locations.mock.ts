@@ -17,24 +17,24 @@ export const mockLoginLocations = {
     link: [
       {
         relation: 'self',
-        url: 'http://openmrs:8080/openmrs/ws/fhir2/R4/Location?_count=50&_summary=data&_tag=login%20location',
+        url: 'http://egen:8080/egen/ws/fhir2/R4/Location?_count=50&_summary=data&_tag=login%20location',
       },
     ],
     entry: [
       {
-        fullUrl: 'http://openmrs:8080/openmrs/ws/fhir2/R4/Location/44c3efb0-2583-4c80-a79e-1f756a03c0a1',
+        fullUrl: 'http://egen:8080/egen/ws/fhir2/R4/Location/44c3efb0-2583-4c80-a79e-1f756a03c0a1',
         resource: {
           resourceType: 'Location',
           id: '44c3efb0-2583-4c80-a79e-1f756a03c0a1',
           meta: {
             tag: [
               {
-                system: 'http://fhir.openmrs.org/ext/location-tag',
+                system: 'http://fhir.egen.org/ext/location-tag',
                 code: 'Login Location',
                 display: 'When a user logs in and chooses a session location, they may only choose one with this tag',
               },
               {
-                system: 'http://fhir.openmrs.org/ext/location-tag',
+                system: 'http://fhir.egen.org/ext/location-tag',
                 code: 'Facility Location',
               },
               {
@@ -104,14 +104,14 @@ export const mockLoginLocations = {
         },
       },
       {
-        fullUrl: 'http://openmrs:8080/openmrs/ws/fhir2/R4/Location/ba685651-ed3b-4e63-9b35-78893060758a',
+        fullUrl: 'http://egen:8080/egen/ws/fhir2/R4/Location/ba685651-ed3b-4e63-9b35-78893060758a',
         resource: {
           resourceType: 'Location',
           id: 'ba685651-ed3b-4e63-9b35-78893060758a',
           meta: {
             tag: [
               {
-                system: 'http://fhir.openmrs.org/ext/location-tag',
+                system: 'http://fhir.egen.org/ext/location-tag',
                 code: 'Login Location',
                 display: 'When a user logs in and chooses a session location, they may only choose one with this tag',
               },
@@ -182,14 +182,14 @@ export const mockLoginLocations = {
         },
       },
       {
-        fullUrl: 'http://openmrs:8080/openmrs/ws/fhir2/R4/Location/8d9045ad-50f0-45b8-93c8-3ed4bce19dbf',
+        fullUrl: 'http://egen:8080/egen/ws/fhir2/R4/Location/8d9045ad-50f0-45b8-93c8-3ed4bce19dbf',
         resource: {
           resourceType: 'Location',
           id: '8d9045ad-50f0-45b8-93c8-3ed4bce19dbf',
           meta: {
             tag: [
               {
-                system: 'http://fhir.openmrs.org/ext/location-tag',
+                system: 'http://fhir.egen.org/ext/location-tag',
                 code: 'Login Location',
                 display: 'When a user logs in and chooses a session location, they may only choose one with this tag',
               },
@@ -260,14 +260,14 @@ export const mockLoginLocations = {
         },
       },
       {
-        fullUrl: 'http://openmrs:8080/openmrs/ws/fhir2/R4/Location/1ce1b7d4-c865-4178-82b0-5932e51503d6',
+        fullUrl: 'http://egen:8080/egen/ws/fhir2/R4/Location/1ce1b7d4-c865-4178-82b0-5932e51503d6',
         resource: {
           resourceType: 'Location',
           id: '1ce1b7d4-c865-4178-82b0-5932e51503d6',
           meta: {
             tag: [
               {
-                system: 'http://fhir.openmrs.org/ext/location-tag',
+                system: 'http://fhir.egen.org/ext/location-tag',
                 code: 'Login Location',
                 display: 'When a user logs in and chooses a session location, they may only choose one with this tag',
               },
@@ -354,19 +354,19 @@ export const inpatientWardResponse = {
     link: [
       {
         relation: 'self',
-        url: 'https://dev3.openmrs.org/openmrs/ws/fhir2/R4/Location?_id=1ce1b7d4-c865-4178-82b0-5932e51503d6',
+        url: 'https://dev3.egen.org/egen/ws/fhir2/R4/Location?_id=1ce1b7d4-c865-4178-82b0-5932e51503d6',
       },
     ],
     entry: [
       {
-        fullUrl: 'http://openmrs:8080/openmrs/ws/fhir2/R4/Location/ba685651-ed3b-4e63-9b35-78893060758a',
+        fullUrl: 'http://egen:8080/egen/ws/fhir2/R4/Location/ba685651-ed3b-4e63-9b35-78893060758a',
         resource: {
           resourceType: 'Location',
           id: 'ba685651-ed3b-4e63-9b35-78893060758a',
           meta: {
             tag: [
               {
-                system: 'http://fhir.openmrs.org/ext/location-tag',
+                system: 'http://fhir.egen.org/ext/location-tag',
                 code: 'Login Location',
                 display: 'When a user logs in and chooses a session location, they may only choose one with this tag',
               },
@@ -459,7 +459,7 @@ export const locationResponseForNonExistingSearch = {
     link: [
       {
         relation: 'self',
-        url: 'http://openmrs:8080/openmrs/ws/fhir2/R4/Location?_count=50&_summary=data&_tag=login%20location',
+        url: 'http://egen:8080/egen/ws/fhir2/R4/Location?_count=50&_summary=data&_tag=login%20location',
       },
     ],
     entry: [],
@@ -485,24 +485,24 @@ export const outpatientClinicResponse = {
     link: [
       {
         relation: 'self',
-        url: 'http://openmrs:8080/openmrs/ws/fhir2/R4/Location?_count=50&_summary=data&_tag=login%20location',
+        url: 'http://egen:8080/egen/ws/fhir2/R4/Location?_count=50&_summary=data&_tag=login%20location',
       },
     ],
     entry: [
       {
-        fullUrl: 'http://openmrs:8080/openmrs/ws/fhir2/R4/Location/44c3efb0-2583-4c80-a79e-1f756a03c0a1',
+        fullUrl: 'http://egen:8080/egen/ws/fhir2/R4/Location/44c3efb0-2583-4c80-a79e-1f756a03c0a1',
         resource: {
           resourceType: 'Location',
           id: '44c3efb0-2583-4c80-a79e-1f756a03c0a1',
           meta: {
             tag: [
               {
-                system: 'http://fhir.openmrs.org/ext/location-tag',
+                system: 'http://fhir.egen.org/ext/location-tag',
                 code: 'Login Location',
                 display: 'When a user logs in and chooses a session location, they may only choose one with this tag',
               },
               {
-                system: 'http://fhir.openmrs.org/ext/location-tag',
+                system: 'http://fhir.egen.org/ext/location-tag',
                 code: 'Facility Location',
               },
               {

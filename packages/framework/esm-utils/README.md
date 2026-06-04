@@ -1,3 +1,3 @@
-# openmrs-esm-utils
+# egen-esm-utils
 
-openmrs-esm-utils provides helper functions.
+egen-esm-utils provides helper functions.

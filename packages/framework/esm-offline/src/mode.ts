@@ -39,7 +39,7 @@ export interface OfflineModeResult {
   active: boolean;
 }
 
-const offlineModeStorageKey = 'openmrs3:offline-mode';
+const offlineModeStorageKey = 'egen3:offline-mode';
 let offlineMode: OfflineMode = 'unavailable';
 
 export function getCurrentOfflineMode(): OfflineModeResult {

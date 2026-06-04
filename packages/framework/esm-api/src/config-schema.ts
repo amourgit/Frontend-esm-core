@@ -1,6 +1,6 @@
-import { type ConfigSchema, Type, validators } from '@openmrs/esm-config';
+import { type ConfigSchema, Type, validators } from '@egen/esm-config';
 
-export const defaultRedirectAuthFailureUrl = '${openmrsSpaBase}/login';
+export const defaultRedirectAuthFailureUrl = '${egenSpaBase}/login';
 
 export const configSchema: ConfigSchema = {
   redirectAuthFailure: {
@@ -35,7 +35,7 @@ export const configSchema: ConfigSchema = {
   followRedirects: {
     _type: Type.Boolean,
     _default: true,
-    _description: 'Whether openmrsFetch should support redirects returned from the backend',
+    _description: 'Whether egenFetch should support redirects returned from the backend',
   },
 };
 

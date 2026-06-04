@@ -44,7 +44,7 @@ export const mockPatient = {
     {
       id: '1f0ad7a1-430f-4397-b571-59ea654a52db',
       use: 'usual',
-      system: 'OpenMRS ID',
+      system: 'Egen ID',
       value: '100GEJ',
     },
   ],

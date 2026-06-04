@@ -1,4 +1,4 @@
-/* The svg container is a div that contains all the OpenMRS svgs, with
+/* The svg container is a div that contains all the Egen svgs, with
  * an HTML id that can be referenced with the following code:
  * <svg role="img">
  *   <use link:href="#the-svg-id"></use>
@@ -10,7 +10,7 @@ const svgContainer = document.createElement('div');
 const appendContainer = () => {
   document.body.appendChild(svgContainer);
 };
-svgContainer.id = 'omrs-svgs-container';
+svgContainer.id = 'egen-svgs-container';
 svgContainer.style.display = 'none';
 
 if (document.readyState === 'complete') {

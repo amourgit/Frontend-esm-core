@@ -1,11 +1,11 @@
-import { registerDefaultCalendar } from '@openmrs/esm-utils';
+import { registerDefaultCalendar } from '@egen/esm-utils';
 
-// Sets up the global variables that the OpenMRS framework expects to find
+// Sets up the global variables that the Egen framework expects to find
 // on window. Without these, components that call interpolateUrl() or
-// reference openmrsBase will throw at runtime.
-(window as any).openmrsBase = '/openmrs';
-(window as any).spaBase = '/openmrs/spa';
-(window as any).getOpenmrsSpaBase = () => '/openmrs/spa/';
+// reference egenBase will throw at runtime.
+(window as any).egenBase = '/egen';
+(window as any).spaBase = '/egen/spa';
+(window as any).getEgenSpaBase = () => '/egen/spa/';
 (window as any).i18next = { language: 'en' };
 
 // Register non-Gregorian calendars for locales that use them by default.

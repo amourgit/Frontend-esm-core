@@ -4,7 +4,7 @@
 
 > **WorkspaceContainer**(`__namedParameters`): `Element`
 
-Defined in: [packages/framework/esm-styleguide/src/workspaces/container/workspace-container.component.tsx:81](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-styleguide/src/workspaces/container/workspace-container.component.tsx#L81)
+Defined in: [packages/framework/esm-styleguide/src/workspaces/container/workspace-container.component.tsx:81](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-styleguide/src/workspaces/container/workspace-container.component.tsx#L81)
 
 Use this component to render the [workspace window](https://zeroheight.com/23a080e38/p/483a22-workspace)
 in an app such as the patient chart, or a workspace overlay in an app such as the clinic dashboard.
@@ -12,7 +12,7 @@ This allows workspaces to be opened on the page where this component is mounted.
 must not be mounted multiple times on the same page. If there are multiple apps on a page, only
 one of those apps should use this component—it "hosts" the workspaces.
 
-Workspaces may be opened with the [[launchWorkspace]] function from `@openmrs/esm-framework`
+Workspaces may be opened with the [[launchWorkspace]] function from `@egen/esm-framework`
 (among other options).
 
 The `overlay` prop determines whether the workspace is rendered as an overlay or a window.

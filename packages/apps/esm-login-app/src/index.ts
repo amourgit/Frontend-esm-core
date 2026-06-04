@@ -1,4 +1,4 @@
-import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@openmrs/esm-framework';
+import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen/esm-framework';
 import { configSchema } from './config-schema';
 import changeLocationLinkComponent from './change-location-link/change-location-link.extension';
 import changePasswordLinkComponent from './change-password/change-password-link.extension';
@@ -6,7 +6,7 @@ import locationPickerComponent from './location-picker/location-picker-view.comp
 import logoutButtonComponent from './logout/logout.extension';
 import rootComponent from './root.component';
 
-const moduleName = '@openmrs/esm-login-app';
+const moduleName = '@egen/esm-login-app';
 
 const options = {
   featureName: 'login',

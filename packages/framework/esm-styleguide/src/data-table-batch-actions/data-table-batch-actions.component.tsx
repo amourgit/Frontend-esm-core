@@ -1,9 +1,9 @@
 /** @module @category UI */
 import React from 'react';
 import { TableBatchActions as CarbonTableBatchActions, type TableBatchActionsProps } from '@carbon/react';
-import { type CoreTranslationKey, getCoreTranslation } from '@openmrs/esm-translations';
+import { type CoreTranslationKey, getCoreTranslation } from '@egen/esm-translations';
 
-// Maps Carbon's internal translateWithId keys to OpenMRS core translation keys
+// Maps Carbon's internal translateWithId keys to Egen core translation keys
 const carbonToCoreTranslationMap: Record<string, CoreTranslationKey> = {
   'carbon.table.batch.cancel': 'cancel',
   'carbon.table.batch.items.selected': 'batchActionsItemsSelected',
@@ -13,7 +13,7 @@ const carbonToCoreTranslationMap: Record<string, CoreTranslationKey> = {
 
 /*
  * A wrapper around Carbon's `TableBatchActions` component that provides
- * OpenMRS core translations by default. The `translateWithId` prop is
+ * Egen core translations by default. The `translateWithId` prop is
  * pre-wired so that batch action strings are automatically translated.
  */
 export const TableBatchActions: React.FC<TableBatchActionsProps> = (props) => {

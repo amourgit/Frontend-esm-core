@@ -17,22 +17,22 @@ const { removeTrailingSlash, getTimestamp } = require('./tools/helpers');
 
 const { name, version, dependencies } = require('./package.json');
 const sharedDependencies = require('./dependencies.json');
-const frameworkVersion = require('@openmrs/esm-framework/package.json').version;
+const frameworkVersion = require('@egen/esm-framework/package.json').version;
 
 const timestamp = getTimestamp();
 const production = 'production';
 const allowedSuffixes = ['-app', '-widgets'];
 const { ModuleFederationPlugin } = container;
 
-const openmrsAddCookie = process.env.OMRS_ADD_COOKIE;
-const openmrsApiUrl = removeTrailingSlash(process.env.OMRS_API_URL || '/openmrs');
-const openmrsPublicPath = removeTrailingSlash(process.env.OMRS_PUBLIC_PATH || '/openmrs/spa');
-// Default proxy target is localhost. Set OMRS_PROXY_TARGET in .env to point to your EIGEN backend.
-const openmrsProxyTarget = process.env.OMRS_PROXY_TARGET || 'http://localhost:8080/';
-const openmrsPageTitle = process.env.OMRS_PAGE_TITLE || 'OpenMRS';
-const openmrsFavicon = process.env.OMRS_FAVICON || `${openmrsPublicPath}/favicon.ico`;
+const egenAddCookie = process.env.EGEN_ADD_COOKIE;
+const egenApiUrl = removeTrailingSlash(process.env.EGEN_API_URL || '/egen');
+const egenPublicPath = removeTrailingSlash(process.env.EGEN_PUBLIC_PATH || '/egen/spa');
+// Default proxy target is localhost. Set EGEN_PROXY_TARGET in .env to point to your EIGEN backend.
+const egenProxyTarget = process.env.EGEN_PROXY_TARGET || 'http://localhost:8080/';
+const egenPageTitle = process.env.EGEN_PAGE_TITLE || 'Egen';
+const egenFavicon = process.env.EGEN_FAVICON || `${egenPublicPath}/favicon.ico`;
 /**
- * Resolves the target environment from OMRS_ENV, falling back to NODE_ENV / build mode.
+ * Resolves the target environment from EGEN_ENV, falling back to NODE_ENV / build mode.
  *
  * Accepts aliases ("prod" → "production", "dev" → "development") and defaults
  * to "production" when nothing is set — so dev features are never accidentally
@@ -42,7 +42,7 @@ const openmrsFavicon = process.env.OMRS_FAVICON || `${openmrsPublicPath}/favicon
  * @returns {"production" | "development" | "test"}
  */
 function resolveEnvironment(buildMode) {
-  const raw = process.env.OMRS_ENV;
+  const raw = process.env.EGEN_ENV;
 
   if (raw) {
     switch (raw) {
@@ -55,38 +55,38 @@ function resolveEnvironment(buildMode) {
       case 'test':
         return 'test';
       default:
-        console.warn(`Unknown OMRS_ENV value "${raw}", defaulting to "production".`);
+        console.warn(`Unknown EGEN_ENV value "${raw}", defaulting to "production".`);
         return 'production';
     }
   }
 
-  // No explicit OMRS_ENV — derive from NODE_ENV or build mode.
+  // No explicit EGEN_ENV — derive from NODE_ENV or build mode.
   // Only "development" is treated as development; everything else is production.
   const fallback = process.env.NODE_ENV || buildMode || '';
   return fallback === 'development' ? 'development' : 'production';
 }
-const openmrsOffline = process.env.OMRS_OFFLINE === 'enable';
-const openmrsDefaultLocale = process.env.OMRS_ESM_DEFAULT_LOCALE || 'en';
-const openmrsImportmapDef = process.env.OMRS_ESM_IMPORTMAP;
-const openmrsImportmapUrl = process.env.OMRS_ESM_IMPORTMAP_URL || `${openmrsPublicPath}/importmap.json`;
-const openmrsRoutesDef = process.env.OMRS_ROUTES;
-const openmrsRoutesUrl = process.env.OMRS_ROUTES_URL || `${openmrsPublicPath}/routes.registry.json`;
-const openmrsCoreApps = process.env.OMRS_ESM_CORE_APPS_DIR || resolve(__dirname, '../../apps');
-const openmrsConfigUrls = (process.env.OMRS_CONFIG_URLS || '')
+const egenOffline = process.env.EGEN_OFFLINE === 'enable';
+const egenDefaultLocale = process.env.EGEN_ESM_DEFAULT_LOCALE || 'en';
+const egenImportmapDef = process.env.EGEN_ESM_IMPORTMAP;
+const egenImportmapUrl = process.env.EGEN_ESM_IMPORTMAP_URL || `${egenPublicPath}/importmap.json`;
+const egenRoutesDef = process.env.EGEN_ROUTES;
+const egenRoutesUrl = process.env.EGEN_ROUTES_URL || `${egenPublicPath}/routes.registry.json`;
+const egenCoreApps = process.env.EGEN_ESM_CORE_APPS_DIR || resolve(__dirname, '../../apps');
+const egenConfigUrls = (process.env.EGEN_CONFIG_URLS || '')
   .split(';')
   .filter((url) => url.length > 0)
   .map((url) => JSON.stringify(url))
   .join(', ');
-const openmrsJsCssAssets = (process.env.OMRS_JS_CSS_ASSETS || '').split(';').filter((filePath) => filePath.length > 0);
+const egenJsCssAssets = (process.env.EGEN_JS_CSS_ASSETS || '').split(';').filter((filePath) => filePath.length > 0);
 
-const openmrsCleanBeforeBuild =
+const egenCleanBeforeBuild =
   (() => {
     try {
       return (
-        process.env.OMRS_CLEAN_BEFORE_BUILD === undefined ||
-        (typeof process.env.OMRS_CLEAN_BEFORE_BUILD === 'boolean' && process.env.OMRS_CLEAN_BEFORE_BUILD) ||
-        (typeof process.env.OMRS_CLEAN_BEFORE_BUILD === 'string' &&
-          process.env.OMRS_CLEAN_BEFORE_BUILD.toLowerCase() !== 'false')
+        process.env.EGEN_CLEAN_BEFORE_BUILD === undefined ||
+        (typeof process.env.EGEN_CLEAN_BEFORE_BUILD === 'boolean' && process.env.EGEN_CLEAN_BEFORE_BUILD) ||
+        (typeof process.env.EGEN_CLEAN_BEFORE_BUILD === 'string' &&
+          process.env.EGEN_CLEAN_BEFORE_BUILD.toLowerCase() !== 'false')
       );
     } catch {
       // this is intensionally a no-op
@@ -141,7 +141,7 @@ module.exports = (env, argv = []) => {
   const mode = argv.mode || process.env.NODE_ENV || production;
   const outDir = mode === production ? 'dist' : 'lib';
   const isProd = mode === 'production';
-  const openmrsEnvironment = resolveEnvironment(mode);
+  const egenEnvironment = resolveEnvironment(mode);
   const appPatterns = [];
 
   const coreImportmap = {
@@ -150,9 +150,9 @@ module.exports = (env, argv = []) => {
 
   const coreRoutes = {};
 
-  if (!isProd && checkDirectoryExists(openmrsCoreApps)) {
-    readdirSync(openmrsCoreApps).forEach((dir) => {
-      const appDir = resolve(openmrsCoreApps, dir);
+  if (!isProd && checkDirectoryExists(egenCoreApps)) {
+    readdirSync(egenCoreApps).forEach((dir) => {
+      const appDir = resolve(egenCoreApps, dir);
       if (checkDirectoryExists(appDir)) {
         const { name, browser } = require(resolve(appDir, 'package.json'));
         const distDir = resolve(appDir, dirname(browser));
@@ -177,13 +177,13 @@ module.exports = (env, argv = []) => {
     });
   }
 
-  const assetsPatterns = openmrsJsCssAssets.map((asset) => ({ from: asset, to: 'assets' }));
+  const assetsPatterns = egenJsCssAssets.map((asset) => ({ from: asset, to: 'assets' }));
 
   // Compile the styleguide SCSS to CSS outside of rspack so it's a pure static file
   // with no JS involvement. The result is content-hashed for long-term caching.
   // Sass preserves @import of .css files as plain CSS @import rules rather than
   // inlining them, so we strip those out and prepend the actual file contents.
-  const sassOutput = sass.compile(require.resolve('@openmrs/esm-styleguide/styles'), {
+  const sassOutput = sass.compile(require.resolve('@egen/esm-styleguide/styles'), {
     style: isProd ? 'compressed' : 'expanded',
     quietDeps: true,
     loadPaths: [resolve(__dirname, '..', '..', '..', 'node_modules')],
@@ -218,22 +218,22 @@ module.exports = (env, argv = []) => {
     },
   );
   const styleguideCSS = resolvedCSS;
-  let openmrsCssFilename = 'openmrs.css';
+  let egenCssFilename = 'egen.css';
   if (isProd) {
     const cssHash = createHash('sha256').update(styleguideCSS).digest('hex').slice(0, 16);
-    openmrsCssFilename = `openmrs.${cssHash}.css`;
+    egenCssFilename = `egen.${cssHash}.css`;
   }
 
   const cssTmpDir = resolve(__dirname, '.tmp');
   mkdirSync(cssTmpDir, { recursive: true });
-  writeFileSync(resolve(cssTmpDir, openmrsCssFilename), styleguideCSS);
+  writeFileSync(resolve(cssTmpDir, egenCssFilename), styleguideCSS);
 
   const fontPatterns = [...fontAssets].map((fontPath) => ({ from: fontPath, to: 'fonts' }));
 
   return {
     entry: resolve(__dirname, 'src/index.ts'),
     output: {
-      filename: isProd ? 'openmrs.[contenthash].js' : 'openmrs.js',
+      filename: isProd ? 'egen.[contenthash].js' : 'egen.js',
       chunkFilename: '[chunkhash].js',
       path: resolve(__dirname, outDir),
       publicPath: '',
@@ -244,15 +244,15 @@ module.exports = (env, argv = []) => {
     lazyCompilation: false,
     devServer: {
       compress: true,
-      open: [`${openmrsPublicPath}/`.substring(1)],
+      open: [`${egenPublicPath}/`.substring(1)],
       devMiddleware: {
-        publicPath: `${openmrsPublicPath}/`,
+        publicPath: `${egenPublicPath}/`,
       },
       historyApiFallback: {
         rewrites: [
           {
-            from: new RegExp(`^${escapeRegExp(openmrsPublicPath)}/.*(?!\\.(?!html).+$)`),
-            to: `${openmrsPublicPath}/index.html`,
+            from: new RegExp(`^${escapeRegExp(egenPublicPath)}/.*(?!\\.(?!html).+$)`),
+            to: `${egenPublicPath}/index.html`,
           },
         ],
       },
@@ -266,7 +266,7 @@ module.exports = (env, argv = []) => {
               return false;
             }
 
-            if (path.startsWith(openmrsPublicPath)) {
+            if (path.startsWith(egenPublicPath)) {
               if (basename(path).indexOf('.') >= 0) {
                 return true;
               } else {
@@ -274,21 +274,21 @@ module.exports = (env, argv = []) => {
               }
             }
 
-            if (path.startsWith(openmrsApiUrl)) {
+            if (path.startsWith(egenApiUrl)) {
               return true;
             }
 
             return false;
           },
-          target: openmrsProxyTarget,
+          target: egenProxyTarget,
           changeOrigin: true,
           /**
            * @param {Request} proxyReq
            */
           onProxyReq(proxyReq) {
-            if (openmrsAddCookie) {
+            if (egenAddCookie) {
               const origCookie = proxyReq.getHeader('cookie');
-              const newCookie = `${origCookie};${openmrsAddCookie}`;
+              const newCookie = `${origCookie};${egenAddCookie}`;
               proxyReq.setHeader('cookie', newCookie);
             }
           },
@@ -306,10 +306,10 @@ module.exports = (env, argv = []) => {
            * @returns {string}
            */
           pathRewrite(path) {
-            if (path.startsWith(openmrsPublicPath)) {
+            if (path.startsWith(egenPublicPath)) {
               const matcher = /^.*\/([^\/]*\.(?!html|js)[^.]+)$/i.exec(path);
               if (matcher) {
-                return `${openmrsPublicPath}/${matcher[1]}`;
+                return `${egenPublicPath}/${matcher[1]}`;
               }
             }
 
@@ -327,7 +327,7 @@ module.exports = (env, argv = []) => {
     module: {
       rules: [
         {
-          test: /openmrs-esm-styleguide\.css$/,
+          test: /egen-esm-styleguide\.css$/,
           use: [
             isProd
               ? { loader: require.resolve(CssExtractRspackPlugin.loader) }
@@ -337,7 +337,7 @@ module.exports = (env, argv = []) => {
         },
         {
           test: /\.css$/,
-          exclude: [/openmrs-esm-styleguide\.css$/],
+          exclude: [/egen-esm-styleguide\.css$/],
           use: [
             isProd
               ? { loader: require.resolve(CssExtractRspackPlugin.loader) }
@@ -399,49 +399,49 @@ module.exports = (env, argv = []) => {
         url: false,
       },
       alias: {
-        '@openmrs/esm-framework': '@openmrs/esm-framework/src/internal',
+        '@egen/esm-framework': '@egen/esm-framework/src/internal',
         'lodash.debounce': 'lodash-es/debounce',
         'lodash.findlast': 'lodash-es/findLast',
         'lodash.isequal': 'lodash-es/isEqual',
         'lodash.omit': 'lodash-es/omit',
         'lodash.throttle': 'lodash-es/throttle',
         // ugly, stupid hack to support dynamic translation resolution here
-        '@openmrs/esm-translations/translations': resolve(
-          dirname(require.resolve('@openmrs/esm-translations/package.json')),
+        '@egen/esm-translations/translations': resolve(
+          dirname(require.resolve('@egen/esm-translations/package.json')),
           'translations',
         ),
       },
     },
     plugins: [
-      openmrsCleanBeforeBuild && new CleanWebpackPlugin(),
+      egenCleanBeforeBuild && new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         inject: false,
         scriptLoading: 'blocking',
-        publicPath: openmrsPublicPath,
+        publicPath: egenPublicPath,
         template: resolve(__dirname, 'src/index.ejs'),
         templateParameters: {
-          openmrsApiUrl,
-          openmrsPublicPath,
-          openmrsFavicon,
-          openmrsPageTitle,
-          openmrsDefaultLocale,
-          openmrsImportmapDef,
-          openmrsImportmapUrl,
-          openmrsRoutesDef,
-          openmrsRoutesUrl,
-          openmrsOffline,
-          openmrsEnvironment,
-          openmrsConfigUrls,
-          openmrsCoreImportmap: appPatterns.length > 0 && JSON.stringify(coreImportmap),
-          openmrsCoreRoutes: Object.keys(coreRoutes).length > 0 && JSON.stringify(coreRoutes),
-          openmrsCssFilename,
-          openmrsExtraAssets: openmrsJsCssAssets.map((fileName) => 'assets/' + basename(fileName)),
+          egenApiUrl,
+          egenPublicPath,
+          egenFavicon,
+          egenPageTitle,
+          egenDefaultLocale,
+          egenImportmapDef,
+          egenImportmapUrl,
+          egenRoutesDef,
+          egenRoutesUrl,
+          egenOffline,
+          egenEnvironment,
+          egenConfigUrls,
+          egenCoreImportmap: appPatterns.length > 0 && JSON.stringify(coreImportmap),
+          egenCoreRoutes: Object.keys(coreRoutes).length > 0 && JSON.stringify(coreRoutes),
+          egenCssFilename,
+          egenExtraAssets: egenJsCssAssets.map((fileName) => 'assets/' + basename(fileName)),
         },
       }),
       new WebpackPwaManifest({
-        name: openmrsPageTitle,
-        short_name: openmrsPageTitle,
-        publicPath: openmrsPublicPath,
+        name: egenPageTitle,
+        short_name: egenPageTitle,
+        publicPath: egenPublicPath,
         description: 'Open source Health IT by and for the entire planet, starting with the developing world.',
         background_color: '#ffffff',
         theme_color: '#005d5d',
@@ -455,7 +455,7 @@ module.exports = (env, argv = []) => {
       new CopyRspackPlugin({
         patterns: [
           { from: resolve(__dirname, 'src/assets') },
-          { from: resolve(cssTmpDir, openmrsCssFilename), to: openmrsCssFilename },
+          { from: resolve(cssTmpDir, egenCssFilename), to: egenCssFilename },
           ...fontPatterns,
           ...appPatterns,
           ...assetsPatterns,

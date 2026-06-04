@@ -1,5 +1,5 @@
-import type { ExtensionInternalStore } from '@openmrs/esm-extensions';
-import { getExtensionInternalStore } from '@openmrs/esm-extensions';
+import type { ExtensionInternalStore } from '@egen/esm-extensions';
+import { getExtensionInternalStore } from '@egen/esm-extensions';
 import { createUseStore } from './useStore';
 
 /** @internal

@@ -1,7 +1,7 @@
 /** @module @category Navigation */
 import { navigate } from '../navigation/navigate';
 
-const historyKey = 'openmrs:history';
+const historyKey = 'egen:history';
 
 function addToHistory(newLocation: string) {
   let history = JSON.parse(sessionStorage.getItem(historyKey) ?? '[]') || [];

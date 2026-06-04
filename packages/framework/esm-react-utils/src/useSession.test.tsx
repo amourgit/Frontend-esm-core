@@ -2,15 +2,15 @@ import React, { Suspense } from 'react';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, render, screen } from '@testing-library/react';
 import { useSession, __cleanup } from './useSession';
-import { createGlobalStore } from '@openmrs/esm-state';
-import { type SessionStore } from '@openmrs/esm-api';
+import { createGlobalStore } from '@egen/esm-state';
+import { type SessionStore } from '@egen/esm-api';
 
 const mockSessionStore = createGlobalStore<SessionStore>('mockSessionStore', {
   loaded: false,
   session: null,
 });
 
-vi.mock('@openmrs/esm-api', () => ({
+vi.mock('@egen/esm-api', () => ({
   getSessionStore: vi.fn(() => mockSessionStore),
 }));
 

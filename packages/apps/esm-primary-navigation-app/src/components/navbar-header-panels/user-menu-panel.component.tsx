@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderPanel, type HeaderPanelProps, Switcher, SwitcherDivider } from '@carbon/react';
-import { ExtensionSlot } from '@openmrs/esm-framework';
+import { ExtensionSlot } from '@egen/esm-framework';
 import styles from './user-menu-panel.scss';
 
 interface UserMenuPanelProps extends HeaderPanelProps {

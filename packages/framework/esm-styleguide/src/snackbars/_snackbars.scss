@@ -1,6 +1,6 @@
 @use '@carbon/layout';
 
-.omrs-snackbars-container {
+.egen-snackbars-container {
   z-index: 9001;
   position: fixed;
   width: 20rem;
@@ -14,18 +14,18 @@
 }
 
 /* Tablet */
-.omrs-breakpoint-lt-desktop {
-  .omrs-snackbars-container {
+.egen-breakpoint-lt-desktop {
+  .egen-snackbars-container {
     bottom: 5.5rem;
   }
 }
 
-.omrs-snackbar-mounting,
-.omrs-snackbar-mounting > * {
+.egen-snackbar-mounting,
+.egen-snackbar-mounting > * {
   padding: 0;
 }
 
-.omrs-snackbar-closing,
-.omrs-snackbar-mounting {
+.egen-snackbar-closing,
+.egen-snackbar-mounting {
   opacity: 0;
 }

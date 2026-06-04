@@ -1,8 +1,8 @@
 {
-  "name": "@openmrs/esm-offline",
+  "name": "@egen/esm-offline",
   "version": "9.0.2",
   "license": "MPL-2.0",
-  "description": "Helper utilities for OpenMRS",
+  "description": "Helper utilities for Egen",
   "type": "module",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,7 +27,7 @@
     "lint": "eslint src --ext ts,tsx"
   },
   "keywords": [
-    "openmrs",
+    "egen",
     "microfrontends"
   ],
   "directories": {
@@ -35,23 +35,23 @@
     "src": "src"
   },
   "browserslist": [
-    "extends browserslist-config-openmrs"
+    "extends browserslist-config-egen"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-core.git"
+    "url": "git+https://github.com/egen/egen-esm-core.git"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-core/issues"
+    "url": "https://github.com/egen/egen-esm-core/issues"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-core#readme",
+  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "publishConfig": {
     "access": "public"
   },
   "peerDependencies": {
-    "@openmrs/esm-api": "9.x",
-    "@openmrs/esm-globals": "9.x",
-    "@openmrs/esm-state": "9.x",
+    "@egen/esm-api": "9.x",
+    "@egen/esm-globals": "9.x",
+    "@egen/esm-state": "9.x",
     "rxjs": "6.x"
   },
   "dependencies": {
@@ -61,9 +61,9 @@
     "workbox-window": "^6.1.5"
   },
   "devDependencies": {
-    "@openmrs/esm-api": "workspace:*",
-    "@openmrs/esm-globals": "workspace:*",
-    "@openmrs/esm-state": "workspace:*",
+    "@egen/esm-api": "workspace:*",
+    "@egen/esm-globals": "workspace:*",
+    "@egen/esm-state": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
     "@types/uuid": "^9.0.1",

@@ -2,12 +2,12 @@ import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, SwitcherItem } from '@carbon/react';
 import { capitalize } from 'lodash-es';
-import { TranslateIcon, showModal, useSession } from '@openmrs/esm-framework';
+import { TranslateIcon, showModal, useSession } from '@egen/esm-framework';
 import styles from './change-language-link.scss';
 
 /**
- * Normalizes an OpenMRS locale string to a valid BCP 47 language tag.
- * OpenMRS stores locales with underscores (e.g. "en_GB", "fr_FR") but the
+ * Normalizes an Egen locale string to a valid BCP 47 language tag.
+ * Egen stores locales with underscores (e.g. "en_GB", "fr_FR") but the
  * Web Intl API requires hyphens (e.g. "en-GB", "fr-FR"). Passing an underscore
  * form directly to `new Intl.DisplayNames(...)` throws a RangeError.
  */

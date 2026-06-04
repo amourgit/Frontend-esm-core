@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ExtensionSlot } from '@openmrs/esm-framework';
+import { ExtensionSlot } from '@egen/esm-framework';
 import styles from './help-popup.styles.scss';
 
 export default function HelpMenuPopup() {

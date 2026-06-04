@@ -1,5 +1,5 @@
-import { createGlobalStore, getGlobalStore } from '@openmrs/esm-state';
-import { shallowEqual } from '@openmrs/esm-utils';
+import { createGlobalStore, getGlobalStore } from '@egen/esm-state';
+import { shallowEqual } from '@egen/esm-utils';
 import { type StoreApi } from 'zustand';
 import type { Config, ConfigObject, ConfigSchema, ExtensionSlotConfig, ProvidedConfig } from '../types';
 
@@ -55,7 +55,7 @@ temporaryConfigStore.subscribe((state) => {
 
 function setTemporaryConfig(value: Config) {
   try {
-    localStorage.setItem('openmrs:temporaryConfig', JSON.stringify(value));
+    localStorage.setItem('egen:temporaryConfig', JSON.stringify(value));
   } catch (e) {
     // localStorage may not be available in all environments
   }
@@ -63,7 +63,7 @@ function setTemporaryConfig(value: Config) {
 
 function getTemporaryConfig(): Config {
   try {
-    return JSON.parse(localStorage.getItem('openmrs:temporaryConfig') || '{}');
+    return JSON.parse(localStorage.getItem('egen:temporaryConfig') || '{}');
   } catch (e) {
     return {};
   }

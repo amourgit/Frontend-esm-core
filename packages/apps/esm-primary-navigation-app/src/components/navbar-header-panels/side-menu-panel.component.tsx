@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { isDesktop, LeftNavMenu, useLayoutType, useLeftNavStore, useOnClickOutside } from '@openmrs/esm-framework';
+import { isDesktop, LeftNavMenu, useLayoutType, useLeftNavStore, useOnClickOutside } from '@egen/esm-framework';
 import { createPortal } from 'react-dom';
 
 interface SideMenuPanelProps {
@@ -22,7 +22,7 @@ const SideMenuPanel: React.FC<SideMenuPanelProps> = ({ expanded, hidePanel }) =>
   const layout = useLayoutType();
   const { mode } = useLeftNavStore();
 
-  const leftNavContainer = window.document.getElementById('omrs-left-nav-container');
+  const leftNavContainer = window.document.getElementById('egen-left-nav-container');
   return (
     <>
       {(!isDesktop(layout) || mode === 'collapsed') && expanded && <LeftNavMenu ref={menuRef} isChildOfHeader />}

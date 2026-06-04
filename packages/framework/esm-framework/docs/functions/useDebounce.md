@@ -4,7 +4,7 @@
 
 > **useDebounce**\<`T`\>(`value`, `delay`): `T`
 
-Defined in: [packages/framework/esm-react-utils/src/useDebounce.ts:32](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useDebounce.ts#L32)
+Defined in: [packages/framework/esm-react-utils/src/useDebounce.ts:32](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useDebounce.ts#L32)
 
 This hook debounces a state variable. That state variable can then be used as the
 value of a controlled input, while the return value of this hook is used for making
@@ -39,7 +39,7 @@ The debounced value
 ## Example
 
 ```tsx
-import { useDebounce } from "@openmrs/esm-framework";
+import { useDebounce } from "@egen/esm-framework";
 
 function MyComponent() {
   const [searchTerm, setSearchTerm] = useState('');

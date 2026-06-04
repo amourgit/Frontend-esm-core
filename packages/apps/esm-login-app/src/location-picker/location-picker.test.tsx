@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  openmrsFetch,
+  egenFetch,
   setSessionLocation,
   setUserProperties,
   showSnackbar,
@@ -13,7 +13,7 @@ import {
   type LoggedInUser,
   type Session,
   type FetchResponse,
-} from '@openmrs/esm-framework';
+} from '@egen/esm-framework';
 import {
   mockLoginLocations,
   validatingLocationFailureResponse,
@@ -36,7 +36,7 @@ const secondLocation = {
 const invalidLocationUuid = '2gf1b7d4-c865-4178-82b0-5932e51503d6';
 const userUuid = '90bd24b3-e700-46b0-a5ef-c85afdfededd';
 
-const mockOpenmrsFetch = vi.mocked(openmrsFetch);
+const mockEgenFetch = vi.mocked(egenFetch);
 const mockUseConfig = vi.mocked(useConfig);
 const mockUseSession = vi.mocked(useSession);
 const mockSetSessionLocation = vi.mocked(setSessionLocation);
@@ -62,7 +62,7 @@ describe('LocationPickerView', () => {
       [`/ws/fhir2/R4/Location?_id=${invalidLocationUuid}`]: validatingLocationFailureResponse as FetchResponse<unknown>,
     };
 
-    mockOpenmrsFetch.mockImplementation(
+    mockEgenFetch.mockImplementation(
       async (url) => urlResponseMap[url] ?? (mockLoginLocations as FetchResponse<unknown>),
     );
 

@@ -4,9 +4,9 @@
 
 > **createAttachment**(`patientUuid`, `fileToUpload`): `Promise`\<[`FetchResponse`](../interfaces/FetchResponse.md)\<`any`\>\>
 
-Defined in: [packages/framework/esm-emr-api/src/attachments.ts:73](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-emr-api/src/attachments.ts#L73)
+Defined in: [packages/framework/esm-emr-api/src/attachments.ts:73](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-emr-api/src/attachments.ts#L73)
 
-Creates a new attachment for a patient by uploading a file to the OpenMRS server.
+Creates a new attachment for a patient by uploading a file to the Egen server.
 The file can be provided either as a File object or as base64-encoded content.
 
 ## Parameters
@@ -35,7 +35,7 @@ A Promise that resolves with the FetchResponse containing the created
 ## Example
 
 ```ts
-import { createAttachment } from '@openmrs/esm-framework';
+import { createAttachment } from '@egen/esm-framework';
 const response = await createAttachment('patient-uuid', {
   file: selectedFile,
   fileName: 'document.pdf',

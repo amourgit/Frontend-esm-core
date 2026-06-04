@@ -8,13 +8,13 @@ function getLayout() {
 
   document.body.classList.forEach((cls) => {
     switch (cls) {
-      case 'omrs-breakpoint-lt-tablet':
+      case 'egen-breakpoint-lt-tablet':
         layout = 'phone';
         break;
-      case 'omrs-breakpoint-gt-small-desktop':
+      case 'egen-breakpoint-gt-small-desktop':
         layout = 'large-desktop';
         break;
-      case 'omrs-breakpoint-gt-tablet':
+      case 'egen-breakpoint-gt-tablet':
         layout = 'small-desktop';
         break;
     }

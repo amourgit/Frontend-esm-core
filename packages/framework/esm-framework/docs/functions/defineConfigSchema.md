@@ -4,13 +4,13 @@
 
 > **defineConfigSchema**(`moduleName`, `schema`): `void`
 
-Defined in: [packages/framework/esm-config/src/module-config/module-config.ts:190](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-config/src/module-config/module-config.ts#L190)
+Defined in: [packages/framework/esm-config/src/module-config/module-config.ts:190](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-config/src/module-config/module-config.ts#L190)
 
 This defines a configuration schema for a module. The schema tells the
 configuration system how the module can be configured. It specifies
 what makes configuration valid or invalid.
 
-See [Configuration System](https://o3-docs.openmrs.org/docs/configuration-system)
+See [Configuration System](https://o3-docs.egen.org/docs/configuration-system)
 for more information about defining a config schema.
 
 ## Parameters

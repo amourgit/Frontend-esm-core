@@ -29,14 +29,14 @@
 }
 
 /* Desktop */
-:global(.omrs-breakpoint-gt-tablet) {
+:global(.egen-breakpoint-gt-tablet) {
   :global(.cds--side-nav__link) {
     height: layout.$spacing-07;
   }
 }
 
 /* Tablet */
-:global(.omrs-breakpoint-lt-desktop) {
+:global(.egen-breakpoint-lt-desktop) {
   :global(.cds--side-nav__link) {
     height: layout.$spacing-09;
   }

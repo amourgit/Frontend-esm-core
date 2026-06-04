@@ -1,15 +1,15 @@
 import { setCacheNameDetails } from 'workbox-core';
 import { handleMessage } from './message';
 import { precacheAppShell } from './caching';
-import { registerAllOmrsRoutes } from './routing';
-import { omrsCachePrefix } from './constants';
+import { registerAllEgenRoutes } from './routing';
+import { egenCachePrefix } from './constants';
 
 self.__WB_DISABLE_DEV_LOGS = true;
 
 // Initial Workbox setup. Renaming its default cache prefix prevents conflicts with other dev envs on localhost.
-setCacheNameDetails({ prefix: omrsCachePrefix });
+setCacheNameDetails({ prefix: egenCachePrefix });
 
-registerAllOmrsRoutes();
+registerAllEgenRoutes();
 
 self.addEventListener('message', handleMessage);
 

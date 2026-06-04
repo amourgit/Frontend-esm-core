@@ -1,6 +1,6 @@
-# openmrs-esm-styleguide
+# egen-esm-styleguide
 
-The styleguide for OpenMRS.
+The styleguide for Egen.
 
 All our frontend UI development is based on [Carbon Design System](https://www.carbondesignsystem.com/). 
 

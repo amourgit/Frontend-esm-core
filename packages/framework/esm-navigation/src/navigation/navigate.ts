@@ -1,7 +1,7 @@
 /** @module @category Navigation */
 import { navigateToUrl } from 'single-spa';
 import { interpolateUrl } from './interpolate-string';
-import type {} from '@openmrs/esm-globals';
+import type {} from '@egen/esm-globals';
 
 function trimTrailingSlash(str: string) {
   return str.replace(/\/$/, '');
@@ -31,25 +31,25 @@ export interface NavigateOptions {
  * @example
  * navigate({ to: "/some/path" }); // => window.location.assign("/some/path")
  * navigate({ to: "https://single-spa.js.org/" }); // => window.location.assign("https://single-spa.js.org/")
- * navigate({ to: "${openmrsBase}/some/path" }); // => window.location.assign("/openmrs/some/path")
- * navigate({ to: "/openmrs/spa/foo/page" }); // => navigateToUrl("/openmrs/spa/foo/page")
- * navigate({ to: "${openmrsSpaBase}/bar/page" }); // => navigateToUrl("/openmrs/spa/bar/page")
- * navigate({ to: "/${openmrsSpaBase}/baz/page" }) // => navigateToUrl("/openmrs/spa/baz/page")
- * navigate({ to: "https://o3.openmrs.org/${openmrsSpaBase}/qux/page" }); // => navigateToUrl("/openmrs/spa/qux/page")
- *   if `window.location.origin` == "https://o3.openmrs.org", else will use window.location.assign
+ * navigate({ to: "${egenBase}/some/path" }); // => window.location.assign("/egen/some/path")
+ * navigate({ to: "/egen/spa/foo/page" }); // => navigateToUrl("/egen/spa/foo/page")
+ * navigate({ to: "${egenSpaBase}/bar/page" }); // => navigateToUrl("/egen/spa/bar/page")
+ * navigate({ to: "/${egenSpaBase}/baz/page" }) // => navigateToUrl("/egen/spa/baz/page")
+ * navigate({ to: "https://o3.egen.org/${egenSpaBase}/qux/page" }); // => navigateToUrl("/egen/spa/qux/page")
+ *   if `window.location.origin` == "https://o3.egen.org", else will use window.location.assign
  * ```
  *
- * @param to The target path or URL. Supports templating with 'openmrsBase', 'openmrsSpaBase',
+ * @param to The target path or URL. Supports templating with 'egenBase', 'egenSpaBase',
  * and any additional template parameters defined in `templateParams`.
- * For example, `${openmrsSpaBase}/home` will resolve to `/openmrs/spa/home`
- * for implementations using the standard OpenMRS and SPA base paths.
- * If `templateParams` contains `{ foo: "bar" }`, then the URL `${openmrsBase}/${foo}`
- * will become `/openmrs/bar`.
+ * For example, `${egenSpaBase}/home` will resolve to `/egen/spa/home`
+ * for implementations using the standard Egen and SPA base paths.
+ * If `templateParams` contains `{ foo: "bar" }`, then the URL `${egenBase}/${foo}`
+ * will become `/egen/bar`.
  */
 export function navigate({ to, templateParams }: NavigateOptions): void {
-  const openmrsSpaBase = trimTrailingSlash(window.getOpenmrsSpaBase());
+  const egenSpaBase = trimTrailingSlash(window.getEgenSpaBase());
   const target = interpolateUrl(to, templateParams).replace(window.location.origin, '');
-  const isSpaPath = target.startsWith(openmrsSpaBase);
+  const isSpaPath = target.startsWith(egenSpaBase);
 
   if (isSpaPath) {
     navigateToUrl(target);

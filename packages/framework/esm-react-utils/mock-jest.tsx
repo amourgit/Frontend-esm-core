@@ -1,25 +1,25 @@
 import React from 'react';
-import { openmrsFetch } from '@openmrs/esm-api/mock';
-import { configSchema } from '@openmrs/esm-config/mock';
-import { getExtensionInternalStore } from '@openmrs/esm-extensions/mock';
-import { createGlobalStore } from '@openmrs/esm-state/mock';
+import { egenFetch } from '@egen/esm-api/mock';
+import { configSchema } from '@egen/esm-config/mock';
+import { getExtensionInternalStore } from '@egen/esm-extensions/mock';
+import { createGlobalStore } from '@egen/esm-state/mock';
 import { isDesktop as realIsDesktop } from './src/useLayoutType';
 import { useFhirFetchAll as realUseFhirFetchAll } from './src/useFhirFetchAll';
 import { useFhirInfinite as realUseFhirInfinite } from './src/useFhirInfinite';
 import { useFhirPagination as realUseFhirPagination } from './src/useFhirPagination';
-import { useOpenmrsFetchAll as realUseOpenmrsFetchAll } from './src/useOpenmrsFetchAll';
-import { useOpenmrsInfinite as realUseOpenmrsInfinite } from './src/useOpenmrsInfinite';
-import { useOpenmrsPagination as realUseOpenmrsrPagination } from './src/useOpenmrsPagination';
+import { useEgenFetchAll as realUseEgenFetchAll } from './src/useEgenFetchAll';
+import { useEgenInfinite as realUseEgenInfinite } from './src/useEgenInfinite';
+import { useEgenPagination as realUseEgenrPagination } from './src/useEgenPagination';
 import { useVisitContextStore as realUseVisitContextStore } from './src/useVisitContextStore';
 import { usePagination as realUsePagination } from './src/usePagination';
 import { usePaginationInfo as realUsePaginationInfo } from './src/usePaginationInfo';
 export { ConfigurableLink } from './src/ConfigurableLink';
 export { useStore, useStoreWithActions, createUseStore } from './src/useStore';
-import * as utils from '@openmrs/esm-utils';
+import * as utils from '@egen/esm-utils';
 
 export const ComponentContext = React.createContext(null);
 
-export const openmrsComponentDecorator = jest.fn().mockImplementation(() => (component) => component);
+export const egenComponentDecorator = jest.fn().mockImplementation(() => (component) => component);
 
 export const useAttachments = jest.fn(() => ({
   isLoading: true,
@@ -77,9 +77,9 @@ export const useFeatureFlag = jest.fn().mockReturnValue(true);
 export const usePagination = jest.fn(realUsePagination);
 export const usePaginationInfo = jest.fn(realUsePaginationInfo);
 
-export const useOpenmrsPagination = jest.fn(realUseOpenmrsrPagination);
-export const useOpenmrsInfinite = jest.fn(realUseOpenmrsInfinite);
-export const useOpenmrsFetchAll = jest.fn(realUseOpenmrsFetchAll);
+export const useEgenPagination = jest.fn(realUseEgenrPagination);
+export const useEgenInfinite = jest.fn(realUseEgenInfinite);
+export const useEgenFetchAll = jest.fn(realUseEgenFetchAll);
 export const useFhirPagination = jest.fn(realUseFhirPagination);
 export const useFhirInfinite = jest.fn(realUseFhirInfinite);
 export const useFhirFetchAll = jest.fn(realUseFhirFetchAll);
@@ -109,8 +109,8 @@ export const useAbortController = jest.fn(() => {
   } as AbortController;
 });
 
-export const useOpenmrsSWR = jest.fn((key: string | Array<any>) => {
-  return { data: openmrsFetch(key.toString()) };
+export const useEgenSWR = jest.fn((key: string | Array<any>) => {
+  return { data: egenFetch(key.toString()) };
 });
 
 export const useDebounce = jest.fn().mockImplementation((value) => value);
@@ -129,7 +129,7 @@ export const isDesktop = jest.fn(realIsDesktop);
 
 export const useLocations = jest.fn().mockReturnValue([]);
 
-export const toOmrsIsoString = jest.fn().mockImplementation((date: Date) => date.toISOString());
+export const toEgenIsoString = jest.fn().mockImplementation((date: Date) => date.toISOString());
 
 export const toDateObjectStrict = jest.fn().mockImplementation((date: string) => new Date(date));
 

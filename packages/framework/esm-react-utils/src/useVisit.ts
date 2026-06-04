@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
 import isToday from 'dayjs/plugin/isToday.js';
-import { openmrsFetch, restBaseUrl } from '@openmrs/esm-api';
-import { defaultVisitCustomRepresentation, type Visit } from '@openmrs/esm-emr-api';
+import { egenFetch, restBaseUrl } from '@egen/esm-api';
+import { defaultVisitCustomRepresentation, type Visit } from '@egen/esm-emr-api';
 import { useVisitContextStore } from './useVisitContextStore';
 
 dayjs.extend(isToday);
@@ -53,7 +53,7 @@ export function useVisit(patientUuid: string, representation = defaultVisitCusto
     isValidating: activeIsValidating,
   } = useSWR<{
     data: { results: Array<Visit> };
-  }>(patientUuid ? `${restBaseUrl}/visit${activeVisitUrlSuffix}` : null, openmrsFetch);
+  }>(patientUuid ? `${restBaseUrl}/visit${activeVisitUrlSuffix}` : null, egenFetch);
 
   const {
     data: retroData,
@@ -62,7 +62,7 @@ export function useVisit(patientUuid: string, representation = defaultVisitCusto
     isValidating: retroIsValidating,
   } = useSWR<{
     data: Visit;
-  }>(patientUuid && retrospectiveVisitUuid ? `${restBaseUrl}/visit${retrospectiveVisitUrlSuffix}` : null, openmrsFetch);
+  }>(patientUuid && retrospectiveVisitUuid ? `${restBaseUrl}/visit${retrospectiveVisitUrlSuffix}` : null, egenFetch);
 
   const activeVisit = useMemo(
     () => activeData?.data.results.find((visit) => visit.stopDatetime === null) ?? null,

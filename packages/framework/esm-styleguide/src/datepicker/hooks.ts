@@ -1,16 +1,16 @@
 import { createContext, type CSSProperties, type ReactNode, useContext, useMemo } from 'react';
 import { createCalendar, getLocalTimeZone, toCalendar, today, type Calendar } from '@internationalized/date';
 import { type AriaLabelingProps, type DOMProps } from '@react-types/shared';
-import { useConfig } from '@openmrs/esm-react-utils';
-import { getLocale, getDefaultCalendar } from '@openmrs/esm-utils';
+import { useConfig } from '@egen/esm-react-utils';
+import { getLocale, getDefaultCalendar } from '@egen/esm-utils';
 import { type StyleguideConfigObject } from '../config-schema';
 
-export const OpenmrsIntlLocaleContext = createContext<Intl.Locale | null>(null);
+export const EgenIntlLocaleContext = createContext<Intl.Locale | null>(null);
 
-export const useIntlLocale = () => useContext(OpenmrsIntlLocaleContext)!;
+export const useIntlLocale = () => useContext(EgenIntlLocaleContext)!;
 
 /**
- * This is the context provided to the OpenmrsDatePicker and OpenmrsDateRangePicker
+ * This is the context provided to the EgenDatePicker and EgenDateRangePicker
  */
 interface DatepickerContext {
   calendar: Calendar | undefined;
@@ -20,7 +20,7 @@ interface DatepickerContext {
 
 /**
  * Resolves the active locale, calendar system, and "today" value for use
- * in both OpenmrsDatePicker and OpenmrsDateRangePicker.
+ * in both EgenDatePicker and EgenDateRangePicker.
  *
  * The locale is resolved from i18next, mapped through the user's preferred
  * date locale config, and then used to derive the calendar system. This
@@ -29,7 +29,7 @@ interface DatepickerContext {
  * Depends on `window.i18next.language` to re-compute when the UI language changes.
  */
 export function useDatepickerContext(): DatepickerContext {
-  const config = useConfig<StyleguideConfigObject>({ externalModuleName: '@openmrs/esm-styleguide' });
+  const config = useConfig<StyleguideConfigObject>({ externalModuleName: '@egen/esm-styleguide' });
   const preferredDateLocaleMap = config.preferredDateLocale;
 
   const locale = useMemo(() => {

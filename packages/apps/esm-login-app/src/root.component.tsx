@@ -7,7 +7,7 @@ import RedirectLogout from './redirect-logout/redirect-logout.component';
 
 const Root: React.FC = () => {
   return (
-    <BrowserRouter basename={window.getOpenmrsSpaBase()}>
+    <BrowserRouter basename={window.getEgenSpaBase()}>
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="login/confirm" element={<Login />} />

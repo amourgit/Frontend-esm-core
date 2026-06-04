@@ -1,9 +1,9 @@
 /** @module @category API */
 import { useState, useEffect } from 'react';
-import { getLocations, type Location } from '@openmrs/esm-emr-api';
+import { getLocations, type Location } from '@egen/esm-emr-api';
 
 /**
- * A React hook that fetches and returns locations from the OpenMRS server.
+ * A React hook that fetches and returns locations from the Egen server.
  * Locations can be filtered by a tag UUID/name and/or a search query string.
  *
  * @param tagUuidOrName Optional tag UUID or name to filter locations by.
@@ -15,7 +15,7 @@ import { getLocations, type Location } from '@openmrs/esm-emr-api';
  *
  * @example
  * ```tsx
- * import { useLocations } from '@openmrs/esm-framework';
+ * import { useLocations } from '@egen/esm-framework';
  * function LocationList() {
  *   const locations = useLocations('Login Location');
  *   return (

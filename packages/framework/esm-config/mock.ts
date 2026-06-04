@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
-import { createGlobalStore } from '@openmrs/esm-state/mock';
-import { getDefaultsFromConfigSchema } from '@openmrs/esm-utils';
+import { createGlobalStore } from '@egen/esm-state/mock';
+import { getDefaultsFromConfigSchema } from '@egen/esm-utils';
 
 export { validators, validator } from './src/index';
 

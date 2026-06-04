@@ -1,9 +1,9 @@
-:wave: New to our project? Be sure to review the [OpenMRS 3 Frontend Developer Documentation](https://openmrs.atlassian.net/wiki/x/IABBHg). You may find the [Introduction](https://openmrs.atlassian.net/wiki/x/94ABCQ) especially helpful.
+:wave: New to our project? Be sure to review the [Egen 3 Frontend Developer Documentation](https://egen.atlassian.net/wiki/x/IABBHg). You may find the [Introduction](https://egen.atlassian.net/wiki/x/94ABCQ) especially helpful.
 
-Also see the [API documentation](./packages/framework/esm-framework/docs/API.md) for `@openmrs/esm-framework`, which is contained in this repository.
+Also see the [API documentation](./packages/framework/esm-framework/docs/API.md) for `@egen/esm-framework`, which is contained in this repository.
 
-![OpenMRS CI](https://github.com/openmrs/openmrs-esm-core/workflows/OpenMRS%20CI/badge.svg)
-![Check documentation](https://github.com/openmrs/openmrs-esm-core/actions/workflows/docs.yml/badge.svg)
+![Egen CI](https://github.com/egen/egen-esm-core/workflows/Egen%20CI/badge.svg)
+![Check documentation](https://github.com/egen/egen-esm-core/actions/workflows/docs.yml/badge.svg)
 
 Below is the documentation for this repository.
 
@@ -17,45 +17,45 @@ This is a [monorepo](https://yarnpkg.com/advanced/lexicon#monorepo) containing t
 
 This contains tooling and the app shell.
 
-- [openmrs](packages/tooling/openmrs)
-- [@openmrs/esm-app-shell](packages/shell/esm-app-shell)
+- [egen](packages/tooling/egen)
+- [@egen/esm-app-shell](packages/shell/esm-app-shell)
 
 ### Framework
 
 The following common libraries have been developed. They may also be used independently of the app shell.
 
-- [@openmrs/esm-api](packages/framework/esm-api): helps make API calls to the backend
-- [@openmrs/esm-config](packages/framework/esm-config): validation and storage of frontend configuration
-- [@openmrs/esm-context](packages/framework/esm-context): provides the AppContext for sharing contextual state across the app
-- [@openmrs/esm-dynamic-loading](packages/framework/esm-dynamic-loading): provides functionality for dynamically loading frontend modules using Webpack Module Federation dynamic remotes
-- [@openmrs/esm-error-handling](packages/framework/esm-error-handling): handles errors
-- [@openmrs/esm-expression-evaluator](packages/framework/esm-expression-evaluator): provides functions that allow evaluation of user-defined expressions in a safer way than eval()
-- [@openmrs/esm-extensions](packages/framework/esm-extensions): implementation of a frontend component extension system
-- [@openmrs/esm-feature-flags](packages/framework/esm-feature-flags): hide features that are in progress
-- [@openmrs/esm-globals](packages/framework/esm-globals): useful global variables and types
-- [@openmrs/esm-navigation](packages/framework/esm-navigation): navigation utilities, breadcrumbs, and history
-- [@openmrs/esm-offline](packages/framework/esm-offline): provides offline functionality
-- [@openmrs/esm-react-utils](packages/framework/esm-react-utils): utilities for React components
-- [@openmrs/esm-routes](packages/framework/esm-routes): provides helper functions for working with `routes.json` files in O3
-- [@openmrs/esm-state](packages/framework/esm-state): brings in state management
-- [@openmrs/esm-styleguide](packages/framework/esm-styleguide): styling and UI capabilities
-- [@openmrs/esm-translations](packages/framework/esm-translations): common translations and utilities
-- [@openmrs/esm-utils](packages/framework/esm-utils): general utility and helper functions
+- [@egen/esm-api](packages/framework/esm-api): helps make API calls to the backend
+- [@egen/esm-config](packages/framework/esm-config): validation and storage of frontend configuration
+- [@egen/esm-context](packages/framework/esm-context): provides the AppContext for sharing contextual state across the app
+- [@egen/esm-dynamic-loading](packages/framework/esm-dynamic-loading): provides functionality for dynamically loading frontend modules using Webpack Module Federation dynamic remotes
+- [@egen/esm-error-handling](packages/framework/esm-error-handling): handles errors
+- [@egen/esm-expression-evaluator](packages/framework/esm-expression-evaluator): provides functions that allow evaluation of user-defined expressions in a safer way than eval()
+- [@egen/esm-extensions](packages/framework/esm-extensions): implementation of a frontend component extension system
+- [@egen/esm-feature-flags](packages/framework/esm-feature-flags): hide features that are in progress
+- [@egen/esm-globals](packages/framework/esm-globals): useful global variables and types
+- [@egen/esm-navigation](packages/framework/esm-navigation): navigation utilities, breadcrumbs, and history
+- [@egen/esm-offline](packages/framework/esm-offline): provides offline functionality
+- [@egen/esm-react-utils](packages/framework/esm-react-utils): utilities for React components
+- [@egen/esm-routes](packages/framework/esm-routes): provides helper functions for working with `routes.json` files in O3
+- [@egen/esm-state](packages/framework/esm-state): brings in state management
+- [@egen/esm-styleguide](packages/framework/esm-styleguide): styling and UI capabilities
+- [@egen/esm-translations](packages/framework/esm-translations): common translations and utilities
+- [@egen/esm-utils](packages/framework/esm-utils): general utility and helper functions
 
-All libraries are aggregated in the `@openmrs/esm-framework` package:
+All libraries are aggregated in the `@egen/esm-framework` package:
 
-- [@openmrs/esm-framework](packages/framework/esm-framework)
+- [@egen/esm-framework](packages/framework/esm-framework)
 
 ### Frontend modules
 
 A set of frontend modules provides the core technical functionality of the application.
 
-- [@openmrs/esm-devtools-app](packages/apps/esm-devtools-app)
-- [@openmrs/esm-help-menu-app](packages/apps/esm-help-menu-app)
-- [@openmrs/esm-implementer-tools-app](packages/apps/esm-implementer-tools-app)
-- [@openmrs/esm-login-app](packages/apps/esm-login-app)
-- [@openmrs/esm-primary-navigation-app](packages/apps/esm-primary-navigation-app)
-- [@openmrs/esm-offline-tools-app](packages/apps/esm-offline-tools-app)
+- [@egen/esm-devtools-app](packages/apps/esm-devtools-app)
+- [@egen/esm-help-menu-app](packages/apps/esm-help-menu-app)
+- [@egen/esm-implementer-tools-app](packages/apps/esm-implementer-tools-app)
+- [@egen/esm-login-app](packages/apps/esm-login-app)
+- [@egen/esm-primary-navigation-app](packages/apps/esm-primary-navigation-app)
+- [@egen/esm-offline-tools-app](packages/apps/esm-offline-tools-app)
 
 ## Development
 
@@ -115,7 +115,7 @@ This will spin up a development server with hot module reloading so any changes 
 ### Running the tooling
 
 ```sh
-cd packages/tooling/openmrs
+cd packages/tooling/egen
 yarn build
 ./dist/cli.js
 ```
@@ -139,7 +139,7 @@ yarn turbo run test:watch
 To run tests for a specific package, pass the package name to the `--filter` flag. For example:
 
 ```bash
-yarn turbo run test --filter="@openmrs/esm-styleguide"
+yarn turbo run test --filter="@egen/esm-styleguide"
 ```
 
 To run a specific test file, run:
@@ -170,7 +170,7 @@ yarn turbo run test --force
 
 #### Running End-to-End (E2E) tests
 
-E2E tests run against a complete OpenMRS stack in Docker containers. The test runner handles everything automatically: building the frontend, starting containers, running tests, and cleanup.
+E2E tests run against a complete Egen stack in Docker containers. The test runner handles everything automatically: building the frontend, starting containers, running tests, and cleanup.
 
 **Prerequisites:**
 
@@ -221,18 +221,18 @@ You can run E2E tests on different branches simultaneously in separate terminal 
 To test against a remote instance instead of Docker containers, set the `E2E_BASE_URL` environment variable:
 
 ```bash
-E2E_BASE_URL=https://dev3.openmrs.org/openmrs yarn playwright test
+E2E_BASE_URL=https://dev3.egen.org/egen yarn playwright test
 ```
 
 Note: When testing against a remote instance, use `yarn playwright test` directly (not `yarn test-e2e`) since you don't need the Docker environment.
 
-Read the [e2e testing guide](https://openmrs.atlassian.net/wiki/spaces/docs/pages/150962731/Testing+Frontend+Modules+O3) to learn more about End-to-End tests in this project.
+Read the [e2e testing guide](https://egen.atlassian.net/wiki/spaces/docs/pages/150962731/Testing+Frontend+Modules+O3) to learn more about End-to-End tests in this project.
 
 ### Linking the framework
 
 You probably want to try out your changes to a framework library in a frontend module. Unfortunately, getting a working development environment for this is very finicky; no one technique works for all frontend modules all the time.
 
-Note that even though frontend modules import from `@openmrs/esm-framework`, the package you need to link is the sub-library; for example, if you are trying to test changes in `packages/framework/esm-api`, you will need to link that sub-library.
+Note that even though frontend modules import from `@egen/esm-framework`, the package you need to link is the sub-library; for example, if you are trying to test changes in `packages/framework/esm-api`, you will need to link that sub-library.
 
 If you're unsure whether your version of a core package is running, add a `console.log` at the top level of a file you're working on.
 
@@ -243,14 +243,14 @@ Here are the tools at your disposal for trying to get this to work:
 This should be the first thing you try. To link the styleguide, for example, you would use
 
 ```sh
-yarn link ../path/to/openmrs-esm-core/packages/framework/esm-styleguide
+yarn link ../path/to/egen-esm-core/packages/framework/esm-styleguide
 ```
 
-This will add a line to the "resolutions" section of the `package.json` file which uses the `portal:` protocol. The other protocol is `link:`. If you need to make changes to the `esm-framework` package, you will need to link it in as well. However, linking `@openmrs/esm-framework` as a portal created by `yarn link` will not work; instead manually add the line to the `resolutions` field in the `package.json` file:
+This will add a line to the "resolutions" section of the `package.json` file which uses the `portal:` protocol. The other protocol is `link:`. If you need to make changes to the `esm-framework` package, you will need to link it in as well. However, linking `@egen/esm-framework` as a portal created by `yarn link` will not work; instead manually add the line to the `resolutions` field in the `package.json` file:
 
 ```json
 "resolutions": {
-  "@openmrs/esm-framework": "link:../path/to/openmrs-esm-core/packages/framework/esm-framework"
+  "@egen/esm-framework": "link:../path/to/egen-esm-core/packages/framework/esm-framework"
 }
 ```
 
@@ -269,8 +269,8 @@ Then, link the repository you are working on. For `esm-api`, for example, run:
 # In this repository
 cd packages/framework/esm-api
 yalc publish
-cd ../../../openmrs-esm-patient-chart  # for example
-yalc link @openmrs/esm-api
+cd ../../../egen-esm-patient-chart  # for example
+yalc link @egen/esm-api
 ```
 
 In order for Patient Chart to receive further updates you make to esm-api, you will need to run `yalc push` in the esm-api directory and `yalc update` in the Patient Chart directory.
@@ -286,7 +286,7 @@ Here, there are two options:
 In order to get your local version of the core packages to be served in your local dev server, you will need to link the tooling as well.
 
 ```sh
-yarn link /path/to/esm-core/packages/tooling/openmrs
+yarn link /path/to/esm-core/packages/tooling/egen
 ```
 
 You can try using `yalc` for this as well, if `yarn link` doesn't work. Or manually create a `link:` resolution in `package.json`.
@@ -330,7 +330,7 @@ Where version corresponds to:
 
 Note that this command will not create a new tag, nor publish the packages. After running it, make a PR or merge to `main` with the resulting changeset. Note that the release commit message must resemble `(chore) Release vx.x.x` where `x.x.x` is the new version number prefixed with `v`. This is to avoid triggering a pre-release build when effecting a version bump.
 
-Once the version bump commit is merged, go to GitHub and [draft a new release](https://github.com/openmrs/openmrs-esm-core/releases/new).
+Once the version bump commit is merged, go to GitHub and [draft a new release](https://github.com/egen/egen-esm-core/releases/new).
 
 The tag should be prefixed with `v` (e.g., `v3.2.1`), while the release title should just be the version number (e.g., `3.2.1`). The creation of the GitHub release will cause GitHub Actions to publish the packages, completing the release process.
 
@@ -340,7 +340,7 @@ The tag should be prefixed with `v` (e.g., `v3.2.1`), while the release title sh
 
 When releasing a new major version (e.g., moving from v6 to v7), you must:
 
-1. Update all peerDependencies that reference `@openmrs/` packages in every package that depends on them.
+1. Update all peerDependencies that reference `@egen/` packages in every package that depends on them.
 2. Change the version notation from the current major version to the new one (e.g., from `6.x` to `7.x`).
 
 Example:
@@ -348,14 +348,14 @@ Example:
 ```jsonc
 // Before (during v6)
 "peerDependencies": {
-  "@openmrs/esm-config": "6.x",
-  "@openmrs/esm-utils": "6.x"
+  "@egen/esm-config": "6.x",
+  "@egen/esm-utils": "6.x"
 }
 
 // After (for v7)
 "peerDependencies": {
-  "@openmrs/esm-config": "7.x",
-  "@openmrs/esm-utils": "7.x"
+  "@egen/esm-config": "7.x",
+  "@egen/esm-utils": "7.x"
 }
 ```
 
@@ -372,7 +372,7 @@ Also, ensure you specify fixed (pinned) versions of Playwright in the `package.j
 
 ## Documentation
 
-The API documentation for `@openmrs/esm-framework` (under `packages/framework/esm-framework/docs/`) is generated by [TypeDoc](https://typedoc.org/) from the framework source. It's regenerated automatically by CI once a PR with framework changes has been approved — the bot pushes a `(chore) Add docs` commit back to the PR branch, so you don't need to run TypeDoc before submitting.
+The API documentation for `@egen/esm-framework` (under `packages/framework/esm-framework/docs/`) is generated by [TypeDoc](https://typedoc.org/) from the framework source. It's regenerated automatically by CI once a PR with framework changes has been approved — the bot pushes a `(chore) Add docs` commit back to the PR branch, so you don't need to run TypeDoc before submitting.
 
 To preview locally:
 

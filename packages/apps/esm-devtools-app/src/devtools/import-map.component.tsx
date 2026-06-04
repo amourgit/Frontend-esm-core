@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { getImportMapOverrideMap } from '@openmrs/esm-framework/src/internal';
+import { getImportMapOverrideMap } from '@egen/esm-framework/src/internal';
 import ImportMapList from './import-map-list/list.component';
 import styles from './import-map.styles.css';
 

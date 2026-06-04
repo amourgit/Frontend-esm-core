@@ -1,15 +1,15 @@
 import React from 'react';
 import type { Meta, StoryObj } from 'storybook-react-rsbuild';
-import { OpenmrsDatePicker } from './openmrs-date-picker.component';
+import { EgenDatePicker } from './egen-date-picker.component';
 
-const meta: Meta<typeof OpenmrsDatePicker> = {
+const meta: Meta<typeof EgenDatePicker> = {
   title: 'Components/DatePicker',
-  component: OpenmrsDatePicker,
+  component: EgenDatePicker,
   tags: ['autodocs'],
 };
 
 export default meta;
-type Story = StoryObj<typeof OpenmrsDatePicker>;
+type Story = StoryObj<typeof EgenDatePicker>;
 
 export const Default: Story = {
   args: {

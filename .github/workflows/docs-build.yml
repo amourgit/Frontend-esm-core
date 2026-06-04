@@ -39,9 +39,9 @@ on:
         type: boolean
         default: false
     secrets:
-      OMRS_PR_BOT_CLIENT_ID:
+      EGEN_PR_BOT_CLIENT_ID:
         required: true
-      OMRS_PR_BOT_PRIVATE_KEY:
+      EGEN_PR_BOT_PRIVATE_KEY:
         required: true
 
 permissions: {}
@@ -298,8 +298,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          git config user.name "openmrs-bot"
-          git config user.email "infrastructure@openmrs.org"
+          git config user.name "egen-bot"
+          git config user.email "infrastructure@egen.org"
           git add packages/framework/esm-framework/docs/
           if git diff --cached --quiet; then
             echo "No doc changes; treating as success"
@@ -355,8 +355,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
         with:
-          client-id: ${{ secrets.OMRS_PR_BOT_CLIENT_ID }}
-          private-key: ${{ secrets.OMRS_PR_BOT_PRIVATE_KEY }}
+          client-id: ${{ secrets.EGEN_PR_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.EGEN_PR_BOT_PRIVATE_KEY }}
 
       - name: Post check run
         env:

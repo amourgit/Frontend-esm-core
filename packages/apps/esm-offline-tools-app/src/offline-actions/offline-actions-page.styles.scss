@@ -1,11 +1,11 @@
 @use '@carbon/layout';
-@use '@openmrs/esm-styleguide/src/vars' as *;
+@use '@egen/esm-styleguide/src/vars' as *;
 
 .buttonInlineIcon {
   margin-right: layout.$spacing-05;
 }
 
-:global(.omrs-breakpoint-lt-small-desktop) .primaryActionButton {
+:global(.egen-breakpoint-lt-small-desktop) .primaryActionButton {
   position: fixed;
   bottom: layout.$spacing-05;
   right: layout.$spacing-05;

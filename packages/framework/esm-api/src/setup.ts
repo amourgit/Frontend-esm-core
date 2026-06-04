@@ -1,4 +1,4 @@
-import { defineConfigSchema } from '@openmrs/esm-config';
+import { defineConfigSchema } from '@egen/esm-config';
 import { refetchCurrentUser } from './current-user';
 import { configSchema } from './config-schema';
 
@@ -6,7 +6,7 @@ import { configSchema } from './config-schema';
  * @internal
  */
 export function setupApiModule() {
-  defineConfigSchema('@openmrs/esm-api', configSchema);
+  defineConfigSchema('@egen/esm-api', configSchema);
 
   refetchCurrentUser();
 }

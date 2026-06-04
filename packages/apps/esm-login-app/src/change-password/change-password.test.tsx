@@ -2,7 +2,7 @@ import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
-import { type FetchResponse } from '@openmrs/esm-framework';
+import { type FetchResponse } from '@egen/esm-framework';
 import { changeUserPassword } from './change-password.resource';
 import ChangePasswordModal from './change-password.modal';
 

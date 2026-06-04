@@ -1,8 +1,8 @@
 # Analyse Complète — Frontend-esm-core → EIGEN/EGÉN
 
 > Document de référence rédigé par l'équipe EIGEN.
-> Base : `amourgit/Frontend-esm-core` (fork de `openmrs/openmrs-esm-core` v9.0.2)
-> Objectif : Transformer ce projet en plateforme éducative nationale EIGEN, propriétaire, déconnectée de toute source OpenMRS.
+> Base : `amourgit/Frontend-esm-core` (fork de `egen/egen-esm-core` v9.0.2)
+> Objectif : Transformer ce projet en plateforme éducative nationale EIGEN, propriétaire, déconnectée de toute source Egen.
 
 ---
 
@@ -15,7 +15,7 @@ Ce projet est un **shell d'application SPA (Single Page Application) basé sur u
 1. **Un shell central** (`esm-app-shell`) qui démarre et orchestre toutes les micro-applications
 2. **Un framework partagé** (`esm-framework`) utilisé par toutes les micro-applications pour communiquer, naviguer, configurer, gérer l'état et accéder à l'API
 3. **Des micro-applications prêtes** (login, navigation, outils d'administration, etc.)
-4. **Une CLI** (`openmrs`) pour développer, builder et assembler le projet
+4. **Une CLI** (`egen`) pour développer, builder et assembler le projet
 
 ### 1.2 Diagramme de l'architecture
 
@@ -40,7 +40,7 @@ Ce projet est un **shell d'application SPA (Single Page Application) basé sur u
 │  └──────────────┘ └──────────────────┘ └──────────────────────────┘ │
 │                                                                       │
 │  ┌─────────────────────────────────────────────────────────────────┐ │
-│  │              @openmrs/esm-framework (Shared Library)             │ │
+│  │              @egen/esm-framework (Shared Library)             │ │
 │  │  esm-api | esm-config | esm-extensions | esm-state              │ │
 │  │  esm-navigation | esm-styleguide | esm-react-utils | ...        │ │
 │  └─────────────────────────────────────────────────────────────────┘ │
@@ -116,7 +116,7 @@ Frontend-esm-core/
 #### `esm-login-app` — Authentification
 - **Rôle** : Page de login/logout, sélection de localisation, changement de mot de passe
 - **Route** : `/login`, `/logout`, `/change-password`
-- **Ce qu'il fait** : Appelle l'endpoint `/ws/rest/v1/session` d'OpenMRS
+- **Ce qu'il fait** : Appelle l'endpoint `/ws/rest/v1/session` d'Egen
 - **Pour EIGEN** : → Adapter pour appeler ton API Keycloak (OIDC/OAuth2) via IAM-Local-Backend
 - **Composants clés** : `login.component.tsx`, `logo.component.tsx`, `footer.component.tsx`
 
@@ -168,15 +168,15 @@ Frontend-esm-core/
 | `esm-translations` | Support internationalisation | Garder (ajouter FR) |
 | `esm-utils` | Utilitaires divers | Garder |
 
-### 2.7 La CLI (`openmrs` → futur `eigen`)
+### 2.7 La CLI (`egen` → futur `eigen`)
 
 La CLI fournit ces commandes :
-- `openmrs develop` → Démarre le serveur de dev (avec proxy vers backend)
-- `openmrs build` → Build de production
-- `openmrs start` → Démarre le shell assemblé
-- `openmrs assemble` → Assemble les modules depuis npm/config
+- `egen develop` → Démarre le serveur de dev (avec proxy vers backend)
+- `egen build` → Build de production
+- `egen start` → Démarre le shell assemblé
+- `egen assemble` → Assemble les modules depuis npm/config
 
-**Problème actuel** : La CLI fait des fallbacks vers `dev3.openmrs.org` si aucune config locale n'est trouvée. **C'est ce qu'il faut couper.**
+**Problème actuel** : La CLI fait des fallbacks vers `dev3.egen.org` si aucune config locale n'est trouvée. **C'est ce qu'il faut couper.**
 
 ### 2.8 Mécanisme d'Import Map + Routes Registry
 
@@ -190,22 +190,22 @@ Au démarrage :
 2. Le shell lit `routes.registry.json` → sait quelle app gère quelle route
 3. Single-SPA monte/démonte les apps selon l'URL active
 
-**Si ces fichiers ne sont pas locaux, la CLI fetch `dev3.openmrs.org`.** → À couper.
+**Si ces fichiers ne sont pas locaux, la CLI fetch `dev3.egen.org`.** → À couper.
 
 ---
 
 ## 3. DÉPENDANCES EXTERNES À COUPER
 
-### 3.1 `dev3.openmrs.org` (serveur de dev OpenMRS)
-**Où** : `packages/tooling/openmrs/src/utils/importmap.ts`
+### 3.1 `dev3.egen.org` (serveur de dev Egen)
+**Où** : `packages/tooling/egen/src/utils/importmap.ts`
 **Fichiers concernés** : 24 occurrences
 **Ce qu'il faut faire** : Remplacer par des fichiers locaux EIGEN ou serveur EIGEN
 
-### 3.2 Schémas JSON `json.openmrs.org`
+### 3.2 Schémas JSON `json.egen.org`
 **Où** : Tous les `routes.json` de chaque app (6 fichiers)
 **Ce qu'il faut faire** : Créer un schéma local EIGEN ou supprimer la référence `$schema`
 
-### 3.3 Packages npm `@openmrs/*`
+### 3.3 Packages npm `@egen/*`
 **Où** : Toutes les dépendances inter-packages
 **Ce qu'il faut faire** : Renommer en `@eigen/*` dans tous les `package.json`
 
@@ -213,7 +213,7 @@ Au démarrage :
 **Où** : `package.json` racine (scripts `ci:publish`, `ci:publish-next`)
 **Ce qu'il faut faire** : Adapter vers votre registre privé ou supprimer
 
-### 3.5 Variables globales `window.openmrsBase`, `window.spaBase`
+### 3.5 Variables globales `window.egenBase`, `window.spaBase`
 **Où** : `packages/framework/esm-globals/src/public.ts` et shell
 **Ce qu'il faut faire** : Renommer en `window.eigenBase`, `window.spaBase`
 
@@ -263,7 +263,7 @@ Au démarrage :
 - Maintenir un **fichier de mapping** ancien-nom → nouveau-nom pour les recherches
 
 ### ❌ À ÉVITER
-- Ne jamais faire un `find/replace` global de "openmrs" → "eigen" en une fois (tu casseras les imports npm qui n'existent pas encore)
+- Ne jamais faire un `find/replace` global de "egen" → "eigen" en une fois (tu casseras les imports npm qui n'existent pas encore)
 - Ne jamais modifier les fichiers `dist/` directement
 - Ne pas supprimer `husky` et `lint-staged` (ils protègent la qualité du code)
 - Ne pas toucher à `single-spa` (c'est la fondation, ne pas le remplacer)

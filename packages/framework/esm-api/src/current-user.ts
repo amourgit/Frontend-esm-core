@@ -1,9 +1,9 @@
 /** @module @category API */
-import { reportError } from '@openmrs/esm-error-handling';
-import { createGlobalStore } from '@openmrs/esm-state';
+import { reportError } from '@egen/esm-error-handling';
+import { createGlobalStore } from '@egen/esm-state';
 import { isUndefined } from 'lodash-es';
 import { Observable } from 'rxjs';
-import { openmrsFetch, restBaseUrl, sessionEndpoint } from './openmrs-fetch';
+import { egenFetch, restBaseUrl, sessionEndpoint } from './egen-fetch';
 import type { LoggedInUser, SessionLocation, Privilege, Role, Session, FetchResponse } from './types';
 
 export type SessionStore = LoadedSessionStore | UnloadedSessionStore;
@@ -50,7 +50,7 @@ const MAX_SESSION_RETRIES = 1; // After 1 failure, treat as unauthenticated
  * @example
  *
  * ```js
- * import { getCurrentUser } from '@openmrs/esm-api'
+ * import { getCurrentUser } from '@egen/esm-api'
  * const subscription = getCurrentUser().subscribe(
  *   user => console.log(user)
  * )
@@ -124,7 +124,7 @@ export { getCurrentUser };
  *
  * @example
  * ```ts
- * import { getSessionStore } from '@openmrs/esm-api';
+ * import { getSessionStore } from '@egen/esm-api';
  * const store = getSessionStore();
  * const unsubscribe = store.subscribe((state) => {
  *   if (state.loaded) {
@@ -216,7 +216,7 @@ function isSuperUser(user: { roles: Array<Role> }) {
  *
  * @example
  * ```js
- * import { refetchCurrentUser } from '@openmrs/esm-api'
+ * import { refetchCurrentUser } from '@egen/esm-api'
  * refetchCurrentUser()
  * ```
  */
@@ -231,7 +231,7 @@ export function refetchCurrentUser(username?: string, password?: string) {
   }
 
   return handleSessionResponse(
-    openmrsFetch(sessionEndpoint, {
+    egenFetch(sessionEndpoint, {
       headers,
     }),
   );
@@ -244,7 +244,7 @@ export function refetchCurrentUser(username?: string, password?: string) {
  *
  * @example
  * ```ts
- * import { clearCurrentUser } from '@openmrs/esm-api';
+ * import { clearCurrentUser } from '@egen/esm-api';
  * // During logout
  * clearCurrentUser();
  * ```
@@ -269,7 +269,7 @@ export function clearCurrentUser() {
  *
  * @example
  * ```ts
- * import { userHasAccess } from '@openmrs/esm-api';
+ * import { userHasAccess } from '@egen/esm-api';
  * const hasAccess = userHasAccess('View Patients', currentUser);
  * const hasMultipleAccess = userHasAccess(['View Patients', 'Edit Patients'], currentUser);
  * ```
@@ -301,7 +301,7 @@ export function userHasAccess(
  *
  * @example
  * ```ts
- * import { getLoggedInUser } from '@openmrs/esm-api';
+ * import { getLoggedInUser } from '@egen/esm-api';
  * const user = await getLoggedInUser();
  * console.log('Logged in as:', user.display);
  * ```
@@ -337,7 +337,7 @@ export function getLoggedInUser() {
  *
  * @example
  * ```ts
- * import { getSessionLocation } from '@openmrs/esm-api';
+ * import { getSessionLocation } from '@egen/esm-api';
  * const location = await getSessionLocation();
  * if (location) {
  *   console.log('Current location:', location.display);
@@ -365,14 +365,14 @@ export function getSessionLocation() {
  *
  * @example
  * ```ts
- * import { setSessionLocation } from '@openmrs/esm-api';
+ * import { setSessionLocation } from '@egen/esm-api';
  * const abortController = new AbortController();
  * await setSessionLocation('location-uuid-here', abortController);
  * ```
  */
 export async function setSessionLocation(locationUuid: string, abortController: AbortController): Promise<any> {
   return handleSessionResponse(
-    openmrsFetch(sessionEndpoint, {
+    egenFetch(sessionEndpoint, {
       method: 'POST',
       body: { sessionLocation: locationUuid },
       headers: {
@@ -398,7 +398,7 @@ export async function setSessionLocation(locationUuid: string, abortController: 
  *
  * @example
  * ```ts
- * import { getLoggedInUser, setUserProperties } from '@openmrs/esm-api';
+ * import { getLoggedInUser, setUserProperties } from '@egen/esm-api';
  * const user = await getLoggedInUser();
  * await setUserProperties(user.uuid, {
  *   defaultLocale: 'en_GB',
@@ -416,7 +416,7 @@ export async function setUserProperties(
   if (!abortController) {
     abortController = new AbortController();
   }
-  await openmrsFetch(`${restBaseUrl}/user/${userUuid}`, {
+  await egenFetch(`${restBaseUrl}/user/${userUuid}`, {
     method: 'POST',
     body: { userProperties },
     headers: {

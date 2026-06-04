@@ -1,4 +1,4 @@
-import { type OpenmrsResource } from '@openmrs/esm-api';
+import { type EgenResource } from '@egen/esm-api';
 
 export interface Location {
   uuid: string;
@@ -25,12 +25,12 @@ export interface Person {
   birthDate: string;
   gender: string;
   display: string;
-  preferredAddress: OpenmrsResource;
+  preferredAddress: EgenResource;
   uuid: string;
 }
 
 export interface Attribute {
-  attributeType: OpenmrsResource;
+  attributeType: EgenResource;
   display: string;
   uuid: string;
   value: string | number;
@@ -42,7 +42,7 @@ export interface CohortMemberResponse {
 
 interface CohortMember {
   uuid: string;
-  patient: OpenmrsResource;
+  patient: EgenResource;
   cohort: Cohort;
 }
 

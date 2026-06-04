@@ -1,7 +1,7 @@
 /** @module @category Context */
 import { useEffect, useRef } from 'react';
-import { getContext, registerContext, unregisterContext, updateContext } from '@openmrs/esm-context';
-import { shallowEqual } from '@openmrs/esm-utils';
+import { getContext, registerContext, unregisterContext, updateContext } from '@egen/esm-context';
+import { shallowEqual } from '@egen/esm-utils';
 
 /**
  * Tracks the current owner of each namespace so that a stale cleanup from a
@@ -16,13 +16,13 @@ const namespaceOwners = new Map<string, symbol>();
  *
  * @example
  * ```ts
- * const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, openmrsFetch);
+ * const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, egenFetch);
  * useDefineAppContext<PatientContext>('patient', patient ?? null);
  * ```
  *
  * @example
  * ```ts
- * const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, openmrsFetch);
+ * const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, egenFetch);
  * const updatePatient = useDefineAppContext<PatientContext>('patient', patient ?? null);
  * updatePatient((patient) => {
  *  patient.name = 'Hector';

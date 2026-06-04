@@ -23,8 +23,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./setup-tests.ts'],
     alias: {
-      '@openmrs/esm-framework/src/internal': '@openmrs/esm-framework/mock',
-      '@openmrs/esm-framework': '@openmrs/esm-framework/mock',
+      '@egen/esm-framework/src/internal': '@egen/esm-framework/mock',
+      '@egen/esm-framework': '@egen/esm-framework/mock',
     },
   },
 });

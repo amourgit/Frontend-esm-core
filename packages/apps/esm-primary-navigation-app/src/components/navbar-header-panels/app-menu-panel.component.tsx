@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { HeaderPanel } from '@carbon/react';
 import { Launch } from '@carbon/react/icons';
-import { ExtensionSlot, useConfig } from '@openmrs/esm-framework';
+import { ExtensionSlot, useConfig } from '@egen/esm-framework';
 import styles from './app-menu-panel.scss';
 
 interface AppMenuProps {

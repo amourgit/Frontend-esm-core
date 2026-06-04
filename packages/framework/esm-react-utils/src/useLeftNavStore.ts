@@ -1,5 +1,5 @@
 /** @module @category UI */
-import { leftNavStore } from '@openmrs/esm-extensions';
+import { leftNavStore } from '@egen/esm-extensions';
 import { useStore } from './useStore';
 
 /**
@@ -10,7 +10,7 @@ import { useStore } from './useStore';
  *
  * @example
  * ```tsx
- * import { useLeftNavStore } from '@openmrs/esm-framework';
+ * import { useLeftNavStore } from '@egen/esm-framework';
  * function MyComponent() {
  *   const leftNavState = useLeftNavStore();
  *   return <div>Current nav: {leftNavState.activeNavName}</div>;

@@ -1,10 +1,10 @@
-import type { SyncItem } from '@openmrs/esm-framework/src/internal';
+import type { SyncItem } from '@egen/esm-framework/src/internal';
 import {
   deleteSynchronizationItem,
   getOfflineSynchronizationStore,
   showModal,
   useStore,
-} from '@openmrs/esm-framework/src/internal';
+} from '@egen/esm-framework/src/internal';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import OfflineActionsTable from './offline-actions-table.component';

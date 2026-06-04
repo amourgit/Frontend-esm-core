@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Button, Column, FlexGrid, Row, TextInput, Toggle } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep, isEmpty } from 'lodash-es';
-import type { Config } from '@openmrs/esm-framework/src/internal';
+import type { Config } from '@egen/esm-framework/src/internal';
 import {
   ChevronDownIcon,
   ChevronUpIcon,
@@ -14,7 +14,7 @@ import {
   temporaryConfigStore,
   useStore,
   useStoreWithActions,
-} from '@openmrs/esm-framework/src/internal';
+} from '@egen/esm-framework/src/internal';
 import { ConfigTree } from './interactive-editor/config-tree.component';
 import { Description } from './interactive-editor/description.component';
 import { implementerToolsStore, type ImplementerToolsStore } from '../store';

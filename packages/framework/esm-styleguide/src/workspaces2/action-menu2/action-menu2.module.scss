@@ -13,7 +13,7 @@ $actionPanelOffset: layout.$spacing-09;
 }
 
 /* Desktop */
-:global(.omrs-breakpoint-gt-tablet) {
+:global(.egen-breakpoint-gt-tablet) {
   .sideRail {
     width: $actionPanelOffset;
     z-index: 100;
@@ -37,13 +37,13 @@ $actionPanelOffset: layout.$spacing-09;
     }
 
     &.withinWorkspace .container {
-      top: calc(var(--omrs-navbar-height) + var(--workspace-header-height));
+      top: calc(var(--egen-navbar-height) + var(--workspace-header-height));
     }
   }
 }
 
 /* Tablet */
-:global(.omrs-breakpoint-lt-desktop) {
+:global(.egen-breakpoint-lt-desktop) {
   .sideRail {
     border-top: 1px solid $color-gray-30;
     background-color: $ui-02;

@@ -2,13 +2,13 @@
 
 > Durée estimée : 2-3 jours
 > Branche : `eigen/phase-3-api`
-> Objectif : Remplacer tous les appels API OpenMRS (REST `/ws/rest/v1`, FHIR `/ws/fhir2/R4`, session OpenMRS) par les APIs EIGEN (FastAPI + Keycloak).
+> Objectif : Remplacer tous les appels API Egen (REST `/ws/rest/v1`, FHIR `/ws/fhir2/R4`, session Egen) par les APIs EIGEN (FastAPI + Keycloak).
 
 ---
 
-## 3.1 Cartographie API : OpenMRS → EIGEN
+## 3.1 Cartographie API : Egen → EIGEN
 
-| Endpoint OpenMRS | Endpoint EIGEN | Description |
+| Endpoint Egen | Endpoint EIGEN | Description |
 |-----------------|---------------|-------------|
 | `POST /ws/rest/v1/session` | `POST /api/v1/auth/token` (Keycloak) | Login |
 | `DELETE /ws/rest/v1/session` | Keycloak logout | Logout |
@@ -24,7 +24,7 @@
 
 ### 3.2.1 Constantes de base URL
 
-**Fichier** : `packages/framework/esm-api/src/openmrs-fetch.ts`
+**Fichier** : `packages/framework/esm-api/src/egen-fetch.ts`
 
 ```typescript
 // Avant
@@ -45,7 +45,7 @@ export function makeUrl(path: string) {
 }
 ```
 
-### 3.2.2 Fonction `eigenFetch` (renommée depuis `openmrsFetch`)
+### 3.2.2 Fonction `eigenFetch` (renommée depuis `egenFetch`)
 
 La mécanique de base du fetch ne change pas beaucoup. Les différences principales :
 
@@ -53,7 +53,7 @@ La mécanique de base du fetch ne change pas beaucoup. Les différences principa
 // Fichier : packages/framework/esm-api/src/eigen-fetch.ts (renommé)
 
 // CHANGEMENT 1 : Authentification
-// Avant : Basic auth ou cookie de session OpenMRS
+// Avant : Basic auth ou cookie de session Egen
 // Après : Bearer token JWT Keycloak
 
 export async function eigenFetch<T>(
@@ -88,7 +88,7 @@ export async function eigenFetch<T>(
 }
 
 // Alias de compatibilité
-export const openmrsFetch = eigenFetch;
+export const egenFetch = eigenFetch;
 ```
 
 ### 3.2.3 Gestion des tokens Keycloak
@@ -269,12 +269,12 @@ async function loadCurrentSession() {
 
 ### Fichier : `packages/apps/esm-login-app/src/login/login.component.tsx`
 
-Le formulaire de login doit maintenant appeler `loginWithCredentials` au lieu de l'endpoint OpenMRS.
+Le formulaire de login doit maintenant appeler `loginWithCredentials` au lieu de l'endpoint Egen.
 
 ```typescript
 // Avant
 const handleLogin = async (username: string, password: string) => {
-  const response = await openmrsFetch('/ws/rest/v1/session', {
+  const response = await egenFetch('/ws/rest/v1/session', {
     method: 'POST',
     headers: { 'Authorization': `Basic ${btoa(`${username}:${password}`)}` },
   });
@@ -306,10 +306,10 @@ const handleLogin = async (username: string, password: string) => {
 Adapter les appels de sélection de "location" (établissement scolaire) :
 
 ```typescript
-// Avant : cherche des locations OpenMRS
+// Avant : cherche des locations Egen
 export function useLocations(/* ... */) {
   const url = `/ws/rest/v1/location?v=custom&...`;
-  return useSWR(url, openmrsFetch);
+  return useSWR(url, egenFetch);
 }
 
 // Après : cherche des établissements EIGEN

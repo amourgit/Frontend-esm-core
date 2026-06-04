@@ -4,9 +4,9 @@
 
 > **deleteAttachmentPermanently**(`attachmentUuid`, `abortController`): `Promise`\<[`FetchResponse`](../interfaces/FetchResponse.md)\<`any`\>\>
 
-Defined in: [packages/framework/esm-emr-api/src/attachments.ts:107](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-emr-api/src/attachments.ts#L107)
+Defined in: [packages/framework/esm-emr-api/src/attachments.ts:107](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-emr-api/src/attachments.ts#L107)
 
-Permanently deletes an attachment from the OpenMRS server. This action cannot
+Permanently deletes an attachment from the Egen server. This action cannot
 be undone.
 
 ## Parameters
@@ -32,7 +32,7 @@ A Promise that resolves with the FetchResponse confirming deletion.
 ## Example
 
 ```ts
-import { deleteAttachmentPermanently } from '@openmrs/esm-framework';
+import { deleteAttachmentPermanently } from '@egen/esm-framework';
 const abortController = new AbortController();
 await deleteAttachmentPermanently('attachment-uuid', abortController);
 ```

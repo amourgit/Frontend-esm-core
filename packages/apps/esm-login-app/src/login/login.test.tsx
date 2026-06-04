@@ -9,7 +9,7 @@ import {
   useConfig,
   useConnectivity,
   useSession,
-} from '@openmrs/esm-framework';
+} from '@egen/esm-framework';
 import { mockConfig } from '../../__mocks__/config.mock';
 import renderWithRouter from '../test-helpers/render-with-router';
 import Login from './login.component';
@@ -56,7 +56,7 @@ describe('Login', () => {
       },
     );
 
-    expect(screen.getAllByRole('img', { name: /OpenMRS logo/i })).toHaveLength(2);
+    expect(screen.getAllByRole('img', { name: /Egen logo/i })).toHaveLength(2);
     expect(screen.queryByAltText(/^logo$/i)).not.toBeInTheDocument();
     screen.getByRole('textbox', { name: /Username/i });
     screen.getByRole('button', { name: /Continue/i });
@@ -76,7 +76,7 @@ describe('Login', () => {
 
     const logo = screen.getByAltText(customLogoConfig.alt);
 
-    expect(screen.queryByTitle(/openmrs logo/i)).not.toBeInTheDocument();
+    expect(screen.queryByTitle(/egen logo/i)).not.toBeInTheDocument();
     expect(logo).toHaveAttribute('src', customLogoConfig.src);
     expect(logo).toHaveAttribute('alt', customLogoConfig.alt);
   });
@@ -321,15 +321,15 @@ describe('Login', () => {
   it('interpolates relative background.image paths via interpolateUrl', () => {
     mockUseConfig.mockReturnValue({
       ...mockConfig,
-      background: { image: '${openmrsSpaBase}/assets/bg.jpg', color: '' },
+      background: { image: '${egenSpaBase}/assets/bg.jpg', color: '' },
     });
 
     renderWithRouter(Login, {}, { route: '/login' });
     const root = screen.getByTestId('login-container');
 
     const bgImage = root.style.getPropertyValue('--login-bg-image');
-    expect(bgImage).toContain('/openmrs/spa/assets/bg.jpg');
-    expect(bgImage).not.toContain('${openmrsSpaBase}');
+    expect(bgImage).toContain('/egen/spa/assets/bg.jpg');
+    expect(bgImage).not.toContain('${egenSpaBase}');
     expect(root.className).toMatch(/containerWithImage/);
   });
 

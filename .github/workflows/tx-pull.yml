@@ -8,7 +8,7 @@ on:
 
 jobs:
   pull-translations:
-    uses: openmrs/openmrs-contrib-gha-workflows/.github/workflows/tx-pull.yml@main
+    uses: egen/egen-contrib-gha-workflows/.github/workflows/tx-pull.yml@main
     secrets:
       TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
-      BOT_GH_TOKEN: ${{ secrets.OMRS_BOT_GH_TOKEN }}
+      BOT_GH_TOKEN: ${{ secrets.EGEN_BOT_GH_TOKEN }}

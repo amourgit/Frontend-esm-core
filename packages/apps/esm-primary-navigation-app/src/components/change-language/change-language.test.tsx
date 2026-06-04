@@ -2,7 +2,7 @@ import React from 'react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
-import { type LoggedInUser, type Session, useSession } from '@openmrs/esm-framework';
+import { type LoggedInUser, type Session, useSession } from '@egen/esm-framework';
 import ChangeLanguageModal from './change-language.modal';
 
 const mockUser = {
@@ -15,9 +15,9 @@ const mockUser = {
 const mockUpdateUserProperties = vi.fn((...args) => Promise.resolve());
 const mockUpdateSessionLocale = vi.fn((...args) => Promise.resolve());
 
-vi.mock('@openmrs/esm-framework', async (importOriginal) => {
+vi.mock('@egen/esm-framework', async (importOriginal) => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const actual = await importOriginal<typeof import('@openmrs/esm-framework')>();
+  const actual = await importOriginal<typeof import('@egen/esm-framework')>();
   return {
     ...actual,
     useSession: vi.fn(),

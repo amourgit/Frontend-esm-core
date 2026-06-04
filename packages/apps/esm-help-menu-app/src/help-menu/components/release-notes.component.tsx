@@ -10,7 +10,7 @@ const ReleaseNotes = () => {
   return (
     <Link
       className={styles.helpButton}
-      href="https://openmrs.atlassian.net/wiki/x/DgAaD"
+      href="https://egen.atlassian.net/wiki/x/DgAaD"
       rel="noopener noreferrer"
       renderIcon={ArrowUpRight}
       target="_blank"

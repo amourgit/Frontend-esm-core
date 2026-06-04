@@ -10,13 +10,13 @@ export const Breakpoint = {
 } as const;
 
 function setBodyCssClasses() {
-  document.body.classList.toggle('omrs-breakpoint-lt-tablet', window.innerWidth < Breakpoint.TABLET_MIN);
-  document.body.classList.toggle('omrs-breakpoint-gt-phone', window.innerWidth > Breakpoint.PHONE_MAX);
-  document.body.classList.toggle('omrs-breakpoint-gt-tablet', window.innerWidth > Breakpoint.TABLET_MAX);
-  document.body.classList.toggle('omrs-breakpoint-lt-desktop', window.innerWidth < Breakpoint.SMALL_DESKTOP_MIN);
-  document.body.classList.toggle('omrs-breakpoint-lt-small-desktop', window.innerWidth < Breakpoint.SMALL_DESKTOP_MIN);
-  document.body.classList.toggle('omrs-breakpoint-lt-large-desktop', window.innerWidth < Breakpoint.LARGE_DESKTOP_MIN);
-  document.body.classList.toggle('omrs-breakpoint-gt-small-desktop', window.innerWidth > Breakpoint.SMALL_DESKTOP_MAX);
+  document.body.classList.toggle('egen-breakpoint-lt-tablet', window.innerWidth < Breakpoint.TABLET_MIN);
+  document.body.classList.toggle('egen-breakpoint-gt-phone', window.innerWidth > Breakpoint.PHONE_MAX);
+  document.body.classList.toggle('egen-breakpoint-gt-tablet', window.innerWidth > Breakpoint.TABLET_MAX);
+  document.body.classList.toggle('egen-breakpoint-lt-desktop', window.innerWidth < Breakpoint.SMALL_DESKTOP_MIN);
+  document.body.classList.toggle('egen-breakpoint-lt-small-desktop', window.innerWidth < Breakpoint.SMALL_DESKTOP_MIN);
+  document.body.classList.toggle('egen-breakpoint-lt-large-desktop', window.innerWidth < Breakpoint.LARGE_DESKTOP_MIN);
+  document.body.classList.toggle('egen-breakpoint-gt-small-desktop', window.innerWidth > Breakpoint.SMALL_DESKTOP_MAX);
 }
 
 let isIntegrated = false;

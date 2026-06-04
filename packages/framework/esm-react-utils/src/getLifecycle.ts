@@ -4,30 +4,30 @@ import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import type { AppProps } from 'single-spa';
 import singleSpaReact, { type ReactAppOrParcel } from 'single-spa-react';
-import type { ComponentDecoratorOptions } from './openmrsComponentDecorator';
-import { openmrsComponentDecorator } from './openmrsComponentDecorator';
+import type { ComponentDecoratorOptions } from './egenComponentDecorator';
+import { egenComponentDecorator } from './egenComponentDecorator';
 
 /**
  * Creates a single-spa lifecycle object for a React component. The component is
- * wrapped with the OpenMRS component decorator which provides standard functionality
+ * wrapped with the Egen component decorator which provides standard functionality
  * like error boundaries, configuration, and extension support.
  *
  * @param Component The React component to create a lifecycle for.
- * @param options Configuration options for the OpenMRS component decorator.
+ * @param options Configuration options for the Egen component decorator.
  * @returns A single-spa lifecycle object with bootstrap, mount, and unmount functions.
  *
  * @example
  * ```ts
- * import { getLifecycle } from '@openmrs/esm-framework';
+ * import { getLifecycle } from '@egen/esm-framework';
  * import MyComponent from './MyComponent';
- * export const lifecycle = getLifecycle(MyComponent, { featureName: 'my-feature', moduleName: '@openmrs/esm-my-app' });
+ * export const lifecycle = getLifecycle(MyComponent, { featureName: 'my-feature', moduleName: '@egen/esm-my-app' });
  * ```
  */
 export function getLifecycle<T>(Component: ComponentType<T>, options: ComponentDecoratorOptions) {
   return singleSpaReact<T>({
     React,
     ReactDOMClient,
-    rootComponent: openmrsComponentDecorator<T>(options)(Component) as ComponentType<T & AppProps>,
+    rootComponent: egenComponentDecorator<T>(options)(Component) as ComponentType<T & AppProps>,
   });
 }
 
@@ -39,13 +39,13 @@ export function getLifecycle<T>(Component: ComponentType<T>, options: ComponentD
  *
  * @param lazy A function that returns a Promise resolving to a module with the
  *   component as its default export (i.e., a dynamic import).
- * @param options Configuration options for the OpenMRS component decorator.
+ * @param options Configuration options for the Egen component decorator.
  * @returns A function that returns a Promise resolving to a single-spa lifecycle object.
  *
  * @example
  * ```ts
- * import { getAsyncLifecycle } from '@openmrs/esm-framework';
- * const options = { featureName: 'my-feature', moduleName: '@openmrs/esm-my-app' };
+ * import { getAsyncLifecycle } from '@egen/esm-framework';
+ * const options = { featureName: 'my-feature', moduleName: '@egen/esm-my-app' };
  * export const root = getAsyncLifecycle(() => import('./root.component'), options);
  * ```
  */
@@ -63,14 +63,14 @@ export function getAsyncLifecycle<T>(
  * component doesn't need lazy loading.
  *
  * @param Component The React component to create a lifecycle for.
- * @param options Configuration options for the OpenMRS component decorator.
+ * @param options Configuration options for the Egen component decorator.
  * @returns A function that returns a Promise resolving to a single-spa lifecycle object.
  *
  * @example
  * ```ts
- * import { getSyncLifecycle } from '@openmrs/esm-framework';
+ * import { getSyncLifecycle } from '@egen/esm-framework';
  * import MyComponent from './MyComponent';
- * const options = { featureName: 'my-feature', moduleName: '@openmrs/esm-my-app' };
+ * const options = { featureName: 'my-feature', moduleName: '@egen/esm-my-app' };
  * export const myExtension = getSyncLifecycle(MyComponent, options);
  * ```
  */

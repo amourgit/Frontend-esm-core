@@ -1,3 +1,3 @@
-# openmrs-esm-primary-navigation-app
+# egen-esm-primary-navigation-app
 
-openmrs-esm-primary-navigation is responsible for rendering the top navbar.
+egen-esm-primary-navigation is responsible for rendering the top navbar.

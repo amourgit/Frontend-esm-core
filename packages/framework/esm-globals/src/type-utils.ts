@@ -1,15 +1,15 @@
-import type { OpenmrsAppRoutes, OpenmrsRoutes } from './types';
+import type { EgenAppRoutes, EgenRoutes } from './types';
 
 /**
- * Simple type-predicate to ensure that the value can be treated as an OpenmrsAppRoutes
+ * Simple type-predicate to ensure that the value can be treated as an EgenAppRoutes
  * object.
  *
- * @param routes the object to check to see if it is an OpenmrsAppRoutes object
- * @returns true if the routes value is an OpenmrsAppRoutes
+ * @param routes the object to check to see if it is an EgenAppRoutes object
+ * @returns true if the routes value is an EgenAppRoutes
  */
-export function isOpenmrsAppRoutes(routes: OpenmrsAppRoutes | unknown): routes is OpenmrsAppRoutes {
+export function isEgenAppRoutes(routes: EgenAppRoutes | unknown): routes is EgenAppRoutes {
   if (routes && typeof routes === 'object') {
-    const maybeRoutes = routes as OpenmrsAppRoutes;
+    const maybeRoutes = routes as EgenAppRoutes;
 
     if (Object.hasOwn(routes, 'pages')) {
       if (!Boolean(maybeRoutes.pages) || !Array.isArray(maybeRoutes.pages)) {
@@ -35,7 +35,7 @@ export function isOpenmrsAppRoutes(routes: OpenmrsAppRoutes | unknown): routes i
       }
     }
 
-    // A completely empty object is a valid OpenmrsAppRoutes object.
+    // A completely empty object is a valid EgenAppRoutes object.
     return true;
   }
 
@@ -43,17 +43,17 @@ export function isOpenmrsAppRoutes(routes: OpenmrsAppRoutes | unknown): routes i
 }
 
 /**
- * Simple type-predicate to ensure that the value can be treated as an OpenmrsRoutes
+ * Simple type-predicate to ensure that the value can be treated as an EgenRoutes
  * object.
  *
- * @param routes the object to check to see if it is an OpenmrsRoutes object
- * @returns true if the routes value is an OpenmrsRoutes
+ * @param routes the object to check to see if it is an EgenRoutes object
+ * @returns true if the routes value is an EgenRoutes
  */
-export function isOpenmrsRoutes(routes: OpenmrsRoutes | unknown): routes is OpenmrsRoutes {
+export function isEgenRoutes(routes: EgenRoutes | unknown): routes is EgenRoutes {
   if (routes && typeof routes === 'object') {
-    const maybeRoutes = routes as OpenmrsRoutes;
+    const maybeRoutes = routes as EgenRoutes;
 
-    return Object.entries(maybeRoutes).every(([key, value]) => typeof key === 'string' && isOpenmrsAppRoutes(value));
+    return Object.entries(maybeRoutes).every(([key, value]) => typeof key === 'string' && isEgenAppRoutes(value));
   }
 
   return false;

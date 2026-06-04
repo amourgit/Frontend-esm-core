@@ -52,25 +52,25 @@ yarn build
 
 ---
 
-## 0.3 Carte des occurrences "openmrs" à remplacer
+## 0.3 Carte des occurrences "egen" à remplacer
 
 Exécuter ces commandes pour cartographier tout ce qui sera touché :
 
 ```bash
 # Toutes les occurrences dans les package.json
-grep -r "openmrs" packages/*/*/package.json --include="package.json" -l
+grep -r "egen" packages/*/*/package.json --include="package.json" -l
 
 # Dans les fichiers source TypeScript/TSX
-grep -rl "@openmrs/" packages --include="*.ts" --include="*.tsx" | wc -l
+grep -rl "@egen/" packages --include="*.ts" --include="*.tsx" | wc -l
 
 # URLs externes
-grep -r "openmrs.org" packages --include="*.ts" --include="*.tsx" --include="*.json"
+grep -r "egen.org" packages --include="*.ts" --include="*.tsx" --include="*.json"
 
-# Variables globales window.openmrs*
-grep -r "window\.openmrs\|openmrsBase\|getOpenmrsSpaBase" packages --include="*.ts"
+# Variables globales window.egen*
+grep -r "window\.egen\|egenBase\|getEgenSpaBase" packages --include="*.ts"
 
 # Dans les scripts de la CLI
-grep -r "dev3.openmrs.org" packages/tooling
+grep -r "dev3.egen.org" packages/tooling
 ```
 
 ---
@@ -82,52 +82,52 @@ Créer `EIGEN-MIGRATION/name-mapping.json` :
 ```json
 {
   "packageNames": {
-    "@openmrs/esm-core": "@eigen/esm-core",
-    "@openmrs/esm-framework": "@eigen/esm-framework",
-    "@openmrs/esm-api": "@eigen/esm-api",
-    "@openmrs/esm-config": "@eigen/esm-config",
-    "@openmrs/esm-context": "@eigen/esm-context",
-    "@openmrs/esm-dynamic-loading": "@eigen/esm-dynamic-loading",
-    "@openmrs/esm-emr-api": "@eigen/esm-education-api",
-    "@openmrs/esm-error-handling": "@eigen/esm-error-handling",
-    "@openmrs/esm-expression-evaluator": "@eigen/esm-expression-evaluator",
-    "@openmrs/esm-extensions": "@eigen/esm-extensions",
-    "@openmrs/esm-feature-flags": "@eigen/esm-feature-flags",
-    "@openmrs/esm-globals": "@eigen/esm-globals",
-    "@openmrs/esm-navigation": "@eigen/esm-navigation",
-    "@openmrs/esm-offline": "@eigen/esm-offline",
-    "@openmrs/esm-react-utils": "@eigen/esm-react-utils",
-    "@openmrs/esm-routes": "@eigen/esm-routes",
-    "@openmrs/esm-state": "@eigen/esm-state",
-    "@openmrs/esm-styleguide": "@eigen/esm-styleguide",
-    "@openmrs/esm-translations": "@eigen/esm-translations",
-    "@openmrs/esm-utils": "@eigen/esm-utils",
-    "@openmrs/esm-app-shell": "@eigen/esm-app-shell",
-    "@openmrs/esm-login-app": "@eigen/esm-login-app",
-    "@openmrs/esm-primary-navigation-app": "@eigen/esm-primary-navigation-app",
-    "@openmrs/esm-implementer-tools-app": "@eigen/esm-admin-tools-app",
-    "@openmrs/esm-devtools-app": "@eigen/esm-devtools-app",
-    "@openmrs/esm-help-menu-app": "@eigen/esm-help-menu-app",
-    "@openmrs/esm-offline-tools-app": "@eigen/esm-offline-tools-app",
-    "@openmrs/rspack-config": "@eigen/rspack-config",
-    "@openmrs/webpack-config": "@eigen/webpack-config",
-    "@openmrs/storybook": "@eigen/storybook"
+    "@egen/esm-core": "@eigen/esm-core",
+    "@egen/esm-framework": "@eigen/esm-framework",
+    "@egen/esm-api": "@eigen/esm-api",
+    "@egen/esm-config": "@eigen/esm-config",
+    "@egen/esm-context": "@eigen/esm-context",
+    "@egen/esm-dynamic-loading": "@eigen/esm-dynamic-loading",
+    "@egen/esm-emr-api": "@eigen/esm-education-api",
+    "@egen/esm-error-handling": "@eigen/esm-error-handling",
+    "@egen/esm-expression-evaluator": "@eigen/esm-expression-evaluator",
+    "@egen/esm-extensions": "@eigen/esm-extensions",
+    "@egen/esm-feature-flags": "@eigen/esm-feature-flags",
+    "@egen/esm-globals": "@eigen/esm-globals",
+    "@egen/esm-navigation": "@eigen/esm-navigation",
+    "@egen/esm-offline": "@eigen/esm-offline",
+    "@egen/esm-react-utils": "@eigen/esm-react-utils",
+    "@egen/esm-routes": "@eigen/esm-routes",
+    "@egen/esm-state": "@eigen/esm-state",
+    "@egen/esm-styleguide": "@eigen/esm-styleguide",
+    "@egen/esm-translations": "@eigen/esm-translations",
+    "@egen/esm-utils": "@eigen/esm-utils",
+    "@egen/esm-app-shell": "@eigen/esm-app-shell",
+    "@egen/esm-login-app": "@eigen/esm-login-app",
+    "@egen/esm-primary-navigation-app": "@eigen/esm-primary-navigation-app",
+    "@egen/esm-implementer-tools-app": "@eigen/esm-admin-tools-app",
+    "@egen/esm-devtools-app": "@eigen/esm-devtools-app",
+    "@egen/esm-help-menu-app": "@eigen/esm-help-menu-app",
+    "@egen/esm-offline-tools-app": "@eigen/esm-offline-tools-app",
+    "@egen/rspack-config": "@eigen/rspack-config",
+    "@egen/webpack-config": "@eigen/webpack-config",
+    "@egen/storybook": "@eigen/storybook"
   },
   "cliNames": {
-    "openmrs": "eigen"
+    "egen": "eigen"
   },
   "globalVariables": {
-    "openmrsBase": "eigenBase",
-    "getOpenmrsSpaBase": "getEigenSpaBase",
-    "window.openmrsBase": "window.eigenBase",
-    "omrs-logo": "eigen-logo",
-    "omrs-top-nav": "eigen-top-nav",
-    "omrs-color": "eigen-color"
+    "egenBase": "eigenBase",
+    "getEgenSpaBase": "getEigenSpaBase",
+    "window.egenBase": "window.eigenBase",
+    "egen-logo": "eigen-logo",
+    "egen-top-nav": "eigen-top-nav",
+    "egen-color": "eigen-color"
   },
   "urls": {
-    "dev3.openmrs.org": "dev.eigen.ga (ton serveur)",
-    "json.openmrs.org": "schema.eigen.ga (schéma local)",
-    "github.com/openmrs": "github.com/amourgit"
+    "dev3.egen.org": "dev.eigen.ga (ton serveur)",
+    "json.egen.org": "schema.eigen.ga (schéma local)",
+    "github.com/egen": "github.com/amourgit"
   }
 }
 ```
@@ -142,17 +142,17 @@ Créer `EIGEN-MIGRATION/check-migration.sh` :
 #!/bin/bash
 echo "=== Vérification migration EIGEN ==="
 
-echo -n "Occurrences '@openmrs/' restantes dans les sources : "
-grep -r "@openmrs/" packages --include="*.ts" --include="*.tsx" --include="*.json" | grep -v "node_modules" | grep -v ".git" | wc -l
+echo -n "Occurrences '@egen/' restantes dans les sources : "
+grep -r "@egen/" packages --include="*.ts" --include="*.tsx" --include="*.json" | grep -v "node_modules" | grep -v ".git" | wc -l
 
-echo -n "Occurrences 'dev3.openmrs.org' restantes : "
-grep -r "dev3.openmrs.org" packages --include="*.ts" | grep -v "node_modules" | wc -l
+echo -n "Occurrences 'dev3.egen.org' restantes : "
+grep -r "dev3.egen.org" packages --include="*.ts" | grep -v "node_modules" | wc -l
 
-echo -n "Occurrences 'window.openmrsBase' restantes : "
-grep -r "openmrsBase" packages --include="*.ts" --include="*.tsx" | grep -v "node_modules" | wc -l
+echo -n "Occurrences 'window.egenBase' restantes : "
+grep -r "egenBase" packages --include="*.ts" --include="*.tsx" | grep -v "node_modules" | wc -l
 
-echo -n "Occurrences 'OpenMRS' dans les textes UI : "
-grep -r "OpenMRS" packages/apps --include="*.tsx" --include="*.ts" | grep -v "node_modules" | wc -l
+echo -n "Occurrences 'Egen' dans les textes UI : "
+grep -r "Egen" packages/apps --include="*.tsx" --include="*.ts" | grep -v "node_modules" | wc -l
 
 echo "=== Fin de vérification ==="
 ```

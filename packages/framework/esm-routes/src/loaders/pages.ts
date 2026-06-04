@@ -1,16 +1,16 @@
 import { type ActivityFn, pathToActiveWhen, registerApplication } from 'single-spa';
-import { registerModuleWithConfigSystem } from '@openmrs/esm-config';
+import { registerModuleWithConfigSystem } from '@egen/esm-config';
 import {
   type WorkspaceGroupDefinition,
   type ExtensionDefinition,
   type FeatureFlagDefinition,
   type ModalDefinition,
-  type OpenmrsAppRoutes,
+  type EgenAppRoutes,
   type RegisteredPageDefinition,
   type RouteDefinition,
   type WorkspaceDefinition,
-} from '@openmrs/esm-globals';
-import { getFeatureFlag } from '@openmrs/esm-feature-flags';
+} from '@egen/esm-globals';
+import { getFeatureFlag } from '@egen/esm-feature-flags';
 import { routeRegex } from './helpers';
 import {
   tryRegisterExtension,
@@ -42,7 +42,7 @@ function getActivityFn(route: RouteDefinition | Array<RouteDefinition>): Activit
     const activators = route.map(getActivityFn);
     return (location) => activators.some((activator) => activator(location));
   } else if (typeof route === 'string') {
-    return pathToActiveWhen(window.getOpenmrsSpaBase() + route);
+    return pathToActiveWhen(window.getEgenSpaBase() + route);
   } else if (route instanceof RegExp) {
     return (location) => routeRegex(route, location);
   } else {
@@ -92,11 +92,11 @@ function wrapPageActivityFn(
  * Each app has a name and should have a `routes.json` file that defines it's
  * associated routes.
  *
- * @param appName The name of the application, e.g. `@openmrs/esm-my-app`
+ * @param appName The name of the application, e.g. `@egen/esm-my-app`
  * @param routes A Javascript object that corresponds to the app's  routes.json`
  * definition.
  */
-export function registerApp(appName: string, routes: OpenmrsAppRoutes) {
+export function registerApp(appName: string, routes: EgenAppRoutes) {
   if (appName && routes && typeof routes === 'object') {
     registerModuleWithConfigSystem(appName);
 
@@ -219,7 +219,7 @@ export function finishRegisteringAllApps() {
     const index = appIndices.get(page.appName);
 
     const name = `${page.appName}-page-${index}`;
-    const containerDomId = page.containerDomId ?? 'omrs-apps-container';
+    const containerDomId = page.containerDomId ?? 'egen-apps-container';
     const containerDiv = document.getElementById(containerDomId);
     const appDomRootId = `single-spa-application:${name}`;
 

@@ -4,7 +4,7 @@
 
 > **translateFrom**(`moduleName`, `key`, `fallback?`, `options?`): `string`
 
-Defined in: [packages/framework/esm-translations/src/index.ts:40](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-translations/src/index.ts#L40)
+Defined in: [packages/framework/esm-translations/src/index.ts:40](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-translations/src/index.ts#L40)
 
 This function is for getting a translation from a specific module. Use this only if the
 translation is neither in the app making the call, nor in the core translations.
@@ -27,7 +27,7 @@ load the module's translations if they have not already been loaded via `useTran
 
 `string`
 
-The module to get the translation from, e.g. '@openmrs/esm-login-app'
+The module to get the translation from, e.g. '@egen/esm-login-app'
 
 ### key
 

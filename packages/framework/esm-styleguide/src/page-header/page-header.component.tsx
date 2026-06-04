@@ -1,10 +1,10 @@
 /** @module @category UI */
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { getConfig } from '@openmrs/esm-config';
+import { getConfig } from '@egen/esm-config';
 import { type StyleguideConfigObject } from '../config-schema';
 import styles from './page-header.module.scss';
-import { type CoreTranslationKey, getCoreTranslation } from '@openmrs/esm-translations';
+import { type CoreTranslationKey, getCoreTranslation } from '@egen/esm-translations';
 
 export interface PageHeaderContentProps {
   title: string | JSX.Element;
@@ -91,7 +91,7 @@ export const PageHeaderContent: React.FC<PageHeaderContentProps> = ({ title, ill
   const [config, setConfig] = useState<StyleguideConfigObject | null>(null);
 
   useEffect(() => {
-    getConfig('@openmrs/esm-styleguide').then((fetchedConfig: StyleguideConfigObject) => {
+    getConfig('@egen/esm-styleguide').then((fetchedConfig: StyleguideConfigObject) => {
       setConfig(fetchedConfig);
     });
   }, []);

@@ -1,12 +1,12 @@
 /** @module @category API */
-import { openmrsFetch, restBaseUrl } from '@openmrs/esm-api';
+import { egenFetch, restBaseUrl } from '@egen/esm-api';
 import type { UploadedFile } from './types';
 
 /** Base URL for the attachment REST API endpoint. */
 export const attachmentUrl = `${restBaseUrl}/attachment`;
 
 /**
- * Fetches a single attachment by its UUID from the OpenMRS server.
+ * Fetches a single attachment by its UUID from the Egen server.
  *
  * @param attachmentUuid The UUID of the attachment to fetch.
  * @param abortController An AbortController to allow cancellation of the request.
@@ -14,20 +14,20 @@ export const attachmentUrl = `${restBaseUrl}/attachment`;
  *
  * @example
  * ```ts
- * import { getAttachmentByUuid } from '@openmrs/esm-framework';
+ * import { getAttachmentByUuid } from '@egen/esm-framework';
  * const abortController = new AbortController();
  * const response = await getAttachmentByUuid('attachment-uuid', abortController);
  * console.log(response.data);
  * ```
  */
 export function getAttachmentByUuid(attachmentUuid: string, abortController: AbortController) {
-  return openmrsFetch(`${attachmentUrl}/${attachmentUuid}`, {
+  return egenFetch(`${attachmentUrl}/${attachmentUuid}`, {
     signal: abortController.signal,
   });
 }
 
 /**
- * Fetches all attachments for a specific patient from the OpenMRS server.
+ * Fetches all attachments for a specific patient from the Egen server.
  *
  * @param patientUuid The UUID of the patient whose attachments should be fetched.
  * @param includeEncounterless Whether to include attachments that are not associated
@@ -37,20 +37,20 @@ export function getAttachmentByUuid(attachmentUuid: string, abortController: Abo
  *
  * @example
  * ```ts
- * import { getAttachments } from '@openmrs/esm-framework';
+ * import { getAttachments } from '@egen/esm-framework';
  * const abortController = new AbortController();
  * const response = await getAttachments('patient-uuid', true, abortController);
  * console.log(response.data.results);
  * ```
  */
 export function getAttachments(patientUuid: string, includeEncounterless: boolean, abortController: AbortController) {
-  return openmrsFetch(`${attachmentUrl}?patient=${patientUuid}&includeEncounterless=${includeEncounterless}`, {
+  return egenFetch(`${attachmentUrl}?patient=${patientUuid}&includeEncounterless=${includeEncounterless}`, {
     signal: abortController.signal,
   });
 }
 
 /**
- * Creates a new attachment for a patient by uploading a file to the OpenMRS server.
+ * Creates a new attachment for a patient by uploading a file to the Egen server.
  * The file can be provided either as a File object or as base64-encoded content.
  *
  * @param patientUuid The UUID of the patient to associate the attachment with.
@@ -62,7 +62,7 @@ export function getAttachments(patientUuid: string, includeEncounterless: boolea
  *
  * @example
  * ```ts
- * import { createAttachment } from '@openmrs/esm-framework';
+ * import { createAttachment } from '@egen/esm-framework';
  * const response = await createAttachment('patient-uuid', {
  *   file: selectedFile,
  *   fileName: 'document.pdf',
@@ -83,14 +83,14 @@ export async function createAttachment(patientUuid: string, fileToUpload: Upload
     formData.append('base64Content', fileToUpload.base64Content);
   }
 
-  return openmrsFetch(`${attachmentUrl}`, {
+  return egenFetch(`${attachmentUrl}`, {
     method: 'POST',
     body: formData,
   });
 }
 
 /**
- * Permanently deletes an attachment from the OpenMRS server. This action cannot
+ * Permanently deletes an attachment from the Egen server. This action cannot
  * be undone.
  *
  * @param attachmentUuid The UUID of the attachment to delete.
@@ -99,13 +99,13 @@ export async function createAttachment(patientUuid: string, fileToUpload: Upload
  *
  * @example
  * ```ts
- * import { deleteAttachmentPermanently } from '@openmrs/esm-framework';
+ * import { deleteAttachmentPermanently } from '@egen/esm-framework';
  * const abortController = new AbortController();
  * await deleteAttachmentPermanently('attachment-uuid', abortController);
  * ```
  */
 export function deleteAttachmentPermanently(attachmentUuid: string, abortController: AbortController) {
-  return openmrsFetch(`${attachmentUrl}/${attachmentUuid}`, {
+  return egenFetch(`${attachmentUrl}/${attachmentUuid}`, {
     method: 'DELETE',
     signal: abortController.signal,
   });

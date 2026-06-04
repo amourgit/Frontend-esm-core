@@ -2,16 +2,16 @@
 
 # Function: toDateObjectStrict()
 
-> **toDateObjectStrict**(`omrsDateString`): `null` \| `Date`
+> **toDateObjectStrict**(`egenDateString`): `null` \| `Date`
 
-Defined in: [packages/framework/esm-utils/src/dates/date-util.ts:72](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-utils/src/dates/date-util.ts#L72)
+Defined in: [packages/framework/esm-utils/src/dates/date-util.ts:72](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-utils/src/dates/date-util.ts#L72)
 
-Converts the object to a date object if it is an OpenMRS ISO date time string.
+Converts the object to a date object if it is an Egen ISO date time string.
 Otherwise returns null.
 
 ## Parameters
 
-### omrsDateString
+### egenDateString
 
 `string`
 

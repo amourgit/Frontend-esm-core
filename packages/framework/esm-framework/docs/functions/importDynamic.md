@@ -4,12 +4,12 @@
 
 > **importDynamic**\<`T`\>(`jsPackage`, `share`, `options?`): `Promise`\<`T`\>
 
-Defined in: [packages/framework/esm-dynamic-loading/src/dynamic-loading.ts:37](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-dynamic-loading/src/dynamic-loading.ts#L37)
+Defined in: [packages/framework/esm-dynamic-loading/src/dynamic-loading.ts:37](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-dynamic-loading/src/dynamic-loading.ts#L37)
 
 Loads the named export from a named package. This might be used like:
 
 ```js
-const { someComponent } = importDynamic("@openmrs/esm-template-app")
+const { someComponent } = importDynamic("@egen/esm-template-app")
 ```
 
 ## Type Parameters
@@ -31,7 +31,7 @@ The package to load the export from.
 `string` = `'./start'`
 
 Indicates the name of the shared module; this is an advanced feature if the package you are loading
-  doesn't use the default OpenMRS shared module name "./start".
+  doesn't use the default Egen shared module name "./start".
 
 ### options?
 

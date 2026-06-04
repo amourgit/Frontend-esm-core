@@ -12,7 +12,7 @@ permissions: {}
 
 jobs:
   pr-description:
-    uses: openmrs/openmrs-contrib-gha-workflows/.github/workflows/frontend-pr-description-check.yml@main
+    uses: egen/egen-contrib-gha-workflows/.github/workflows/frontend-pr-description-check.yml@main
     with:
       pr-body: ${{ github.event.pull_request.body }}
       pr-author-login: ${{ github.event.pull_request.user.login }}

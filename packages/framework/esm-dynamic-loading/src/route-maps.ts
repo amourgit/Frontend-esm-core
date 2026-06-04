@@ -1,24 +1,24 @@
 /** @module @category Route Map */
-import { isOpenmrsAppRoutes, isOpenmrsRoutes, type OpenmrsAppRoutes, type OpenmrsRoutes } from '@openmrs/esm-globals';
+import { isEgenAppRoutes, isEgenRoutes, type EgenAppRoutes, type EgenRoutes } from '@egen/esm-globals';
 
-const OVERRIDE_PREFIX = 'openmrs-routes:';
-const CHANGE_EVENT = 'openmrs-routes:change';
+const OVERRIDE_PREFIX = 'egen-routes:';
+const CHANGE_EVENT = 'egen-routes:change';
 
 // Set by setupRouteMapOverrides(); controls whether override functionality is active.
 let devMode = false;
 
 // Snapshot of overrides at setup time (mirrors the import-map-overrides pattern:
 // getCurrentRouteMap returns the overrides as they were when the page loaded).
-let initialOverrideSnapshot: OpenmrsRoutes | null = null;
+let initialOverrideSnapshot: EgenRoutes | null = null;
 
 /**
- * Reads all `<script type="openmrs-routes">` tags from the DOM and merges
- * them into a single {@link OpenmrsRoutes} object. Tags with a `src` attribute
+ * Reads all `<script type="egen-routes">` tags from the DOM and merges
+ * them into a single {@link EgenRoutes} object. Tags with a `src` attribute
  * are fetched; inline tags have their `textContent` parsed as JSON.
  */
-async function readBaseMap(): Promise<OpenmrsRoutes> {
-  const scripts = document.querySelectorAll<HTMLScriptElement>("script[type='openmrs-routes']");
-  const maps: OpenmrsRoutes[] = [];
+async function readBaseMap(): Promise<EgenRoutes> {
+  const scripts = document.querySelectorAll<HTMLScriptElement>("script[type='egen-routes']");
+  const maps: EgenRoutes[] = [];
 
   for (let i = 0; i < scripts.length; i++) {
     const script = scripts[i];
@@ -31,7 +31,7 @@ async function readBaseMap(): Promise<OpenmrsRoutes> {
         parsed = JSON.parse(script.textContent);
       }
 
-      if (parsed && isOpenmrsRoutes(parsed)) {
+      if (parsed && isEgenRoutes(parsed)) {
         maps.push(parsed);
       }
     } catch (e) {
@@ -42,8 +42,8 @@ async function readBaseMap(): Promise<OpenmrsRoutes> {
   return mergeRouteMaps(maps);
 }
 
-function mergeRouteMaps(maps: OpenmrsRoutes[]): OpenmrsRoutes {
-  const merged: OpenmrsRoutes = {};
+function mergeRouteMaps(maps: EgenRoutes[]): EgenRoutes {
+  const merged: EgenRoutes = {};
   for (const map of maps) {
     if (map && typeof map === 'object') {
       Object.assign(merged, map);
@@ -53,11 +53,11 @@ function mergeRouteMaps(maps: OpenmrsRoutes[]): OpenmrsRoutes {
 }
 
 /**
- * Reads all `openmrs-routes:*` entries from localStorage as an {@link OpenmrsRoutes}.
+ * Reads all `egen-routes:*` entries from localStorage as an {@link EgenRoutes}.
  * This is async because URL-valued overrides need to be fetched.
  */
-async function readOverrideMap(): Promise<OpenmrsRoutes> {
-  const result: OpenmrsRoutes = {};
+async function readOverrideMap(): Promise<EgenRoutes> {
+  const result: EgenRoutes = {};
 
   try {
     const entries: Array<{ moduleName: string; raw: string }> = [];
@@ -75,17 +75,17 @@ async function readOverrideMap(): Promise<OpenmrsRoutes> {
       entries.map(async ({ moduleName, raw }) => {
         const parsed = JSON.parse(raw);
 
-        if (isOpenmrsAppRoutes(parsed)) {
+        if (isEgenAppRoutes(parsed)) {
           return { moduleName, routes: parsed };
         }
 
         if (typeof parsed === 'string' && parsed.startsWith('http')) {
           const response = await fetch(parsed);
           const fetched: unknown = await response.json();
-          if (isOpenmrsAppRoutes(fetched)) {
+          if (isEgenAppRoutes(fetched)) {
             return { moduleName, routes: fetched };
           }
-          throw new Error(`${parsed} did not resolve to a valid OpenmrsAppRoutes object`);
+          throw new Error(`${parsed} did not resolve to a valid EgenAppRoutes object`);
         }
 
         throw new Error(`Override for ${moduleName} is neither a valid routes object nor a URL`);
@@ -110,7 +110,7 @@ async function readOverrideMap(): Promise<OpenmrsRoutes> {
  * Returns the route map for the current page. In dev mode, this merges
  * the base map with the override snapshot captured at page load.
  */
-export async function getCurrentRouteMap(): Promise<OpenmrsRoutes> {
+export async function getCurrentRouteMap(): Promise<EgenRoutes> {
   const base = await readBaseMap();
   if (!devMode) {
     return base;
@@ -122,7 +122,7 @@ export async function getCurrentRouteMap(): Promise<OpenmrsRoutes> {
 /**
  * Returns the base route map from the DOM without any overrides applied.
  */
-export async function getRouteMapDefaultMap(): Promise<OpenmrsRoutes> {
+export async function getRouteMapDefaultMap(): Promise<EgenRoutes> {
   return readBaseMap();
 }
 
@@ -131,7 +131,7 @@ export async function getRouteMapDefaultMap(): Promise<OpenmrsRoutes> {
  * any overrides that have been added/removed since the page loaded.
  * In production, this is the same as the base map.
  */
-export async function getRouteMapNextPageMap(): Promise<OpenmrsRoutes> {
+export async function getRouteMapNextPageMap(): Promise<EgenRoutes> {
   if (!devMode) {
     return readBaseMap();
   }
@@ -170,11 +170,11 @@ export function getRouteMapOverrideMap(): Record<string, string> {
  * The app must be reloaded for overrides to take effect.
  *
  * @param moduleName The name of the module the routes are for
- * @param routes Either an {@link OpenmrsAppRoutes} object, a string that represents a JSON
- *  version of an {@link OpenmrsAppRoutes} object, or a string or URL that resolves to a
- *  JSON document that represents an {@link OpenmrsAppRoutes} object
+ * @param routes Either an {@link EgenAppRoutes} object, a string that represents a JSON
+ *  version of an {@link EgenAppRoutes} object, or a string or URL that resolves to a
+ *  JSON document that represents an {@link EgenAppRoutes} object
  */
-export function addRouteMapOverride(moduleName: string, routes: OpenmrsAppRoutes | string | URL) {
+export function addRouteMapOverride(moduleName: string, routes: EgenAppRoutes | string | URL) {
   if (!devMode) {
     console.warn('[Security] Route overrides are disabled outside development mode.');
     return;
@@ -186,16 +186,16 @@ export function addRouteMapOverride(moduleName: string, routes: OpenmrsAppRoutes
         localStorage.setItem(OVERRIDE_PREFIX + moduleName, JSON.stringify(routes));
       } else {
         const maybeRoutes = JSON.parse(routes);
-        if (isOpenmrsAppRoutes(maybeRoutes)) {
+        if (isEgenAppRoutes(maybeRoutes)) {
           localStorage.setItem(OVERRIDE_PREFIX + moduleName, JSON.stringify(maybeRoutes));
         } else {
-          console.error(`The supplied routes for ${moduleName} is not a valid OpenmrsAppRoutes object`, routes);
+          console.error(`The supplied routes for ${moduleName} is not a valid EgenAppRoutes object`, routes);
           return;
         }
       }
     } else if (routes instanceof URL) {
       localStorage.setItem(OVERRIDE_PREFIX + moduleName, JSON.stringify(routes.toString()));
-    } else if (isOpenmrsAppRoutes(routes)) {
+    } else if (isEgenAppRoutes(routes)) {
       localStorage.setItem(OVERRIDE_PREFIX + moduleName, JSON.stringify(routes));
     } else {
       console.error(

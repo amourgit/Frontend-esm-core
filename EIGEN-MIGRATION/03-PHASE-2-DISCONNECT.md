@@ -2,15 +2,15 @@
 
 > Durée estimée : 1 jour
 > Branche : `eigen/phase-2-disconnect`
-> Objectif : Couper toutes les dépendances vers `dev3.openmrs.org`, `json.openmrs.org`, npm public `@openmrs/*`, et rendre le projet 100% autonome.
+> Objectif : Couper toutes les dépendances vers `dev3.egen.org`, `json.egen.org`, npm public `@egen/*`, et rendre le projet 100% autonome.
 
 ---
 
-## 2.1 Couper le fallback `dev3.openmrs.org` dans la CLI
+## 2.1 Couper le fallback `dev3.egen.org` dans la CLI
 
 ### Fichier : `packages/tooling/eigen/src/utils/importmap.ts`
 
-C'est **LE fichier le plus important** de cette phase. Il contient la logique de fallback vers `dev3.openmrs.org`.
+C'est **LE fichier le plus important** de cette phase. Il contient la logique de fallback vers `dev3.egen.org`.
 
 **Avant** :
 ```typescript
@@ -20,11 +20,11 @@ async function readImportmap(path: string, backend?: string, spaPath?: string) {
       try {
         return await fetchRemoteImportmap(`${backend}${spaPath}importmap.json`);
       } catch (e) {
-        logWarn(`Could not read importmap from ${backend}... Falling back to dev3.openmrs.org`);
+        logWarn(`Could not read importmap from ${backend}... Falling back to dev3.egen.org`);
       }
     }
-    // ← ICI : fallback dangereux vers OpenMRS
-    return fetchRemoteImportmap('https://dev3.openmrs.org/openmrs/spa/importmap.json');
+    // ← ICI : fallback dangereux vers Egen
+    return fetchRemoteImportmap('https://dev3.egen.org/egen/spa/importmap.json');
   }
   return '{"imports":{}}';
 }
@@ -76,19 +76,19 @@ async function readRoutes(path: string, backend?: string, spaPath?: string) {
 
 ### Fichier : `packages/shell/esm-app-shell/package.json`
 
-Retirer les scripts qui font référence à `dev3.openmrs.org` :
+Retirer les scripts qui font référence à `dev3.egen.org` :
 
 ```json
 {
   "scripts": {
-    // Supprimer ces scripts qui utilisent dev3.openmrs.org :
-    // "watch:ref": "... OMRS_ESM_IMPORTMAP_URL=https://dev3.openmrs.org/openmrs/spa/importmap.json ..."
-    // "build:production": "... OMRS_ESM_IMPORTMAP_URL=https://dev3.openmrs.org/openmrs/spa/importmap.json ..."
+    // Supprimer ces scripts qui utilisent dev3.egen.org :
+    // "watch:ref": "... EGEN_ESM_IMPORTMAP_URL=https://dev3.egen.org/egen/spa/importmap.json ..."
+    // "build:production": "... EGEN_ESM_IMPORTMAP_URL=https://dev3.egen.org/egen/spa/importmap.json ..."
     
     // Remplacer par :
-    "watch": "cross-env OMRS_CLEAN_BEFORE_BUILD=true NODE_ENV=development OMRS_OFFLINE=disable rspack serve --mode development",
-    "build:production": "cross-env OMRS_OFFLINE=enable OMRS_CLEAN_BEFORE_BUILD=true NODE_ENV=production rspack --mode production",
-    "build:development": "cross-env OMRS_OFFLINE=enable OMRS_CLEAN_BEFORE_BUILD=true NODE_ENV=development rspack --mode development",
+    "watch": "cross-env EGEN_CLEAN_BEFORE_BUILD=true NODE_ENV=development EGEN_OFFLINE=disable rspack serve --mode development",
+    "build:production": "cross-env EGEN_OFFLINE=enable EGEN_CLEAN_BEFORE_BUILD=true NODE_ENV=production rspack --mode production",
+    "build:development": "cross-env EGEN_OFFLINE=enable EGEN_CLEAN_BEFORE_BUILD=true NODE_ENV=development rspack --mode development",
     "build": "yarn run build:production && yarn run build:development"
   }
 }
@@ -98,7 +98,7 @@ Retirer les scripts qui font référence à `dev3.openmrs.org` :
 
 ## 2.2 Créer des fichiers `importmap.json` et `routes.registry.json` locaux
 
-Ces fichiers locaux remplaceront le fetch depuis `dev3.openmrs.org`.
+Ces fichiers locaux remplaceront le fetch depuis `dev3.egen.org`.
 
 ### `packages/shell/esm-app-shell/src/importmap.json` (dev local)
 
@@ -144,7 +144,7 @@ Ces fichiers locaux remplaceront le fetch depuis `dev3.openmrs.org`.
 
 ## 2.3 Adapter la vérification des dépendances backend
 
-### Fichier : `packages/framework/esm-api/src/openmrs-backend-dependencies.ts`
+### Fichier : `packages/framework/esm-api/src/egen-backend-dependencies.ts`
 
 Ce fichier vérifie que le backend a les modules requis. À adapter pour EIGEN.
 
@@ -180,14 +180,14 @@ Changer les valeurs par défaut :
 ```typescript
 // Avant
 .option('backend', {
-  default: 'https://dev3.openmrs.org',
+  default: 'https://dev3.egen.org',
   describe: 'The backend to proxy API requests to.',
 })
 .option('spa-path', {
-  default: '/openmrs/spa/',
+  default: '/egen/spa/',
 })
 .option('api-url', {
-  default: '/openmrs',
+  default: '/egen',
 })
 
 // Après
@@ -209,12 +209,12 @@ Même chose pour les valeurs par défaut du serveur de prod.
 
 ---
 
-## 2.5 Couper les dépendances npm `@openmrs/*` externe
+## 2.5 Couper les dépendances npm `@egen/*` externe
 
-Les packages `@openmrs/*` installés depuis npm (pas workspace) doivent être supprimés ou remplacés. Chercher dans tous les `package.json` :
+Les packages `@egen/*` installés depuis npm (pas workspace) doivent être supprimés ou remplacés. Chercher dans tous les `package.json` :
 
 ```bash
-grep -r '"@openmrs/' packages */package.json | grep -v "workspace:\*" | grep -v "node_modules"
+grep -r '"@egen/' packages */package.json | grep -v "workspace:\*" | grep -v "node_modules"
 ```
 
 Tout ce qui n'est pas `"workspace:*"` est une dépendance npm externe. Il faut :
@@ -230,7 +230,7 @@ Dans `packages/shell/esm-app-shell/package.json` :
 ```json
 // Avant
 "browserslist": [
-  "extends browserslist-config-openmrs"
+  "extends browserslist-config-egen"
 ]
 
 // Après : définir directement les cibles navigateur
@@ -242,9 +242,9 @@ Dans `packages/shell/esm-app-shell/package.json` :
 ]
 ```
 
-Et désinstaller `browserslist-config-openmrs` :
+Et désinstaller `browserslist-config-egen` :
 ```bash
-yarn workspace @eigen/esm-app-shell remove browserslist-config-openmrs
+yarn workspace @eigen/esm-app-shell remove browserslist-config-egen
 ```
 
 ---
@@ -253,11 +253,11 @@ yarn workspace @eigen/esm-app-shell remove browserslist-config-openmrs
 
 ### Fichier : `packages/shell/esm-app-shell/src/index.ejs`
 
-Chercher et remplacer toutes les références OpenMRS dans le HTML généré :
+Chercher et remplacer toutes les références Egen dans le HTML généré :
 
 ```html
 <!-- Avant -->
-<title>OpenMRS</title>
+<title>Egen</title>
 <link rel="manifest" href="./manifest.webmanifest">
 
 <!-- Après -->
@@ -296,11 +296,11 @@ yarn run:shell
 # → Le shell doit démarrer sans erreur réseau
 
 # Test 2 : Vérifier que le build ne fetch rien d'externe
-yarn build 2>&1 | grep -i "openmrs.org"
+yarn build 2>&1 | grep -i "egen.org"
 # → Doit retourner vide
 
 # Test 3 : Vérifier les URLs dans le code compilé
-grep -r "openmrs.org" packages/*/dist/ 2>/dev/null
+grep -r "egen.org" packages/*/dist/ 2>/dev/null
 # → Doit retourner vide
 ```
 
@@ -308,15 +308,15 @@ grep -r "openmrs.org" packages/*/dist/ 2>/dev/null
 
 ## ✅ Checklist Phase 2
 
-- [ ] Fallback `dev3.openmrs.org` retiré de `importmap.ts`
-- [ ] Fallback `dev3.openmrs.org` retiré de `readRoutes`
+- [ ] Fallback `dev3.egen.org` retiré de `importmap.ts`
+- [ ] Fallback `dev3.egen.org` retiré de `readRoutes`
 - [ ] Fichier `importmap.json` local créé pour le dev
 - [ ] Fichier `routes.registry.json` local créé pour le dev
 - [ ] Backend par défaut CLI changé vers EIGEN
 - [ ] `spaPath` par défaut changé vers `/eigen/spa/`
 - [ ] `apiUrl` par défaut changé vers `/eigen`
-- [ ] Dépendances npm `@openmrs/*` externes supprimées
-- [ ] `browserslist-config-openmrs` retiré
+- [ ] Dépendances npm `@egen/*` externes supprimées
+- [ ] `browserslist-config-egen` retiré
 - [ ] `index.ejs` mis à jour (titre, meta)
 - [ ] PWA manifest mis à jour (nom, icône, couleurs)
 - [ ] Test isolation réseau réussi

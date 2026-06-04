@@ -1,3 +1,3 @@
-# openmrs-esm-offline
+# egen-esm-offline
 
-openmrs-esm-offline provides functions supporting offline implementations.
+egen-esm-offline provides functions supporting offline implementations.

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getI18n, useTranslation } from 'react-i18next';
-import type { OfflineSynchronizationStore } from '@openmrs/esm-framework/src/internal';
-import { getOfflineSynchronizationStore, showNotification, useStore } from '@openmrs/esm-framework/src/internal';
+import type { OfflineSynchronizationStore } from '@egen/esm-framework/src/internal';
+import { getOfflineSynchronizationStore, showNotification, useStore } from '@egen/esm-framework/src/internal';
 
 let showNewModalOnNextSynchronization = true;
 let currentSynchronizationIndex = 0;

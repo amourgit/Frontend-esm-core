@@ -1,4 +1,4 @@
-import { openmrsFetch, restBaseUrl } from '@openmrs/esm-api';
+import { egenFetch, restBaseUrl } from '@egen/esm-api';
 import useSWR from 'swr';
 
 const customRepresentation =
@@ -9,7 +9,7 @@ export function useRelationships(patientUuid: string) {
 
   const { data, error, isLoading, isValidating } = useSWR<{ data: RelationshipsResponse }, Error>(
     patientUuid ? apiUrl : null,
-    openmrsFetch,
+    egenFetch,
   );
 
   const formattedRelationships = data?.data?.results?.length

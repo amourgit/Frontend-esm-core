@@ -4,7 +4,7 @@
 
 > **navigateAndLaunchWorkspace**(`options`): `void`
 
-Defined in: [packages/framework/esm-styleguide/src/workspaces/workspaces.ts:407](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-styleguide/src/workspaces/workspaces.ts#L407)
+Defined in: [packages/framework/esm-styleguide/src/workspaces/workspaces.ts:407](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-styleguide/src/workspaces/workspaces.ts#L407)
 
 Use this function to navigate to a new page and launch a workspace on that page.
 
@@ -45,4 +45,4 @@ The name of the workspace to launch.
 ## Deprecated
 
 migrate to workspace v2 and call launchWorkspace2 instead. See:
-https://openmrs.atlassian.net/wiki/spaces/docs/pages/615677981/Workspace+v2+Migration+Guide
+https://egen.atlassian.net/wiki/spaces/docs/pages/615677981/Workspace+v2+Migration+Guide

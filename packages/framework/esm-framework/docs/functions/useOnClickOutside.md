@@ -4,7 +4,7 @@
 
 > **useOnClickOutside**\<`T`\>(`handler`, `active`): `RefObject`\<`T`\>
 
-Defined in: [packages/framework/esm-react-utils/src/useOnClickOutside.ts:31](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useOnClickOutside.ts#L31)
+Defined in: [packages/framework/esm-react-utils/src/useOnClickOutside.ts:31](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useOnClickOutside.ts#L31)
 
 A React hook that detects clicks outside of a referenced element. Useful for
 implementing dropdown menus, modals, or any component that should close when
@@ -44,7 +44,7 @@ A React ref object to attach to the element you want to detect
 ## Example
 
 ```tsx
-import { useOnClickOutside } from '@openmrs/esm-framework';
+import { useOnClickOutside } from '@egen/esm-framework';
 function Dropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useOnClickOutside<HTMLDivElement>(() => setIsOpen(false), isOpen);

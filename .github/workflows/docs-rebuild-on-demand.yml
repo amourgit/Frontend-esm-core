@@ -78,5 +78,5 @@ jobs:
       bypass_skip_docs: ${{ inputs.bypass_skip_docs }}
       bypass_attack_files: ${{ inputs.bypass_attack_files }}
     secrets:
-      OMRS_PR_BOT_CLIENT_ID: ${{ secrets.OMRS_PR_BOT_CLIENT_ID }}
-      OMRS_PR_BOT_PRIVATE_KEY: ${{ secrets.OMRS_PR_BOT_PRIVATE_KEY }}
+      EGEN_PR_BOT_CLIENT_ID: ${{ secrets.EGEN_PR_BOT_CLIENT_ID }}
+      EGEN_PR_BOT_PRIVATE_KEY: ${{ secrets.EGEN_PR_BOT_PRIVATE_KEY }}

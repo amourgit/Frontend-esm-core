@@ -1,6 +1,6 @@
 /** @module @category Store */
-import type {} from '@openmrs/esm-globals';
-import { shallowEqual } from '@openmrs/esm-utils';
+import type {} from '@egen/esm-globals';
+import { shallowEqual } from '@egen/esm-utils';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { StoreApi } from 'zustand/vanilla';
 import { createStore } from 'zustand/vanilla';

@@ -4,7 +4,7 @@
 
 > **useAbortController**(): `AbortController`
 
-Defined in: [packages/framework/esm-react-utils/src/useAbortController.ts:25](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useAbortController.ts#L25)
+Defined in: [packages/framework/esm-react-utils/src/useAbortController.ts:25](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useAbortController.ts#L25)
 
 **`Beta`**
 
@@ -19,11 +19,11 @@ are cancelled when a component is unmounted.
 ## Example
 
 ```tsx
-import { useAbortController } from "@openmrs/esm-framework";
+import { useAbortController } from "@egen/esm-framework";
 
 function MyComponent() {
  const abortController = useAbortController();
- const { data } = useSWR(key, (key) => openmrsFetch(key, { signal: abortController.signal }));
+ const { data } = useSWR(key, (key) => egenFetch(key, { signal: abortController.signal }));
 
  return (
    // render something with data

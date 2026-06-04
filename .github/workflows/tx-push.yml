@@ -7,6 +7,6 @@ on:
 
 jobs:
   push-translations:
-    uses: openmrs/openmrs-contrib-gha-workflows/.github/workflows/tx-push.yml@main
+    uses: egen/egen-contrib-gha-workflows/.github/workflows/tx-push.yml@main
     secrets:
       TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}

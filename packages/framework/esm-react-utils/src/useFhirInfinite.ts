@@ -3,18 +3,18 @@ import {
   useServerInfinite,
   type UseServerInfiniteOptions,
   type UseServerInfiniteReturnObject,
-} from './useOpenmrsInfinite';
+} from './useEgenInfinite';
 
 /**
  * Fhir REST endpoints that return a list of objects, are server-side paginated.
  * The server limits the max number of results being returned, and multiple requests are needed to get the full data set
  * if its size exceeds this limit.
  *
- * This function is the FHIR counterpart of `useOpenmrsInfinite`.
+ * This function is the FHIR counterpart of `useEgenInfinite`.
  *
  * @see `useFhirPagination`
  * @see `useFhirFetchAll`
- * @see `useOpenmrsInfinite`
+ * @see `useEgenInfinite`
  *
  * @param url The URL of the paginated rest endpoint.
  *            Similar to useSWRInfinite, this param can be null to disable fetching.

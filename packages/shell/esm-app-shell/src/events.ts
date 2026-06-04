@@ -1,12 +1,12 @@
 import {
   cleanupObsoleteFeatureFlags,
   getCurrentUser,
-  subscribeOpenmrsEvent,
-} from '@openmrs/esm-framework/src/internal';
+  subscribeEgenEvent,
+} from '@egen/esm-framework/src/internal';
 import { setupOptionalDependencies } from './optionaldeps';
 
-subscribeOpenmrsEvent('started', () => cleanupObsoleteFeatureFlags());
-subscribeOpenmrsEvent('started', () => {
+subscribeEgenEvent('started', () => cleanupObsoleteFeatureFlags());
+subscribeEgenEvent('started', () => {
   const subscription = getCurrentUser().subscribe((session) => {
     if (session.authenticated) {
       subscription?.unsubscribe();

@@ -1,5 +1,5 @@
-import type { OmrsOfflineHttpHeaders } from '@openmrs/esm-framework';
-import { omrsOfflineCachingStrategyHttpHeaderName } from '@openmrs/esm-framework';
+import type { EgenOfflineHttpHeaders } from '@egen/esm-framework';
+import { egenOfflineCachingStrategyHttpHeaderName } from '@egen/esm-framework';
 
 export const routes = {
   home: `home`,
@@ -9,6 +9,6 @@ export const routes = {
   offlineToolsActions: `offline-tools/actions`,
 };
 
-export const cacheForOfflineHeaders: OmrsOfflineHttpHeaders = {
-  [omrsOfflineCachingStrategyHttpHeaderName]: 'network-first',
+export const cacheForOfflineHeaders: EgenOfflineHttpHeaders = {
+  [egenOfflineCachingStrategyHttpHeaderName]: 'network-first',
 };

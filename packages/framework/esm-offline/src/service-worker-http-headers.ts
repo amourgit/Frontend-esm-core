@@ -1,8 +1,8 @@
 /** @module @category Offline */
 
-export const omrsOfflineResponseBodyHttpHeaderName = 'x-omrs-offline-response-body';
-export const omrsOfflineResponseStatusHttpHeaderName = 'x-omrs-offline-response-status';
-export const omrsOfflineCachingStrategyHttpHeaderName = 'x-omrs-offline-caching-strategy';
+export const egenOfflineResponseBodyHttpHeaderName = 'x-egen-offline-response-body';
+export const egenOfflineResponseStatusHttpHeaderName = 'x-egen-offline-response-status';
+export const egenOfflineCachingStrategyHttpHeaderName = 'x-egen-offline-caching-strategy';
 
 /**
  *
@@ -12,29 +12,29 @@ export const omrsOfflineCachingStrategyHttpHeaderName = 'x-omrs-offline-caching-
  *   The service worker decides the strategy to be used.
  * * `network-first`: See https://developers.google.com/web/tools/workbox/modules/workbox-strategies#network_first_network_falling_back_to_cache.
  */
-export type OmrsOfflineCachingStrategy = 'network-only-or-cache-only' | 'network-first';
+export type EgenOfflineCachingStrategy = 'network-only-or-cache-only' | 'network-first';
 
 /**
  * Defines the keys of the custom headers which can be appended to an HTTP request.
  * HTTP requests with these headers are handled in a special way by the SPA's service worker.
  */
-export type OmrsOfflineHttpHeaders = {
+export type EgenOfflineHttpHeaders = {
   /**
    * If the client is offline and the request cannot be read from the cache (i.e. if there is no way
    * to receive any kind of data for this request), the service worker will return a response with
    * the body in this header.
    */
-  [omrsOfflineResponseBodyHttpHeaderName]?: string;
+  [egenOfflineResponseBodyHttpHeaderName]?: string;
   /**
    * If the client is offline and the request cannot be read from the cache (i.e. if there is no way
    * to receive any kind of data for this request), the service worker will return a response with
    * the status code defined in this header.
    */
-  [omrsOfflineResponseStatusHttpHeaderName]?: `${number}`;
+  [egenOfflineResponseStatusHttpHeaderName]?: `${number}`;
   /**
    * Instructs the service worker to use a specific caching strategy for this request.
    */
-  [omrsOfflineCachingStrategyHttpHeaderName]?: OmrsOfflineCachingStrategy;
+  [egenOfflineCachingStrategyHttpHeaderName]?: EgenOfflineCachingStrategy;
 };
 
-export type OmrsOfflineHttpHeaderNames = keyof OmrsOfflineHttpHeaders;
+export type EgenOfflineHttpHeaderNames = keyof EgenOfflineHttpHeaders;

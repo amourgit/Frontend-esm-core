@@ -1,4 +1,4 @@
-// Storybook-compatible mock for @openmrs/esm-extensions.
+// Storybook-compatible mock for @egen/esm-extensions.
 
 export function attach() {}
 export function detach() {}

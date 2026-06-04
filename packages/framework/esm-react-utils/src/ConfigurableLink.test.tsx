@@ -3,7 +3,7 @@ import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { navigate } from '@openmrs/esm-navigation';
+import { navigate } from '@egen/esm-navigation';
 import { ConfigurableLink } from './ConfigurableLink';
 
 vi.mock('single-spa');
@@ -13,7 +13,7 @@ const mockNavigate = vi.mocked(navigate);
 describe(`ConfigurableLink`, () => {
   afterAll(vi.clearAllMocks);
 
-  const path = '${openmrsSpaBase}/home';
+  const path = '${egenSpaBase}/home';
   beforeEach(() => {
     mockNavigate.mockClear();
   });
@@ -29,7 +29,7 @@ describe(`ConfigurableLink`, () => {
     // eslint-disable-next-line testing-library/no-node-access
     expect(link.closest('a')).toHaveClass('fancy-link');
     // eslint-disable-next-line testing-library/no-node-access
-    expect(link.closest('a')).toHaveAttribute('href', '/openmrs/spa/home');
+    expect(link.closest('a')).toHaveAttribute('href', '/egen/spa/home');
   });
 
   it('calls navigate on normal click but not special clicks', async () => {

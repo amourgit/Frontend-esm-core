@@ -4,7 +4,7 @@ version: "3.7"
 
 services:
   gateway:
-    image: openmrs/openmrs-reference-application-3-gateway:${TAG:-nightly}
+    image: egen/egen-reference-application-3-gateway:${TAG:-nightly}
     hostname: gateway
     depends_on:
       - frontend
@@ -17,15 +17,15 @@ services:
       context: .
     hostname: frontend
     environment:
-      SPA_PATH: /openmrs/spa
-      API_URL: /openmrs
+      SPA_PATH: /egen/spa
+      API_URL: /egen
 
   backend:
-    image: openmrs/openmrs-reference-application-3-backend:nightly-with-data
+    image: egen/egen-reference-application-3-backend:nightly-with-data
     hostname: backend
     depends_on:
       - db
 
   db:
-    image: openmrs/openmrs-reference-application-3-db:nightly-with-data
+    image: egen/egen-reference-application-3-db:nightly-with-data
     hostname: db

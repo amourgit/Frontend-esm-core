@@ -2,9 +2,9 @@
 'use strict';
 
 import { createStore } from 'zustand/vanilla';
-import { registerGlobalStore } from '@openmrs/esm-state';
+import { registerGlobalStore } from '@egen/esm-state';
 
-interface OpenmrsAppContext {
+interface EgenAppContext {
   [namespace: string]: NonNullable<object>;
 }
 
@@ -13,9 +13,9 @@ interface OpenmrsAppContext {
  *
  * The application context store, using immer to potentially simplify updates
  */
-export const contextStore = createStore<OpenmrsAppContext>()(() => ({}));
+export const contextStore = createStore<EgenAppContext>()(() => ({}));
 
-registerGlobalStore<OpenmrsAppContext>('openmrs-app-context', contextStore);
+registerGlobalStore<EgenAppContext>('egen-app-context', contextStore);
 
 const nothing = Object();
 

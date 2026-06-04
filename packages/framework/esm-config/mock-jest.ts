@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
-import { createGlobalStore } from '@openmrs/esm-state/mock';
-import * as utils from '@openmrs/esm-utils';
+import { createGlobalStore } from '@egen/esm-state/mock';
+import * as utils from '@egen/esm-utils';
 
 export { validators, validator } from './src/index';
 

@@ -1,4 +1,4 @@
-// Storybook-compatible mock for @openmrs/esm-navigation.
+// Storybook-compatible mock for @egen/esm-navigation.
 
 export type TemplateParams = Record<string, string>;
 

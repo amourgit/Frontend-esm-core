@@ -10,7 +10,7 @@ import {
   type AssignedExtension,
   type Session,
   useLeftNavStore,
-} from '@openmrs/esm-framework';
+} from '@egen/esm-framework';
 import { isDesktop } from './utils';
 import { mockUser } from '../__mocks__/mock-user';
 import { mockSession } from '../__mocks__/mock-session';
@@ -19,7 +19,7 @@ import Root from './root.component';
 const mockUserObservable = of(mockUser);
 const mockSessionObservable = of({ data: mockSession });
 
-vi.mock('@openmrs/esm-framework', () => ({
+vi.mock('@egen/esm-framework', () => ({
   useConfig: vi.fn(),
   useAssignedExtensions: vi.fn(),
   useSession: vi.fn(),

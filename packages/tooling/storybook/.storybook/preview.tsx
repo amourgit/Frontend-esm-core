@@ -3,7 +3,7 @@ import type { Preview } from 'storybook-react-rsbuild';
 import { setLayoutType } from '../mocks/esm-react-utils';
 
 // Import the styleguide's global stylesheet which brings in Carbon's base
-// styles, OpenMRS brand variables, component-specific styles, and overrides.
+// styles, Egen brand variables, component-specific styles, and overrides.
 import '../../../framework/esm-styleguide/src/_all.scss';
 
 // Global setup: window variables, calendar registration, and SVG sprite.
@@ -34,7 +34,7 @@ const preview: Preview = {
   ],
   globalTypes: {
     layoutType: {
-      description: 'Simulated OpenMRS layout type',
+      description: 'Simulated Egen layout type',
       toolbar: {
         title: 'Layout',
         icon: 'mobile',

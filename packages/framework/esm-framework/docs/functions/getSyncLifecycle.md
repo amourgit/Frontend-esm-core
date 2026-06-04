@@ -4,7 +4,7 @@
 
 > **getSyncLifecycle**\<`T`\>(`Component`, `options`): () => `Promise`\<`ReactAppOrParcel`\<`T`\>\>
 
-Defined in: [packages/framework/esm-react-utils/src/getLifecycle.ts:77](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/getLifecycle.ts#L77)
+Defined in: [packages/framework/esm-react-utils/src/getLifecycle.ts:77](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/getLifecycle.ts#L77)
 
 Creates a single-spa lifecycle for a React component that is already loaded.
 Unlike [getAsyncLifecycle](getAsyncLifecycle.md), this wraps a synchronously-available component
@@ -29,7 +29,7 @@ The React component to create a lifecycle for.
 
 `ComponentDecoratorOptions`
 
-Configuration options for the OpenMRS component decorator.
+Configuration options for the Egen component decorator.
 
 ## Returns
 
@@ -44,8 +44,8 @@ A function that returns a Promise resolving to a single-spa lifecycle object.
 ## Example
 
 ```ts
-import { getSyncLifecycle } from '@openmrs/esm-framework';
+import { getSyncLifecycle } from '@egen/esm-framework';
 import MyComponent from './MyComponent';
-const options = { featureName: 'my-feature', moduleName: '@openmrs/esm-my-app' };
+const options = { featureName: 'my-feature', moduleName: '@egen/esm-my-app' };
 export const myExtension = getSyncLifecycle(MyComponent, options);
 ```

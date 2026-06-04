@@ -1,4 +1,4 @@
-# openmrs-esm-error-handling
+# egen-esm-error-handling
 
-openmrs-esm-error-handling provides facilities for handling errors
+egen-esm-error-handling provides facilities for handling errors
 consistently across the application.

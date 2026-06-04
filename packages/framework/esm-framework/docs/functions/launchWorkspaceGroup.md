@@ -4,7 +4,7 @@
 
 > **launchWorkspaceGroup**(`groupName`, `args`): `void`
 
-Defined in: [packages/framework/esm-styleguide/src/workspaces/workspaces.ts:216](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-styleguide/src/workspaces/workspaces.ts#L216)
+Defined in: [packages/framework/esm-styleguide/src/workspaces/workspaces.ts:216](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-styleguide/src/workspaces/workspaces.ts#L216)
 
 Launches a workspace group with the specified name and configuration.
 If there are any open workspaces, it will first close them before launching the new workspace group.
@@ -40,4 +40,4 @@ launchWorkspaceGroup("myGroup", {
 ## Deprecated
 
 migrate to workspace v2 and use launchWorkspaceGroup2 instead. See:
-https://openmrs.atlassian.net/wiki/spaces/docs/pages/615677981/Workspace+v2+Migration+Guide
+https://egen.atlassian.net/wiki/spaces/docs/pages/615677981/Workspace+v2+Migration+Guide

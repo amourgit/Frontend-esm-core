@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eu
 
-# E2E Test Runner for OpenMRS ESM Core
+# E2E Test Runner for Egen ESM Core
 #
 # Usage:
 #   ./run-e2e-docker-env.sh [options] [-- playwright-args]
@@ -72,7 +72,7 @@ generate_project_name() {
   local branch
   branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "local")
   # Sanitize: lowercase, replace non-alphanumeric with dash, limit length
-  echo "openmrs-e2e-$(echo "$branch" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | cut -c1-40)"
+  echo "egen-e2e-$(echo "$branch" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | cut -c1-40)"
 }
 
 # Wait for the gateway container to be running
@@ -120,10 +120,10 @@ wait_for_backend() {
 # Generate unique identifiers for this run
 project_name=$(generate_project_name)
 export E2E_PORT=$(find_available_port)
-base_url="http://localhost:$E2E_PORT/openmrs"
+base_url="http://localhost:$E2E_PORT/egen"
 
 echo "========================================"
-echo "OpenMRS E2E Test Runner"
+echo "Egen E2E Test Runner"
 echo "========================================"
 echo "Project name: $project_name"
 echo "Port: $E2E_PORT"
@@ -132,7 +132,7 @@ echo "Keep on failure: $keep_on_failure"
 echo "========================================"
 
 # Create a temporary working directory
-working_dir=$(mktemp -d "${TMPDIR:-/tmp/}openmrs-e2e-frontends.XXXXXXXXXX")
+working_dir=$(mktemp -d "${TMPDIR:-/tmp/}egen-e2e-frontends.XXXXXXXXXX")
 echo "Working directory: $working_dir"
 
 # Store paths for cleanup
@@ -193,7 +193,7 @@ echo "Creating packed archives of apps..."
 # For each app
 for app in $apps
 do
-  # @openmrs/esm-whatever -> _openmrs_esm_whatever
+  # @egen/esm-whatever -> _egen_esm_whatever
   app_name=$(echo "$app" | tr '[:punct:]' '_');
   # Add to our array
   app_names+=("$app_name.tgz");
@@ -210,43 +210,43 @@ jq -n \
   --arg apps "$apps" \
   --arg app_names "$(echo ${app_names[@]})" \
   '{
-    "@openmrs/esm-active-visits-app": "next",
-    "@openmrs/esm-appointments-app": "next",
-    "@openmrs/esm-bed-management-app": "next",
-    "@openmrs/esm-cohort-builder-app": "next",
-    "@openmrs/esm-dispensing-app": "next",
-    "@openmrs/esm-fast-data-entry-app": "next",
-    "@openmrs/esm-form-builder-app": "next",
-    "@openmrs/esm-form-engine-app": "next",
-    "@openmrs/esm-generic-patient-widgets-app": "next",
-    "@openmrs/esm-home-app": "next",
-    "@openmrs/esm-laboratory-app": "next",
-    "@openmrs/esm-openconceptlab-app": "next",
-    "@openmrs/esm-patient-allergies-app": "next",
-    "@openmrs/esm-patient-attachments-app": "next",
-    "@openmrs/esm-patient-banner-app": "next",
-    "@openmrs/esm-patient-chart-app": "next",
-    "@openmrs/esm-patient-conditions-app": "next",
-    "@openmrs/esm-patient-flags-app": "next",
-    "@openmrs/esm-patient-forms-app": "next",
-    "@openmrs/esm-patient-immunizations-app": "next",
-    "@openmrs/esm-patient-list-management-app": "next",
-    "@openmrs/esm-patient-lists-app": "next",
-    "@openmrs/esm-patient-medications-app": "next",
-    "@openmrs/esm-patient-notes-app": "next",
-    "@openmrs/esm-patient-orders-app": "next",
-    "@openmrs/esm-patient-programs-app": "next",
-    "@openmrs/esm-patient-registration-app": "next",
-    "@openmrs/esm-patient-search-app": "next",
-    "@openmrs/esm-patient-task-list-app": "next",
-    "@openmrs/esm-patient-tests-app": "next",
-    "@openmrs/esm-patient-vitals-app": "next",
-    "@openmrs/esm-service-queues-app": "next",
-    "@openmrs/esm-system-admin-app": "next",
-    "@openmrs/esm-user-onboarding-app": "next",
-    "@openmrs/esm-ward-app": "next",
-    "@openmrs/esm-stock-management-app": "next",
-    "@openmrs/esm-billing-app": "next"
+    "@egen/esm-active-visits-app": "next",
+    "@egen/esm-appointments-app": "next",
+    "@egen/esm-bed-management-app": "next",
+    "@egen/esm-cohort-builder-app": "next",
+    "@egen/esm-dispensing-app": "next",
+    "@egen/esm-fast-data-entry-app": "next",
+    "@egen/esm-form-builder-app": "next",
+    "@egen/esm-form-engine-app": "next",
+    "@egen/esm-generic-patient-widgets-app": "next",
+    "@egen/esm-home-app": "next",
+    "@egen/esm-laboratory-app": "next",
+    "@egen/esm-openconceptlab-app": "next",
+    "@egen/esm-patient-allergies-app": "next",
+    "@egen/esm-patient-attachments-app": "next",
+    "@egen/esm-patient-banner-app": "next",
+    "@egen/esm-patient-chart-app": "next",
+    "@egen/esm-patient-conditions-app": "next",
+    "@egen/esm-patient-flags-app": "next",
+    "@egen/esm-patient-forms-app": "next",
+    "@egen/esm-patient-immunizations-app": "next",
+    "@egen/esm-patient-list-management-app": "next",
+    "@egen/esm-patient-lists-app": "next",
+    "@egen/esm-patient-medications-app": "next",
+    "@egen/esm-patient-notes-app": "next",
+    "@egen/esm-patient-orders-app": "next",
+    "@egen/esm-patient-programs-app": "next",
+    "@egen/esm-patient-registration-app": "next",
+    "@egen/esm-patient-search-app": "next",
+    "@egen/esm-patient-task-list-app": "next",
+    "@egen/esm-patient-tests-app": "next",
+    "@egen/esm-patient-vitals-app": "next",
+    "@egen/esm-service-queues-app": "next",
+    "@egen/esm-system-admin-app": "next",
+    "@egen/esm-user-onboarding-app": "next",
+    "@egen/esm-ward-app": "next",
+    "@egen/esm-stock-management-app": "next",
+    "@egen/esm-billing-app": "next"
   } + (
     ($apps | split("\n")) as $apps | ($app_names | split(" ") | map("/app/" + .)) as $app_files
     | [$apps, $app_files]

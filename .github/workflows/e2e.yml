@@ -119,9 +119,9 @@ jobs:
     strategy:
       matrix:
         repo:
-          - openmrs-esm-patient-management
-          - openmrs-esm-patient-chart
-          - openmrs-esm-form-builder
+          - egen-esm-patient-management
+          - egen-esm-patient-chart
+          - egen-esm-form-builder
       fail-fast: false
 
     steps:
@@ -159,7 +159,7 @@ jobs:
       - name: 📥 Checkout to the ${{ matrix.repo }} main branch
         uses: actions/checkout@v6
         with:
-          repository: openmrs/${{ matrix.repo }}
+          repository: egen/${{ matrix.repo }}
           ref: main
           path: e2e_repo
 

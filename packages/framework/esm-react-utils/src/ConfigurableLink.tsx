@@ -1,6 +1,6 @@
 /** @module @category Navigation */
 import React, { type MouseEvent, type AnchorHTMLAttributes, type PropsWithChildren, useEffect } from 'react';
-import { navigate, interpolateUrl, type TemplateParams } from '@openmrs/esm-navigation';
+import { navigate, interpolateUrl, type TemplateParams } from '@egen/esm-navigation';
 
 function handleClick(
   event: MouseEvent,
@@ -35,7 +35,7 @@ function handleClick(
 export interface ConfigurableLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** The target path or URL. Supports interpolation. See [[navigate]] */
   to: string;
-  /** A dictionary of values to interpolate into the URL, in addition to the default keys `openmrsBase` and `openmrsSpaBase`. */
+  /** A dictionary of values to interpolate into the URL, in addition to the default keys `egenBase` and `egenSpaBase`. */
   templateParams?: TemplateParams;
   /** A callback to be called just before navigation occurs */
   onBeforeNavigate?: (event: MouseEvent) => void;

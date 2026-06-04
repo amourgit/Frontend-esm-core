@@ -4,9 +4,9 @@
 
 > **getAttachmentByUuid**(`attachmentUuid`, `abortController`): `Promise`\<[`FetchResponse`](../interfaces/FetchResponse.md)\<`any`\>\>
 
-Defined in: [packages/framework/esm-emr-api/src/attachments.ts:23](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-emr-api/src/attachments.ts#L23)
+Defined in: [packages/framework/esm-emr-api/src/attachments.ts:23](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-emr-api/src/attachments.ts#L23)
 
-Fetches a single attachment by its UUID from the OpenMRS server.
+Fetches a single attachment by its UUID from the Egen server.
 
 ## Parameters
 
@@ -31,7 +31,7 @@ A Promise that resolves with the FetchResponse containing the attachment data.
 ## Example
 
 ```ts
-import { getAttachmentByUuid } from '@openmrs/esm-framework';
+import { getAttachmentByUuid } from '@egen/esm-framework';
 const abortController = new AbortController();
 const response = await getAttachmentByUuid('attachment-uuid', abortController);
 console.log(response.data);

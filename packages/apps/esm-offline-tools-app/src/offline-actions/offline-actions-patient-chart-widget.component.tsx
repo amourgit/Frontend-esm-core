@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLayoutType } from '@openmrs/esm-framework';
+import { useLayoutType } from '@egen/esm-framework';
 import OfflineActions from './offline-actions.component';
 import styles from './offline-actions-patient-chart-widget.styles.scss';
 

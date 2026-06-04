@@ -1,1 +1,1 @@
-# openmrs-esm-navigation
+# egen-esm-navigation

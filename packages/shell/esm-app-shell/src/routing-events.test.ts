@@ -19,7 +19,7 @@ function dispatchSingleSpaEvent(detail: {
 function makeEventDetail(overrides: Partial<Parameters<typeof dispatchSingleSpaEvent>[0]> = {}) {
   return {
     appsByNewStatus: {
-      MOUNTED: ['@openmrs/esm-patient-chart-app'],
+      MOUNTED: ['@egen/esm-patient-chart-app'],
       NOT_MOUNTED: [],
       NOT_LOADED: [],
       SKIP_BECAUSE_BROKEN: [],
@@ -37,16 +37,16 @@ describe('routing-events', () => {
 
   beforeAll(() => {
     // Enable routing events by dispatching the 'started' event
-    window.dispatchEvent(new CustomEvent('openmrs:started', { detail: undefined }));
+    window.dispatchEvent(new CustomEvent('egen:started', { detail: undefined }));
   });
 
   beforeEach(() => {
     pageChangedHandler = vi.fn();
-    window.addEventListener('openmrs:before-page-changed', pageChangedHandler);
+    window.addEventListener('egen:before-page-changed', pageChangedHandler);
   });
 
   afterEach(() => {
-    window.removeEventListener('openmrs:before-page-changed', pageChangedHandler);
+    window.removeEventListener('egen:before-page-changed', pageChangedHandler);
   });
 
   it('should set newPage to the mounted app when totalAppChanges > 0', () => {
@@ -60,7 +60,7 @@ describe('routing-events', () => {
 
     expect(pageChangedHandler).toHaveBeenCalledTimes(1);
     const payload = pageChangedHandler.mock.calls[0][0].detail;
-    expect(payload.newPage).toBe('@openmrs/esm-patient-chart-app');
+    expect(payload.newPage).toBe('@egen/esm-patient-chart-app');
   });
 
   it('should set newPage to undefined for pathname-only changes (no app changes)', () => {

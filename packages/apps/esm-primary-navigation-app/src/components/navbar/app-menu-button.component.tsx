@@ -1,5 +1,5 @@
 import { HeaderGlobalAction } from '@carbon/react';
-import { CloseIcon, SwitcherIcon, useAssignedExtensions, useOnClickOutside } from '@openmrs/esm-framework';
+import { CloseIcon, SwitcherIcon, useAssignedExtensions, useOnClickOutside } from '@egen/esm-framework';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -4,7 +4,7 @@ import { describe, expect, it, afterEach, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { implementerToolsConfigStore, temporaryConfigStore, Type } from '@openmrs/esm-framework/src/internal';
+import { implementerToolsConfigStore, temporaryConfigStore, Type } from '@egen/esm-framework/src/internal';
 import { Configuration } from './configuration.component';
 import { useConceptLookup, useGetConceptByUuid } from './interactive-editor/value-editors/concept-search.resource';
 
@@ -25,7 +25,7 @@ vi.mock('./interactive-editor/value-editors/concept-search.resource', () => ({
 }));
 
 const mockImplToolsConfig = {
-  '@openmrs/mario': {
+  '@egen/mario': {
     hasHat: {
       _type: Type.Boolean,
       _default: true,
@@ -57,7 +57,7 @@ const mockImplToolsConfig = {
       _source: 'temporary config',
     },
   },
-  '@openmrs/luigi': {
+  '@egen/luigi': {
     favoriteNumbers: {
       _type: Type.Array,
       _elements: { _type: Type.Number },
@@ -66,7 +66,7 @@ const mockImplToolsConfig = {
       _source: 'provided',
     },
   },
-  '@openmrs/bowser': {
+  '@egen/bowser': {
     minions: {
       _type: Type.Array,
       _elements: {
@@ -81,7 +81,7 @@ const mockImplToolsConfig = {
       _source: 'provided',
     },
   },
-  '@openmrs/peach': {
+  '@egen/peach': {
     weapons: {
       _type: Type.Object,
       _elements: { _type: Type.Number },
@@ -116,7 +116,7 @@ describe('Configuration', () => {
 
     implementerToolsConfigStore.setState({
       config: {
-        '@openmrs/mario': mockImplToolsConfig['@openmrs/mario'],
+        '@egen/mario': mockImplToolsConfig['@egen/mario'],
       },
     });
 
@@ -136,7 +136,7 @@ describe('Configuration', () => {
       await user.click(row.getByText('Save'));
 
       expect(temporaryConfigStore.setState).toHaveBeenCalledWith({
-        config: { '@openmrs/mario': { hasHat: false } },
+        config: { '@egen/mario': { hasHat: false } },
       });
     }
   });
@@ -164,7 +164,7 @@ describe('Configuration', () => {
 
     implementerToolsConfigStore.setState({
       config: {
-        '@openmrs/mario': mockImplToolsConfig['@openmrs/mario'],
+        '@egen/mario': mockImplToolsConfig['@egen/mario'],
       },
     });
 
@@ -193,7 +193,7 @@ describe('Configuration', () => {
 
       // expect(temporaryConfigStore.setState).toHaveBeenCalledWith({
       //   config: {
-      //     "@openmrs/mario": { hatUuid: "61523693-72e2-456d-8c64-8c5293febeb6" },
+      //     "@egen/mario": { hatUuid: "61523693-72e2-456d-8c64-8c5293febeb6" },
       //   },
       // });
     }
@@ -204,7 +204,7 @@ describe('Configuration', () => {
 
     implementerToolsConfigStore.setState({
       config: {
-        '@openmrs/mario': mockImplToolsConfig['@openmrs/mario'],
+        '@egen/mario': mockImplToolsConfig['@egen/mario'],
       },
     });
 
@@ -232,7 +232,7 @@ describe('Configuration', () => {
       await user.click(row.getByText('Save'));
 
       expect(temporaryConfigStore.setState).toHaveBeenCalledWith({
-        config: { '@openmrs/mario': { numberFingers: 11 } },
+        config: { '@egen/mario': { numberFingers: 11 } },
       });
     }
   });
@@ -242,7 +242,7 @@ describe('Configuration', () => {
 
     implementerToolsConfigStore.setState({
       config: {
-        '@openmrs/mario': mockImplToolsConfig['@openmrs/mario'],
+        '@egen/mario': mockImplToolsConfig['@egen/mario'],
       },
     });
 
@@ -265,7 +265,7 @@ describe('Configuration', () => {
       await user.click(row.getByText('Save'));
 
       expect(temporaryConfigStore.setState).toHaveBeenCalledWith({
-        config: { '@openmrs/mario': { nemesisName: 'Bowser' } },
+        config: { '@egen/mario': { nemesisName: 'Bowser' } },
       });
     }
   });
@@ -275,7 +275,7 @@ describe('Configuration', () => {
 
     implementerToolsConfigStore.setState({
       config: {
-        '@openmrs/mario': mockImplToolsConfig['@openmrs/mario'],
+        '@egen/mario': mockImplToolsConfig['@egen/mario'],
       },
     });
 
@@ -301,7 +301,7 @@ describe('Configuration', () => {
       await user.click(row.getByText('Save'));
 
       expect(temporaryConfigStore.setState).toHaveBeenCalledWith({
-        config: { '@openmrs/mario': { mustacheUuid: newUuid } },
+        config: { '@egen/mario': { mustacheUuid: newUuid } },
       });
     }
   });
@@ -311,7 +311,7 @@ describe('Configuration', () => {
 
     implementerToolsConfigStore.setState({
       config: {
-        '@openmrs/luigi': mockImplToolsConfig['@openmrs/luigi'],
+        '@egen/luigi': mockImplToolsConfig['@egen/luigi'],
       },
     });
 
@@ -356,7 +356,7 @@ describe('Configuration', () => {
       // newInput = rows[rows.length - 1];
       // user.type(newInput, "13");
       // user.click(row.getByText("Save"));
-      // expect(mockSetTemporaryConfigValue).toHaveBeenCalledWith(["@openmrs/luigi", "favoriteNumbers"], [5, 11, 13]);
+      // expect(mockSetTemporaryConfigValue).toHaveBeenCalledWith(["@egen/luigi", "favoriteNumbers"], [5, 11, 13]);
     }
   });
 
@@ -365,8 +365,8 @@ describe('Configuration', () => {
 
     implementerToolsConfigStore.setState({
       config: {
-        '@openmrs/mario': {
-          hasHat: mockImplToolsConfig['@openmrs/mario'].hasHat,
+        '@egen/mario': {
+          hasHat: mockImplToolsConfig['@egen/mario'].hasHat,
           weapons: {
             gloves: {
               _type: Type.Number,

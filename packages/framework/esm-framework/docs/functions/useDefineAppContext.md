@@ -4,7 +4,7 @@
 
 > **useDefineAppContext**\<`T`\>(`namespace`, `value?`): (`update`) => `void`
 
-Defined in: [packages/framework/esm-react-utils/src/useDefineAppContext.ts:43](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-react-utils/src/useDefineAppContext.ts#L43)
+Defined in: [packages/framework/esm-react-utils/src/useDefineAppContext.ts:43](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-react-utils/src/useDefineAppContext.ts#L43)
 
 This hook is used to register a namespace in the AppContext. The component that registers the
 namespace is responsible for updating the value associated with the namespace. The namespace
@@ -53,12 +53,12 @@ A function which can be used to update the state associated with the namespace
 ## Examples
 
 ```ts
-const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, openmrsFetch);
+const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, egenFetch);
 useDefineAppContext<PatientContext>('patient', patient ?? null);
 ```
 
 ```ts
-const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, openmrsFetch);
+const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, egenFetch);
 const updatePatient = useDefineAppContext<PatientContext>('patient', patient ?? null);
 updatePatient((patient) => {
  patient.name = 'Hector';

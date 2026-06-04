@@ -1,6 +1,6 @@
 @use '@carbon/layout';
 
-.omrs-inline-notifications-container {
+.egen-inline-notifications-container {
   z-index: 100000;
   position: fixed;
   width: 100%;
@@ -11,12 +11,12 @@
   justify-content: center;
 }
 
-.omrs-notification-mounting,
-.omrs-notification-mounting > * {
+.egen-notification-mounting,
+.egen-notification-mounting > * {
   padding: 0;
 }
 
-.omrs-notification-closing,
-.omrs-notification-mounting {
+.egen-notification-closing,
+.egen-notification-mounting {
   opacity: 0;
 }

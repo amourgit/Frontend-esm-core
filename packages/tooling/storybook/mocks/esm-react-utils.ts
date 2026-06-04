@@ -1,7 +1,7 @@
-// Storybook-compatible mock for @openmrs/esm-react-utils.
+// Storybook-compatible mock for @egen/esm-react-utils.
 // Provides working implementations of the hooks and components that
 // styleguide components actually import, without depending on the
-// full OpenMRS runtime.
+// full Egen runtime.
 import React, { type PropsWithChildren, useEffect, useMemo, useRef } from 'react';
 
 // --- Layout type (controllable from Storybook toolbar) ---
@@ -22,7 +22,7 @@ export function isDesktop(layout: string) {
 
 // --- Config (delegates to esm-config mock) ---
 
-export { useConfig } from '@openmrs/esm-config';
+export { useConfig } from '@egen/esm-config';
 
 // --- Pagination (pure React hook, no framework dependency) ---
 
@@ -200,6 +200,6 @@ export function useStore(store: any) {
   return store?.getState?.() ?? {};
 }
 
-export function openmrsComponentDecorator() {
+export function egenComponentDecorator() {
   return (c: any) => c;
 }

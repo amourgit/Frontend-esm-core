@@ -1,74 +1,74 @@
 <!DOCTYPE html>
-<html lang="<%= openmrsDefaultLocale %>" data-default-lang="<%= openmrsDefaultLocale %>">
+<html lang="<%= egenDefaultLocale %>" data-default-lang="<%= egenDefaultLocale %>">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><%= openmrsPageTitle %></title>
+    <title><%= egenPageTitle %></title>
     <link
       rel="shortcut icon"
       type="image/x-icon"
-      href="<%= openmrsFavicon %>"
+      href="<%= egenFavicon %>"
     >
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="importmap-type" content="systemjs-importmap">
-    <link rel="stylesheet" href="<%= openmrsPublicPath %>/<%= openmrsCssFilename %>">
+    <link rel="stylesheet" href="<%= egenPublicPath %>/<%= egenCssFilename %>">
     <%= htmlWebpackPlugin.tags.headTags %>
-<% if (openmrsExtraAssets && openmrsExtraAssets.length) { %>
-<% openmrsExtraAssets.forEach(function(asset) { %>
+<% if (egenExtraAssets && egenExtraAssets.length) { %>
+<% egenExtraAssets.forEach(function(asset) { %>
 <% if (asset.endsWith('.css')) { %>
-    <link rel="stylesheet" href="<%= openmrsPublicPath %>/<%= asset %>">
+    <link rel="stylesheet" href="<%= egenPublicPath %>/<%= asset %>">
 <% } %>
 <% }); %>
 <% } %>
-<% if (openmrsImportmapDef) { %>
-    <script type="systemjs-importmap"><%= openmrsImportmapDef %></script>
-<% } else if (openmrsImportmapUrl) { %>
+<% if (egenImportmapDef) { %>
+    <script type="systemjs-importmap"><%= egenImportmapDef %></script>
+<% } else if (egenImportmapUrl) { %>
     <link
       rel="preload"
-      href="<%= openmrsImportmapUrl %>"
+      href="<%= egenImportmapUrl %>"
       as="fetch"
       crossorigin="anonymous"
     >
-    <script type="systemjs-importmap" src="<%= openmrsImportmapUrl %>"></script>
+    <script type="systemjs-importmap" src="<%= egenImportmapUrl %>"></script>
 <% } %>
-<% if (openmrsCoreImportmap) { %>
-  <script type="systemjs-importmap"><%= openmrsCoreImportmap %></script>
+<% if (egenCoreImportmap) { %>
+  <script type="systemjs-importmap"><%= egenCoreImportmap %></script>
 <% } %>
-<% if (openmrsRoutesDef) { %>
-  <script type="openmrs-routes"><%= openmrsRoutesDef %></script>
-<% } else if (openmrsRoutesUrl) { %>
+<% if (egenRoutesDef) { %>
+  <script type="egen-routes"><%= egenRoutesDef %></script>
+<% } else if (egenRoutesUrl) { %>
   <link
     rel="preload"
-    href="<%= openmrsRoutesUrl %>"
+    href="<%= egenRoutesUrl %>"
     as="fetch"
     crossorigin="anonymous"
   >
-  <script type="openmrs-routes" src="<%= openmrsRoutesUrl %>"></script>
+  <script type="egen-routes" src="<%= egenRoutesUrl %>"></script>
 <% } %>
-<% if (openmrsCoreRoutes) { %>
-  <script type="openmrs-routes"><%= openmrsCoreRoutes %></script>
+<% if (egenCoreRoutes) { %>
+  <script type="egen-routes"><%= egenCoreRoutes %></script>
 <% } %>
   </head>
   <body>
     <%= htmlWebpackPlugin.tags.bodyTags %>
-<% if (openmrsExtraAssets && openmrsExtraAssets.length) { %>
-<% openmrsExtraAssets.forEach(function(asset) { %>
+<% if (egenExtraAssets && egenExtraAssets.length) { %>
+<% egenExtraAssets.forEach(function(asset) { %>
 <% if (asset.endsWith('.js')) { %>
-    <script src="<%= openmrsPublicPath %>/<%= asset %>"></script>
+    <script src="<%= egenPublicPath %>/<%= asset %>"></script>
 <% } %>
 <% }); %>
 <% } %>
-    <div class="omrs-toasts-container"></div>
-    <div class="omrs-inline-notifications-container"></div>
-    <div class="omrs-actionable-notifications-container"></div>
-    <div class="omrs-snackbars-container"></div>
-    <div class="omrs-modals-container"></div>
-    <div id="omrs-left-nav-container"></div>
-    <div id="omrs-workspaces-container"></div>
-    <div id="omrs-top-nav-app-container"></div>
-    <div id="omrs-apps-container"></div>
+    <div class="egen-toasts-container"></div>
+    <div class="egen-inline-notifications-container"></div>
+    <div class="egen-actionable-notifications-container"></div>
+    <div class="egen-snackbars-container"></div>
+    <div class="egen-modals-container"></div>
+    <div id="egen-left-nav-container"></div>
+    <div id="egen-workspaces-container"></div>
+    <div id="egen-top-nav-app-container"></div>
+    <div id="egen-apps-container"></div>
     <template id="loading-spinner">
-      <div class="omrs-loading-spinner">
+      <div class="egen-loading-spinner">
         <div data-inline-loading="" class="cds--inline-loading" role="alert" aria-live="assertive">
           <div class="cds--inline-loading__animation">
             <div data-inline-loading-spinner="" class="cds--loading cds--loading--small">
@@ -83,7 +83,7 @@
       </div>
     </template>
     <template id="app-error">
-      <div class="omrs-app-error">
+      <div class="egen-app-error">
         <h1>Application Error</h1>
         <p>Something went wrong. Please try reloading.</p>
         <p>Contact your system administrator if the problem persists.</p>
@@ -106,11 +106,11 @@
     </template>
     <script>
       initializeSpa({
-        apiUrl: "<%= openmrsApiUrl %>",
-        spaPath: "<%= openmrsPublicPath %>",
-        env: "<%= openmrsEnvironment %>",
-        offline: <%= openmrsOffline %>,
-        configUrls: [<%= openmrsConfigUrls %>],
+        apiUrl: "<%= egenApiUrl %>",
+        spaPath: "<%= egenPublicPath %>",
+        env: "<%= egenEnvironment %>",
+        offline: <%= egenOffline %>,
+        configUrls: [<%= egenConfigUrls %>],
       });
     </script>
   </body>

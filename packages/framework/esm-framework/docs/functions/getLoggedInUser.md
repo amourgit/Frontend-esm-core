@@ -4,7 +4,7 @@
 
 > **getLoggedInUser**(): `Promise`\<[`LoggedInUser`](../interfaces/LoggedInUser.md)\>
 
-Defined in: [packages/framework/esm-api/src/current-user.ts:287](https://github.com/openmrs/openmrs-esm-core/blob/main/packages/framework/esm-api/src/current-user.ts#L287)
+Defined in: [packages/framework/esm-api/src/current-user.ts:287](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-api/src/current-user.ts#L287)
 
 Returns a Promise that resolves with the currently logged-in user object.
 If the user is already loaded in the session store, the Promise resolves immediately.
@@ -20,7 +20,7 @@ A Promise that resolves with the LoggedInUser object once available.
 ## Example
 
 ```ts
-import { getLoggedInUser } from '@openmrs/esm-api';
+import { getLoggedInUser } from '@egen/esm-api';
 const user = await getLoggedInUser();
 console.log('Logged in as:', user.display);
 ```

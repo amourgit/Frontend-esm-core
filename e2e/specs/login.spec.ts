@@ -7,7 +7,7 @@ test.use({ storageState: { cookies: [], origins: [] } });
 test('Login as Admin user', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const userPanel = page.locator('[data-extension-slot-name="user-panel-slot"]');
-  const topNav = page.getByRole('banner', { name: 'OpenMRS' });
+  const topNav = page.getByRole('banner', { name: 'Egen' });
 
   await test.step('When I navigate to the login page', async () => {
     await loginPage.goto();

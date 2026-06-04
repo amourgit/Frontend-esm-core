@@ -12,7 +12,7 @@ describe('all validators', () => {
 
 describe('isUrl', () => {
   it('accepts a string with valid URL parameters', () => {
-    expect(isUrl('${openmrsSpaBase}/${openmrsBase}/thing')).toBeUndefined();
+    expect(isUrl('${egenSpaBase}/${egenBase}/thing')).toBeUndefined();
   });
 
   it('accepts a string with no parameters', () => {
@@ -20,7 +20,7 @@ describe('isUrl', () => {
   });
 
   it('rejects a string with unknkown URL parameters', () => {
-    expect(isUrl('${foo}/bad')).toMatch(/allowed template parameters are \${openmrsBase}, \${openmrsSpaBase}/i);
+    expect(isUrl('${foo}/bad')).toMatch(/allowed template parameters are \${egenBase}, \${egenSpaBase}/i);
   });
 });
 

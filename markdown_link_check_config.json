@@ -9,10 +9,10 @@
   ],
   "ignorePatterns": [
     {
-      "pattern": "^https://dev3.openmrs.org"
+      "pattern": "^https://dev3.egen.org"
     },
     {
-      "pattern": "^https://www.npmjs.com/package/@openmrs/"
+      "pattern": "^https://www.npmjs.com/package/@egen/"
     },
     {
       "pattern": "^http://localhost"

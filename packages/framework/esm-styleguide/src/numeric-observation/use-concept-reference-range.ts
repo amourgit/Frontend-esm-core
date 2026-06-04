@@ -1,6 +1,6 @@
 /** @module @category UI */
 import useSWRImmutable from 'swr/immutable';
-import { openmrsFetch, restBaseUrl } from '@openmrs/esm-api';
+import { egenFetch, restBaseUrl } from '@egen/esm-api';
 import type { ObsReferenceRanges } from './interpretation-utils';
 
 export interface UseConceptReferenceRangeResult {
@@ -24,7 +24,7 @@ interface ConceptReferenceRangeResponse {
 }
 
 /**
- * Hook to fetch concept reference range from OpenMRS REST API
+ * Hook to fetch concept reference range from Egen REST API
  * @param conceptUuid - The UUID of the concept to fetch reference range for
  * @returns Reference range data, loading state, and error
  */
@@ -43,7 +43,7 @@ export function useConceptReferenceRange(
 
   const { data, error, isLoading } = useSWRImmutable<{ data: ConceptReferenceRangeResponse }, Error>(
     apiUrl,
-    openmrsFetch,
+    egenFetch,
   );
 
   const conceptData = data?.data?.results?.[0];

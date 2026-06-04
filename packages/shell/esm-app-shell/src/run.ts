@@ -6,19 +6,19 @@ import {
   dispatchPrecacheStaticDependencies,
   type ExtensionDefinition,
   finishRegisteringAllApps,
-  fireOpenmrsEvent,
+  fireEgenEvent,
   getConfig,
   getCurrentPageMap,
   getCurrentRouteMap,
   getCurrentUser,
   integrateBreakpoints,
   interpolateUrl,
-  messageOmrsServiceWorker,
-  openmrsFetch,
+  messageEgenServiceWorker,
+  egenFetch,
   provide,
   registerApp,
   registerDefaultCalendar,
-  registerOmrsServiceWorker,
+  registerEgenServiceWorker,
   renderActionableNotifications,
   renderInlineNotifications,
   renderLoadingSpinner,
@@ -44,7 +44,7 @@ import {
   tryRegisterExtension,
   type Config,
   type StyleguideConfigObject,
-} from '@openmrs/esm-framework/src/internal';
+} from '@egen/esm-framework/src/internal';
 import { setupI18n } from './locale';
 import './routing-events';
 import './events';
@@ -54,7 +54,7 @@ import { setupCoreConfig } from './core-config';
 // @internal
 // used to track when the window.installedModules global is finalised
 // so we can pre-load all modules
-const REGISTRATION_PROMISES = Symbol('openmrs_registration_promises');
+const REGISTRATION_PROMISES = Symbol('egen_registration_promises');
 
 /**
  * Sets up the frontend modules (apps). Uses the defined export
@@ -117,7 +117,7 @@ async function runShell() {
   return setupI18n()
     .catch((err) => console.error(`Failed to initialize translations`, err))
     .then(async () => {
-      const { preferredCalendar } = await getConfig<StyleguideConfigObject>('@openmrs/esm-styleguide');
+      const { preferredCalendar } = await getConfig<StyleguideConfigObject>('@egen/esm-styleguide');
 
       for (const entry of Object.entries(preferredCalendar)) {
         registerDefaultCalendar(entry[0], entry[1] as CalendarIdentifier);
@@ -143,7 +143,7 @@ function renderFatalErrorPage(e?: Error) {
     }
 
     if (
-      localStorage.getItem('openmrs:devtools') &&
+      localStorage.getItem('egen:devtools') &&
       Object.keys(localStorage).some((k) => k.startsWith('import-map-override:'))
     ) {
       const appErrorActionButtons = fragment?.querySelector('#buttons');
@@ -193,28 +193,28 @@ function createConfigLoader(configUrls: Array<string>) {
 }
 
 function showNotifications() {
-  renderInlineNotifications(document.querySelector('.omrs-inline-notifications-container'));
+  renderInlineNotifications(document.querySelector('.egen-inline-notifications-container'));
   return;
 }
 
 function showActionableNotifications() {
-  renderActionableNotifications(document.querySelector('.omrs-actionable-notifications-container'));
+  renderActionableNotifications(document.querySelector('.egen-actionable-notifications-container'));
 }
 
 function showToasts() {
-  renderToasts(document.querySelector('.omrs-toasts-container'));
+  renderToasts(document.querySelector('.egen-toasts-container'));
 }
 
 function showWorkspacesAndActionMenu() {
-  renderWorkspaceWindowsAndMenu(document.querySelector('#omrs-workspaces-container'));
+  renderWorkspaceWindowsAndMenu(document.querySelector('#egen-workspaces-container'));
 }
 
 function showSnackbars() {
-  renderSnackbars(document.querySelector('.omrs-snackbars-container'));
+  renderSnackbars(document.querySelector('.egen-snackbars-container'));
 }
 
 function showModals() {
-  setupModals(document.querySelector('.omrs-modals-container'));
+  setupModals(document.querySelector('.egen-modals-container'));
 }
 
 function showLoadingSpinner() {
@@ -234,7 +234,7 @@ function registerCoreExtensions() {
 
 async function setupOffline() {
   try {
-    await registerOmrsServiceWorker(`${window.getOpenmrsSpaBase()}service-worker.js`);
+    await registerEgenServiceWorker(`${window.getEgenSpaBase()}service-worker.js`);
     await activateOfflineCapability();
     setupOfflineStaticDependencyPrecaching();
   } catch (error) {
@@ -281,15 +281,15 @@ async function precacheGlobalStaticDependencies() {
 
   // By default, cache the session endpoint.
   // This ensures that a lot of user/session related functions also work offline.
-  const sessionPathUrl = new URL(`${window.openmrsBase}${restBaseUrl}/session`, window.location.origin).href;
+  const sessionPathUrl = new URL(`${window.egenBase}${restBaseUrl}/session`, window.location.origin).href;
 
-  await messageOmrsServiceWorker({
+  await messageEgenServiceWorker({
     type: 'registerDynamicRoute',
     url: sessionPathUrl,
     strategy: 'network-first',
   });
 
-  await openmrsFetch(`${restBaseUrl}/session`).catch((e) =>
+  await egenFetch(`${restBaseUrl}/session`).catch((e) =>
     console.warn(
       'Failed to precache the user session data from the app shell. MFs depending on this data may run into problems while offline.',
       e,
@@ -299,7 +299,7 @@ async function precacheGlobalStaticDependencies() {
 
 async function precacheImportMap() {
   const importMap = await getCurrentPageMap();
-  await messageOmrsServiceWorker({
+  await messageEgenServiceWorker({
     type: 'onImportMapChanged',
     importMap,
   });
@@ -314,9 +314,9 @@ function setupOfflineCssClasses() {
   subscribeConnectivity(({ online }) => {
     const body = document.querySelector('body')!;
     if (online) {
-      body.classList.remove('omrs-offline');
+      body.classList.remove('egen-offline');
     } else {
-      body.classList.add('omrs-offline');
+      body.classList.add('egen-offline');
     }
   });
 }
@@ -328,7 +328,7 @@ export function run(configUrls: Array<string>) {
   const closeLoading = showLoadingSpinner();
   const provideConfigs = createConfigLoader(configUrls);
 
-  return import('@openmrs/esm-styleguide/src/index').then(() => {
+  return import('@egen/esm-styleguide/src/index').then(() => {
     integrateBreakpoints();
     showToasts();
     showModals();
@@ -366,7 +366,7 @@ export function run(configUrls: Array<string>) {
       .then(offlineEnabled ? setupOffline : undefined)
       .then(() => {
         // intentionally not returned so that processing the "started" event doesn't block
-        fireOpenmrsEvent('started');
+        fireEgenEvent('started');
       });
   });
 }

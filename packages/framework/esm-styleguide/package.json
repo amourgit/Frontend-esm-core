@@ -1,8 +1,8 @@
 {
-  "name": "@openmrs/esm-styleguide",
+  "name": "@egen/esm-styleguide",
   "version": "9.0.2",
   "license": "MPL-2.0",
-  "description": "The styleguide for OpenMRS SPA",
+  "description": "The styleguide for Egen SPA",
   "module": "dist/internal.js",
   "types": "dist/public.d.ts",
   "exports": {
@@ -44,7 +44,7 @@
     "lint": "eslint src"
   },
   "keywords": [
-    "openmrs",
+    "egen",
     "microfrontends",
     "styleguide"
   ],
@@ -53,16 +53,16 @@
     "src": "src"
   },
   "browserslist": [
-    "extends browserslist-config-openmrs"
+    "extends browserslist-config-egen"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-core.git"
+    "url": "git+https://github.com/egen/egen-esm-core.git"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-core/issues"
+    "url": "https://github.com/egen/egen-esm-core/issues"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-core#readme",
+  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "publishConfig": {
     "access": "public"
   },
@@ -77,18 +77,18 @@
     "react-aria-components": "^1.7.1"
   },
   "peerDependencies": {
-    "@openmrs/esm-api": "9.x",
-    "@openmrs/esm-config": "9.x",
-    "@openmrs/esm-emr-api": "9.x",
-    "@openmrs/esm-error-handling": "9.x",
-    "@openmrs/esm-extensions": "9.x",
-    "@openmrs/esm-globals": "9.x",
-    "@openmrs/esm-navigation": "9.x",
-    "@openmrs/esm-react-utils": "9.x",
-    "@openmrs/esm-routes": "9.x",
-    "@openmrs/esm-state": "9.x",
-    "@openmrs/esm-translations": "9.x",
-    "@openmrs/esm-utils": "9.x",
+    "@egen/esm-api": "9.x",
+    "@egen/esm-config": "9.x",
+    "@egen/esm-emr-api": "9.x",
+    "@egen/esm-error-handling": "9.x",
+    "@egen/esm-extensions": "9.x",
+    "@egen/esm-globals": "9.x",
+    "@egen/esm-navigation": "9.x",
+    "@egen/esm-react-utils": "9.x",
+    "@egen/esm-routes": "9.x",
+    "@egen/esm-state": "9.x",
+    "@egen/esm-translations": "9.x",
+    "@egen/esm-utils": "9.x",
     "dayjs": "1.x",
     "i18next": "25.x",
     "react": "18.x",
@@ -98,18 +98,18 @@
     "swr": "2.x"
   },
   "devDependencies": {
-    "@openmrs/esm-api": "workspace:*",
-    "@openmrs/esm-config": "workspace:*",
-    "@openmrs/esm-emr-api": "workspace:*",
-    "@openmrs/esm-error-handling": "workspace:*",
-    "@openmrs/esm-extensions": "workspace:*",
-    "@openmrs/esm-globals": "workspace:*",
-    "@openmrs/esm-navigation": "workspace:*",
-    "@openmrs/esm-react-utils": "workspace:*",
-    "@openmrs/esm-routes": "workspace:*",
-    "@openmrs/esm-state": "workspace:*",
-    "@openmrs/esm-translations": "workspace:*",
-    "@openmrs/esm-utils": "workspace:*",
+    "@egen/esm-api": "workspace:*",
+    "@egen/esm-config": "workspace:*",
+    "@egen/esm-emr-api": "workspace:*",
+    "@egen/esm-error-handling": "workspace:*",
+    "@egen/esm-extensions": "workspace:*",
+    "@egen/esm-globals": "workspace:*",
+    "@egen/esm-navigation": "workspace:*",
+    "@egen/esm-react-utils": "workspace:*",
+    "@egen/esm-routes": "workspace:*",
+    "@egen/esm-state": "workspace:*",
+    "@egen/esm-translations": "workspace:*",
+    "@egen/esm-utils": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
     "@types/geopattern": "^1.2.9",

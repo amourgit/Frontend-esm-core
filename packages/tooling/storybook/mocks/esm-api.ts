@@ -1,10 +1,10 @@
-// Storybook-compatible mock for @openmrs/esm-api.
+// Storybook-compatible mock for @egen/esm-api.
 import { of } from 'rxjs';
 import humanPhotoUrl from '../public/human.jpg';
 
 // Recognises specific URL patterns and returns canned responses so that
 // components backed by SWR hooks render realistic data in stories.
-export function openmrsFetch(url?: string) {
+export function egenFetch(url?: string) {
   if (url?.includes('patient=patient-with-photo')) {
     return Promise.resolve({
       data: {
@@ -20,7 +20,7 @@ export function openmrsFetch(url?: string) {
   return Promise.resolve({ data: { results: [] } });
 }
 
-export function openmrsObservableFetch() {
+export function egenObservableFetch() {
   return of({ data: { entry: [] } });
 }
 

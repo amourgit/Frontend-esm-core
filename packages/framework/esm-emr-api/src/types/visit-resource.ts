@@ -1,4 +1,4 @@
-import { type OpenmrsResource } from '@openmrs/esm-api';
+import { type EgenResource } from '@egen/esm-api';
 import { type Encounter } from './encounter-resource';
 import { type Patient } from './patient-resource';
 
@@ -26,7 +26,7 @@ export interface Visit {
   location?: Location;
   startDatetime: string;
   stopDatetime: string | null;
-  attributes?: Array<OpenmrsResource>;
+  attributes?: Array<EgenResource>;
   [anythingElse: string]: any;
 }
 

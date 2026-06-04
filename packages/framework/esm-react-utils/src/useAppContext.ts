@@ -1,7 +1,7 @@
 /** @module @category Context */
 import { useEffect, useState } from 'react';
-import { getContext, subscribeToContext } from '@openmrs/esm-context';
-import { shallowEqual } from '@openmrs/esm-utils';
+import { getContext, subscribeToContext } from '@egen/esm-context';
+import { shallowEqual } from '@egen/esm-utils';
 
 /**
  * This hook is used to access a namespace within the overall AppContext, so that a component can

@@ -1,9 +1,9 @@
 /** @module @category Workspace */
 import React from 'react';
 import { IconButton } from '@carbon/react';
-import { ExtensionSlot, ComponentContext, isDesktop, useLayoutType } from '@openmrs/esm-react-utils';
-import { type WorkspaceGroupDefinition2 } from '@openmrs/esm-globals';
-import { getCoreTranslation } from '@openmrs/esm-translations';
+import { ExtensionSlot, ComponentContext, isDesktop, useLayoutType } from '@egen/esm-react-utils';
+import { type WorkspaceGroupDefinition2 } from '@egen/esm-globals';
+import { getCoreTranslation } from '@egen/esm-translations';
 import { closeWorkspaceGroup2 } from '../workspace2';
 import { CloseIcon } from '../../icons';
 import styles from './action-menu2.module.scss';

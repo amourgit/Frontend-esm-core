@@ -1,8 +1,8 @@
 {
-  "name": "@openmrs/esm-extensions",
+  "name": "@egen/esm-extensions",
   "version": "9.0.2",
   "license": "MPL-2.0",
-  "description": "Coordinates extensions and extension points in the OpenMRS Frontend",
+  "description": "Coordinates extensions and extension points in the Egen Frontend",
   "type": "module",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -31,7 +31,7 @@
     "lint": "eslint src --ext ts,tsx"
   },
   "keywords": [
-    "openmrs",
+    "egen",
     "microfrontends"
   ],
   "directories": {
@@ -39,16 +39,16 @@
     "src": "src"
   },
   "browserslist": [
-    "extends browserslist-config-openmrs"
+    "extends browserslist-config-egen"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-core.git"
+    "url": "git+https://github.com/egen/egen-esm-core.git"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-core/issues"
+    "url": "https://github.com/egen/egen-esm-core/issues"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-core#readme",
+  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "publishConfig": {
     "access": "public"
   },
@@ -56,21 +56,21 @@
     "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
-    "@openmrs/esm-api": "9.x",
-    "@openmrs/esm-config": "9.x",
-    "@openmrs/esm-expression-evaluator": "9.x",
-    "@openmrs/esm-feature-flags": "9.x",
-    "@openmrs/esm-state": "9.x",
-    "@openmrs/esm-utils": "9.x",
+    "@egen/esm-api": "9.x",
+    "@egen/esm-config": "9.x",
+    "@egen/esm-expression-evaluator": "9.x",
+    "@egen/esm-feature-flags": "9.x",
+    "@egen/esm-state": "9.x",
+    "@egen/esm-utils": "9.x",
     "single-spa": "6.x"
   },
   "devDependencies": {
-    "@openmrs/esm-api": "workspace:*",
-    "@openmrs/esm-config": "workspace:*",
-    "@openmrs/esm-expression-evaluator": "workspace:*",
-    "@openmrs/esm-feature-flags": "workspace:*",
-    "@openmrs/esm-state": "workspace:*",
-    "@openmrs/esm-utils": "workspace:*",
+    "@egen/esm-api": "workspace:*",
+    "@egen/esm-config": "workspace:*",
+    "@egen/esm-expression-evaluator": "workspace:*",
+    "@egen/esm-feature-flags": "workspace:*",
+    "@egen/esm-state": "workspace:*",
+    "@egen/esm-utils": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
     "@vitest/coverage-v8": "^4.1.2",
