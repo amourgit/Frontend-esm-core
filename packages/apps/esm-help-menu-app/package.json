@@ -25,7 +25,7 @@
     "microfrontends"
   ],
   "browserslist": [
-    "extends browserslist-config-egen"
+    "extends browserslist-config-openmrs"
   ],
   "repository": {
     "type": "git",

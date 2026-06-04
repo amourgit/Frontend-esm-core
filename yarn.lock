@@ -2808,14 +2808,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openmrs/esm-api@workspace:*, @openmrs/esm-api@workspace:packages/framework/esm-api":
+"@egen/esm-api@workspace:*, @egen/esm-api@workspace:packages/framework/esm-api":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-api@workspace:packages/framework/esm-api"
+  resolution: "@egen/esm-api@workspace:packages/framework/esm-api"
   dependencies:
-    "@openmrs/esm-config": "workspace:*"
-    "@openmrs/esm-error-handling": "workspace:*"
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-navigation": "workspace:*"
+    "@egen/esm-config": "workspace:*"
+    "@egen/esm-error-handling": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-navigation": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -2827,21 +2827,21 @@ __metadata:
     rxjs: "npm:^6.5.3"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-config": 9.x
-    "@openmrs/esm-error-handling": 9.x
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-navigation": 9.x
+    "@egen/esm-config": 9.x
+    "@egen/esm-error-handling": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-navigation": 9.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-app-shell@workspace:*, @openmrs/esm-app-shell@workspace:packages/shell/esm-app-shell":
+"@egen/esm-app-shell@workspace:*, @egen/esm-app-shell@workspace:packages/shell/esm-app-shell":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-app-shell@workspace:packages/shell/esm-app-shell"
+  resolution: "@egen/esm-app-shell@workspace:packages/shell/esm-app-shell"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@internationalized/date": "npm:^3.8.0"
-    "@openmrs/esm-framework": "workspace:*"
-    "@openmrs/esm-styleguide": "workspace:*"
+    "@egen/esm-framework": "workspace:*"
+    "@egen/esm-styleguide": "workspace:*"
     "@rspack/cli": "npm:1.7.9"
     "@rspack/core": "npm:1.7.9"
     cross-env: "npm:^10.1.0"
@@ -2866,13 +2866,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-config@workspace:*, @openmrs/esm-config@workspace:packages/framework/esm-config":
+"@egen/esm-config@workspace:*, @egen/esm-config@workspace:packages/framework/esm-config":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-config@workspace:packages/framework/esm-config"
+  resolution: "@egen/esm-config@workspace:packages/framework/esm-config"
   dependencies:
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
-    "@openmrs/esm-utils": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-state": "workspace:*"
+    "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@types/lodash-es": "npm:^4.17.12"
@@ -2885,19 +2885,19 @@ __metadata:
     single-spa: "npm:^6.0.3"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-state": 9.x
-    "@openmrs/esm-utils": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-state": 9.x
+    "@egen/esm-utils": 9.x
     single-spa: 6.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-context@workspace:*, @openmrs/esm-context@workspace:packages/framework/esm-context":
+"@egen/esm-context@workspace:*, @egen/esm-context@workspace:packages/framework/esm-context":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-context@workspace:packages/framework/esm-context"
+  resolution: "@egen/esm-context@workspace:packages/framework/esm-context"
   dependencies:
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -2905,14 +2905,14 @@ __metadata:
     rimraf: "npm:^6.1.3"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-state": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-state": 9.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-core@workspace:.":
+"@egen/esm-core@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-core@workspace:."
+  resolution: "@egen/esm-core@workspace:."
   dependencies:
     "@playwright/test": "npm:^1.55.1"
     "@swc/core": "npm:1.15.21"
@@ -2949,9 +2949,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-devtools-app@workspace:packages/apps/esm-devtools-app":
+"@egen/esm-devtools-app@workspace:packages/apps/esm-devtools-app":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-devtools-app@workspace:packages/apps/esm-devtools-app"
+  resolution: "@egen/esm-devtools-app@workspace:packages/apps/esm-devtools-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     cross-env: "npm:^10.1.0"
@@ -2964,7 +2964,7 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
-    "@openmrs/esm-framework": 9.x
+    "@egen/esm-framework": 9.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
@@ -2972,12 +2972,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-dynamic-loading@workspace:*, @openmrs/esm-dynamic-loading@workspace:packages/framework/esm-dynamic-loading":
+"@egen/esm-dynamic-loading@workspace:*, @egen/esm-dynamic-loading@workspace:packages/framework/esm-dynamic-loading":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-dynamic-loading@workspace:packages/framework/esm-dynamic-loading"
+  resolution: "@egen/esm-dynamic-loading@workspace:packages/framework/esm-dynamic-loading"
   dependencies:
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-translations": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-translations": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -2988,18 +2988,18 @@ __metadata:
     vitest: "npm:^4.1.2"
     vitest-fetch-mock: "npm:^0.4.5"
   peerDependencies:
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-translations": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-translations": 9.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-emr-api@workspace:*, @openmrs/esm-emr-api@workspace:packages/framework/esm-emr-api":
+"@egen/esm-emr-api@workspace:*, @egen/esm-emr-api@workspace:packages/framework/esm-emr-api":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-emr-api@workspace:packages/framework/esm-emr-api"
+  resolution: "@egen/esm-emr-api@workspace:packages/framework/esm-emr-api"
   dependencies:
-    "@openmrs/esm-api": "workspace:*"
-    "@openmrs/esm-offline": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
+    "@egen/esm-api": "workspace:*"
+    "@egen/esm-offline": "workspace:*"
+    "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@types/fhir": "npm:0.0.31"
@@ -3012,17 +3012,17 @@ __metadata:
     rxjs: "npm:^6.5.3"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-api": 9.x
-    "@openmrs/esm-offline": 9.x
-    "@openmrs/esm-state": 9.x
+    "@egen/esm-api": 9.x
+    "@egen/esm-offline": 9.x
+    "@egen/esm-state": 9.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-error-handling@workspace:*, @openmrs/esm-error-handling@workspace:packages/framework/esm-error-handling":
+"@egen/esm-error-handling@workspace:*, @egen/esm-error-handling@workspace:packages/framework/esm-error-handling":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-error-handling@workspace:packages/framework/esm-error-handling"
+  resolution: "@egen/esm-error-handling@workspace:packages/framework/esm-error-handling"
   dependencies:
-    "@openmrs/esm-globals": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -3031,13 +3031,13 @@ __metadata:
     rimraf: "npm:^6.1.3"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-globals": 9.x
+    "@egen/esm-globals": 9.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-expression-evaluator@workspace:*, @openmrs/esm-expression-evaluator@workspace:packages/framework/esm-expression-evaluator":
+"@egen/esm-expression-evaluator@workspace:*, @egen/esm-expression-evaluator@workspace:packages/framework/esm-expression-evaluator":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-expression-evaluator@workspace:packages/framework/esm-expression-evaluator"
+  resolution: "@egen/esm-expression-evaluator@workspace:packages/framework/esm-expression-evaluator"
   dependencies:
     "@jsep-plugin/arrow": "npm:^1.0.6"
     "@jsep-plugin/new": "npm:^1.0.4"
@@ -3056,16 +3056,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-extensions@workspace:*, @openmrs/esm-extensions@workspace:packages/framework/esm-extensions":
+"@egen/esm-extensions@workspace:*, @egen/esm-extensions@workspace:packages/framework/esm-extensions":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-extensions@workspace:packages/framework/esm-extensions"
+  resolution: "@egen/esm-extensions@workspace:packages/framework/esm-extensions"
   dependencies:
-    "@openmrs/esm-api": "workspace:*"
-    "@openmrs/esm-config": "workspace:*"
-    "@openmrs/esm-expression-evaluator": "workspace:*"
-    "@openmrs/esm-feature-flags": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
-    "@openmrs/esm-utils": "workspace:*"
+    "@egen/esm-api": "workspace:*"
+    "@egen/esm-config": "workspace:*"
+    "@egen/esm-expression-evaluator": "workspace:*"
+    "@egen/esm-feature-flags": "workspace:*"
+    "@egen/esm-state": "workspace:*"
+    "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -3077,57 +3077,57 @@ __metadata:
     single-spa: "npm:^6.0.3"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-api": 9.x
-    "@openmrs/esm-config": 9.x
-    "@openmrs/esm-expression-evaluator": 9.x
-    "@openmrs/esm-feature-flags": 9.x
-    "@openmrs/esm-state": 9.x
-    "@openmrs/esm-utils": 9.x
+    "@egen/esm-api": 9.x
+    "@egen/esm-config": 9.x
+    "@egen/esm-expression-evaluator": 9.x
+    "@egen/esm-feature-flags": 9.x
+    "@egen/esm-state": 9.x
+    "@egen/esm-utils": 9.x
     single-spa: 6.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-feature-flags@workspace:*, @openmrs/esm-feature-flags@workspace:packages/framework/esm-feature-flags":
+"@egen/esm-feature-flags@workspace:*, @egen/esm-feature-flags@workspace:packages/framework/esm-feature-flags":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-feature-flags@workspace:packages/framework/esm-feature-flags"
+  resolution: "@egen/esm-feature-flags@workspace:packages/framework/esm-feature-flags"
   dependencies:
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     concurrently: "npm:^9.2.1"
     rimraf: "npm:^6.1.3"
     single-spa: "npm:^6.0.3"
   peerDependencies:
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-state": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-state": 9.x
     single-spa: 6.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-framework@workspace:*, @openmrs/esm-framework@workspace:packages/framework/esm-framework":
+"@egen/esm-framework@workspace:*, @egen/esm-framework@workspace:packages/framework/esm-framework":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-framework@workspace:packages/framework/esm-framework"
+  resolution: "@egen/esm-framework@workspace:packages/framework/esm-framework"
   dependencies:
-    "@openmrs/esm-api": "workspace:*"
-    "@openmrs/esm-config": "workspace:*"
-    "@openmrs/esm-context": "workspace:*"
-    "@openmrs/esm-dynamic-loading": "workspace:*"
-    "@openmrs/esm-emr-api": "workspace:*"
-    "@openmrs/esm-error-handling": "workspace:*"
-    "@openmrs/esm-expression-evaluator": "workspace:*"
-    "@openmrs/esm-extensions": "workspace:*"
-    "@openmrs/esm-feature-flags": "workspace:*"
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-navigation": "workspace:*"
-    "@openmrs/esm-offline": "workspace:*"
-    "@openmrs/esm-react-utils": "workspace:*"
-    "@openmrs/esm-routes": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
-    "@openmrs/esm-styleguide": "workspace:*"
-    "@openmrs/esm-translations": "workspace:*"
-    "@openmrs/esm-utils": "workspace:*"
-    "@openmrs/typedoc-plugin-file-categories": "workspace:*"
+    "@egen/esm-api": "workspace:*"
+    "@egen/esm-config": "workspace:*"
+    "@egen/esm-context": "workspace:*"
+    "@egen/esm-dynamic-loading": "workspace:*"
+    "@egen/esm-emr-api": "workspace:*"
+    "@egen/esm-error-handling": "workspace:*"
+    "@egen/esm-expression-evaluator": "workspace:*"
+    "@egen/esm-extensions": "workspace:*"
+    "@egen/esm-feature-flags": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-navigation": "workspace:*"
+    "@egen/esm-offline": "workspace:*"
+    "@egen/esm-react-utils": "workspace:*"
+    "@egen/esm-routes": "workspace:*"
+    "@egen/esm-state": "workspace:*"
+    "@egen/esm-styleguide": "workspace:*"
+    "@egen/esm-translations": "workspace:*"
+    "@egen/esm-utils": "workspace:*"
+    "@egen/typedoc-plugin-file-categories": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -3153,9 +3153,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-globals@workspace:*, @openmrs/esm-globals@workspace:packages/framework/esm-globals":
+"@egen/esm-globals@workspace:*, @egen/esm-globals@workspace:packages/framework/esm-globals":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-globals@workspace:packages/framework/esm-globals"
+  resolution: "@egen/esm-globals@workspace:packages/framework/esm-globals"
   dependencies:
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
@@ -3169,9 +3169,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-help-menu-app@workspace:packages/apps/esm-help-menu-app":
+"@egen/esm-help-menu-app@workspace:packages/apps/esm-help-menu-app":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-help-menu-app@workspace:packages/apps/esm-help-menu-app"
+  resolution: "@egen/esm-help-menu-app@workspace:packages/apps/esm-help-menu-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     cross-env: "npm:^10.1.0"
@@ -3184,7 +3184,7 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
-    "@openmrs/esm-framework": 9.x
+    "@egen/esm-framework": 9.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
@@ -3192,9 +3192,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-implementer-tools-app@workspace:packages/apps/esm-implementer-tools-app":
+"@egen/esm-implementer-tools-app@workspace:packages/apps/esm-implementer-tools-app":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-implementer-tools-app@workspace:packages/apps/esm-implementer-tools-app"
+  resolution: "@egen/esm-implementer-tools-app@workspace:packages/apps/esm-implementer-tools-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -3212,7 +3212,7 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
-    "@openmrs/esm-framework": 9.x
+    "@egen/esm-framework": 9.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
@@ -3221,9 +3221,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-login-app@workspace:packages/apps/esm-login-app":
+"@egen/esm-login-app@workspace:packages/apps/esm-login-app":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-login-app@workspace:packages/apps/esm-login-app"
+  resolution: "@egen/esm-login-app@workspace:packages/apps/esm-login-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@hookform/resolvers": "npm:^3.6.0"
@@ -3243,7 +3243,7 @@ __metadata:
     zod: "npm:^3.23.8"
   peerDependencies:
     "@carbon/react": 1.x
-    "@openmrs/esm-framework": 9.x
+    "@egen/esm-framework": 9.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
@@ -3253,11 +3253,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-navigation@workspace:*, @openmrs/esm-navigation@workspace:packages/framework/esm-navigation":
+"@egen/esm-navigation@workspace:*, @egen/esm-navigation@workspace:packages/framework/esm-navigation":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-navigation@workspace:packages/framework/esm-navigation"
+  resolution: "@egen/esm-navigation@workspace:packages/framework/esm-navigation"
   dependencies:
-    "@openmrs/esm-state": "workspace:*"
+    "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -3270,13 +3270,13 @@ __metadata:
     rimraf: "npm:^6.1.3"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-state": 9.x
+    "@egen/esm-state": 9.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-offline-tools-app@workspace:packages/apps/esm-offline-tools-app":
+"@egen/esm-offline-tools-app@workspace:packages/apps/esm-offline-tools-app":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-offline-tools-app@workspace:packages/apps/esm-offline-tools-app"
+  resolution: "@egen/esm-offline-tools-app@workspace:packages/apps/esm-offline-tools-app"
   dependencies:
     "@carbon/icons-react": "npm:^11.58.0"
     "@carbon/react": "npm:^1.92.1"
@@ -3295,7 +3295,7 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
-    "@openmrs/esm-framework": 9.x
+    "@egen/esm-framework": 9.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
@@ -3305,13 +3305,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-offline@workspace:*, @openmrs/esm-offline@workspace:packages/framework/esm-offline":
+"@egen/esm-offline@workspace:*, @egen/esm-offline@workspace:packages/framework/esm-offline":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-offline@workspace:packages/framework/esm-offline"
+  resolution: "@egen/esm-offline@workspace:packages/framework/esm-offline"
   dependencies:
-    "@openmrs/esm-api": "workspace:*"
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
+    "@egen/esm-api": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@types/uuid": "npm:^9.0.1"
@@ -3327,16 +3327,16 @@ __metadata:
     vitest: "npm:^4.1.2"
     workbox-window: "npm:^6.1.5"
   peerDependencies:
-    "@openmrs/esm-api": 9.x
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-state": 9.x
+    "@egen/esm-api": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-state": 9.x
     rxjs: 6.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-primary-navigation-app@workspace:packages/apps/esm-primary-navigation-app":
+"@egen/esm-primary-navigation-app@workspace:packages/apps/esm-primary-navigation-app":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-primary-navigation-app@workspace:packages/apps/esm-primary-navigation-app"
+  resolution: "@egen/esm-primary-navigation-app@workspace:packages/apps/esm-primary-navigation-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -3351,7 +3351,7 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
-    "@openmrs/esm-framework": 9.x
+    "@egen/esm-framework": 9.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
@@ -3361,21 +3361,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-react-utils@workspace:*, @openmrs/esm-react-utils@workspace:packages/framework/esm-react-utils":
+"@egen/esm-react-utils@workspace:*, @egen/esm-react-utils@workspace:packages/framework/esm-react-utils":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-react-utils@workspace:packages/framework/esm-react-utils"
+  resolution: "@egen/esm-react-utils@workspace:packages/framework/esm-react-utils"
   dependencies:
-    "@openmrs/esm-api": "workspace:*"
-    "@openmrs/esm-config": "workspace:*"
-    "@openmrs/esm-context": "workspace:*"
-    "@openmrs/esm-emr-api": "workspace:*"
-    "@openmrs/esm-error-handling": "workspace:*"
-    "@openmrs/esm-extensions": "workspace:*"
-    "@openmrs/esm-feature-flags": "workspace:*"
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-navigation": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
-    "@openmrs/esm-utils": "workspace:*"
+    "@egen/esm-api": "workspace:*"
+    "@egen/esm-config": "workspace:*"
+    "@egen/esm-context": "workspace:*"
+    "@egen/esm-emr-api": "workspace:*"
+    "@egen/esm-error-handling": "workspace:*"
+    "@egen/esm-extensions": "workspace:*"
+    "@egen/esm-feature-flags": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-navigation": "workspace:*"
+    "@egen/esm-state": "workspace:*"
+    "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -3394,17 +3394,17 @@ __metadata:
     swr: "npm:2.2.5"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-api": 9.x
-    "@openmrs/esm-config": 9.x
-    "@openmrs/esm-context": 9.x
-    "@openmrs/esm-emr-api": 9.x
-    "@openmrs/esm-error-handling": 9.x
-    "@openmrs/esm-extensions": 9.x
-    "@openmrs/esm-feature-flags": 9.x
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-navigation": 9.x
-    "@openmrs/esm-state": 9.x
-    "@openmrs/esm-utils": 9.x
+    "@egen/esm-api": 9.x
+    "@egen/esm-config": 9.x
+    "@egen/esm-context": 9.x
+    "@egen/esm-emr-api": 9.x
+    "@egen/esm-error-handling": 9.x
+    "@egen/esm-extensions": 9.x
+    "@egen/esm-feature-flags": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-navigation": 9.x
+    "@egen/esm-state": 9.x
+    "@egen/esm-utils": 9.x
     dayjs: 1.x
     i18next: 25.x
     react: 18.x
@@ -3415,16 +3415,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-routes@workspace:*, @openmrs/esm-routes@workspace:packages/framework/esm-routes":
+"@egen/esm-routes@workspace:*, @egen/esm-routes@workspace:packages/framework/esm-routes":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-routes@workspace:packages/framework/esm-routes"
+  resolution: "@egen/esm-routes@workspace:packages/framework/esm-routes"
   dependencies:
-    "@openmrs/esm-config": "workspace:*"
-    "@openmrs/esm-dynamic-loading": "workspace:*"
-    "@openmrs/esm-extensions": "workspace:*"
-    "@openmrs/esm-feature-flags": "workspace:*"
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-utils": "workspace:*"
+    "@egen/esm-config": "workspace:*"
+    "@egen/esm-dynamic-loading": "workspace:*"
+    "@egen/esm-extensions": "workspace:*"
+    "@egen/esm-feature-flags": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -3436,22 +3436,22 @@ __metadata:
     vitest: "npm:^4.1.2"
     vitest-fetch-mock: "npm:^0.4.5"
   peerDependencies:
-    "@openmrs/esm-config": 9.x
-    "@openmrs/esm-dynamic-loading": 9.x
-    "@openmrs/esm-extensions": 9.x
-    "@openmrs/esm-feature-flags": 9.x
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-utils": 9.x
+    "@egen/esm-config": 9.x
+    "@egen/esm-dynamic-loading": 9.x
+    "@egen/esm-extensions": 9.x
+    "@egen/esm-feature-flags": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-utils": 9.x
     single-spa: 6.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-state@workspace:*, @openmrs/esm-state@workspace:packages/framework/esm-state":
+"@egen/esm-state@workspace:*, @egen/esm-state@workspace:packages/framework/esm-state":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-state@workspace:packages/framework/esm-state"
+  resolution: "@egen/esm-state@workspace:packages/framework/esm-state"
   dependencies:
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-utils": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -3461,30 +3461,30 @@ __metadata:
     vitest: "npm:^4.1.2"
     zustand: "npm:^4.5.5"
   peerDependencies:
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-utils": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-utils": 9.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-styleguide@workspace:*, @openmrs/esm-styleguide@workspace:packages/framework/esm-styleguide":
+"@egen/esm-styleguide@workspace:*, @egen/esm-styleguide@workspace:packages/framework/esm-styleguide":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-styleguide@workspace:packages/framework/esm-styleguide"
+  resolution: "@egen/esm-styleguide@workspace:packages/framework/esm-styleguide"
   dependencies:
     "@carbon/charts": "npm:^1.27.0"
     "@carbon/react": "npm:^1.92.1"
     "@internationalized/date": "npm:^3.8.0"
-    "@openmrs/esm-api": "workspace:*"
-    "@openmrs/esm-config": "workspace:*"
-    "@openmrs/esm-emr-api": "workspace:*"
-    "@openmrs/esm-error-handling": "workspace:*"
-    "@openmrs/esm-extensions": "workspace:*"
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-navigation": "workspace:*"
-    "@openmrs/esm-react-utils": "workspace:*"
-    "@openmrs/esm-routes": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
-    "@openmrs/esm-translations": "workspace:*"
-    "@openmrs/esm-utils": "workspace:*"
+    "@egen/esm-api": "workspace:*"
+    "@egen/esm-config": "workspace:*"
+    "@egen/esm-emr-api": "workspace:*"
+    "@egen/esm-error-handling": "workspace:*"
+    "@egen/esm-extensions": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-navigation": "workspace:*"
+    "@egen/esm-react-utils": "workspace:*"
+    "@egen/esm-routes": "workspace:*"
+    "@egen/esm-state": "workspace:*"
+    "@egen/esm-translations": "workspace:*"
+    "@egen/esm-utils": "workspace:*"
     "@react-aria/utils": "npm:^3.28.2"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
@@ -3507,18 +3507,18 @@ __metadata:
     typescript: "npm:^5.8.3"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-api": 9.x
-    "@openmrs/esm-config": 9.x
-    "@openmrs/esm-emr-api": 9.x
-    "@openmrs/esm-error-handling": 9.x
-    "@openmrs/esm-extensions": 9.x
-    "@openmrs/esm-globals": 9.x
-    "@openmrs/esm-navigation": 9.x
-    "@openmrs/esm-react-utils": 9.x
-    "@openmrs/esm-routes": 9.x
-    "@openmrs/esm-state": 9.x
-    "@openmrs/esm-translations": 9.x
-    "@openmrs/esm-utils": 9.x
+    "@egen/esm-api": 9.x
+    "@egen/esm-config": 9.x
+    "@egen/esm-emr-api": 9.x
+    "@egen/esm-error-handling": 9.x
+    "@egen/esm-extensions": 9.x
+    "@egen/esm-globals": 9.x
+    "@egen/esm-navigation": 9.x
+    "@egen/esm-react-utils": 9.x
+    "@egen/esm-routes": 9.x
+    "@egen/esm-state": 9.x
+    "@egen/esm-translations": 9.x
+    "@egen/esm-utils": 9.x
     dayjs: 1.x
     i18next: 25.x
     react: 18.x
@@ -3529,9 +3529,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-translations@workspace:*, @openmrs/esm-translations@workspace:packages/framework/esm-translations":
+"@egen/esm-translations@workspace:*, @egen/esm-translations@workspace:packages/framework/esm-translations":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-translations@workspace:packages/framework/esm-translations"
+  resolution: "@egen/esm-translations@workspace:packages/framework/esm-translations"
   dependencies:
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
@@ -3544,13 +3544,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/esm-utils@workspace:*, @openmrs/esm-utils@workspace:packages/framework/esm-utils":
+"@egen/esm-utils@workspace:*, @egen/esm-utils@workspace:packages/framework/esm-utils":
   version: 0.0.0-use.local
-  resolution: "@openmrs/esm-utils@workspace:packages/framework/esm-utils"
+  resolution: "@egen/esm-utils@workspace:packages/framework/esm-utils"
   dependencies:
     "@formatjs/intl-durationformat": "npm:^0.7.3"
     "@internationalized/date": "npm:^3.8.0"
-    "@openmrs/esm-globals": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@types/lodash-es": "npm:^4.17.12"
@@ -3567,16 +3567,16 @@ __metadata:
     semver: "npm:^7.7.3"
     vitest: "npm:^4.1.2"
   peerDependencies:
-    "@openmrs/esm-globals": 9.x
+    "@egen/esm-globals": 9.x
     dayjs: 1.x
     i18next: 25.x
     rxjs: 6.x
   languageName: unknown
   linkType: soft
 
-"@openmrs/rspack-config@workspace:*, @openmrs/rspack-config@workspace:packages/tooling/rspack-config":
+"@egen/rspack-config@workspace:*, @egen/rspack-config@workspace:packages/tooling/rspack-config":
   version: 0.0.0-use.local
-  resolution: "@openmrs/rspack-config@workspace:packages/tooling/rspack-config"
+  resolution: "@egen/rspack-config@workspace:packages/tooling/rspack-config"
   dependencies:
     "@rspack/cli": "npm:1.7.9"
     "@rspack/core": "npm:1.7.9"
@@ -3597,25 +3597,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/storybook@workspace:packages/tooling/storybook":
+"@egen/storybook@workspace:packages/tooling/storybook":
   version: 0.0.0-use.local
-  resolution: "@openmrs/storybook@workspace:packages/tooling/storybook"
+  resolution: "@egen/storybook@workspace:packages/tooling/storybook"
   dependencies:
     "@carbon/charts": "npm:^1.27.0"
     "@carbon/react": "npm:^1.92.1"
     "@internationalized/date": "npm:^3.8.0"
-    "@openmrs/esm-api": "workspace:*"
-    "@openmrs/esm-config": "workspace:*"
-    "@openmrs/esm-emr-api": "workspace:*"
-    "@openmrs/esm-error-handling": "workspace:*"
-    "@openmrs/esm-extensions": "workspace:*"
-    "@openmrs/esm-globals": "workspace:*"
-    "@openmrs/esm-navigation": "workspace:*"
-    "@openmrs/esm-react-utils": "workspace:*"
-    "@openmrs/esm-state": "workspace:*"
-    "@openmrs/esm-styleguide": "workspace:*"
-    "@openmrs/esm-translations": "workspace:*"
-    "@openmrs/esm-utils": "workspace:*"
+    "@egen/esm-api": "workspace:*"
+    "@egen/esm-config": "workspace:*"
+    "@egen/esm-emr-api": "workspace:*"
+    "@egen/esm-error-handling": "workspace:*"
+    "@egen/esm-extensions": "workspace:*"
+    "@egen/esm-globals": "workspace:*"
+    "@egen/esm-navigation": "workspace:*"
+    "@egen/esm-react-utils": "workspace:*"
+    "@egen/esm-state": "workspace:*"
+    "@egen/esm-styleguide": "workspace:*"
+    "@egen/esm-translations": "workspace:*"
+    "@egen/esm-utils": "workspace:*"
     "@rsbuild/core": "npm:^1.5.0"
     "@rsbuild/plugin-sass": "npm:^1.3.2"
     "@storybook/addon-links": "npm:^10.2.13"
@@ -3636,9 +3636,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/typedoc-plugin-file-categories@workspace:*, @openmrs/typedoc-plugin-file-categories@workspace:packages/tooling/typedoc-plugin-file-categories":
+"@egen/typedoc-plugin-file-categories@workspace:*, @egen/typedoc-plugin-file-categories@workspace:packages/tooling/typedoc-plugin-file-categories":
   version: 0.0.0-use.local
-  resolution: "@openmrs/typedoc-plugin-file-categories@workspace:packages/tooling/typedoc-plugin-file-categories"
+  resolution: "@egen/typedoc-plugin-file-categories@workspace:packages/tooling/typedoc-plugin-file-categories"
   dependencies:
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
@@ -3652,9 +3652,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openmrs/webpack-config@workspace:*, @openmrs/webpack-config@workspace:packages/tooling/webpack-config":
+"@egen/webpack-config@workspace:*, @egen/webpack-config@workspace:packages/tooling/webpack-config":
   version: 0.0.0-use.local
-  resolution: "@openmrs/webpack-config@workspace:packages/tooling/webpack-config"
+  resolution: "@egen/webpack-config@workspace:packages/tooling/webpack-config"
   dependencies:
     "@swc/core": "npm:1.15.21"
     "@types/lodash-es": "npm:4.17.12"
@@ -15327,15 +15327,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openmrs@workspace:*, openmrs@workspace:packages/tooling/openmrs":
+"egen@workspace:*, egen@workspace:packages/tooling/egen":
   version: 0.0.0-use.local
-  resolution: "openmrs@workspace:packages/tooling/openmrs"
+  resolution: "egen@workspace:packages/tooling/egen"
   dependencies:
     "@inquirer/prompts": "npm:8.3.2"
     "@inquirer/testing": "npm:^3.3.2"
-    "@openmrs/esm-app-shell": "workspace:*"
-    "@openmrs/rspack-config": "workspace:*"
-    "@openmrs/webpack-config": "workspace:*"
+    "@egen/esm-app-shell": "workspace:*"
+    "@egen/rspack-config": "workspace:*"
+    "@egen/webpack-config": "workspace:*"
     "@pnpm/npm-conf": "npm:^3.0.2"
     "@rspack/cli": "npm:1.7.9"
     "@rspack/core": "npm:1.7.9"
@@ -15383,7 +15383,7 @@ __metadata:
     webpack-stats-plugin: "npm:1.1.3"
     yargs: "npm:17.7.2"
   bin:
-    openmrs: ./dist/cli.js
+    egen: ./dist/cli.js
     rspack: ./bin/rspack.cjs
     webpack: ./bin/webpack.cjs
   languageName: unknown
