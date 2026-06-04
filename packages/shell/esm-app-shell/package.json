@@ -33,9 +33,9 @@
   },
   "dependencies": {
     "@carbon/react": "^1.92.1",
-    "@internationalized/date": "^3.8.0",
     "@egen/esm-framework": "workspace:*",
     "@egen/esm-styleguide": "workspace:*",
+    "@internationalized/date": "^3.8.0",
     "@rspack/cli": "1.7.9",
     "@rspack/core": "1.7.9",
     "dayjs": "^1.11.13",
@@ -57,7 +57,11 @@
     "webpack-pwa-manifest": "4.3.0"
   },
   "devDependencies": {
+    "@swc/core": "1.15.21",
     "cross-env": "^10.1.0",
-    "vitest": "^4.1.2"
+    "react-is": "^17.0.2",
+    "sass": "^1.98.0",
+    "vitest": "^4.1.2",
+    "webpack": "^5.105.3"
   }
 }

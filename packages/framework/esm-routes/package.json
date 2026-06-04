@@ -66,8 +66,11 @@
     "@vitest/coverage-v8": "^4.1.2",
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
+    "dayjs": "^1.11.13",
     "happy-dom": "^20.6.0",
+    "i18next": "^25.5.3",
     "rimraf": "^6.1.3",
+    "rxjs": "^6.6.7",
     "single-spa": "^6.0.3",
     "vitest": "^4.1.2",
     "vitest-fetch-mock": "^0.4.5"

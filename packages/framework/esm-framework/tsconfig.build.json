@@ -4,8 +4,16 @@
     "declarationDir": "dist",
     "emitDeclarationOnly": true,
     "skipLibCheck": true,
-    "stripInternal": true
+    "stripInternal": true,
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": true
   },
   "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.*", "**/setup-tests.ts", "**/__mocks__/*", "**/mock.tsx"]
+  "exclude": [
+    "**/*.test.*",
+    "**/setup-tests.ts",
+    "**/__mocks__/*",
+    "**/mock.tsx"
+  ]
 }

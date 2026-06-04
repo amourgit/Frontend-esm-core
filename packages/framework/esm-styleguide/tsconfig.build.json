@@ -3,8 +3,16 @@
   "compilerOptions": {
     "declarationDir": "dist",
     "emitDeclarationOnly": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": true
   },
   "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.*", "**/*.stories.*", "**/setup-tests.ts", "**/__mocks__/*"]
+  "exclude": [
+    "**/*.test.*",
+    "**/*.stories.*",
+    "**/setup-tests.ts",
+    "**/__mocks__/*"
+  ]
 }

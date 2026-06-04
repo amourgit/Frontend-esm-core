@@ -225,7 +225,7 @@ export function refetchCurrentUser(username?: string, password?: string) {
   // An explicit refetch (e.g. after login) resets the failure counter so the
   // fetch is actually attempted even if previous attempts had failed.
   consecutiveSessionFetchFailures = 0;
-  let headers = {};
+  let headers: Record<string, string> = {};
   if (username && password) {
     headers['Authorization'] = `Basic ${window.btoa(`${username}:${password}`)}`;
   }
@@ -465,7 +465,9 @@ function handleSessionResponse(result: Promise<FetchResponse<Session>>) {
                   : `Session fetch failed (attempt ${consecutiveSessionFetchFailures}). Backend may be unreachable.`,
               );
 
-        console.warn(`[ESM] Session fetch failed (attempt ${consecutiveSessionFetchFailures}): ${wrappedError.message}`);
+        console.warn(
+          `[ESM] Session fetch failed (attempt ${consecutiveSessionFetchFailures}): ${wrappedError.message}`,
+        );
 
         // CRITICAL: set loaded:true so components stop triggering new fetches.
         // authenticated:false causes Single-SPA to redirect to the login page,
