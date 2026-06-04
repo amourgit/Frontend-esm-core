@@ -468,6 +468,7 @@ function handleSessionResponse(result: Promise<FetchResponse<Session>>) {
         console.warn(
           `[ESM] Session fetch failed (attempt ${consecutiveSessionFetchFailures}): ${wrappedError.message}`,
         );
+        reportError(wrappedError);
 
         // CRITICAL: set loaded:true so components stop triggering new fetches.
         // authenticated:false causes Single-SPA to redirect to the login page,

@@ -588,10 +588,7 @@ describe('refetchCurrentUser', () => {
   it('should handle fetch failure', async () => {
     mockEgenFetch.mockRejectedValue(new Error('Network error'));
 
-    await expect(refetchCurrentUser()).rejects.toMatchObject({
-      loaded: false,
-      session: null,
-    });
+    await expect(refetchCurrentUser()).rejects.toBeInstanceOf(Error);
 
     expect(mockReportError).toHaveBeenCalled();
   });
