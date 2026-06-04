@@ -1294,7 +1294,7 @@ __metadata:
     rxjs: "npm:^6.5.3"
     sass: "npm:^1.98.0"
     single-spa: "npm:^6.0.3"
-    svgo: "npm:^3.3.2"
+    svgo: "npm:^4.0.1"
     swr: "npm:2.2.5"
     typescript: "npm:^5.8.3"
     vitest: "npm:^4.1.2"
@@ -9468,6 +9468,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "commander@npm:11.1.0"
+  checksum: 10/66bd2d8a0547f6cb1d34022efb25f348e433b0e04ad76a65279b1b09da108f59a4d3001ca539c60a7a46ea38bcf399fc17d91adad76a8cf43845d8dcbaf5cda1
+  languageName: node
+  linkType: hard
+
 "commander@npm:^12.1.0, commander@npm:~12.1.0":
   version: 12.1.0
   resolution: "commander@npm:12.1.0"
@@ -9785,7 +9792,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-tree@npm:^3.0.0, css-tree@npm:^3.2.1":
+"css-tree@npm:^3.0.0, css-tree@npm:^3.0.1, css-tree@npm:^3.2.1":
   version: 3.2.1
   resolution: "css-tree@npm:3.2.1"
   dependencies:
@@ -18810,7 +18817,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svgo@npm:^3.0.0, svgo@npm:^3.3.2":
+"svgo@npm:^3.0.0":
   version: 3.3.3
   resolution: "svgo@npm:3.3.3"
   dependencies:
@@ -18824,6 +18831,23 @@ __metadata:
   bin:
     svgo: ./bin/svgo
   checksum: 10/f3c1b4d05d1704483e53515d5995af5f06a2718df85e3a8320f57bb256b8dc926b84c87a1a9b98e9d3ca1224314cc0676a803bdd03163508292f2d45c7077096
+  languageName: node
+  linkType: hard
+
+"svgo@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "svgo@npm:4.0.1"
+  dependencies:
+    commander: "npm:^11.1.0"
+    css-select: "npm:^5.1.0"
+    css-tree: "npm:^3.0.1"
+    css-what: "npm:^6.1.0"
+    csso: "npm:^5.0.5"
+    picocolors: "npm:^1.1.1"
+    sax: "npm:^1.5.0"
+  bin:
+    svgo: ./bin/svgo.js
+  checksum: 10/8791aa12f3d1a5b3da12a67c2f880917512eaf32dad40563ae474deefff0630a4ce2259e06730f02150756ac77cc8b06598d30fb3ed3f02f085e6cbfbd344fb6
   languageName: node
   linkType: hard
 
