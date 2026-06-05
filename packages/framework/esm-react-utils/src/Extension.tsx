@@ -36,7 +36,7 @@ export const Extension: React.FC<ExtensionProps> = ({ state, children, ...divPro
         extension.extensionId,
         undefined,
         state,
-      ).then((newParcel: Parcel) => {
+      ).then((newParcel: Parcel | null) => {
         parcel.current = newParcel;
       });
     }

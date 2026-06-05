@@ -57,7 +57,7 @@ export async function loadLifeCycles(routesAppName: string, fullComponentName: s
   return emptyLifecycle;
 }
 
-const emptyLifecycle: LifeCycles<never> = {
+const emptyLifecycle: LifeCycles<unknown> = {
   bootstrap() {
     return Promise.resolve();
   },

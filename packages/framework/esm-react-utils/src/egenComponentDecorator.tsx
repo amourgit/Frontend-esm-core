@@ -80,10 +80,7 @@ export function egenComponentDecorator<T>(userOpts: ComponentDecoratorOptions) {
   const swrConfig = { ...defaultSwrConfig, ...opts.swrConfig };
 
   return function decorateComponent(Comp: ComponentType<T>): ComponentType<T> {
-    return class EgenReactComponent extends React.Component<
-      EgenReactComponentProps & T,
-      EgenReactComponentState
-    > {
+    return class EgenReactComponent extends React.Component<EgenReactComponentProps & T, EgenReactComponentState> {
       static displayName = `EgenReactComponent(${opts.featureName})`;
 
       constructor(props: EgenReactComponentProps & T) {
@@ -153,6 +150,6 @@ export function egenComponentDecorator<T>(userOpts: ComponentDecoratorOptions) {
           }
         }
       }
-    };
+    } as unknown as ComponentType<T>;
   };
 }

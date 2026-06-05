@@ -197,11 +197,12 @@ async function processHandler(
       }
 
       await db.syncQueue.delete(key);
-    } catch (e) {
+    } catch (e: unknown) {
+      const err = e instanceof Error ? e : { name: 'UnknownError', message: String(e) };
       await db.syncQueue.update(key, {
         lastError: {
-          name: e?.name,
-          message: e?.message ?? e?.toString(),
+          name: err.name,
+          message: err.message,
         },
       });
     } finally {
@@ -371,7 +372,7 @@ export function setupOfflineSync<T>(
   handlers[type] = {
     type,
     dependsOn,
-    process,
+    process: process as ProcessSyncItem<unknown>,
     options,
   };
 }

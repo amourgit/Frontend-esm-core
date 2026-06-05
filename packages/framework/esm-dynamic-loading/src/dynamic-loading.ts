@@ -140,7 +140,7 @@ export async function preloadImport(jsPackage: string, importMap?: ImportMap) {
 
     const isOverridden = jsPackage in getImportMapOverrideMap().imports;
     try {
-      return await new Promise<void>((resolve, reject) => {
+      return await new Promise<unknown>((resolve, reject) => {
         loadScript(url, resolve, reject);
       });
     } catch (err: any) {
@@ -237,11 +237,11 @@ function loadScript(
       scriptLoading.delete(url);
 
       if (loadFn) {
-        element.removeEventListener('load', loadFn);
+        element.removeEventListener('load', loadFn as EventListener);
       }
 
       if (errFn) {
-        element.removeEventListener('error', errFn);
+        element.removeEventListener('error', errFn as EventListener);
       }
     };
 
@@ -257,8 +257,8 @@ function loadScript(
       reject(ev.message ?? msg);
     };
 
-    element.addEventListener('load', loadFn);
-    element.addEventListener('error', errFn);
+    element.addEventListener('load', loadFn as EventListener);
+    element.addEventListener('error', errFn as EventListener);
 
     document.head.appendChild(element);
   } else {
@@ -267,11 +267,11 @@ function loadScript(
 
       finishScriptLoading = () => {
         if (loadFn) {
-          scriptElement.removeEventListener('load', loadFn);
+          scriptElement.removeEventListener('load', loadFn as EventListener);
         }
 
         if (errFn) {
-          scriptElement.removeEventListener('error', errFn);
+          scriptElement.removeEventListener('error', errFn as EventListener);
         }
       };
 
@@ -286,8 +286,8 @@ function loadScript(
         reject(ev.message);
       };
 
-      scriptElement.addEventListener('load', loadFn);
-      scriptElement.addEventListener('error', errFn);
+      scriptElement.addEventListener('load', loadFn as EventListener);
+      scriptElement.addEventListener('error', errFn as EventListener);
     } else {
       console.warn(`Script at ${url} already loaded. Not loading it again.`);
       resolve(null);
