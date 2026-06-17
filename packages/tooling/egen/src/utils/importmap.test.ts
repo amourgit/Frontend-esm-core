@@ -248,14 +248,14 @@ describe('mergeImportmapAndRoutes', () => {
     };
 
     const result = await mergeImportmapAndRoutes(original, {
-      importMap: { local: 'http://localhost:8080/local.js' },
+      importMap: { local: 'http://localhost:8081/local.js' },
       routes: {},
       watchedRoutesPaths: {},
     });
 
     expect(result.importMap.type).toBe('inline');
     const merged = JSON.parse(result.importMap.value);
-    expect(merged.imports.local).toBe('http://localhost:8080/local.js');
+    expect(merged.imports.local).toBe('http://localhost:8081/local.js');
     // The remote import URL should have been resolved against the fetch URL
     expect(merged.imports.remote).toBeDefined();
 

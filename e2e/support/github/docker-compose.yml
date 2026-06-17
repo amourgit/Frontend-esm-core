@@ -10,7 +10,7 @@ services:
       - frontend
       - backend
     ports:
-      - "${E2E_PORT:-8080}:80"
+      - "${E2E_PORT:-8081}:80"
 
   frontend:
     build:

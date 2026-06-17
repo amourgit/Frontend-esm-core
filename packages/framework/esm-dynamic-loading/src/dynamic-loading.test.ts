@@ -101,9 +101,7 @@ describe('dynamic-loading', () => {
 
     it('throws when the package is not in the import map', async () => {
       mockGetCurrentPageMap.mockResolvedValue({ imports: {} });
-      await expect(preloadImport('@egen/esm-missing')).rejects.toThrow(
-        'Could not find the package @egen/esm-missing',
-      );
+      await expect(preloadImport('@egen/esm-missing')).rejects.toThrow('Could not find the package @egen/esm-missing');
     });
 
     it('resolves immediately if the package is already loaded on window', async () => {
@@ -146,14 +144,14 @@ describe('dynamic-loading', () => {
 
     it('shows a toast when an overridden script fails to load', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@egen/esm-foo': 'http://localhost:8080/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost:8081/foo.js' },
       });
       mockGetImportMapOverrideMap.mockReturnValue({
-        imports: { '@egen/esm-foo': 'http://localhost:8080/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost:8081/foo.js' },
       });
 
       const promise = preloadImport('@egen/esm-foo');
-      const script = await waitForScript('http://localhost:8080/foo.js');
+      const script = await waitForScript('http://localhost:8081/foo.js');
 
       script.dispatchEvent(new ErrorEvent('error', { message: 'net::ERR_CONNECTION_REFUSED' }));
 
@@ -167,10 +165,10 @@ describe('dynamic-loading', () => {
 
     it('calls resetImportMapOverrides when the toast action button is clicked', async () => {
       mockGetCurrentPageMap.mockResolvedValue({
-        imports: { '@egen/esm-foo': 'http://localhost:8080/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost:8081/foo.js' },
       });
       mockGetImportMapOverrideMap.mockReturnValue({
-        imports: { '@egen/esm-foo': 'http://localhost:8080/foo.js' },
+        imports: { '@egen/esm-foo': 'http://localhost:8081/foo.js' },
       });
 
       const reloadMock = vi.fn();
@@ -181,7 +179,7 @@ describe('dynamic-loading', () => {
       });
 
       const promise = preloadImport('@egen/esm-foo');
-      const script = await waitForScript('http://localhost:8080/foo.js');
+      const script = await waitForScript('http://localhost:8081/foo.js');
 
       script.dispatchEvent(new ErrorEvent('error', { message: 'fail' }));
       await promise.catch(() => {});

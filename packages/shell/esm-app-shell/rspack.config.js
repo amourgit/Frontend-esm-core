@@ -25,12 +25,17 @@ const allowedSuffixes = ['-app', '-widgets'];
 const { ModuleFederationPlugin } = container;
 
 const egenAddCookie = process.env.EGEN_ADD_COOKIE;
-const egenApiUrl = removeTrailingSlash(process.env.EGEN_API_URL || '/egen');
-const egenPublicPath = removeTrailingSlash(process.env.EGEN_PUBLIC_PATH || '/egen/spa');
+const egenApiUrl = removeTrailingSlash(process.env.EGEN_API_URL || '/openmrs');
+const egenPublicPath = removeTrailingSlash(process.env.EGEN_PUBLIC_PATH || '/openmrs/spa');
 // Default proxy target is localhost. Set EGEN_PROXY_TARGET in .env to point to your EIGEN backend.
-const egenProxyTarget = process.env.EGEN_PROXY_TARGET || 'http://localhost:8080/';
+const egenProxyTarget = process.env.EGEN_PROXY_TARGET || 'http://localhost:8081/';
 const egenPageTitle = process.env.EGEN_PAGE_TITLE || 'Egen';
 const egenFavicon = process.env.EGEN_FAVICON || `${egenPublicPath}/favicon.ico`;
+
+
+console.log("EGEN_API_URL =", process.env.EGEN_API_URL);
+console.log("OMRS_API_URL =", process.env.OMRS_API_URL);
+console.log("OMRS_PROXY_TARGET =", process.env.OMRS_PROXY_TARGET);
 /**
  * Resolves the target environment from EGEN_ENV, falling back to NODE_ENV / build mode.
  *

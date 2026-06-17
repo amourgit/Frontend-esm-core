@@ -41,7 +41,7 @@ export function buildCli(y: Argv) {
     (argv) =>
       argv
         .option('port', {
-          describe: 'The port where the dev server should run. Defaults to 8080, or the next available port.',
+          describe: 'The port where the dev server should run. Defaults to 8081, or the next available port.',
           type: 'number',
         })
         .option('host', {
@@ -50,7 +50,7 @@ export function buildCli(y: Argv) {
           type: 'string',
         })
         .option('backend', {
-          default: 'http://localhost:8080',
+          default: 'http://localhost:8081',
           describe: 'The backend to proxy API requests to.',
           type: 'string',
           coerce: (arg) => (arg.endsWith('/') ? arg.slice(0, -1) : arg),
@@ -131,7 +131,7 @@ export function buildCli(y: Argv) {
     async (args) => {
       let port: number;
       if (args.port === undefined) {
-        port = await getAvailablePort(8080);
+        port = await getAvailablePort(8081);
       } else {
         // handle case where user has specified a port to run on
         if (!(await isPortAvailable(args.port))) {
@@ -352,13 +352,13 @@ export function buildCli(y: Argv) {
     (argv) =>
       argv
         .number('port')
-        .default('port', 8080)
+        .default('port', 8081)
         .describe('port', 'The port where the dev server should run.')
         .string('host')
         .default('host', 'localhost')
         .describe('host', 'The host name or IP for the server to use.')
         .string('backend')
-        .default('backend', 'http://localhost:8080/')
+        .default('backend', 'http://localhost:8081/')
         .describe('backend', 'The backend to proxy API requests to.')
         .string('add-cookie')
         .default('add-cookie', '')

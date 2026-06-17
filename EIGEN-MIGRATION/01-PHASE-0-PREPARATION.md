@@ -175,13 +175,13 @@ Modifier `.env` :
 
 ```env
 # Backend EIGEN (IAM + Gestion scolaire)
-E2E_BASE_URL=http://localhost:8080/eigen
+E2E_BASE_URL=http://localhost:8081/eigen
 E2E_USER_ADMIN_USERNAME=admin
 E2E_USER_ADMIN_PASSWORD=Admin123
 E2E_LOGIN_DEFAULT_LOCATION_UUID=   # UUID d'un établissement scolaire dans ton backend
 
 # URLs backend EIGEN
-EIGEN_API_BASE_URL=http://localhost:8080/api/v1
+EIGEN_API_BASE_URL=http://localhost:8081/api/v1
 EIGEN_IAM_URL=http://localhost:8180/auth/realms/eigen
 EIGEN_SPA_PATH=/eigen/spa
 ```

@@ -33,7 +33,7 @@ beforeEach(() => {
     on: vi.fn(),
   } as unknown as ChildProcess);
 
-  vi.mocked(getAvailablePort).mockResolvedValue(8080);
+  vi.mocked(getAvailablePort).mockResolvedValue(8081);
   vi.mocked(isPortAvailable).mockResolvedValue(true);
   vi.mocked(getImportmapAndRoutes).mockResolvedValue({
     importMap: { type: 'inline', value: '{"imports":{}}' },
@@ -109,13 +109,7 @@ describe('develop command', () => {
   });
 
   it('accepts multiple --packages flags', async () => {
-    const parsed = await createCli([
-      'develop',
-      '--packages',
-      '@egen/app-a',
-      '--packages',
-      '@egen/app-b',
-    ]).parseAsync();
+    const parsed = await createCli(['develop', '--packages', '@egen/app-a', '--packages', '@egen/app-b']).parseAsync();
     expect(parsed.packages).toEqual(['@egen/app-a', '@egen/app-b']);
   });
 });
@@ -198,9 +192,9 @@ describe('assemble command', () => {
 });
 
 describe('start command', () => {
-  it('defaults port to 8080', async () => {
+  it('defaults port to 8081', async () => {
     const parsed = await createCli(['start']).parseAsync();
-    expect(parsed.port).toBe(8080);
+    expect(parsed.port).toBe(8081);
   });
 
   it('defaults open to false', async () => {

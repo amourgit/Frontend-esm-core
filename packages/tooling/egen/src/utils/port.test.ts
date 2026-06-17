@@ -67,11 +67,11 @@ describe('getAvailablePort', () => {
     const ipv6 = createMockServer(true);
     mockCreateServer.mockReturnValueOnce(ipv4).mockReturnValueOnce(ipv6);
 
-    await expect(getAvailablePort(8080)).resolves.toBe(8080);
+    await expect(getAvailablePort(8081)).resolves.toBe(8081);
   });
 
   it('skips occupied ports and returns the next available one', async () => {
-    // Port 8080: IPv4 fails
+    // Port 8081: IPv4 fails
     const occupied = createMockServer(false);
     // Port 8081: both succeed
     const ipv4 = createMockServer(true);
@@ -79,7 +79,7 @@ describe('getAvailablePort', () => {
 
     mockCreateServer.mockReturnValueOnce(occupied).mockReturnValueOnce(ipv4).mockReturnValueOnce(ipv6);
 
-    await expect(getAvailablePort(8080)).resolves.toBe(8081);
+    await expect(getAvailablePort(8081)).resolves.toBe(8081);
   });
 
   it('throws when no port is available up to 65535', async () => {

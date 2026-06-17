@@ -54,13 +54,13 @@ done
 # Utility Functions
 # ============================================================================
 
-# Find an available port starting from 8080
+# Find an available port starting from 8081
 find_available_port() {
-  local port=8080
+  local port=8081
   while lsof -i:"$port" >/dev/null 2>&1 || nc -z localhost "$port" 2>/dev/null; do
     port=$((port + 1))
     if [[ $port -gt 9000 ]]; then
-      echo "ERROR: Could not find available port in range 8080-9000" >&2
+      echo "ERROR: Could not find available port in range 8081-9000" >&2
       exit 1
     fi
   done

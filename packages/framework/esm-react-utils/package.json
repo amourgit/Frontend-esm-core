@@ -93,6 +93,8 @@
     "@egen/esm-utils": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
+    "@types/fhir": "0.0.31",
+    "@types/node": "^22.0.0",
     "@vitest/coverage-v8": "^4.1.2",
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
@@ -106,8 +108,6 @@
     "rxjs": "^6.5.3",
     "single-spa": "^6.0.3",
     "swr": "2.2.5",
-    "vitest": "^4.1.2",
-    "@types/fhir": "0.0.31",
-    "@types/node": "^22.0.0"
+    "vitest": "^4.1.2"
   }
 }

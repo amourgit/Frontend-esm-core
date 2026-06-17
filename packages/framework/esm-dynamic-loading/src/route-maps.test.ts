@@ -37,10 +37,7 @@ describe('route-maps', () => {
       await setupRouteMapOverrides();
 
       setDomRouteMaps([{ '@egen/esm-foo': { pages: [] }, '@egen/esm-bar': { extensions: [] } }]);
-      localStorage.setItem(
-        'egen-routes:@egen/esm-foo',
-        JSON.stringify({ pages: [{ component: 'evil', route: '/' }] }),
-      );
+      localStorage.setItem('egen-routes:@egen/esm-foo', JSON.stringify({ pages: [{ component: 'evil', route: '/' }] }));
 
       const map = await getCurrentRouteMap();
       expect(map['@egen/esm-foo']).toEqual({ pages: [] });
@@ -52,10 +49,7 @@ describe('route-maps', () => {
       await setupRouteMapOverrides();
 
       setDomRouteMaps([{ '@egen/esm-foo': { pages: [] } }]);
-      localStorage.setItem(
-        'egen-routes:@egen/esm-foo',
-        JSON.stringify({ pages: [{ component: 'evil', route: '/' }] }),
-      );
+      localStorage.setItem('egen-routes:@egen/esm-foo', JSON.stringify({ pages: [{ component: 'evil', route: '/' }] }));
 
       const map = await getRouteMapNextPageMap();
       expect(map['@egen/esm-foo']).toEqual({ pages: [] });
@@ -106,10 +100,7 @@ describe('route-maps', () => {
 
     it('getCurrentRouteMap merges base map with JSON object overrides', async () => {
       setDomRouteMaps([{ '@egen/esm-foo': { pages: [] }, '@egen/esm-bar': { extensions: [] } }]);
-      localStorage.setItem(
-        'egen-routes:@egen/esm-foo',
-        JSON.stringify({ pages: [{ component: 'root', route: '/' }] }),
-      );
+      localStorage.setItem('egen-routes:@egen/esm-foo', JSON.stringify({ pages: [{ component: 'root', route: '/' }] }));
 
       const { setupRouteMapOverrides, getCurrentRouteMap } = await import('./route-maps');
       await setupRouteMapOverrides();
@@ -121,7 +112,7 @@ describe('route-maps', () => {
 
     it('getCurrentRouteMap merges base map with URL-fetched overrides', async () => {
       setDomRouteMaps([{ '@egen/esm-foo': { pages: [] } }]);
-      localStorage.setItem('egen-routes:@egen/esm-foo', JSON.stringify('http://localhost:8080/routes.json'));
+      localStorage.setItem('egen-routes:@egen/esm-foo', JSON.stringify('http://localhost:8081/routes.json'));
       fetchMock.mockResponseOnce(JSON.stringify({ pages: [{ component: 'root', route: '/fetched' }] }));
 
       const { setupRouteMapOverrides, getCurrentRouteMap } = await import('./route-maps');
@@ -133,10 +124,7 @@ describe('route-maps', () => {
 
     it('getRouteMapDefaultMap returns only the base map', async () => {
       setDomRouteMaps([{ '@egen/esm-foo': { pages: [] } }]);
-      localStorage.setItem(
-        'egen-routes:@egen/esm-foo',
-        JSON.stringify({ pages: [{ component: 'x', route: '/' }] }),
-      );
+      localStorage.setItem('egen-routes:@egen/esm-foo', JSON.stringify({ pages: [{ component: 'x', route: '/' }] }));
 
       const { setupRouteMapOverrides, getRouteMapDefaultMap } = await import('./route-maps');
       await setupRouteMapOverrides();
@@ -150,9 +138,7 @@ describe('route-maps', () => {
       await setupRouteMapOverrides();
 
       addRouteMapOverride('@egen/esm-foo', { pages: [{ component: 'root', route: '/' }] });
-      expect(localStorage.getItem('egen-routes:@egen/esm-foo')).toBe(
-        '{"pages":[{"component":"root","route":"/"}]}',
-      );
+      expect(localStorage.getItem('egen-routes:@egen/esm-foo')).toBe('{"pages":[{"component":"root","route":"/"}]}');
     });
 
     it('addRouteMapOverride stores a JSON string in localStorage', async () => {
@@ -160,9 +146,7 @@ describe('route-maps', () => {
       await setupRouteMapOverrides();
 
       addRouteMapOverride('@egen/esm-foo', JSON.stringify({ pages: [{ component: 'root', route: '/' }] }));
-      expect(localStorage.getItem('egen-routes:@egen/esm-foo')).toBe(
-        '{"pages":[{"component":"root","route":"/"}]}',
-      );
+      expect(localStorage.getItem('egen-routes:@egen/esm-foo')).toBe('{"pages":[{"component":"root","route":"/"}]}');
     });
 
     it('addRouteMapOverride stores an HTTP URL string in localStorage', async () => {
