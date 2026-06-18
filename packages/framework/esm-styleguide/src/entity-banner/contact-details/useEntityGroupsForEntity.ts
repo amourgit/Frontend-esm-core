@@ -1,4 +1,4 @@
-import { restBaseUrl } from '@egen/esm-react-utils';
+import { restBaseUrl } from '@egen/esm-api';
 import useSWRImmutable from 'swr/immutable';
 
 interface EntityGroup {
