@@ -36,6 +36,7 @@ export const offlineToolsNavItems = getSyncLifecycle(offlineToolsNavItemsCompone
 
 export const offlineToolsConfirmationModal = getSyncLifecycle(offlineToolsConfirmationModalComponent, options);
 
+/** Overview card for the entities section */
 export const offlineToolsEntitiesCard = getSyncLifecycle(offlineToolsEntitiesCardComponent, options);
 
 export const offlineToolsActionsCard = getSyncLifecycle(offlineToolsActionsCardComponent, options);
@@ -43,8 +44,8 @@ export const offlineToolsActionsCard = getSyncLifecycle(offlineToolsActionsCardC
 export const offlineToolsEntitiesLink = getSyncLifecycle(
   () =>
     OfflineToolsNavLink({
-      page: 'patients',
-      title: 'offlinePatients',
+      page: 'entities',
+      title: 'offlineEntities',
     }),
   options,
 );
@@ -60,13 +61,14 @@ export const offlineToolsActionsLink = getSyncLifecycle(
 
 export const offlineToolsActions = getSyncLifecycle(offlineToolsActionsComponent, options);
 
-export const offlineToolsEntitiesCard = getSyncLifecycle(offlineToolsEntitiesComponent, options);
+/** Full entities page component */
+export const offlineToolsEntities = getSyncLifecycle(offlineToolsEntitiesComponent, options);
 
 export const offlineToolsPageActions = getSyncLifecycle(offlineToolsPageActionsComponent, options);
 
-export const offlineToolsEntityWidgetActions = getSyncLifecycle(offlineToolsEntityWidgetComponent, options);
+export const offlineToolsEntityWidget = getSyncLifecycle(offlineToolsEntityWidgetComponent, options);
 
-export const offlineToolsEntityWidgetActionsDashboardLink = getSyncLifecycle(
+export const offlineToolsEntityWidgetDashboardLink = getSyncLifecycle(
   createDashboardLink({
     ...dashboardMeta,
     // t('offline_actions_link', 'Offline Actions')
