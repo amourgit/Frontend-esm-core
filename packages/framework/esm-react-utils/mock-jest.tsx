@@ -38,10 +38,10 @@ export const useConfig = jest.fn().mockImplementation((options?: { externalModul
 
 export const useCurrentPatient = jest.fn(() => []);
 
-export const usePatient = jest.fn(() => ({
+export const useEntity = jest.fn(() => ({
   isLoading: true,
   patient: null,
-  patientUuid: null,
+  entityUuid: null,
   error: null,
 }));
 
@@ -84,18 +84,18 @@ export const useFhirPagination = jest.fn(realUseFhirPagination);
 export const useFhirInfinite = jest.fn(realUseFhirInfinite);
 export const useFhirFetchAll = jest.fn(realUseFhirFetchAll);
 
-export const useVisit = jest.fn().mockReturnValue({
+export const useSessionContext = jest.fn().mockReturnValue({
   error: null,
   mutate: jest.fn(),
   isValidating: true,
-  currentVisit: null,
-  activeVisit: null,
-  currentVisitIsRetrospective: false,
+  currentSession: null,
+  activeSession: null,
+  currentSessionIsRetrospective: false,
 });
 
 export const useVisitContextStore = jest.fn(realUseVisitContextStore);
 
-export const useVisitTypes = jest.fn(() => []);
+export const useSessionTypes = jest.fn(() => []);
 
 export const useAbortController = jest.fn(() => {
   let aborted = false;
@@ -156,9 +156,9 @@ export const usePrimaryIdentifierResource = jest.fn();
 
 export const usePrimaryIdentifierCode = jest.fn();
 
-export const useEmrConfiguration = jest.fn().mockReturnValue({
-  emrConfiguration: undefined,
-  isLoadingEmrConfiguration: false,
-  mutateEmrConfiguration: jest.fn(),
-  errorFetchingEmrConfiguration: undefined,
+export const useBackendConfiguration = jest.fn().mockReturnValue({
+  backendConfiguration: undefined,
+  isLoadingBackendConfiguration: false,
+  mutateBackendConfiguration: jest.fn(),
+  errorFetchingBackendConfiguration: undefined,
 });

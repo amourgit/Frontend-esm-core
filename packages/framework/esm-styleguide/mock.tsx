@@ -1,6 +1,6 @@
 import React from 'react';
 import { vi } from 'vitest';
-import { type Diagnosis } from '@egen/esm-emr-api';
+import { type Classification } from '@egen/esm-data-api';
 
 /* Please keep these stubs in alphabetical order for readability */
 
@@ -194,9 +194,9 @@ export const LocationPicker = vi.fn(({ onChange, selectedLocationUuid }) => {
   );
 });
 
-export const DiagnosisTags = vi.fn(({ diagnoses }: { diagnoses: Array<Diagnosis> }) => (
+export const ClassificationTags = vi.fn(({ classifications }: { classifications: Array<Classification> }) => (
   <>
-    {diagnoses.map((d) => (
+    {classifications.map((d) => (
       <span key={d.uuid}>{d.display}</span>
     ))}
   </>
@@ -209,7 +209,7 @@ export const Workspace2 = vi.fn(({ title, children }) => (
   </div>
 ));
 
-export const NumericObservation = vi.fn(({ value, unit, label }) => (
+export const NumericDataPoint = vi.fn(({ value, unit, label }) => (
   <span>
     {label && <span>{label}</span>}
     {value} {unit}

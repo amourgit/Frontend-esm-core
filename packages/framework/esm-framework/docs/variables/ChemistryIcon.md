@@ -1,7 +1,0 @@
-[O3 Framework](../API.md) / ChemistryIcon
-
-# Variable: ChemistryIcon
-
-> `const` **ChemistryIcon**: `MemoExoticComponent`\<`ForwardRefExoticComponent`\<[`IconProps`](../type-aliases/IconProps.md) & `RefAttributes`\<`SVGSVGElement`\>\>\>
-
-Defined in: [packages/framework/esm-styleguide/src/icons/icons.tsx:247](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-styleguide/src/icons/icons.tsx#L247)

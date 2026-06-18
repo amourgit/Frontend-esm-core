@@ -8,7 +8,7 @@ import * as utils from '@egen/esm-utils/mock';
 window.i18next = { ...window.i18next, language: 'en' };
 
 export * from '@egen/esm-api/mock';
-export * from '@egen/esm-emr-api/mock';
+export * from '@egen/esm-data-api/mock';
 export * from '@egen/esm-config/mock';
 export * from '@egen/esm-context';
 export * from '@egen/esm-expression-evaluator/src/public';
@@ -80,15 +80,15 @@ export const CustomOverflowMenuItem = vi.fn(({ itemText, ...props }) => (
     {itemText}
   </button>
 ));
-export const PatientBannerActionsMenu = vi.fn(() => <div>Patient Banner Actions Menu</div>);
-export const PatientBannerContactDetails = vi.fn(() => <div>Patient Banner Contact Details</div>);
-export const PatientBannerPatientInfo = vi.fn(() => <div>Patient Banner Patient Info</div>);
-export const PatientBannerPatientIdentifiers = vi.fn(() => <div>Patient Banner Patient Identifier</div>);
-export const PatientBannerToggleContactDetailsButton = vi.fn(() => (
-  <div>Patient Banner Toggle Contact Details Button</div>
+export const EntityBannerActionsMenu = vi.fn(() => <div>Entity Banner Actions Menu</div>);
+export const EntityBannerContactDetails = vi.fn(() => <div>Entity Banner Contact Details</div>);
+export const EntityBannerEntityInfo = vi.fn(() => <div>Entity Banner Entity Info</div>);
+export const EntityBannerEntityIdentifiers = vi.fn(() => <div>Entity Banner Entity Identifier</div>);
+export const EntityBannerToggleContactDetailsButton = vi.fn(() => (
+  <div>Entity Banner Toggle Contact Details Button</div>
 ));
-export const PatientPhoto = vi.fn(() => <div>Patient Photo</div>);
-export const usePatientPhoto = vi.fn(() => ({
+export const EntityPhoto = vi.fn(() => <div>Entity Photo</div>);
+export const useEntityPhoto = vi.fn(() => ({
   isLoading: true,
   data: null,
   error: null,
@@ -158,8 +158,8 @@ export const EgenDateRangePicker = vi.fn(({ id, labelText, value = [], onChange,
 /* esm-utils */
 export {
   getDefaultsFromConfigSchema,
-  getPatientName,
-  formatPatientName,
+  getEntityName,
+  formatEntityName,
   selectPreferredName,
 } from '@egen/esm-utils';
 

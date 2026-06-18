@@ -1,7 +1,0 @@
-[O3 Framework](../API.md) / RadiologyIcon
-
-# Variable: RadiologyIcon
-
-> `const` **RadiologyIcon**: `MemoExoticComponent`\<`ForwardRefExoticComponent`\<[`IconProps`](../type-aliases/IconProps.md) & `RefAttributes`\<`SVGSVGElement`\>\>\> = `ImageMedicalIcon`
-
-Defined in: [packages/framework/esm-styleguide/src/icons/icons.tsx:856](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-styleguide/src/icons/icons.tsx#L856)

@@ -1,16 +1,15 @@
 /** @module @category API */
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { egenFetch, type FetchResponse } from '@egen/esm-api';
-import { attachmentUrl, type AttachmentResponse } from '@egen/esm-emr-api';
+import { egenFetch, type FetchResponse } from '@eigen/esm-api';
+import { attachmentUrl, type AttachmentResponse } from '@eigen/esm-data-api';
 
 /**
- * A React hook that fetches attachments for a patient using SWR for caching
+ * A React hook that fetches attachments for an entity using SWR for caching
  * and automatic revalidation.
  *
- * @param patientUuid The UUID of the patient whose attachments should be fetched.
- * @param includeEncounterless Whether to include attachments that are not
- *   associated with any encounter.
+ * @param entityUuid The UUID of the entity whose attachments should be fetched.
+ * @param includeOrphan Whether to include attachments not associated with any interaction.
  * @returns An object containing:
  *   - `data`: Array of attachment objects (empty array while loading)
  *   - `isLoading`: Whether the initial fetch is in progress
@@ -20,19 +19,19 @@ import { attachmentUrl, type AttachmentResponse } from '@egen/esm-emr-api';
  *
  * @example
  * ```tsx
- * import { useAttachments } from '@egen/esm-framework';
- * function PatientAttachments({ patientUuid }) {
- *   const { data, isLoading, error } = useAttachments(patientUuid, true);
+ * import { useAttachments } from '@eigen/esm-framework';
+ * function EntityAttachments({ entityUuid }) {
+ *   const { data, isLoading, error } = useAttachments(entityUuid, true);
  *   if (isLoading) return <span>Loading...</span>;
  *   if (error) return <span>Error loading attachments</span>;
  *   return <AttachmentList attachments={data} />;
  * }
  * ```
  */
-export function useAttachments(patientUuid: string, includeEncounterless: boolean) {
+export function useAttachments(entityUuid: string, includeOrphan: boolean) {
   const { data, error, mutate, isLoading, isValidating } = useSWR<
     FetchResponse<{ results: Array<AttachmentResponse> }>
-  >(`${attachmentUrl}?patient=${patientUuid}&includeEncounterless=${includeEncounterless}`, egenFetch);
+  >(`${attachmentUrl}?entity=${entityUuid}&includeOrphan=${includeOrphan}`, egenFetch);
 
   const results = useMemo(
     () => ({

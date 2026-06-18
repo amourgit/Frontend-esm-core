@@ -79,7 +79,7 @@
   "peerDependencies": {
     "@egen/esm-api": "9.x",
     "@egen/esm-config": "9.x",
-    "@egen/esm-emr-api": "9.x",
+    "@egen/esm-data-api": "9.x",
     "@egen/esm-error-handling": "9.x",
     "@egen/esm-extensions": "9.x",
     "@egen/esm-globals": "9.x",
@@ -100,7 +100,7 @@
   "devDependencies": {
     "@egen/esm-api": "workspace:*",
     "@egen/esm-config": "workspace:*",
-    "@egen/esm-emr-api": "workspace:*",
+    "@egen/esm-data-api": "workspace:*",
     "@egen/esm-error-handling": "workspace:*",
     "@egen/esm-expression-evaluator": "workspace:*",
     "@egen/esm-extensions": "workspace:*",

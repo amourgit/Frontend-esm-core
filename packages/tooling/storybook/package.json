@@ -13,7 +13,7 @@
     "@carbon/react": "^1.92.1",
     "@egen/esm-api": "workspace:*",
     "@egen/esm-config": "workspace:*",
-    "@egen/esm-emr-api": "workspace:*",
+    "@egen/esm-data-api": "workspace:*",
     "@egen/esm-error-handling": "workspace:*",
     "@egen/esm-expression-evaluator": "workspace:*",
     "@egen/esm-extensions": "workspace:*",

@@ -18,21 +18,16 @@ export interface LoggedInUser {
   systemId: string;
   userProperties: {
     /**
-     * The UUIDs of patients the user has visited
-     * Separated by commas
-     * To get the array, do `user.userProperties.patientsVisited.split(',')`
-     * To store the array, do `patientsVisited: patientsVisited.join(',')`
+     * Recently viewed entity UUIDs, stored as a comma-separated string.
+     * To get the array: `user.userProperties.recentlyViewed.split(',')`
      */
-    patientsVisited?: string;
+    recentlyViewed?: string;
     /**
-     * The UUIDs of patient lists the user has starred
-     * Separated by commas
-     * To get the array, do `user.userProperties.starredPatientLists.split(',')`
-     * To store the array, perform `starredPatientLists: starredPatientLists.join(',')`
+     * UUIDs of groups/lists the user has bookmarked, stored as comma-separated.
      */
-    starredPatientLists?: string;
+    bookmarkedGroups?: string;
     /**
-     * The UUID of the location the user has set preference to use for next logins
+     * The UUID of the location the user has set as their default for next logins.
      */
     defaultLocation?: string;
     [key: string]: string | undefined;

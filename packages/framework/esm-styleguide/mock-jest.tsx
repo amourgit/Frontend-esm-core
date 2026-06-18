@@ -1,5 +1,5 @@
 import React from 'react';
-import { type Diagnosis } from '@egen/esm-emr-api';
+import { type Classification } from '@egen/esm-data-api';
 
 /* Please keep these stubs in alphabetical order for readability */
 
@@ -193,9 +193,9 @@ export const LocationPicker = jest.fn(({ onChange, selectedLocationUuid }) => {
   );
 });
 
-export const DiagnosisTags = jest.fn(({ diagnoses }: { diagnoses: Array<Diagnosis> }) => (
+export const ClassificationTags = jest.fn(({ classifications }: { classifications: Array<Classification> }) => (
   <>
-    {diagnoses.map((d) => (
+    {classifications.map((d) => (
       <span key={d.uuid}>{d.display}</span>
     ))}
   </>
@@ -208,7 +208,7 @@ export const Workspace2 = jest.fn(({ title, children }) => (
   </div>
 ));
 
-export const NumericObservation = jest.fn(({ value, unit, label }) => (
+export const NumericDataPoint = jest.fn(({ value, unit, label }) => (
   <span>
     {label && <span>{label}</span>}
     {value} {unit}

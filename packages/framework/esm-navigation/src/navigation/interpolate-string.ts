@@ -15,8 +15,8 @@ function trimTrailingSlash(str: string) {
  * interpolateUrl("test ${egenBase} ${egenSpaBase} ok");
  *    // will return "test /egen /egen/spa ok"
  *
- * interpolateUrl("${egenSpaBase}/patient/${patientUuid}", {
- *    patientUuid: "4fcb7185-c6c9-450f-8828-ccae9436bd82",
+ * interpolateUrl("${egenSpaBase}/entity/${entityUuid}", {
+ *    entityUuid: "4fcb7185-c6c9-450f-8828-ccae9436bd82",
  * }); // will return "/egen/spa/patient/4fcb7185-c6c9-450f-8828-ccae9436bd82"
  * ```
  *
@@ -24,8 +24,8 @@ function trimTrailingSlash(str: string) {
  * ```js
  * navigate({
  *  to: interpolateUrl(
- *    "${egenSpaBase}/patient/${patientUuid}",
- *    { patientUuid: patient.uuid }
+ *    "${egenSpaBase}/entity/${entityUuid}",
+ *    { entityUuid: entity.uuid }
  *  )
  * }); // will navigate to "/egen/spa/patient/4fcb7185-c6c9-450f-8828-ccae9436bd82"
  * ```

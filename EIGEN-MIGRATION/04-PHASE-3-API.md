@@ -321,14 +321,14 @@ export function useEtablissements(searchQuery?: string) {
 
 ---
 
-## 3.5 Remplacer `esm-emr-api` par `esm-education-api`
+## 3.5 Remplacer `esm-data-api` par `esm-data-api`
 
-Le package `esm-emr-api` contient des types et fonctions spécifiques au domaine médical. Le remplacer par un package éducatif EIGEN.
+Le package `esm-data-api` contient des types et fonctions spécifiques au domaine médical. Le remplacer par un package éducatif EIGEN.
 
-### Nouveaux types éducatifs (à créer dans `esm-education-api`)
+### Nouveaux types éducatifs (à créer dans `esm-data-api`)
 
 ```typescript
-// packages/framework/esm-education-api/src/types.ts
+// packages/framework/esm-data-api/src/types.ts
 
 export interface Apprenant {
   uuid: string;
@@ -412,7 +412,7 @@ export interface BulletinScolaire {
 
 ## 3.6 Hooks React pour les données EIGEN
 
-Créer `packages/framework/esm-education-api/src/hooks.ts` :
+Créer `packages/framework/esm-data-api/src/hooks.ts` :
 
 ```typescript
 import useSWR from 'swr';
@@ -572,7 +572,7 @@ export const RequireRole: React.FC<{
 - [ ] Store de session adapté pour les données EIGEN
 - [ ] Login component adapté
 - [ ] Resource `login.resource.ts` adapté (établissements)
-- [ ] Package `esm-emr-api` renommé et adapté en `esm-education-api`
+- [ ] Package `esm-data-api` renommé et adapté en `esm-data-api`
 - [ ] Types éducatifs définis (Apprenant, Classe, Enseignant, etc.)
 - [ ] Hooks React créés pour les données EIGEN
 - [ ] Système de permissions (roles/privileges) implémenté

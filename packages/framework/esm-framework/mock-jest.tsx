@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 window.i18next = { ...window.i18next, language: 'en' };
 
 export * from '@egen/esm-api/mock';
-export * from '@egen/esm-emr-api/mock';
+export * from '@egen/esm-data-api/mock';
 export * from '@egen/esm-config/mock';
 export * from '@egen/esm-context';
 export * from '@egen/esm-expression-evaluator/src/public';
@@ -79,15 +79,15 @@ export const CustomOverflowMenuItem = jest.fn(({ itemText, ...props }) => (
     {itemText}
   </button>
 ));
-export const PatientBannerActionsMenu = jest.fn(() => <div>Patient Banner Actions Menu</div>);
-export const PatientBannerContactDetails = jest.fn(() => <div>Patient Banner Contact Details</div>);
-export const PatientBannerPatientInfo = jest.fn(() => <div>Patient Banner Patient Info</div>);
-export const PatientBannerPatientIdentifiers = jest.fn(() => <div>Patient Banner Patient Identifier</div>);
-export const PatientBannerToggleContactDetailsButton = jest.fn(() => (
-  <div>Patient Banner Toggle Contact Details Button</div>
+export const EntityBannerActionsMenu = jest.fn(() => <div>Entity Banner Actions Menu</div>);
+export const EntityBannerContactDetails = jest.fn(() => <div>Entity Banner Contact Details</div>);
+export const EntityBannerEntityInfo = jest.fn(() => <div>Entity Banner Entity Info</div>);
+export const EntityBannerEntityIdentifiers = jest.fn(() => <div>Entity Banner Entity Identifier</div>);
+export const EntityBannerToggleContactDetailsButton = jest.fn(() => (
+  <div>Entity Banner Toggle Contact Details Button</div>
 ));
-export const PatientPhoto = jest.fn(() => <div>Patient Photo</div>);
-export const usePatientPhoto = jest.fn(() => ({
+export const EntityPhoto = jest.fn(() => <div>Entity Photo</div>);
+export const useEntityPhoto = jest.fn(() => ({
   isLoading: true,
   data: null,
   error: null,
@@ -157,8 +157,8 @@ export const EgenDateRangePicker = jest.fn(({ id, labelText, value = [], onChang
 /* esm-utils */
 export {
   getDefaultsFromConfigSchema,
-  getPatientName,
-  formatPatientName,
+  getEntityName,
+  formatEntityName,
   selectPreferredName,
 } from '@egen/esm-utils';
 

@@ -28,7 +28,7 @@ const defaultMockSyncItemDescriptor: QueueItemDescriptor = {
   dependencies: [],
   id: '123',
   displayName: 'Mock Sync Item',
-  patientUuid: '00000000-0000-0000-0000-000000000001',
+  entityUuid: '00000000-0000-0000-0000-000000000001',
 };
 
 vi.mock('@egen/esm-api', () => ({

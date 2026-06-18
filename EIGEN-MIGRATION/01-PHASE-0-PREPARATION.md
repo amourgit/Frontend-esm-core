@@ -88,7 +88,7 @@ Créer `EIGEN-MIGRATION/name-mapping.json` :
     "@egen/esm-config": "@eigen/esm-config",
     "@egen/esm-context": "@eigen/esm-context",
     "@egen/esm-dynamic-loading": "@eigen/esm-dynamic-loading",
-    "@egen/esm-emr-api": "@eigen/esm-education-api",
+    "@egen/esm-data-api": "@eigen/esm-data-api",
     "@egen/esm-error-handling": "@eigen/esm-error-handling",
     "@egen/esm-expression-evaluator": "@eigen/esm-expression-evaluator",
     "@egen/esm-extensions": "@eigen/esm-extensions",

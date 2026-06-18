@@ -16,13 +16,13 @@ const namespaceOwners = new Map<string, symbol>();
  *
  * @example
  * ```ts
- * const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, egenFetch);
+ * const { data: entity } = useSWR(`/ws/rest/v1/entity/${entityUuid}`, egenFetch);
  * useDefineAppContext<PatientContext>('patient', patient ?? null);
  * ```
  *
  * @example
  * ```ts
- * const { data: patient } = useSWR(`/ws/rest/v1/patient/${patientUuid}`, egenFetch);
+ * const { data: entity } = useSWR(`/ws/rest/v1/entity/${entityUuid}`, egenFetch);
  * const updatePatient = useDefineAppContext<PatientContext>('patient', patient ?? null);
  * updatePatient((patient) => {
  *  patient.name = 'Hector';

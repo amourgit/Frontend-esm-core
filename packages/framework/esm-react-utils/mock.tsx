@@ -43,10 +43,10 @@ export const useConfig = vi.fn<typeof import('@egen/esm-react-utils').useConfig>
 
 export const useCurrentPatient = vi.fn(() => []);
 
-export const usePatient = vi.fn(() => ({
+export const useEntity = vi.fn(() => ({
   isLoading: true,
   patient: null,
-  patientUuid: null,
+  entityUuid: null,
   error: null,
 }));
 
@@ -89,18 +89,18 @@ export const useFhirPagination = vi.fn(realUseFhirPagination);
 export const useFhirInfinite = vi.fn(realUseFhirInfinite);
 export const useFhirFetchAll = vi.fn(realUseFhirFetchAll);
 
-export const useVisit = vi.fn(() => ({
+export const useSessionContext = vi.fn(() => ({
   error: null,
   mutate: vi.fn(),
   isValidating: true,
-  currentVisit: null,
-  activeVisit: null,
-  currentVisitIsRetrospective: false,
+  currentSession: null,
+  activeSession: null,
+  currentSessionIsRetrospective: false,
 }));
 
 export const useVisitContextStore = vi.fn(realUseVisitContextStore);
 
-export const useVisitTypes = vi.fn(() => []);
+export const useSessionTypes = vi.fn(() => []);
 
 export const useAbortController = vi.fn(() => {
   let aborted = false;
@@ -161,9 +161,9 @@ export const usePrimaryIdentifierResource = vi.fn();
 
 export const usePrimaryIdentifierCode = vi.fn();
 
-export const useEmrConfiguration = vi.fn(() => ({
-  emrConfiguration: undefined,
-  isLoadingEmrConfiguration: false,
-  mutateEmrConfiguration: vi.fn(),
-  errorFetchingEmrConfiguration: undefined,
+export const useBackendConfiguration = vi.fn(() => ({
+  backendConfiguration: undefined,
+  isLoadingBackendConfiguration: false,
+  mutateBackendConfiguration: vi.fn(),
+  errorFetchingBackendConfiguration: undefined,
 }));

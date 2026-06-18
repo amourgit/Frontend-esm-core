@@ -7,7 +7,7 @@ export * from './esm-config';
 export * from './esm-api';
 export * from './esm-state';
 export * from './esm-extensions';
-export * from './esm-emr-api';
+export * from './esm-data-api';
 export * from './esm-globals';
 export * from './esm-navigation';
 export * from './esm-error-handling';

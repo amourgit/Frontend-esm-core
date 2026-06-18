@@ -4,7 +4,7 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type LoggedInUser, type Session } from '@egen/esm-api';
-import { type FHIRLocationResource } from '@egen/esm-emr-api';
+import { type FHIRLocationResource } from '@egen/esm-data-api';
 import { useConfig, useSession } from '@egen/esm-react-utils';
 import {
   inpatientWardResponse,

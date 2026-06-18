@@ -549,7 +549,7 @@ describe('workspace system', () => {
     });
 
     it('should return store if workspace sidebar name is passed', () => {
-      const workspaceGroupStore = getWorkspaceGroupStore('ward-patient-store', {
+      const workspaceGroupStore = getWorkspaceGroupStore('entity-workspace-group', {
         foo: true,
       });
 
@@ -558,14 +558,14 @@ describe('workspace system', () => {
     });
 
     it('should update the store state with new additionalProps if workspaces with same workspaceGroup name calls the function', () => {
-      let workspaceGroupStore = getWorkspaceGroupStore('ward-patient-store', {
+      let workspaceGroupStore = getWorkspaceGroupStore('entity-workspace-group', {
         foo: true,
       });
 
       expect(workspaceGroupStore).toBeTruthy();
       expect(workspaceGroupStore?.getState()['foo']).toBe(true);
 
-      workspaceGroupStore = getWorkspaceGroupStore('ward-patient-store', {
+      workspaceGroupStore = getWorkspaceGroupStore('entity-workspace-group', {
         bar: true,
       });
 
@@ -584,27 +584,27 @@ describe('workspace system', () => {
         moduleName: '@egen/foo',
       });
       registerWorkspace({
-        name: 'ward-patient-workspace',
-        title: 'Ward Patient Workspace',
+        name: 'entity-workspace',
+        title: 'Entity Workspace',
         load: vi.fn(),
-        type: 'ward-patient',
+        type: 'workspace-group',
         moduleName: '@egen/esm-ward-app',
       });
 
       registerWorkspaceGroup({
-        name: 'ward-patient-store',
-        members: ['ward-patient-workspace'],
+        name: 'entity-workspace-group',
+        members: ['entity-workspace'],
       });
 
-      launchWorkspaceGroup('ward-patient-store', {
+      launchWorkspaceGroup('entity-workspace-group', {
         state: {},
-        workspaceToLaunch: { name: 'ward-patient-workspace' },
+        workspaceToLaunch: { name: 'entity-workspace' },
       });
 
-      const workspaceGroupStore = getWorkspaceGroupStore('ward-patient-store');
+      const workspaceGroupStore = getWorkspaceGroupStore('entity-workspace-group');
       const workspaceStore = getWorkspaceStore();
       expect(workspaceStore.getState().openWorkspaces.length).toBe(1);
-      expect(workspaceStore.getState().openWorkspaces[0].name).toBe('ward-patient-workspace');
+      expect(workspaceStore.getState().openWorkspaces[0].name).toBe('entity-workspace');
       expect(workspaceGroupStore).toBeTruthy();
 
       workspaceStore.getState().openWorkspaces[0].closeWorkspace({ ignoreChanges: true });
@@ -618,59 +618,59 @@ describe('workspace system', () => {
 
     it('should clear workspace group store by default if the workspace is closed, since `closeWorkspaceGroup` is true by default', async () => {
       registerWorkspace({
-        name: 'ward-patient-workspace',
-        title: 'Ward Patient Workspace',
+        name: 'entity-workspace',
+        title: 'Entity Workspace',
         load: vi.fn(),
-        type: 'ward-patient',
+        type: 'workspace-group',
         moduleName: '@egen/esm-ward-app',
       });
       registerWorkspaceGroup({
-        name: 'ward-patient-store',
-        members: ['ward-patient-workspace'],
+        name: 'entity-workspace-group',
+        members: ['entity-workspace'],
       });
-      launchWorkspaceGroup('ward-patient-store', {
+      launchWorkspaceGroup('entity-workspace-group', {
         state: {
           foo: true,
         },
-        workspaceToLaunch: { name: 'ward-patient-workspace' },
+        workspaceToLaunch: { name: 'entity-workspace' },
       });
 
-      const workspaceGroupStore = getWorkspaceGroupStore('ward-patient-store');
+      const workspaceGroupStore = getWorkspaceGroupStore('entity-workspace-group');
       expect(workspaceGroupStore).toBeTruthy();
       expect(workspaceGroupStore?.getState()?.['foo']).toBe(true);
 
-      closeWorkspace('ward-patient-workspace');
+      closeWorkspace('entity-workspace');
 
       expect(workspaceGroupStore?.getState()?.['foo']).toBeUndefined();
       expect(workspaceGroupStore?.getState()).toStrictEqual({});
     });
 
     it('should not clear the workspace store if the new workspace opened can open in the same group', () => {
-      const workspaceGroup = 'ward-patient-store';
+      const workspaceGroup = 'entity-workspace-group';
       registerWorkspace({
-        name: 'ward-patient-workspace',
-        title: 'Ward Patient Workspace',
+        name: 'entity-workspace',
+        title: 'Entity Workspace',
         load: vi.fn(),
-        type: 'ward-patient',
+        type: 'workspace-group',
         moduleName: '@egen/esm-ward-app',
       });
       registerWorkspace({
-        name: 'transfer-patient-workspace',
-        title: 'Transfer Patient Workspace',
+        name: 'transfer-entity-workspace',
+        title: 'Transfer Entity Workspace',
         load: vi.fn(),
         type: 'transfer-patient',
         moduleName: '@egen/esm-ward-app',
       });
       registerWorkspaceGroup({
         name: workspaceGroup,
-        members: ['ward-patient-workspace', 'transfer-patient-workspace'],
+        members: ['entity-workspace', 'transfer-entity-workspace'],
       });
 
       launchWorkspaceGroup(workspaceGroup, {
         state: {
           foo: true,
         },
-        workspaceToLaunch: { name: 'ward-patient-workspace' },
+        workspaceToLaunch: { name: 'entity-workspace' },
       });
 
       const workspaceStore = getWorkspaceStore();
@@ -679,7 +679,7 @@ describe('workspace system', () => {
       expect(workspaceGroupStore).toBeTruthy();
       expect(workspaceGroupStore?.getState()?.['foo']).toBe(true);
 
-      launchWorkspace('transfer-patient-workspace', {
+      launchWorkspace('transfer-entity-workspace', {
         bar: false,
       });
 
@@ -692,39 +692,39 @@ describe('workspace system', () => {
 
     it('should clear the store when new workspace with different sidebar is opened, given the original workspace cannot hide', () => {
       registerWorkspace({
-        name: 'ward-patient-workspace',
-        title: 'Ward Patient Workspace',
+        name: 'entity-workspace',
+        title: 'Entity Workspace',
         load: vi.fn(),
-        type: 'ward-patient',
+        type: 'workspace-group',
         moduleName: '@egen/esm-ward-app',
       });
       registerWorkspace({
-        name: 'transfer-patient-workspace',
-        title: 'Transfer Patient Workspace',
+        name: 'transfer-entity-workspace',
+        title: 'Transfer Entity Workspace',
         load: vi.fn(),
         type: 'transfer-patient',
         moduleName: '@egen/esm-ward-app',
       });
 
       registerWorkspaceGroup({
-        name: 'ward-patient-store',
-        members: ['ward-patient-workspace'],
+        name: 'entity-workspace-group',
+        members: ['entity-workspace'],
       });
 
       registerWorkspaceGroup({
         name: 'another-sidebar-group',
-        members: ['transfer-patient-workspace'],
+        members: ['transfer-entity-workspace'],
       });
 
       const workspaceStore = getWorkspaceStore();
-      launchWorkspaceGroup('ward-patient-store', {
+      launchWorkspaceGroup('entity-workspace-group', {
         state: {
           foo: true,
         },
-        workspaceToLaunch: { name: 'ward-patient-workspace' },
+        workspaceToLaunch: { name: 'entity-workspace' },
       });
 
-      const wardPatientGroupStore = getWorkspaceGroupStore('ward-patient-store');
+      const wardPatientGroupStore = getWorkspaceGroupStore('entity-workspace-group');
       expect(workspaceStore.getState().openWorkspaces.length).toBe(1);
       expect(wardPatientGroupStore).toBeTruthy();
       expect(wardPatientGroupStore?.getState()?.['foo']).toBe(true);
@@ -733,7 +733,7 @@ describe('workspace system', () => {
         state: {
           bar: false,
         },
-        workspaceToLaunch: { name: 'transfer-patient-workspace' },
+        workspaceToLaunch: { name: 'transfer-entity-workspace' },
       });
 
       expect(workspaceStore.getState().workspaceGroup?.name).toBe('another-sidebar-group');
@@ -747,41 +747,41 @@ describe('workspace system', () => {
 
     it('should not clear the workspace if a workspace of same sidebar group is opened', () => {
       registerWorkspace({
-        name: 'ward-patient-workspace',
-        title: 'Ward Patient Workspace',
+        name: 'entity-workspace',
+        title: 'Entity Workspace',
         load: vi.fn(),
-        type: 'ward-patient',
+        type: 'workspace-group',
         moduleName: '@egen/esm-ward-app',
         canHide: true,
       });
       registerWorkspace({
-        name: 'transfer-patient-workspace',
-        title: 'Transfer Patient Workspace',
+        name: 'transfer-entity-workspace',
+        title: 'Transfer Entity Workspace',
         load: vi.fn(),
         type: 'transfer-patient',
         moduleName: '@egen/esm-ward-app',
       });
 
       registerWorkspaceGroup({
-        name: 'ward-patient-store',
-        members: ['ward-patient-workspace', 'transfer-patient-workspace'],
+        name: 'entity-workspace-group',
+        members: ['entity-workspace', 'transfer-entity-workspace'],
       });
 
       const workspaceStore = getWorkspaceStore();
 
-      launchWorkspaceGroup('ward-patient-store', {
+      launchWorkspaceGroup('entity-workspace-group', {
         state: {
           foo: true,
         },
-        workspaceToLaunch: { name: 'ward-patient-workspace' },
+        workspaceToLaunch: { name: 'entity-workspace' },
       });
 
-      const wardPatientGroupStore = getWorkspaceGroupStore('ward-patient-store');
+      const wardPatientGroupStore = getWorkspaceGroupStore('entity-workspace-group');
       expect(workspaceStore.getState().openWorkspaces.length).toBe(1);
       expect(wardPatientGroupStore).toBeTruthy();
       expect(wardPatientGroupStore?.getState()?.['foo']).toBe(true);
 
-      launchWorkspace('transfer-patient-workspace', { bar: false });
+      launchWorkspace('transfer-entity-workspace', { bar: false });
 
       expect(workspaceStore.getState().openWorkspaces.length).toBe(2);
       expect(wardPatientGroupStore?.getState()?.['foo']).toBe(true);
@@ -790,28 +790,28 @@ describe('workspace system', () => {
 
     it('should retain default closeWorkspace options in case workspace options are passed', () => {
       registerWorkspace({
-        name: 'ward-patient-workspace',
-        title: 'Ward Patient Workspace',
+        name: 'entity-workspace',
+        title: 'Entity Workspace',
         load: vi.fn(),
-        type: 'ward-patient',
+        type: 'workspace-group',
         moduleName: '@egen/esm-ward-app',
       });
       registerWorkspaceGroup({
-        name: 'ward-patient-store',
-        members: ['ward-patient-workspace'],
+        name: 'entity-workspace-group',
+        members: ['entity-workspace'],
       });
-      launchWorkspaceGroup('ward-patient-store', {
+      launchWorkspaceGroup('entity-workspace-group', {
         state: { foo: true },
-        workspaceToLaunch: { name: 'ward-patient-workspace' },
+        workspaceToLaunch: { name: 'entity-workspace' },
       });
 
-      const workspaceGroupStore = getWorkspaceGroupStore('ward-patient-store');
+      const workspaceGroupStore = getWorkspaceGroupStore('entity-workspace-group');
 
       expect(workspaceGroupStore).toBeTruthy();
       expect(workspaceGroupStore?.getState()?.['foo']).toBe(true);
 
       // test that default options are interpolated when providing options to `closeWorkspace`
-      closeWorkspace('ward-patient-workspace', { ignoreChanges: true });
+      closeWorkspace('entity-workspace', { ignoreChanges: true });
 
       expect(workspaceGroupStore?.getState()?.['foo']).toBeUndefined();
       expect(workspaceGroupStore?.getState()).toStrictEqual({});

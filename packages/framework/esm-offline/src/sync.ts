@@ -34,7 +34,7 @@ export interface QueueItemDescriptor {
     id: string;
     type: string;
   }>;
-  patientUuid?: string;
+  entityUuid?: string;
   displayName?: string;
 }
 

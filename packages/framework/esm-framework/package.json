@@ -63,7 +63,7 @@
     "@egen/esm-config": "workspace:*",
     "@egen/esm-context": "workspace:*",
     "@egen/esm-dynamic-loading": "workspace:*",
-    "@egen/esm-emr-api": "workspace:*",
+    "@egen/esm-data-api": "workspace:*",
     "@egen/esm-error-handling": "workspace:*",
     "@egen/esm-expression-evaluator": "workspace:*",
     "@egen/esm-extensions": "workspace:*",

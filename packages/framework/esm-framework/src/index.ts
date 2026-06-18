@@ -2,7 +2,7 @@ export * from '@egen/esm-api/src/public';
 export * from '@egen/esm-config/src/public';
 export * from '@egen/esm-context/src/public';
 export * from '@egen/esm-dynamic-loading/src/public';
-export * from '@egen/esm-emr-api/src/public';
+export * from '@eigen/esm-data-api/src/public';
 export * from '@egen/esm-error-handling';
 export * from '@egen/esm-expression-evaluator/src/public';
 export * from '@egen/esm-extensions/src/public';

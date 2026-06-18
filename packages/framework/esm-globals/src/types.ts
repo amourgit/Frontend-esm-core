@@ -270,11 +270,11 @@ export type WorkspaceDefinition = {
    * {
    *  name: 'order-basket',
    *  type: 'order',
-   *  groups: ['ward-patient']
+   *  groups: ['entity-workspace-group']
    * }
    *
    * This means that the 'order-basket' workspace can be opened independently, or only
-   * in the 'ward-patient'.
+   * in the 'entity-workspace-group'.
    * If a workspace group is already open and a new workspace is launched, and the
    * groups in the newly launched workspace do not include the currently open group’s
    * name, the entire workspace group will close, and the new workspace will launch independently.
@@ -321,7 +321,7 @@ export interface WorkspaceGroupDefinition2 {
    * - If defined with capture groups: workspaces close when captured values change
    *
    * @example "^/home/appointments" - static scope for appointments dashboard
-   * @example "^/patient/([^/]+)/chart" - dynamic scope by patient UUID
+   * @example "^/entity/([^/]+)/detail" - dynamic scope by entity UUID
    */
   scopePattern?: string;
 }

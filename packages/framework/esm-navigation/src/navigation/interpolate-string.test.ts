@@ -8,10 +8,10 @@ describe('interpolateUrl', () => {
   });
 
   it('interpolates other URL template parameters', () => {
-    const result = interpolateUrl('${egenSpaBase}/patient/${patientUuid}', {
-      patientUuid: '4fcb7185-c6c9-450f-8828-ccae9436bd82',
+    const result = interpolateUrl('${egenSpaBase}/entity/${entityUuid}', {
+      entityUuid: '4fcb7185-c6c9-450f-8828-ccae9436bd82',
     });
-    expect(result).toBe('/egen/spa/patient/4fcb7185-c6c9-450f-8828-ccae9436bd82');
+    expect(result).toBe('/egen/spa/entity/4fcb7185-c6c9-450f-8828-ccae9436bd82');
   });
 
   it('works when no interpolation needed', () => {

@@ -4,6 +4,6 @@ export * from './service-worker-messaging';
 export * from './mode';
 export * from './sync';
 export * from './uuid-support';
-export * from './offline-patient-data';
+export * from './offline-entity-data';
 export * from './dynamic-offline-data';
 export { getOfflineDb } from './offline-db';

@@ -31,7 +31,7 @@ window.history.pushState({}, 'Workspace Container', '/workspace-container');
 vi.mock('single-spa-react/parcel', () => vi.fn().mockImplementation(() => <div>Parcel</div>));
 
 interface ClinicalFormWorkspaceProps extends DefaultWorkspaceProps {
-  patientUuid: string;
+  entityUuid: string;
 }
 
 describe('WorkspaceContainer in window mode', () => {
@@ -78,7 +78,7 @@ describe('WorkspaceContainer in window mode', () => {
     act(() =>
       launchWorkspace<ClinicalFormWorkspaceProps>('clinical-form', {
         workspaceTitle: 'COVID Admission',
-        patientUuid: '123',
+        entityUuid: '123',
       }),
     );
 
@@ -91,9 +91,9 @@ describe('WorkspaceContainer in window mode', () => {
     expect(within(header).getByText('COVID Discharge')).toBeInTheDocument();
 
     act(() =>
-      utils.result.current.workspaces[0].setTitle('Space Ghost', <div data-testid="patient-name">Space Ghost</div>),
+      utils.result.current.workspaces[0].setTitle('Space Ghost', <div data-testid="entity-name">Space Ghost</div>),
     );
-    expect(within(header).getByTestId('patient-name')).toBeInTheDocument();
+    expect(within(header).getByTestId('entity-name')).toBeInTheDocument();
   });
 
   it('re-launching workspace should update title, but only if setTitle was not used', async () => {
@@ -218,8 +218,8 @@ function renderWorkspaceWindow() {
 describe('WorkspaceContainer in overlay mode', () => {
   beforeAll(() => {
     registerWorkspace({
-      name: 'patient-search',
-      title: 'Patient Search',
+      name: 'entity-search',
+      title: 'Entity Search',
       load: vi.fn(),
       moduleName: '@egen/foo',
     });
@@ -230,7 +230,7 @@ describe('WorkspaceContainer in overlay mode', () => {
     const user = userEvent.setup();
 
     renderWorkspaceOverlay();
-    act(() => launchWorkspace('patient-search', { workspaceTitle: 'Make an appointment' }));
+    act(() => launchWorkspace('entity-search', { workspaceTitle: 'Make an appointment' }));
 
     expect(screen.getByRole('complementary')).toBeInTheDocument();
     expectToBeVisible(screen.getByRole('complementary'));

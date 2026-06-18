@@ -48,7 +48,7 @@ export interface DynamicOfflineData {
   id?: number;
   /**
    * The underlying type used for categorizing the data entry.
-   * Examples could be `"patient"` or `"form"`.
+   * Examples could be `"entity"`, `"document"` or `"form"`.
    */
   type: string;
   /**

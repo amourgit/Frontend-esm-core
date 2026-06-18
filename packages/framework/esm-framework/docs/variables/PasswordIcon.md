@@ -1,7 +1,0 @@
-[O3 Framework](../API.md) / PasswordIcon
-
-# Variable: PasswordIcon
-
-> `const` **PasswordIcon**: `MemoExoticComponent`\<`ForwardRefExoticComponent`\<[`IconProps`](../type-aliases/IconProps.md) & `RefAttributes`\<`SVGSVGElement`\>\>\>
-
-Defined in: [packages/framework/esm-styleguide/src/icons/icons.tsx:571](https://github.com/egen/egen-esm-core/blob/main/packages/framework/esm-styleguide/src/icons/icons.tsx#L571)

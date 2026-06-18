@@ -74,7 +74,7 @@ describe('userHasAccess', () => {
       createPrivilege('Edit Patients'),
       createPrivilege('Delete Patients'),
     ],
-    roles: [createRole('Clinician')],
+    roles: [createRole('Manager')],
   };
 
   const mockSuperUser = {

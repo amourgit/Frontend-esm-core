@@ -50,17 +50,17 @@ describe('ActionMenuButton', () => {
     render(
       <ActionMenuButton
         getIcon={(props) => <Pen {...props} />}
-        label={'Visit note'}
+        label={'Work Item'}
         iconDescription={'Note'}
         handler={handler}
-        type={'visit-note'}
+        type={'work-item'}
       />,
     );
 
     expect(screen.getByTestId('pen-icon')).toBeInTheDocument();
     expect(screen.getByTestId('pen-icon').innerHTML).toBe('size: 16');
 
-    const button = screen.getByRole('button', { name: /Visit note/i });
+    const button = screen.getByRole('button', { name: /Work Item/i });
     expect(button).toBeInTheDocument();
 
     await user.click(button);
@@ -70,7 +70,7 @@ describe('ActionMenuButton', () => {
 
   it('should have not active className if workspace is not active', async () => {
     mockUseWorkspaces.mockReturnValue({
-      workspaces: [{ type: 'order' }, { type: 'visit-note' } as unknown as OpenWorkspace],
+      workspaces: [{ type: 'order' }, { type: 'work-item' } as unknown as OpenWorkspace],
       workspaceWindowState: 'normal',
     } as unknown as WorkspacesInfo);
 
@@ -81,14 +81,14 @@ describe('ActionMenuButton', () => {
     render(
       <ActionMenuButton
         getIcon={(props) => <Pen {...props} />}
-        label={'Visit note'}
+        label={'Work Item'}
         iconDescription={'Note'}
         handler={handler}
-        type={'visit-note'}
+        type={'work-item'}
       />,
     );
 
-    const button = screen.getByRole('button', { name: /Visit note/i });
+    const button = screen.getByRole('button', { name: /Work Item/i });
     expect(button).toBeInTheDocument();
 
     expect(button.getAttribute('class')).not.toContain('active');
@@ -96,7 +96,7 @@ describe('ActionMenuButton', () => {
 
   it('should have active className if workspace is active', async () => {
     mockUseWorkspaces.mockReturnValue({
-      workspaces: [{ type: 'visit-note' }, { type: 'order' } as unknown as OpenWorkspace],
+      workspaces: [{ type: 'work-item' }, { type: 'order' } as unknown as OpenWorkspace],
       workspaceWindowState: 'normal',
     } as unknown as WorkspacesInfo);
 
@@ -107,14 +107,14 @@ describe('ActionMenuButton', () => {
     render(
       <ActionMenuButton
         getIcon={(props) => <Pen {...props} />}
-        label={'Visit note'}
+        label={'Work Item'}
         iconDescription={'Note'}
         handler={handler}
-        type={'visit-note'}
+        type={'work-item'}
       />,
     );
 
-    const button = screen.getByRole('button', { name: /Visit note/i });
+    const button = screen.getByRole('button', { name: /Work Item/i });
     expect(button).toBeInTheDocument();
 
     // toHaveAttribute() cannot do either partial or regex matches
@@ -124,7 +124,7 @@ describe('ActionMenuButton', () => {
 
   it('should not display active className if workspace is active but workspace window is hidden', async () => {
     mockUseWorkspaces.mockReturnValue({
-      workspaces: [{ type: 'visit-note' }, { type: 'order' } as unknown as OpenWorkspace],
+      workspaces: [{ type: 'work-item' }, { type: 'order' } as unknown as OpenWorkspace],
       workspaceWindowState: 'hidden',
     } as unknown as WorkspacesInfo);
 
@@ -135,10 +135,10 @@ describe('ActionMenuButton', () => {
     render(
       <ActionMenuButton
         getIcon={(props) => <Pen {...props} />}
-        label={'Visit note'}
+        label={'Work Item'}
         iconDescription={'Note'}
         handler={handler}
-        type={'visit-note'}
+        type={'work-item'}
       />,
     );
 
@@ -163,10 +163,10 @@ describe('ActionMenuButton', () => {
     render(
       <ActionMenuButton
         getIcon={(props) => <Pen {...props} />}
-        label={'Visit note'}
+        label={'Work Item'}
         iconDescription={'Note'}
         handler={handler}
-        type={'visit-note'}
+        type={'work-item'}
       />,
     );
 
@@ -183,7 +183,7 @@ describe('ActionMenuButton', () => {
 
   it('should display have active className if workspace is not active', async () => {
     mockUseWorkspaces.mockReturnValue({
-      workspaces: [{ type: 'order' }, { type: 'visit-note' } as unknown as OpenWorkspace],
+      workspaces: [{ type: 'order' }, { type: 'work-item' } as unknown as OpenWorkspace],
       workspaceWindowState: 'normal',
     } as unknown as WorkspacesInfo);
 
@@ -194,10 +194,10 @@ describe('ActionMenuButton', () => {
     render(
       <ActionMenuButton
         getIcon={(props) => <Pen {...props} />}
-        label={'Visit note'}
+        label={'Work Item'}
         iconDescription={'Note'}
         handler={handler}
-        type={'visit-note'}
+        type={'work-item'}
       />,
     );
 
@@ -209,7 +209,7 @@ describe('ActionMenuButton', () => {
 
   it('should display active className if workspace is active and workspace window is normal', async () => {
     mockUseWorkspaces.mockReturnValue({
-      workspaces: [{ type: 'visit-note' }, { type: 'order' } as unknown as OpenWorkspace],
+      workspaces: [{ type: 'work-item' }, { type: 'order' } as unknown as OpenWorkspace],
       workspaceWindowState: 'normal',
     } as unknown as WorkspacesInfo);
 
@@ -220,10 +220,10 @@ describe('ActionMenuButton', () => {
     render(
       <ActionMenuButton
         getIcon={(props) => <Pen {...props} />}
-        label={'Visit note'}
+        label={'Work Item'}
         iconDescription={'Note'}
         handler={handler}
-        type={'visit-note'}
+        type={'work-item'}
       />,
     );
 
@@ -237,7 +237,7 @@ describe('ActionMenuButton', () => {
 
   it('should not display active className if workspace is active but workspace window is hidden', async () => {
     mockUseWorkspaces.mockReturnValue({
-      workspaces: [{ type: 'visit-note' }, { type: 'order' } as unknown as OpenWorkspace],
+      workspaces: [{ type: 'work-item' }, { type: 'order' } as unknown as OpenWorkspace],
       workspaceWindowState: 'hidden',
     } as unknown as WorkspacesInfo);
 
@@ -248,10 +248,10 @@ describe('ActionMenuButton', () => {
     render(
       <ActionMenuButton
         getIcon={(props) => <Pen {...props} />}
-        label={'Visit note'}
+        label={'Work Item'}
         iconDescription={'Note'}
         handler={handler}
-        type={'visit-note'}
+        type={'work-item'}
       />,
     );
 

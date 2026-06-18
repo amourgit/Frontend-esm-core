@@ -22,7 +22,7 @@ Le renommage de namespace est une opération **à haut risque** si mal exécuté
 5. esm-config          (dépend de esm-utils, esm-globals)
 6. esm-navigation      (dépend de esm-globals)
 7. esm-api             (dépend de esm-config, esm-navigation)
-8. esm-emr-api         (dépend de esm-api)
+8. esm-data-api         (dépend de esm-api)
 9. esm-extensions      (dépend de esm-config, esm-state)
 10. esm-react-utils    (dépend de esm-extensions, esm-config)
 11. esm-styleguide     (dépend de esm-react-utils)
@@ -50,7 +50,7 @@ declare -A RENAMES=(
   ["@egen/esm-config"]="@eigen/esm-config"
   ["@egen/esm-context"]="@eigen/esm-context"
   ["@egen/esm-dynamic-loading"]="@eigen/esm-dynamic-loading"
-  ["@egen/esm-emr-api"]="@eigen/esm-education-api"
+  ["@egen/esm-data-api"]="@eigen/esm-data-api"
   ["@egen/esm-error-handling"]="@eigen/esm-error-handling"
   ["@egen/esm-expression-evaluator"]="@eigen/esm-expression-evaluator"
   ["@egen/esm-extensions"]="@eigen/esm-extensions"

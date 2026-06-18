@@ -152,7 +152,7 @@ Frontend-esm-core/
 | `esm-config` | Système de configuration par micro-app | Garder tel quel |
 | `esm-context` | Contexte d'exécution | Garder |
 | `esm-dynamic-loading` | Chargement dynamique de code | Garder |
-| `esm-emr-api` | API EMR spécifiques (patients, visites) | Remplacer par API éducatives EIGEN |
+| `esm-data-api` | API EMR spécifiques (patients, visites) | Remplacer par API éducatives EIGEN |
 | `esm-error-handling` | Gestion des erreurs globales | Garder |
 | `esm-expression-evaluator` | Évaluateur d'expressions utilisateur | Garder |
 | `esm-extensions` | Système d'extension slots | **GARDER ABSOLUMENT** |

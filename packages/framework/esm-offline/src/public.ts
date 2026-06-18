@@ -1,5 +1,5 @@
 export { type OfflineMode, type OfflineModeResult, getCurrentOfflineMode } from './mode';
-export * from './offline-patient-data';
+export * from './offline-entity-data';
 export * from './service-worker-messaging';
 export * from './service-worker-http-headers';
 export * from './uuid-support';

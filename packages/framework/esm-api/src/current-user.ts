@@ -330,7 +330,7 @@ export function getLoggedInUser() {
 /**
  * Returns a Promise that resolves with the current session location, if one is set.
  * The session location represents the physical location where the user is currently
- * working (e.g., a clinic or ward).
+ * working (e.g., a branch, department, or workspace).
  *
  * @returns A Promise that resolves with the SessionLocation object, or `undefined`
  *   if no session location is set.
@@ -355,7 +355,7 @@ export function getSessionLocation() {
 
 /**
  * Sets the session location for the current user. The session location represents
- * the physical location where the user is working (e.g., a clinic or ward).
+ * the physical location where the user is working (e.g., a branch, department, or workspace).
  * This triggers a server request to update the session and refreshes the local
  * session store.
  *

@@ -26,8 +26,8 @@ export const Success: Story = {
   args: {
     snackbar: {
       id: 1,
-      title: 'Patient saved',
-      subtitle: 'The patient record has been updated successfully.',
+      title: 'Record saved',
+      subtitle: 'The record has been updated successfully.',
       kind: 'success',
       autoClose: false,
     },
@@ -51,7 +51,7 @@ export const WithAction: Story = {
     snackbar: {
       id: 3,
       title: 'Visit started',
-      subtitle: 'A new visit has been started for this patient.',
+      subtitle: 'A new session has been started for this entity.',
       kind: 'info',
       actionButtonLabel: 'Undo',
       autoClose: false,
