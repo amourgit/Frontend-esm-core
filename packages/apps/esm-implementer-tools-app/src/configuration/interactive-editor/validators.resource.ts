@@ -139,7 +139,7 @@ export const validateValue = (
       return validateArray(value, validators, elementSchema);
     case Type.Object:
       return validateObject(value, validators, elementSchema);
-    case Type.UUID || Type.ConceptUuid || Type.PersonAttributeTypeUuid || Type.PatientIdentifierTypeUuid:
+    case Type.UUID || Type.ConceptUuid || Type.PersonAttributeTypeUuid:
       return validateUuid(value, validators);
     default:
       return null;

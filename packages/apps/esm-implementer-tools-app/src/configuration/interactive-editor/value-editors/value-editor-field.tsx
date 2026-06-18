@@ -48,7 +48,7 @@ export function ValueEditorField({ element, path, valueType, value, onChange, er
       value={value}
       setPersonAttributeUuid={(personAttributeTypeUuid) => onChange(personAttributeTypeUuid)}
     />
-  ) : valueType === Type.PatientIdentifierTypeUuid ? (
+  ) : valueType === Type.EntityIdentifierTypeUuid ? (
     <PatientIdentifierTypeSearchBox value={value} setPatientIdentifierTypeUuid={(uuid) => onChange(uuid)} />
   ) : valueType === Type.Number ? (
     <NumberInput
