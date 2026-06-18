@@ -34,7 +34,7 @@ const OfflineActionsPage: React.FC = () => {
       onClick={synchronize}
     >
       {!isDesktop(layout) && <Renew size={16} className={styles.buttonInlineIcon} />}
-      {t('offlineActionsUpdateOfflinePatients', 'Update offline patients')}
+      {t('offlineActionsUpdateOfflineEntities', 'Update offline entities')}
     </Button>
   );
 

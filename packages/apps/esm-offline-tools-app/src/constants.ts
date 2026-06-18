@@ -4,8 +4,8 @@ import { egenOfflineCachingStrategyHttpHeaderName } from '@egen/esm-framework';
 export const routes = {
   home: `home`,
   offlineTools: `offline-tools`,
-  offlineToolsPatients: `offline-tools/patients`,
-  offlineToolsPatientOfflineData: `offline-tools/patients/:patientUuid/offline-data`,
+  offlineToolsEntities: `offline-tools/entities`,
+  offlineToolsEntityOfflineData: `offline-tools/entities/:entityUuid/offline-data`,
   offlineToolsActions: `offline-tools/actions`,
 };
 

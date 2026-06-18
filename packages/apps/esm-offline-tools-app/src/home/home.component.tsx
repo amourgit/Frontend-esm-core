@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import CardsContainer from './cards-container.component';
-import OfflinePatientTable from '../offline-patients/offline-patient-table.component';
+import OfflineEntityTable from '../offline-entities/offline-entity-table.component';
 import SharedPageLayout from '../components/shared-page-layout.component';
 import styles from './home.styles.scss';
 
@@ -20,8 +20,8 @@ const Home: React.FC = () => {
         <CardsContainer />
       </div>
 
-      <div className={styles.offlinePatientsTableContainer}>
-        <OfflinePatientTable isInteractive={false} showHeader />
+      <div className={styles.offlineEntitiesTableContainer}>
+        <OfflineEntityTable isInteractive={false} showHeader />
       </div>
     </SharedPageLayout>
   );

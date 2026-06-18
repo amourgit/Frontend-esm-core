@@ -32,64 +32,64 @@ import {
   useLayoutType,
   type DynamicOfflineDataSyncState,
 } from '@egen/esm-framework';
-import { useOfflinePatientsWithEntries, useOfflineRegisteredPatients } from '../hooks/offline-patient-data-hooks';
+import { useOfflineEntitiesWithEntries, useOfflineRegisteredEntities } from '../hooks/offline-entity-data-hooks';
 import EmptyState from './empty-state.component';
 import LastUpdatedTableCell from './last-updated-table-cell.component';
-import PatientNameTableCell from './patient-name-table-cell.component';
-import styles from './offline-patient-table.scss';
+import EntityNameTableCell from './entity-name-table-cell.component';
+import styles from './offline-entity-table.scss';
 
-export interface OfflinePatientTableProps {
+export interface OfflineEntityTableProps {
   isInteractive: boolean;
   showHeader: boolean;
 }
 
-const OfflinePatientTable: React.FC<OfflinePatientTableProps> = ({ isInteractive, showHeader }) => {
+const OfflineEntityTable: React.FC<OfflineEntityTableProps> = ({ isInteractive, showHeader }) => {
   // TODO: Restore @carbon/react type annotations
   const { t } = useTranslation();
   const layout = useLayoutType();
-  const offlinePatientsSwr = useOfflinePatientsWithEntries();
-  const offlineRegisteredPatientsSwr = useOfflineRegisteredPatients();
+  const offlineEntitiesSwr = useOfflineEntitiesWithEntries();
+  const offlineRegisteredEntitiesSwr = useOfflineRegisteredEntities();
   const toolbarItemSize = isDesktop(layout) ? 'sm' : undefined;
-  const [syncingPatientUuids, setSyncingPatientUuids] = useState<Array<string>>([]);
-  const headers = useOfflinePatientTableHeaders();
-  const rows = useOfflinePatientTableRows(syncingPatientUuids);
+  const [syncingEntityUuids, setSyncingEntityUuids] = useState<Array<string>>([]);
+  const headers = useOfflineEntityTableHeaders();
+  const rows = useOfflineEntityTableRows(syncingEntityUuids);
 
-  const handleUpdateSelectedPatientsClick = async (selectedRows) => {
-    const selectedPatientUuids = selectedRows.map((row) => row.id);
-    setSyncingPatientUuids(selectedPatientUuids);
-    await syncSelectedOfflinePatients(selectedPatientUuids).finally(() => setSyncingPatientUuids([]));
+  const handleUpdateSelectedEntitiesClick = async (selectedRows) => {
+    const selectedEntityUuids = selectedRows.map((row) => row.id);
+    setSyncingEntityUuids(selectedEntityUuids);
+    await syncSelectedOfflineEntities(selectedEntityUuids).finally(() => setSyncingEntityUuids([]));
 
-    offlinePatientsSwr.mutate();
-    offlineRegisteredPatientsSwr.mutate();
+    offlineEntitiesSwr.mutate();
+    offlineRegisteredEntitiesSwr.mutate();
   };
 
   const handleRemovePatientsFromOfflineListClick = async (selectedRows) => {
     const closeModal = showModal('offline-tools-confirmation-modal', {
-      title: t('offlinePatientsTableDeleteConfirmationModalTitle', 'Remove offline patients'),
+      title: t('offlineEntitiesTableDeleteConfirmationModalTitle', 'Remove offline patients'),
       children: t(
-        'offlinePatientsTableDeleteConfirmationModalContent',
-        'Are you sure that you want to remove all selected patients from the offline list? Their charts will no longer be available in offline mode and any newly registered patient will be permanently deleted.',
+        'offlineEntitiesTableDeleteConfirmationModalContent',
+        'Are you sure that you want to remove all selected entities from the offline list? They will no longer be available in offline mode and any newly registered entity will be permanently deleted.',
       ),
-      confirmText: t('offlinePatientsTableDeleteConfirmationModalConfirm', 'Remove patients'),
-      cancelText: t('offlinePatientsTableDeleteConfirmationModalCancel', 'Cancel'),
+      confirmText: t('offlineEntitiesTableDeleteConfirmationModalConfirm', 'Remove patients'),
+      cancelText: t('offlineEntitiesTableDeleteConfirmationModalCancel', 'Cancel'),
       closeModal: () => closeModal(),
       onConfirm: async () => {
-        await removeSelectedOfflinePatients(selectedRows.map((row) => row.id));
-        offlinePatientsSwr.mutate();
-        offlineRegisteredPatientsSwr.mutate();
+        await removeSelectedOfflineEntities(selectedRows.map((row) => row.id));
+        offlineEntitiesSwr.mutate();
+        offlineRegisteredEntitiesSwr.mutate();
       },
     });
   };
 
-  if (offlinePatientsSwr.isValidating || offlineRegisteredPatientsSwr.isValidating) {
+  if (offlineEntitiesSwr.isValidating || offlineRegisteredEntitiesSwr.isValidating) {
     return <TableSkeleton showHeader={showHeader} />;
   }
 
-  if (offlinePatientsSwr?.data?.length === 0 && offlineRegisteredPatientsSwr?.data?.length === 0) {
+  if (offlineEntitiesSwr?.data?.length === 0 && offlineRegisteredEntitiesSwr?.data?.length === 0) {
     return (
       <EmptyState
-        displayText={t('offlinePatients_lower', 'offline patients')}
-        headerTitle={t('offlinePatients', 'Offline patients')}
+        displayText={t('offlineEntities_lower', 'offline entities')}
+        headerTitle={t('offlineEntities', 'Offline entities')}
       />
     );
   }
@@ -111,14 +111,14 @@ const OfflinePatientTable: React.FC<OfflinePatientTableProps> = ({ isInteractive
           <TableContainer className={styles.tableContainer} {...getTableContainerProps()}>
             <div className={styles.tableHeaderContainer}>
               {showHeader && (
-                <h4 className={styles.tableHeader}>{t('offlinePatientsTableTitle', 'Offline patients')}</h4>
+                <h4 className={styles.tableHeader}>{t('offlineEntitiesTableTitle', 'Offline entities')}</h4>
               )}
               {selectedRows.length === 0 && (
                 <Layer>
                   <Search
                     className={styles.tableSearch}
-                    labelText={t('offlinePatientsTableSearchLabel', 'Search this list')}
-                    placeholder={t('offlinePatientsTableSearchPlaceholder', 'Search this list')}
+                    labelText={t('offlineEntitiesTableSearchLabel', 'Search this list')}
+                    placeholder={t('offlineEntitiesTableSearchPlaceholder', 'Search this list')}
                     size={toolbarItemSize}
                     onChange={(e) => onInputChange(e as ChangeEvent<HTMLInputElement>)}
                   />
@@ -131,11 +131,11 @@ const OfflinePatientTable: React.FC<OfflinePatientTableProps> = ({ isInteractive
                     kind="ghost"
                     size={toolbarItemSize}
                     renderIcon={(props) => <Renew size={32} {...props} />}
-                    onClick={() => handleUpdateSelectedPatientsClick(selectedRows)}
+                    onClick={() => handleUpdateSelectedEntitiesClick(selectedRows)}
                   >
                     {selectedRows.length === 1
-                      ? t('offlinePatientsTableUpdatePatient', 'Update patient')
-                      : t('offlinePatientsTableUpdatePatients', 'Update patients')}
+                      ? t('offlineEntitiesTableUpdateEntity', 'Update entity')
+                      : t('offlineEntitiesTableUpdatePatients', 'Update patients')}
                   </Button>
                   <Button
                     className={styles.tablePrimaryAction}
@@ -143,7 +143,7 @@ const OfflinePatientTable: React.FC<OfflinePatientTableProps> = ({ isInteractive
                     size={toolbarItemSize}
                     onClick={() => handleRemovePatientsFromOfflineListClick(selectedRows)}
                   >
-                    {t('offlinePatientsTableRemoveFromOfflineList', 'Remove from list')}
+                    {t('offlineEntitiesTableRemoveFromOfflineList', 'Remove from list')}
                   </Button>
                 </>
               )}
@@ -207,100 +207,100 @@ function filterTableRows({
   );
 }
 
-function useOfflinePatientTableHeaders() {
+function useOfflineEntityTableHeaders() {
   const { t } = useTranslation();
   return useMemo(
     () => [
       {
         key: 'name',
-        header: t('offlinePatientsTableHeaderName', 'Name'),
+        header: t('offlineEntitiesTableHeaderName', 'Name'),
       },
       {
         key: 'lastUpdated',
-        header: t('offlinePatientsTableHeaderLastUpdated', 'Last updated'),
+        header: t('offlineEntitiesTableHeaderLastUpdated', 'Last updated'),
       },
       {
         key: 'gender',
-        header: t('offlinePatientsTableHeaderGender', 'Gender'),
+        header: t('offlineEntitiesTableHeaderGender', 'Gender'),
       },
       {
         key: 'age',
-        header: t('offlinePatientsTableHeaderAge', 'Age'),
+        header: t('offlineEntitiesTableHeaderAge', 'Age'),
       },
     ],
     [t],
   );
 }
 
-function useOfflinePatientTableRows(syncingPatientUuids: Array<string>) {
-  const offlinePatientsSwr = useOfflinePatientsWithEntries();
-  const offlineRegisteredPatientsSwr = useOfflineRegisteredPatients();
+function useOfflineEntityTableRows(syncingEntityUuids: Array<string>) {
+  const offlineEntitiesSwr = useOfflineEntitiesWithEntries();
+  const offlineRegisteredEntitiesSwr = useOfflineRegisteredEntities();
 
   return useMemo(() => {
     const result = [];
-    const mapPatientToRow = (
-      patient: fhir.Patient,
+    const mapEntityToRow = (
+      entity: fhir.Patient,
       isNewlyRegistered: boolean,
       lastSyncState?: DynamicOfflineDataSyncState,
     ) => ({
-      id: patient.id,
+      id: entity.id,
       name: {
-        value: <PatientNameTableCell key={patient.id} patient={patient} isNewlyRegistered={isNewlyRegistered} />,
-        filterableValue: JSON.stringify(patient.name),
+        value: <EntityNameTableCell key={entity.id} entity={entity} isNewlyRegistered={isNewlyRegistered} />,
+        filterableValue: JSON.stringify(entity.name),
       },
       lastUpdated: isNewlyRegistered ? (
         '--'
       ) : (
         <LastUpdatedTableCell
-          key={patient.id}
-          patientUuid={patient.id}
-          isSyncing={syncingPatientUuids.includes(patient.id)}
+          key={entity.id}
+          entityUuid={entity.id}
+          isSyncing={syncingEntityUuids.includes(entity.id)}
           lastSyncState={lastSyncState}
         />
       ),
-      gender: capitalize(patient.gender),
-      age: patient.birthDate ? age(patient.birthDate) : '',
+      gender: capitalize(entity.gender),
+      age: entity.birthDate ? age(entity.birthDate) : '',
     });
 
-    for (const patient of offlineRegisteredPatientsSwr.data ?? []) {
-      result.push(mapPatientToRow(patient, true));
+    for (const entity of offlineRegisteredEntitiesSwr.data ?? []) {
+      result.push(mapEntityToRow(entity, true));
     }
 
-    for (const { patient, entry } of offlinePatientsSwr.data ?? []) {
-      result.push(mapPatientToRow(patient, false, entry.syncState));
+    for (const { entity, entry } of offlineEntitiesSwr.data ?? []) {
+      result.push(mapEntityToRow(entity, false, entry.syncState));
     }
 
     return result;
-  }, [syncingPatientUuids, offlinePatientsSwr.data, offlineRegisteredPatientsSwr.data]);
+  }, [syncingEntityUuids, offlineEntitiesSwr.data, offlineRegisteredEntitiesSwr.data]);
 }
 
-async function syncSelectedOfflinePatients(selectedPatientUuids: Array<string>) {
-  const offlinePatientEntries = await getDynamicOfflineDataEntries('patient-registration');
-  const syncablePatientUuids = offlinePatientEntries.map((entry) => entry.identifier);
-  const offlinePatientUuidsToSync = selectedPatientUuids.filter((id) => syncablePatientUuids.includes(id));
+async function syncSelectedOfflineEntities(selectedEntityUuids: Array<string>) {
+  const offlineEntityEntries = await getDynamicOfflineDataEntries('entity-registration');
+  const syncablePatientUuids = offlineEntityEntries.map((entry) => entry.identifier);
+  const offlineEntityUuidsToSync = selectedEntityUuids.filter((id) => syncablePatientUuids.includes(id));
 
   return await Promise.all(
-    offlinePatientUuidsToSync.map((patientUuid) => syncDynamicOfflineData('patient', patientUuid)),
+    offlineEntityUuidsToSync.map((entityUuid) => syncDynamicOfflineData('entity', entityUuid)),
   );
 }
 
-async function removeSelectedOfflinePatients(selectedPatientUuids: Array<string>) {
-  const offlinePatientEntries = await getDynamicOfflineDataEntries('patient');
+async function removeSelectedOfflineEntities(selectedEntityUuids: Array<string>) {
+  const offlineEntityEntries = await getDynamicOfflineDataEntries('entity');
   const offlineRegisteredPatients = await getFullSynchronizationItems<{
-    fhirPatient: fhir.Patient;
-  }>('patient-registration');
-  const offlinePatientUuidsToBeDeleted = selectedPatientUuids.filter((id) =>
-    offlinePatientEntries.some((entry) => entry.identifier === id),
+    fhirEntity: fhir.Patient;
+  }>('entity-registration');
+  const offlineEntityUuidsToBeDeleted = selectedEntityUuids.filter((id) =>
+    offlineEntityEntries.some((entry) => entry.identifier === id),
   );
-  const offlineRegisteredPatientUuidsToBeDeleted = selectedPatientUuids.filter(
-    (id) => !offlinePatientUuidsToBeDeleted.includes(id),
+  const offlineRegisteredPatientUuidsToBeDeleted = selectedEntityUuids.filter(
+    (id) => !offlineEntityUuidsToBeDeleted.includes(id),
   );
 
   const promises = [
-    ...offlinePatientUuidsToBeDeleted.map((patientUuid) => removeDynamicOfflineData('patient', patientUuid)),
-    ...offlineRegisteredPatientUuidsToBeDeleted.map(async (patientUuid) => {
+    ...offlineEntityUuidsToBeDeleted.map((entityUuid) => removeDynamicOfflineData('entity', entityUuid)),
+    ...offlineRegisteredPatientUuidsToBeDeleted.map(async (entityUuid) => {
       const offlineRegisteredPatient = offlineRegisteredPatients.find(
-        (syncItem) => syncItem.content.fhirPatient.id === patientUuid,
+        (syncItem) => syncItem.content.fhirEntity.id === entityUuid,
       );
 
       if (offlineRegisteredPatient) {
@@ -312,4 +312,4 @@ async function removeSelectedOfflinePatients(selectedPatientUuids: Array<string>
   await Promise.all(promises);
 }
 
-export default OfflinePatientTable;
+export default OfflineEntityTable;

@@ -1,5 +1,5 @@
 import {
-  fetchCurrentPatient,
+  fetchCurrentEntity,
   makeUrl,
   messageEgenServiceWorker,
   setupDynamicOfflineDataHandler,
@@ -8,11 +8,11 @@ import { cacheForOfflineHeaders } from './constants';
 
 export function setupOffline() {
   setupDynamicOfflineDataHandler({
-    id: 'esm-offline-tools-app:patient',
+    id: 'esm-offline-tools-app:entity',
     displayName: 'Offline tools',
-    type: 'patient',
+    type: 'entity',
     async isSynced(identifier) {
-      const expectedUrls = [`/ws/fhir2/R4/Patient/${identifier}`];
+      const expectedUrls = [`/ws/fhir2/R4/Entity/${identifier}`];
       const absoluteExpectedUrls = expectedUrls.map((url) => window.origin + makeUrl(url));
       const cache = await caches.open('egen-spa-cache-v1');
       const keys = (await cache.keys()).map((key) => key.url);
@@ -21,10 +21,10 @@ export function setupOffline() {
     async sync(identifier) {
       await messageEgenServiceWorker({
         type: 'registerDynamicRoute',
-        pattern: `/ws/fhir2/R4/Patient/${identifier}`,
+        pattern: `/ws/fhir2/R4/Entity/${identifier}`,
       });
 
-      await fetchCurrentPatient(identifier, {
+      await fetchCurrentEntity(identifier, {
         headers: cacheForOfflineHeaders,
       });
     },

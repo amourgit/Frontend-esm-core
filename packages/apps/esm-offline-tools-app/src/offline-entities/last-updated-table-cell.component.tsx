@@ -7,12 +7,12 @@ import { getDynamicOfflineDataHandlers, navigate } from '@egen/esm-framework';
 import styles from './last-updated-table-cell.scss';
 
 export interface LastUpdatedTableCellProps {
-  patientUuid: string;
+  entityUuid: string;
   isSyncing: boolean;
   lastSyncState?: DynamicOfflineDataSyncState;
 }
 
-const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ patientUuid, isSyncing, lastSyncState }) => {
+const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ entityUuid, isSyncing, lastSyncState }) => {
   const { t } = useTranslation();
 
   const InnerContent = () => {
@@ -20,7 +20,7 @@ const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ patientUuid
       return (
         <>
           <PendingFilled className={styles.pendingIcon} />
-          {t('offlinePatientsTableLastUpdatedDownloading', 'Downloading...')}
+          {t('offlineEntitiesTableLastUpdatedDownloading', 'Downloading...')}
         </>
       );
     }
@@ -29,7 +29,7 @@ const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ patientUuid
       return (
         <>
           <WarningAltFilled className={styles.errorIcon} />
-          {t('offlinePatientsTableLastUpdatedNotYetSynchronized', 'Not synchronized')}
+          {t('offlineEntitiesTableLastUpdatedNotYetSynchronized', 'Not synchronized')}
         </>
       );
     }
@@ -38,7 +38,7 @@ const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ patientUuid
       return (
         <>
           <WarningAltFilled className={styles.errorIcon} />
-          {t('offlinePatientsTableLastUpdatedOutdatedData', 'Outdated data')}
+          {t('offlineEntitiesTableLastUpdatedOutdatedData', 'Outdated data')}
         </>
       );
     }
@@ -50,14 +50,14 @@ const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ patientUuid
           <Link
             onClick={() =>
               navigate({
-                to: `${window.getEgenSpaBase()}offline-tools/patients/${patientUuid}/offline-data`,
+                to: `${window.getEgenSpaBase()}offline-tools/entities/${entityUuid}/offline-data`,
               })
             }
           >
             {lastSyncState.erroredHandlers.length}{' '}
             {lastSyncState.erroredHandlers.length === 1
-              ? t('offlinePatientsTableLastUpdatedError', 'error')
-              : t('offlinePatientsTableLastUpdatedErrors', 'errors')}
+              ? t('offlineEntitiesTableLastUpdatedError', 'error')
+              : t('offlineEntitiesTableLastUpdatedErrors', 'errors')}
           </Link>
         </>
       );
@@ -80,7 +80,7 @@ const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ patientUuid
 
 function hasNewUnknownHandlers(lastSyncState: DynamicOfflineDataSyncState) {
   const currentHandlers = getDynamicOfflineDataHandlers()
-    .filter((handler) => handler.type === 'patient')
+    .filter((handler) => handler.type === 'entity')
     .map((handler) => handler.id);
   const lastSyncHandlers = [...lastSyncState.succeededHandlers, ...lastSyncState.erroredHandlers];
 

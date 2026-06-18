@@ -8,26 +8,29 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import OfflineActionsTable from './offline-actions-table.component';
-import { usePendingSyncItems, useSyncItemPatients } from '../hooks/offline-actions';
+import { usePendingSyncItems, useSyncItemEntities } from '../hooks/offline-actions';
 import NoActionsEmptyState from './no-actions-empty-state.component';
 
 export interface OfflineActionsProps {
   /**
-   * If specified, shows a single patient's offline actions only.
+   * If specified, shows a single entity's offline actions only.
    */
-  patientUuid?: string;
+  entityUuid?: string;
+  /** @deprecated Use entityUuid */
+  entityUuid?: string;
 }
 
-const OfflineActions: React.FC<OfflineActionsProps> = ({ patientUuid }) => {
+const OfflineActions: React.FC<OfflineActionsProps> = ({ entityUuid, entityUuid }) => {
+  const resolvedEntityUuid = entityUuid ?? entityUuid;
   const { t } = useTranslation();
   const syncStore = useStore(getOfflineSynchronizationStore());
   const { data: syncItems, mutate } = usePendingSyncItems();
-  const { data: syncItemPatients } = useSyncItemPatients(syncItems);
-  const syncItemsToRender = patientUuid
-    ? syncItems?.filter((x) => x.descriptor.patientUuid === patientUuid)
+  const { data: syncItemEntities } = useSyncItemEntities(syncItems);
+  const syncItemsToRender = resolvedEntityUuid
+    ? syncItems?.filter((x) => x.descriptor.entityUuid === resolvedEntityUuid)
     : syncItems;
-  const syncItemsTableData = getSyncItemsWithPatient(syncItemsToRender, syncItemPatients);
-  const isLoading = !syncItems || !syncItemPatients;
+  const syncItemsTableData = getSyncItemsWithEntity(syncItemsToRender, syncItemEntities);
+  const isLoading = !syncItems || !syncItemEntities;
   const isSynchronizing = !!syncStore.synchronization;
 
   const deleteSynchronizationItems = async (ids: Array<number>) => {
@@ -53,7 +56,7 @@ const OfflineActions: React.FC<OfflineActionsProps> = ({ patientUuid }) => {
         <OfflineActionsTable
           isLoading={isLoading}
           data={syncItemsTableData}
-          hiddenHeaders={patientUuid ? ['patient'] : []}
+          hiddenHeaders={resolvedEntityUuid ? ['entity'] : []}
           disableEditing={isSynchronizing}
           disableDelete={false}
           onDelete={deleteSynchronizationItems}
@@ -65,10 +68,10 @@ const OfflineActions: React.FC<OfflineActionsProps> = ({ patientUuid }) => {
   );
 };
 
-function getSyncItemsWithPatient(syncItems: Array<SyncItem> = [], patients: Array<fhir.Patient> = []) {
+function getSyncItemsWithEntity(syncItems: Array<SyncItem> = [], entities: Array<fhir.Patient> = []) {
   return syncItems.map((item) => ({
     item,
-    patient: patients.find((patient) => patient.id === item.descriptor?.patientUuid),
+    entity: entities.find((entity) => entity.id === item.descriptor?.entityUuid),
   }));
 }
 

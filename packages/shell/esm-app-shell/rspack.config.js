@@ -10,6 +10,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const { basename, dirname, resolve } = require('path');
+const path = require('path');
+
+// Load .env from the monorepo root (two levels up from packages/shell/esm-app-shell)
+try {
+  require('dotenv').config({ path: path.resolve(__dirname, '..', '..', '..', '.env') });
+} catch (e) {
+  // dotenv not installed, skip — env vars must be set via OS/CI environment
+}
+
+
 const { mkdirSync, readdirSync, statSync, readFileSync, writeFileSync } = require('node:fs');
 const sass = require('sass-embedded');
 const semver = require('semver');

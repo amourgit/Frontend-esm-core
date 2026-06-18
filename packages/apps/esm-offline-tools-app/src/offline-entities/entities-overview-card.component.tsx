@@ -3,21 +3,21 @@ import { useTranslation } from 'react-i18next';
 import HeaderedQuickInfo from '../components/headered-quick-info.component';
 import OverviewCard from '../components/overview-card.component';
 import { routes } from '../constants';
-import { useOfflinePatientStats } from '../hooks/offline-patient-data-hooks';
+import { useOfflineEntityStats } from '../hooks/offline-entity-data-hooks';
 
-const PatientsOverviewCard: React.FC = () => {
+const EntitiesOverviewCard: React.FC = () => {
   const { t } = useTranslation();
-  const { data } = useOfflinePatientStats();
+  const { data } = useOfflineEntityStats();
 
   return (
-    <OverviewCard header={t('homeOverviewCardPatientsHeader', 'Patients')} viewLink={routes.offlineToolsPatients}>
+    <OverviewCard header={t('homeOverviewCardEntitiesHeader', 'Entities')} viewLink={routes.offlineToolsPatients}>
       <HeaderedQuickInfo
-        header={t('homeOverviewCardPatientsDownloaded', 'Downloaded')}
+        header={t('homeOverviewCardEntitiesDownloaded', 'Downloaded')}
         content={data?.downloadedCount}
         isLoading={!data}
       />
       <HeaderedQuickInfo
-        header={t('homeOverviewCardPatientsNewlyRegistered', 'Newly registered')}
+        header={t('homeOverviewCardEntitiesNewlyRegistered', 'Newly registered')}
         content={data?.registeredCount}
         isLoading={!data}
       />
@@ -25,4 +25,4 @@ const PatientsOverviewCard: React.FC = () => {
   );
 };
 
-export default PatientsOverviewCard;
+export default EntitiesOverviewCard;

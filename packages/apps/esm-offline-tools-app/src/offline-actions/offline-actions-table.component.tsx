@@ -31,15 +31,18 @@ import {
 } from '@egen/esm-framework';
 import styles from './offline-actions-table.styles.scss';
 
-export interface SyncItemWithPatient {
+export interface SyncItemWithEntity {
   item: SyncItem;
-  patient?: fhir.Patient;
+  entity?: fhir.Patient;
 }
 
-type OfflineActionsTableHeaders = 'createdOn' | 'patient' | 'action' | 'error';
+/** @deprecated Use SyncItemWithEntity */
+export type SyncItemWithEntity = SyncItemWithEntity;
+
+type OfflineActionsTableHeaders = 'createdOn' | 'entity' | 'action' | 'error';
 
 export interface OfflineActionsTableProps {
-  data?: Array<SyncItemWithPatient>;
+  data?: Array<SyncItemWithEntity>;
   isLoading: boolean;
   hiddenHeaders?: Array<OfflineActionsTableHeaders>;
   disableEditing: boolean;
@@ -71,8 +74,8 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
       header: t('offlineActionsTableCreatedOn', 'Date & Time'),
     },
     {
-      key: 'patient',
-      header: t('offlineActionsTablePatient', 'Patient'),
+      key: 'entity',
+      header: t('offlineActionsTableEntity', 'Entity'),
     },
     {
       key: 'action',
@@ -86,14 +89,14 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
   const headers = defaultHeaders.filter((header) => !hiddenHeaders?.includes(header.key));
 
   const rows = results.map((syncItem) => {
-    const patientName = getPatientName(syncItem);
+    const entityName = getEntityName(syncItem);
 
     return {
       id: syncItem.item.id.toString(),
       createdOn: syncItem.item.createdOn?.toLocaleDateString(),
-      patient: {
-        value: <PatientLink patientUuid={syncItem.item.descriptor?.patientUuid} patientName={patientName} />,
-        filterableValue: patientName,
+      entity: {
+        value: <EntityLink entityUuid={syncItem.item.descriptor?.entityUuid} entityName={entityName} />,
+        filterableValue: entityName,
       },
       action: {
         value: <ActionNameLink syncItem={syncItem.item} />,
@@ -126,8 +129,8 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
               <Layer>
                 <Search
                   className={styles.tableSearch}
-                  labelText={t('offlinePatientsTableSearchLabel', 'Search this list')}
-                  placeholder={t('offlinePatientsTableSearchPlaceholder', 'Search this list')}
+                  labelText={t('offlineEntitiesTableSearchLabel', 'Search this list')}
+                  placeholder={t('offlineEntitiesTableSearchPlaceholder', 'Search this list')}
                   size={toolbarItemSize}
                   onChange={(e) => onInputChange(e as ChangeEvent<HTMLInputElement>)}
                 />
@@ -194,14 +197,14 @@ const TableSkeleton: React.FC = () => {
   );
 };
 
-function getPatientName({ item, patient }: SyncItemWithPatient) {
-  const hasPatient = item.descriptor?.patientUuid;
-  if (!hasPatient) {
+function getEntityName({ item, entity }: SyncItemWithEntity) {
+  const hasEntity = item.descriptor?.entityUuid;
+  if (!hasEntity) {
     return undefined;
   }
 
-  const patientName = patient?.name?.[0];
-  return patientName ? `${patientName.given.join(' ')} ${patientName.family}` : item.descriptor.patientUuid;
+  const entityName = entity?.name?.[0];
+  return entityName ? `${entityName.given.join(' ')} ${entityName.family}` : item.descriptor.entityUuid;
 }
 
 function ActionNameLink({ syncItem }: { syncItem: SyncItem }) {
@@ -218,16 +221,16 @@ function ActionNameLink({ syncItem }: { syncItem: SyncItem }) {
   );
 }
 
-function PatientLink({ patientUuid, patientName }) {
-  return patientUuid ? (
+function EntityLink({ entityUuid, entityName }) {
+  return entityUuid ? (
     <Link
       onClick={() =>
         navigate({
-          to: `${window.getEgenSpaBase()}patient/${patientUuid}/chart`,
+          to: `${window.getEgenSpaBase()}entity/${entityUuid}/detail`,
         })
       }
     >
-      {patientName}
+      {entityName}
     </Link>
   ) : (
     <>-</>

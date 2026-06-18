@@ -8,12 +8,12 @@ import offlineToolsComponent from './root.component';
 import offlineToolsLinkComponent from './offline-tools-app-menu-link.component';
 import offlineToolsNavItemsComponent from './nav/offline-tools-nav-menu.component';
 import offlineToolsConfirmationModalComponent from './components/confirmation.modal';
-import offlineToolsPatientsCardComponent from './offline-patients/patients-overview-card.component';
+import offlineToolsEntitiesCardComponent from './offline-entities/entities-overview-card.component';
 import offlineToolsActionsCardComponent from './offline-actions/offline-actions-overview-card.component';
 import offlineToolsActionsComponent from './offline-actions/offline-actions.component';
-import offlineToolsPatientsComponent from './offline-patients/offline-patients.component';
+import offlineToolsEntitiesComponent from './offline-entities/offline-entities.component';
 import offlineToolsPageActionsComponent from './offline-actions/offline-actions-page.component';
-import offlineToolsPatientChartComponent from './offline-actions/offline-actions-patient-chart-widget.component';
+import offlineToolsEntityWidgetComponent from './offline-actions/offline-actions-entity-widget.component';
 import offlineToolsOptInButtonComponent from './offline-actions/offline-actions-mode-button.extension';
 import OfflineToolsNavLink from './nav/offline-tools-nav-link.component';
 
@@ -36,11 +36,11 @@ export const offlineToolsNavItems = getSyncLifecycle(offlineToolsNavItemsCompone
 
 export const offlineToolsConfirmationModal = getSyncLifecycle(offlineToolsConfirmationModalComponent, options);
 
-export const offlineToolsPatientsCard = getSyncLifecycle(offlineToolsPatientsCardComponent, options);
+export const offlineToolsEntitiesCard = getSyncLifecycle(offlineToolsEntitiesCardComponent, options);
 
 export const offlineToolsActionsCard = getSyncLifecycle(offlineToolsActionsCardComponent, options);
 
-export const offlineToolsPatientsLink = getSyncLifecycle(
+export const offlineToolsEntitiesLink = getSyncLifecycle(
   () =>
     OfflineToolsNavLink({
       page: 'patients',
@@ -60,13 +60,13 @@ export const offlineToolsActionsLink = getSyncLifecycle(
 
 export const offlineToolsActions = getSyncLifecycle(offlineToolsActionsComponent, options);
 
-export const offlineToolsPatients = getSyncLifecycle(offlineToolsPatientsComponent, options);
+export const offlineToolsPatients = getSyncLifecycle(offlineToolsEntitiesComponent, options);
 
 export const offlineToolsPageActions = getSyncLifecycle(offlineToolsPageActionsComponent, options);
 
-export const offlineToolsPatientChartActions = getSyncLifecycle(offlineToolsPatientChartComponent, options);
+export const offlineToolsEntityWidgetActions = getSyncLifecycle(offlineToolsEntityWidgetComponent, options);
 
-export const offlineToolsPatientChartActionsDashboardLink = getSyncLifecycle(
+export const offlineToolsEntityWidgetActionsDashboardLink = getSyncLifecycle(
   createDashboardLink({
     ...dashboardMeta,
     // t('offline_actions_link', 'Offline Actions')
@@ -100,7 +100,7 @@ export function startupApp() {
       parent: `${window.spaBase}/${routes.offlineTools}`,
     },
     {
-      path: `${window.spaBase}/${routes.offlineToolsPatientOfflineData}`,
+      path: `${window.spaBase}/${routes.offlineToolsEntityOfflineData}`,
       title: 'Data',
       parent: `${window.spaBase}/${routes.offlineToolsPatients}`,
     },

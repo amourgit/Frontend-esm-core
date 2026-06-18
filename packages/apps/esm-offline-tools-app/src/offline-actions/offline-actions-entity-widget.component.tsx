@@ -2,19 +2,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLayoutType } from '@egen/esm-framework';
 import OfflineActions from './offline-actions.component';
-import styles from './offline-actions-patient-chart-widget.styles.scss';
+import styles from './offline-actions-entity-widget.styles.scss';
 
-export interface OfflineActionsPatientChartWidgetProps {
-  patientUuid: string;
+export interface OfflineActionsEntityWidgetProps {
+  entityUuid: string;
 }
 
-const OfflineActionsPatientChartWidget: React.FC<OfflineActionsPatientChartWidgetProps> = ({ patientUuid }) => {
+const OfflineActionsEntityWidget: React.FC<OfflineActionsEntityWidgetProps> = ({ entityUuid }) => {
   const { t } = useTranslation();
 
   return (
     <div className={styles.widgetCard}>
       <CardHeader title={t('offlineActions', 'Offline actions')} />
-      <OfflineActions patientUuid={patientUuid} />
+      <OfflineActions entityUuid={entityUuid} />
     </div>
   );
 };
@@ -33,4 +33,4 @@ const CardHeader: React.FC<{
   );
 };
 
-export default OfflineActionsPatientChartWidget;
+export default OfflineActionsEntityWidget;

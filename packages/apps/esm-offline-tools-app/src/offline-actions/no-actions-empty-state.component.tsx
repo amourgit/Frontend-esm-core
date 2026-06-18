@@ -20,7 +20,7 @@ const NoActionsEmptyState: React.FC = () => {
         <span className={styles.emptyStateDescription}>
           {t(
             'offlineActionsNoActionsEmptyStateContent',
-            'All offline actions have been uploaded successfully,\nand merged with the online patient records.',
+            'All offline actions have been uploaded successfully,\nand merged with the online entity records.',
           )}
         </span>
       </Tile>

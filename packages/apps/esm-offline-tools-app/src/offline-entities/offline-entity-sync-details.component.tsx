@@ -5,25 +5,25 @@ import { useTranslation } from 'react-i18next';
 import { Layer, Tile } from '@carbon/react';
 import { CheckmarkFilled, WarningFilled } from '@carbon/react/icons';
 import { getDynamicOfflineDataHandlers } from '@egen/esm-framework';
-import { useLastSyncStateOfPatient } from '../hooks/offline-patient-data-hooks';
+import { useLastSyncStateOfEntity } from '../hooks/offline-entity-data-hooks';
 import SharedPageLayout from '../components/shared-page-layout.component';
-import styles from './offline-patient-sync-details.styles.scss';
+import styles from './offline-entity-sync-details.styles.scss';
 
-const OfflinePatientSyncDetails: React.FC = () => {
+const OfflineEntitySyncDetails: React.FC = () => {
   const { t } = useTranslation();
-  const { patientUuid } = useParams();
-  const { data: lastSyncState } = useLastSyncStateOfPatient(patientUuid);
+  const { entityUuid } = useParams();
+  const { data: lastSyncState } = useLastSyncStateOfEntity(entityUuid);
   const handlers = getDynamicOfflineDataHandlers();
   const succeededHandlers = filterOutNonDisplayableHandlerIds(lastSyncState?.succeededHandlers ?? []);
   const erroredHandlers = filterOutNonDisplayableHandlerIds(lastSyncState?.erroredHandlers ?? []);
 
   return (
-    <SharedPageLayout header={t('offlinePatientSyncDetailsHeader', 'Offline patient details')}>
+    <SharedPageLayout header={t('offlineEntitySyncDetailsHeader', 'Offline entity details')}>
       <div className={styles.contentContainer}>
         {succeededHandlers.length > 0 && (
           <section className={styles.headeredTileSection}>
             <h2 className={styles.productiveHeading02}>
-              {t('offlinePatientSyncDetailsDownloadedHeader', 'Downloaded to this device')}
+              {t('offlineEntitySyncDetailsDownloadedHeader', 'Downloaded to this device')}
             </h2>
             {succeededHandlers.map((id) => (
               <Layer>
@@ -40,7 +40,7 @@ const OfflinePatientSyncDetails: React.FC = () => {
         {erroredHandlers.length > 0 && (
           <section className={styles.headeredTileSection}>
             <h2 className={styles.productiveHeading02}>
-              {t('offlinePatientSyncDetailsFailedHeader', 'There was an error downloading the following items')}
+              {t('offlineEntitySyncDetailsFailedHeader', 'There was an error downloading the following items')}
             </h2>
             {erroredHandlers.map((id) => (
               <Layer>
@@ -51,7 +51,7 @@ const OfflinePatientSyncDetails: React.FC = () => {
                   <WarningFilled size={16} className={styles.failedTileIcon} />
                   <span className={classNames(styles.failedTileErrorMessage, styles.label01)}>
                     {lastSyncState.errors.find((error) => error.handlerId === id)?.message ??
-                      t('offlinePatientSyncDetailsFallbackErrorMessage', 'Unknown error.')}
+                      t('offlineEntitySyncDetailsFallbackErrorMessage', 'Unknown error.')}
                   </span>
                 </Tile>
               </Layer>
@@ -68,4 +68,4 @@ function filterOutNonDisplayableHandlerIds(handlerIds: Array<string>) {
   return handlerIds.filter((id) => handlers.some((handler) => handler.id === id && !!handler.displayName));
 }
 
-export default OfflinePatientSyncDetails;
+export default OfflineEntitySyncDetails;

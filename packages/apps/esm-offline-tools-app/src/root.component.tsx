@@ -14,7 +14,7 @@ const Root: React.FC = () => {
         <Routes>
           <Route path="offline-tools" element={<Home />} />
           <Route path="offline-tools/:page" element={<OfflineToolsPage />}>
-            <Route path=":patientUuid" element={<OfflineToolsPage />} />
+            <Route path=":entityUuid" element={<OfflineToolsPage />} />
           </Route>
         </Routes>
       </div>
