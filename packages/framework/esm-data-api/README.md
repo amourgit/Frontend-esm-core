@@ -1,6 +1,6 @@
-# @eigen/esm-data-api
+# @egen/esm-data-api
 
-A generic, domain-agnostic data API module for the Eigen framework.
+A generic, domain-agnostic data API module for the Egen framework.
 
 ## Overview
 
@@ -30,12 +30,12 @@ import {
   getSessionsForEntity,
   getSessionTypes,
   getLocations,
-} from '@eigen/esm-framework';
+} from '@egen/esm-framework';
 ```
 
 ## Architecture
 
-This module is part of the Eigen micro-frontend framework. It provides:
+This module is part of the Egen micro-frontend framework. It provides:
 
 - **Types** (`src/types/`) — TypeScript interfaces for all generic resources
 - **Attachments** (`src/attachments.ts`) — File attachment CRUD API
@@ -49,7 +49,7 @@ This module is part of the Eigen micro-frontend framework. It provides:
 
 To adapt this module for your domain, configure:
 
-1. **REST base URL** via `@eigen/esm-api` configuration
+1. **REST base URL** via `@egen/esm-api` configuration
 2. **Session types** — define your domain's session categories in your backend
 3. **Entity identifiers** — configure identifier types relevant to your domain
 4. **Attributes** — extend entities with domain-specific custom attributes

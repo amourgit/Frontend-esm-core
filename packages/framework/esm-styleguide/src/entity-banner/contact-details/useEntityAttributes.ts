@@ -1,4 +1,4 @@
-import { restBaseUrl, useConfig } from '@eigen/esm-react-utils';
+import { restBaseUrl, useConfig } from '@egen/esm-react-utils';
 import useSWRImmutable from 'swr/immutable';
 import { type StyleguideConfigObject } from '../../config-schema';
 
@@ -20,12 +20,14 @@ export function useEntityContactAttributes(entityUuid: string) {
   const { contactAttributeTypes } = useConfig<StyleguideConfigObject>();
 
   const { data, isLoading } = useSWRImmutable<{ data: EntityAttributes }>(
-    entityUuid ? `${restBaseUrl}/entity/${entityUuid}?v=custom:(attributes:(attributeType:(display,uuid),value))` : null,
+    entityUuid
+      ? `${restBaseUrl}/entity/${entityUuid}?v=custom:(attributes:(attributeType:(display,uuid),value))`
+      : null,
     (url: string) => fetch(url).then((res) => res.json()),
   );
 
-  const contactAttributes = data?.data?.attributes?.filter((attr) =>
-    contactAttributeTypes?.uuids?.includes(attr.attributeType.uuid),
+  const contactAttributes = data?.data?.attributes?.filter(
+    (attr) => contactAttributeTypes?.uuids?.includes(attr.attributeType.uuid),
   );
 
   return { contactAttributes, isLoading };

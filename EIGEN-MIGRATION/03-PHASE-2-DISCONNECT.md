@@ -1,14 +1,14 @@
 # PHASE 2 — Déconnexion des Sources Externes
 
 > Durée estimée : 1 jour
-> Branche : `eigen/phase-2-disconnect`
+> Branche : `egen/phase-2-disconnect`
 > Objectif : Couper toutes les dépendances vers `dev3.egen.org`, `json.egen.org`, npm public `@egen/*`, et rendre le projet 100% autonome.
 
 ---
 
 ## 2.1 Couper le fallback `dev3.egen.org` dans la CLI
 
-### Fichier : `packages/tooling/eigen/src/utils/importmap.ts`
+### Fichier : `packages/tooling/egen/src/utils/importmap.ts`
 
 C'est **LE fichier le plus important** de cette phase. Il contient la logique de fallback vers `dev3.egen.org`.
 
@@ -44,7 +44,7 @@ async function readImportmap(path: string, backend?: string, spaPath?: string) {
     } catch (e) {
       logWarn(
         `Could not read importmap from ${backend}${spaPath}importmap.json. ` +
-        `Using empty importmap. Run 'eigen assemble' to generate a local importmap.`
+        `Using empty importmap. Run 'egen assemble' to generate a local importmap.`
       );
     }
   }
@@ -105,12 +105,12 @@ Ces fichiers locaux remplaceront le fetch depuis `dev3.egen.org`.
 ```json
 {
   "imports": {
-    "@eigen/esm-login-app": "http://localhost:8081/main.js",
-    "@eigen/esm-primary-navigation-app": "http://localhost:8082/main.js",
-    "@eigen/esm-admin-tools-app": "http://localhost:8083/main.js",
-    "@eigen/esm-devtools-app": "http://localhost:8084/main.js",
-    "@eigen/esm-help-menu-app": "http://localhost:8085/main.js",
-    "@eigen/esm-offline-tools-app": "http://localhost:8086/main.js"
+    "@egen/esm-login-app": "http://localhost:8081/main.js",
+    "@egen/esm-primary-navigation-app": "http://localhost:8082/main.js",
+    "@egen/esm-admin-tools-app": "http://localhost:8083/main.js",
+    "@egen/esm-devtools-app": "http://localhost:8084/main.js",
+    "@egen/esm-help-menu-app": "http://localhost:8085/main.js",
+    "@egen/esm-offline-tools-app": "http://localhost:8086/main.js"
   }
 }
 ```
@@ -121,8 +121,8 @@ Ces fichiers locaux remplaceront le fetch depuis `dev3.egen.org`.
 
 ```json
 {
-  "@eigen/esm-login-app": {
-    "backendDependencies": { "eigen-api": ">=1.0.0" },
+  "@egen/esm-login-app": {
+    "backendDependencies": { "egen-api": ">=1.0.0" },
     "pages": [
       { "component": "root", "route": "login", "online": true, "offline": true },
       { "component": "root", "route": "logout", "online": true, "offline": true }
@@ -131,10 +131,10 @@ Ces fichiers locaux remplaceront le fetch depuis `dev3.egen.org`.
       { "name": "logout-button", "slot": "user-panel-bottom-slot", "component": "logoutButton" }
     ]
   },
-  "@eigen/esm-primary-navigation-app": {
-    "backendDependencies": { "eigen-api": ">=1.0.0" },
+  "@egen/esm-primary-navigation-app": {
+    "backendDependencies": { "egen-api": ">=1.0.0" },
     "pages": [
-      { "component": "root", "routeRegex": "^(?!(?:login|change-password)/?)", "online": true, "offline": true, "containerDomId": "eigen-top-nav-app-container" }
+      { "component": "root", "routeRegex": "^(?!(?:login|change-password)/?)", "online": true, "offline": true, "containerDomId": "egen-top-nav-app-container" }
     ]
   }
 }
@@ -173,7 +173,7 @@ export const sessionEndpoint = `/api/v1/auth/session`;  // ← Ou Keycloak
 
 ## 2.4 Adapter la CLI `develop` pour pointer vers EIGEN
 
-### Fichier : `packages/tooling/eigen/src/commands/develop.ts`
+### Fichier : `packages/tooling/egen/src/commands/develop.ts`
 
 Changer les valeurs par défaut :
 
@@ -196,14 +196,14 @@ Changer les valeurs par défaut :
   describe: 'The EIGEN backend to proxy API requests to.',
 })
 .option('spa-path', {
-  default: '/eigen/spa/',
+  default: '/egen/spa/',
 })
 .option('api-url', {
-  default: '/eigen',
+  default: '/egen',
 })
 ```
 
-### Fichier : `packages/tooling/eigen/src/commands/start.ts`
+### Fichier : `packages/tooling/egen/src/commands/start.ts`
 
 Même chose pour les valeurs par défaut du serveur de prod.
 
@@ -244,7 +244,7 @@ Dans `packages/shell/esm-app-shell/package.json` :
 
 Et désinstaller `browserslist-config-egen` :
 ```bash
-yarn workspace @eigen/esm-app-shell remove browserslist-config-egen
+yarn workspace @egen/esm-app-shell remove browserslist-config-egen
 ```
 
 ---
@@ -278,7 +278,7 @@ new WebpackPwaManifest({
   theme_color: '#1a56db',    // Couleur EIGEN
   icons: [
     {
-      src: path.resolve('src/assets/eigen-icon-512.png'),
+      src: path.resolve('src/assets/egen-icon-512.png'),
       sizes: [96, 128, 192, 256, 384, 512]
     }
   ]
@@ -313,8 +313,8 @@ grep -r "egen.org" packages/*/dist/ 2>/dev/null
 - [ ] Fichier `importmap.json` local créé pour le dev
 - [ ] Fichier `routes.registry.json` local créé pour le dev
 - [ ] Backend par défaut CLI changé vers EIGEN
-- [ ] `spaPath` par défaut changé vers `/eigen/spa/`
-- [ ] `apiUrl` par défaut changé vers `/eigen`
+- [ ] `spaPath` par défaut changé vers `/egen/spa/`
+- [ ] `apiUrl` par défaut changé vers `/egen`
 - [ ] Dépendances npm `@egen/*` externes supprimées
 - [ ] `browserslist-config-egen` retiré
 - [ ] `index.ejs` mis à jour (titre, meta)

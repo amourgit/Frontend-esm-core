@@ -7,7 +7,7 @@
 | Phase | Durée | Risque | Description |
 |-------|-------|--------|-------------|
 | **0** | 1 jour | Faible | Préparation, branches, cartographie |
-| **1** | 2 jours | **ÉLEVÉ** | Renommage namespace @egen → @eigen |
+| **1** | 2 jours | **ÉLEVÉ** | Renommage namespace @egen → @egen |
 | **2** | 1 jour | Moyen | Déconnexion sources externes |
 | **3** | 3 jours | **ÉLEVÉ** | Adaptation API (Keycloak + FastAPI) |
 | **4** | 2 jours | Faible | Refonte visuelle |
@@ -33,7 +33,7 @@
 |---------|----------------|---------------|
 | `packages/shell/esm-app-shell/src/run.ts` | App totalement cassée | Bootstrap Single-SPA |
 | `packages/framework/esm-extensions/src/extensions.ts` | Plugins cassés | Système d'extension slots |
-| `packages/tooling/eigen/src/utils/importmap.ts` | Dev impossible | Chargement des modules |
+| `packages/tooling/egen/src/utils/importmap.ts` | Dev impossible | Chargement des modules |
 | `packages/framework/esm-framework/src/index.ts` | Tout les imports cassés | Point d'entrée framework |
 | `turbo.json` | Build impossible | Ordre de compilation |
 | `packages/tooling/rspack-config/` | Build impossible | Module Federation |
@@ -45,7 +45,7 @@
 ```bash
 # Développement
 yarn run:shell                           # Démarrer le shell seul
-yarn workspace @eigen/esm-login-app start  # Démarrer une app seule
+yarn workspace @egen/esm-login-app start  # Démarrer une app seule
 
 # Build
 yarn build                               # Build tout le monorepo
@@ -75,7 +75,7 @@ find packages -name "dist" -type d -exec rm -rf {} +  # Supprimer tous les dist
 | `EGEN_CLEAN_BEFORE_BUILD` | Nettoie avant build | `true` |
 | `NODE_ENV` | Environnement | `development` |
 | `EIGEN_API_BASE` | URL de l'API EIGEN | `/api/v1` |
-| `EIGEN_IAM_URL` | URL Keycloak | `/auth/realms/eigen` |
+| `EIGEN_IAM_URL` | URL Keycloak | `/auth/realms/egen` |
 
 ---
 
@@ -108,13 +108,13 @@ Niveau 1 : RÔLES KEYCLOAK (grossier)
   APPRENANT → consultation propre profil
 
 Niveau 2 : PRIVILEGES KEYCLOAK (granulaire)
-  eigen:apprenants:read / write / delete
-  eigen:notes:read / write / validate
-  eigen:absences:read / write / justify
-  eigen:bulletins:read / generate / print
-  eigen:etablissements:read / admin
-  eigen:users:read / admin
-  eigen:planning:read / write
+  egen:apprenants:read / write / delete
+  egen:notes:read / write / validate
+  egen:absences:read / write / justify
+  egen:bulletins:read / generate / print
+  egen:etablissements:read / admin
+  egen:users:read / admin
+  egen:planning:read / write
 
 Niveau 3 : LOGIQUE MÉTIER (dans le code)
   Un enseignant ne peut saisir que les notes de ses propres classes

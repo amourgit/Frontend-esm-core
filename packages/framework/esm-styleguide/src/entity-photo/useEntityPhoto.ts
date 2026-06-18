@@ -1,7 +1,7 @@
 /** @module @category UI */
 import useSWR from 'swr';
-import { egenFetch, restBaseUrl } from '@eigen/esm-api';
-import { useConfig } from '@eigen/esm-react-utils';
+import { egenFetch, restBaseUrl } from '@egen/esm-api';
+import { useConfig } from '@egen/esm-react-utils';
 import { type StyleguideConfigObject } from '../config-schema';
 
 export interface UseEntityPhotoResult {
@@ -38,7 +38,7 @@ interface PhotoDataPoint {
  *
  * @example
  * ```tsx
- * import { useEntityPhoto } from '@eigen/esm-framework';
+ * import { useEntityPhoto } from '@egen/esm-framework';
  * function ProfilePhoto({ entityUuid }) {
  *   const { data, isLoading } = useEntityPhoto(entityUuid);
  *   if (isLoading) return <Spinner />;
@@ -48,7 +48,7 @@ interface PhotoDataPoint {
  */
 export function useEntityPhoto(entityUuid: string): UseEntityPhotoResult {
   const { entityPhotoConceptUuid } = useConfig<StyleguideConfigObject>({
-    externalModuleName: '@eigen/esm-styleguide',
+    externalModuleName: '@egen/esm-styleguide',
   });
 
   const url = entityPhotoConceptUuid

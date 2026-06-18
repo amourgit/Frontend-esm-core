@@ -1,6 +1,6 @@
 /** @module @category Utility */
 
-import { type NameUse } from '@eigen/esm-globals';
+import { type NameUse } from '@egen/esm-globals';
 
 /**
  * Gets the formatted display name for an entity.
@@ -13,7 +13,7 @@ import { type NameUse } from '@eigen/esm-globals';
  *
  * @example
  * ```ts
- * import { getEntityName } from '@eigen/esm-framework';
+ * import { getEntityName } from '@egen/esm-framework';
  * const name = getEntityName(entity); // "Alice Martin"
  * ```
  */
@@ -25,7 +25,7 @@ export function getEntityName(entity: fhir.Patient): string {
 /**
  * @deprecated Use `getEntityName` instead.
  */
-export function getPatientName(entity: fhir.Patient) /* @deprecated use getEntityName */: string {
+export function getPatientName(entity: fhir.Patient) /* @deprecated use getEntityName */ : string {
   return getEntityName(entity);
 }
 
@@ -50,7 +50,7 @@ export function formatEntityName(name: fhir.HumanName | undefined): string {
 /**
  * @deprecated Use `formatEntityName` instead.
  */
-export function formatPatientName(name: fhir.HumanName | undefined) /* @deprecated use formatEntityName */: string {
+export function formatPatientName(name: fhir.HumanName | undefined) /* @deprecated use formatEntityName */ : string {
   return formatEntityName(name);
 }
 

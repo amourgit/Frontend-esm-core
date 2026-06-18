@@ -1,7 +1,7 @@
 # PHASE 4 — Refonte Visuelle EIGEN
 
 > Durée estimée : 2-3 jours
-> Branche : `eigen/phase-4-design`
+> Branche : `egen/phase-4-design`
 > Objectif : Donner une identité visuelle propre à EIGEN sans toucher au fonctionnement du système.
 
 ---
@@ -38,59 +38,59 @@ Définir les couleurs officielles EIGEN. Exemple pour une plateforme éducative 
      ═══════════════════════════════════════════ */
 
   /* Fonds */
-  --eigen-color-bg-high-contrast: #ffffff;
-  --eigen-color-bg-medium-contrast: rgba(249, 249, 249, 0.94);
-  --eigen-color-bg-low-contrast: #f0f4ff;
-  --eigen-color-bg-lowest-contrast: #e8edf8;
+  --egen-color-bg-high-contrast: #ffffff;
+  --egen-color-bg-medium-contrast: rgba(249, 249, 249, 0.94);
+  --egen-color-bg-low-contrast: #f0f4ff;
+  --egen-color-bg-lowest-contrast: #e8edf8;
 
   /* Textes */
-  --eigen-color-ink-high-contrast: #0d1b3e;
-  --eigen-color-ink-medium-contrast: rgba(13, 27, 62, 0.7);
-  --eigen-color-ink-low-contrast: rgba(13, 27, 62, 0.4);
-  --eigen-color-ink-white: #ffffff;
+  --egen-color-ink-high-contrast: #0d1b3e;
+  --egen-color-ink-medium-contrast: rgba(13, 27, 62, 0.7);
+  --egen-color-ink-low-contrast: rgba(13, 27, 62, 0.4);
+  --egen-color-ink-white: #ffffff;
 
   /* Couleur principale — Bleu national EIGEN */
-  --eigen-color-primary-dark: #0a2463;
-  --eigen-color-primary: #1a4fba;
-  --eigen-color-primary-light: #2d6cdf;
-  --eigen-color-primary-subtle: rgba(26, 79, 186, 0.08);
+  --egen-color-primary-dark: #0a2463;
+  --egen-color-primary: #1a4fba;
+  --egen-color-primary-light: #2d6cdf;
+  --egen-color-primary-subtle: rgba(26, 79, 186, 0.08);
 
   /* Couleur secondaire — Vert (éducation, croissance) */
-  --eigen-color-secondary-dark: #0d5c2e;
-  --eigen-color-secondary: #1a8c4e;
-  --eigen-color-secondary-light: #24b865;
-  --eigen-color-secondary-subtle: rgba(26, 140, 78, 0.08);
+  --egen-color-secondary-dark: #0d5c2e;
+  --egen-color-secondary: #1a8c4e;
+  --egen-color-secondary-light: #24b865;
+  --egen-color-secondary-subtle: rgba(26, 140, 78, 0.08);
 
   /* Accent — Or (excellence académique) */
-  --eigen-color-accent: #c8942a;
-  --eigen-color-accent-light: #f5c842;
-  --eigen-color-accent-subtle: rgba(200, 148, 42, 0.1);
+  --egen-color-accent: #c8942a;
+  --egen-color-accent-light: #f5c842;
+  --egen-color-accent-subtle: rgba(200, 148, 42, 0.1);
 
   /* Statuts */
-  --eigen-color-success: #0d5c2e;
-  --eigen-color-success-bg: #e8f5ee;
-  --eigen-color-warning: #7d5500;
-  --eigen-color-warning-bg: #fff4e0;
-  --eigen-color-danger: #9e1515;
-  --eigen-color-danger-bg: #fdeaea;
-  --eigen-color-info: #0a2463;
-  --eigen-color-info-bg: #e8edf8;
+  --egen-color-success: #0d5c2e;
+  --egen-color-success-bg: #e8f5ee;
+  --egen-color-warning: #7d5500;
+  --egen-color-warning-bg: #fff4e0;
+  --egen-color-danger: #9e1515;
+  --egen-color-danger-bg: #fdeaea;
+  --egen-color-info: #0a2463;
+  --egen-color-info-bg: #e8edf8;
 
   /* Marque nationale */
-  --eigen-color-brand-bleu: #0a2463;
-  --eigen-color-brand-vert: #1a8c4e;
-  --eigen-color-brand-or: #c8942a;
-  --eigen-color-brand-blanc: #ffffff;
+  --egen-color-brand-bleu: #0a2463;
+  --egen-color-brand-vert: #1a8c4e;
+  --egen-color-brand-or: #c8942a;
+  --egen-color-brand-blanc: #ffffff;
 
   /* Compatibilité avec anciens --egen-* (à garder pendant transition) */
-  --egen-color-bg-high-contrast: var(--eigen-color-bg-high-contrast);
-  --egen-color-bg-medium-contrast: var(--eigen-color-bg-medium-contrast);
-  --egen-color-bg-low-contrast: var(--eigen-color-bg-low-contrast);
-  --egen-color-ink-high-contrast: var(--eigen-color-ink-high-contrast);
-  --egen-color-interaction: var(--eigen-color-primary);
-  --egen-color-interaction-plus-one: var(--eigen-color-primary-dark);
-  --egen-color-brand-orange: var(--eigen-color-accent);
-  --egen-color-brand-teal: var(--eigen-color-secondary);
+  --egen-color-bg-high-contrast: var(--egen-color-bg-high-contrast);
+  --egen-color-bg-medium-contrast: var(--egen-color-bg-medium-contrast);
+  --egen-color-bg-low-contrast: var(--egen-color-bg-low-contrast);
+  --egen-color-ink-high-contrast: var(--egen-color-ink-high-contrast);
+  --egen-color-interaction: var(--egen-color-primary);
+  --egen-color-interaction-plus-one: var(--egen-color-primary-dark);
+  --egen-color-brand-orange: var(--egen-color-accent);
+  --egen-color-brand-teal: var(--egen-color-secondary);
 }
 ```
 
@@ -127,7 +127,7 @@ Remplacer les logos Egen dans :
 - `packages/apps/esm-login-app/src/logo.component.tsx`
 - `packages/apps/esm-primary-navigation-app/src/components/logo/logo.component.tsx`
 
-**Créer** `packages/framework/esm-styleguide/src/logo/eigen-logo.svg` :
+**Créer** `packages/framework/esm-styleguide/src/logo/egen-logo.svg` :
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" role="img">
@@ -164,22 +164,22 @@ Remplacer les logos Egen dans :
 
 ### Sprite SVG pour le shell (logo blanc pour header dark)
 
-Créer `packages/framework/esm-styleguide/src/logo/eigen-sprite.svg` :
+Créer `packages/framework/esm-styleguide/src/logo/egen-sprite.svg` :
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
   <!-- Logo couleur pour fond blanc (login page) -->
-  <symbol id="eigen-logo-full-color" viewBox="0 0 200 50">
+  <symbol id="egen-logo-full-color" viewBox="0 0 200 50">
     <!-- ... même SVG avec couleurs bleues/vertes/or ... -->
   </symbol>
   
   <!-- Logo blanc pour fond sombre (header de navigation) -->
-  <symbol id="eigen-logo-white" viewBox="0 0 200 50">
+  <symbol id="egen-logo-white" viewBox="0 0 200 50">
     <!-- ... même SVG mais tout en blanc ... -->
   </symbol>
   
   <!-- Icône seule (32x32, pour favicon et notifications) -->
-  <symbol id="eigen-icon" viewBox="0 0 32 32">
+  <symbol id="egen-icon" viewBox="0 0 32 32">
     <!-- ... juste le livre + étoile ... -->
   </symbol>
 </svg>
@@ -201,7 +201,7 @@ const Logo: React.FC = () => {
         logo.name
       ) : (
         <svg aria-label="EIGEN — Plateforme Éducative Nationale" role="img" width={130} height={40}>
-          <use href="#eigen-logo-white" />
+          <use href="#egen-logo-white" />
         </svg>
       )}
     </>
@@ -221,7 +221,7 @@ const Logo: React.FC = () => {
 .container {
   display: flex;
   height: 100vh;
-  background-color: var(--eigen-color-bg-low-contrast);
+  background-color: var(--egen-color-bg-low-contrast);
 }
 
 // Panneau gauche - Branding EIGEN
@@ -233,9 +233,9 @@ const Logo: React.FC = () => {
   align-items: center;
   background: linear-gradient(
     145deg,
-    var(--eigen-color-primary-dark) 0%,
-    var(--eigen-color-primary) 50%,
-    var(--eigen-color-secondary) 100%
+    var(--egen-color-primary-dark) 0%,
+    var(--egen-color-primary) 50%,
+    var(--egen-color-secondary) 100%
   );
   padding: 3rem;
   position: relative;
@@ -296,21 +296,21 @@ const Logo: React.FC = () => {
 .formTitle {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--eigen-color-ink-high-contrast);
+  color: var(--egen-color-ink-high-contrast);
   margin-bottom: 0.5rem;
 }
 
 .formSubtitle {
-  color: var(--eigen-color-ink-medium-contrast);
+  color: var(--egen-color-ink-medium-contrast);
   margin-bottom: 2rem;
 }
 
 .loginButton {
   width: 100%;
-  background-color: var(--eigen-color-primary) !important;
+  background-color: var(--egen-color-primary) !important;
   
   &:hover {
-    background-color: var(--eigen-color-primary-dark) !important;
+    background-color: var(--egen-color-primary-dark) !important;
   }
 }
 ```
@@ -325,7 +325,7 @@ return (
   <div className={styles.container}>
     {/* Panneau gauche - Branding */}
     <div className={styles.brandingPanel}>
-      <img src="/eigen-logo-white.svg" alt="EIGEN" className={styles.brandingLogo} />
+      <img src="/egen-logo-white.svg" alt="EIGEN" className={styles.brandingLogo} />
       <h1 className={styles.brandingTitle}>
         Plateforme Éducative Nationale
       </h1>
@@ -361,8 +361,8 @@ return (
 ```scss
 .topNavHeader {
   // Carbon Header en bleu EIGEN
-  background-color: var(--eigen-color-primary-dark) !important;
-  border-bottom: 3px solid var(--eigen-color-accent) !important; // Filet or
+  background-color: var(--egen-color-primary-dark) !important;
+  border-bottom: 3px solid var(--egen-color-accent) !important; // Filet or
 
   :global(.cds--header__name) {
     color: white;
@@ -432,14 +432,14 @@ Dans chaque app, modifier `translations/en.json` et `translations/fr.json` :
 
 ### Remplacer le favicon
 
-1. Créer `packages/shell/esm-app-shell/src/assets/eigen-favicon.ico`
-2. Créer `packages/shell/esm-app-shell/src/assets/eigen-icon-192.png`
-3. Créer `packages/shell/esm-app-shell/src/assets/eigen-icon-512.png`
+1. Créer `packages/shell/esm-app-shell/src/assets/egen-favicon.ico`
+2. Créer `packages/shell/esm-app-shell/src/assets/egen-icon-192.png`
+3. Créer `packages/shell/esm-app-shell/src/assets/egen-icon-512.png`
 
 Dans `packages/shell/esm-app-shell/src/index.ejs` :
 ```html
-<link rel="icon" href="./eigen-favicon.ico" type="image/x-icon" />
-<link rel="apple-touch-icon" href="./eigen-icon-192.png" />
+<link rel="icon" href="./egen-favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon" href="./egen-icon-192.png" />
 ```
 
 ---

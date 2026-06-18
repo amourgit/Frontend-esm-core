@@ -12,23 +12,23 @@
 git checkout main
 git pull origin main
 
-git checkout -b eigen/phase-1-namespace
+git checkout -b egen/phase-1-namespace
 git checkout main
 
-git checkout -b eigen/phase-2-disconnect
+git checkout -b egen/phase-2-disconnect
 git checkout main
 
-git checkout -b eigen/phase-3-api
+git checkout -b egen/phase-3-api
 git checkout main
 
-git checkout -b eigen/phase-4-design
+git checkout -b egen/phase-4-design
 git checkout main
 
 # Branche d'intégration progressive
-git checkout -b eigen/integration
+git checkout -b egen/integration
 ```
 
-> **Règle d'or** : On merge dans `eigen/integration` uniquement quand une phase est terminée et testée. On ne merge pas dans `main` tant qu'on n'a pas un système fonctionnel de bout en bout.
+> **Règle d'or** : On merge dans `egen/integration` uniquement quand une phase est terminée et testée. On ne merge pas dans `main` tant qu'on n'a pas un système fonctionnel de bout en bout.
 
 ---
 
@@ -82,51 +82,51 @@ Créer `EIGEN-MIGRATION/name-mapping.json` :
 ```json
 {
   "packageNames": {
-    "@egen/esm-core": "@eigen/esm-core",
-    "@egen/esm-framework": "@eigen/esm-framework",
-    "@egen/esm-api": "@eigen/esm-api",
-    "@egen/esm-config": "@eigen/esm-config",
-    "@egen/esm-context": "@eigen/esm-context",
-    "@egen/esm-dynamic-loading": "@eigen/esm-dynamic-loading",
-    "@egen/esm-data-api": "@eigen/esm-data-api",
-    "@egen/esm-error-handling": "@eigen/esm-error-handling",
-    "@egen/esm-expression-evaluator": "@eigen/esm-expression-evaluator",
-    "@egen/esm-extensions": "@eigen/esm-extensions",
-    "@egen/esm-feature-flags": "@eigen/esm-feature-flags",
-    "@egen/esm-globals": "@eigen/esm-globals",
-    "@egen/esm-navigation": "@eigen/esm-navigation",
-    "@egen/esm-offline": "@eigen/esm-offline",
-    "@egen/esm-react-utils": "@eigen/esm-react-utils",
-    "@egen/esm-routes": "@eigen/esm-routes",
-    "@egen/esm-state": "@eigen/esm-state",
-    "@egen/esm-styleguide": "@eigen/esm-styleguide",
-    "@egen/esm-translations": "@eigen/esm-translations",
-    "@egen/esm-utils": "@eigen/esm-utils",
-    "@egen/esm-app-shell": "@eigen/esm-app-shell",
-    "@egen/esm-login-app": "@eigen/esm-login-app",
-    "@egen/esm-primary-navigation-app": "@eigen/esm-primary-navigation-app",
-    "@egen/esm-implementer-tools-app": "@eigen/esm-admin-tools-app",
-    "@egen/esm-devtools-app": "@eigen/esm-devtools-app",
-    "@egen/esm-help-menu-app": "@eigen/esm-help-menu-app",
-    "@egen/esm-offline-tools-app": "@eigen/esm-offline-tools-app",
-    "@egen/rspack-config": "@eigen/rspack-config",
-    "@egen/webpack-config": "@eigen/webpack-config",
-    "@egen/storybook": "@eigen/storybook"
+    "@egen/esm-core": "@egen/esm-core",
+    "@egen/esm-framework": "@egen/esm-framework",
+    "@egen/esm-api": "@egen/esm-api",
+    "@egen/esm-config": "@egen/esm-config",
+    "@egen/esm-context": "@egen/esm-context",
+    "@egen/esm-dynamic-loading": "@egen/esm-dynamic-loading",
+    "@egen/esm-data-api": "@egen/esm-data-api",
+    "@egen/esm-error-handling": "@egen/esm-error-handling",
+    "@egen/esm-expression-evaluator": "@egen/esm-expression-evaluator",
+    "@egen/esm-extensions": "@egen/esm-extensions",
+    "@egen/esm-feature-flags": "@egen/esm-feature-flags",
+    "@egen/esm-globals": "@egen/esm-globals",
+    "@egen/esm-navigation": "@egen/esm-navigation",
+    "@egen/esm-offline": "@egen/esm-offline",
+    "@egen/esm-react-utils": "@egen/esm-react-utils",
+    "@egen/esm-routes": "@egen/esm-routes",
+    "@egen/esm-state": "@egen/esm-state",
+    "@egen/esm-styleguide": "@egen/esm-styleguide",
+    "@egen/esm-translations": "@egen/esm-translations",
+    "@egen/esm-utils": "@egen/esm-utils",
+    "@egen/esm-app-shell": "@egen/esm-app-shell",
+    "@egen/esm-login-app": "@egen/esm-login-app",
+    "@egen/esm-primary-navigation-app": "@egen/esm-primary-navigation-app",
+    "@egen/esm-implementer-tools-app": "@egen/esm-admin-tools-app",
+    "@egen/esm-devtools-app": "@egen/esm-devtools-app",
+    "@egen/esm-help-menu-app": "@egen/esm-help-menu-app",
+    "@egen/esm-offline-tools-app": "@egen/esm-offline-tools-app",
+    "@egen/rspack-config": "@egen/rspack-config",
+    "@egen/webpack-config": "@egen/webpack-config",
+    "@egen/storybook": "@egen/storybook"
   },
   "cliNames": {
-    "egen": "eigen"
+    "egen": "egen"
   },
   "globalVariables": {
     "egenBase": "eigenBase",
     "getEgenSpaBase": "getEigenSpaBase",
     "window.egenBase": "window.eigenBase",
-    "egen-logo": "eigen-logo",
-    "egen-top-nav": "eigen-top-nav",
-    "egen-color": "eigen-color"
+    "egen-logo": "egen-logo",
+    "egen-top-nav": "egen-top-nav",
+    "egen-color": "egen-color"
   },
   "urls": {
-    "dev3.egen.org": "dev.eigen.ga (ton serveur)",
-    "json.egen.org": "schema.eigen.ga (schéma local)",
+    "dev3.egen.org": "dev.egen.ga (ton serveur)",
+    "json.egen.org": "schema.egen.ga (schéma local)",
     "github.com/egen": "github.com/amourgit"
   }
 }
@@ -175,15 +175,15 @@ Modifier `.env` :
 
 ```env
 # Backend EIGEN (IAM + Gestion scolaire)
-E2E_BASE_URL=http://localhost:8081/eigen
+E2E_BASE_URL=http://localhost:8081/egen
 E2E_USER_ADMIN_USERNAME=admin
 E2E_USER_ADMIN_PASSWORD=Admin123
 E2E_LOGIN_DEFAULT_LOCATION_UUID=   # UUID d'un établissement scolaire dans ton backend
 
 # URLs backend EIGEN
 EIGEN_API_BASE_URL=http://localhost:8081/api/v1
-EIGEN_IAM_URL=http://localhost:8180/auth/realms/eigen
-EIGEN_SPA_PATH=/eigen/spa
+EIGEN_IAM_URL=http://localhost:8180/auth/realms/egen
+EIGEN_SPA_PATH=/egen/spa
 ```
 
 ---

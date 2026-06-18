@@ -1,7 +1,7 @@
-# PHASE 1 — Renommage du Namespace `@egen` → `@eigen`
+# PHASE 1 — Renommage du Namespace `@egen` → `@egen`
 
 > Durée estimée : 1-2 jours
-> Branche : `eigen/phase-1-namespace`
+> Branche : `egen/phase-1-namespace`
 > Objectif : Remplacer tous les identifiants `egen` dans les noms de packages, les imports, et les variables internes, SANS casser le système de build.
 
 ---
@@ -44,36 +44,36 @@ Ce script modifie uniquement les `package.json` (pas les imports TypeScript — 
 
 # Mapping des noms
 declare -A RENAMES=(
-  ["@egen/esm-core"]="@eigen/esm-core"
-  ["@egen/esm-framework"]="@eigen/esm-framework"
-  ["@egen/esm-api"]="@eigen/esm-api"
-  ["@egen/esm-config"]="@eigen/esm-config"
-  ["@egen/esm-context"]="@eigen/esm-context"
-  ["@egen/esm-dynamic-loading"]="@eigen/esm-dynamic-loading"
-  ["@egen/esm-data-api"]="@eigen/esm-data-api"
-  ["@egen/esm-error-handling"]="@eigen/esm-error-handling"
-  ["@egen/esm-expression-evaluator"]="@eigen/esm-expression-evaluator"
-  ["@egen/esm-extensions"]="@eigen/esm-extensions"
-  ["@egen/esm-feature-flags"]="@eigen/esm-feature-flags"
-  ["@egen/esm-globals"]="@eigen/esm-globals"
-  ["@egen/esm-navigation"]="@eigen/esm-navigation"
-  ["@egen/esm-offline"]="@eigen/esm-offline"
-  ["@egen/esm-react-utils"]="@eigen/esm-react-utils"
-  ["@egen/esm-routes"]="@eigen/esm-routes"
-  ["@egen/esm-state"]="@eigen/esm-state"
-  ["@egen/esm-styleguide"]="@eigen/esm-styleguide"
-  ["@egen/esm-translations"]="@eigen/esm-translations"
-  ["@egen/esm-utils"]="@eigen/esm-utils"
-  ["@egen/esm-app-shell"]="@eigen/esm-app-shell"
-  ["@egen/esm-login-app"]="@eigen/esm-login-app"
-  ["@egen/esm-primary-navigation-app"]="@eigen/esm-primary-navigation-app"
-  ["@egen/esm-implementer-tools-app"]="@eigen/esm-admin-tools-app"
-  ["@egen/esm-devtools-app"]="@eigen/esm-devtools-app"
-  ["@egen/esm-help-menu-app"]="@eigen/esm-help-menu-app"
-  ["@egen/esm-offline-tools-app"]="@eigen/esm-offline-tools-app"
-  ["@egen/rspack-config"]="@eigen/rspack-config"
-  ["@egen/webpack-config"]="@eigen/webpack-config"
-  ["@egen/storybook"]="@eigen/storybook"
+  ["@egen/esm-core"]="@egen/esm-core"
+  ["@egen/esm-framework"]="@egen/esm-framework"
+  ["@egen/esm-api"]="@egen/esm-api"
+  ["@egen/esm-config"]="@egen/esm-config"
+  ["@egen/esm-context"]="@egen/esm-context"
+  ["@egen/esm-dynamic-loading"]="@egen/esm-dynamic-loading"
+  ["@egen/esm-data-api"]="@egen/esm-data-api"
+  ["@egen/esm-error-handling"]="@egen/esm-error-handling"
+  ["@egen/esm-expression-evaluator"]="@egen/esm-expression-evaluator"
+  ["@egen/esm-extensions"]="@egen/esm-extensions"
+  ["@egen/esm-feature-flags"]="@egen/esm-feature-flags"
+  ["@egen/esm-globals"]="@egen/esm-globals"
+  ["@egen/esm-navigation"]="@egen/esm-navigation"
+  ["@egen/esm-offline"]="@egen/esm-offline"
+  ["@egen/esm-react-utils"]="@egen/esm-react-utils"
+  ["@egen/esm-routes"]="@egen/esm-routes"
+  ["@egen/esm-state"]="@egen/esm-state"
+  ["@egen/esm-styleguide"]="@egen/esm-styleguide"
+  ["@egen/esm-translations"]="@egen/esm-translations"
+  ["@egen/esm-utils"]="@egen/esm-utils"
+  ["@egen/esm-app-shell"]="@egen/esm-app-shell"
+  ["@egen/esm-login-app"]="@egen/esm-login-app"
+  ["@egen/esm-primary-navigation-app"]="@egen/esm-primary-navigation-app"
+  ["@egen/esm-implementer-tools-app"]="@egen/esm-admin-tools-app"
+  ["@egen/esm-devtools-app"]="@egen/esm-devtools-app"
+  ["@egen/esm-help-menu-app"]="@egen/esm-help-menu-app"
+  ["@egen/esm-offline-tools-app"]="@egen/esm-offline-tools-app"
+  ["@egen/rspack-config"]="@egen/rspack-config"
+  ["@egen/webpack-config"]="@egen/webpack-config"
+  ["@egen/storybook"]="@egen/storybook"
 )
 
 echo "Renommage des package.json..."
@@ -102,13 +102,13 @@ Après les `package.json`, modifier les imports dans les fichiers `.ts` et `.tsx
 
 echo "Renommage des imports TypeScript..."
 
-# Remplacer @egen/ par @eigen/ dans tous les imports
+# Remplacer @egen/ par @egen/ dans tous les imports
 find packages -name "*.ts" -o -name "*.tsx" | grep -v node_modules | while read file; do
   if grep -q "@egen/" "$file"; then
-    sed -i "s|from '@egen/|from '@eigen/|g" "$file"
-    sed -i 's|from "@egen/|from "@eigen/|g' "$file"
-    sed -i "s|require('@egen/|require('@eigen/|g" "$file"
-    sed -i 's|require("@egen/|require("@eigen/|g' "$file"
+    sed -i "s|from '@egen/|from '@egen/|g" "$file"
+    sed -i 's|from "@egen/|from "@egen/|g' "$file"
+    sed -i "s|require('@egen/|require('@egen/|g" "$file"
+    sed -i 's|require("@egen/|require("@egen/|g' "$file"
     echo "  ✓ $file"
   fi
 done
@@ -124,50 +124,50 @@ Modifier manuellement le `package.json` racine :
 
 ```json
 {
-  "name": "@eigen/esm-core",
+  "name": "@egen/esm-core",
   "version": "1.0.0",
   "scripts": {
-    "run:eigen": "eigen",
-    "run:shell": "yarn workspace @eigen/esm-app-shell watch",
-    "ci:publish-next": "yarn workspaces foreach --all --topological --exclude @eigen/esm-core --exclude @eigen/storybook npm publish --tolerate-republish --access public --tag next",
-    "ci:publish": "yarn workspaces foreach --all --topological --exclude @eigen/esm-core --exclude @eigen/storybook npm publish --tolerate-republish --access public --tag latest",
-    "build:apps": "turbo run build --filter='@eigen/*-app'",
-    "start": "eigen develop"
+    "run:egen": "egen",
+    "run:shell": "yarn workspace @egen/esm-app-shell watch",
+    "ci:publish-next": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag next",
+    "ci:publish": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag latest",
+    "build:apps": "turbo run build --filter='@egen/*-app'",
+    "start": "egen develop"
   }
 }
 ```
 
 ---
 
-## 1.4 Renommage du CLI `egen` → `eigen`
+## 1.4 Renommage du CLI `egen` → `egen`
 
 Le package `packages/tooling/egen` doit être renommé :
 
 ```bash
 # 1. Renommer le dossier
-mv packages/tooling/egen packages/tooling/eigen
+mv packages/tooling/egen packages/tooling/egen
 
 # 2. Modifier package.json du CLI
 ```
 
-Dans `packages/tooling/eigen/package.json` :
+Dans `packages/tooling/egen/package.json` :
 ```json
 {
-  "name": "eigen",
+  "name": "egen",
   "bin": {
-    "eigen": "./dist/cli.js",
+    "egen": "./dist/cli.js",
     "rspack": "./bin/rspack.cjs",
     "webpack": "./bin/webpack.cjs"
   }
 }
 ```
 
-Dans `packages/tooling/eigen/src/cli.ts`, changer la description :
+Dans `packages/tooling/egen/src/cli.ts`, changer la description :
 ```typescript
 // Changer tous les textes "Egen" → "EIGEN"
 // Changer le backend par défaut :
 .option('backend', {
-  default: 'https://dev.eigen.ga',   // ← Ton backend EIGEN
+  default: 'https://dev.egen.ga',   // ← Ton backend EIGEN
   describe: 'The backend to proxy API requests to.',
 })
 ```
@@ -217,7 +217,7 @@ Object.defineProperty(window, 'egenBase', {
 
 ---
 
-## 1.6 Renommage des constantes CSS `egen-*` → `eigen-*`
+## 1.6 Renommage des constantes CSS `egen-*` → `egen-*`
 
 Dans `packages/framework/esm-styleguide/src/components/_colors.scss` :
 
@@ -230,11 +230,11 @@ Dans `packages/framework/esm-styleguide/src/components/_colors.scss` :
 
 /* Après */
 :root {
-  --eigen-color-bg-high-contrast: #ffffff;
-  --eigen-color-brand-primary: #1a56db;   /* Couleur principale EIGEN */
+  --egen-color-bg-high-contrast: #ffffff;
+  --egen-color-brand-primary: #1a56db;   /* Couleur principale EIGEN */
   
   /* Alias de compatibilité pendant transition */
-  --egen-color-bg-high-contrast: var(--eigen-color-bg-high-contrast);
+  --egen-color-bg-high-contrast: var(--egen-color-bg-high-contrast);
 }
 ```
 
@@ -246,14 +246,14 @@ grep -r "\-\-egen\-" packages --include="*.scss" | wc -l
 
 ```bash
 find packages -name "*.scss" | while read file; do
-  sed -i 's/--egen-/--eigen-/g' "$file"
-  sed -i 's/egen-color-/eigen-color-/g' "$file"
+  sed -i 's/--egen-/--egen-/g' "$file"
+  sed -i 's/egen-color-/egen-color-/g' "$file"
 done
 ```
 
 ---
 
-## 1.7 DOM IDs `egen-*` → `eigen-*`
+## 1.7 DOM IDs `egen-*` → `egen-*`
 
 Chercher dans le HTML/TSX :
 
@@ -262,8 +262,8 @@ grep -r "egen-" packages/apps --include="*.tsx" --include="*.ts" --include="*.sc
 ```
 
 Exemples à changer :
-- `id="egen-top-nav-app-container"` → `id="eigen-top-nav-app-container"`
-- `className="egen-icon"` → `className="eigen-icon"`
+- `id="egen-top-nav-app-container"` → `id="egen-top-nav-app-container"`
+- `className="egen-icon"` → `className="egen-icon"`
 
 Dans `packages/shell/esm-app-shell/src/index.ejs` (template HTML) :
 ```html
@@ -271,7 +271,7 @@ Dans `packages/shell/esm-app-shell/src/index.ejs` (template HTML) :
 <div id="egen-top-nav-app-container"></div>
 
 <!-- Après -->
-<div id="eigen-top-nav-app-container"></div>
+<div id="egen-top-nav-app-container"></div>
 ```
 
 Et dans `packages/apps/esm-primary-navigation-app/src/routes.json` :
@@ -279,7 +279,7 @@ Et dans `packages/apps/esm-primary-navigation-app/src/routes.json` :
 {
   "pages": [
     {
-      "containerDomId": "eigen-top-nav-app-container"
+      "containerDomId": "egen-top-nav-app-container"
     }
   ]
 }
@@ -302,14 +302,14 @@ Dans chaque `src/routes.json` des 6 apps, remplacer :
 
 // Après
 {
-  "$schema": "../../schema/eigen-routes.schema.json",
+  "$schema": "../../schema/egen-routes.schema.json",
   "backendDependencies": {
-    "eigen-api": ">=1.0.0"
+    "egen-api": ">=1.0.0"
   }
 }
 ```
 
-Créer le schéma local `packages/framework/esm-routes/schema/eigen-routes.schema.json` (copier et adapter le schéma Egen).
+Créer le schéma local `packages/framework/esm-routes/schema/egen-routes.schema.json` (copier et adapter le schéma Egen).
 
 ---
 
@@ -334,10 +334,10 @@ grep -r "@egen/" packages --include="*.ts" --include="*.tsx" | grep -v node_modu
 - [ ] Script `rename-packages.sh` exécuté et vérifié
 - [ ] Script `rename-imports.sh` exécuté et vérifié
 - [ ] `package.json` racine modifié
-- [ ] Dossier `tooling/egen` renommé en `tooling/eigen`
-- [ ] CLI renommée (`egen` → `eigen`)
+- [ ] Dossier `tooling/egen` renommé en `tooling/egen`
+- [ ] CLI renommée (`egen` → `egen`)
 - [ ] Variables globales `window.egenBase` aliasées
-- [ ] CSS `--egen-*` renommé en `--eigen-*`
+- [ ] CSS `--egen-*` renommé en `--egen-*`
 - [ ] DOM IDs `egen-*` renommés
 - [ ] Schémas `routes.json` mis à jour
 - [ ] `yarn install` sans erreur

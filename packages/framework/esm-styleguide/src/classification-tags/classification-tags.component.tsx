@@ -1,8 +1,8 @@
 /** @module @category UI */
 import React from 'react';
 import { Tag } from '@carbon/react';
-import { useConfig } from '@eigen/esm-react-utils';
-import { getCoreTranslation } from '@eigen/esm-translations';
+import { useConfig } from '@egen/esm-react-utils';
+import { getCoreTranslation } from '@egen/esm-translations';
 import { type StyleguideConfigObject } from '../config-schema';
 
 export interface ClassificationTag {
@@ -25,7 +25,7 @@ interface ClassificationTagsProps {
  *
  * @example
  * ```tsx
- * import { ClassificationTags } from '@eigen/esm-framework';
+ * import { ClassificationTags } from '@egen/esm-framework';
  * <ClassificationTags
  *   classifications={[
  *     { display: 'High Priority', rank: 'primary' },
@@ -47,8 +47,8 @@ export function ClassificationTags({ classifications }: ClassificationTagsProps)
         const color = isPrimary
           ? classificationTags?.primaryColor ?? 'red'
           : isSecondary
-          ? classificationTags?.secondaryColor ?? 'blue'
-          : 'gray';
+            ? classificationTags?.secondaryColor ?? 'blue'
+            : 'gray';
 
         return (
           <Tag key={`${tag.display}-${i}`} type={color as any} size="sm">

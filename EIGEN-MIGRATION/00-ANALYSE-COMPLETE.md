@@ -168,7 +168,7 @@ Frontend-esm-core/
 | `esm-translations` | Support internationalisation | Garder (ajouter FR) |
 | `esm-utils` | Utilitaires divers | Garder |
 
-### 2.7 La CLI (`egen` → futur `eigen`)
+### 2.7 La CLI (`egen` → futur `egen`)
 
 La CLI fournit ces commandes :
 - `egen develop` → Démarre le serveur de dev (avec proxy vers backend)
@@ -207,7 +207,7 @@ Au démarrage :
 
 ### 3.3 Packages npm `@egen/*`
 **Où** : Toutes les dépendances inter-packages
-**Ce qu'il faut faire** : Renommer en `@eigen/*` dans tous les `package.json`
+**Ce qu'il faut faire** : Renommer en `@egen/*` dans tous les `package.json`
 
 ### 3.4 Scripts `publish` vers npm public
 **Où** : `package.json` racine (scripts `ci:publish`, `ci:publish-next`)
@@ -263,7 +263,7 @@ Au démarrage :
 - Maintenir un **fichier de mapping** ancien-nom → nouveau-nom pour les recherches
 
 ### ❌ À ÉVITER
-- Ne jamais faire un `find/replace` global de "egen" → "eigen" en une fois (tu casseras les imports npm qui n'existent pas encore)
+- Ne jamais faire un `find/replace` global de "egen" → "egen" en une fois (tu casseras les imports npm qui n'existent pas encore)
 - Ne jamais modifier les fichiers `dist/` directement
 - Ne pas supprimer `husky` et `lint-staged` (ils protègent la qualité du code)
 - Ne pas toucher à `single-spa` (c'est la fondation, ne pas le remplacer)

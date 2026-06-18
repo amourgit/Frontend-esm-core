@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
 import isToday from 'dayjs/plugin/isToday.js';
-import { egenFetch, restBaseUrl } from '@eigen/esm-api';
-import { defaultSessionCustomRepresentation, type Session } from '@eigen/esm-data-api';
+import { egenFetch, restBaseUrl } from '@egen/esm-api';
+import { defaultSessionCustomRepresentation, type Session } from '@egen/esm-data-api';
 import { useSessionContextStore } from './useSessionContextStore';
 
 dayjs.extend(isToday);
@@ -34,7 +34,7 @@ export interface SessionContextReturnType {
  *
  * @example
  * ```tsx
- * import { useSessionContext } from '@eigen/esm-framework';
+ * import { useSessionContext } from '@egen/esm-framework';
  * function EntitySessionStatus({ entityUuid }) {
  *   const { activeSession, isLoading } = useSessionContext(entityUuid);
  *   if (isLoading) return <Spinner />;
@@ -46,14 +46,9 @@ export function useSessionContext(
   entityUuid: string,
   representation = defaultSessionCustomRepresentation,
 ): SessionContextReturnType {
-  const {
-    entityUuid: sessionStoreEntityUuid,
-    manuallySetSessionUuid,
-    setSessionContext,
-  } = useSessionContextStore();
+  const { entityUuid: sessionStoreEntityUuid, manuallySetSessionUuid, setSessionContext } = useSessionContextStore();
 
-  const retrospectiveSessionUuid =
-    entityUuid && sessionStoreEntityUuid == entityUuid ? manuallySetSessionUuid : null;
+  const retrospectiveSessionUuid = entityUuid && sessionStoreEntityUuid == entityUuid ? manuallySetSessionUuid : null;
   const activeSessionUrlSuffix = `?entity=${entityUuid}&v=${representation}&includeInactive=false`;
   const retrospectiveSessionUrlSuffix = `/${retrospectiveSessionUuid}?v=${representation}`;
 
@@ -73,7 +68,10 @@ export function useSessionContext(
     isValidating: retroIsValidating,
   } = useSWR<{
     data: Session;
-  }>(entityUuid && retrospectiveSessionUuid ? `${restBaseUrl}/session${retrospectiveSessionUrlSuffix}` : null, egenFetch);
+  }>(
+    entityUuid && retrospectiveSessionUuid ? `${restBaseUrl}/session${retrospectiveSessionUrlSuffix}` : null,
+    egenFetch,
+  );
 
   const activeSession = useMemo(
     () => activeData?.data.results.find((s) => s.stopDatetime === null) ?? null,
@@ -88,7 +86,12 @@ export function useSessionContext(
   const previousCurrentSession = useRef<Session | null>(null);
 
   useEffect(() => {
-    if (!activeIsValidating && activeSession && sessionStoreEntityUuid === entityUuid && manuallySetSessionUuid === null) {
+    if (
+      !activeIsValidating &&
+      activeSession &&
+      sessionStoreEntityUuid === entityUuid &&
+      manuallySetSessionUuid === null
+    ) {
       setSessionContext(activeSession);
     }
     if (!retroIsValidating) {
@@ -103,7 +106,14 @@ export function useSessionContext(
       }
       previousCurrentSession.current = currentSession;
     }
-  }, [currentSession, manuallySetSessionUuid, activeSession, activeIsValidating, retroIsValidating, sessionStoreEntityUuid]);
+  }, [
+    currentSession,
+    manuallySetSessionUuid,
+    activeSession,
+    activeIsValidating,
+    retroIsValidating,
+    sessionStoreEntityUuid,
+  ]);
 
   const mutateSession = useCallback(() => {
     activeMutate();

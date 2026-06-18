@@ -1,7 +1,7 @@
 /** @module @category UI */
 import React, { useMemo, useId } from 'react';
 import classNames from 'classnames';
-import { getCoreTranslation } from '@eigen/esm-translations';
+import { getCoreTranslation } from '@egen/esm-translations';
 import {
   calculateInterpretation,
   normalizeInterpretation,
@@ -42,7 +42,7 @@ export interface NumericDataPointProps {
  *
  * @example
  * ```tsx
- * import { NumericDataPoint } from '@eigen/esm-framework';
+ * import { NumericDataPoint } from '@egen/esm-framework';
  * <NumericDataPoint
  *   value={98.5}
  *   unit="%"
@@ -87,10 +87,10 @@ export const NumericDataPoint: React.FC<NumericDataPointProps> = ({
   const flaggedAbnormal = interpretation !== 'normal';
 
   const labelId = label
-    ? `eigen-numeric-dp-label-${label.replaceAll(/\s+/g, '-').toLowerCase()}-${generatedId}`
+    ? `egen-numeric-dp-label-${label.replaceAll(/\s+/g, '-').toLowerCase()}-${generatedId}`
     : undefined;
-  const valueId = `eigen-numeric-dp-value-${generatedId}`;
-  const unitId = `eigen-numeric-dp-unit-${generatedId}`;
+  const valueId = `egen-numeric-dp-value-${generatedId}`;
+  const unitId = `egen-numeric-dp-unit-${generatedId}`;
 
   const hasValue = value != null && value !== '';
   const displayValue = hasValue ? value : getCoreTranslation('notAvailable', 'Not available');

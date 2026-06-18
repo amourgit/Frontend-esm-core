@@ -1,7 +1,7 @@
 # PHASE 3 — Adaptation de l'API vers EIGEN
 
 > Durée estimée : 2-3 jours
-> Branche : `eigen/phase-3-api`
+> Branche : `egen/phase-3-api`
 > Objectif : Remplacer tous les appels API Egen (REST `/ws/rest/v1`, FHIR `/ws/fhir2/R4`, session Egen) par les APIs EIGEN (FastAPI + Keycloak).
 
 ---
@@ -50,7 +50,7 @@ export function makeUrl(path: string) {
 La mécanique de base du fetch ne change pas beaucoup. Les différences principales :
 
 ```typescript
-// Fichier : packages/framework/esm-api/src/eigen-fetch.ts (renommé)
+// Fichier : packages/framework/esm-api/src/egen-fetch.ts (renommé)
 
 // CHANGEMENT 1 : Authentification
 // Avant : Basic auth ou cookie de session Egen
@@ -282,7 +282,7 @@ const handleLogin = async (username: string, password: string) => {
 };
 
 // Après
-import { loginWithCredentials } from '@eigen/esm-api';
+import { loginWithCredentials } from '@egen/esm-api';
 
 const handleLogin = async (username: string, password: string) => {
   setIsLoggingIn(true);
@@ -416,7 +416,7 @@ Créer `packages/framework/esm-data-api/src/hooks.ts` :
 
 ```typescript
 import useSWR from 'swr';
-import { eigenFetch } from '@eigen/esm-api';
+import { eigenFetch } from '@egen/esm-api';
 import type { Apprenant, Classe, Enseignant, Etablissement, NoteEvaluation } from './types';
 
 // Hook pour récupérer un apprenant
@@ -504,15 +504,15 @@ L'un des objectifs clés est la gestion fine des permissions au niveau frontend.
  *   - APPRENANT             : Consultation (son propre profil)
  *
  * PRIVILEGES (permissions granulaires Keycloak):
- *   - eigen:apprenants:read
- *   - eigen:apprenants:write
- *   - eigen:notes:read
- *   - eigen:notes:write
- *   - eigen:absences:read
- *   - eigen:absences:write
- *   - eigen:bulletins:generate
- *   - eigen:etablissements:admin
- *   - eigen:users:admin
+ *   - egen:apprenants:read
+ *   - egen:apprenants:write
+ *   - egen:notes:read
+ *   - egen:notes:write
+ *   - egen:absences:read
+ *   - egen:absences:write
+ *   - egen:bulletins:generate
+ *   - egen:etablissements:admin
+ *   - egen:users:admin
  */
 
 import { useSession } from './current-user';

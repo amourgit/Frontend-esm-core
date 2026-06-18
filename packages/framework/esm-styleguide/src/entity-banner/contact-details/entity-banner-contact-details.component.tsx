@@ -2,9 +2,9 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { InlineLoading } from '@carbon/react';
-import { type CoreTranslationKey, getCoreTranslation } from '@eigen/esm-translations';
-import { ConfigurableLink, useEntity } from '@eigen/esm-react-utils';
-import { parseDate } from '@eigen/esm-utils';
+import { type CoreTranslationKey, getCoreTranslation } from '@egen/esm-translations';
+import { ConfigurableLink, useEntity } from '@egen/esm-react-utils';
+import { parseDate } from '@egen/esm-utils';
 import { useEntityContactAttributes } from './useEntityAttributes';
 import { useEntityGroupsForEntity } from './useEntityGroupsForEntity';
 import { useRelationships } from './useRelationships';
@@ -108,10 +108,7 @@ const Contact: React.FC<{ entityUuid: string; inactive?: boolean }> = ({ entityU
         ? [
             ...contactAttributes?.map((contact) => [
               contact.attributeType.display
-                ? getCoreTranslation(
-                    contact.attributeType.display as CoreTranslationKey,
-                    contact.attributeType.display,
-                  )
+                ? getCoreTranslation(contact.attributeType.display as CoreTranslationKey, contact.attributeType.display)
                 : '',
               contact.value,
             ]),

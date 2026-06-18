@@ -87,27 +87,27 @@ esm-apprenants-app/
 
 ```json
 {
-  "name": "@eigen/esm-apprenants-app",
+  "name": "@egen/esm-apprenants-app",
   "version": "1.0.0",
   "license": "PROPRIETARY",
   "main": "dist/main.js",
   "source": "src/index.ts",
   "scripts": {
-    "start": "eigen develop",
-    "build": "eigen build",
+    "start": "egen develop",
+    "build": "egen build",
     "test": "cross-env TZ=UTC vitest run",
     "lint": "eslint src --ext ts,tsx"
   },
   "peerDependencies": {
-    "@eigen/esm-framework": "*",
+    "@egen/esm-framework": "*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@eigen/esm-framework": "workspace:*",
-    "@eigen/rspack-config": "workspace:*",
+    "@egen/esm-framework": "workspace:*",
+    "@egen/rspack-config": "workspace:*",
     "cross-env": "^10.1.0",
-    "eigen": "workspace:*",
+    "egen": "workspace:*",
     "vitest": "^4.1.2"
   }
 }
@@ -119,12 +119,12 @@ esm-apprenants-app/
 
 ```typescript
 // packages/apps/esm-apprenants-app/src/index.ts
-import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@eigen/esm-framework';
+import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen/esm-framework';
 import { configSchema } from './config-schema';
 import listeApprenantsComponent from './liste/liste-apprenants.component';
 import miniProfilExtension from './widgets/mini-profil.extension';
 
-const moduleName = '@eigen/esm-apprenants-app';
+const moduleName = '@egen/esm-apprenants-app';
 
 const options = {
   featureName: 'apprenants',
@@ -157,8 +157,8 @@ export const inscriptionModal = getAsyncLifecycle(
 ```json
 {
   "backendDependencies": {
-    "eigen-api": ">=1.0.0",
-    "eigen-education-module": ">=1.0.0"
+    "egen-api": ">=1.0.0",
+    "egen-education-module": ">=1.0.0"
   },
   "pages": [
     {
@@ -166,14 +166,14 @@ export const inscriptionModal = getAsyncLifecycle(
       "route": "apprenants",
       "online": true,
       "offline": false,
-      "requiredPrivilege": "eigen:apprenants:read"
+      "requiredPrivilege": "egen:apprenants:read"
     },
     {
       "component": "root",
       "route": "apprenants/:uuid",
       "online": true,
       "offline": false,
-      "requiredPrivilege": "eigen:apprenants:read"
+      "requiredPrivilege": "egen:apprenants:read"
     }
   ],
   "extensions": [
@@ -189,7 +189,7 @@ export const inscriptionModal = getAsyncLifecycle(
     {
       "name": "inscription-apprenant-modal",
       "component": "inscriptionModal",
-      "requiredPrivilege": "eigen:apprenants:write"
+      "requiredPrivilege": "egen:apprenants:write"
     }
   ]
 }
@@ -203,8 +203,8 @@ export const inscriptionModal = getAsyncLifecycle(
 // packages/apps/esm-tableau-de-bord-app/src/root.component.tsx
 
 import React from 'react';
-import { useSession } from '@eigen/esm-framework';
-import { useHasRole, useHasPrivilege } from '@eigen/esm-api';
+import { useSession } from '@egen/esm-framework';
+import { useHasRole, useHasPrivilege } from '@egen/esm-api';
 import styles from './root.scss';
 
 /**
@@ -278,8 +278,8 @@ Dans chaque app, déclarer des extensions de type `nav-group` ou `link` :
       "meta": {
         "title": "Apprenants",
         "icon": "User",
-        "href": "/eigen/spa/apprenants",
-        "requiredPrivilege": "eigen:apprenants:read"
+        "href": "/egen/spa/apprenants",
+        "requiredPrivilege": "egen:apprenants:read"
       },
       "order": 10
     }
@@ -298,8 +298,8 @@ Dans chaque app, déclarer des extensions de type `nav-group` ou `link` :
       "meta": {
         "title": "Notes & Évaluations",
         "icon": "Education",
-        "href": "/eigen/spa/notes",
-        "requiredPrivilege": "eigen:notes:read"
+        "href": "/egen/spa/notes",
+        "requiredPrivilege": "egen:notes:read"
       },
       "order": 20
     }
@@ -343,7 +343,7 @@ Résultat : chaque micro-app contribue à son propre lien dans le menu, sans mod
 
 ```tsx
 // ✅ BON : utiliser les hooks EIGEN
-import { useConfig, useSession, useExtensionSlotMeta } from '@eigen/esm-framework';
+import { useConfig, useSession, useExtensionSlotMeta } from '@egen/esm-framework';
 
 // ❌ MAUVAIS : accéder directement au state global
 import { sessionStore } from '../../some-internal-path';
@@ -353,7 +353,7 @@ import { sessionStore } from '../../some-internal-path';
 
 ```tsx
 // ✅ BON
-const canEdit = useHasPrivilege('eigen:notes:write');
+const canEdit = useHasPrivilege('egen:notes:write');
 return (
   <div>
     <NotesList />
