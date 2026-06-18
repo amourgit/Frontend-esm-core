@@ -1,19 +1,19 @@
 /** @module @category API */
-import { getSessionTypes, type SessionType } from '@egen/esm-data-api';
+import { getWorkSessionTypes, type WorkSessionType } from '@egen/esm-data-api';
 import { useEffect, useState } from 'react';
 
 /**
  * A React hook that fetches and returns all available session types from the
  * server. The data is fetched once when the component mounts.
  *
- * @returns An array of SessionType objects. Returns an empty array while loading
+ * @returns An array of WorkSessionType objects. Returns an empty array while loading
  *   or if an error occurs.
  *
  * @example
  * ```tsx
- * import { useSessionTypes } from '@egen/esm-framework';
- * function SessionTypeSelector() {
- *   const sessionTypes = useSessionTypes();
+ * import { useWorkSessionTypes } from '@egen/esm-framework';
+ * function WorkSessionTypeSelector() {
+ *   const sessionTypes = useWorkSessionTypes();
  *   return (
  *     <select>
  *       {sessionTypes.map((st) => (
@@ -24,12 +24,12 @@ import { useEffect, useState } from 'react';
  * }
  * ```
  */
-export function useSessionTypes() {
-  const [sessionTypes, setSessionTypes] = useState<Array<SessionType>>([]);
+export function useWorkSessionTypes() {
+  const [sessionTypes, setWorkSessionTypes] = useState<Array<WorkSessionType>>([]);
 
   useEffect(() => {
-    const sub = getSessionTypes().subscribe(
-      (types) => setSessionTypes(types),
+    const sub = getWorkSessionTypes().subscribe(
+      (types) => setWorkSessionTypes(types),
       (error) => console.error(error),
     );
     return () => sub.unsubscribe();

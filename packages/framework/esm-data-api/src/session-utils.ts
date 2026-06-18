@@ -2,33 +2,33 @@
 import { egenFetch, restBaseUrl, type FetchResponse } from '@egen/esm-api';
 import { getGlobalStore } from '@egen/esm-state';
 import { BehaviorSubject } from 'rxjs';
-import { type NewSessionPayload, type UpdateSessionPayload, type Session } from './types';
+import { type NewWorkSessionPayload, type UpdateWorkSessionPayload, type WorkSession } from './types';
 
-export interface SessionItem {
-  mode: SessionMode;
-  sessionData?: Session;
-  status: SessionStatus;
+export interface WorkSessionItem {
+  mode: WorkSessionMode;
+  sessionData?: WorkSession;
+  status: WorkSessionStatus;
   anythingElse?: any;
 }
 
-export enum SessionMode {
+export enum WorkSessionMode {
   NEW = 'startSession',
   EDIT = 'editSession',
   LOADING = 'loadingSession',
 }
 
-export enum SessionStatus {
+export enum WorkSessionStatus {
   NOTSTARTED = 'notStarted',
   ONGOING = 'ongoing',
 }
 
-export interface SessionStoreState {
+export interface WorkSessionStoreState {
   entityUuid: string | null;
   manuallySetSessionUuid: string | null;
 
   /**
    * Stores a record of SWR mutate callbacks that should be called when
-   * the Session with the specified uuid is modified. The callbacks are keyed
+   * the WorkSession with the specified uuid is modified. The callbacks are keyed
    * by unique component IDs.
    */
   mutateSessionCallbacks: {
@@ -39,7 +39,7 @@ export interface SessionStoreState {
 /**
  * The default custom representation string for fetching session data from the REST API.
  */
-export const defaultSessionCustomRepresentation =
+export const defaultWorkSessionCustomRepresentation =
   'custom:(uuid,display,voided,indication,startDatetime,stopDatetime,' +
   'interactions:(uuid,display,interactionDatetime,' +
   'form:(uuid,name),location:ref,' +
@@ -51,7 +51,7 @@ export const defaultSessionCustomRepresentation =
   'attributes:(uuid,display,attributeType:(name,datatypeClassname,uuid),value),' +
   'location:(uuid,name,display))';
 
-const initialState: SessionStoreState = getSessionSessionStorage() || {
+const initialState: WorkSessionStoreState = getSessionSessionStorage() || {
   entityUuid: null,
   manuallySetSessionUuid: null,
   mutateSessionCallbacks: {},
@@ -62,15 +62,15 @@ const initialState: SessionStoreState = getSessionSessionStorage() || {
  *
  * @example
  * ```ts
- * import { getSessionStore } from '@egen/esm-framework';
- * const store = getSessionStore();
+ * import { getWorkSessionStore } from '@egen/esm-framework';
+ * const store = getWorkSessionStore();
  * const unsubscribe = store.subscribe((state) => {
  *   console.log('Current entity:', state.entityUuid);
  * });
  * ```
  */
-export function getSessionStore() {
-  return getGlobalStore<SessionStoreState>('session', initialState);
+export function getWorkSessionStore() {
+  return getGlobalStore<WorkSessionStoreState>('session', initialState);
 }
 
 /**
@@ -79,19 +79,19 @@ export function getSessionStore() {
  * @param entityUuid The UUID of the entity.
  * @param sessionUuid The UUID of the session to set as current.
  */
-export function setCurrentSession(entityUuid: string, sessionUuid: string) {
-  getSessionStore().setState({ entityUuid, manuallySetSessionUuid: sessionUuid });
+export function setCurrentWorkSession(entityUuid: string, sessionUuid: string) {
+  getWorkSessionStore().setState({ entityUuid, manuallySetSessionUuid: sessionUuid });
 }
 
-getSessionStore().subscribe((state) => {
+getWorkSessionStore().subscribe((state) => {
   setSessionSessionStorage(state);
 });
 
-function setSessionSessionStorage(value: SessionStoreState) {
+function setSessionSessionStorage(value: WorkSessionStoreState) {
   sessionStorage.setItem('egen:sessionStoreState', JSON.stringify(value));
 }
 
-function getSessionSessionStorage(): SessionStoreState | null {
+function getSessionSessionStorage(): WorkSessionStoreState | null {
   try {
     return JSON.parse(sessionStorage.getItem('egen:sessionStoreState') || 'null');
   } catch (e) {
@@ -105,7 +105,7 @@ function getSessionSessionStorage(): SessionStoreState | null {
  * @param payload The session data to create.
  * @param abortController An AbortController to allow cancellation of the request.
  */
-export function saveSession(payload: NewSessionPayload, abortController: AbortController): Promise<FetchResponse<Session>> {
+export function saveWorkSession(payload: NewWorkSessionPayload, abortController: AbortController): Promise<FetchResponse<WorkSession>> {
   return egenFetch(`${restBaseUrl}/session`, {
     signal: abortController.signal,
     method: 'POST',
@@ -123,11 +123,11 @@ export function saveSession(payload: NewSessionPayload, abortController: AbortCo
  * @param payload The session data to update.
  * @param abortController An AbortController to allow cancellation of the request.
  */
-export function updateSession(
+export function updateWorkSession(
   uuid: string,
-  payload: UpdateSessionPayload,
+  payload: UpdateWorkSessionPayload,
   abortController: AbortController,
-): Promise<FetchResponse<Session>> {
+): Promise<FetchResponse<WorkSession>> {
   return egenFetch(`${restBaseUrl}/session/${uuid}`, {
     signal: abortController.signal,
     method: 'POST',
@@ -141,12 +141,12 @@ export function updateSession(
 /**
  * @deprecated Use the `useSession` hook instead.
  */
-export function getSessionsForEntity(
+export function getWorkSessionsForEntity(
   entityUuid: string,
   abortController: AbortController,
   v?: string,
-): Promise<FetchResponse<{ results: Array<Session> }>> {
-  const custom = v ?? defaultSessionCustomRepresentation;
+): Promise<FetchResponse<{ results: Array<WorkSession> }>> {
+  const custom = v ?? defaultWorkSessionCustomRepresentation;
 
   return egenFetch(`${restBaseUrl}/session?entity=${entityUuid}&v=${custom}`, {
     signal: abortController.signal,
@@ -158,4 +158,4 @@ export function getSessionsForEntity(
 }
 
 /** @deprecated */
-export const getStartedSession = new BehaviorSubject<SessionItem | null>(null);
+export const getStartedWorkSession = new BehaviorSubject<WorkSessionItem | null>(null);

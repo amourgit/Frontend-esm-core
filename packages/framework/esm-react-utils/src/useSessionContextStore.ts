@@ -1,9 +1,9 @@
 import { useEffect, useId } from 'react';
-import { getSessionStore, type Session, type SessionStoreState } from '@egen/esm-data-api';
+import { getWorkSessionStore, type WorkSession, type WorkSessionStoreState } from '@egen/esm-data-api';
 import { type Actions, useStoreWithActions } from './useStore';
 
 const sessionContextStoreActions = {
-  setSessionContext(_: SessionStoreState, newSelectedSession: Session | null) {
+  setSessionContext(_: WorkSessionStoreState, newSelectedSession: WorkSession | null) {
     if (newSelectedSession == null) {
       return { manuallySetSessionUuid: null };
     }
@@ -12,13 +12,13 @@ const sessionContextStoreActions = {
       entityUuid: newSelectedSession.entity?.uuid,
     };
   },
-  mutateSession(currState: SessionStoreState) {
+  mutateSession(currState: WorkSessionStoreState) {
     for (const mutateCallback of Object.values(currState.mutateSessionCallbacks ?? {})) {
       mutateCallback();
     }
     return {};
   },
-} satisfies Actions<SessionStoreState>;
+} satisfies Actions<WorkSessionStoreState>;
 
 /**
  * A hook to return the session context store and corresponding actions.
@@ -40,7 +40,7 @@ export function useSessionContextStore(mutateSessionCallback?: () => void) {
   const id = useId();
 
   useEffect(() => {
-    const sessionStore = getSessionStore();
+    const sessionStore = getWorkSessionStore();
 
     if (mutateSessionCallback) {
       sessionStore.setState({
@@ -60,5 +60,5 @@ export function useSessionContextStore(mutateSessionCallback?: () => void) {
     };
   }, [id, mutateSessionCallback]);
 
-  return useStoreWithActions(getSessionStore(), sessionContextStoreActions);
+  return useStoreWithActions(getWorkSessionStore(), sessionContextStoreActions);
 }

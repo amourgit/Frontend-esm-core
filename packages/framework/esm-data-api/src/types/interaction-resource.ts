@@ -3,7 +3,7 @@ import { type Classification } from './classification-resource';
 import { type Location } from './location-resource';
 import { type DataPoint } from './datapoint-resource';
 import { type Entity } from './entity-resource';
-import { type Session } from './session-resource';
+import { type WorkSession } from './session-resource';
 
 /**
  * Represents a generic interaction — a discrete event or transaction involving
@@ -15,7 +15,7 @@ export interface Interaction extends EgenResource {
   location?: Location;
   interactionType?: InteractionType;
   dataPoints?: Array<DataPoint>;
-  session?: Session;
+  session?: WorkSession;
   interactionHandlers?: Array<InteractionHandler>;
   classifications?: Array<Classification>;
   form?: EgenResource;

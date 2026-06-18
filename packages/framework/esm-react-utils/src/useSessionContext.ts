@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import dayjs from 'dayjs';
 import isToday from 'dayjs/plugin/isToday.js';
 import { egenFetch, restBaseUrl } from '@egen/esm-api';
-import { defaultSessionCustomRepresentation, type Session } from '@egen/esm-data-api';
+import { defaultWorkSessionCustomRepresentation, type WorkSession } from '@egen/esm-data-api';
 import { useSessionContextStore } from './useSessionContextStore';
 
 dayjs.extend(isToday);
@@ -13,8 +13,8 @@ export interface SessionContextReturnType {
   error: Error;
   mutate: () => void;
   isValidating: boolean;
-  activeSession: Session | null;
-  currentSession: Session | null;
+  activeSession: WorkSession | null;
+  currentSession: WorkSession | null;
   currentSessionIsRetrospective: boolean;
   isLoading: boolean;
 }
@@ -35,7 +35,7 @@ export interface SessionContextReturnType {
  * @example
  * ```tsx
  * import { useSessionContext } from '@egen/esm-framework';
- * function EntitySessionStatus({ entityUuid }) {
+ * function EntityWorkSessionStatus({ entityUuid }) {
  *   const { activeSession, isLoading } = useSessionContext(entityUuid);
  *   if (isLoading) return <Spinner />;
  *   return <div>{activeSession ? 'In active session' : 'No active session'}</div>;
@@ -44,7 +44,7 @@ export interface SessionContextReturnType {
  */
 export function useSessionContext(
   entityUuid: string,
-  representation = defaultSessionCustomRepresentation,
+  representation = defaultWorkSessionCustomRepresentation,
 ): SessionContextReturnType {
   const { entityUuid: sessionStoreEntityUuid, manuallySetSessionUuid, setSessionContext } = useSessionContextStore();
 
@@ -58,7 +58,7 @@ export function useSessionContext(
     mutate: activeMutate,
     isValidating: activeIsValidating,
   } = useSWR<{
-    data: { results: Array<Session> };
+    data: { results: Array<WorkSession> };
   }>(entityUuid ? `${restBaseUrl}/session${activeSessionUrlSuffix}` : null, egenFetch);
 
   const {
@@ -67,7 +67,7 @@ export function useSessionContext(
     mutate: retroMutate,
     isValidating: retroIsValidating,
   } = useSWR<{
-    data: Session;
+    data: WorkSession;
   }>(
     entityUuid && retrospectiveSessionUuid ? `${restBaseUrl}/session${retrospectiveSessionUrlSuffix}` : null,
     egenFetch,
@@ -83,7 +83,7 @@ export function useSessionContext(
     [retroData, retrospectiveSessionUuid],
   );
 
-  const previousCurrentSession = useRef<Session | null>(null);
+  const previousCurrentSession = useRef<WorkSession | null>(null);
 
   useEffect(() => {
     if (

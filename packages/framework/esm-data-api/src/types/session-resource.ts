@@ -7,7 +7,7 @@ import { type Entity } from './entity-resource';
  * A session groups a set of interactions performed by or for an entity
  * at a given location and time.
  */
-export interface NewSessionPayload {
+export interface NewWorkSessionPayload {
   uuid?: string;
   location: string;
   entity?: string;
@@ -20,25 +20,25 @@ export interface NewSessionPayload {
   }>;
 }
 
-export type UpdateSessionPayload = Partial<NewSessionPayload> & {};
+export type UpdateWorkSessionPayload = Partial<NewWorkSessionPayload> & {};
 
 /**
  * Represents an active or past session for an entity.
  */
-export interface Session {
+export interface WorkSession {
   uuid: string;
   display?: string;
   interactions?: Array<Interaction>;
   entity?: Entity;
-  sessionType: SessionType;
-  location?: SessionLocation;
+  sessionType: WorkSessionType;
+  location?: WorkSessionLocation;
   startDatetime: string;
   stopDatetime: string | null;
   attributes?: Array<EgenResource>;
   [anythingElse: string]: any;
 }
 
-interface SessionLocation {
+interface WorkSessionLocation {
   uuid: string;
   display?: string;
   name?: string;
@@ -47,7 +47,7 @@ interface SessionLocation {
 /**
  * Describes the type/category of a session (e.g. "onboarding", "review", "audit").
  */
-export interface SessionType {
+export interface WorkSessionType {
   uuid: string;
   display: string;
   name?: string;
