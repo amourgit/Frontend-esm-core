@@ -19,7 +19,7 @@ export function toSessionTypeObject(egenRestForm: any): SessionType {
  *
  * @example
  * ```ts
- * import { getSessionTypes } from '@eigen/esm-framework';
+ * import { getSessionTypes } from '@egen/esm-framework';
  * getSessionTypes().subscribe((sessionTypes) => {
  *   console.log('Available session types:', sessionTypes);
  * });

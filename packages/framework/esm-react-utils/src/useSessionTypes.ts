@@ -1,5 +1,5 @@
 /** @module @category API */
-import { getSessionTypes, type SessionType } from '@eigen/esm-data-api';
+import { getSessionTypes, type SessionType } from '@egen/esm-data-api';
 import { useEffect, useState } from 'react';
 
 /**
@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
  *
  * @example
  * ```tsx
- * import { useSessionTypes } from '@eigen/esm-framework';
+ * import { useSessionTypes } from '@egen/esm-framework';
  * function SessionTypeSelector() {
  *   const sessionTypes = useSessionTypes();
  *   return (

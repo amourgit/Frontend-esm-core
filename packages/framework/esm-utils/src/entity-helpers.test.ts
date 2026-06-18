@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type NameUse } from '@eigen/esm-globals';
+import { type NameUse } from '@egen/esm-globals';
 import { formatEntityName, getEntityName, selectPreferredName } from './entity-helpers';
 import {
   mockEntityWithNoName,

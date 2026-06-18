@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { egenFetch, type FetchResponse } from '@egen/esm-api';
-import { getSynchronizationItems } from '@eigen/esm-offline';
+import { getSynchronizationItems } from '@egen/esm-offline';
 import { fetchCurrentEntity } from './current-entity';
 
 vi.mock('@egen/esm-api');
@@ -13,7 +13,7 @@ vi.mock('../egen-fetch', () => ({
   fhirBaseUrl: '/ws/fhir2/R4',
 }));
 
-vi.mock('@eigen/esm-offline', () => ({
+vi.mock('@egen/esm-offline', () => ({
   getSynchronizationItems: vi.fn(),
 }));
 

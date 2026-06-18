@@ -1,6 +1,6 @@
 /** @module @category Utility */
 
-import { type NameUse } from '@eigen/esm-globals';
+import { type NameUse } from '@egen/esm-globals';
 
 /**
  * Gets the formatted display name for an entity.
@@ -13,7 +13,7 @@ import { type NameUse } from '@eigen/esm-globals';
  *
  * @example
  * ```ts
- * import { getEntityName } from '@eigen/esm-framework';
+ * import { getEntityName } from '@egen/esm-framework';
  * const name = getEntityName(entity); // "Alice Martin"
  * ```
  */

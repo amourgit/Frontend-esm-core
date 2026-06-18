@@ -44,7 +44,7 @@ const config: StorybookConfig = {
           '@egen/esm-api': path.resolve(mocksRoot, 'esm-api.ts'),
           '@egen/esm-state': path.resolve(mocksRoot, 'esm-state.ts'),
           '@egen/esm-extensions': path.resolve(mocksRoot, 'esm-extensions.ts'),
-          '@eigen/esm-data-api': path.resolve(mocksRoot, 'esm-data-api.ts'),
+          '@egen/esm-data-api': path.resolve(mocksRoot, 'esm-data-api.ts'),
           '@egen/esm-globals': path.resolve(mocksRoot, 'esm-globals.ts'),
           '@egen/esm-navigation': path.resolve(mocksRoot, 'esm-navigation.ts'),
           '@egen/esm-error-handling': path.resolve(mocksRoot, 'esm-error-handling.ts'),

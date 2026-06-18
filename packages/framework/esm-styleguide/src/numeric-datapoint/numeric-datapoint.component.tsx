@@ -1,7 +1,7 @@
 /** @module @category UI */
 import React, { useMemo, useId } from 'react';
 import classNames from 'classnames';
-import { getCoreTranslation } from '@eigen/esm-translations';
+import { getCoreTranslation } from '@egen/esm-translations';
 import {
   calculateInterpretation,
   normalizeInterpretation,
@@ -42,7 +42,7 @@ export interface NumericDataPointProps {
  *
  * @example
  * ```tsx
- * import { NumericDataPoint } from '@eigen/esm-framework';
+ * import { NumericDataPoint } from '@egen/esm-framework';
  * <NumericDataPoint
  *   value={98.5}
  *   unit="%"

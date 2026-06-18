@@ -1,7 +1,7 @@
 /** @module @category API */
 import { useMemo } from 'react';
 import useSWRImmutable from 'swr/immutable';
-import { type FetchResponse, type EgenResource, egenFetch, restBaseUrl } from '@eigen/esm-api';
+import { type FetchResponse, type EgenResource, egenFetch, restBaseUrl } from '@egen/esm-api';
 
 interface LocationTag extends EgenResource {
   name: string;
@@ -52,7 +52,7 @@ export interface BackendConfigurationResponse {
  *
  * @example
  * ```tsx
- * import { useBackendConfiguration } from '@eigen/esm-framework';
+ * import { useBackendConfiguration } from '@egen/esm-framework';
  * function ConfigDisplay() {
  *   const { backendConfiguration, isLoadingBackendConfiguration } = useBackendConfiguration();
  *   if (isLoadingBackendConfiguration) return <Spinner />;

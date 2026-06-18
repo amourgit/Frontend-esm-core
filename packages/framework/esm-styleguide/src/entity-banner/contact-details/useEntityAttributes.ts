@@ -1,4 +1,4 @@
-import { restBaseUrl, useConfig } from '@eigen/esm-react-utils';
+import { restBaseUrl, useConfig } from '@egen/esm-react-utils';
 import useSWRImmutable from 'swr/immutable';
 import { type StyleguideConfigObject } from '../../config-schema';
 
