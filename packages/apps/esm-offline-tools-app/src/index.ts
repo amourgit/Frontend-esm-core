@@ -60,7 +60,7 @@ export const offlineToolsActionsLink = getSyncLifecycle(
 
 export const offlineToolsActions = getSyncLifecycle(offlineToolsActionsComponent, options);
 
-export const offlineToolsPatients = getSyncLifecycle(offlineToolsEntitiesComponent, options);
+export const offlineToolsEntitiesCard = getSyncLifecycle(offlineToolsEntitiesComponent, options);
 
 export const offlineToolsPageActions = getSyncLifecycle(offlineToolsPageActionsComponent, options);
 
@@ -95,14 +95,14 @@ export function startupApp() {
       parent: `${window.spaBase}/${routes.home}`,
     },
     {
-      path: `${window.spaBase}/${routes.offlineToolsPatients}`,
-      title: 'Patients',
+      path: `${window.spaBase}/${routes.offlineToolsEntities}`,
+      title: 'Entities',
       parent: `${window.spaBase}/${routes.offlineTools}`,
     },
     {
       path: `${window.spaBase}/${routes.offlineToolsEntityOfflineData}`,
       title: 'Data',
-      parent: `${window.spaBase}/${routes.offlineToolsPatients}`,
+      parent: `${window.spaBase}/${routes.offlineToolsEntities}`,
     },
     {
       path: `${window.spaBase}/${routes.offlineToolsActions}`,

@@ -36,9 +36,6 @@ export interface SyncItemWithEntity {
   entity?: fhir.Patient;
 }
 
-/** @deprecated Use SyncItemWithEntity */
-export type SyncItemWithEntity = SyncItemWithEntity;
-
 type OfflineActionsTableHeaders = 'createdOn' | 'entity' | 'action' | 'error';
 
 export interface OfflineActionsTableProps {
@@ -62,35 +59,18 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
   const [pageSize, setPageSize] = useState(10);
   const { results, currentPage, goTo } = usePagination(data);
   const layout = useLayoutType();
-
   const toolbarItemSize = isDesktop(layout) ? 'sm' : undefined;
 
-  const defaultHeaders: Array<{
-    key: OfflineActionsTableHeaders;
-    header: string;
-  }> = [
-    {
-      key: 'createdOn',
-      header: t('offlineActionsTableCreatedOn', 'Date & Time'),
-    },
-    {
-      key: 'entity',
-      header: t('offlineActionsTableEntity', 'Entity'),
-    },
-    {
-      key: 'action',
-      header: t('offlineActionsTableAction', 'Action'),
-    },
-    {
-      key: 'error',
-      header: t('offlineActionsTableError', 'Error'),
-    },
+  const defaultHeaders: Array<{ key: OfflineActionsTableHeaders; header: string }> = [
+    { key: 'createdOn', header: t('offlineActionsTableCreatedOn', 'Date & Time') },
+    { key: 'entity',    header: t('offlineActionsTableEntity', 'Entity') },
+    { key: 'action',   header: t('offlineActionsTableAction', 'Action') },
+    { key: 'error',    header: t('offlineActionsTableError', 'Error') },
   ];
   const headers = defaultHeaders.filter((header) => !hiddenHeaders?.includes(header.key));
 
   const rows = results.map((syncItem) => {
     const entityName = getEntityName(syncItem);
-
     return {
       id: syncItem.item.id.toString(),
       createdOn: syncItem.item.createdOn?.toLocaleDateString(),
@@ -112,17 +92,7 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
 
   return (
     <DataTable rows={rows} headers={headers} filterRows={filterTableRows}>
-      {({
-        rows,
-        headers,
-        getTableProps,
-        getHeaderProps,
-        getRowProps,
-        getTableContainerProps,
-        getSelectionProps,
-        onInputChange,
-        selectedRows,
-      }) => (
+      {({ rows, headers, getTableProps, getHeaderProps, getRowProps, getTableContainerProps, getSelectionProps, onInputChange, selectedRows }) => (
         <TableContainer className={styles.tableContainer} {...getTableContainerProps()}>
           <div className={styles.tableHeaderContainer}>
             {selectedRows.length === 0 && (
@@ -153,7 +123,7 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
               <TableRow>
                 <TableSelectAll {...getSelectionProps()} disabled={disableEditing} />
                 {headers.map((header) => (
-                  <TableHeader {...getHeaderProps({ header })} isSortable>
+                  <TableHeader {...getHeaderProps({ header })} isSortable key={header.key}>
                     {header.header}
                   </TableHeader>
                 ))}
@@ -161,7 +131,7 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <TableRow {...getRowProps({ row })}>
+                <TableRow {...getRowProps({ row })} key={row.id}>
                   <TableSelectRow {...getSelectionProps({ row })} disabled={disableEditing} />
                   {row.cells.map((cell) => (
                     <TableCell key={cell.id}>{cell.value?.value ?? cell.value}</TableCell>
@@ -175,10 +145,7 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
             page={currentPage}
             pageSize={pageSize}
             totalItems={data.length}
-            onChange={({ page, pageSize }) => {
-              goTo(page);
-              setPageSize(pageSize);
-            }}
+            onChange={({ page, pageSize }) => { goTo(page); setPageSize(pageSize); }}
           />
         </TableContainer>
       )}
@@ -186,34 +153,24 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
   );
 };
 
-const TableSkeleton: React.FC = () => {
-  return (
-    <TableContainer className={styles.tableContainer}>
-      <div className={styles.tableHeaderContainer}>
-        <SearchSkeleton className={styles.tableSearch} />
-      </div>
-      <DataTableSkeleton showToolbar={false} showHeader={false} />
-    </TableContainer>
-  );
-};
+const TableSkeleton: React.FC = () => (
+  <TableContainer className={styles.tableContainer}>
+    <div className={styles.tableHeaderContainer}>
+      <SearchSkeleton className={styles.tableSearch} />
+    </div>
+    <DataTableSkeleton showToolbar={false} showHeader={false} />
+  </TableContainer>
+);
 
 function getEntityName({ item, entity }: SyncItemWithEntity) {
-  const hasEntity = item.descriptor?.entityUuid;
-  if (!hasEntity) {
-    return undefined;
-  }
-
-  const entityName = entity?.name?.[0];
-  return entityName ? `${entityName.given.join(' ')} ${entityName.family}` : item.descriptor.entityUuid;
+  if (!item.descriptor?.entityUuid) return undefined;
+  const name = entity?.name?.[0];
+  return name ? `${(name.given ?? []).join(' ')} ${name.family}` : item.descriptor.entityUuid;
 }
 
 function ActionNameLink({ syncItem }: { syncItem: SyncItem }) {
   const displayName = syncItem.descriptor.displayName ?? '-';
-
-  if (!canBeginEditSynchronizationItemsOfType(syncItem.type)) {
-    return <>{displayName}</>;
-  }
-
+  if (!canBeginEditSynchronizationItemsOfType(syncItem.type)) return <>{displayName}</>;
   return (
     <Link onClick={() => beginEditSynchronizationItem(syncItem.id).catch((e) => createErrorHandler()(e))}>
       {displayName}
@@ -221,30 +178,15 @@ function ActionNameLink({ syncItem }: { syncItem: SyncItem }) {
   );
 }
 
-function EntityLink({ entityUuid, entityName }) {
+function EntityLink({ entityUuid, entityName }: { entityUuid?: string; entityName?: string }) {
   return entityUuid ? (
-    <Link
-      onClick={() =>
-        navigate({
-          to: `${window.getEgenSpaBase()}entity/${entityUuid}/detail`,
-        })
-      }
-    >
+    <Link onClick={() => navigate({ to: `${window.getEgenSpaBase()}entity/${entityUuid}/detail` })}>
       {entityName}
     </Link>
-  ) : (
-    <>-</>
-  );
+  ) : <>-</>;
 }
 
-function filterTableRows({
-  rowIds,
-  headers,
-  cellsById,
-  inputValue,
-  // @ts-ignore `getCellId` is not in the types, but present in Carbon.
-  getCellId,
-}) {
+function filterTableRows({ rowIds, headers, cellsById, inputValue, getCellId }) {
   return rowIds.filter((rowId) =>
     headers.some(({ key }) => {
       const cellId = getCellId(rowId, key);

@@ -7,13 +7,12 @@ export function usePendingSyncItems() {
 }
 
 export function useSyncItemEntities(syncItems?: Array<SyncItem>) {
-  const entityUuids = syncItems ? uniq(syncItems.map((item) => item?.descriptor?.entityUuid).filter(Boolean)) : null;
+  const entityUuids = syncItems
+    ? uniq(syncItems.map((item) => item?.descriptor?.entityUuid).filter(Boolean))
+    : null;
 
   return useSWR(
-    () => ['entities', ...entityUuids],
+    () => (entityUuids ? ['entities', ...entityUuids] : null),
     () => Promise.all(entityUuids.map((id) => fetchCurrentEntity(id))),
   );
 }
-
-/** @deprecated Use useSyncItemEntities */
-export const useSyncItemEntities = useSyncItemEntities;

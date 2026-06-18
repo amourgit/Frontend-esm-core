@@ -10,7 +10,7 @@ const EntitiesOverviewCard: React.FC = () => {
   const { data } = useOfflineEntityStats();
 
   return (
-    <OverviewCard header={t('homeOverviewCardEntitiesHeader', 'Entities')} viewLink={routes.offlineToolsPatients}>
+    <OverviewCard header={t('homeOverviewCardEntitiesHeader', 'Entities')} viewLink={routes.offlineToolsEntities}>
       <HeaderedQuickInfo
         header={t('homeOverviewCardEntitiesDownloaded', 'Downloaded')}
         content={data?.downloadedCount}

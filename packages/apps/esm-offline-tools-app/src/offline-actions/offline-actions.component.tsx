@@ -7,27 +7,22 @@ import {
 } from '@egen/esm-framework/src/internal';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import OfflineActionsTable from './offline-actions-table.component';
+import OfflineActionsTable, { type SyncItemWithEntity } from './offline-actions-table.component';
 import { usePendingSyncItems, useSyncItemEntities } from '../hooks/offline-actions';
 import NoActionsEmptyState from './no-actions-empty-state.component';
 
 export interface OfflineActionsProps {
-  /**
-   * If specified, shows a single entity's offline actions only.
-   */
-  entityUuid?: string;
-  /** @deprecated Use entityUuid */
+  /** If specified, shows a single entity's offline actions only. */
   entityUuid?: string;
 }
 
-const OfflineActions: React.FC<OfflineActionsProps> = ({ entityUuid, entityUuid }) => {
-  const resolvedEntityUuid = entityUuid ?? entityUuid;
+const OfflineActions: React.FC<OfflineActionsProps> = ({ entityUuid }) => {
   const { t } = useTranslation();
   const syncStore = useStore(getOfflineSynchronizationStore());
   const { data: syncItems, mutate } = usePendingSyncItems();
   const { data: syncItemEntities } = useSyncItemEntities(syncItems);
-  const syncItemsToRender = resolvedEntityUuid
-    ? syncItems?.filter((x) => x.descriptor.entityUuid === resolvedEntityUuid)
+  const syncItemsToRender = entityUuid
+    ? syncItems?.filter((x) => x.descriptor.entityUuid === entityUuid)
     : syncItems;
   const syncItemsTableData = getSyncItemsWithEntity(syncItemsToRender, syncItemEntities);
   const isLoading = !syncItems || !syncItemEntities;
@@ -56,7 +51,7 @@ const OfflineActions: React.FC<OfflineActionsProps> = ({ entityUuid, entityUuid 
         <OfflineActionsTable
           isLoading={isLoading}
           data={syncItemsTableData}
-          hiddenHeaders={resolvedEntityUuid ? ['entity'] : []}
+          hiddenHeaders={entityUuid ? ['entity'] : []}
           disableEditing={isSynchronizing}
           disableDelete={false}
           onDelete={deleteSynchronizationItems}
@@ -68,10 +63,13 @@ const OfflineActions: React.FC<OfflineActionsProps> = ({ entityUuid, entityUuid 
   );
 };
 
-function getSyncItemsWithEntity(syncItems: Array<SyncItem> = [], entities: Array<fhir.Patient> = []) {
+function getSyncItemsWithEntity(
+  syncItems: Array<SyncItem> = [],
+  entities: Array<fhir.Patient> = [],
+): Array<SyncItemWithEntity> {
   return syncItems.map((item) => ({
     item,
-    entity: entities.find((entity) => entity.id === item.descriptor?.entityUuid),
+    entity: entities.find((entity) => entity?.id === item.descriptor?.entityUuid),
   }));
 }
 
