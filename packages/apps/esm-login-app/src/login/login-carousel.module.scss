@@ -1,0 +1,104 @@
+// ─── Carrousel ────────────────────────────────────────────────────────────────
+// Panneau gauche de la page login : messages textuels défilants.
+
+.carousel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 3rem 3.5rem 4rem;
+  max-width: 520px;
+  min-height: 280px;
+  pointer-events: none; // Les dots restent cliquables
+}
+
+// ── Slide ────────────────────────────────────────────────────────────────────
+.slide {
+  pointer-events: none;
+}
+
+.enter {
+  animation: fadeSlideIn 0.4s ease forwards;
+}
+
+.exit {
+  animation: fadeSlideOut 0.4s ease forwards;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeSlideOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-14px); }
+}
+
+// ── Texte ────────────────────────────────────────────────────────────────────
+.accent {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--carousel-accent, #78a9ff);
+  margin-bottom: 0.75rem;
+  background: rgba(120, 169, 255, 0.1);
+  border: 1px solid rgba(120, 169, 255, 0.25);
+  border-radius: 2rem;
+  padding: 0.25rem 0.9rem;
+}
+
+.headline {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff;
+  margin: 0 0 1rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.body {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 420px;
+  margin: 0;
+}
+
+// ── Indicateurs ──────────────────────────────────────────────────────────────
+.dots {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2.25rem;
+  pointer-events: all;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.6);
+  }
+}
+
+.dotActive {
+  width: 28px;
+  border-radius: 4px;
+  background: #78a9ff;
+}
+
+// ── Responsive ───────────────────────────────────────────────────────────────
+@media (max-width: 1024px) {
+  .carousel {
+    display: none; // Masqué sur tablette/mobile
+  }
+}

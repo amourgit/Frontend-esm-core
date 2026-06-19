@@ -1,109 +1,139 @@
 @use '@carbon/layout';
 @use '@carbon/type';
-@use '@egen/esm-styleguide/src/vars' as *;
+@use '@carbon/colors';
 
-.bodyShort01 {
-  @include type.type-style('body-compact-01');
+
+// ─── Dark theme tokens ────────────────────────────────────────────────────────
+:root {
+  --login-bg-overlay: linear-gradient(
+    135deg,
+    rgba(4, 8, 20, 0.88) 0%,
+    rgba(9, 20, 48, 0.78) 50%,
+    rgba(2, 12, 32, 0.92) 100%
+  );
+  --login-card-bg: rgba(13, 17, 36, 0.82);
+  --login-card-border: rgba(120, 169, 255, 0.15);
+  --login-card-blur: 24px;
+  --login-input-bg: rgba(255, 255, 255, 0.06);
+  --login-input-border: rgba(255, 255, 255, 0.15);
+  --login-text-primary: #f4f4f4;
+  --login-text-secondary: rgba(255, 255, 255, 0.6);
+  --login-accent: #78a9ff;
+  --login-btn-bg: #78a9ff;
+  --login-btn-hover: #a6c8ff;
+  --carousel-accent: #78a9ff;
 }
 
-.productiveHeading03 {
-  @include type.type-style('heading-03');
-}
+// ─── Typography helpers ───────────────────────────────────────────────────────
+.bodyShort01 { @include type.type-style('body-compact-01'); }
+.productiveHeading03 { @include type.type-style('heading-03'); }
+.label01 { @include type.type-style('label-01'); }
+.caption01 { @include type.type-style('legal-01'); }
 
-.label01 {
-  @include type.type-style('label-01');
-}
-
-.caption01 {
-  @include type.type-style('legal-01');
-}
-
+// ─── Back button ─────────────────────────────────────────────────────────────
 .backButton {
   height: layout.$spacing-09;
   padding-left: 0;
+  color: var(--login-text-primary) !important;
 
-  svg {
-    margin-right: layout.$spacing-03;
-    order: 1;
-  }
-
-  span {
-    order: 2;
-  }
+  svg { margin-right: layout.$spacing-03; order: 1; }
+  span { order: 2; }
 }
 
+// ─── Page container ───────────────────────────────────────────────────────────
 .container {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
-  min-height: calc(100vh - var(--egen-navbar-height));
+  min-height: calc(100vh - var(--egen-navbar-height, 0px));
+  background-color: #070d1e; // fallback si pas d'image
 }
 
+// Layout deux colonnes (carousel | formulaire)
+.container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--login-bg-overlay);
+  pointer-events: none;
+  z-index: 0;
+}
+
+// Wrapper flex pour centrer le contenu au-dessus de l'overlay
+.container > * {
+  position: relative;
+  z-index: 1;
+}
+
+// ─── Avec image en arrière-plan ───────────────────────────────────────────────
 .containerWithImage {
   background-image: var(--login-bg-image);
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .containerWithColor {
-  background-color: var(--login-bg-color);
+  background-color: var(--login-bg-color, #070d1e);
 }
 
-.center {
-  text-align: center;
+// ─── Layout interne : panneau gauche + carte login ────────────────────────────
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+  width: 100%;
+  max-width: 1100px;
+  padding: 2rem;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: center;
+  }
 }
+
+// ─── Logo ─────────────────────────────────────────────────────────────────────
+.center { text-align: center; }
 
 .logo {
-  margin-bottom: layout.$spacing-08;
-  height: layout.$spacing-11;
-  width: 16rem;
+  margin-bottom: layout.$spacing-07;
+  height: layout.$spacing-10;
+  width: 14rem;
+  // forcer couleur blanche
+  filter: brightness(0) invert(1);
 }
 
 .logoImg {
-  margin-bottom: layout.$spacing-09;
-  max-width: 100%;
+  margin-bottom: layout.$spacing-07;
+  max-width: 10rem;
+  max-height: 3.5rem;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
-.poweredByTxt {
-  @extend .caption01;
-  text-align: center;
-  color: $color-gray-70;
-  color: $text-02;
-}
-
-.needHelp {
-  display: flex;
-  width: 23rem;
-}
-
-.needHelpText {
-  @extend .bodyShort01;
-  text-align: left;
-  color: $text-02;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: layout.$spacing-05 0;
-}
-
-.link {
-  text-decoration-line: none;
-  margin-left: layout.$spacing-03;
-}
-
+// ─── Carte formulaire (glassmorphism) ─────────────────────────────────────────
 .loginCard {
-  border-radius: 0;
-  border: 1px solid $ui-03;
-  background-color: $ui-02;
+  background: var(--login-card-bg) !important;
+  backdrop-filter: blur(var(--login-card-blur));
+  -webkit-backdrop-filter: blur(var(--login-card-blur));
+  border: 1px solid var(--login-card-border) !important;
+  border-radius: 1.25rem !important;
+  padding: layout.$spacing-09 layout.$spacing-07;
   width: 23rem;
-  padding: layout.$spacing-08;
-  border-radius: layout.$spacing-03;
-  position: relative;
   min-height: fit-content;
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.06) inset;
+
+  // Surcharger Carbon : fond blanc → transparent
+  :global(.cds--tile) {
+    background: transparent;
+  }
 }
 
+// ─── Inputs ───────────────────────────────────────────────────────────────────
 .inputGroup {
   display: flex;
   justify-content: center;
@@ -112,13 +142,40 @@
   width: 18rem;
   gap: layout.$spacing-05;
 
-  :global(.cds--text-input) {
+  // Label Carbon
+  :global(.cds--label) {
+    color: var(--login-text-secondary) !important;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  // Input Carbon
+  :global(.cds--text-input),
+  :global(.cds--password-input) {
     height: layout.$spacing-09;
-    @extend .label01;
+    background: var(--login-input-bg) !important;
+    border-bottom-color: var(--login-input-border) !important;
+    color: var(--login-text-primary) !important;
+    @include type.type-style('label-01');
+
+    &:focus {
+      border-bottom-color: var(--login-accent) !important;
+      outline: none !important;
+    }
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
   }
 
   :global(.cds--text-input__field-outer-wrapper) {
     width: 18rem;
+  }
+
+  // Icône "show password"
+  :global(.cds--password-input-wrapper .cds--btn) {
+    color: var(--login-text-secondary) !important;
   }
 
   &:not(:last-child) {
@@ -126,9 +183,51 @@
   }
 }
 
+// ─── Bouton connexion ─────────────────────────────────────────────────────────
 .continueButton {
   margin-top: layout.$spacing-06;
   width: 18rem;
+  background: var(--login-btn-bg) !important;
+  color: #0d1124 !important;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: background 0.2s ease, transform 0.1s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--login-btn-hover) !important;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+  }
+}
+
+// ─── Loader ───────────────────────────────────────────────────────────────────
+.loader {
+  min-height: fit-content;
+  :global(.cds--inline-loading__text) {
+    color: #0d1124;
+  }
+}
+
+// ─── Messages d'erreur ────────────────────────────────────────────────────────
+.errorMessage {
+  width: 23rem;
+  margin-bottom: layout.$spacing-09;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+
+  :global(.cds--inline-notification) {
+    background: rgba(218, 30, 40, 0.15);
+    border-color: rgba(218, 30, 40, 0.4);
+    color: #ffb3b8;
+  }
 }
 
 .backButtonDiv {
@@ -138,19 +237,7 @@
   left: 0;
 }
 
-.loader {
-  min-height: fit-content;
-}
-
-.errorMessage {
-  width: 23rem;
-  margin-bottom: layout.$spacing-09;
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-}
-
-// Keep password field in DOM for browser autofill
+// ─── Password field hidden (autofill) ─────────────────────────────────────────
 .hiddenPasswordField {
   visibility: hidden;
   height: 0;
@@ -159,10 +246,39 @@
   pointer-events: none;
 }
 
+// ─── Announcements ────────────────────────────────────────────────────────────
 .announcements {
   width: 23rem;
   margin-bottom: layout.$spacing-07;
   display: flex;
   flex-direction: column;
   gap: layout.$spacing-03;
+}
+
+// ─── Textes secondaires dans la carte ─────────────────────────────────────────
+.poweredByTxt {
+  @include type.type-style('legal-01');
+  text-align: center;
+  color: var(--login-text-secondary);
+}
+
+.needHelp {
+  display: flex;
+  width: 23rem;
+}
+
+.needHelpText {
+  @include type.type-style('body-compact-01');
+  text-align: left;
+  color: var(--login-text-secondary);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: layout.$spacing-05 0;
+}
+
+.link {
+  text-decoration-line: none;
+  margin-left: layout.$spacing-03;
+  color: var(--login-accent) !important;
 }

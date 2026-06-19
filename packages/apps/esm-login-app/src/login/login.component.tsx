@@ -12,15 +12,40 @@ import {
   useConfig,
   useConnectivity,
   useSession,
-} from '@egen/esm-framework';
+} from '@eigen/esm-framework';
 import { type ConfigSchema } from '../config-schema';
 import Logo from '../logo.component';
 import Footer from '../footer.component';
+import LoginCarousel, { type CarouselSlide } from './login-carousel.component';
 import styles from './login.scss';
 
 export interface LoginReferrer {
   referrer?: string;
 }
+
+// ─── Slides par défaut (overridable via config) ───────────────────────────────
+const DEFAULT_SLIDES: CarouselSlide[] = [
+  {
+    accent: 'Plateforme universelle',
+    headline: 'Un framework conçu\npour votre domaine.',
+    body: 'EIGEN est une architecture micro-frontend générique et modulaire. Construisez n\'importe quelle application professionnelle sur cette base solide.',
+  },
+  {
+    accent: 'Extensibilité totale',
+    headline: 'Branchez vos modules\noù vous le souhaitez.',
+    body: 'Le système d\'extensions permet à chaque module d\'enrichir l\'interface sans que les équipes se marchent dessus. Collaboration sans friction.',
+  },
+  {
+    accent: 'Configuration runtime',
+    headline: 'Personnalisez sans\nrecompiler.',
+    body: 'Thèmes, workflows, permissions, URLs d\'API — tout se configure via un simple fichier JSON. Zéro modification de code pour adapter l\'interface.',
+  },
+  {
+    accent: 'Architecture CIVITAS',
+    headline: 'L\'intelligence artificielle\nau service de l\'Afrique.',
+    body: 'CIVITAS intègre des agents IA dans un framework frontend robuste pour répondre aux besoins numériques du Gabon et du continent africain.',
+  },
+];
 
 const Login: React.FC = () => {
   const {
@@ -29,7 +54,12 @@ const Login: React.FC = () => {
     showPasswordOnSeparateScreen,
     provider: loginProvider,
     links: loginLinks,
+    carousel: carouselConfig = { intervalMs: 5500, slides: [] },
   } = useConfig<ConfigSchema>();
+
+  // Utiliser les slides de la config si disponibles, sinon les slides par défaut
+  const carouselSlides = carouselConfig.slides?.length > 0 ? carouselConfig.slides : DEFAULT_SLIDES;
+  const carouselInterval = carouselConfig.intervalMs ?? 5500;
   const isLoginEnabled = useConnectivity();
   const { t } = useTranslation();
   const { user } = useSession();
@@ -71,7 +101,6 @@ const Login: React.FC = () => {
   const continueLogin = useCallback(() => {
     const currentUsername = usernameInputRef.current?.value?.trim();
     if (currentUsername) {
-      // If credentials were autofilled, input onChange might not have been called
       setUsername(currentUsername);
       setShowPasswordField(true);
     } else {
@@ -102,7 +131,6 @@ const Login: React.FC = () => {
       evt.preventDefault();
       evt.stopPropagation();
 
-      // If credentials were autofilled, input onChange might not have been called
       const currentUsername = usernameInputRef.current?.value?.trim() || username;
       const currentPassword = passwordInputRef.current?.value || password;
 
@@ -132,7 +160,6 @@ const Login: React.FC = () => {
                 to = location.state.referrer;
               }
             }
-
             egenNavigate({ to });
           } else {
             navigate('/login/location');
@@ -141,9 +168,7 @@ const Login: React.FC = () => {
           setErrorMessage(t('invalidCredentials', 'Invalid username or password'));
           setUsername('');
           setPassword('');
-          if (showPasswordOnSeparateScreen) {
-            setShowPasswordField(false);
-          }
+          if (showPasswordOnSeparateScreen) setShowPasswordField(false);
         }
 
         return true;
@@ -155,155 +180,156 @@ const Login: React.FC = () => {
         }
         setUsername('');
         setPassword('');
-        if (showPasswordOnSeparateScreen) {
-          setShowPasswordField(false);
-        }
+        if (showPasswordOnSeparateScreen) setShowPasswordField(false);
       } finally {
         setIsLoggingIn(false);
       }
     },
-    [
-      username,
-      password,
-      navigate,
-      showPasswordOnSeparateScreen,
-      showPasswordField,
-      loginLinks,
-      location,
-      t,
-      continueLogin,
-    ],
+    [username, password, navigate, showPasswordOnSeparateScreen, showPasswordField, loginLinks, location, t, continueLogin],
   );
 
   if (!loginProvider || loginProvider.type === 'basic') {
     return (
       <div className={containerClassName} style={containerStyle} data-testid="login-container">
-        {announcements.length > 0 && (
-          <div className={styles.announcements}>
-            {announcements.map((announcement, i) => (
-              <InlineNotification
-                key={i}
-                kind={announcement.kind}
-                title={announcement.title ? t(announcement.title) : ''}
-                subtitle={t(announcement.text)}
-                lowContrast
-                hideCloseButton
-              />
-            ))}
-          </div>
-        )}
-        <Tile className={styles.loginCard}>
-          {errorMessage && (
-            <div className={styles.errorMessage}>
-              <InlineNotification
-                kind="error"
-                subtitle={t(errorMessage)}
-                title={getCoreTranslation('error')}
-                onClick={() => setErrorMessage('')}
-              />
-            </div>
-          )}
-          <div className={styles.center}>
-            <Logo t={t} />
-          </div>
-          <form onSubmit={handleSubmit}>
-            <div className={styles.inputGroup}>
-              <TextInput
-                id="username"
-                type="text"
-                name="username"
-                autoComplete="username"
-                labelText={t('username', 'Username')}
-                value={username}
-                onChange={changeUsername}
-                ref={usernameInputRef}
-                required
-                autoFocus
-              />
-              {showPasswordOnSeparateScreen ? (
-                <>
-                  <div className={showPasswordField ? undefined : styles.hiddenPasswordField}>
-                    <PasswordInput
-                      id="password"
-                      labelText={t('password', 'Password')}
-                      name="password"
-                      autoComplete="current-password"
-                      onChange={changePassword}
-                      ref={passwordInputRef}
-                      required
-                      value={password}
-                      showPasswordLabel={t('showPassword', 'Show password')}
-                      invalidText={t('validValueRequired', 'A valid value is required')}
-                      aria-hidden={!showPasswordField}
-                      tabIndex={showPasswordField ? 0 : -1}
-                    />
-                  </div>
-                  {showPasswordField ? (
-                    <Button
-                      type="submit"
-                      className={styles.continueButton}
-                      renderIcon={(props) => <ArrowRightIcon size={24} {...props} />}
-                      iconDescription={t('loginButtonIconDescription', 'Log in button')}
-                      disabled={!isLoginEnabled || isLoggingIn}
-                    >
-                      {isLoggingIn ? (
-                        <InlineLoading className={styles.loader} description={t('loggingIn', 'Logging in') + '...'} />
-                      ) : (
-                        t('login', 'Log in')
-                      )}
-                    </Button>
-                  ) : (
-                    <Button
-                      type="submit"
-                      className={styles.continueButton}
-                      renderIcon={(props) => <ArrowRightIcon size={24} {...props} />}
-                      iconDescription={t('continueToPassword', 'Continue to password')}
-                      onClick={(evt) => {
-                        evt.preventDefault();
-                        continueLogin();
-                      }}
-                      disabled={!isLoginEnabled}
-                    >
-                      {t('continue', 'Continue')}
-                    </Button>
-                  )}
-                </>
-              ) : (
-                <>
-                  <PasswordInput
-                    id="password"
-                    labelText={t('password', 'Password')}
-                    name="password"
-                    autoComplete="current-password"
-                    onChange={changePassword}
-                    ref={passwordInputRef}
-                    required
-                    value={password}
-                    showPasswordLabel={t('showPassword', 'Show password')}
-                    invalidText={t('validValueRequired', 'A valid value is required')}
+
+        {/* ── Layout deux colonnes ── */}
+        <div className={styles.inner}>
+
+          {/* ── Panneau gauche : carrousel ── */}
+          <LoginCarousel slides={carouselSlides} intervalMs={carouselInterval} />
+
+          {/* ── Panneau droit : formulaire ── */}
+          <div style={{ position: 'relative' }}>
+            {announcements.length > 0 && (
+              <div className={styles.announcements}>
+                {announcements.map((announcement, i) => (
+                  <InlineNotification
+                    key={i}
+                    kind={announcement.kind}
+                    title={announcement.title ? t(announcement.title) : ''}
+                    subtitle={t(announcement.text)}
+                    lowContrast
+                    hideCloseButton
                   />
-                  <Button
-                    type="submit"
-                    className={styles.continueButton}
-                    renderIcon={(props) => <ArrowRightIcon size={24} {...props} />}
-                    iconDescription={t('loginButtonIconDescription', 'Log in button')}
-                    disabled={!isLoginEnabled || isLoggingIn}
-                  >
-                    {isLoggingIn ? (
-                      <InlineLoading className={styles.loader} description={t('loggingIn', 'Logging in') + '...'} />
-                    ) : (
-                      t('login', 'Log in')
-                    )}
-                  </Button>
-                </>
+                ))}
+              </div>
+            )}
+
+            <Tile className={styles.loginCard}>
+              {errorMessage && (
+                <div className={styles.errorMessage}>
+                  <InlineNotification
+                    kind="error"
+                    subtitle={t(errorMessage)}
+                    title={getCoreTranslation('error')}
+                    onClick={() => setErrorMessage('')}
+                  />
+                </div>
               )}
-            </div>
-          </form>
-        </Tile>
+
+              <div className={styles.center}>
+                <Logo t={t} />
+              </div>
+
+              <form onSubmit={handleSubmit}>
+                <div className={styles.inputGroup}>
+                  <TextInput
+                    id="username"
+                    type="text"
+                    name="username"
+                    autoComplete="username"
+                    labelText={t('username', 'Username')}
+                    value={username}
+                    onChange={changeUsername}
+                    ref={usernameInputRef}
+                    required
+                    autoFocus
+                  />
+                  {showPasswordOnSeparateScreen ? (
+                    <>
+                      <div className={showPasswordField ? undefined : styles.hiddenPasswordField}>
+                        <PasswordInput
+                          id="password"
+                          labelText={t('password', 'Password')}
+                          name="password"
+                          autoComplete="current-password"
+                          onChange={changePassword}
+                          ref={passwordInputRef}
+                          required
+                          value={password}
+                          showPasswordLabel={t('showPassword', 'Show password')}
+                          invalidText={t('validValueRequired', 'A valid value is required')}
+                          aria-hidden={!showPasswordField}
+                          tabIndex={showPasswordField ? 0 : -1}
+                        />
+                      </div>
+                      {showPasswordField ? (
+                        <Button
+                          type="submit"
+                          className={styles.continueButton}
+                          renderIcon={(props) => <ArrowRightIcon size={24} {...props} />}
+                          iconDescription={t('loginButtonIconDescription', 'Log in button')}
+                          disabled={!isLoginEnabled || isLoggingIn}
+                        >
+                          {isLoggingIn ? (
+                            <InlineLoading className={styles.loader} description={t('loggingIn', 'Logging in') + '...'} />
+                          ) : (
+                            t('login', 'Log in')
+                          )}
+                        </Button>
+                      ) : (
+                        <Button
+                          type="submit"
+                          className={styles.continueButton}
+                          renderIcon={(props) => <ArrowRightIcon size={24} {...props} />}
+                          iconDescription={t('continueToPassword', 'Continue to password')}
+                          onClick={(evt) => { evt.preventDefault(); continueLogin(); }}
+                          disabled={!isLoginEnabled}
+                        >
+                          {t('continue', 'Continue')}
+                        </Button>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <PasswordInput
+                        id="password"
+                        labelText={t('password', 'Password')}
+                        name="password"
+                        autoComplete="current-password"
+                        onChange={changePassword}
+                        ref={passwordInputRef}
+                        required
+                        value={password}
+                        showPasswordLabel={t('showPassword', 'Show password')}
+                        invalidText={t('validValueRequired', 'A valid value is required')}
+                      />
+                      <Button
+                        type="submit"
+                        className={styles.continueButton}
+                        renderIcon={(props) => <ArrowRightIcon size={24} {...props} />}
+                        iconDescription={t('loginButtonIconDescription', 'Log in button')}
+                        disabled={!isLoginEnabled || isLoggingIn}
+                      >
+                        {isLoggingIn ? (
+                          <InlineLoading className={styles.loader} description={t('loggingIn', 'Logging in') + '...'} />
+                        ) : (
+                          t('login', 'Log in')
+                        )}
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </form>
+            </Tile>
+          </div>
+        </div>
+
         <Footer />
       </div>
     );
   }
+
   return null;
 };
 

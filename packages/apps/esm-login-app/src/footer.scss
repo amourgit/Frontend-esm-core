@@ -1,6 +1,7 @@
 @use '@carbon/colors';
 @use '@carbon/layout';
 
+// ─── Footer sombre ─────────────────────────────────────────────────────────────
 .footer {
   display: flex;
   justify-content: space-between;
@@ -11,6 +12,7 @@
   flex-wrap: wrap;
   gap: layout.$spacing-05;
   width: 100%;
+  z-index: 1;
 }
 
 .logosContainer {
@@ -19,8 +21,8 @@
   justify-content: flex-end;
   flex-direction: row;
   gap: layout.$spacing-03;
-  filter: grayscale(100%);
-  opacity: 80%;
+  filter: brightness(0) invert(1);
+  opacity: 40%;
 }
 
 @media only screen and (max-width: 1024px) {
@@ -74,11 +76,14 @@
   max-width: fit-content;
   min-height: fit-content;
   font-size: smaller;
-  background-color: colors.$white;
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   padding: layout.$spacing-03 layout.$spacing-05;
-  border: 1px solid colors.$gray-20;
   border-radius: layout.$spacing-04;
   flex-wrap: wrap;
+  box-shadow: none !important;
 }
 
 .poweredByContainer {
@@ -86,6 +91,16 @@
   height: layout.$spacing-06;
   align-items: center;
   gap: layout.$spacing-03;
+}
+
+.poweredByText {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.75rem;
+}
+
+.poweredBySubtext {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
 }
 
 .poweredByLogo {
@@ -97,6 +112,9 @@
   object-fit: contain;
   display: block;
   flex-shrink: 0;
+  // Logo blanc sur fond sombre
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
 }
 
 .poweredByLogo + .poweredByText {
@@ -106,8 +124,13 @@
 .learnMoreButton {
   display: flex;
   align-items: center;
+  color: rgba(120, 169, 255, 0.8) !important;
 
   svg {
-    fill: colors.$blue-60;
+    fill: rgba(120, 169, 255, 0.8) !important;
+  }
+
+  &:hover {
+    color: #78a9ff !important;
   }
 }

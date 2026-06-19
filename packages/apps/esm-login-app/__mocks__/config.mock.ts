@@ -26,5 +26,9 @@ export const mockConfig: ConfigSchema = {
   footer: {
     additionalLogos: [],
   },
+  carousel: {
+    intervalMs: 5500,
+    slides: [],
+  },
   showPasswordOnSeparateScreen: true,
 };

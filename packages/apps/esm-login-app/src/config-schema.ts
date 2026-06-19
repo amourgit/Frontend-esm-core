@@ -123,6 +123,39 @@ export const configSchema = {
       _description: 'CSS color value (e.g. "#0066cc" or "rgb(0,102,204)"). Used when no image is set.',
     },
   },
+
+  carousel: {
+    intervalMs: {
+      _type: Type.Number,
+      _default: 5500,
+      _description: 'Durée en ms entre deux slides du carrousel de connexion.',
+    },
+    slides: {
+      _type: Type.Array,
+      _default: [],
+      _description:
+        'Slides du carrousel côté gauche de la page de connexion. ' +
+        'Si vide, les slides par défaut intégrés dans le code sont utilisés.',
+      _elements: {
+        _type: Type.Object,
+        accent: {
+          _type: Type.String,
+          _default: '',
+          _description: 'Petit label coloré affiché au-dessus du titre (optionnel).',
+        },
+        headline: {
+          _type: Type.String,
+          _required: true,
+          _description: 'Titre principal du slide.',
+        },
+        body: {
+          _type: Type.String,
+          _required: true,
+          _description: 'Texte descriptif du slide.',
+        },
+      },
+    },
+  },
   announcements: {
     _type: Type.Array,
     _description:
@@ -153,6 +186,15 @@ export const configSchema = {
 };
 
 export interface ConfigSchema {
+
+  carousel: {
+    intervalMs: number;
+    slides: Array<{
+      accent?: string;
+      headline: string;
+      body: string;
+    }>;
+  };
   announcements: Array<{
     title: string;
     text: string;
