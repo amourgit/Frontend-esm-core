@@ -35,8 +35,8 @@ const allowedSuffixes = ['-app', '-widgets'];
 const { ModuleFederationPlugin } = container;
 
 const egenAddCookie = process.env.EGEN_ADD_COOKIE;
-const egenApiUrl = removeTrailingSlash(process.env.EGEN_API_URL || '/openmrs');
-const egenPublicPath = removeTrailingSlash(process.env.EGEN_PUBLIC_PATH || '/openmrs/spa');
+const egenApiUrl = removeTrailingSlash(process.env.EGEN_API_URL || '/egen');
+const egenPublicPath = removeTrailingSlash(process.env.EGEN_PUBLIC_PATH || '/egen/spa');
 // Default proxy target is localhost. Set EGEN_PROXY_TARGET in .env to point to your EIGEN backend.
 const egenProxyTarget = process.env.EGEN_PROXY_TARGET || 'http://localhost:8081/';
 const egenPageTitle = process.env.EGEN_PAGE_TITLE || 'Egen';
