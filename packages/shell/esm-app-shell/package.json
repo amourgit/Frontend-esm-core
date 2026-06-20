@@ -54,7 +54,8 @@
     "single-spa": "^6.0.3",
     "swc-loader": "0.2.7",
     "swr": "2.2.5",
-    "webpack-pwa-manifest": "4.3.0"
+    "webpack-pwa-manifest": "4.3.0",
+    "@eigen/esm-theme": "workspace:*"
   },
   "devDependencies": {
     "@swc/core": "1.15.21",

@@ -1,4 +1,5 @@
 import { start, triggerAppChange } from 'single-spa';
+import { setupThemeEngine } from '@eigen/esm-theme';
 import { type CalendarIdentifier } from '@internationalized/date';
 import {
   activateOfflineCapability,
@@ -328,7 +329,39 @@ export function run(configUrls: Array<string>) {
   const closeLoading = showLoadingSpinner();
   const provideConfigs = createConfigLoader(configUrls);
 
-  return import('@egen/esm-styleguide/src/index').then(() => {
+  // ── Moteur de thème EIGEN : initialisation anticipée ──────────────────────
+  // Démarrer le moteur en parallèle de l'import styleguide.
+  // Les URLs de thème peuvent être surchargées via window.eigenThemeUrls (optionnel).
+  // Le thème par défaut (glass-morphism.default.json) est toujours chargé en premier.
+  const themeUrls: string[] = [
+    // Thème par défaut embarqué (priority=1)
+    new URL('./assets/themes/glass-morphism.default.json', import.meta.url).href,
+    // Surcharge tenant possible via variable globale (priority>1 pour prendre la main)
+    ...(Array.isArray((window as any).eigenThemeUrls) ? (window as any).eigenThemeUrls : []),
+  ];
+
+  const themeReady = setupThemeEngine({
+    themeUrls,
+    // Hot-reload uniquement en développement
+    pollIntervalMs: process.env.NODE_ENV === 'development' ? 4000 : 0,
+    onApplied: (theme) => {
+      if (process.env.NODE_ENV !== 'production') {
+        const name = theme.schema?.meta?.name ?? theme.url;
+        console.info(`[eigen/esm-theme] ✅ Thème appliqué : "${name}" (${Object.keys({}).length} vars CSS)`);
+      }
+    },
+    onError: (err) => {
+      console.warn('[eigen/esm-theme] Le thème par défaut sera utilisé.', err.message);
+    },
+  }).catch((err) => {
+    // Erreur non bloquante : l'app démarre quand même avec les fallbacks SCSS
+    console.warn('[eigen/esm-theme] Initialisation thème échouée (fallback SCSS actif):', err);
+  });
+
+  return Promise.all([
+    import('@egen/esm-styleguide/src/index'),
+    themeReady,
+  ]).then(([_styleguide]) => {
     integrateBreakpoints();
     showToasts();
     showModals();

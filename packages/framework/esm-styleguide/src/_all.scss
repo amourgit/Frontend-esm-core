@@ -2,11 +2,15 @@
 
 @forward './vars';
 
+// Glass Morphism design tokens + mixins (EIGEN theme system)
+@forward './glass';
+
 @forward './components/general';
 @forward './components/canvas';
 @forward './components/colors';
 @forward './components/breadcrumbs';
 @forward './components/main-content';
+@forward './components/glass-overrides';
 @forward './logo/logo';
 @forward './spinner/spinner';
 @forward './notifications/notifications';
