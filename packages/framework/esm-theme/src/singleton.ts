@@ -1,5 +1,5 @@
 // ============================================================================
-//  EIGEN THEME ENGINE — Instance singleton + API globale
+//  EGEN THEME ENGINE — Instance singleton + API globale
 // ============================================================================
 
 import { ThemeEngine } from './engine';
@@ -24,9 +24,7 @@ let _engine: ThemeEngine | null = null;
  * });
  * ```
  */
-export async function setupThemeEngine(
-  options: ThemeEngineOptions,
-): Promise<ThemeEngine> {
+export async function setupThemeEngine(options: ThemeEngineOptions): Promise<ThemeEngine> {
   // Nettoyer un moteur précédent si ré-appelé (HMR dev)
   if (_engine) {
     _engine.destroy();
@@ -43,9 +41,7 @@ export async function setupThemeEngine(
  */
 export function getThemeEngine(): ThemeEngine {
   if (!_engine) {
-    throw new Error(
-      '[eigen/esm-theme] ThemeEngine non initialisé. Appelez setupThemeEngine() au boot du shell.',
-    );
+    throw new Error('[egen/esm-theme] ThemeEngine non initialisé. Appelez setupThemeEngine() au boot du shell.');
   }
   return _engine;
 }

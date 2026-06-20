@@ -1,19 +1,19 @@
 // ============================================================================
-//  EIGEN — Glass Morphism Design Tokens (SCSS)
+//  EGEN — Glass Morphism Design Tokens (SCSS)
 // ============================================================================
 //
 //  Ce fichier est la couche SCSS du système de thème glass.
 //
 //  PRINCIPE D'USAGE :
 //  - Les variables CSS "--glass-*", "--colors-*", etc. sont injectées dans
-//    :root par le moteur de thème (@eigen/esm-theme) au runtime.
+//    :root par le moteur de thème (@egen/esm-theme) au runtime.
 //  - Ce fichier fournit :
 //    1. Des valeurs de FALLBACK statiques dans :root (si le moteur n'est pas
 //       encore chargé — évite le flash de contenu non stylé)
 //    2. Des mixins SCSS réutilisables dans tous les composants du framework
 //
 //  UTILISATION dans un composant SCSS :
-//    @use '@eigen/esm-styleguide/src/glass' as glass;
+//    @use '@egen/esm-styleguide/src/glass' as glass;
 //
 //    .ma-card {
 //      @include glass.glass-card();
@@ -31,178 +31,178 @@
 // ----------------------------------------------------------------------------
 :root {
   // ── Colors : Primary ──
-  --colors-primary-50:   #eef2ff;
-  --colors-primary-100:  #e0e7ff;
-  --colors-primary-200:  #c7d2fe;
-  --colors-primary-300:  #a5b4fc;
-  --colors-primary-400:  #818cf8;
-  --colors-primary-500:  #6366f1;
-  --colors-primary-600:  #4f46e5;
-  --colors-primary-700:  #4338ca;
-  --colors-primary-800:  #3730a3;
-  --colors-primary-900:  #312e81;
-  --colors-primary-950:  #1e1b4b;
+  --colors-primary-50: #eef2ff;
+  --colors-primary-100: #e0e7ff;
+  --colors-primary-200: #c7d2fe;
+  --colors-primary-300: #a5b4fc;
+  --colors-primary-400: #818cf8;
+  --colors-primary-500: #6366f1;
+  --colors-primary-600: #4f46e5;
+  --colors-primary-700: #4338ca;
+  --colors-primary-800: #3730a3;
+  --colors-primary-900: #312e81;
+  --colors-primary-950: #1e1b4b;
 
   // ── Glass Dark (fallback) ──
-  --glass-dark-xs-background:     rgba(15, 23, 42, 0.50);
-  --glass-dark-xs-backdrop-filter:blur(8px) saturate(160%);
-  --glass-dark-xs-border:         1px solid rgba(255, 255, 255, 0.06);
-  --glass-dark-xs-box-shadow:     0 2px 8px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --glass-dark-xs-background: rgba(15, 23, 42, 0.5);
+  --glass-dark-xs-backdrop-filter: blur(8px) saturate(160%);
+  --glass-dark-xs-border: 1px solid rgba(255, 255, 255, 0.06);
+  --glass-dark-xs-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
-  --glass-dark-sm-background:     rgba(15, 23, 42, 0.60);
-  --glass-dark-sm-backdrop-filter:blur(12px) saturate(180%);
-  --glass-dark-sm-border:         1px solid rgba(255, 255, 255, 0.08);
-  --glass-dark-sm-box-shadow:     0 4px 16px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass-dark-sm-background: rgba(15, 23, 42, 0.6);
+  --glass-dark-sm-backdrop-filter: blur(12px) saturate(180%);
+  --glass-dark-sm-border: 1px solid rgba(255, 255, 255, 0.08);
+  --glass-dark-sm-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
-  --glass-dark-md-background:     rgba(15, 23, 42, 0.70);
-  --glass-dark-md-backdrop-filter:blur(20px) saturate(200%);
-  --glass-dark-md-border:         1px solid rgba(255, 255, 255, 0.10);
-  --glass-dark-md-box-shadow:     0 8px 32px rgba(0, 0, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --glass-dark-md-background: rgba(15, 23, 42, 0.7);
+  --glass-dark-md-backdrop-filter: blur(20px) saturate(200%);
+  --glass-dark-md-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-dark-md-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
-  --glass-dark-lg-background:     rgba(15, 23, 42, 0.78);
-  --glass-dark-lg-backdrop-filter:blur(32px) saturate(220%);
-  --glass-dark-lg-border:         1px solid rgba(255, 255, 255, 0.12);
-  --glass-dark-lg-box-shadow:     0 12px 48px rgba(0, 0, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  --glass-dark-lg-background: rgba(15, 23, 42, 0.78);
+  --glass-dark-lg-backdrop-filter: blur(32px) saturate(220%);
+  --glass-dark-lg-border: 1px solid rgba(255, 255, 255, 0.12);
+  --glass-dark-lg-box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
-  --glass-dark-xl-background:     rgba(9, 9, 18, 0.85);
-  --glass-dark-xl-backdrop-filter:blur(48px) saturate(240%);
-  --glass-dark-xl-border:         1px solid rgba(255, 255, 255, 0.14);
-  --glass-dark-xl-box-shadow:     0 20px 64px rgba(0, 0, 0, 0.70), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --glass-dark-xl-background: rgba(9, 9, 18, 0.85);
+  --glass-dark-xl-backdrop-filter: blur(48px) saturate(240%);
+  --glass-dark-xl-border: 1px solid rgba(255, 255, 255, 0.14);
+  --glass-dark-xl-box-shadow: 0 20px 64px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 
-  --glass-dark-sidebar-background:     rgba(9, 9, 18, 0.82);
-  --glass-dark-sidebar-backdrop-filter:blur(40px) saturate(200%);
-  --glass-dark-sidebar-border:         1px solid rgba(255, 255, 255, 0.06);
-  --glass-dark-sidebar-box-shadow:     2px 0 24px rgba(0, 0, 0, 0.50), inset -1px 0 0 rgba(255, 255, 255, 0.04);
+  --glass-dark-sidebar-background: rgba(9, 9, 18, 0.82);
+  --glass-dark-sidebar-backdrop-filter: blur(40px) saturate(200%);
+  --glass-dark-sidebar-border: 1px solid rgba(255, 255, 255, 0.06);
+  --glass-dark-sidebar-box-shadow: 2px 0 24px rgba(0, 0, 0, 0.5), inset -1px 0 0 rgba(255, 255, 255, 0.04);
 
-  --glass-dark-header-background:     rgba(9, 9, 18, 0.80);
-  --glass-dark-header-backdrop-filter:blur(40px) saturate(200%);
-  --glass-dark-header-border:         0 1px 0 rgba(51, 65, 85, 0.60);
-  --glass-dark-header-box-shadow:     0 1px 16px rgba(0, 0, 0, 0.30);
+  --glass-dark-header-background: rgba(9, 9, 18, 0.8);
+  --glass-dark-header-backdrop-filter: blur(40px) saturate(200%);
+  --glass-dark-header-border: 0 1px 0 rgba(51, 65, 85, 0.6);
+  --glass-dark-header-box-shadow: 0 1px 16px rgba(0, 0, 0, 0.3);
 
-  --glass-dark-modal-background:     rgba(15, 23, 42, 0.82);
-  --glass-dark-modal-backdrop-filter:blur(48px) saturate(220%);
-  --glass-dark-modal-border:         1px solid rgba(255, 255, 255, 0.12);
-  --glass-dark-modal-box-shadow:     0 24px 80px rgba(0, 0, 0, 0.70), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --glass-dark-modal-background: rgba(15, 23, 42, 0.82);
+  --glass-dark-modal-backdrop-filter: blur(48px) saturate(220%);
+  --glass-dark-modal-border: 1px solid rgba(255, 255, 255, 0.12);
+  --glass-dark-modal-box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
-  --glass-dark-card-background:     rgba(15, 23, 42, 0.65);
-  --glass-dark-card-backdrop-filter:blur(20px) saturate(180%);
-  --glass-dark-card-border:         1px solid rgba(255, 255, 255, 0.08);
-  --glass-dark-card-box-shadow:     0 4px 20px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --glass-dark-card-background: rgba(15, 23, 42, 0.65);
+  --glass-dark-card-backdrop-filter: blur(20px) saturate(180%);
+  --glass-dark-card-border: 1px solid rgba(255, 255, 255, 0.08);
+  --glass-dark-card-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 
-  --glass-dark-dropdown-background:     rgba(15, 23, 42, 0.90);
-  --glass-dark-dropdown-backdrop-filter:blur(24px) saturate(200%);
-  --glass-dark-dropdown-border:         1px solid rgba(255, 255, 255, 0.10);
-  --glass-dark-dropdown-box-shadow:     0 8px 32px rgba(0, 0, 0, 0.60), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --glass-dark-dropdown-background: rgba(15, 23, 42, 0.9);
+  --glass-dark-dropdown-backdrop-filter: blur(24px) saturate(200%);
+  --glass-dark-dropdown-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-dark-dropdown-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04);
 
-  --glass-dark-toast-background:     rgba(15, 23, 42, 0.92);
-  --glass-dark-toast-backdrop-filter:blur(24px) saturate(200%);
-  --glass-dark-toast-border:         1px solid rgba(255, 255, 255, 0.10);
-  --glass-dark-toast-box-shadow:     0 12px 40px rgba(0, 0, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass-dark-toast-background: rgba(15, 23, 42, 0.92);
+  --glass-dark-toast-backdrop-filter: blur(24px) saturate(200%);
+  --glass-dark-toast-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-dark-toast-box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
   // ── Glass Light ──
-  --glass-light-card-background:     rgba(255, 255, 255, 0.60);
-  --glass-light-card-backdrop-filter:blur(20px) saturate(180%);
-  --glass-light-card-border:         1px solid rgba(255, 255, 255, 0.72);
-  --glass-light-card-box-shadow:     0 4px 20px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.90);
+  --glass-light-card-background: rgba(255, 255, 255, 0.6);
+  --glass-light-card-backdrop-filter: blur(20px) saturate(180%);
+  --glass-light-card-border: 1px solid rgba(255, 255, 255, 0.72);
+  --glass-light-card-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 
-  --glass-light-modal-background:     rgba(255, 255, 255, 0.82);
-  --glass-light-modal-backdrop-filter:blur(48px) saturate(220%);
-  --glass-light-modal-border:         1px solid rgba(255, 255, 255, 0.88);
-  --glass-light-modal-box-shadow:     0 24px 80px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 1.0);
+  --glass-light-modal-background: rgba(255, 255, 255, 0.82);
+  --glass-light-modal-backdrop-filter: blur(48px) saturate(220%);
+  --glass-light-modal-border: 1px solid rgba(255, 255, 255, 0.88);
+  --glass-light-modal-box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 1);
 
-  --glass-light-sidebar-background:     rgba(255, 255, 255, 0.68);
-  --glass-light-sidebar-backdrop-filter:blur(40px) saturate(200%);
-  --glass-light-sidebar-border:         1px solid rgba(255, 255, 255, 0.75);
-  --glass-light-sidebar-box-shadow:     2px 0 24px rgba(0, 0, 0, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.80);
+  --glass-light-sidebar-background: rgba(255, 255, 255, 0.68);
+  --glass-light-sidebar-backdrop-filter: blur(40px) saturate(200%);
+  --glass-light-sidebar-border: 1px solid rgba(255, 255, 255, 0.75);
+  --glass-light-sidebar-box-shadow: 2px 0 24px rgba(0, 0, 0, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.8);
 
-  --glass-light-header-background:     rgba(255, 255, 255, 0.78);
-  --glass-light-header-backdrop-filter:blur(40px) saturate(200%);
-  --glass-light-header-border:         0 1px 0 rgba(203, 213, 225, 0.50);
-  --glass-light-header-box-shadow:     0 1px 16px rgba(0, 0, 0, 0.06);
+  --glass-light-header-background: rgba(255, 255, 255, 0.78);
+  --glass-light-header-backdrop-filter: blur(40px) saturate(200%);
+  --glass-light-header-border: 0 1px 0 rgba(203, 213, 225, 0.5);
+  --glass-light-header-box-shadow: 0 1px 16px rgba(0, 0, 0, 0.06);
 
-  --glass-light-dropdown-background:     rgba(255, 255, 255, 0.88);
-  --glass-light-dropdown-backdrop-filter:blur(24px) saturate(200%);
-  --glass-light-dropdown-border:         1px solid rgba(255, 255, 255, 0.80);
-  --glass-light-dropdown-box-shadow:     0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --glass-light-dropdown-background: rgba(255, 255, 255, 0.88);
+  --glass-light-dropdown-backdrop-filter: blur(24px) saturate(200%);
+  --glass-light-dropdown-border: 1px solid rgba(255, 255, 255, 0.8);
+  --glass-light-dropdown-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
 
-  --glass-light-toast-background:     rgba(255, 255, 255, 0.90);
-  --glass-light-toast-backdrop-filter:blur(24px) saturate(200%);
-  --glass-light-toast-border:         1px solid rgba(255, 255, 255, 0.82);
-  --glass-light-toast-box-shadow:     0 12px 40px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 1.0);
+  --glass-light-toast-background: rgba(255, 255, 255, 0.9);
+  --glass-light-toast-backdrop-filter: blur(24px) saturate(200%);
+  --glass-light-toast-border: 1px solid rgba(255, 255, 255, 0.82);
+  --glass-light-toast-box-shadow: 0 12px 40px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 1);
 
   // ── Border Radius ──
   --border-radius-none: 0px;
-  --border-radius-xs:   0.25rem;
-  --border-radius-sm:   0.5rem;
-  --border-radius-md:   0.75rem;
-  --border-radius-lg:   1rem;
-  --border-radius-xl:   1.25rem;
-  --border-radius-2xl:  1.5rem;
-  --border-radius-3xl:  2rem;
-  --border-radius-4xl:  2.5rem;
+  --border-radius-xs: 0.25rem;
+  --border-radius-sm: 0.5rem;
+  --border-radius-md: 0.75rem;
+  --border-radius-lg: 1rem;
+  --border-radius-xl: 1.25rem;
+  --border-radius-2xl: 1.5rem;
+  --border-radius-3xl: 2rem;
+  --border-radius-4xl: 2.5rem;
   --border-radius-full: 9999px;
 
   // ── Transitions ──
-  --transition-default:   all 200ms cubic-bezier(0.42, 0, 0.18, 1);
-  --transition-fast:      all 100ms cubic-bezier(0.42, 0, 0.18, 1);
-  --transition-slow:      all 350ms cubic-bezier(0.42, 0, 0.18, 1);
-  --transition-glass:     background 200ms ease, backdrop-filter 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
-  --transition-colors:    color 150ms ease, background-color 200ms ease, border-color 200ms ease;
+  --transition-default: all 200ms cubic-bezier(0.42, 0, 0.18, 1);
+  --transition-fast: all 100ms cubic-bezier(0.42, 0, 0.18, 1);
+  --transition-slow: all 350ms cubic-bezier(0.42, 0, 0.18, 1);
+  --transition-glass: background 200ms ease, backdrop-filter 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+  --transition-colors: color 150ms ease, background-color 200ms ease, border-color 200ms ease;
   --transition-transform: transform 200ms cubic-bezier(0.42, 0, 0.18, 1);
-  --transition-opacity:   opacity 180ms ease;
-  --transition-shadow:    box-shadow 200ms ease;
+  --transition-opacity: opacity 180ms ease;
+  --transition-shadow: box-shadow 200ms ease;
 
   // ── Shadows ──
-  --shadow-glass:    0 8px 32px rgba(0, 0, 0, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.80);
-  --shadow-glass-lg: 0 20px 60px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.90);
-  --shadow-primary:  0 4px 20px rgba(99, 102, 241, 0.35), 0 2px 8px rgba(99, 102, 241, 0.20);
-  --shadow-glow:     0 0 24px rgba(99, 102, 241, 0.40), 0 0 48px rgba(99, 102, 241, 0.15);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --shadow-glass-lg: 0 20px 60px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-primary: 0 4px 20px rgba(99, 102, 241, 0.35), 0 2px 8px rgba(99, 102, 241, 0.2);
+  --shadow-glow: 0 0 24px rgba(99, 102, 241, 0.4), 0 0 48px rgba(99, 102, 241, 0.15);
 
   // ── Surface dark (mode par défaut) ──
-  --surface-background:  rgba(9, 9, 18, 0.92);
-  --surface-foreground:  #f1f5f9;
-  --surface-glass:       rgba(15, 23, 42, 0.60);
+  --surface-background: rgba(9, 9, 18, 0.92);
+  --surface-foreground: #f1f5f9;
+  --surface-glass: rgba(15, 23, 42, 0.6);
   --surface-glass-hover: rgba(30, 41, 59, 0.75);
-  --surface-overlay:     rgba(0, 0, 0, 0.65);
+  --surface-overlay: rgba(0, 0, 0, 0.65);
 
   // ── Border dark ──
-  --border-default: rgba(51, 65, 85, 0.70);
-  --border-input:   rgba(71, 85, 105, 0.60);
-  --border-focus:   rgba(129, 140, 248, 0.80);
-  --border-ring:    rgba(99, 102, 241, 0.60);
+  --border-default: rgba(51, 65, 85, 0.7);
+  --border-input: rgba(71, 85, 105, 0.6);
+  --border-focus: rgba(129, 140, 248, 0.8);
+  --border-ring: rgba(99, 102, 241, 0.6);
 
   // ── Layout ──
-  --layout-sidebar-width:          260px;
-  --layout-sidebar-collapsed-width:64px;
-  --layout-header-height:          64px;
-  --layout-content-max-width:      1400px;
+  --layout-sidebar-width: 260px;
+  --layout-sidebar-collapsed-width: 64px;
+  --layout-header-height: 64px;
+  --layout-content-max-width: 1400px;
 
   // ── Z-Index ──
   --z-dropdown: 100;
-  --z-sticky:   200;
-  --z-overlay:  300;
-  --z-modal:    400;
-  --z-popover:  500;
-  --z-toast:    600;
-  --z-tooltip:  700;
-  --z-top:      9999;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+  --z-top: 9999;
 }
 
 // ----------------------------------------------------------------------------
 // 2. MODE CLAIR (light theme selector)
 // ----------------------------------------------------------------------------
 [data-theme='light'],
-.eigen-theme-light {
-  --surface-background:  rgba(248, 250, 252, 0.85);
-  --surface-foreground:  #0f172a;
-  --surface-glass:       rgba(255, 255, 255, 0.55);
+.egen-theme-light {
+  --surface-background: rgba(248, 250, 252, 0.85);
+  --surface-foreground: #0f172a;
+  --surface-glass: rgba(255, 255, 255, 0.55);
   --surface-glass-hover: rgba(255, 255, 255, 0.72);
-  --surface-overlay:     rgba(15, 23, 42, 0.45);
+  --surface-overlay: rgba(15, 23, 42, 0.45);
 
-  --border-default: rgba(203, 213, 225, 0.70);
-  --border-input:   rgba(148, 163, 184, 0.60);
-  --border-focus:   rgba(79, 70, 229, 0.80);
-  --border-ring:    rgba(99, 102, 241, 0.60);
+  --border-default: rgba(203, 213, 225, 0.7);
+  --border-input: rgba(148, 163, 184, 0.6);
+  --border-focus: rgba(79, 70, 229, 0.8);
+  --border-ring: rgba(99, 102, 241, 0.6);
 }
 
 // ----------------------------------------------------------------------------
@@ -213,79 +213,79 @@
 /// @param $variant — 'dark' | 'light' (default: dark)
 /// @param $size — 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 @mixin glass($variant: 'dark', $size: 'md') {
-  background:      var(--glass-#{$variant}-#{$size}-background);
+  background: var(--glass-#{$variant}-#{$size}-background);
   backdrop-filter: var(--glass-#{$variant}-#{$size}-backdrop-filter);
   -webkit-backdrop-filter: var(--glass-#{$variant}-#{$size}-backdrop-filter);
-  border:          var(--glass-#{$variant}-#{$size}-border);
-  box-shadow:      var(--glass-#{$variant}-#{$size}-box-shadow);
-  transition:      var(--transition-glass);
+  border: var(--glass-#{$variant}-#{$size}-border);
+  box-shadow: var(--glass-#{$variant}-#{$size}-box-shadow);
+  transition: var(--transition-glass);
 }
 
 /// Variante glass pour une card
 @mixin glass-card($variant: 'dark') {
-  background:      var(--glass-#{$variant}-card-background);
+  background: var(--glass-#{$variant}-card-background);
   backdrop-filter: var(--glass-#{$variant}-card-backdrop-filter);
   -webkit-backdrop-filter: var(--glass-#{$variant}-card-backdrop-filter);
-  border:          var(--glass-#{$variant}-card-border);
-  box-shadow:      var(--glass-#{$variant}-card-box-shadow);
-  border-radius:   var(--border-radius-xl);
-  transition:      var(--transition-glass);
+  border: var(--glass-#{$variant}-card-border);
+  box-shadow: var(--glass-#{$variant}-card-box-shadow);
+  border-radius: var(--border-radius-xl);
+  transition: var(--transition-glass);
 }
 
 /// Variante glass pour la sidebar
 @mixin glass-sidebar($variant: 'dark') {
-  background:      var(--glass-#{$variant}-sidebar-background);
+  background: var(--glass-#{$variant}-sidebar-background);
   backdrop-filter: var(--glass-#{$variant}-sidebar-backdrop-filter);
   -webkit-backdrop-filter: var(--glass-#{$variant}-sidebar-backdrop-filter);
-  border-right:    var(--glass-#{$variant}-sidebar-border);
-  box-shadow:      var(--glass-#{$variant}-sidebar-box-shadow);
-  transition:      var(--transition-sidebar, width 280ms cubic-bezier(0.42, 0, 0.18, 1));
+  border-right: var(--glass-#{$variant}-sidebar-border);
+  box-shadow: var(--glass-#{$variant}-sidebar-box-shadow);
+  transition: var(--transition-sidebar, width 280ms cubic-bezier(0.42, 0, 0.18, 1));
 }
 
 /// Variante glass pour le header
 @mixin glass-header($variant: 'dark') {
-  background:      var(--glass-#{$variant}-header-background);
+  background: var(--glass-#{$variant}-header-background);
   backdrop-filter: var(--glass-#{$variant}-header-backdrop-filter);
   -webkit-backdrop-filter: var(--glass-#{$variant}-header-backdrop-filter);
-  border-bottom:   var(--glass-#{$variant}-header-border);
-  box-shadow:      var(--glass-#{$variant}-header-box-shadow);
-  position:        sticky;
-  top:             0;
-  z-index:         var(--z-sticky);
-  transition:      var(--transition-glass);
+  border-bottom: var(--glass-#{$variant}-header-border);
+  box-shadow: var(--glass-#{$variant}-header-box-shadow);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  transition: var(--transition-glass);
 }
 
 /// Variante glass pour un modal
 @mixin glass-modal($variant: 'dark') {
-  background:      var(--glass-#{$variant}-modal-background);
+  background: var(--glass-#{$variant}-modal-background);
   backdrop-filter: var(--glass-#{$variant}-modal-backdrop-filter);
   -webkit-backdrop-filter: var(--glass-#{$variant}-modal-backdrop-filter);
-  border:          var(--glass-#{$variant}-modal-border);
-  box-shadow:      var(--glass-#{$variant}-modal-box-shadow);
-  border-radius:   var(--border-radius-2xl);
-  transition:      var(--transition-glass);
+  border: var(--glass-#{$variant}-modal-border);
+  box-shadow: var(--glass-#{$variant}-modal-box-shadow);
+  border-radius: var(--border-radius-2xl);
+  transition: var(--transition-glass);
 }
 
 /// Variante glass pour un dropdown / popover
 @mixin glass-dropdown($variant: 'dark') {
-  background:      var(--glass-#{$variant}-dropdown-background);
+  background: var(--glass-#{$variant}-dropdown-background);
   backdrop-filter: var(--glass-#{$variant}-dropdown-backdrop-filter);
   -webkit-backdrop-filter: var(--glass-#{$variant}-dropdown-backdrop-filter);
-  border:          var(--glass-#{$variant}-dropdown-border);
-  box-shadow:      var(--glass-#{$variant}-dropdown-box-shadow);
-  border-radius:   var(--border-radius-xl);
-  transition:      var(--transition-glass);
+  border: var(--glass-#{$variant}-dropdown-border);
+  box-shadow: var(--glass-#{$variant}-dropdown-box-shadow);
+  border-radius: var(--border-radius-xl);
+  transition: var(--transition-glass);
 }
 
 /// Variante glass pour un toast / snackbar
 @mixin glass-toast($variant: 'dark') {
-  background:      var(--glass-#{$variant}-toast-background);
+  background: var(--glass-#{$variant}-toast-background);
   backdrop-filter: var(--glass-#{$variant}-toast-backdrop-filter);
   -webkit-backdrop-filter: var(--glass-#{$variant}-toast-backdrop-filter);
-  border:          var(--glass-#{$variant}-toast-border);
-  box-shadow:      var(--glass-#{$variant}-toast-box-shadow);
-  border-radius:   var(--border-radius-xl);
-  transition:      var(--transition-glass);
+  border: var(--glass-#{$variant}-toast-border);
+  box-shadow: var(--glass-#{$variant}-toast-box-shadow);
+  border-radius: var(--border-radius-xl);
+  transition: var(--transition-glass);
 }
 
 /// Effet glow sur un bouton ou un élément interactif
@@ -295,7 +295,7 @@
 
 /// Overlay de fond pour les modals
 @mixin glass-overlay {
-  background:      var(--surface-overlay);
+  background: var(--surface-overlay);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
 }

@@ -1,5 +1,5 @@
 // ============================================================================
-//  EIGEN THEME ENGINE — Flatten JSON → CSS custom properties
+//  EGEN THEME ENGINE — Flatten JSON → CSS custom properties
 // ============================================================================
 
 const DEFAULT_IGNORE_KEYS = ['priority', 'meta', 'tenant'];
@@ -62,15 +62,8 @@ export interface FlattenOptions {
  * flattenToCssVars({ glass: { dark: { modal: { background: "rgba(15,23,42,0.82)" } } } })
  * // → { "--glass-dark-modal-background": "rgba(15,23,42,0.82)" }
  */
-export function flattenToCssVars(
-  obj: Record<string, unknown>,
-  options: FlattenOptions = {},
-): Record<string, string> {
-  const {
-    prefix = DEFAULT_PREFIX,
-    separator = DEFAULT_SEPARATOR,
-    ignoreRootKeys = DEFAULT_IGNORE_KEYS,
-  } = options;
+export function flattenToCssVars(obj: Record<string, unknown>, options: FlattenOptions = {}): Record<string, string> {
+  const { prefix = DEFAULT_PREFIX, separator = DEFAULT_SEPARATOR, ignoreRootKeys = DEFAULT_IGNORE_KEYS } = options;
 
   const result: Record<string, string> = {};
 

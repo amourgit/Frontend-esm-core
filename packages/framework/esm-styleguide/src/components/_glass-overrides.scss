@@ -1,16 +1,16 @@
 // ============================================================================
-//  EIGEN — Glass Morphism : surcharges Carbon Design System
+//  EGEN — Glass Morphism : surcharges Carbon Design System
 // ============================================================================
 //
 //  Ce fichier applique le design glass morphism aux composants Carbon (cds--)
-//  et aux composants EIGEN natifs.
+//  et aux composants EGEN natifs.
 //
 //  Il est chargé APRÈS les styles Carbon, donc il surcharge proprement.
 //  Toutes les valeurs passent par les variables CSS du moteur de thème.
 //
 // ============================================================================
 
-@use './glass' as *;
+@use '../_glass' as *;
 
 // ── Header (topNav) ──────────────────────────────────────────────────────────
 .cds--header {
@@ -20,7 +20,7 @@
 }
 
 [data-theme='light'] .cds--header,
-.eigen-theme-light .cds--header {
+.egen-theme-light .cds--header {
   @include glass-header('light');
   background: var(--glass-light-header-background) !important;
 }
@@ -42,7 +42,7 @@
 }
 
 [data-theme='light'] .cds--side-nav,
-.eigen-theme-light .cds--side-nav {
+.egen-theme-light .cds--side-nav {
   @include glass-sidebar('light');
   background: var(--glass-light-sidebar-background) !important;
 }
@@ -61,7 +61,7 @@
 }
 
 [data-theme='light'] .cds--modal-container,
-.eigen-theme-light .cds--modal-container {
+.egen-theme-light .cds--modal-container {
   @include glass-modal('light');
   background: var(--glass-light-modal-background) !important;
 }
@@ -86,7 +86,7 @@
 
 [data-theme='light'] .cds--dropdown,
 [data-theme='light'] .cds--overflow-menu-options,
-.eigen-theme-light .cds--dropdown {
+.egen-theme-light .cds--dropdown {
   @include glass-dropdown('light');
 }
 
@@ -102,7 +102,7 @@
 }
 
 [data-theme='light'] .cds--toast-notification,
-.eigen-theme-light .cds--toast-notification {
+.egen-theme-light .cds--toast-notification {
   @include glass-toast('light');
 }
 
@@ -115,7 +115,7 @@
 }
 
 [data-theme='light'] .cds--tile,
-.eigen-theme-light .cds--tile {
+.egen-theme-light .cds--tile {
   @include glass-card('light');
   background: var(--glass-light-card-background) !important;
 }
@@ -125,27 +125,27 @@
 .cds--text-area,
 .cds--select-input,
 .cds--number-input {
-  background:      var(--surface-glass) !important;
+  background: var(--surface-glass) !important;
   backdrop-filter: blur(12px);
-  border:          1px solid var(--border-input) !important;
-  border-radius:   var(--border-radius-md);
-  color:           var(--surface-foreground) !important;
-  transition:      var(--transition-glass);
+  border: 1px solid var(--border-input) !important;
+  border-radius: var(--border-radius-md);
+  color: var(--surface-foreground) !important;
+  transition: var(--transition-glass);
 
   &:focus,
   &:focus-within {
     border-color: var(--border-focus) !important;
-    box-shadow:   0 0 0 3px rgba(99, 102, 241, 0.20) !important;
-    background:   var(--surface-glass-hover) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+    background: var(--surface-glass-hover) !important;
   }
 }
 
 // ── Buttons ──────────────────────────────────────────────────────────────────
 .cds--btn--primary {
-  background:    var(--colors-primary-600) !important;
-  box-shadow:    var(--shadow-primary);
+  background: var(--colors-primary-600) !important;
+  box-shadow: var(--shadow-primary);
   border-radius: var(--border-radius-md);
-  transition:    var(--transition-default);
+  transition: var(--transition-default);
 
   &:hover {
     background: var(--colors-primary-700) !important;
@@ -155,19 +155,19 @@
 
 .cds--btn--ghost,
 .cds--btn--tertiary {
-  background:      transparent;
-  border-color:    var(--border-default);
-  border-radius:   var(--border-radius-md);
-  color:           var(--surface-foreground);
+  background: transparent;
+  border-color: var(--border-default);
+  border-radius: var(--border-radius-md);
+  color: var(--surface-foreground);
   backdrop-filter: blur(8px);
-  transition:      var(--transition-glass);
+  transition: var(--transition-glass);
 
   &:hover {
     background: var(--surface-glass) !important;
   }
 }
 
-// ── EIGEN specific containers ─────────────────────────────────────────────────
+// ── EGEN specific containers ─────────────────────────────────────────────────
 #egen-top-nav-app-container {
   position: sticky;
   top: 0;
@@ -176,12 +176,12 @@
 
 #egen-left-nav-container .cds--side-nav {
   height: calc(100vh - var(--layout-header-height));
-  top:    var(--layout-header-height);
+  top: var(--layout-header-height);
   position: sticky;
 }
 
 // Workspace panel
-#eigen-workspaces-container {
+#egen-workspaces-container {
   backdrop-filter: blur(20px) saturate(180%);
   border-left: 1px solid var(--border-default);
 }

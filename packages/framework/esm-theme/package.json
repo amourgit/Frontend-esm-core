@@ -1,8 +1,8 @@
 {
-  "name": "@eigen/esm-theme",
+  "name": "@egen/esm-theme",
   "version": "9.0.2",
   "license": "MPL-2.0",
-  "description": "Dynamic theme engine with glassmorphism support and priority-based JSON loading for EIGEN SPA",
+  "description": "Dynamic theme engine with glassmorphism support and priority-based JSON loading for EGEN SPA",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {

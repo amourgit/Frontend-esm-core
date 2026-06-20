@@ -1,5 +1,5 @@
 // ============================================================================
-//  @eigen/esm-theme — Point d'entrée public
+//  @egen/esm-theme — Point d'entrée public
 // ============================================================================
 
 // Types
@@ -19,12 +19,7 @@ export type {
 export { ThemeEngine } from './engine';
 
 // Singleton global (utilisé par le shell)
-export {
-  setupThemeEngine,
-  getThemeEngine,
-  getThemeState,
-  reloadTheme,
-} from './singleton';
+export { setupThemeEngine, getThemeEngine, getThemeState, reloadTheme } from './singleton';
 
 // Utilitaires bas niveau (utiles pour les outils de build, tests, storybook)
 export { flattenToCssVars } from './flatten';

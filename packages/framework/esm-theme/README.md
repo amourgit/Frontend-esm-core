@@ -1,6 +1,6 @@
-# `@eigen/esm-theme` — Moteur de Thème Dynamique
+# `@egen/esm-theme` — Moteur de Thème Dynamique
 
-Système de chargement de thèmes JSON par **priorité**, avec génération dynamique de variables CSS et **hot-reload** intégré. Conçu pour le framework EIGEN (Single-SPA, micro-frontends).
+Système de chargement de thèmes JSON par **priorité**, avec génération dynamique de variables CSS et **hot-reload** intégré. Conçu pour le framework EGEN (Single-SPA, micro-frontends).
 
 ---
 
@@ -12,7 +12,7 @@ esm-theme/
 │   ├── types.ts        — Interfaces TypeScript (ThemeSchema, LoadedTheme, …)
 │   ├── loader.ts       — Fetch parallèle + sélection par priorité
 │   ├── flatten.ts      — JSON imbriqué → variables CSS à plat
-│   ├── inject.ts       — Injection DOM via balise <style id="eigen-theme-vars">
+│   ├── inject.ts       — Injection DOM via balise <style id="egen-theme-vars">
 │   ├── engine.ts       — Orchestrateur (ThemeEngine class)
 │   ├── singleton.ts    — Instance globale + API fonctionnelle
 │   ├── index.ts        — Exports publics
@@ -35,7 +35,7 @@ esm-theme/
    ```css
    --glass-dark-card-background: rgba(15,23,42,0.65);
    ```
-5. Toutes les variables sont injectées dans une balise `<style id="eigen-theme-vars">` au début de `<head>`.
+5. Toutes les variables sont injectées dans une balise `<style id="egen-theme-vars">` au début de `<head>`.
 
 ---
 
@@ -64,7 +64,7 @@ esm-theme/
 }
 ```
 
-> **Règle** : le fichier avec `priority` le plus élevé prend la main. Le thème par défaut EIGEN a `priority: 1` — il suffit de mettre `priority: 10` dans un fichier custom pour le surcharger.
+> **Règle** : le fichier avec `priority` le plus élevé prend la main. Le thème par défaut EGEN a `priority: 1` — il suffit de mettre `priority: 10` dans un fichier custom pour le surcharger.
 
 ---
 
@@ -75,7 +75,7 @@ Le moteur est initialisé automatiquement dans `run.ts`. Pour ajouter des thème
 ```html
 <!-- index.ejs — avant initializeSpa() -->
 <script>
-  window.eigenThemeUrls = [
+  window.egenThemeUrls = [
     '/api/tenant/mon-tenant/theme.json',
     '/themes/override.json'
   ];
@@ -87,7 +87,7 @@ Le moteur est initialisé automatiquement dans `run.ts`. Pour ajouter des thème
 ## API TypeScript
 
 ```ts
-import { setupThemeEngine, getThemeEngine, reloadTheme } from '@eigen/esm-theme';
+import { setupThemeEngine, getThemeEngine, reloadTheme } from '@egen/esm-theme';
 
 // Initialisation (shell uniquement)
 await setupThemeEngine({
@@ -114,7 +114,7 @@ await reloadTheme();
 ## Usage SCSS dans les composants
 
 ```scss
-@use '@eigen/esm-styleguide/src/glass' as glass;
+@use '@egen/esm-styleguide/src/glass' as glass;
 
 .ma-card {
   @include glass.glass-card('dark');
@@ -169,6 +169,6 @@ En mode `development`, le moteur poll automatiquement les URLs de thème toutes 
 Si un fichier JSON change (ou si un fichier avec une priorité plus haute est ajouté), les variables CSS sont mises à jour **immédiatement** sans rechargement de page.
 
 ```
-[eigen/esm-theme] 🔥 Changement de thème détecté — rechargement à chaud
-[eigen/esm-theme] ✅ Thème appliqué : "Mon thème custom" (247 vars CSS)
+[egen/esm-theme] 🔥 Changement de thème détecté — rechargement à chaud
+[egen/esm-theme] ✅ Thème appliqué : "Mon thème custom" (247 vars CSS)
 ```

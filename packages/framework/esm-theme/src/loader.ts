@@ -1,5 +1,5 @@
 // ============================================================================
-//  EIGEN THEME ENGINE — Chargeur de fichiers JSON par priorité
+//  EGEN THEME ENGINE — Chargeur de fichiers JSON par priorité
 // ============================================================================
 
 import type { ThemeSchema, LoadedTheme } from './types';
@@ -19,14 +19,14 @@ async function fetchThemeJson(url: string): Promise<{ url: string; json: ThemeSc
     });
 
     if (!res.ok) {
-      console.warn(`[eigen/esm-theme] ⚠️  HTTP ${res.status} pour "${url}" → ignoré`);
+      console.warn(`[egen/esm-theme] ⚠️  HTTP ${res.status} pour "${url}" → ignoré`);
       return null;
     }
 
     const json: ThemeSchema = await res.json();
     return { url, json };
   } catch (err) {
-    console.warn(`[eigen/esm-theme] ⚠️  Impossible de charger "${url}" →`, err);
+    console.warn(`[egen/esm-theme] ⚠️  Impossible de charger "${url}" →`, err);
     return null;
   }
 }
@@ -44,11 +44,9 @@ async function fetchThemeJson(url: string): Promise<{ url: string; json: ThemeSc
  * Note: on charge tous les fichiers en parallèle (performance) puis on compare.
  * Le "gagnant" est déjà parsé — on ne relit pas de fichier.
  */
-export async function loadHighestPriorityTheme(
-  themeUrls: string[],
-): Promise<LoadedTheme | null> {
+export async function loadHighestPriorityTheme(themeUrls: string[]): Promise<LoadedTheme | null> {
   if (!themeUrls || themeUrls.length === 0) {
-    console.warn('[eigen/esm-theme] Aucun URL de thème fourni.');
+    console.warn('[egen/esm-theme] Aucun URL de thème fourni.');
     return null;
   }
 
@@ -56,23 +54,24 @@ export async function loadHighestPriorityTheme(
   const results = await Promise.all(themeUrls.map(fetchThemeJson));
 
   // Filtrer les échecs
-  const valid = results.filter(
-    (r): r is { url: string; json: ThemeSchema } => r !== null,
-  );
+  const valid = results.filter((r): r is { url: string; json: ThemeSchema } => r !== null);
 
   if (valid.length === 0) {
-    console.warn('[eigen/esm-theme] Aucun fichier de thème valide chargé.');
+    console.warn('[egen/esm-theme] Aucun fichier de thème valide chargé.');
     return null;
   }
 
   // Log des priorités détectées
   if (process.env.NODE_ENV !== 'production') {
-    console.group('[eigen/esm-theme] 📂 Fichiers de thème détectés');
+    // eslint-disable-next-line no-console
+    console.group('[egen/esm-theme] 📂 Fichiers de thème détectés');
     for (const { url, json } of valid) {
       const p = typeof json.priority === 'number' ? json.priority : 'N/A';
       const name = json.meta?.name ?? url;
+      // eslint-disable-next-line no-console
       console.log(`  • ${name} (priority = ${p}) — ${url}`);
     }
+    // eslint-disable-next-line no-console
     console.groupEnd();
   }
 
@@ -89,14 +88,15 @@ export async function loadHighestPriorityTheme(
       winnerPriority = p;
     } else if (p === winnerPriority && process.env.NODE_ENV !== 'production') {
       console.warn(
-        `[eigen/esm-theme] ⚠️  Égalité de priorité (${p}) entre "${winner.url}" et "${candidate.url}". Le premier est retenu.`,
+        `[egen/esm-theme] ⚠️  Égalité de priorité (${p}) entre "${winner.url}" et "${candidate.url}". Le premier est retenu.`,
       );
     }
   }
 
   if (process.env.NODE_ENV !== 'production') {
     const name = winner.json.meta?.name ?? winner.url;
-    console.log(`[eigen/esm-theme] 🏆 Thème retenu : "${name}" (priority = ${winnerPriority})`);
+    // eslint-disable-next-line no-console
+    console.log(`[egen/esm-theme] 🏆 Thème retenu : "${name}" (priority = ${winnerPriority})`);
   }
 
   return {

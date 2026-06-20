@@ -1,15 +1,11 @@
 // ============================================================================
-//  EIGEN THEME ENGINE — Orchestrateur principal
+//  EGEN THEME ENGINE — Orchestrateur principal
 // ============================================================================
 
 import { loadHighestPriorityTheme } from './loader';
 import { flattenToCssVars } from './flatten';
 import { injectCssVarsToDocument, removeCssVarsFromDocument } from './inject';
-import type {
-  ThemeEngineOptions,
-  ThemeEngineState,
-  LoadedTheme,
-} from './types';
+import type { ThemeEngineOptions, ThemeEngineState, LoadedTheme } from './types';
 
 const DEFAULT_OPTIONS: Required<
   Pick<ThemeEngineOptions, 'cssVarPrefix' | 'separator' | 'ignoreRootKeys' | 'pollIntervalMs' | 'targetSelector'>
@@ -22,7 +18,7 @@ const DEFAULT_OPTIONS: Required<
 };
 
 /**
- * ThemeEngine — Moteur de thème dynamique EIGEN
+ * ThemeEngine — Moteur de thème dynamique EGEN
  *
  * Charge des fichiers JSON de thème par URL, sélectionne le plus prioritaire,
  * aplatit ses tokens en variables CSS et les injecte dans le DOM.
@@ -97,7 +93,7 @@ export class ThemeEngine {
       const message = err instanceof Error ? err.message : String(err);
       this.setState({ status: 'error', error: message });
       this.options.onError?.(err instanceof Error ? err : new Error(message));
-      console.error('[eigen/esm-theme] ❌ Erreur lors de l\'application du thème:', message);
+      console.error("[egen/esm-theme] ❌ Erreur lors de l'application du thème:", message);
       return {};
     }
   }
@@ -113,7 +109,8 @@ export class ThemeEngine {
     if (!interval || interval <= 0) return;
 
     if (process.env.NODE_ENV !== 'production') {
-      console.log(`[eigen/esm-theme] 🔄 Hot-reload activé (polling toutes les ${interval}ms)`);
+      // eslint-disable-next-line no-console
+      console.log(`[egen/esm-theme] 🔄 Hot-reload activé (polling toutes les ${interval}ms)`);
     }
 
     this.pollTimer = setInterval(async () => {
@@ -125,7 +122,8 @@ export class ThemeEngine {
 
         if (fingerprint !== this.lastThemeFingerprint) {
           if (process.env.NODE_ENV !== 'production') {
-            console.log('[eigen/esm-theme] 🔥 Changement de thème détecté — rechargement à chaud');
+            // eslint-disable-next-line no-console
+            console.log('[egen/esm-theme] 🔥 Changement de thème détecté — rechargement à chaud');
           }
           const cssVars = this.processTheme(loaded);
           this.setState({
@@ -151,7 +149,8 @@ export class ThemeEngine {
       clearInterval(this.pollTimer);
       this.pollTimer = null;
       if (process.env.NODE_ENV !== 'production') {
-        console.log('[eigen/esm-theme] ⏹  Hot-reload désactivé');
+        // eslint-disable-next-line no-console
+        console.log('[egen/esm-theme] ⏹  Hot-reload désactivé');
       }
     }
   }

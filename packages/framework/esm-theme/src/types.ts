@@ -1,5 +1,5 @@
 // ============================================================================
-//  EIGEN THEME ENGINE — Types publics
+//  EGEN THEME ENGINE — Types publics
 // ============================================================================
 
 /** Structure d'une palette de couleurs (50→950) */

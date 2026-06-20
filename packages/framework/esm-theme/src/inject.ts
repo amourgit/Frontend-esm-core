@@ -1,8 +1,8 @@
 // ============================================================================
-//  EIGEN THEME ENGINE — Injection CSS dans le DOM
+//  EGEN THEME ENGINE — Injection CSS dans le DOM
 // ============================================================================
 
-const STYLE_TAG_ID = 'eigen-theme-vars';
+const STYLE_TAG_ID = 'egen-theme-vars';
 
 /**
  * Injecte les variables CSS dans le DOM via une balise <style> dédiée.
@@ -16,10 +16,7 @@ const STYLE_TAG_ID = 'eigen-theme-vars';
  *
  * La balise est créée une seule fois, puis son contenu est remplacé à chaque update.
  */
-export function injectCssVarsToDocument(
-  cssVarsMap: Record<string, string>,
-  targetSelector = ':root',
-): void {
+export function injectCssVarsToDocument(cssVarsMap: Record<string, string>, targetSelector = ':root'): void {
   if (typeof document === 'undefined') return; // SSR guard
 
   const lines = Object.entries(cssVarsMap)
@@ -33,7 +30,7 @@ export function injectCssVarsToDocument(
   if (!styleTag) {
     styleTag = document.createElement('style');
     styleTag.id = STYLE_TAG_ID;
-    styleTag.setAttribute('data-eigen', 'theme');
+    styleTag.setAttribute('data-egen', 'theme');
     // Insérer en premier dans <head> pour que les styles app puissent surcharger
     const firstChild = document.head.firstChild;
     document.head.insertBefore(styleTag, firstChild);
@@ -54,10 +51,7 @@ export function removeCssVarsFromDocument(): void {
 /**
  * Génère un bloc CSS :root { ... } en string — utile pour export statique.
  */
-export function buildCssString(
-  cssVarsMap: Record<string, string>,
-  selector = ':root',
-): string {
+export function buildCssString(cssVarsMap: Record<string, string>, selector = ':root'): string {
   const lines = Object.entries(cssVarsMap)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([name, value]) => `  ${name}: ${value};`);
