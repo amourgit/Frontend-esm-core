@@ -77,7 +77,7 @@ grep -r "dev3.egen.org" packages/tooling
 
 ## 0.4 Créer le fichier de mapping des noms
 
-Créer `EIGEN-MIGRATION/name-mapping.json` :
+Créer `EGEN-MIGRATION/name-mapping.json` :
 
 ```json
 {
@@ -136,11 +136,11 @@ Créer `EIGEN-MIGRATION/name-mapping.json` :
 
 ## 0.5 Script de vérification rapide (à utiliser après chaque phase)
 
-Créer `EIGEN-MIGRATION/check-migration.sh` :
+Créer `EGEN-MIGRATION/check-migration.sh` :
 
 ```bash
 #!/bin/bash
-echo "=== Vérification migration EIGEN ==="
+echo "=== Vérification migration EGEN ==="
 
 echo -n "Occurrences '@egen/' restantes dans les sources : "
 grep -r "@egen/" packages --include="*.ts" --include="*.tsx" --include="*.json" | grep -v "node_modules" | grep -v ".git" | wc -l
@@ -158,7 +158,7 @@ echo "=== Fin de vérification ==="
 ```
 
 ```bash
-chmod +x EIGEN-MIGRATION/check-migration.sh
+chmod +x EGEN-MIGRATION/check-migration.sh
 ```
 
 ---
@@ -174,13 +174,13 @@ cp example.env .env
 Modifier `.env` :
 
 ```env
-# Backend EIGEN (IAM + Gestion scolaire)
+# Backend EGEN (IAM + Gestion scolaire)
 E2E_BASE_URL=http://localhost:8081/egen
 E2E_USER_ADMIN_USERNAME=admin
 E2E_USER_ADMIN_PASSWORD=Admin123
 E2E_LOGIN_DEFAULT_LOCATION_UUID=   # UUID d'un établissement scolaire dans ton backend
 
-# URLs backend EIGEN
+# URLs backend EGEN
 EIGEN_API_BASE_URL=http://localhost:8081/api/v1
 EIGEN_IAM_URL=http://localhost:8180/auth/realms/egen
 EIGEN_SPA_PATH=/egen/spa
@@ -196,5 +196,5 @@ EIGEN_SPA_PATH=/egen/spa
 - [ ] Branches Git créées
 - [ ] Fichier `name-mapping.json` créé
 - [ ] Script `check-migration.sh` créé
-- [ ] `.env` configuré avec les URLs EIGEN
+- [ ] `.env` configuré avec les URLs EGEN
 - [ ] Cartographie des occurrences faite

@@ -1,7 +1,7 @@
 {
   "name": "browserslist-config-egen",
   "version": "1.0.0",
-  "description": "Browserslist configuration for the EIGEN Educational Platform",
+  "description": "Browserslist configuration for the EGEN Educational Platform",
   "main": "src/index.js",
   "license": "MPL-2.0",
   "keywords": [

@@ -40,7 +40,7 @@ Ce script modifie uniquement les `package.json` (pas les imports TypeScript — 
 
 ```bash
 #!/bin/bash
-# EIGEN-MIGRATION/scripts/rename-packages.sh
+# EGEN-MIGRATION/scripts/rename-packages.sh
 
 # Mapping des noms
 declare -A RENAMES=(
@@ -98,7 +98,7 @@ Après les `package.json`, modifier les imports dans les fichiers `.ts` et `.tsx
 
 ```bash
 #!/bin/bash
-# EIGEN-MIGRATION/scripts/rename-imports.sh
+# EGEN-MIGRATION/scripts/rename-imports.sh
 
 echo "Renommage des imports TypeScript..."
 
@@ -164,10 +164,10 @@ Dans `packages/tooling/egen/package.json` :
 
 Dans `packages/tooling/egen/src/cli.ts`, changer la description :
 ```typescript
-// Changer tous les textes "Egen" → "EIGEN"
+// Changer tous les textes "Egen" → "EGEN"
 // Changer le backend par défaut :
 .option('backend', {
-  default: 'https://dev.egen.ga',   // ← Ton backend EIGEN
+  default: 'https://dev.egen.ga',   // ← Ton backend EGEN
   describe: 'The backend to proxy API requests to.',
 })
 ```
@@ -231,7 +231,7 @@ Dans `packages/framework/esm-styleguide/src/components/_colors.scss` :
 /* Après */
 :root {
   --egen-color-bg-high-contrast: #ffffff;
-  --egen-color-brand-primary: #1a56db;   /* Couleur principale EIGEN */
+  --egen-color-brand-primary: #1a56db;   /* Couleur principale EGEN */
   
   /* Alias de compatibilité pendant transition */
   --egen-color-bg-high-contrast: var(--egen-color-bg-high-contrast);
@@ -317,7 +317,7 @@ Créer le schéma local `packages/framework/esm-routes/schema/egen-routes.schema
 
 ```bash
 # Lancer le script de vérification
-bash EIGEN-MIGRATION/check-migration.sh
+bash EGEN-MIGRATION/check-migration.sh
 
 # Tenter un build
 yarn install   # Pour mettre à jour le lockfile

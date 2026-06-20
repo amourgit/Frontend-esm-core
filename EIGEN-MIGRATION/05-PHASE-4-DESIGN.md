@@ -1,18 +1,18 @@
-# PHASE 4 — Refonte Visuelle EIGEN
+# PHASE 4 — Refonte Visuelle EGEN
 
 > Durée estimée : 2-3 jours
 > Branche : `egen/phase-4-design`
-> Objectif : Donner une identité visuelle propre à EIGEN sans toucher au fonctionnement du système.
+> Objectif : Donner une identité visuelle propre à EGEN sans toucher au fonctionnement du système.
 
 ---
 
 ## 4.1 Stratégie de design
 
 ### Ce qui CHANGE (identité visuelle)
-- Palette de couleurs (Egen bleu/teal → EIGEN couleurs nationales)
-- Logo (SVG EIGEN)
+- Palette de couleurs (Egen bleu/teal → EGEN couleurs nationales)
+- Logo (SVG EGEN)
 - Typographie (optionnel)
-- Nom dans les UI textes ("Egen" → "EIGEN")
+- Nom dans les UI textes ("Egen" → "EGEN")
 - Textes des boutons, titres de pages
 - Page de login (layout, image de fond, message d'accueil)
 - Favicon et icônes PWA
@@ -25,16 +25,16 @@
 
 ---
 
-## 4.2 Palette de couleurs EIGEN
+## 4.2 Palette de couleurs EGEN
 
-Définir les couleurs officielles EIGEN. Exemple pour une plateforme éducative nationale :
+Définir les couleurs officielles EGEN. Exemple pour une plateforme éducative nationale :
 
 ```scss
 // packages/framework/esm-styleguide/src/components/_colors.scss
 
 :root {
   /* ═══════════════════════════════════════════
-     EIGEN — Système de couleurs
+     EGEN — Système de couleurs
      ═══════════════════════════════════════════ */
 
   /* Fonds */
@@ -49,7 +49,7 @@ Définir les couleurs officielles EIGEN. Exemple pour une plateforme éducative 
   --egen-color-ink-low-contrast: rgba(13, 27, 62, 0.4);
   --egen-color-ink-white: #ffffff;
 
-  /* Couleur principale — Bleu national EIGEN */
+  /* Couleur principale — Bleu national EGEN */
   --egen-color-primary-dark: #0a2463;
   --egen-color-primary: #1a4fba;
   --egen-color-primary-light: #2d6cdf;
@@ -94,7 +94,7 @@ Définir les couleurs officielles EIGEN. Exemple pour une plateforme éducative 
 }
 ```
 
-### Intégration Carbon avec les couleurs EIGEN
+### Intégration Carbon avec les couleurs EGEN
 
 Carbon utilise ses propres variables CSS. Pour les surcharger :
 
@@ -102,7 +102,7 @@ Carbon utilise ses propres variables CSS. Pour les surcharger :
 // packages/framework/esm-styleguide/src/_vars.scss
 // Ajouter en HAUT du fichier :
 
-// Surcharges Carbon pour EIGEN
+// Surcharges Carbon pour EGEN
 $interactive-01: #1a4fba;     // Boutons primaires
 $interactive-02: #0a2463;     // Fond header
 $brand-01: #0a2463;           // Marque
@@ -118,9 +118,9 @@ $support-04: #0a2463;         // Info
 
 ---
 
-## 4.3 Logo EIGEN
+## 4.3 Logo EGEN
 
-### Créer le SVG du logo EIGEN
+### Créer le SVG du logo EGEN
 
 Remplacer les logos Egen dans :
 - `packages/framework/esm-styleguide/src/logo/` → Sprites SVG
@@ -131,8 +131,8 @@ Remplacer les logos Egen dans :
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" role="img">
-  <title>EIGEN — Plateforme Éducative Nationale</title>
-  <!-- Logo EIGEN : E + livre ouvert stylisé -->
+  <title>EGEN — Plateforme Éducative Nationale</title>
+  <!-- Logo EGEN : E + livre ouvert stylisé -->
   <rect x="0" y="0" width="200" height="50" fill="none"/>
   
   <!-- Icône livre stylisée -->
@@ -152,9 +152,9 @@ Remplacer les logos Egen dans :
              fill="#c8942a" transform="translate(0, -3)"/>
   </g>
   
-  <!-- Texte EIGEN -->
+  <!-- Texte EGEN -->
   <text x="42" y="28" font-family="IBM Plex Sans, sans-serif" font-size="22" 
-        font-weight="700" fill="#0a2463" letter-spacing="2">EIGEN</text>
+        font-weight="700" fill="#0a2463" letter-spacing="2">EGEN</text>
         
   <!-- Sous-titre optionnel -->
   <!-- <text x="42" y="40" font-family="IBM Plex Sans, sans-serif" font-size="8" 
@@ -196,11 +196,11 @@ const Logo: React.FC = () => {
   return (
     <>
       {logo?.src ? (
-        <img alt={logo.alt || 'EIGEN Logo'} className={styles.logo} src={interpolateUrl(logo.src)} />
+        <img alt={logo.alt || 'EGEN Logo'} className={styles.logo} src={interpolateUrl(logo.src)} />
       ) : logo?.name ? (
         logo.name
       ) : (
-        <svg aria-label="EIGEN — Plateforme Éducative Nationale" role="img" width={130} height={40}>
+        <svg aria-label="EGEN — Plateforme Éducative Nationale" role="img" width={130} height={40}>
           <use href="#egen-logo-white" />
         </svg>
       )}
@@ -224,7 +224,7 @@ const Logo: React.FC = () => {
   background-color: var(--egen-color-bg-low-contrast);
 }
 
-// Panneau gauche - Branding EIGEN
+// Panneau gauche - Branding EGEN
 .brandingPanel {
   flex: 0 0 45%;
   display: flex;
@@ -325,12 +325,12 @@ return (
   <div className={styles.container}>
     {/* Panneau gauche - Branding */}
     <div className={styles.brandingPanel}>
-      <img src="/egen-logo-white.svg" alt="EIGEN" className={styles.brandingLogo} />
+      <img src="/egen-logo-white.svg" alt="EGEN" className={styles.brandingLogo} />
       <h1 className={styles.brandingTitle}>
         Plateforme Éducative Nationale
       </h1>
       <p className={styles.brandingSubtitle}>
-        Gérez efficacement votre établissement scolaire avec EIGEN
+        Gérez efficacement votre établissement scolaire avec EGEN
       </p>
     </div>
 
@@ -339,7 +339,7 @@ return (
       <div className={styles.formContainer}>
         <h2 className={styles.formTitle}>Connexion</h2>
         <p className={styles.formSubtitle}>
-          Accédez à votre espace EIGEN
+          Accédez à votre espace EGEN
         </p>
         
         {/* Formulaire existant reste ici */}
@@ -360,7 +360,7 @@ return (
 
 ```scss
 .topNavHeader {
-  // Carbon Header en bleu EIGEN
+  // Carbon Header en bleu EGEN
   background-color: var(--egen-color-primary-dark) !important;
   border-bottom: 3px solid var(--egen-color-accent) !important; // Filet or
 
@@ -398,8 +398,8 @@ Dans chaque app, modifier `translations/en.json` et `translations/fr.json` :
 **`packages/apps/esm-login-app/translations/fr.json`** :
 ```json
 {
-  "egenLogo": "Logo EIGEN",
-  "loginHeader": "Connexion à EIGEN",
+  "egenLogo": "Logo EGEN",
+  "loginHeader": "Connexion à EGEN",
   "username": "Identifiant",
   "password": "Mot de passe",
   "login": "Se connecter",
@@ -422,7 +422,7 @@ Dans chaque app, modifier `translations/en.json` et `translations/fr.json` :
   "appMenuButton": "Applications",
   "changeLanguage": "Changer la langue",
   "home": "Accueil",
-  "platform": "EIGEN — Plateforme Éducative Nationale"
+  "platform": "EGEN — Plateforme Éducative Nationale"
 }
 ```
 
@@ -446,15 +446,15 @@ Dans `packages/shell/esm-app-shell/src/index.ejs` :
 
 ## ✅ Checklist Phase 4
 
-- [ ] Variables CSS couleurs EIGEN définies
-- [ ] Variables Carbon surchargées avec couleurs EIGEN
-- [ ] Logo SVG EIGEN créé (couleur + blanc)
+- [ ] Variables CSS couleurs EGEN définies
+- [ ] Variables Carbon surchargées avec couleurs EGEN
+- [ ] Logo SVG EGEN créé (couleur + blanc)
 - [ ] Sprite SVG intégré dans le shell
 - [ ] Composants Logo des apps mis à jour
 - [ ] Page login repensée (layout 2 colonnes)
 - [ ] SCSS login avec nouveau design
 - [ ] Couleur header navigation mise à jour
 - [ ] Fichiers de traduction FR créés pour toutes les apps
-- [ ] Tous les textes "Egen" remplacés par "EIGEN"
+- [ ] Tous les textes "Egen" remplacés par "EGEN"
 - [ ] Favicon et icônes PWA créés
 - [ ] Test visuel sur mobile + desktop

@@ -1,4 +1,4 @@
-# EIGEN — Référence Rapide & Points Critiques
+# EGEN — Référence Rapide & Points Critiques
 
 ---
 
@@ -57,7 +57,7 @@ yarn test                                # Tests unitaires
 yarn test-e2e                            # Tests end-to-end
 
 # Migration
-bash EIGEN-MIGRATION/check-migration.sh  # Vérifier progression migration
+bash EGEN-MIGRATION/check-migration.sh  # Vérifier progression migration
 
 # Nettoyage
 yarn cache clean --all                   # Vider le cache Yarn
@@ -74,7 +74,7 @@ find packages -name "dist" -type d -exec rm -rf {} +  # Supprimer tous les dist
 | `EGEN_OFFLINE` | Active le mode offline | `disable` en dev |
 | `EGEN_CLEAN_BEFORE_BUILD` | Nettoie avant build | `true` |
 | `NODE_ENV` | Environnement | `development` |
-| `EIGEN_API_BASE` | URL de l'API EIGEN | `/api/v1` |
+| `EIGEN_API_BASE` | URL de l'API EGEN | `/api/v1` |
 | `EIGEN_IAM_URL` | URL Keycloak | `/auth/realms/egen` |
 
 ---
@@ -139,9 +139,9 @@ Niveau 3 : LOGIQUE MÉTIER (dans le code)
 
 ---
 
-## MAPPING FINAL : EGEN → EIGEN
+## MAPPING FINAL : EGEN → EGEN
 
-| Egen | EIGEN | Notes |
+| Egen | EGEN | Notes |
 |---------|-------|-------|
 | Patient | Apprenant | |
 | Visit | Inscription / Année scolaire | |
@@ -149,16 +149,16 @@ Niveau 3 : LOGIQUE MÉTIER (dans le code)
 | Observation | Note / Résultat | |
 | Location | Établissement scolaire | |
 | Provider | Enseignant | |
-| Role | Rôle EIGEN (via Keycloak) | |
-| Privilege | Privilege EIGEN (via Keycloak) | |
+| Role | Rôle EGEN (via Keycloak) | |
+| Privilege | Privilege EGEN (via Keycloak) | |
 | Form | Bulletin / Formulaire d'inscription | |
 | Program | Filière / Cursus | |
 | Concept | Matière scolaire | |
-| `/ws/rest/v1` | `/api/v1` (FastAPI EIGEN) | |
+| `/ws/rest/v1` | `/api/v1` (FastAPI EGEN) | |
 | `/ws/fhir2/R4` | `/api/v1/fhir` (si nécessaire) | |
 | Session Egen | JWT Keycloak | |
 
 ---
 
-*Document généré pour l'équipe EIGEN — Mise à jour : 2026*
+*Document généré pour l'équipe EGEN — Mise à jour : 2026*
 *Repo : github.com/amourgit/Frontend-esm-core*

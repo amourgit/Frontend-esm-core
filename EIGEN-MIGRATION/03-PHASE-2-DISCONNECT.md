@@ -37,7 +37,7 @@ async function readImportmap(path: string, backend?: string, spaPath?: string) {
     return fetchRemoteImportmap(path);
   }
   
-  // Si un backend EIGEN est spécifié, essayer de le contacter
+  // Si un backend EGEN est spécifié, essayer de le contacter
   if (path === 'importmap.json' && backend && spaPath) {
     try {
       return await fetchRemoteImportmap(`${backend}${spaPath}importmap.json`);
@@ -146,11 +146,11 @@ Ces fichiers locaux remplaceront le fetch depuis `dev3.egen.org`.
 
 ### Fichier : `packages/framework/esm-api/src/egen-backend-dependencies.ts`
 
-Ce fichier vérifie que le backend a les modules requis. À adapter pour EIGEN.
+Ce fichier vérifie que le backend a les modules requis. À adapter pour EGEN.
 
 **Avant** : Vérifiait `webservices.rest`, `webservices.fhir2`, etc.
 
-**Après** : Vérifier les modules EIGEN :
+**Après** : Vérifier les modules EGEN :
 
 ```typescript
 // Avant
@@ -159,19 +159,19 @@ export const fhirBaseUrl = '/ws/fhir2/R4';
 export const sessionEndpoint = `${restBaseUrl}/session`;
 
 // Après
-export const restBaseUrl = '/api/v1';          // ← API EIGEN FastAPI
+export const restBaseUrl = '/api/v1';          // ← API EGEN FastAPI
 export const fhirBaseUrl = '/api/v1/fhir';     // ← Si tu exposes du FHIR
 export const sessionEndpoint = `/api/v1/auth/session`;  // ← Ou Keycloak
 
 // Et adapter la fonction de vérification des dépendances backend
-// pour qu'elle teste tes propres endpoints EIGEN
+// pour qu'elle teste tes propres endpoints EGEN
 ```
 
 > ⚠️ **IMPORTANT** : Cette adaptation est liée à la Phase 3 (API). La faire en même temps ou juste après.
 
 ---
 
-## 2.4 Adapter la CLI `develop` pour pointer vers EIGEN
+## 2.4 Adapter la CLI `develop` pour pointer vers EGEN
 
 ### Fichier : `packages/tooling/egen/src/commands/develop.ts`
 
@@ -192,8 +192,8 @@ Changer les valeurs par défaut :
 
 // Après
 .option('backend', {
-  default: 'http://localhost:8081',   // ← Ton backend FastAPI EIGEN
-  describe: 'The EIGEN backend to proxy API requests to.',
+  default: 'http://localhost:8081',   // ← Ton backend FastAPI EGEN
+  describe: 'The EGEN backend to proxy API requests to.',
 })
 .option('spa-path', {
   default: '/egen/spa/',
@@ -261,7 +261,7 @@ Chercher et remplacer toutes les références Egen dans le HTML généré :
 <link rel="manifest" href="./manifest.webmanifest">
 
 <!-- Après -->
-<title>EIGEN — Plateforme Éducative Nationale</title>
+<title>EGEN — Plateforme Éducative Nationale</title>
 <link rel="manifest" href="./manifest.webmanifest">
 ```
 
@@ -271,11 +271,11 @@ Dans le fichier de config rspack/webpack du shell, chercher `webpack-pwa-manifes
 
 ```javascript
 new WebpackPwaManifest({
-  name: 'EIGEN — Plateforme Éducative Nationale',
-  short_name: 'EIGEN',
+  name: 'EGEN — Plateforme Éducative Nationale',
+  short_name: 'EGEN',
   description: 'Plateforme de gestion éducative nationale',
   background_color: '#ffffff',
-  theme_color: '#1a56db',    // Couleur EIGEN
+  theme_color: '#1a56db',    // Couleur EGEN
   icons: [
     {
       src: path.resolve('src/assets/egen-icon-512.png'),
@@ -312,7 +312,7 @@ grep -r "egen.org" packages/*/dist/ 2>/dev/null
 - [ ] Fallback `dev3.egen.org` retiré de `readRoutes`
 - [ ] Fichier `importmap.json` local créé pour le dev
 - [ ] Fichier `routes.registry.json` local créé pour le dev
-- [ ] Backend par défaut CLI changé vers EIGEN
+- [ ] Backend par défaut CLI changé vers EGEN
 - [ ] `spaPath` par défaut changé vers `/egen/spa/`
 - [ ] `apiUrl` par défaut changé vers `/egen`
 - [ ] Dépendances npm `@egen/*` externes supprimées

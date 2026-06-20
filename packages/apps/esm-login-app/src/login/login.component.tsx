@@ -12,7 +12,7 @@ import {
   useConfig,
   useConnectivity,
   useSession,
-} from '@eigen/esm-framework';
+} from '@egen/esm-framework';
 import { type ConfigSchema } from '../config-schema';
 import Logo from '../logo.component';
 import Footer from '../footer.component';
@@ -28,21 +28,21 @@ const DEFAULT_SLIDES: CarouselSlide[] = [
   {
     accent: 'Plateforme universelle',
     headline: 'Un framework conçu\npour votre domaine.',
-    body: 'EIGEN est une architecture micro-frontend générique et modulaire. Construisez n\'importe quelle application professionnelle sur cette base solide.',
+    body: "EGEN est une architecture micro-frontend générique et modulaire. Construisez n'importe quelle application professionnelle sur cette base solide.",
   },
   {
     accent: 'Extensibilité totale',
     headline: 'Branchez vos modules\noù vous le souhaitez.',
-    body: 'Le système d\'extensions permet à chaque module d\'enrichir l\'interface sans que les équipes se marchent dessus. Collaboration sans friction.',
+    body: "Le système d'extensions permet à chaque module d'enrichir l'interface sans que les équipes se marchent dessus. Collaboration sans friction.",
   },
   {
     accent: 'Configuration runtime',
     headline: 'Personnalisez sans\nrecompiler.',
-    body: 'Thèmes, workflows, permissions, URLs d\'API — tout se configure via un simple fichier JSON. Zéro modification de code pour adapter l\'interface.',
+    body: "Thèmes, workflows, permissions, URLs d'API — tout se configure via un simple fichier JSON. Zéro modification de code pour adapter l'interface.",
   },
   {
     accent: 'Architecture CIVITAS',
-    headline: 'L\'intelligence artificielle\nau service de l\'Afrique.',
+    headline: "L'intelligence artificielle\nau service de l'Afrique.",
     body: 'CIVITAS intègre des agents IA dans un framework frontend robuste pour répondre aux besoins numériques du Gabon et du continent africain.',
   },
 ];
@@ -185,16 +185,24 @@ const Login: React.FC = () => {
         setIsLoggingIn(false);
       }
     },
-    [username, password, navigate, showPasswordOnSeparateScreen, showPasswordField, loginLinks, location, t, continueLogin],
+    [
+      username,
+      password,
+      navigate,
+      showPasswordOnSeparateScreen,
+      showPasswordField,
+      loginLinks,
+      location,
+      t,
+      continueLogin,
+    ],
   );
 
   if (!loginProvider || loginProvider.type === 'basic') {
     return (
       <div className={containerClassName} style={containerStyle} data-testid="login-container">
-
         {/* ── Layout deux colonnes ── */}
         <div className={styles.inner}>
-
           {/* ── Panneau gauche : carrousel ── */}
           <LoginCarousel slides={carouselSlides} intervalMs={carouselInterval} />
 
@@ -272,7 +280,10 @@ const Login: React.FC = () => {
                           disabled={!isLoginEnabled || isLoggingIn}
                         >
                           {isLoggingIn ? (
-                            <InlineLoading className={styles.loader} description={t('loggingIn', 'Logging in') + '...'} />
+                            <InlineLoading
+                              className={styles.loader}
+                              description={t('loggingIn', 'Logging in') + '...'}
+                            />
                           ) : (
                             t('login', 'Log in')
                           )}
@@ -283,7 +294,10 @@ const Login: React.FC = () => {
                           className={styles.continueButton}
                           renderIcon={(props) => <ArrowRightIcon size={24} {...props} />}
                           iconDescription={t('continueToPassword', 'Continue to password')}
-                          onClick={(evt) => { evt.preventDefault(); continueLogin(); }}
+                          onClick={(evt) => {
+                            evt.preventDefault();
+                            continueLogin();
+                          }}
                           disabled={!isLoginEnabled}
                         >
                           {t('continue', 'Continue')}

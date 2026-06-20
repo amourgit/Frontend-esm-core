@@ -1,14 +1,14 @@
-# PHASE 3 — Adaptation de l'API vers EIGEN
+# PHASE 3 — Adaptation de l'API vers EGEN
 
 > Durée estimée : 2-3 jours
 > Branche : `egen/phase-3-api`
-> Objectif : Remplacer tous les appels API Egen (REST `/ws/rest/v1`, FHIR `/ws/fhir2/R4`, session Egen) par les APIs EIGEN (FastAPI + Keycloak).
+> Objectif : Remplacer tous les appels API Egen (REST `/ws/rest/v1`, FHIR `/ws/fhir2/R4`, session Egen) par les APIs EGEN (FastAPI + Keycloak).
 
 ---
 
-## 3.1 Cartographie API : Egen → EIGEN
+## 3.1 Cartographie API : Egen → EGEN
 
-| Endpoint Egen | Endpoint EIGEN | Description |
+| Endpoint Egen | Endpoint EGEN | Description |
 |-----------------|---------------|-------------|
 | `POST /ws/rest/v1/session` | `POST /api/v1/auth/token` (Keycloak) | Login |
 | `DELETE /ws/rest/v1/session` | Keycloak logout | Logout |
@@ -97,7 +97,7 @@ Créer un nouveau fichier : `packages/framework/esm-api/src/keycloak-auth.ts`
 
 ```typescript
 /**
- * Gestion des tokens Keycloak pour EIGEN.
+ * Gestion des tokens Keycloak pour EGEN.
  * 
  * Supporte deux modes :
  * 1. Authorization Code Flow + PKCE (OAuth2 recommandé pour SPA)
@@ -108,7 +108,7 @@ const TOKEN_STORAGE_KEY = 'eigen_access_token';
 const REFRESH_TOKEN_KEY = 'eigen_refresh_token';
 const TOKEN_EXPIRY_KEY = 'eigen_token_expiry';
 
-// URL du realm Keycloak EIGEN (configurable via esm-config)
+// URL du realm Keycloak EGEN (configurable via esm-config)
 let keycloakTokenUrl: string = '/api/v1/auth/token';
 
 export function setKeycloakConfig(config: { tokenUrl: string }) {
@@ -213,7 +213,7 @@ export function scheduleTokenRefresh() {
 
 ### Fichier : `packages/framework/esm-api/src/current-user.ts`
 
-La structure du store reste la même mais les données viennent de Keycloak + EIGEN API.
+La structure du store reste la même mais les données viennent de Keycloak + EGEN API.
 
 ```typescript
 // Adapter la fonction qui charge la session
@@ -225,7 +225,7 @@ async function loadCurrentSession() {
   }
   
   try {
-    // Appel à ton API EIGEN pour récupérer le profil utilisateur
+    // Appel à ton API EGEN pour récupérer le profil utilisateur
     const response = await eigenFetch<EigenUserSession>('/api/v1/auth/me');
     
     sessionStore.setState({
@@ -248,7 +248,7 @@ async function loadCurrentSession() {
           locale: response.data.locale || 'fr',
           allowedLocales: ['fr', 'en'],
         },
-        // Pour EIGEN, "sessionLocation" = établissement scolaire de l'utilisateur
+        // Pour EGEN, "sessionLocation" = établissement scolaire de l'utilisateur
         sessionLocation: response.data.etablissement ? {
           uuid: response.data.etablissement.id,
           display: response.data.etablissement.nom,
@@ -312,7 +312,7 @@ export function useLocations(/* ... */) {
   return useSWR(url, egenFetch);
 }
 
-// Après : cherche des établissements EIGEN
+// Après : cherche des établissements EGEN
 export function useEtablissements(searchQuery?: string) {
   const url = `/api/v1/etablissements?q=${searchQuery || ''}&fields=id,nom,code,type`;
   return useSWR(url, eigenFetch);
@@ -323,7 +323,7 @@ export function useEtablissements(searchQuery?: string) {
 
 ## 3.5 Remplacer `esm-data-api` par `esm-data-api`
 
-Le package `esm-data-api` contient des types et fonctions spécifiques au domaine médical. Le remplacer par un package éducatif EIGEN.
+Le package `esm-data-api` contient des types et fonctions spécifiques au domaine médical. Le remplacer par un package éducatif EGEN.
 
 ### Nouveaux types éducatifs (à créer dans `esm-data-api`)
 
@@ -410,7 +410,7 @@ export interface BulletinScolaire {
 
 ---
 
-## 3.6 Hooks React pour les données EIGEN
+## 3.6 Hooks React pour les données EGEN
 
 Créer `packages/framework/esm-data-api/src/hooks.ts` :
 
@@ -479,7 +479,7 @@ export function useAbsencesApprenant(apprenantUuid: string) {
 
 L'un des objectifs clés est la gestion fine des permissions au niveau frontend.
 
-### Stratégie de permissions EIGEN
+### Stratégie de permissions EGEN
 
 ```typescript
 // packages/framework/esm-api/src/permissions.ts
@@ -487,7 +487,7 @@ L'un des objectifs clés est la gestion fine des permissions au niveau frontend.
 /**
  * Vérification des permissions basée sur les rôles et privileges Keycloak.
  * 
- * Structure de rôles EIGEN recommandée (à définir dans Keycloak) :
+ * Structure de rôles EGEN recommandée (à définir dans Keycloak) :
  * 
  * ROLES GLOBAUX:
  *   - SUPER_ADMIN           : Accès total
@@ -569,11 +569,11 @@ export const RequireRole: React.FC<{
 - [ ] `sessionEndpoint` changé vers `/api/v1/auth/session`
 - [ ] `eigenFetch` créée avec gestion Bearer token
 - [ ] `keycloak-auth.ts` créé avec `loginWithCredentials`
-- [ ] Store de session adapté pour les données EIGEN
+- [ ] Store de session adapté pour les données EGEN
 - [ ] Login component adapté
 - [ ] Resource `login.resource.ts` adapté (établissements)
 - [ ] Package `esm-data-api` renommé et adapté en `esm-data-api`
 - [ ] Types éducatifs définis (Apprenant, Classe, Enseignant, etc.)
-- [ ] Hooks React créés pour les données EIGEN
+- [ ] Hooks React créés pour les données EGEN
 - [ ] Système de permissions (roles/privileges) implémenté
 - [ ] Tests mis à jour

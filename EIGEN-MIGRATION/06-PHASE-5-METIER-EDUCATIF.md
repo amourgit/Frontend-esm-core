@@ -1,11 +1,11 @@
-# PHASE 5 — Intégration du Métier Éducatif EIGEN
+# PHASE 5 — Intégration du Métier Éducatif EGEN
 
 > Durée estimée : Plusieurs semaines (itératif)
-> Objectif : Créer les micro-applications éducatives EIGEN sur la base du framework migré.
+> Objectif : Créer les micro-applications éducatives EGEN sur la base du framework migré.
 
 ---
 
-## 5.1 Architecture cible des micro-applications EIGEN
+## 5.1 Architecture cible des micro-applications EGEN
 
 ```
 packages/apps/
@@ -16,7 +16,7 @@ packages/apps/
 ├── esm-help-menu-app/                ← Adapté
 ├── esm-offline-tools-app/            ← Conservé
 │
-│ ← NOUVELLES APPS ÉDUCATIVES EIGEN →
+│ ← NOUVELLES APPS ÉDUCATIVES EGEN →
 │
 ├── esm-tableau-de-bord-app/          ← Dashboard accueil personnalisé
 ├── esm-apprenants-app/               ← Gestion des apprenants (élèves)
@@ -34,9 +34,9 @@ packages/apps/
 
 ---
 
-## 5.2 Créer une nouvelle micro-app EIGEN (template)
+## 5.2 Créer une nouvelle micro-app EGEN (template)
 
-### Commande de création (à adapter depuis la CLI EIGEN)
+### Commande de création (à adapter depuis la CLI EGEN)
 
 ```bash
 # Créer une nouvelle micro-app à partir du template
@@ -44,7 +44,7 @@ mkdir -p packages/apps/esm-apprenants-app/src
 cd packages/apps/esm-apprenants-app
 ```
 
-### Structure type d'une micro-app EIGEN
+### Structure type d'une micro-app EGEN
 
 ```
 esm-apprenants-app/
@@ -83,7 +83,7 @@ esm-apprenants-app/
 
 ---
 
-## 5.3 `package.json` type d'une micro-app EIGEN
+## 5.3 `package.json` type d'une micro-app EGEN
 
 ```json
 {
@@ -115,7 +115,7 @@ esm-apprenants-app/
 
 ---
 
-## 5.4 `index.ts` type d'une micro-app EIGEN
+## 5.4 `index.ts` type d'une micro-app EGEN
 
 ```typescript
 // packages/apps/esm-apprenants-app/src/index.ts
@@ -152,7 +152,7 @@ export const inscriptionModal = getAsyncLifecycle(
 
 ---
 
-## 5.5 `routes.json` type d'une micro-app EIGEN
+## 5.5 `routes.json` type d'une micro-app EGEN
 
 ```json
 {
@@ -257,7 +257,7 @@ export default TableauDeBord;
 
 ---
 
-## 5.7 Système de navigation EIGEN
+## 5.7 Système de navigation EGEN
 
 Adapter la navigation principale pour le domaine éducatif.
 
@@ -342,7 +342,7 @@ Résultat : chaque micro-app contribue à son propre lien dans le menu, sans mod
 ### 1. Toujours utiliser les hooks du framework
 
 ```tsx
-// ✅ BON : utiliser les hooks EIGEN
+// ✅ BON : utiliser les hooks EGEN
 import { useConfig, useSession, useExtensionSlotMeta } from '@egen/esm-framework';
 
 // ❌ MAUVAIS : accéder directement au state global

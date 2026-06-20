@@ -1,8 +1,8 @@
-# Analyse Complète — Frontend-esm-core → EIGEN/EGÉN
+# Analyse Complète — Frontend-esm-core → EGEN/EGÉN
 
-> Document de référence rédigé par l'équipe EIGEN.
+> Document de référence rédigé par l'équipe EGEN.
 > Base : `amourgit/Frontend-esm-core` (fork de `egen/egen-esm-core` v9.0.2)
-> Objectif : Transformer ce projet en plateforme éducative nationale EIGEN, propriétaire, déconnectée de toute source Egen.
+> Objectif : Transformer ce projet en plateforme éducative nationale EGEN, propriétaire, déconnectée de toute source Egen.
 
 ---
 
@@ -117,42 +117,42 @@ Frontend-esm-core/
 - **Rôle** : Page de login/logout, sélection de localisation, changement de mot de passe
 - **Route** : `/login`, `/logout`, `/change-password`
 - **Ce qu'il fait** : Appelle l'endpoint `/ws/rest/v1/session` d'Egen
-- **Pour EIGEN** : → Adapter pour appeler ton API Keycloak (OIDC/OAuth2) via IAM-Local-Backend
+- **Pour EGEN** : → Adapter pour appeler ton API Keycloak (OIDC/OAuth2) via IAM-Local-Backend
 - **Composants clés** : `login.component.tsx`, `logo.component.tsx`, `footer.component.tsx`
 
 #### `esm-primary-navigation-app` — Navigation principale
 - **Rôle** : Barre de navigation top + menu latéral, profil utilisateur, changement de langue
 - **Route** : Toutes routes sauf login/change-password
 - **Ce qu'il fait** : Charge les extensions dans les slots de navigation
-- **Pour EIGEN** : → Adapter le logo, les couleurs, les routes, le menu éducatif
+- **Pour EGEN** : → Adapter le logo, les couleurs, les routes, le menu éducatif
 - **Composants clés** : `navbar.component.tsx`, `logo.component.tsx`, menu latéral
 
 #### `esm-implementer-tools-app` — Outils d'administration
 - **Rôle** : Panneau de configuration live, feature flags, éditeur d'UI, dépendances backend
-- **Pour EIGEN** : → **GARDER** (très utile pour gérer les configs EIGEN en live)
+- **Pour EGEN** : → **GARDER** (très utile pour gérer les configs EGEN en live)
 - **Composants clés** : configuration, feature-flags, frontend-modules, ui-editor
 
 #### `esm-devtools-app` — Outils développeur
 - **Rôle** : Overrides d'importmap pour dev local
-- **Pour EIGEN** : → **GARDER** tel quel, utile pour le dev
+- **Pour EGEN** : → **GARDER** tel quel, utile pour le dev
 
 #### `esm-help-menu-app` — Menu d'aide
 - **Rôle** : Liens d'aide dans la navbar
-- **Pour EIGEN** : → Adapter les liens vers la documentation EIGEN
+- **Pour EGEN** : → Adapter les liens vers la documentation EGEN
 
 #### `esm-offline-tools-app` — Outils offline
 - **Rôle** : Gestion du mode hors-ligne (service worker, cache)
-- **Pour EIGEN** : → Évaluer si pertinent (écoles sans internet = OUI, très pertinent !)
+- **Pour EGEN** : → Évaluer si pertinent (écoles sans internet = OUI, très pertinent !)
 
 ### 2.6 Les 19 Packages du Framework
 
-| Package | Rôle | Pour EIGEN |
+| Package | Rôle | Pour EGEN |
 |---------|------|-----------|
-| `esm-api` | Client HTTP REST/FHIR, gestion session | Adapter vers API EIGEN (Keycloak + FastAPI) |
+| `esm-api` | Client HTTP REST/FHIR, gestion session | Adapter vers API EGEN (Keycloak + FastAPI) |
 | `esm-config` | Système de configuration par micro-app | Garder tel quel |
 | `esm-context` | Contexte d'exécution | Garder |
 | `esm-dynamic-loading` | Chargement dynamique de code | Garder |
-| `esm-data-api` | API EMR spécifiques (patients, visites) | Remplacer par API éducatives EIGEN |
+| `esm-data-api` | API EMR spécifiques (patients, visites) | Remplacer par API éducatives EGEN |
 | `esm-error-handling` | Gestion des erreurs globales | Garder |
 | `esm-expression-evaluator` | Évaluateur d'expressions utilisateur | Garder |
 | `esm-extensions` | Système d'extension slots | **GARDER ABSOLUMENT** |
@@ -164,7 +164,7 @@ Frontend-esm-core/
 | `esm-react-utils` | Hooks React utilitaires | Garder |
 | `esm-routes` | Registre des routes | Garder |
 | `esm-state` | State management global (Zustand) | Garder |
-| `esm-styleguide` | Composants UI Carbon + thème | Adapter couleurs/logo EIGEN |
+| `esm-styleguide` | Composants UI Carbon + thème | Adapter couleurs/logo EGEN |
 | `esm-translations` | Support internationalisation | Garder (ajouter FR) |
 | `esm-utils` | Utilitaires divers | Garder |
 
@@ -199,11 +199,11 @@ Au démarrage :
 ### 3.1 `dev3.egen.org` (serveur de dev Egen)
 **Où** : `packages/tooling/egen/src/utils/importmap.ts`
 **Fichiers concernés** : 24 occurrences
-**Ce qu'il faut faire** : Remplacer par des fichiers locaux EIGEN ou serveur EIGEN
+**Ce qu'il faut faire** : Remplacer par des fichiers locaux EGEN ou serveur EGEN
 
 ### 3.2 Schémas JSON `json.egen.org`
 **Où** : Tous les `routes.json` de chaque app (6 fichiers)
-**Ce qu'il faut faire** : Créer un schéma local EIGEN ou supprimer la référence `$schema`
+**Ce qu'il faut faire** : Créer un schéma local EGEN ou supprimer la référence `$schema`
 
 ### 3.3 Packages npm `@egen/*`
 **Où** : Toutes les dépendances inter-packages

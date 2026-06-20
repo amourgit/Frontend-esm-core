@@ -1,6 +1,6 @@
 # browserslist-config-egen
 
-Browserslist configuration for the EIGEN Educational Platform frontend monorepo.
+Browserslist configuration for the EGEN Educational Platform frontend monorepo.
 
 ## Supported Browsers
 

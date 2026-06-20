@@ -1,4 +1,4 @@
-// Browserslist config for EIGEN Educational Platform
+// Browserslist config for EGEN Educational Platform
 // Defines the target browsers for all packages in the monorepo
 module.exports = [
   "Last 2 Safari major versions",
