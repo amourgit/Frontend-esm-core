@@ -78,7 +78,7 @@ export function toggleThemeMode(): void {
  * @example
  * ```ts
  * // dans le run.ts d'une app microfrontend
- * applyAppThemeOverride('eigen-academique', {
+ * applyAppThemeOverride('egen-academique', {
  *   colors: { primary: { '500': '#16a34a', '600': '#15803d' } },
  * }, { priority: 5 });
  * ```

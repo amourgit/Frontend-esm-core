@@ -25,7 +25,13 @@ import type {
 const DEFAULT_OPTIONS: Required<
   Pick<
     ThemeEngineOptions,
-    'cssVarPrefix' | 'separator' | 'ignoreRootKeys' | 'pollIntervalMs' | 'targetSelector' | 'defaultMode' | 'modeStorageKey'
+    | 'cssVarPrefix'
+    | 'separator'
+    | 'ignoreRootKeys'
+    | 'pollIntervalMs'
+    | 'targetSelector'
+    | 'defaultMode'
+    | 'modeStorageKey'
   >
 > = {
   cssVarPrefix: '',
@@ -108,7 +114,8 @@ export class ThemeEngine {
       this.setState({
         status: 'applied',
         activeTheme: loaded,
-        cssVarsCount: Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length,
+        cssVarsCount:
+          Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length,
         lastApplied: Date.now(),
         error: null,
       });
@@ -161,7 +168,8 @@ export class ThemeEngine {
           this.setState({
             status: 'applied',
             activeTheme: loaded,
-            cssVarsCount: Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length,
+            cssVarsCount:
+              Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length,
             lastApplied: Date.now(),
             error: null,
           });
@@ -267,12 +275,16 @@ export class ThemeEngine {
    * utilisateur" à priority=10) — elles sont fusionnées en profondeur dans
    * l'ordre des priorités, la plus haute gagnant clé par clé.
    *
-   * @param scope Nom du scope (en général le nom de l'app, ex: "eigen-academique")
+   * @param scope Nom du scope (en général le nom de l'app, ex: "egen-academique")
    * @param schema Schéma de thème partiel (deep partial — ne déclarer que ce qu'on surcharge)
    * @param options.id Identifiant de cette surcharge précise au sein du scope (par défaut "default")
    * @param options.priority Priorité de fusion (par défaut 0)
    */
-  applyAppOverride(scope: string, schema: Partial<ThemeSchema>, options: { id?: string; priority?: number } = {}): void {
+  applyAppOverride(
+    scope: string,
+    schema: Partial<ThemeSchema>,
+    options: { id?: string; priority?: number } = {},
+  ): void {
     const id = options.id ?? 'default';
     const priority = options.priority ?? 0;
 

@@ -100,9 +100,9 @@ Une microfrontend peut surcharger uniquement les clés qui l'intéressent, sans 
 ```ts
 import { applyAppThemeOverride } from '@egen/esm-theme';
 
-// Dans le run.ts (ou au montage) de l'app "eigen-academique"
+// Dans le run.ts (ou au montage) de l'app "egen-academique"
 applyAppThemeOverride(
-  'eigen-academique',
+  'egen-academique',
   {
     colors: { primary: { '500': '#16a34a', '600': '#15803d' } },
     panel: { dark: { card: { boxShadow: 'none' } } },
@@ -111,28 +111,28 @@ applyAppThemeOverride(
 );
 ```
 
-**Pré-requis côté app** : le conteneur racine de l'app doit porter l'attribut `data-egen-app="eigen-academique"` (même valeur que le `scope` utilisé ci-dessus) :
+**Pré-requis côté app** : le conteneur racine de l'app doit porter l'attribut `data-egen-app="egen-academique"` (même valeur que le `scope` utilisé ci-dessus) :
 
 ```html
-<div id="eigen-academique-root" data-egen-app="eigen-academique">...</div>
+<div id="egen-academique-root" data-egen-app="egen-academique">...</div>
 ```
 
-Le moteur injecte alors une balise `<style id="egen-theme-override-eigen-academique">` scopée à `[data-egen-app="eigen-academique"]`, placée **après** la balise globale dans `<head>` — donc elle gagne la cascade pour les variables qu'elle redéclare, et hérite du thème global pour tout le reste.
+Le moteur injecte alors une balise `<style id="egen-theme-override-egen-academique">` scopée à `[data-egen-app="egen-academique"]`, placée **après** la balise globale dans `<head>` — donc elle gagne la cascade pour les variables qu'elle redéclare, et hérite du thème global pour tout le reste.
 
 **Plusieurs surcharges, plusieurs priorités, fusion en profondeur (pas de winner-take-all)** :
 
 ```ts
 // Surcharge "tenant" (priorité basse)
-applyAppThemeOverride('eigen-academique', { colors: { primary: { '500': '#16a34a' } } }, { id: 'tenant', priority: 5 });
+applyAppThemeOverride('egen-academique', { colors: { primary: { '500': '#16a34a' } } }, { id: 'tenant', priority: 5 });
 
 // Préférence utilisateur (priorité plus haute → gagne en cas de conflit)
-applyAppThemeOverride('eigen-academique', { colors: { primary: { '500': '#0ea5e9' } } }, { id: 'user-pref', priority: 10 });
+applyAppThemeOverride('egen-academique', { colors: { primary: { '500': '#0ea5e9' } } }, { id: 'user-pref', priority: 10 });
 
 // Retirer une surcharge précise
-removeAppThemeOverride('eigen-academique', 'user-pref');
+removeAppThemeOverride('egen-academique', 'user-pref');
 
 // Retirer tout le scope
-removeAppThemeOverride('eigen-academique');
+removeAppThemeOverride('egen-academique');
 ```
 
 Chaque scope maintient sa propre liste de surcharges ; elles sont fusionnées (deep merge) par priorité croissante avant flatten + injection — la dernière (priorité la plus haute) gagne clé par clé, le reste est conservé.
