@@ -3,29 +3,25 @@
 // ============================================================================
 
 import { ThemeEngine } from './engine';
-import type { ThemeEngineOptions, ThemeEngineState } from './types';
+import type { ThemeEngineOptions, ThemeEngineState, ThemeMode, ThemeSchema } from './types';
 
 /**
  * Instance singleton du moteur de thème.
  * Elle est initialisée par `setupThemeEngine()` au boot du shell.
+ *
+ * NOTE MICROFRONTENDS : ce module DOIT être partagé en singleton via la
+ * configuration Module Federation (`shared: { '@egen/esm-theme': { singleton: true, eager: true } }`)
+ * pour toutes les apps consommatrices. Si chaque remote embarque sa propre
+ * copie du module, plusieurs instances de `_engine` coexisteront et se
+ * marcheront dessus (chacune réécrivant la même balise `<style>`).
  */
 let _engine: ThemeEngine | null = null;
 
 /**
  * Initialise et démarre le moteur de thème global.
  * À appeler une seule fois, au démarrage de l'app shell (run.ts).
- *
- * @example
- * ```ts
- * // dans esm-app-shell/src/run.ts
- * await setupThemeEngine({
- *   themeUrls: ['/themes/glass-dark.json'],
- *   pollIntervalMs: 5000,
- * });
- * ```
  */
 export async function setupThemeEngine(options: ThemeEngineOptions): Promise<ThemeEngine> {
-  // Nettoyer un moteur précédent si ré-appelé (HMR dev)
   if (_engine) {
     _engine.destroy();
   }
@@ -59,4 +55,43 @@ export function getThemeState(): ThemeEngineState | null {
  */
 export async function reloadTheme(): Promise<void> {
   await _engine?.apply();
+}
+
+/** Raccourci pour changer le mode clair/sombre depuis n'importe quelle app. */
+export function setThemeMode(mode: ThemeMode): void {
+  _engine?.setMode(mode);
+}
+
+/** Raccourci pour basculer le mode clair/sombre. */
+export function toggleThemeMode(): void {
+  _engine?.toggleMode();
+}
+
+/**
+ * Raccourci — permet à une application microfrontend d'enregistrer sa
+ * propre surcharge de thème, scopée à son conteneur racine, avec priorité.
+ *
+ * Pré-requis côté app : son conteneur racine doit porter l'attribut
+ * `data-egen-app="<scope>"` (le même `scope` que celui utilisé ici) pour que
+ * la surcharge CSS s'applique.
+ *
+ * @example
+ * ```ts
+ * // dans le run.ts d'une app microfrontend
+ * applyAppThemeOverride('eigen-academique', {
+ *   colors: { primary: { '500': '#16a34a', '600': '#15803d' } },
+ * }, { priority: 5 });
+ * ```
+ */
+export function applyAppThemeOverride(
+  scope: string,
+  schema: Partial<ThemeSchema>,
+  options?: { id?: string; priority?: number },
+): void {
+  _engine?.applyAppOverride(scope, schema, options);
+}
+
+/** Raccourci pour retirer une surcharge de thème d'une application. */
+export function removeAppThemeOverride(scope: string, id?: string): void {
+  _engine?.removeAppOverride(scope, id);
 }

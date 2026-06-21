@@ -332,10 +332,10 @@ export function run(configUrls: Array<string>) {
   // ── Moteur de thème EGEN : initialisation anticipée ──────────────────────
   // Démarrer le moteur en parallèle de l'import styleguide.
   // Les URLs de thème peuvent être surchargées via window.egenThemeUrls (optionnel).
-  // Le thème par défaut (glass-morphism.default.json) est toujours chargé en premier.
+  // Le thème par défaut (theme.default.json) est toujours chargé en premier.
   const themeUrls: string[] = [
     // Thème par défaut embarqué (priority=1)
-    new URL('./assets/themes/glass-morphism.default.json', import.meta.url).href,
+    new URL('./assets/themes/theme.default.json', import.meta.url).href,
     // Surcharge tenant possible via variable globale (priority>1 pour prendre la main)
     ...(Array.isArray((window as any).egenThemeUrls) ? (window as any).egenThemeUrls : []),
   ];
@@ -344,11 +344,12 @@ export function run(configUrls: Array<string>) {
     themeUrls,
     // Hot-reload uniquement en développement
     pollIntervalMs: process.env.NODE_ENV === 'development' ? 4000 : 0,
-    onApplied: (theme) => {
+    onApplied: (theme, cssVars) => {
       if (process.env.NODE_ENV !== 'production') {
         const name = theme.schema?.meta?.name ?? theme.url;
+        const count = Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length;
         // eslint-disable-next-line no-console
-        console.info(`[egen/esm-theme] ✅ Thème appliqué : "${name}" (${Object.keys({}).length} vars CSS)`);
+        console.info(`[egen/esm-theme] ✅ Thème appliqué : "${name}" (${count} vars CSS)`);
       }
     },
     onError: (err) => {
