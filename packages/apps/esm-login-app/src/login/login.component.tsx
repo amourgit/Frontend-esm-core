@@ -151,7 +151,14 @@ const Login: React.FC = () => {
         const authenticated = sessionStore?.session?.authenticated;
 
         if (authenticated) {
-          if (session.sessionLocation) {
+          // TODO(EIGEN): La condition sur sessionLocation était liée à OpenMRS.
+          // Dans EIGEN, on navigue directement vers la route de succès sans
+          // attendre de sélection de location. La logique de location sera
+          // redéfinie ultérieurement selon le contexte applicatif.
+          //
+          // COMMENTÉ — ancienne logique OpenMRS :
+          // if (session.sessionLocation) { ... } else { navigate('/login/location'); }
+          {
             let to = loginLinks?.loginSuccess || '/home';
             if (location?.state?.referrer) {
               if (location.state.referrer.startsWith('/')) {
@@ -161,8 +168,6 @@ const Login: React.FC = () => {
               }
             }
             egenNavigate({ to });
-          } else {
-            navigate('/login/location');
           }
         } else {
           setErrorMessage(t('invalidCredentials', 'Invalid username or password'));

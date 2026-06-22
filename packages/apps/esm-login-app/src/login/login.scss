@@ -1,28 +1,16 @@
 @use '@carbon/layout';
 @use '@carbon/type';
-@use '@carbon/colors';
 
-
-// ─── Dark theme tokens ────────────────────────────────────────────────────────
-:root {
-  --login-bg-overlay: linear-gradient(
-    135deg,
-    rgba(4, 8, 20, 0.88) 0%,
-    rgba(9, 20, 48, 0.78) 50%,
-    rgba(2, 12, 32, 0.92) 100%
-  );
-  --login-card-bg: rgba(13, 17, 36, 0.82);
-  --login-card-border: rgba(120, 169, 255, 0.15);
-  --login-card-blur: 24px;
-  --login-input-bg: rgba(255, 255, 255, 0.06);
-  --login-input-border: rgba(255, 255, 255, 0.15);
-  --login-text-primary: #f4f4f4;
-  --login-text-secondary: rgba(255, 255, 255, 0.6);
-  --login-accent: #78a9ff;
-  --login-btn-bg: #78a9ff;
-  --login-btn-hover: #a6c8ff;
-  --carousel-accent: #78a9ff;
-}
+// =============================================================================
+//  LOGIN APP — Styles hérités du système de thème EIGEN (esm-theme)
+//  Toutes les valeurs visuelles viennent des variables CSS injectées par le
+//  ThemeEngine depuis theme.default.json (ou tout autre thème chargé).
+//  Convention de nommage : concaténation des clés JSON avec "-".
+//    colors.primary.500  → var(--colors-primary-500)
+//    panel.dark.card.background → var(--panel-card-background)  [résolu via data-theme]
+//    shadows.glass        → var(--shadows-glass)
+//    border-radius.xl     → var(--border-radius-xl)
+// =============================================================================
 
 // ─── Typography helpers ───────────────────────────────────────────────────────
 .bodyShort01 { @include type.type-style('body-compact-01'); }
@@ -34,7 +22,7 @@
 .backButton {
   height: layout.$spacing-09;
   padding-left: 0;
-  color: var(--login-text-primary) !important;
+  color: var(--colors-surface-foreground) !important;
 
   svg { margin-right: layout.$spacing-03; order: 1; }
   span { order: 2; }
@@ -47,26 +35,27 @@
   align-items: center;
   position: relative;
   min-height: calc(100vh - var(--egen-navbar-height, 0px));
-  background-color: #070d1e; // fallback si pas d'image
+  background-color: var(--colors-neutral-950);
 }
 
-// Layout deux colonnes (carousel | formulaire)
+// Overlay au-dessus du fond (image ou couleur)
 .container::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--login-bg-overlay);
+  background: var(--colors-surface-background);
+  opacity: 0.88;
   pointer-events: none;
   z-index: 0;
 }
 
-// Wrapper flex pour centrer le contenu au-dessus de l'overlay
+// Contenu au-dessus de l'overlay
 .container > * {
   position: relative;
   z-index: 1;
 }
 
-// ─── Avec image en arrière-plan ───────────────────────────────────────────────
+// ─── Variantes de fond ────────────────────────────────────────────────────────
 .containerWithImage {
   background-image: var(--login-bg-image);
   background-size: cover;
@@ -75,7 +64,7 @@
 }
 
 .containerWithColor {
-  background-color: var(--login-bg-color, #070d1e);
+  background-color: var(--login-bg-color, var(--colors-neutral-950));
 }
 
 // ─── Layout interne : panneau gauche + carte login ────────────────────────────
@@ -101,7 +90,6 @@
   margin-bottom: layout.$spacing-07;
   height: layout.$spacing-10;
   width: 14rem;
-  // forcer couleur blanche
   filter: brightness(0) invert(1);
 }
 
@@ -113,21 +101,19 @@
   filter: brightness(0) invert(1);
 }
 
-// ─── Carte formulaire (glassmorphism) ─────────────────────────────────────────
+// ─── Carte formulaire (glassmorphism via thème) ───────────────────────────────
 .loginCard {
-  background: var(--login-card-bg) !important;
-  backdrop-filter: blur(var(--login-card-blur));
-  -webkit-backdrop-filter: blur(var(--login-card-blur));
-  border: 1px solid var(--login-card-border) !important;
-  border-radius: 1.25rem !important;
+  // panel.*.card.* → résolu par data-theme sur <html>
+  background: var(--panel-card-background) !important;
+  backdrop-filter: var(--panel-card-backdrop-filter);
+  -webkit-backdrop-filter: var(--panel-card-backdrop-filter);
+  border: var(--panel-card-border) !important;
+  border-radius: var(--border-radius-xl) !important;
   padding: layout.$spacing-09 layout.$spacing-07;
   width: 23rem;
   min-height: fit-content;
-  box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.55),
-    0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  box-shadow: var(--panel-card-box-shadow);
 
-  // Surcharger Carbon : fond blanc → transparent
   :global(.cds--tile) {
     background: transparent;
   }
@@ -144,9 +130,9 @@
 
   // Label Carbon
   :global(.cds--label) {
-    color: var(--login-text-secondary) !important;
-    font-size: 0.75rem;
-    font-weight: 500;
+    color: var(--colors-surface-muted-foreground) !important;
+    font-size: var(--typography-font-size-xs-size);
+    font-weight: var(--typography-font-weight-medium);
     letter-spacing: 0.04em;
   }
 
@@ -154,18 +140,20 @@
   :global(.cds--text-input),
   :global(.cds--password-input) {
     height: layout.$spacing-09;
-    background: var(--login-input-bg) !important;
-    border-bottom-color: var(--login-input-border) !important;
-    color: var(--login-text-primary) !important;
+    background: var(--panel-input-background) !important;
+    backdrop-filter: var(--panel-input-backdrop-filter);
+    border-bottom-color: var(--colors-border-input) !important;
+    color: var(--colors-surface-foreground) !important;
     @include type.type-style('label-01');
 
     &:focus {
-      border-bottom-color: var(--login-accent) !important;
+      border-bottom-color: var(--colors-border-focus) !important;
       outline: none !important;
     }
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.3);
+      color: var(--colors-surface-muted-foreground);
+      opacity: 0.5;
     }
   }
 
@@ -175,7 +163,7 @@
 
   // Icône "show password"
   :global(.cds--password-input-wrapper .cds--btn) {
-    color: var(--login-text-secondary) !important;
+    color: var(--colors-surface-muted-foreground) !important;
   }
 
   &:not(:last-child) {
@@ -187,15 +175,16 @@
 .continueButton {
   margin-top: layout.$spacing-06;
   width: 18rem;
-  background: var(--login-btn-bg) !important;
-  color: #0d1124 !important;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  transition: background 0.2s ease, transform 0.1s ease;
+  background: var(--colors-primary-500) !important;
+  color: var(--colors-neutral-950) !important;
+  font-weight: var(--typography-font-weight-semibold);
+  border-radius: var(--border-radius-sm);
+  transition: var(--transitions-colors), var(--transitions-transform);
 
   &:hover:not(:disabled) {
-    background: var(--login-btn-hover) !important;
+    background: var(--colors-primary-400) !important;
     transform: translateY(-1px);
+    box-shadow: var(--shadows-primary);
   }
 
   &:active:not(:disabled) {
@@ -211,7 +200,7 @@
 .loader {
   min-height: fit-content;
   :global(.cds--inline-loading__text) {
-    color: #0d1124;
+    color: var(--colors-neutral-950);
   }
 }
 
@@ -224,9 +213,9 @@
   left: 0;
 
   :global(.cds--inline-notification) {
-    background: rgba(218, 30, 40, 0.15);
-    border-color: rgba(218, 30, 40, 0.4);
-    color: #ffb3b8;
+    background: color-mix(in srgb, var(--colors-error-500) 15%, transparent);
+    border-color: color-mix(in srgb, var(--colors-error-500) 40%, transparent);
+    color: var(--colors-error-200);
   }
 }
 
@@ -259,7 +248,7 @@
 .poweredByTxt {
   @include type.type-style('legal-01');
   text-align: center;
-  color: var(--login-text-secondary);
+  color: var(--colors-surface-muted-foreground);
 }
 
 .needHelp {
@@ -270,7 +259,7 @@
 .needHelpText {
   @include type.type-style('body-compact-01');
   text-align: left;
-  color: var(--login-text-secondary);
+  color: var(--colors-surface-muted-foreground);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -280,5 +269,9 @@
 .link {
   text-decoration-line: none;
   margin-left: layout.$spacing-03;
-  color: var(--login-accent) !important;
+  color: var(--colors-primary-400) !important;
+
+  &:hover {
+    color: var(--colors-primary-300) !important;
+  }
 }

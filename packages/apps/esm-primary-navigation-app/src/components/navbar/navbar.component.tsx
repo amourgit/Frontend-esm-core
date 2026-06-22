@@ -94,18 +94,26 @@ const Navbar: React.FC = () => {
   const egenSpaBase = window['getEgenSpaBase']();
 
   if (session?.user?.person) {
-    return session.sessionLocation ? (
-      <HeaderContainer render={HeaderItems}></HeaderContainer>
-    ) : (
-      <Navigate
-        to={`/login/location`}
-        state={{
-          referrer: window.location.pathname.slice(
-            window.location.pathname.indexOf(egenSpaBase) + egenSpaBase.length - 1,
-          ),
-        }}
-      />
-    );
+    // TODO(EIGEN): La logique de sélection de location (sessionLocation) était
+    // liée à OpenMRS. Elle n'a plus de sens dans EIGEN — la notion de
+    // "session location" sera redéfinie selon le contexte applicatif (ex: absence
+    // de sous-domaine dans l'URL). En attendant, on rend la navbar directement
+    // sans conditionner sur sessionLocation.
+    //
+    // COMMENTÉ — ancienne logique OpenMRS :
+    // return session.sessionLocation ? (
+    //   <HeaderContainer render={HeaderItems}></HeaderContainer>
+    // ) : (
+    //   <Navigate
+    //     to={`/login/location`}
+    //     state={{
+    //       referrer: window.location.pathname.slice(
+    //         window.location.pathname.indexOf(egenSpaBase) + egenSpaBase.length - 1,
+    //       ),
+    //     }}
+    //   />
+    // );
+    return <HeaderContainer render={HeaderItems}></HeaderContainer>;
   }
 
   return (
