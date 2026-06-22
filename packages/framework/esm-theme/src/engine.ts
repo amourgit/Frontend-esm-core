@@ -2,7 +2,7 @@
 //  EGEN THEME ENGINE — Orchestrateur principal
 // ============================================================================
 
-import { loadHighestPriorityTheme } from './loader';
+import { loadHighestPriorityTheme, loadHighestPriorityThemeIfChanged } from './loader';
 import { flattenToCssVars } from './flatten';
 import {
   injectCssVarsToDocument,
@@ -36,11 +36,43 @@ const DEFAULT_OPTIONS: Required<
 > = {
   cssVarPrefix: '',
   separator: '-',
-  ignoreRootKeys: ['priority', 'meta', 'tenant'],
+  ignoreRootKeys: ['priority', 'meta'],
   pollIntervalMs: 0,
   targetSelector: ':root',
   defaultMode: 'dark',
   modeStorageKey: 'egen-theme-mode',
+};
+
+/**
+ * Thème de secours minimal, embarqué directement dans le moteur (aucune
+ * requête réseau requise). Appliqué UNIQUEMENT si tous les `themeUrls`
+ * fournis échouent à charger/valider — pour que l'application reste
+ * exploitable (lisible, navigable) plutôt que totalement non stylée.
+ *
+ * Volontairement minimal : il ne couvre que les tokens essentiels à la
+ * lisibilité de base. Ce n'est pas un "vrai" thème de présentation — c'est
+ * un filet de sécurité, pas une dépendance cachée comme l'était l'ancien
+ * SCSS statique dupliqué.
+ */
+const EMBEDDED_FALLBACK_THEME: ThemeSchema = {
+  priority: -1,
+  meta: { name: 'Fallback intégré (egen/esm-theme)' },
+  colors: {
+    primary: {
+      '50': '#eef2ff', '100': '#e0e7ff', '200': '#c7d2fe', '300': '#a5b4fc', '400': '#818cf8',
+      '500': '#6366f1', '600': '#4f46e5', '700': '#4338ca', '800': '#3730a3', '900': '#312e81', '950': '#1e1b4b',
+    },
+    surface: {
+      light: { background: '#ffffff', foreground: '#0f172a' },
+      dark: { background: '#0f172a', foreground: '#f1f5f9' },
+    },
+    border: {
+      light: { default: '#cbd5e1' },
+      dark: { default: '#334155' },
+    },
+  },
+  borderRadius: { md: '0.5rem', xl: '1rem' },
+  transitions: { default: 'all 200ms ease' },
 };
 
 /**
@@ -73,11 +105,12 @@ export class ThemeEngine {
     error: null,
     lastApplied: null,
     activeOverrideScopes: [],
+    usingFallback: false,
   };
 
   private pollTimer: ReturnType<typeof setInterval> | null = null;
-  /** Empreinte du dernier thème appliqué pour détecter les changements en hot-reload */
-  private lastThemeFingerprint: string | null = null;
+  /** Hash de contenu par URL, utilisé par le polling pour éviter de re-flatten/ré-injecter si rien n'a changé. */
+  private lastPollHashes = new Map<string, string>();
 
   private readonly listeners = new Set<(state: ThemeEngineState) => void>();
 
@@ -96,6 +129,12 @@ export class ThemeEngine {
   /**
    * Charge et applique le thème le plus prioritaire.
    * Retourne les variables CSS générées (groupées par base/light/dark).
+   *
+   * Si AUCUN `themeUrls` ne charge/valide avec succès, le moteur n'échoue
+   * pas silencieusement (et ne laisse pas l'app sans aucun style) : il
+   * applique un thème de secours minimal embarqué (`EMBEDDED_FALLBACK_THEME`)
+   * et place `status: 'error'` + `usingFallback: true` dans son état, pour
+   * que l'app puisse afficher un avertissement si elle le souhaite.
    */
   async apply(): Promise<FlattenResult> {
     this.setState({ status: 'loading', error: null });
@@ -118,6 +157,7 @@ export class ThemeEngine {
           Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length,
         lastApplied: Date.now(),
         error: null,
+        usingFallback: false,
       });
 
       this.options.onApplied?.(loaded, cssVars);
@@ -134,10 +174,29 @@ export class ThemeEngine {
       return cssVars;
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      this.setState({ status: 'error', error: message });
       this.options.onError?.(err instanceof Error ? err : new Error(message));
-      console.error("[egen/esm-theme] ❌ Erreur lors de l'application du thème:", message);
-      return { base: {}, light: {}, dark: {} };
+      console.error(
+        "[egen/esm-theme] ❌ Erreur lors de l'application du thème — repli sur le thème de secours intégré:",
+        message,
+      );
+
+      // Filet de sécurité : on applique tout de même un thème minimal pour
+      // que l'app reste lisible/navigable plutôt que totalement non stylée.
+      const fallback: LoadedTheme = { url: '(embedded-fallback)', priority: -1, schema: EMBEDDED_FALLBACK_THEME };
+      const cssVars = this.processTheme(fallback);
+      applyModeAttribute(this.state.mode);
+
+      this.setState({
+        status: 'error',
+        activeTheme: fallback,
+        cssVarsCount:
+          Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length,
+        lastApplied: Date.now(),
+        error: message,
+        usingFallback: true,
+      });
+
+      return cssVars;
     }
   }
 
@@ -154,32 +213,40 @@ export class ThemeEngine {
 
     this.pollTimer = setInterval(async () => {
       try {
-        const loaded = await loadHighestPriorityTheme(this.options.themeUrls);
-        if (!loaded) return;
+        // Variante "if-changed" : compare un hash léger du contenu brut de
+        // chaque URL à la dernière exécution AVANT tout parsing/flatten —
+        // si rien n'a changé, on sort immédiatement sans toucher au DOM ni
+        // notifier les abonnés (évite un coût CPU/réseau inutile à chaque
+        // tick quand le thème est stable, ce qui est le cas la majorité du temps).
+        const result = await loadHighestPriorityThemeIfChanged(this.options.themeUrls, this.lastPollHashes);
+        if (!result.changed) return;
 
-        const fingerprint = this.computeFingerprint(loaded);
+        this.lastPollHashes = result.hashes;
+        const loaded = result.theme;
 
-        if (fingerprint !== this.lastThemeFingerprint) {
-          if (process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.log('[egen/esm-theme] 🔥 Changement de thème détecté — rechargement à chaud');
-          }
-          const cssVars = this.processTheme(loaded);
-          this.setState({
-            status: 'applied',
-            activeTheme: loaded,
-            cssVarsCount:
-              Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length,
-            lastApplied: Date.now(),
-            error: null,
-          });
-          this.options.onApplied?.(loaded, cssVars);
-          for (const scope of this.overrides.keys()) {
-            this.recomputeOverride(scope);
-          }
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.log('[egen/esm-theme] 🔥 Changement de thème détecté — rechargement à chaud');
         }
-      } catch {
-        // Erreur silencieuse en polling — on attend la prochaine itération
+        const cssVars = this.processTheme(loaded);
+        this.setState({
+          status: 'applied',
+          activeTheme: loaded,
+          cssVarsCount:
+            Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length,
+          lastApplied: Date.now(),
+          error: null,
+          usingFallback: false,
+        });
+        this.options.onApplied?.(loaded, cssVars);
+        for (const scope of this.overrides.keys()) {
+          this.recomputeOverride(scope);
+        }
+      } catch (err) {
+        // Une égalité de priorité levée en dev (cf. loader.ts) ou toute
+        // autre erreur ne doit pas arrêter le polling — on log et on
+        // réessaiera au prochain tick.
+        console.warn('[egen/esm-theme] ⚠️  Erreur pendant le polling de hot-reload:', err);
       }
     }, interval);
   }
@@ -206,6 +273,7 @@ export class ThemeEngine {
       removeScopedCssVars(scope);
     }
     this.overrides.clear();
+    this.lastPollHashes = new Map();
     this.setState({
       status: 'idle',
       activeTheme: null,
@@ -213,6 +281,7 @@ export class ThemeEngine {
       error: null,
       lastApplied: null,
       activeOverrideScopes: [],
+      usingFallback: false,
     });
     this.listeners.clear();
   }
@@ -358,7 +427,6 @@ export class ThemeEngine {
     });
 
     injectCssVarsToDocument(cssVars, this.options.targetSelector);
-    this.lastThemeFingerprint = this.computeFingerprint(loaded);
 
     return cssVars;
   }
@@ -393,14 +461,5 @@ export class ThemeEngine {
     for (const listener of this.listeners) {
       listener(this.getState());
     }
-  }
-
-  /**
-   * Calcule une empreinte légère d'un thème chargé pour détecter les changements.
-   * Utilise l'URL + priority + updatedAt (si disponible) pour éviter un JSON.stringify complet.
-   */
-  private computeFingerprint(loaded: LoadedTheme): string {
-    const updatedAt = (loaded.schema.meta as Record<string, string>)?.updatedAt ?? '';
-    return `${loaded.url}::${loaded.priority}::${updatedAt}`;
   }
 }

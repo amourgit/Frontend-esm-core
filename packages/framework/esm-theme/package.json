@@ -2,7 +2,7 @@
   "name": "@egen/esm-theme",
   "version": "9.0.2",
   "license": "MPL-2.0",
-  "description": "Dynamic theme engine with glassmorphism support and priority-based JSON loading for EGEN SPA",
+  "description": "Dynamic, schema-agnostic theme engine with priority-based JSON loading, light/dark resolution and per-app scoped overrides for EGEN SPA",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -19,6 +19,9 @@
     "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests",
     "typescript": "tsc --project tsconfig.build.json",
     "lint": "eslint src --ext ts,tsx"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@swc/cli": "0.8.1",

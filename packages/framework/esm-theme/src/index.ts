@@ -44,5 +44,7 @@ export {
   removeScopedCssVars,
   applyModeAttribute,
 } from './inject';
-export { loadHighestPriorityTheme } from './loader';
+export { loadHighestPriorityTheme, loadHighestPriorityThemeIfChanged } from './loader';
 export { deepMerge, mergeBySortedPriority } from './deepMerge';
+export { validateThemeSchema } from './schema';
+export type { ThemeValidationResult } from './schema';

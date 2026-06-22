@@ -8,7 +8,8 @@ function mockFetchJson(themesByUrl: Record<string, unknown>) {
       const url = String(input).split('?')[0];
       const body = themesByUrl[url];
       if (!body) return { ok: false, status: 404 } as Response;
-      return { ok: true, json: async () => body } as Response;
+      const text = JSON.stringify(body);
+      return { ok: true, text: async () => text, json: async () => body } as unknown as Response;
     }),
   );
 }
@@ -98,6 +99,21 @@ describe('ThemeEngine — résolution du mode clair/sombre', () => {
     mockFetchJson({ '/theme.json': BASE_THEME });
     const engine = new ThemeEngine({ themeUrls: ['/theme.json'], defaultMode: 'dark' });
     expect(engine.getMode()).toBe('light');
+  });
+  it('applique un thème de secours embarqué si AUCUN themeUrls ne charge/valide, sans laisser l’app non stylée', async () => {
+    mockFetchJson({}); // aucune URL connue -> tout échoue
+    const engine = new ThemeEngine({ themeUrls: ['/inexistant.json'] });
+    const cssVars = await engine.apply();
+
+    const state = engine.getState();
+    expect(state.status).toBe('error');
+    expect(state.usingFallback).toBe(true);
+    expect(state.error).toBeTruthy();
+
+    // Le DOM contient malgré tout des variables exploitables (pas un app totalement non stylée)
+    expect(Object.keys(cssVars.base).length).toBeGreaterThan(0);
+    const css = document.getElementById('egen-theme-vars')?.textContent ?? '';
+    expect(css).toContain('--colors-primary-500');
   });
 });
 

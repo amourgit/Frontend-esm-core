@@ -80,12 +80,49 @@ describe('flattenToCssVars — résolution générique light/dark', () => {
     expect(result.base).toEqual({ '--colors-primary-500': '#000' });
   });
 
-  it('échappe les valeurs pour empêcher une injection CSS', () => {
+  it('REJETTE (et omet) une valeur contenant des caractères structurants CSS dangereux, plutôt que de la "nettoyer"', () => {
     const result = flattenToCssVars({
       colors: { primary: { '500': 'red; } body { display:none } /* ' } },
+      borderRadius: { xl: '1.25rem' }, // valeur saine voisine, doit rester intacte
     });
-    const value = result.base['--colors-primary-500'];
-    expect(value).not.toMatch(/[{};]/);
-    expect(value).not.toMatch(/\/\*/);
+
+    // La variable dangereuse est totalement absente (pas de valeur partielle/mutée)
+    expect(result.base['--colors-primary-500']).toBeUndefined();
+    // Les autres variables, saines, ne sont pas affectées
+    expect(result.base['--border-radius-xl']).toBe('1.25rem');
+  });
+
+  it('rejette une valeur dépassant la longueur maximale autorisée', () => {
+    const result = flattenToCssVars({ colors: { primary: { '500': 'a'.repeat(5000) } } });
+    expect(result.base['--colors-primary-500']).toBeUndefined();
+  });
+
+  it("rejette un url(...) avec un schéma non sûr (javascript:, data:text/html...) mais accepte https:// et les chemins relatifs", () => {
+    const safe1 = flattenToCssVars({ effects: { bg: "url('https://cdn.example.com/bg.png')" } });
+    const safe2 = flattenToCssVars({ effects: { bg2: "url('/assets/bg.png')" } });
+    const unsafe1 = flattenToCssVars({ effects: { bg3: "url('javascript:alert(1)')" } });
+    const unsafe2 = flattenToCssVars({ effects: { bg4: "url('data:text/html,<script>alert(1)</script>')" } });
+
+    expect(safe1.base['--effects-bg']).toContain('https://cdn.example.com/bg.png');
+    expect(safe2.base['--effects-bg2']).toContain('/assets/bg.png');
+    expect(unsafe1.base['--effects-bg3']).toBeUndefined();
+    expect(unsafe2.base['--effects-bg4']).toBeUndefined();
+  });
+
+  it('accepte les valeurs CSS légitimes courantes (couleurs, flou, ombres, transitions, polices)', () => {
+    const result = flattenToCssVars({
+      colors: { primary: { '500': '#6366f1' } },
+      panel: { dark: { card: { background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(20px) saturate(180%)' } } },
+      shadows: { glow: '0 0 24px rgba(99, 102, 241, 0.4), 0 0 48px rgba(99, 102, 241, 0.15)' },
+      transitions: { default: 'all 200ms cubic-bezier(0.42, 0, 0.18, 1)' },
+      typography: { fontFamily: ['Inter', 'sans-serif'] },
+    });
+
+    expect(result.base['--colors-primary-500']).toBe('#6366f1');
+    expect(result.dark['--panel-card-background']).toBe('rgba(15, 23, 42, 0.65)');
+    expect(result.dark['--panel-card-backdrop-filter']).toBe('blur(20px) saturate(180%)');
+    expect(result.base['--shadows-glow']).toContain('rgba(99, 102, 241, 0.4)');
+    expect(result.base['--transitions-default']).toContain('cubic-bezier');
+    expect(result.base['--typography-font-family']).toBe('Inter, sans-serif');
   });
 });

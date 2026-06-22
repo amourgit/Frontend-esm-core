@@ -115,12 +115,11 @@ export interface ThemeSchema {
     version?: string;
     author?: string;
     description?: string;
+    /** Identifiant du tenant propriétaire de ce thème (filtrage côté serveur / audit) — purement informatif, jamais lu par le moteur. */
     tenantId?: string;
     createdAt?: string;
     updatedAt?: string;
   };
-
-  tenant?: Record<string, unknown>;
 
   colors?: {
     primary?: ColorScale;
@@ -210,7 +209,7 @@ export interface ThemeEngineOptions {
 
   /**
    * Clés racines ignorées lors du flatten (ne génèrent pas de variables CSS).
-   * @default ["priority", "meta", "tenant"]
+   * @default ["priority", "meta"]
    */
   ignoreRootKeys?: string[];
 
@@ -266,6 +265,12 @@ export interface ThemeEngineState {
   lastApplied: number | null;
   /** Liste des scopes de surcharge app actuellement actifs (cf. AppThemeOverride) */
   activeOverrideScopes: string[];
+  /**
+   * `true` si AUCUN thème fourni n'a pu charger/valider et que le moteur
+   * applique en repli le thème de secours minimal embarqué
+   * (`EMBEDDED_FALLBACK_THEME`). À surveiller en prod (cf. `onError`).
+   */
+  usingFallback: boolean;
 }
 
 /**

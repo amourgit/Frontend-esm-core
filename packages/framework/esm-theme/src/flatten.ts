@@ -4,7 +4,7 @@
 
 import type { FlattenResult } from './types';
 
-const DEFAULT_IGNORE_KEYS = ['priority', 'meta', 'tenant'];
+const DEFAULT_IGNORE_KEYS = ['priority', 'meta'];
 const DEFAULT_SEPARATOR = '-';
 const DEFAULT_PREFIX = '';
 
@@ -28,30 +28,92 @@ function sanitizeSegment(segment: string): string {
 }
 
 /**
- * Échappe une valeur de feuille avant de l'écrire dans un fichier CSS.
- * Empêche toute injection (un thème peut provenir d'une URL distante /
- * d'un tenant non totalement fiable) : on retire tout caractère permettant
- * de sortir de la déclaration `nom: valeur;` (accolades, point-virgule,
- * ouverture de commentaire CSS).
+ * Liste blanche des caractères autorisés dans une valeur CSS générée
+ * dynamiquement depuis un thème JSON (potentiellement chargé depuis une
+ * URL distante / un endpoint tenant non totalement fiable).
+ *
+ * Volontairement permissive sur le VOCABULAIRE (le schéma reste ouvert :
+ * couleurs hex/rgb/hsl/oklch, longueurs avec toutes unités, fonctions CSS
+ * usuelles `blur()`, `cubic-bezier()`, `calc()`, piles de polices `"Inter", sans-serif`...)
+ * mais STRICTE sur la STRUCTURE : aucun caractère de cette liste ne permet
+ * de fermer une déclaration (`;`), de fermer/ouvrir un bloc (`{` `}`), ou
+ * d'ouvrir un commentaire CSS (`/*`) — donc AUCUNE valeur, quelle qu'elle
+ * soit, ne peut faire sortir le parseur CSS de la déclaration
+ * `--nom: <valeur>;` dans laquelle elle est insérée. C'est ce qui rend
+ * l'injection structurelle impossible, indépendamment du contenu.
+ *
+ * `<` et `>` sont exclus en défense en profondeur (empêche toute tentative
+ * de fermeture de balise `</style>` si jamais ce texte finissait, par
+ * erreur d'implémentation future, injecté ailleurs qu'en `textContent`).
+ * Les backslashes sont exclus (empêchent les séquences d'échappement CSS
+ * permettant de reconstituer un caractère interdit, ex: `\7B` = `{`).
  */
-function escapeCssValue(value: string): string {
-  return value.replace(/[{};]/g, '').replace(/\/\*/g, '').trim();
+const SAFE_CSS_VALUE_RE = /^[a-zA-Z0-9 ,.#%()_+\-:/!'"]*$/;
+
+const MAX_VALUE_LENGTH = 1000;
+
+/** Schémes d'URL autorisés dans un éventuel `url(...)` — bloque `javascript:`, `data:text/html`, etc. */
+const SAFE_URL_RE = /url\(\s*['"]?(https:\/\/|\/(?!\/))/gi;
+const ANY_URL_RE = /url\(/gi;
+
+/**
+ * Valide qu'une valeur sérialisée est sûre à injecter telle quelle dans une
+ * feuille de style. Retourne `{ ok: true }` ou `{ ok: false, reason }`.
+ *
+ * Politique : REJET (pas de mutation silencieuse). Une valeur refusée est
+ * purement et simplement exclue du CSS généré (avec un warning explicite),
+ * plutôt que d'être "nettoyée" de façon imprévisible — un fragment
+ * partiellement modifié peut donner un résultat visuellement cassé sans que
+ * personne ne comprenne pourquoi.
+ */
+function isSafeCssValue(value: string): { ok: true } | { ok: false; reason: string } {
+  if (value.length > MAX_VALUE_LENGTH) {
+    return { ok: false, reason: `valeur trop longue (${value.length} > ${MAX_VALUE_LENGTH} caractères)` };
+  }
+  if (!SAFE_CSS_VALUE_RE.test(value)) {
+    return { ok: false, reason: 'contient un ou plusieurs caractères non autorisés' };
+  }
+  // Toute occurrence de url(...) doit pointer vers https:// ou un chemin relatif au site (anti data:/javascript:/exfiltration)
+  const urlMatches = value.match(ANY_URL_RE) ?? [];
+  const safeUrlMatches = value.match(SAFE_URL_RE) ?? [];
+  if (urlMatches.length !== safeUrlMatches.length) {
+    return { ok: false, reason: "url(...) doit utiliser le schéma https:// ou un chemin relatif au site" };
+  }
+  return { ok: true };
 }
 
 /**
- * Sérialise une valeur feuille en string CSS exploitable.
+ * Sérialise une valeur feuille en string CSS exploitable, en validant
+ * qu'elle est sûre. Retourne `null` si la valeur est rejetée (l'appelant
+ * doit alors omettre la variable plutôt que d'injecter une valeur partielle).
  * - Array  → "Poppins, sans-serif"
  * - null   → "initial"
  * - bool   → "true" / "false"
  * - autres → String()
  */
-function serializeLeaf(value: unknown): string {
+function serializeLeaf(value: unknown, varNameForWarning: string): string | null {
+  let serialized: string;
+
   if (Array.isArray(value)) {
-    return escapeCssValue(value.map((v) => (typeof v === 'string' ? v : JSON.stringify(v))).join(', '));
+    serialized = value.map((v) => (typeof v === 'string' ? v : JSON.stringify(v))).join(', ');
+  } else if (value === null) {
+    serialized = 'initial';
+  } else if (typeof value === 'boolean') {
+    serialized = value ? 'true' : 'false';
+  } else {
+    serialized = String(value);
   }
-  if (value === null) return 'initial';
-  if (typeof value === 'boolean') return value ? 'true' : 'false';
-  return escapeCssValue(String(value));
+
+  const verdict = isSafeCssValue(serialized);
+  if (!verdict.ok) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.warn(`[egen/esm-theme] ⚠️  Valeur rejetée pour "${varNameForWarning}" : ${verdict.reason}`);
+    }
+    return null;
+  }
+
+  return serialized;
 }
 
 function isPlainObject(val: unknown): val is Record<string, unknown> {
@@ -112,7 +174,10 @@ export function flattenToCssVars(obj: Record<string, unknown>, options: FlattenO
     } else {
       const parts = prefix ? [prefix, ...segments] : segments;
       const varName = `--${parts.join(separator)}`;
-      result[bucket][varName] = serializeLeaf(node);
+      const safeValue = serializeLeaf(node, varName);
+      if (safeValue !== null) {
+        result[bucket][varName] = safeValue;
+      }
     }
   }
 

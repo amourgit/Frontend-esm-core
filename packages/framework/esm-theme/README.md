@@ -256,7 +256,21 @@ Toute app ou tout package peut introduire de nouvelles clés sans toucher au mot
 
 ## Sécurité
 
-Les valeurs JSON sont échappées avant injection (`escapeCssValue`) pour empêcher toute injection CSS via un thème chargé depuis une source externe (ex: endpoint tenant). Ne chargez néanmoins que des URLs de confiance dans `themeUrls` / `applyAppThemeOverride`.
+Le moteur applique une défense en profondeur à 2 niveaux, exécutée à chaque chargement (boot + chaque tick de hot-reload) :
+
+1. **Validation structurelle (`schema.ts`, zod)** — avant même d'aplatir un fichier, sa structure est validée : `priority` doit être un nombre fini, et l'arborescence entière doit être composée uniquement de types JSON plats (string/number/boolean/null/array/object), avec des garde-fous anti-abus (profondeur max 12, max 500 clés par niveau, chaînes de 4000 caractères max). Le schéma reste **ouvert** — aucune clé précise n'est imposée — seule la *forme* est vérifiée. Un fichier invalide est **rejeté et ignoré** (les autres `themeUrls` valides continuent de fonctionner), avec le détail des erreurs en console.
+
+2. **Validation des valeurs CSS (`flatten.ts`, liste blanche)** — chaque valeur-feuille est ensuite vérifiée avant sérialisation : caractères autorisés stricts (aucun moyen de fermer une déclaration `;`, un bloc `{ }`, ou d'ouvrir un commentaire `/*`), longueur max (1000 caractères), et tout usage de `url(...)` doit pointer vers `https://` ou un chemin relatif au site (bloque `javascript:`, `data:text/html`, et toute tentative d'exfiltration). **Politique de rejet, pas de nettoyage** : une valeur refusée est entièrement omise (avec un warning explicite indiquant la variable et la raison), plutôt que d'être mutée silencieusement vers un résultat imprévisible.
+
+Ne chargez néanmoins que des URLs de confiance dans `themeUrls` / `applyAppThemeOverride` — ces validations empêchent l'injection CSS structurelle, pas un thème délibérément trompeur visuellement (ex: couleurs qui rendent un bouton "Annuler" illisible).
+
+---
+
+## Résilience
+
+- **Thème de secours embarqué** : si *aucun* fichier de `themeUrls` ne charge ou ne valide, le moteur n'échoue pas silencieusement — il applique un thème minimal embarqué dans le code (`EMBEDDED_FALLBACK_THEME`, zéro requête réseau) et expose `state.usingFallback === true` pour que l'app puisse afficher un avertissement. L'application reste donc toujours lisible/navigable, jamais totalement non stylée.
+- **Égalité de priorité déterministe** : en cas d'égalité entre deux fichiers, le départage se fait par ordre alphabétique d'URL (toujours le même résultat, indépendamment de l'ordre de déclaration dans `themeUrls` ou de l'ordre de réponse réseau). En développement, une égalité lève une erreur explicite (configuration ambiguë à corriger) plutôt qu'un simple warning silencieux ; en production, elle est journalisée et résolue automatiquement.
+- **Polling de hot-reload optimisé** : à chaque tick, un hash léger du contenu brut de chaque URL est comparé au précédent *avant* tout parsing JSON/flatten/injection DOM. Si rien n'a changé (cas très majoritaire), le pipeline coûteux est entièrement court-circuité — seul le coût réseau du fetch demeure.
 
 ---
 
