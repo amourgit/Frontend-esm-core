@@ -68,9 +68,9 @@ function createCli(args: string[]) {
 }
 
 describe('develop command', () => {
-  it('defaults backend to https://dev3.egen.org', async () => {
+  it('defaults backend to https://dev.eigen.alpha.vercel.com', async () => {
     const parsed = await createCli(['develop']).parseAsync();
-    expect(parsed.backend).toBe('https://dev3.egen.org');
+    expect(parsed.backend).toBe('https://dev.eigen.alpha.vercel.com');
   });
 
   it('strips trailing slash from backend via coerce', async () => {
@@ -202,9 +202,9 @@ describe('start command', () => {
     expect(parsed.open).toBe(false);
   });
 
-  it('defaults backend to https://dev3.egen.org/', async () => {
+  it('defaults backend to https://dev.eigen.alpha.vercel.com/', async () => {
     const parsed = await createCli(['start']).parseAsync();
-    expect(parsed.backend).toBe('https://dev3.egen.org/');
+    expect(parsed.backend).toBe('https://dev.eigen.alpha.vercel.com/');
   });
 });
 

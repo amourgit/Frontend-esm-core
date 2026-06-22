@@ -47,7 +47,7 @@ export const subscribeToFeatureFlag = jest.fn((name: string, callback) => callba
 /* esm-navigation */
 export { interpolateUrl, interpolateString } from '@egen/esm-navigation';
 export const navigate = jest.fn();
-export const getHistory = jest.fn(() => ['https://o3.egen.org/home']);
+export const getHistory = jest.fn(() => ['https://egen.alpha.vercel.com/home']);
 export const clearHistory = jest.fn();
 export const goBackInHistory = jest.fn();
 

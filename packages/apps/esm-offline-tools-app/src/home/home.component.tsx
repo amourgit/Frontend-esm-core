@@ -9,7 +9,7 @@ import styles from './home.styles.scss';
  * The offline tool's home/dashboard page.
  * Renders the overview cards and provides an extension slot for the read-only offline patient table.
  *
- * Designs: https://zpl.io/an851Lr
+ * Designs: https://egen.alpha.vercel.com/design-system
  */
 const Home: React.FC = () => {
   const { t } = useTranslation();

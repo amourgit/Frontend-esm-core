@@ -9,7 +9,7 @@
   ],
   "ignorePatterns": [
     {
-      "pattern": "^https://dev3.egen.org"
+      "pattern": "^https://dev.eigen.alpha.vercel.com"
     },
     {
       "pattern": "^https://www.npmjs.com/package/@egen/"

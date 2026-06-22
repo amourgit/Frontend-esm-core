@@ -354,7 +354,7 @@ export const inpatientWardResponse = {
     link: [
       {
         relation: 'self',
-        url: 'https://dev3.egen.org/egen/ws/fhir2/R4/Location?_id=1ce1b7d4-c865-4178-82b0-5932e51503d6',
+        url: 'https://dev.eigen.alpha.vercel.com/egen/ws/fhir2/R4/Location?_id=1ce1b7d4-c865-4178-82b0-5932e51503d6',
       },
     ],
     entry: [

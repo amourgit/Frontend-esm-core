@@ -20,7 +20,7 @@ export interface ConfirmationModalProps {
  * Several design aspects (e.g. the color and the general content) are preconfigured to match the
  * design linked below.
  *
- * Designs: https://zpl.io/2GPjjjW
+ * Designs: https://egen.alpha.vercel.com/design-system
  */
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   title,

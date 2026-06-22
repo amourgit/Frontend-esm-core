@@ -48,7 +48,7 @@ export const subscribeToFeatureFlag = vi.fn((name: string, callback) => callback
 /* esm-navigation */
 export { interpolateUrl, interpolateString } from '@egen/esm-navigation';
 export const navigate = vi.fn();
-export const getHistory = vi.fn(() => ['https://o3.egen.org/home']);
+export const getHistory = vi.fn(() => ['https://egen.alpha.vercel.com/home']);
 export const clearHistory = vi.fn();
 export const goBackInHistory = vi.fn();
 

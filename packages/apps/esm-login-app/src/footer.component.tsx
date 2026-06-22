@@ -24,15 +24,15 @@ const Footer: React.FC = () => {
       <Tile className={styles.poweredByTile}>
         <div className={styles.poweredByContainer}>
           <span className={styles.poweredByText}>{t('builtWith', 'Built with')}</span>
-          <svg aria-label={t('egenLogo', 'Egen Logo')} className={styles.poweredByLogo} role="img">
+          <svg aria-label={t('egenLogo', 'EIGEN Logo')} className={styles.poweredByLogo} role="img">
             <use href="#egen-logo-full-color"></use>
           </svg>
           <span className={`${styles.poweredByText} ${styles.poweredBySubtext}`}>
-            {t('poweredBySubtext', 'An open-source medical record system and global community')}
+            {t('poweredBySubtext', 'La plateforme éducative nationale du Gabon')}
           </span>
           <Link
             className={styles.learnMoreButton}
-            href="https://egen.org"
+            href="https://egen.alpha.vercel.com"
             rel="noopener noreferrer"
             renderIcon={() => <ArrowRightIcon size={16} aria-label="Arrow right icon" />}
             target="_blank"

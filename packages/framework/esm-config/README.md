@@ -6,7 +6,7 @@
 
 This is the configuration library for [Egen Frontend 3.0](https://wiki.egen.org/display/projects/Egen+3.0%3A+A+Frontend+Framework+that+enables+collaboration+and+better+User+Experience).
 
-Please see the [Developer Documentation](https://o3-docs.egen.org/docs/configuration-system)
+Please see the [Developer Documentation](https://egen.alpha.vercel.com/docs/configuration-system)
 for information about how to use it.
 
 ## Contributing & Development

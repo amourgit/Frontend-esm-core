@@ -9,12 +9,12 @@ const ContactUs = () => {
   return (
     <Link
       className={styles.helpButton}
-      href="https://talk.egen.org"
+      href="https://egen.alpha.vercel.com/contact"
       rel="noopener noreferrer"
       renderIcon={ArrowUpRight}
       target="_blank"
     >
-      {t('communityforum', 'Community forum')}
+      {t('contact', 'Contact')}
     </Link>
   );
 };

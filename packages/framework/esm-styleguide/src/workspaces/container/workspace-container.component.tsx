@@ -38,7 +38,7 @@ export interface WorkspaceContainerProps {
 }
 
 /**
- * Use this component to render the [workspace window](https://zeroheight.com/23a080e38/p/483a22-workspace)
+ * Use this component to render the [workspace window](https://egen.alpha.vercel.com/design-system)
  * in an app such as the patient chart, or a workspace overlay in an app such as the clinic dashboard.
  * This allows workspaces to be opened on the page where this component is mounted. This component
  * must not be mounted multiple times on the same page. If there are multiple apps on a page, only
@@ -65,7 +65,7 @@ export interface WorkspaceContainerProps {
  * functions in an app's `index.ts` file). The slot is named `workspace-header-${featureName}-slot`.
  * For the patient chart, this is `workspace-header-patient-chart-slot`.
  *
- * This component also provides the [Siderail and Bottom Nav](https://zeroheight.com/23a080e38/p/948cf1-siderail-and-bottom-nav/b/86907e).
+ * This component also provides the [Siderail and Bottom Nav](https://egen.alpha.vercel.com/design-system).
  * To use this, pass the `showSiderailAndBottomNav` prop. The Siderail is rendered on the right side of the screen
  * on desktop, and the Bottom Nav is rendered at the bottom of the screen on tablet or mobile. The sidebar/bottom-nav
  * menu provides an extension slot, to which buttons are attached as extensions. The slot

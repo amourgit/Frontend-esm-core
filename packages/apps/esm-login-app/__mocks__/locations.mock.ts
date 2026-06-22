@@ -463,12 +463,12 @@ export const validatingLocationSuccessResponse = {
     link: [
       {
         relation: 'self',
-        url: 'https://dev3.egen.org/egen/ws/fhir2/R4/Location?_id=1ce1b7d4-c865-4178-82b0-5932e51503d6',
+        url: 'https://dev.eigen.alpha.vercel.com/egen/ws/fhir2/R4/Location?_id=1ce1b7d4-c865-4178-82b0-5932e51503d6',
       },
     ],
     entry: [
       {
-        fullUrl: 'https://dev3.egen.org/egen/ws/fhir2/R4/Location/1ce1b7d4-c865-4178-82b0-5932e51503d6',
+        fullUrl: 'https://dev.eigen.alpha.vercel.com/egen/ws/fhir2/R4/Location/1ce1b7d4-c865-4178-82b0-5932e51503d6',
         resource: {
           resourceType: 'Location',
           id: '1ce1b7d4-c865-4178-82b0-5932e51503d6',
@@ -508,7 +508,7 @@ export const validatingLocationFailureResponse = {
     link: [
       {
         relation: 'self',
-        url: 'https://dev3.egen.org/egen/ws/fhir2/R4/Location?_id=8d6c993e-c2cc-11de-8d13-0010c6dffd0',
+        url: 'https://dev.eigen.alpha.vercel.com/egen/ws/fhir2/R4/Location?_id=8d6c993e-c2cc-11de-8d13-0010c6dffd0',
       },
     ],
   },

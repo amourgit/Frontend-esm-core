@@ -12,7 +12,7 @@ describe('navigate', () => {
   beforeAll(() => {
     delete (window as any).location;
     //@ts-ignore
-    window.location = { assign: vi.fn(), origin: 'https://o3.egen.org' };
+    window.location = { assign: vi.fn(), origin: 'https://egen.alpha.vercel.com' };
     mockLocationAssign = window.location.assign as Mock<typeof window.location.assign>;
   });
 

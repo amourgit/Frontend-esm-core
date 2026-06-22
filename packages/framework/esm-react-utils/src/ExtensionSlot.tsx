@@ -38,7 +38,7 @@ function defaultSelect(extensions: Array<AssignedExtension>) {
 }
 
 /**
- * An [extension slot](https://o3-docs.egen.org/docs/extension-system).
+ * An [extension slot](https://egen.alpha.vercel.com/docs/extension-system).
  * A place with a name. Extensions that get connected to that name
  * will be rendered into this.
  *

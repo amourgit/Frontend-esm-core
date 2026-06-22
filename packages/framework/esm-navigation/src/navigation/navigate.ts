@@ -35,8 +35,8 @@ export interface NavigateOptions {
  * navigate({ to: "/egen/spa/foo/page" }); // => navigateToUrl("/egen/spa/foo/page")
  * navigate({ to: "${egenSpaBase}/bar/page" }); // => navigateToUrl("/egen/spa/bar/page")
  * navigate({ to: "/${egenSpaBase}/baz/page" }) // => navigateToUrl("/egen/spa/baz/page")
- * navigate({ to: "https://o3.egen.org/${egenSpaBase}/qux/page" }); // => navigateToUrl("/egen/spa/qux/page")
- *   if `window.location.origin` == "https://o3.egen.org", else will use window.location.assign
+ * navigate({ to: "https://egen.alpha.vercel.com/${egenSpaBase}/qux/page" }); // => navigateToUrl("/egen/spa/qux/page")
+ *   if `window.location.origin` == "https://egen.alpha.vercel.com", else will use window.location.assign
  * ```
  *
  * @param to The target path or URL. Supports templating with 'egenBase', 'egenSpaBase',

@@ -44,8 +44,6 @@ const egenFavicon = process.env.EGEN_FAVICON || `${egenPublicPath}/favicon.ico`;
 
 
 console.log("EGEN_API_URL =", process.env.EGEN_API_URL);
-console.log("OMRS_API_URL =", process.env.OMRS_API_URL);
-console.log("OMRS_PROXY_TARGET =", process.env.OMRS_PROXY_TARGET);
 /**
  * Resolves the target environment from EGEN_ENV, falling back to NODE_ENV / build mode.
  *

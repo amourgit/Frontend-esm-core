@@ -9,7 +9,7 @@ const Docs = () => {
   return (
     <Link
       className={styles.helpButton}
-      href="https://om.rs/o3docs"
+      href="https://egen.alpha.vercel.com/docs"
       rel="noopener noreferrer"
       renderIcon={ArrowUpRight}
       target="_blank"

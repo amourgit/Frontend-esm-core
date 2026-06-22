@@ -6,4 +6,4 @@ egen-esm-state provides functions for managing Egen state using
 It also provides a global Unistore store called `app`.
 
 Please see the Developer Documentation page on
-[Storing values](https://o3-docs.egen.org/docs/recipes/store-values).
+[Storing values](https://egen.alpha.vercel.com/docs/recipes/store-values).

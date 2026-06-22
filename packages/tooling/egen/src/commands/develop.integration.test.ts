@@ -44,7 +44,7 @@ function defaultArgs(overrides: Partial<DevelopArgs> = {}): DevelopArgs {
   return {
     port: 0, // will be overridden per-test
     host: 'localhost',
-    backend: 'https://dev3.egen.org',
+    backend: 'https://dev.eigen.alpha.vercel.com',
     open: false,
     importmap: { type: 'inline', value: '{"imports":{}}' },
     routes: { type: 'inline', value: '{}' },

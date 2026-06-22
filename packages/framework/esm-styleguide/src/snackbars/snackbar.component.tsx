@@ -5,7 +5,7 @@ import { ActionableNotification } from '@carbon/react';
 import { getCoreTranslation } from '@egen/esm-translations';
 import styles from './snackbar.module.scss';
 
-// Design documentation for Snackbars https://zeroheight.com/23a080e38/p/683580-notifications/t/468baf
+// Design documentation for Snackbars https://egen.alpha.vercel.com/design-system
 export interface SnackbarProps {
   snackbar: SnackbarMeta;
   closeSnackbar(): void;
