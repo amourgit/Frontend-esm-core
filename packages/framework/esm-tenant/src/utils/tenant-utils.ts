@@ -5,11 +5,11 @@
 import type { TenantDefinition, TenantId } from '../types';
 import { getTenantById as getById, getAllTenants } from '../context/registry';
 import {
+  tenantStore,
   getActiveTenant,
   getAvailableTenants,
   getTenantSystemMode,
   getTenantStoreState,
-  getTenantStore,
 } from '../context/store';
 
 // ---------------------------------------------------------------------------

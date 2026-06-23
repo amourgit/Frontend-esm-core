@@ -38,7 +38,6 @@ import type {
 } from '../types';
 import {
   tenantStore,
-  getTenantStore,
   getActiveTenant,
   getAvailableTenants,
   getTenantSystemMode,
