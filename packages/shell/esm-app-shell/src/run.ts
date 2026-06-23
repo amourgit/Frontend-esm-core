@@ -1,5 +1,6 @@
 import { start, triggerAppChange } from 'single-spa';
-import { setupThemeEngine } from '@egen/esm-theme';
+import { setupThemeEngine, applyAppThemeOverride } from '@eigen/esm-theme';
+import { setupTenantSystem, registerTenantThemeApplier } from '@eigen/esm-tenant';
 import { type CalendarIdentifier } from '@internationalized/date';
 import {
   activateOfflineCapability,

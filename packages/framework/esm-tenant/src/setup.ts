@@ -1,0 +1,247 @@
+// ============================================================================
+//  @eigen/esm-tenant — Orchestrateur du système tenant
+// ============================================================================
+
+import type { TenantDefinition, TenantSystemConfig, TenantId } from './types';
+import { resolveConfigFromEnv } from './config/env';
+import { initTenantRegistry, getAllTenants, getTenantById } from './context/registry';
+import { resolveActiveTenantId, persistActiveTenant } from './context/resolver';
+import {
+  setTenantConfig,
+  setTenantStoreStatus,
+  setAvailableTenants,
+  setActiveTenantInStore,
+  getTenantStoreState,
+} from './context/store';
+
+// ---------------------------------------------------------------------------
+// Theme applier injection (évite dépendance circulaire esm-tenant ↔ esm-theme)
+// ---------------------------------------------------------------------------
+
+type ThemeApplier = (tenantId: string, schema?: TenantDefinition['themeOverride'], themeUrl?: string) => Promise<void>;
+let _themeApplier: ThemeApplier | null = null;
+
+/**
+ * Injecte la fonction d'application du thème tenant.
+ * À appeler dans le shell, après `setupThemeEngine()`.
+ *
+ * @example
+ * ```ts
+ * // Dans run.ts du shell :
+ * import { applyAppThemeOverride } from '@eigen/esm-theme';
+ * import { registerTenantThemeApplier } from '@eigen/esm-tenant';
+ *
+ * registerTenantThemeApplier(async (tenantId, schema, themeUrl) => {
+ *   const urls = themeUrl
+ *     ? [themeUrl, existingThemeUrl]
+ *     : [existingThemeUrl];
+ *   if (schema) applyAppThemeOverride(`tenant-${tenantId}`, schema, { priority: 10 });
+ * });
+ * ```
+ */
+export function registerTenantThemeApplier(fn: ThemeApplier): void {
+  _themeApplier = fn;
+}
+
+// ---------------------------------------------------------------------------
+// Activation d'un tenant
+// ---------------------------------------------------------------------------
+
+async function applyTenantTheme(tenant: TenantDefinition, config: TenantSystemConfig): Promise<void> {
+  if (!config.applyTheme) return;
+  if (!_themeApplier) return;
+  if (!tenant.themeOverride && !tenant.themeUrl) return;
+
+  try {
+    await _themeApplier(tenant.id, tenant.themeOverride, tenant.themeUrl);
+  } catch (err) {
+    console.warn(`[eigen/esm-tenant] Erreur thème pour "${tenant.id}":`, err);
+  }
+}
+
+function fireEsmEvent(name: string, detail: unknown): void {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new CustomEvent(name, { detail, bubbles: false }));
+}
+
+async function activateTenant(
+  tenant: TenantDefinition,
+  config: TenantSystemConfig,
+  previousTenant: TenantDefinition | null = null,
+): Promise<void> {
+  if (tenant.suspended) {
+    setTenantStoreStatus('suspended', tenant.suspendedMessage ?? `Le tenant "${tenant.id}" est suspendu.`);
+    console.warn(`[eigen/esm-tenant] ⚠️  Tenant "${tenant.id}" suspendu.`);
+    return;
+  }
+
+  setActiveTenantInStore(tenant);
+
+  if (config.persistActive) {
+    persistActiveTenant(tenant.id, config.storageKey ?? 'eigen:tenant:active');
+  }
+
+  await applyTenantTheme(tenant, config);
+
+  fireEsmEvent('esm:tenant-activated', { tenant, previousTenantId: previousTenant?.id ?? null });
+  fireEsmEvent('esm:tenant-changed', { from: previousTenant, to: tenant });
+
+  config.onTenantActivated?.(tenant);
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.info(`[eigen/esm-tenant] ✅ Tenant actif : "${tenant.id}" (${tenant.name})`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// API principale
+// ---------------------------------------------------------------------------
+
+/**
+ * Initialise le système de gestion des tenants.
+ * À appeler une seule fois au boot du shell, APRÈS `setupThemeEngine()`.
+ *
+ * @example
+ * ```ts
+ * // Mode multi, registry distante :
+ * await setupTenantSystem({
+ *   mode: 'multi',
+ *   registryUrl: '/tenants/registry.json',
+ *   applyTheme: true,
+ * });
+ *
+ * // Mode single, config statique :
+ * await setupTenantSystem({
+ *   mode: 'single',
+ *   staticTenants: [{ id: 'civitas', name: 'CIVITAS' }],
+ *   defaultTenantId: 'civitas',
+ * });
+ *
+ * // Tout depuis variables d'environnement (VITE_TENANT_MODE, etc.) :
+ * await setupTenantSystem();
+ * ```
+ */
+export async function setupTenantSystem(userConfig: Partial<TenantSystemConfig> = {}): Promise<void> {
+  // 1. Fusion : env < userConfig (userConfig est prioritaire)
+  const envConfig = resolveConfigFromEnv();
+  const config: TenantSystemConfig = {
+    mode: 'off',
+    persistActive: true,
+    storageKey: 'eigen:tenant:active',
+    applyTheme: true,
+    resolutionOrder: ['subdomain', 'path', 'query', 'jwt', 'header', 'localStorage', 'static', 'first'],
+    ...envConfig,
+    ...userConfig,
+    pathConfig: { ...envConfig.pathConfig, ...userConfig.pathConfig },
+    jwtConfig: { claim: 'tenantId', ...envConfig.jwtConfig, ...userConfig.jwtConfig },
+  };
+
+  setTenantConfig(config);
+
+  if (config.mode === 'off') {
+    if (process.env.NODE_ENV !== 'production') {
+      console.info('[eigen/esm-tenant] Système tenant désactivé (mode: "off").');
+    }
+    return;
+  }
+
+  setTenantStoreStatus('loading');
+
+  try {
+    // 2. Registry
+    const allTenants = await initTenantRegistry(config.staticTenants, config.registryUrl);
+    setAvailableTenants(allTenants);
+
+    if (allTenants.length === 0) {
+      throw new Error('La registry de tenants est vide. Configurez staticTenants ou registryUrl.');
+    }
+
+    // 3. Résolution
+    let activeTenant: TenantDefinition | undefined;
+
+    if (config.mode === 'single') {
+      const targetId = config.defaultTenantId ?? allTenants[0]?.id;
+      activeTenant = targetId ? getTenantById(targetId) : allTenants[0];
+    } else {
+      const resolvedId = resolveActiveTenantId(config);
+      activeTenant = resolvedId ? getTenantById(resolvedId) : undefined;
+
+      if (!activeTenant) {
+        activeTenant = allTenants[0];
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn('[eigen/esm-tenant] Fallback sur le premier tenant:', activeTenant?.id);
+        }
+      }
+    }
+
+    if (!activeTenant) {
+      throw new Error('Impossible de résoudre un tenant actif.');
+    }
+
+    // 4. Activation
+    await activateTenant(activeTenant, config, null);
+
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    setTenantStoreStatus('error', message);
+    config.onError?.(err instanceof Error ? err : new Error(message));
+    console.error('[eigen/esm-tenant] ❌', message);
+  }
+}
+
+/**
+ * Change le tenant actif à la volée (mode "multi" uniquement).
+ *
+ * @example
+ * ```ts
+ * await switchTenant('acme-corp');
+ * ```
+ */
+export async function switchTenant(tenantId: TenantId): Promise<void> {
+  const state = getTenantStoreState();
+
+  if (state.mode === 'off') {
+    console.warn('[eigen/esm-tenant] switchTenant() ignoré : mode "off".');
+    return;
+  }
+  if (state.mode === 'single') {
+    console.warn('[eigen/esm-tenant] switchTenant() ignoré : mode "single".');
+    return;
+  }
+
+  const tenant = getTenantById(tenantId);
+  if (!tenant) {
+    console.error(`[eigen/esm-tenant] Tenant introuvable : "${tenantId}"`);
+    return;
+  }
+
+  const previous = state.activeTenant;
+  setTenantStoreStatus('loading');
+  await activateTenant(tenant, state.config, previous);
+}
+
+/**
+ * Recharge la registry distante et ré-active le tenant courant.
+ */
+export async function reloadTenantRegistry(): Promise<void> {
+  const state = getTenantStoreState();
+  if (state.mode === 'off') return;
+
+  setTenantStoreStatus('loading');
+  try {
+    const tenants = await initTenantRegistry(state.config.staticTenants, state.config.registryUrl);
+    setAvailableTenants(tenants);
+
+    if (state.activeTenant) {
+      const refreshed = getTenantById(state.activeTenant.id);
+      if (refreshed) await activateTenant(refreshed, state.config, state.activeTenant);
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    setTenantStoreStatus('error', message);
+  }
+}
+
+// Re-exports pratiques
+export { storeHeaderTenantId } from './context/resolver';
+export { registerTenant } from './context/registry';

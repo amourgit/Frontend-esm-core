@@ -1,3 +1,4 @@
+export * from '@eigen/esm-tenant';
 export * from '@egen/esm-api/src/public';
 export * from '@egen/esm-config/src/public';
 export * from '@egen/esm-context/src/public';
