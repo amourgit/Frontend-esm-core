@@ -45,3 +45,4 @@ export * from './useSessionContext';
 export * from './useSessionContextStore';
 export * from './useSessionTypes';
 export * from './UserHasAccess';
+export * from './useTenant';

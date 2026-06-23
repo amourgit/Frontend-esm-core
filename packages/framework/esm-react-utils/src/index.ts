@@ -49,3 +49,4 @@ export * from './useSessionContextStore';
 export * from './useSessionTypes';
 export * from './useStore';
 export * from './UserHasAccess';
+export * from './useTenant';

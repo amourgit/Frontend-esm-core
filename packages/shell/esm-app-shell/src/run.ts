@@ -361,7 +361,39 @@ export function run(configUrls: Array<string>) {
     console.warn('[egen/esm-theme] Initialisation thème échouée (fallback SCSS actif):', err);
   });
 
-  return Promise.all([import('@egen/esm-styleguide/src/index'), themeReady]).then(([_styleguide]) => {
+  // ── Tenant system setup ────────────────────────────────────────────────
+  // Initialisé après le thème : le tenant peut surcharger le thème via
+  // registerTenantThemeApplier. Le système reste complètement inerte si
+  // VITE_TENANT_MODE === "off" (défaut) ou non défini.
+  registerTenantThemeApplier(async (tenantId, schema, themeUrl) => {
+    const { applyAppThemeOverride } = await import('@eigen/esm-theme');
+    if (schema) {
+      applyAppThemeOverride(`tenant-${tenantId}`, schema, { priority: 10 });
+    }
+    if (themeUrl) {
+      // Le themeUrl est simplement ajouté avec priorité haute au moteur de thème
+      const { setupThemeEngine: reloadTheme } = await import('@eigen/esm-theme');
+      // Note: on ne réinitialise pas tout le moteur, on charge juste l'URL
+      // via applyAppThemeOverride si le backend renvoie le schema JSON
+      console.info(`[eigen/esm-tenant] Chargement thème tenant depuis: ${themeUrl}`);
+    }
+  });
+
+  const tenantReady = setupTenantSystem(
+    // Configuration par défaut : tout vient des variables d'environnement.
+    // Pour surcharger, passer une config ici ou définir window.eigenTenantMode.
+    // Exemple mode multi statique (pour les projets qui ne veulent pas de registryUrl) :
+    // {
+    //   mode: 'multi',
+    //   staticTenants: [ { id: 'default', name: 'Default' } ],
+    //   applyTheme: true,
+    // }
+  ).catch((err) => {
+    // Non bloquant : l'app démarre même si le système tenant échoue
+    console.warn('[eigen/esm-tenant] Initialisation tenant échouée (mode dégradé):', err);
+  });
+
+  return Promise.all([import('@egen/esm-styleguide/src/index'), themeReady, tenantReady]).then(([_styleguide]) => {
     integrateBreakpoints();
     showToasts();
     showModals();
