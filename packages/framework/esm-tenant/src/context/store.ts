@@ -45,6 +45,9 @@ export const tenantStore = createGlobalStore<TenantStore>('tenant', {
   config: DEFAULT_CONFIG,
 });
 
+// Export also as named export for convenience
+export { tenantStore as tenantStoreInstance };
+
 // ---------------------------------------------------------------------------
 // Mutations internes
 // ---------------------------------------------------------------------------
@@ -91,6 +94,11 @@ export function setTenantConfig(config: Partial<TenantSystemConfig>): void {
 /** @category Tenant */
 export function getTenantStoreState(): TenantStore {
   return tenantStore.getState();
+}
+
+/** @category Tenant */
+export function getTenantStore() {
+  return tenantStore;
 }
 
 /** @category Tenant */

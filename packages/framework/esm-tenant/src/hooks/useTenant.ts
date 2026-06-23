@@ -36,7 +36,13 @@ import type {
   TenantAccessOptions,
   TenantAccessResult,
 } from '../types';
-import { getTenantStore, getActiveTenant, getAvailableTenants, getTenantSystemMode } from '../context/store';
+import {
+  tenantStore,
+  getTenantStore,
+  getActiveTenant,
+  getAvailableTenants,
+  getTenantSystemMode,
+} from '../context/store';
 import { switchTenant } from '../setup';
 
 // ---------------------------------------------------------------------------

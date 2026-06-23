@@ -555,6 +555,7 @@ __metadata:
     "@egen/esm-error-handling": 9.x
     "@egen/esm-globals": 9.x
     "@egen/esm-navigation": 9.x
+    "@egen/esm-state": 1.x
   languageName: unknown
   linkType: soft
 
@@ -1189,6 +1190,7 @@ __metadata:
     "@egen/esm-globals": 9.x
     "@egen/esm-navigation": 9.x
     "@egen/esm-state": 9.x
+    "@egen/esm-tenant": 1.x
     "@egen/esm-utils": 9.x
     dayjs: 1.x
     i18next: 25.x
@@ -1330,7 +1332,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@egen/esm-tenant@workspace:packages/framework/esm-tenant"
   dependencies:
-    "@egen/esm-theme": "npm:^9.0.0"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -1346,7 +1347,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@egen/esm-theme@npm:^9.0.0, @egen/esm-theme@workspace:*, @egen/esm-theme@workspace:packages/framework/esm-theme":
+"@egen/esm-theme@workspace:*, @egen/esm-theme@workspace:packages/framework/esm-theme":
   version: 0.0.0-use.local
   resolution: "@egen/esm-theme@workspace:packages/framework/esm-theme"
   dependencies:
