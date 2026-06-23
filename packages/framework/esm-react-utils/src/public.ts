@@ -45,4 +45,6 @@ export * from './useSessionContext';
 export * from './useSessionContextStore';
 export * from './useSessionTypes';
 export * from './UserHasAccess';
-export * from './useTenant';
+// NOTE: tenant hooks (useTenant, TenantGuard, etc.) are NOT re-exported here.
+// They are exported directly from @egen/esm-tenant via @egen/esm-framework.
+// This avoids duplicate exports and keeps each package responsible for its own API.

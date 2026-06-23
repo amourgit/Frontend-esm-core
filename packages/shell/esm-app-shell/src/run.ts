@@ -362,36 +362,39 @@ export function run(configUrls: Array<string>) {
     console.warn('[egen/esm-theme] Initialisation thème échouée (fallback SCSS actif):', err);
   });
 
-  // ── Tenant system setup ────────────────────────────────────────────────
-  // Initialisé après le thème : le tenant peut surcharger le thème via
-  // registerTenantThemeApplier. Le système reste complètement inerte si
-  // VITE_TENANT_MODE === "off" (défaut) ou non défini.
+  // ── Tenant system setup ─────────────────────────────────────────────────
+  // Initialisé juste avant le boot des apps, après le moteur de thème.
+  // COMPLÈTEMENT INERTE si VITE_TENANT_MODE="off" ou absent — zéro overhead.
+  //
+  // Configuration :
+  //   .env              → VITE_TENANT_MODE=multi | single | off
+  //   window.*          → window.eigenTenantMode = 'multi'  (injection serveur)
+  //   setupTenantSystem → options inline ci-dessous (priorité maximale)
+
+  // Branche le moteur de thème sur le système tenant.
+  // Quand un tenant est activé, son thème écrase le thème global (priorité 10).
   registerTenantThemeApplier(async (tenantId, schema, themeUrl) => {
-    const { applyAppThemeOverride } = await import('@egen/esm-theme');
     if (schema) {
       applyAppThemeOverride(`tenant-${tenantId}`, schema, { priority: 10 });
     }
     if (themeUrl) {
-      // Le themeUrl est simplement ajouté avec priorité haute au moteur de thème
-      const { setupThemeEngine: reloadTheme } = await import('@egen/esm-theme');
-      // Note: on ne réinitialise pas tout le moteur, on charge juste l'URL
-      // via applyAppThemeOverride si le backend renvoie le schema JSON
-      // eslint-disable-next-line no-console
-      console.info(`[egen/esm-tenant] Chargement thème tenant depuis: ${themeUrl}`);
+      try {
+        const res = await fetch(themeUrl);
+        if (res.ok) {
+          const remoteSchema = await res.json();
+          applyAppThemeOverride(`tenant-${tenantId}-url`, remoteSchema, { priority: 9 });
+        } else {
+          console.warn(`[eigen/esm-tenant] Thème distant inaccessible (${res.status}): ${themeUrl}`);
+        }
+      } catch (err) {
+        console.warn(`[eigen/esm-tenant] Impossible de charger le thème depuis ${themeUrl}:`, err);
+      }
     }
   });
 
+  // Non bloquant : le shell démarre même si le système tenant échoue.
   const tenantReady = setupTenantSystem().catch((err) => {
-    // Configuration par défaut : tout vient des variables d'environnement.
-    // Pour surcharger, passer une config ici ou définir window.eigenTenantMode.
-    // Exemple mode multi statique (pour les projets qui ne veulent pas de registryUrl) :
-    // {
-    //   mode: 'multi',
-    //   staticTenants: [ { id: 'default', name: 'Default' } ],
-    //   applyTheme: true,
-    // }
-    // Non bloquant : l'app démarre même si le système tenant échoue
-    console.warn('[egen/esm-tenant] Initialisation tenant échouée (mode dégradé):', err);
+    console.warn('[eigen/esm-tenant] Initialisation tenant échouée (mode dégradé):', err);
   });
 
   return Promise.all([import('@egen/esm-styleguide/src/index'), themeReady, tenantReady]).then(([_styleguide]) => {

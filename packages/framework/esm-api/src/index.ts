@@ -4,4 +4,6 @@ export * from './egen-backend-dependencies';
 export * from './egen-fetch';
 export * from './setup';
 export * from './types';
-export * from './tenant';
+// NOTE: src/tenant.ts is intentionally NOT exported here.
+// It is an internal module used only by egenFetch to inject X-Tenant-ID headers.
+// Public tenant API is exposed via @egen/esm-tenant → @egen/esm-framework.

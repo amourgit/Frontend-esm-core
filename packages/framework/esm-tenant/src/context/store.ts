@@ -95,10 +95,6 @@ export function getTenantStoreState(): TenantStore {
 }
 
 /** @category Tenant */
-export function getTenantStore() {
-  return tenantStore;
-}
-
 /** @category Tenant */
 export function getActiveTenant(): TenantDefinition | null {
   return tenantStore.getState().activeTenant;

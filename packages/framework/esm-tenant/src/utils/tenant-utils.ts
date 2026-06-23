@@ -85,7 +85,7 @@ export function tenantHasPermission(key: string): boolean {
 export function onTenantChange(callback: (tenant: TenantDefinition | null) => void): () => void {
   let previous: TenantDefinition | null = getActiveTenant();
 
-  return getTenantStore().subscribe((state) => {
+  return tenantStore.subscribe((state) => {
     if (state.activeTenant?.id !== previous?.id) {
       previous = state.activeTenant;
       callback(state.activeTenant);

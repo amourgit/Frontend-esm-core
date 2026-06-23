@@ -33,8 +33,6 @@ import {
   useTenantMode,
   useTenantStatus,
 } from './useTenant';
-import { getTenantStore } from '../context/store';
-
 // ---------------------------------------------------------------------------
 // Context
 // ---------------------------------------------------------------------------

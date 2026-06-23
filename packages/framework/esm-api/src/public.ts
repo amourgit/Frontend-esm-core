@@ -17,12 +17,3 @@ export * from './environment';
 export * from './types';
 export * from './egen-fetch';
 export * from './egen-backend-dependencies';
-export {
-  getTenantId,
-  getActiveTenantInfo,
-  getTenantApiBase,
-  tenantHeaders,
-  getTenantLocale,
-  getTenantTimezone,
-  isMultiTenant,
-} from './tenant';
