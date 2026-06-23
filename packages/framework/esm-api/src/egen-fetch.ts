@@ -4,6 +4,7 @@ import { isPlainObject } from 'lodash-es';
 import { getConfig } from '@egen/esm-config';
 import { clearHistory, navigate } from '@egen/esm-navigation';
 import type { FetchResponse } from './types';
+import { getTenantId } from './tenant';
 import { defaultRedirectAuthFailureUrl, type EsmApiConfigObject } from './config-schema';
 
 /** The base URL for the Egen REST API (e.g., '/ws/rest/v1'). */
@@ -147,7 +148,6 @@ export function egenFetch<T = any>(path: string, fetchInit: FetchConfig = {}): P
    * and no header is injected — zero overhead.
    */
   if (typeof fetchInit.headers['X-Tenant-ID'] === 'undefined') {
-    const { getTenantId } = await import('./tenant');
     const tenantId = getTenantId();
     if (tenantId) {
       fetchInit.headers['X-Tenant-ID'] = tenantId;
