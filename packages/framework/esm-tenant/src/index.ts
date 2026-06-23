@@ -67,6 +67,8 @@ export {
   useTenantPermission,
   useTenantIsSuspended,
   useTenantApiBaseUrl,
+  useTenantLocale,
+  useTenantTimezone,
 } from './hooks/useTenant';
 
 // ── React Components ───────────────────────────────────────────────────────

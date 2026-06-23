@@ -382,3 +382,357 @@ yarn document
 
 If a PR shouldn't update the docs (rare — typically only for reverts or release-version bumps), a maintainer can apply the `skip-docs` label to bypass regeneration.
 # Frontend-esm-core
+
+---
+
+## Système Multi-Tenant (`@eigen/esm-tenant`)
+
+EIGEN intègre un système de gestion des tenants **configurable et non-intrusif**. Il est **désactivé par défaut** (`mode: "off"`) — les projets qui n'en ont pas besoin n'ont rien à faire et ne subissent aucun overhead.
+
+### Philosophie
+
+Le système est conçu pour être la **base de tout projet spécialisé** développé à partir d'EIGEN. Qu'il s'agisse d'une plateforme éducative, d'un ERP, d'un portail santé ou d'un SaaS multi-organisation, le mécanisme tenant est le même. Seule la configuration change.
+
+```
+                     ┌──────────────────────────────────────┐
+                     │         EIGEN (ce dépôt)             │
+                     │  framework agnostique + esm-tenant   │
+                     └──────────────────┬───────────────────┘
+                                        │ base pour
+              ┌─────────────────────────┼──────────────────────┐
+              ▼                         ▼                      ▼
+     Projet Académique          Projet ERP              Projet Santé
+  (mode: "single",            (mode: "multi",         (mode: "off",
+   tenant: "univ-omar-bongo")  tenants par org)        pas de tenant)
+```
+
+### Les trois modes
+
+| Mode | Description | Quand l'utiliser |
+|------|-------------|-----------------|
+| `"off"` | Système désactivé **(défaut)** | Projet mono-organisation sans besoin de tenant |
+| `"single"` | Un seul tenant fixe | Déploiement dédié à une organisation, branding spécifique |
+| `"multi"` | Plusieurs tenants, résolution dynamique | SaaS, portail multi-organisations, plateforme nationale |
+
+### Niveaux de configuration
+
+Le système tenant est configurable à **trois niveaux**, par ordre de priorité décroissante :
+
+#### Niveau 1 — Programmatique dans `run.ts` (priorité maximale)
+
+C'est le point d'entrée principal. La configuration passée ici écrase tout le reste.
+
+```ts
+// packages/shell/esm-app-shell/src/run.ts
+import { setupTenantSystem, registerTenantThemeApplier } from '@eigen/esm-tenant';
+import { applyAppThemeOverride } from '@eigen/esm-theme';
+
+// Optionnel : brancher le thème tenant sur le moteur de thème EIGEN
+registerTenantThemeApplier(async (tenantId, schema, themeUrl) => {
+  if (schema) applyAppThemeOverride(`tenant-${tenantId}`, schema, { priority: 10 });
+});
+
+// Mode single — tenant unique fixe, chargé depuis une URL JSON
+await setupTenantSystem({
+  mode: 'single',
+  defaultTenantId: 'civitas',
+  registryUrl: '/public/tenants/registry.json',
+  applyTheme: true,
+});
+
+// Mode multi — résolution depuis le sous-domaine ou le JWT
+await setupTenantSystem({
+  mode: 'multi',
+  registryUrl: '/api/tenants',
+  resolutionOrder: ['subdomain', 'jwt', 'localStorage'],
+  jwtConfig: { claim: 'org' },
+  onTenantActivated: (tenant) => console.info('Tenant activé :', tenant.name),
+  onError: (err) => console.error('Erreur tenant :', err),
+});
+
+// Désactivé — zero code, zero overhead
+await setupTenantSystem({ mode: 'off' });
+// ou simplement ne pas appeler setupTenantSystem() du tout
+```
+
+#### Niveau 2 — Variables d'environnement build-time (`VITE_TENANT_*`)
+
+Configurez dans `.env`, `.env.production`, `.env.staging`, etc. :
+
+```ini
+# Mode
+VITE_TENANT_MODE=multi
+
+# Tenant par défaut / unique
+VITE_TENANT_ID=civitas
+
+# Registry distante
+VITE_TENANT_REGISTRY_URL=/public/tenants/registry.json
+
+# Ordre de résolution (CSV)
+VITE_TENANT_RESOLUTION_ORDER=subdomain,jwt,localStorage,static
+
+# Stratégie "path" : /t/acme/dashboard → tenant "acme"
+VITE_TENANT_PATH_PREFIX=/t/
+
+# Claim JWT portant l'ID tenant
+VITE_TENANT_JWT_CLAIM=tenantId
+
+# Thème automatique
+VITE_TENANT_THEME_APPLY=true
+
+# Persistance localStorage
+VITE_TENANT_PERSIST=true
+```
+
+Ces variables sont lues par `resolveConfigFromEnv()` au boot et fusionnées avec les options de `setupTenantSystem()`. **Les options programmatiques sont toujours prioritaires.**
+
+#### Niveau 3 — Injection runtime via `window.*` (priorité sur les env vars)
+
+Le serveur peut injecter ces variables dans `index.html` sans rebuild. Utile pour les déploiements dynamiques (Docker, Kubernetes, CDN multi-tenant) :
+
+```html
+<!-- index.html — injecté par le serveur -->
+<script>
+  window.eigenTenantMode = 'multi';
+  window.eigenTenantId = 'acme';
+  window.eigenTenantRegistryUrl = '/api/tenants';
+  window.eigenTenantApplyTheme = 'true';
+  window.eigenTenantPersist = 'true';
+  window.eigenTenantResolutionOrder = 'subdomain,jwt,localStorage';
+  window.eigenTenantPathPrefix = '/t/';
+  window.eigenTenantJwtClaim = 'tenantId';
+</script>
+```
+
+#### Niveau 4 — Configuration par application (décentralisée)
+
+Chaque microfrontend peut déclarer ses propres exigences tenant sans toucher à la config globale :
+
+```ts
+// Dans le run.ts ou l'entrypoint de votre app
+import { registerAppTenantConfig } from '@eigen/esm-framework';
+
+registerAppTenantConfig('@eigen/esm-academique-app', {
+  requiredApp: 'eigen-academique',          // Doit être dans tenant.allowedApps
+  requiredPermissions: ['manage-students'], // Doit être dans tenant.permissions
+  requiredFeatureFlags: ['module-notes'],   // Doit être dans tenant.featureFlags
+  allowInSingleMode: true,                  // Accès libre en mode "single"
+  onTenantChange: (tenant) => {
+    // Rechargement des données quand le tenant change
+    queryClient.invalidateQueries(['students']);
+  },
+});
+```
+
+### Définition des tenants
+
+Un tenant est défini par `TenantDefinition`. Seuls `id` et `name` sont obligatoires :
+
+```ts
+// Exemple minimal
+{ id: 'civitas', name: 'CIVITAS' }
+
+// Exemple complet
+{
+  id: 'univ-omar-bongo',
+  name: 'Université Omar Bongo',
+  slug: 'uob',                          // Alias URL (si différent de id)
+  domains: ['uob.eigen.ga', 'uob'],     // Pour la résolution par sous-domaine
+  locale: 'fr-GA',
+  timezone: 'Africa/Libreville',
+  apiBaseUrl: 'https://api.uob.eigen.ga', // Backend dédié
+  themeUrl: '/themes/uob.json',           // Thème JSON (chargé par esm-theme)
+  themeOverride: {                        // Surcharge inline (prioritaire sur themeUrl)
+    colors: { primary: '#003087' }
+  },
+  importMapUrls: ['/uob/importmap.json'], // MFEs spécifiques à ce tenant
+  featureFlags: {
+    'module-notes': true,
+    'module-bibliotheque': false,
+  },
+  allowedApps: [                          // Apps autorisées pour ce tenant
+    '@eigen/esm-academique-app',
+    '@eigen/esm-notes-app',
+  ],
+  permissions: {
+    'manage-students': true,
+    'manage-finances': ['admin', 'daf'],  // Limité à certains rôles
+    'export-data': false,
+  },
+  meta: {
+    logoUrl: '/assets/logos/uob.svg',
+    primaryColor: '#003087',
+    plan: 'premium',
+  },
+  active: true,
+  suspended: false,
+}
+```
+
+La registry peut être fournie de deux façons (ou les deux, fusionnées) :
+- **`staticTenants`** : tableau inline dans `setupTenantSystem()`
+- **`registryUrl`** : URL d'un fichier JSON `TenantDefinition[]` chargé au boot
+
+### Stratégies de résolution
+
+En mode `"multi"`, EIGEN essaie les stratégies dans l'ordre configuré jusqu'à trouver un tenant valide :
+
+| Stratégie | Source | Exemple |
+|-----------|--------|---------|
+| `subdomain` | `window.location.hostname` | `acme.app.com` → `"acme"` |
+| `path` | `window.location.pathname` | `/t/acme/dashboard` → `"acme"` |
+| `query` | `window.location.search` | `?tenant=acme` → `"acme"` |
+| `jwt` | Claim JWT de session | `token.tenantId = "acme"` |
+| `header` | Header `X-Tenant-ID` (stocké au login) | Propagé par le backend |
+| `localStorage` | `localStorage['eigen:tenant:active']` | Survie aux rechargements |
+| `static` | `window.eigenTenantId` / `VITE_TENANT_ID` | Config fixe |
+| `first` | Premier tenant de la registry | Fallback ultime |
+
+### API — Hooks React
+
+Disponibles via `@eigen/esm-framework` (ou `@eigen/esm-react-utils`) :
+
+```tsx
+import {
+  useTenant,            // TenantDefinition | null — tenant actif
+  useTenantMode,        // "off" | "single" | "multi"
+  useTenantStatus,      // "idle" | "loading" | "active" | "error" | "suspended"
+  useAvailableTenants,  // TenantDefinition[] — tous les tenants
+  useIsMultiTenant,     // boolean
+  useSwitchTenant,      // { switchTo(id), switching }
+  useTenantAccess,      // { allowed, reason, tenant }
+  useTenantFeatureFlag, // boolean
+  useTenantPermission,  // boolean | string[] | undefined
+  useTenantMeta,        // T | undefined
+  useTenantLocale,      // string | undefined — ex: "fr-GA"
+  useTenantTimezone,    // string | undefined — ex: "Africa/Libreville"
+  useTenantApiBaseUrl,  // string | undefined
+  useTenantIsSuspended, // { suspended, message }
+} from '@eigen/esm-framework';
+```
+
+### API — Services (non-React)
+
+```ts
+import {
+  getCurrentTenant,      // TenantDefinition | null
+  getCurrentTenantId,    // string | undefined
+  getTenantApiBaseUrl,   // string | undefined
+  getTenantHeaders,      // Record<string,string> — { 'X-Tenant-ID': '...' }
+  fetchWithTenant,       // fetch() avec X-Tenant-ID auto-injecté
+  tenantHasFeatureFlag,  // (flag: string) => boolean
+  tenantHasPermission,   // (key: string) => boolean
+  onTenantChange,        // (cb) => unsubscribe — réagir aux changements hors React
+  buildTenantUrl,        // ('/dashboard') => '/t/acme/dashboard'
+  isTenantSystemActive,  // boolean
+  isMultiTenantMode,     // boolean
+} from '@eigen/esm-framework';
+
+// Via @eigen/esm-api (sans dépendance React, utilisable dans egenFetch) :
+import { getTenantId, tenantHeaders, getTenantApiBase } from '@eigen/esm-api';
+```
+
+> **Note :** `egenFetch` injecte automatiquement le header `X-Tenant-ID` à chaque requête quand un tenant est actif. Vous n'avez rien à faire.
+
+### Composants React
+
+```tsx
+import {
+  TenantProvider,           // Context Provider (optionnel si useStore suffit)
+  TenantGuard,              // Protège un sous-arbre selon les droits tenant
+  TenantRequired,           // S'assure qu'un tenant est résolu avant de rendre
+  TenantSuspendedBoundary,  // Écran de maintenance si tenant.suspended = true
+  TenantSelector,           // Sélecteur headless (mode "multi")
+} from '@eigen/esm-framework';
+
+// Exemple : protéger une app
+function AcademiqueRoot() {
+  return (
+    <TenantSuspendedBoundary fallback={(msg) => <MaintenancePage message={msg} />}>
+      <TenantGuard
+        appName="@eigen/esm-academique-app"
+        permission="manage-students"
+        fallback={<AccessDenied />}
+        loadingFallback={<Spinner />}
+      >
+        <AcademiqueApp />
+      </TenantGuard>
+    </TenantSuspendedBoundary>
+  );
+}
+
+// Exemple : sélecteur de tenant
+function TenantSwitcher() {
+  return (
+    <TenantSelector
+      render={({ tenants, activeTenant, switchTo, switching }) => (
+        <select
+          value={activeTenant?.id ?? ''}
+          onChange={(e) => switchTo(e.target.value)}
+          disabled={switching}
+        >
+          {tenants.map((t) => (
+            <option key={t.id} value={t.id}>{t.name}</option>
+          ))}
+        </select>
+      )}
+    />
+  );
+}
+```
+
+### Accès direct au store
+
+Pour les intégrations avancées (DevTools, tests, monitoring) :
+
+```ts
+import { tenantStore } from '@eigen/esm-tenant';
+import { useStore } from '@eigen/esm-react-utils';
+
+// Dans un composant React
+const { activeTenant, mode, availableTenants, status, error } = useStore(tenantStore);
+
+// Hors React — abonnement manuel
+const unsubscribe = tenantStore.subscribe((state) => {
+  console.log('Tenant changed:', state.activeTenant?.id);
+});
+```
+
+### Module Federation — configuration requise
+
+Pour que le store soit un singleton partagé entre tous les microfrontends, ajoutez dans chaque `webpack.config.js` ou `vite.config.ts` :
+
+```js
+// webpack.config.js
+shared: {
+  '@eigen/esm-tenant': { singleton: true, eager: true },
+  '@eigen/esm-state':  { singleton: true, eager: true },
+}
+```
+
+### Événements DOM
+
+Le système émet des événements `CustomEvent` sur `window` lors des transitions :
+
+| Événement | Payload | Quand |
+|-----------|---------|-------|
+| `esm:tenant-activated` | `{ tenant, previousTenantId }` | Premier tenant résolu au boot |
+| `esm:tenant-changed` | `{ from, to }` | Changement de tenant via `switchTenant()` |
+
+```ts
+window.addEventListener('esm:tenant-activated', (e: CustomEvent) => {
+  const { tenant } = e.detail;
+  analytics.identify(tenant.id);
+});
+```
+
+### Checklist d'intégration pour un projet dérivé
+
+- [ ] Copier `.env.example` → `.env` et configurer `VITE_TENANT_MODE`
+- [ ] Appeler `setupTenantSystem()` dans `run.ts` avec la config souhaitée
+- [ ] Si thème par tenant : appeler `registerTenantThemeApplier()` avant `setupTenantSystem()`
+- [ ] Définir les tenants (soit `staticTenants`, soit `registryUrl`)
+- [ ] Ajouter `@eigen/esm-tenant: { singleton: true }` dans la config Module Federation
+- [ ] Optionnel : appeler `registerAppTenantConfig()` dans chaque app qui a des exigences spécifiques
+- [ ] Optionnel : utiliser `<TenantGuard>` pour protéger les routes sensibles

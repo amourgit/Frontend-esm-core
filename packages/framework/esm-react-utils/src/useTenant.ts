@@ -38,6 +38,8 @@ export {
   useTenantPermission,
   useTenantIsSuspended,
   useTenantApiBaseUrl,
+  useTenantLocale,
+  useTenantTimezone,
   // Composants
   TenantProvider,
   TenantGuard,

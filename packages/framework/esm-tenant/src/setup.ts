@@ -59,6 +59,27 @@ async function applyTenantTheme(tenant: TenantDefinition, config: TenantSystemCo
   }
 }
 
+/**
+ * Charge les import maps additionnels d'un tenant.
+ * Utilisé pour activer des microfrontends spécifiques à un tenant.
+ * @internal
+ */
+function applyTenantImportMaps(urls: string[]): void {
+  if (typeof document === 'undefined') return;
+  for (const url of urls) {
+    // Vérifie si ce script est déjà chargé
+    const existing = document.querySelector(`script[src="${url}"]`);
+    if (existing) continue;
+    const script = document.createElement('script');
+    script.type = 'systemjs-importmap';
+    script.src = url;
+    document.head.appendChild(script);
+    if (process.env.NODE_ENV !== 'production') {
+      console.info(`[egen/esm-tenant] Import map tenant chargée : ${url}`);
+    }
+  }
+}
+
 function fireEsmEvent(name: string, detail: unknown): void {
   if (typeof window === 'undefined') return;
   window.dispatchEvent(new CustomEvent(name, { detail, bubbles: false }));
@@ -87,6 +108,11 @@ async function activateTenant(
   fireEsmEvent('esm:tenant-changed', { from: previousTenant, to: tenant });
 
   config.onTenantActivated?.(tenant);
+
+  // Apply tenant-specific import map URLs if defined
+  if (tenant.importMapUrls?.length) {
+    applyTenantImportMaps(tenant.importMapUrls);
+  }
 
   if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line no-console

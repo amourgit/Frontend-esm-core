@@ -248,9 +248,27 @@ export function useTenantPermission(key: string): boolean | string[] | undefined
  * @category Tenant
  */
 export function useTenantIsSuspended(): { suspended: boolean; message?: string } {
-  const suspended = useTenantStoreSelector((s) => s.activeTenant?.suspended === true);
-  const message = useTenantStoreSelector((s) => s.activeTenant?.suspendedMessage);
-  return { suspended, message };
+  return useTenantStoreSelector((s) => ({
+    suspended: s.activeTenant?.suspended === true,
+    message: s.activeTenant?.suspendedMessage,
+  }));
+}
+
+/**
+ * Retourne la locale du tenant actif (ex: "fr-GA", "en-US").
+ * Utile pour initialiser i18n ou formatter les dates selon le tenant.
+ * @category Tenant
+ */
+export function useTenantLocale(): string | undefined {
+  return useTenantStoreSelector((s) => s.activeTenant?.locale);
+}
+
+/**
+ * Retourne le fuseau horaire du tenant actif (ex: "Africa/Libreville").
+ * @category Tenant
+ */
+export function useTenantTimezone(): string | undefined {
+  return useTenantStoreSelector((s) => s.activeTenant?.timezone);
 }
 
 /**
