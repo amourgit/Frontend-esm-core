@@ -9,7 +9,7 @@ import type { TenantSystemConfig } from '../types';
 
 const BASE_CONFIG: TenantSystemConfig = {
   mode: 'multi',
-  storageKey: 'eigen:tenant:active',
+  storageKey: 'egen:tenant:active',
   persistActive: true,
   applyTheme: false,
 };
@@ -37,7 +37,7 @@ describe('résolution par query param', () => {
 
 describe('résolution par localStorage', () => {
   it('résout depuis localStorage', () => {
-    localStorage.setItem('eigen:tenant:active', 'civitas');
+    localStorage.setItem('egen:tenant:active', 'civitas');
     const id = resolveActiveTenantId({ ...BASE_CONFIG, resolutionOrder: ['localStorage'] });
     expect(id).toBe('civitas');
   });
@@ -68,7 +68,7 @@ describe('résolution "first"', () => {
 
 describe('persistActiveTenant', () => {
   it('écrit en localStorage', () => {
-    persistActiveTenant('acme', 'eigen:tenant:active');
-    expect(localStorage.getItem('eigen:tenant:active')).toBe('acme');
+    persistActiveTenant('acme', 'egen:tenant:active');
+    expect(localStorage.getItem('egen:tenant:active')).toBe('acme');
   });
 });

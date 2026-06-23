@@ -9,7 +9,7 @@ const mockNavigate = vi.mocked(navigate);
 const mockUseSession = vi.mocked(useSession);
 
 delete window.location;
-(window.location as Location) = new URL('https://dev.eigen.alpha.vercel.com/egen/spa/home') as unknown as Location;
+(window.location as Location) = new URL('https://dev.egen.alpha.vercel.com/egen/spa/home') as unknown as Location;
 
 describe('ChangeLocationLink', () => {
   beforeEach(() => {

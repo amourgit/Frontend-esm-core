@@ -1,6 +1,6 @@
 import { start, triggerAppChange } from 'single-spa';
-import { setupThemeEngine, applyAppThemeOverride } from '@eigen/esm-theme';
-import { setupTenantSystem, registerTenantThemeApplier } from '@eigen/esm-tenant';
+import { setupThemeEngine, applyAppThemeOverride } from '@egen/esm-theme';
+import { setupTenantSystem, registerTenantThemeApplier } from '@egen/esm-tenant';
 import { type CalendarIdentifier } from '@internationalized/date';
 import {
   activateOfflineCapability,
@@ -348,7 +348,8 @@ export function run(configUrls: Array<string>) {
     onApplied: (theme, cssVars) => {
       if (process.env.NODE_ENV !== 'production') {
         const name = theme.schema?.meta?.name ?? theme.url;
-        const count = Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length;
+        const count =
+          Object.keys(cssVars.base).length + Object.keys(cssVars.light).length + Object.keys(cssVars.dark).length;
         // eslint-disable-next-line no-console
         console.info(`[egen/esm-theme] ✅ Thème appliqué : "${name}" (${count} vars CSS)`);
       }

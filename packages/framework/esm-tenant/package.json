@@ -1,8 +1,8 @@
 {
-  "name": "@eigen/esm-tenant",
+  "name": "@egen/esm-tenant",
   "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "Configurable multi-tenant system for EIGEN SPA — single/multi tenant, per-app config, permission-aware routing, theme integration",
+  "description": "Configurable multi-tenant system for EGEN SPA — single/multi tenant, per-app config, permission-aware routing, theme integration",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -21,6 +21,7 @@
     "lint": "eslint src --ext ts,tsx"
   },
   "dependencies": {
+    "@egen/esm-theme": "^9.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

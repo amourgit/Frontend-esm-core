@@ -13,7 +13,7 @@
 
 ## Related Issue
 <!-- Paste the link to the Jira ticket here if one exists. -->
-<!-- https://eigen.alpha.vercel.com/issues/browse/O3- -->
+<!-- https://egen.alpha.vercel.com/issues/browse/O3- -->
 
 ## Other
 <!-- Anything not covered above -->

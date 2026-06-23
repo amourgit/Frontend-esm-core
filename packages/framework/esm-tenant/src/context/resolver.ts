@@ -1,5 +1,5 @@
 // ============================================================================
-//  @eigen/esm-tenant — Stratégies de résolution du tenant actif
+//  @egen/esm-tenant — Stratégies de résolution du tenant actif
 // ============================================================================
 //
 //  Chaque stratégie tente de résoudre un TenantId depuis une source.
@@ -85,7 +85,7 @@ function resolveByHeader(storageKey: string): TenantId | undefined {
 /**
  * Résolution depuis un claim JWT.
  * Le JWT est lu depuis le sessionStorage (format: "Bearer <token>") ou
- * depuis localStorage (clé : "eigen:session:token").
+ * depuis localStorage (clé : "egen:session:token").
  * On ne fait QUE lire le payload — aucune vérification de signature côté frontend.
  */
 function resolveByJwt(jwtConfig?: TenantSystemConfig['jwtConfig']): TenantId | undefined {
@@ -108,8 +108,8 @@ function readTokenFromStorage(): string | undefined {
   if (typeof window === 'undefined') return undefined;
   try {
     const candidates = [
-      localStorage.getItem('eigen:session:token'),
-      sessionStorage.getItem('eigen:session:token'),
+      localStorage.getItem('egen:session:token'),
+      sessionStorage.getItem('egen:session:token'),
       localStorage.getItem('token'),
     ];
     for (const candidate of candidates) {
@@ -148,13 +148,15 @@ function resolveByLocalStorage(storageKey: string): TenantId | undefined {
 
 /** Résolution depuis une config statique (window.eigenTenantId / env) */
 function resolveByStatic(defaultTenantId?: string): TenantId | undefined {
-  const fromWindow = typeof window !== 'undefined'
-    ? (window as Record<string, unknown>)['eigenTenantId'] as string | undefined
-    : undefined;
+  const fromWindow =
+    typeof window !== 'undefined'
+      ? ((window as unknown as Record<string, unknown>)['eigenTenantId'] as string | undefined)
+      : undefined;
 
-  const fromEnv = typeof import.meta !== 'undefined'
-    ? (import.meta.env as Record<string, string | undefined>)['VITE_TENANT_ID']
-    : undefined;
+  const fromEnv =
+    typeof import.meta !== 'undefined'
+      ? (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.['VITE_TENANT_ID']
+      : undefined;
 
   const value = defaultTenantId ?? fromWindow ?? fromEnv;
   if (!value) return undefined;
@@ -173,7 +175,14 @@ function resolveByFirst(): TenantId | undefined {
 // ---------------------------------------------------------------------------
 
 const DEFAULT_RESOLUTION_ORDER: TenantResolutionStrategy[] = [
-  'subdomain', 'path', 'query', 'jwt', 'header', 'localStorage', 'static', 'first',
+  'subdomain',
+  'path',
+  'query',
+  'jwt',
+  'header',
+  'localStorage',
+  'static',
+  'first',
 ];
 
 /**
@@ -182,7 +191,7 @@ const DEFAULT_RESOLUTION_ORDER: TenantResolutionStrategy[] = [
  */
 export function resolveActiveTenantId(config: TenantSystemConfig): TenantId | undefined {
   const order = config.resolutionOrder ?? DEFAULT_RESOLUTION_ORDER;
-  const storageKey = config.storageKey ?? 'eigen:tenant:active';
+  const storageKey = config.storageKey ?? 'egen:tenant:active';
 
   for (const strategy of order) {
     let result: TenantId | undefined;
@@ -216,7 +225,8 @@ export function resolveActiveTenantId(config: TenantSystemConfig): TenantId | un
 
     if (result) {
       if (process.env.NODE_ENV !== 'production') {
-        console.info(`[eigen/esm-tenant] ✅ Tenant résolu via stratégie "${strategy}": "${result}"`);
+        // eslint-disable-next-line no-console
+        console.info(`[egen/esm-tenant] ✅ Tenant résolu via stratégie "${strategy}": "${result}"`);
       }
       return result;
     }

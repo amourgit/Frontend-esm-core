@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
       <Tile className={styles.poweredByTile}>
         <div className={styles.poweredByContainer}>
           <span className={styles.poweredByText}>{t('builtWith', 'Built with')}</span>
-          <svg aria-label={t('egenLogo', 'EIGEN Logo')} className={styles.poweredByLogo} role="img">
+          <svg aria-label={t('egenLogo', 'EGEN Logo')} className={styles.poweredByLogo} role="img">
             <use href="#egen-logo-full-color"></use>
           </svg>
           <span className={`${styles.poweredByText} ${styles.poweredBySubtext}`}>

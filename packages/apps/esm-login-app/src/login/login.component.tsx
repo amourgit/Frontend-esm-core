@@ -151,8 +151,8 @@ const Login: React.FC = () => {
         const authenticated = sessionStore?.session?.authenticated;
 
         if (authenticated) {
-          // TODO(EIGEN): La condition sur sessionLocation était liée à OpenMRS.
-          // Dans EIGEN, on navigue directement vers la route de succès sans
+          // TODO(EGEN): La condition sur sessionLocation était liée à OpenMRS.
+          // Dans EGEN, on navigue directement vers la route de succès sans
           // attendre de sélection de location. La logique de location sera
           // redéfinie ultérieurement selon le contexte applicatif.
           //

@@ -1,5 +1,5 @@
 // =============================================================================
-//  LOGIN CAROUSEL — Styles hérités du système de thème EIGEN (esm-theme)
+//  LOGIN CAROUSEL — Styles hérités du système de thème EGEN (esm-theme)
 //  Pas de valeur codée en dur : tout passe par les CSS vars du thème.
 //    colors.primary.400  → var(--colors-primary-400)
 //    animation.duration.normal → var(--animation-duration-normal)
@@ -33,13 +33,25 @@
 }
 
 @keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeSlideOut {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-14px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
 }
 
 // ── Texte ────────────────────────────────────────────────────────────────────

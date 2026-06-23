@@ -1,5 +1,5 @@
 // ============================================================================
-//  @eigen/esm-tenant — Registry des tenants
+//  @egen/esm-tenant — Registry des tenants
 // ============================================================================
 //
 //  La registry est la source de vérité des tenants disponibles.
@@ -23,17 +23,17 @@ async function loadRemoteRegistry(url: string): Promise<TenantDefinition[]> {
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      console.warn(`[eigen/esm-tenant] Registry distante inaccessible (${response.status}) : ${url}`);
+      console.warn(`[egen/esm-tenant] Registry distante inaccessible (${response.status}) : ${url}`);
       return [];
     }
     const data = await response.json();
     if (!Array.isArray(data)) {
-      console.warn('[eigen/esm-tenant] La registry distante doit être un tableau JSON (TenantDefinition[])');
+      console.warn('[egen/esm-tenant] La registry distante doit être un tableau JSON (TenantDefinition[])');
       return [];
     }
     return data as TenantDefinition[];
   } catch (err) {
-    console.warn('[eigen/esm-tenant] Erreur lors du chargement de la registry distante:', err);
+    console.warn('[egen/esm-tenant] Erreur lors du chargement de la registry distante:', err);
     return [];
   }
 }
@@ -61,7 +61,8 @@ export async function initTenantRegistry(
   _loaded = true;
 
   if (process.env.NODE_ENV !== 'production') {
-    console.info(`[eigen/esm-tenant] Registry initialisée avec ${map.size} tenant(s):`, [...map.keys()]);
+    // eslint-disable-next-line no-console
+    console.info(`[egen/esm-tenant] Registry initialisée avec ${map.size} tenant(s):`, [...map.keys()]);
   }
 
   return [...map.values()];

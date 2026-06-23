@@ -94,8 +94,8 @@ const Navbar: React.FC = () => {
   const egenSpaBase = window['getEgenSpaBase']();
 
   if (session?.user?.person) {
-    // TODO(EIGEN): La logique de sélection de location (sessionLocation) était
-    // liée à OpenMRS. Elle n'a plus de sens dans EIGEN — la notion de
+    // TODO(EGEN): La logique de sélection de location (sessionLocation) était
+    // liée à OpenMRS. Elle n'a plus de sens dans EGEN — la notion de
     // "session location" sera redéfinie selon le contexte applicatif (ex: absence
     // de sous-domaine dans l'URL). En attendant, on rend la navbar directement
     // sans conditionner sur sessionLocation.

@@ -1,11 +1,11 @@
 // ============================================================================
-//  @eigen/esm-tenant — Configuration décentralisée par application
+//  @egen/esm-tenant — Configuration décentralisée par application
 // ============================================================================
 //
 //  Ce module permet à chaque app microfrontend de déclarer sa propre
 //  configuration tenant SANS avoir besoin de toucher à la config globale
 //  du shell. C'est l'équivalent, pour le tenant, de ce que `useConfig()`
-//  est pour la config EIGEN.
+//  est pour la config EGEN.
 //
 //  DEUX MODES D'UTILISATION :
 //  ───────────────────────────
@@ -15,7 +15,7 @@
 //     ```json
 //     {
 //       "tenant": {
-//         "requiredApp": "eigen-academique",
+//         "requiredApp": "egen-academique",
 //         "requiredPermissions": ["manage-students"],
 //         "allowInSingleMode": true
 //       }
@@ -24,10 +24,10 @@
 //
 //  2. PROGRAMMATIQUE (dans le run.ts de l'app) :
 //     ```ts
-//     import { registerAppTenantConfig } from '@eigen/esm-tenant';
+//     import { registerAppTenantConfig } from '@egen/esm-tenant';
 //
-//     registerAppTenantConfig('eigen-academique', {
-//       requiredApp: 'eigen-academique',
+//     registerAppTenantConfig('egen-academique', {
+//       requiredApp: 'egen-academique',
 //       requiredPermissions: ['manage-students'],
 //     });
 //     ```
@@ -89,7 +89,7 @@ const _appConfigs = new Map<string, AppTenantConfig>();
  * Enregistre la configuration tenant d'une app microfrontend.
  * À appeler dans le run.ts de l'app, au boot.
  *
- * @param appName Nom de l'app (identifiant unique, ex: "@eigen/esm-academique-app")
+ * @param appName Nom de l'app (identifiant unique, ex: "@egen/esm-academique-app")
  * @param config Configuration tenant de l'app
  */
 export function registerAppTenantConfig(appName: string, config: AppTenantConfig): void {

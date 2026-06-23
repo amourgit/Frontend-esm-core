@@ -1,5 +1,5 @@
 // ============================================================================
-//  @eigen/esm-tenant — Orchestrateur du système tenant
+//  @egen/esm-tenant — Orchestrateur du système tenant
 // ============================================================================
 
 import type { TenantDefinition, TenantSystemConfig, TenantId } from './types';
@@ -28,8 +28,8 @@ let _themeApplier: ThemeApplier | null = null;
  * @example
  * ```ts
  * // Dans run.ts du shell :
- * import { applyAppThemeOverride } from '@eigen/esm-theme';
- * import { registerTenantThemeApplier } from '@eigen/esm-tenant';
+ * import { applyAppThemeOverride } from '@egen/esm-theme';
+ * import { registerTenantThemeApplier } from '@egen/esm-tenant';
  *
  * registerTenantThemeApplier(async (tenantId, schema, themeUrl) => {
  *   const urls = themeUrl
@@ -55,7 +55,7 @@ async function applyTenantTheme(tenant: TenantDefinition, config: TenantSystemCo
   try {
     await _themeApplier(tenant.id, tenant.themeOverride, tenant.themeUrl);
   } catch (err) {
-    console.warn(`[eigen/esm-tenant] Erreur thème pour "${tenant.id}":`, err);
+    console.warn(`[egen/esm-tenant] Erreur thème pour "${tenant.id}":`, err);
   }
 }
 
@@ -71,14 +71,14 @@ async function activateTenant(
 ): Promise<void> {
   if (tenant.suspended) {
     setTenantStoreStatus('suspended', tenant.suspendedMessage ?? `Le tenant "${tenant.id}" est suspendu.`);
-    console.warn(`[eigen/esm-tenant] ⚠️  Tenant "${tenant.id}" suspendu.`);
+    console.warn(`[egen/esm-tenant] ⚠️  Tenant "${tenant.id}" suspendu.`);
     return;
   }
 
   setActiveTenantInStore(tenant);
 
   if (config.persistActive) {
-    persistActiveTenant(tenant.id, config.storageKey ?? 'eigen:tenant:active');
+    persistActiveTenant(tenant.id, config.storageKey ?? 'egen:tenant:active');
   }
 
   await applyTenantTheme(tenant, config);
@@ -89,7 +89,8 @@ async function activateTenant(
   config.onTenantActivated?.(tenant);
 
   if (process.env.NODE_ENV !== 'production') {
-    console.info(`[eigen/esm-tenant] ✅ Tenant actif : "${tenant.id}" (${tenant.name})`);
+    // eslint-disable-next-line no-console
+    console.info(`[egen/esm-tenant] ✅ Tenant actif : "${tenant.id}" (${tenant.name})`);
   }
 }
 
@@ -127,7 +128,7 @@ export async function setupTenantSystem(userConfig: Partial<TenantSystemConfig> 
   const config: TenantSystemConfig = {
     mode: 'off',
     persistActive: true,
-    storageKey: 'eigen:tenant:active',
+    storageKey: 'egen:tenant:active',
     applyTheme: true,
     resolutionOrder: ['subdomain', 'path', 'query', 'jwt', 'header', 'localStorage', 'static', 'first'],
     ...envConfig,
@@ -140,7 +141,8 @@ export async function setupTenantSystem(userConfig: Partial<TenantSystemConfig> 
 
   if (config.mode === 'off') {
     if (process.env.NODE_ENV !== 'production') {
-      console.info('[eigen/esm-tenant] Système tenant désactivé (mode: "off").');
+      // eslint-disable-next-line no-console
+      console.info('[egen/esm-tenant] Système tenant désactivé (mode: "off").');
     }
     return;
   }
@@ -169,7 +171,7 @@ export async function setupTenantSystem(userConfig: Partial<TenantSystemConfig> 
       if (!activeTenant) {
         activeTenant = allTenants[0];
         if (process.env.NODE_ENV !== 'production') {
-          console.warn('[eigen/esm-tenant] Fallback sur le premier tenant:', activeTenant?.id);
+          console.warn('[egen/esm-tenant] Fallback sur le premier tenant:', activeTenant?.id);
         }
       }
     }
@@ -180,12 +182,11 @@ export async function setupTenantSystem(userConfig: Partial<TenantSystemConfig> 
 
     // 4. Activation
     await activateTenant(activeTenant, config, null);
-
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     setTenantStoreStatus('error', message);
     config.onError?.(err instanceof Error ? err : new Error(message));
-    console.error('[eigen/esm-tenant] ❌', message);
+    console.error('[egen/esm-tenant] ❌', message);
   }
 }
 
@@ -201,17 +202,17 @@ export async function switchTenant(tenantId: TenantId): Promise<void> {
   const state = getTenantStoreState();
 
   if (state.mode === 'off') {
-    console.warn('[eigen/esm-tenant] switchTenant() ignoré : mode "off".');
+    console.warn('[egen/esm-tenant] switchTenant() ignoré : mode "off".');
     return;
   }
   if (state.mode === 'single') {
-    console.warn('[eigen/esm-tenant] switchTenant() ignoré : mode "single".');
+    console.warn('[egen/esm-tenant] switchTenant() ignoré : mode "single".');
     return;
   }
 
   const tenant = getTenantById(tenantId);
   if (!tenant) {
-    console.error(`[eigen/esm-tenant] Tenant introuvable : "${tenantId}"`);
+    console.error(`[egen/esm-tenant] Tenant introuvable : "${tenantId}"`);
     return;
   }
 

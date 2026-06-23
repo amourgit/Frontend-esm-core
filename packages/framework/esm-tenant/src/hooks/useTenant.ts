@@ -1,8 +1,8 @@
 // ============================================================================
-//  @eigen/esm-tenant — Hooks React
+//  @egen/esm-tenant — Hooks React
 // ============================================================================
 //
-//  Tous les hooks suivent le même pattern que les hooks EIGEN existants
+//  Tous les hooks suivent le même pattern que les hooks EGEN existants
 //  (useFeatureFlag, useSession, useStore) pour une cohérence maximale.
 //
 //  USAGE DANS UNE APP MICROFRONTEND :
@@ -14,11 +14,11 @@
 //    useTenantAccess,
 //    useAvailableTenants,
 //    useSwitchTenant,
-//  } from '@eigen/esm-tenant';
+//  } from '@egen/esm-tenant';
 //
 //  function MyPage() {
 //    const tenant = useTenant();
-//    const { allowed, reason } = useTenantAccess({ appName: 'eigen-academique' });
+//    const { allowed, reason } = useTenantAccess({ appName: 'egen-academique' });
 //    if (!allowed) return <AccessDenied reason={reason} />;
 //    return <div>Bienvenue dans {tenant?.name}</div>;
 //  }
@@ -26,7 +26,14 @@
 // ============================================================================
 
 import { useState, useEffect, useCallback } from 'react';
-import type { TenantDefinition, TenantMode, TenantStatus, TenantStore, TenantAccessOptions, TenantAccessResult } from '../types';
+import type {
+  TenantDefinition,
+  TenantMode,
+  TenantStatus,
+  TenantStore,
+  TenantAccessOptions,
+  TenantAccessResult,
+} from '../types';
 import { getTenantStore, getActiveTenant, getAvailableTenants, getTenantSystemMode } from '../context/store';
 import { switchTenant } from '../setup';
 
@@ -144,7 +151,7 @@ export function useSwitchTenant(): {
  *
  * @example
  * ```tsx
- * const { allowed, reason } = useTenantAccess({ appName: 'eigen-academique' });
+ * const { allowed, reason } = useTenantAccess({ appName: 'egen-academique' });
  * if (!allowed) return <TenantDenied reason={reason} />;
  * ```
  */

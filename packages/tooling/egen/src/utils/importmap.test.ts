@@ -284,7 +284,7 @@ describe('mergeImportmapAndRoutes', () => {
 
 describe('proxyImportmapAndRoutes', () => {
   const spaPath = '/egen/spa/';
-  const backend = 'https://dev.eigen.alpha.vercel.com';
+  const backend = 'https://dev.egen.alpha.vercel.com';
 
   it('rewrites backend URLs to relative paths, stripping the spaPath prefix', () => {
     const input: ImportmapAndRoutesWithWatches = {
@@ -292,7 +292,7 @@ describe('proxyImportmapAndRoutes', () => {
         type: 'inline',
         value: JSON.stringify({
           imports: {
-            '@egen/foo': 'https://dev.eigen.alpha.vercel.com/egen/spa/foo-1.0.0/foo.js',
+            '@egen/foo': 'https://dev.egen.alpha.vercel.com/egen/spa/foo-1.0.0/foo.js',
           },
         }),
       },
@@ -313,7 +313,7 @@ describe('proxyImportmapAndRoutes', () => {
         value: JSON.stringify({
           imports: {
             '@egen/local': 'http://localhost:8081/main.js',
-            '@egen/remote': 'https://dev.eigen.alpha.vercel.com/egen/spa/remote.js',
+            '@egen/remote': 'https://dev.egen.alpha.vercel.com/egen/spa/remote.js',
           },
         }),
       },
@@ -334,7 +334,7 @@ describe('proxyImportmapAndRoutes', () => {
         type: 'inline',
         value: JSON.stringify({
           imports: {
-            '@egen/foo': 'https://dev.eigen.alpha.vercel.com/egen/spa/foo.js?v=1#section',
+            '@egen/foo': 'https://dev.egen.alpha.vercel.com/egen/spa/foo.js?v=1#section',
           },
         }),
       },

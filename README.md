@@ -221,7 +221,7 @@ You can run E2E tests on different branches simultaneously in separate terminal 
 To test against a remote instance instead of Docker containers, set the `E2E_BASE_URL` environment variable:
 
 ```bash
-E2E_BASE_URL=https://dev.eigen.alpha.vercel.com/egen yarn playwright test
+E2E_BASE_URL=https://dev.egen.alpha.vercel.com/egen yarn playwright test
 ```
 
 Note: When testing against a remote instance, use `yarn playwright test` directly (not `yarn test-e2e`) since you don't need the Docker environment.

@@ -1,15 +1,15 @@
 // ============================================================================
-//  @eigen/esm-tenant — Store Zustand global du système tenant
+//  @egen/esm-tenant — Store Zustand global du système tenant
 // ============================================================================
 //
 //  Le store est le point central de vérité pour l'état tenant au runtime.
-//  Il suit exactement le même pattern que les autres stores EIGEN
+//  Il suit exactement le même pattern que les autres stores EGEN
 //  (esm-feature-flags, esm-state) pour une intégration sans friction.
 //
 //  IMPORTANT — SINGLETON MODULE FEDERATION :
 //  Ce module DOIT être partagé en singleton via Module Federation pour que
 //  toutes les microfrontends lisent le même état. Configurez :
-//    shared: { '@eigen/esm-tenant': { singleton: true, eager: true } }
+//    shared: { '@egen/esm-tenant': { singleton: true, eager: true } }
 // ============================================================================
 
 import { createStore } from 'zustand/vanilla';
@@ -23,7 +23,7 @@ const DEFAULT_CONFIG: TenantSystemConfig = {
   mode: 'off',
   resolutionOrder: ['subdomain', 'path', 'query', 'jwt', 'header', 'localStorage', 'static', 'first'],
   persistActive: true,
-  storageKey: 'eigen:tenant:active',
+  storageKey: 'egen:tenant:active',
   applyTheme: true,
 };
 

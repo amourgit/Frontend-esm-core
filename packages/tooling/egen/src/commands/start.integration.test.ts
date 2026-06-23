@@ -26,7 +26,7 @@ function defaultArgs(overrides: Partial<StartArgs> = {}): StartArgs {
     port: 0,
     host: 'localhost',
     open: false,
-    backend: 'https://dev.eigen.alpha.vercel.com/',
+    backend: 'https://dev.egen.alpha.vercel.com/',
     addCookie: '',
     ...overrides,
   };

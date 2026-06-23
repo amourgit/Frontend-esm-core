@@ -1,10 +1,16 @@
 // ============================================================================
-//  @eigen/esm-tenant — Utilitaires publics
+//  @egen/esm-tenant — Utilitaires publics
 // ============================================================================
 
 import type { TenantDefinition, TenantId } from '../types';
 import { getTenantById as getById, getAllTenants } from '../context/registry';
-import { getActiveTenant, getAvailableTenants, getTenantSystemMode, getTenantStoreState, getTenantStore } from '../context/store';
+import {
+  getActiveTenant,
+  getAvailableTenants,
+  getTenantSystemMode,
+  getTenantStoreState,
+  getTenantStore,
+} from '../context/store';
 
 // ---------------------------------------------------------------------------
 // Accès synchrone (hors React — pour services, intercepteurs, etc.)
@@ -129,10 +135,7 @@ export function getTenantHeaders(): Record<string, string> {
  * const response = await fetchWithTenant('/api/students');
  * ```
  */
-export async function fetchWithTenant(
-  url: string,
-  init: RequestInit = {},
-): Promise<Response> {
+export async function fetchWithTenant(url: string, init: RequestInit = {}): Promise<Response> {
   const tenantHeaders = getTenantHeaders();
   const merged: RequestInit = {
     ...init,

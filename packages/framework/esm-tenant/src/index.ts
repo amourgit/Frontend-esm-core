@@ -1,5 +1,5 @@
 // ============================================================================
-//  @eigen/esm-tenant — Point d'entrée public
+//  @egen/esm-tenant — Point d'entrée public
 // ============================================================================
 //
 //  Ce fichier expose UNIQUEMENT l'API publique stable du package.
@@ -24,7 +24,7 @@
 //    // Setup (shell uniquement)
 //    setupTenantSystem, switchTenant, reloadTenantRegistry,
 //    registerTenantThemeApplier,
-//  } from '@eigen/esm-tenant';
+//  } from '@egen/esm-tenant';
 // ============================================================================
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -123,14 +123,7 @@ export {
 } from './context/store';
 
 // ── Registry (accès bas niveau) ────────────────────────────────────────────
-export {
-  getAllTenants,
-  getTenantById,
-  isTenantRegistryLoaded,
-} from './context/registry';
+export { getAllTenants, getTenantById, isTenantRegistryLoaded } from './context/registry';
 
 // ── Résolution d'environnement ─────────────────────────────────────────────
-export {
-  resolveConfigFromEnv,
-  isTenantModeEnabledFromEnv,
-} from './config/env';
+export { resolveConfigFromEnv, isTenantModeEnabledFromEnv } from './config/env';

@@ -1,5 +1,5 @@
 // ============================================================================
-//  @eigen/esm-tenant — Résolution de la configuration depuis l'environnement
+//  @egen/esm-tenant — Résolution de la configuration depuis l'environnement
 // ============================================================================
 //
 //  Ce module lit les variables de contrôle depuis :
@@ -43,21 +43,24 @@
 //    Nom du claim JWT portant l'ID tenant.
 // ============================================================================
 
-import type { TenantMode, TenantResolutionStrategy, TenantSystemConfig } from './types';
+import type { TenantMode, TenantResolutionStrategy, TenantSystemConfig } from '../types';
 
 // Helpers pour lire les deux sources (env build + window runtime)
 const env = (key: string): string | undefined => {
   // Vite
-  if (typeof import.meta !== 'undefined' && import.meta.env) {
-    const v = (import.meta.env as Record<string, string | undefined>)[key];
-    if (v !== undefined && v !== '') return v;
+  if (typeof import.meta !== 'undefined') {
+    const metaEnv = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
+    if (metaEnv) {
+      const v = metaEnv[key];
+      if (v !== undefined && v !== '') return v;
+    }
   }
   return undefined;
 };
 
 const win = (key: string): string | undefined => {
   if (typeof window === 'undefined') return undefined;
-  const v = (window as Record<string, unknown>)[key];
+  const v = (window as unknown as Record<string, unknown>)[key];
   if (v !== undefined && v !== null && v !== '') return String(v);
   return undefined;
 };
@@ -80,7 +83,14 @@ function parseTenantMode(value: string | undefined): TenantMode {
 function parseResolutionOrder(value: string | undefined): TenantResolutionStrategy[] | undefined {
   if (!value) return undefined;
   const valid: TenantResolutionStrategy[] = [
-    'subdomain', 'path', 'query', 'jwt', 'header', 'localStorage', 'static', 'first',
+    'subdomain',
+    'path',
+    'query',
+    'jwt',
+    'header',
+    'localStorage',
+    'static',
+    'first',
   ];
   const parsed = value
     .split(',')

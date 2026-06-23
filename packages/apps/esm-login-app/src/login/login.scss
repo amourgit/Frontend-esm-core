@@ -2,7 +2,7 @@
 @use '@carbon/type';
 
 // =============================================================================
-//  LOGIN APP — Styles hérités du système de thème EIGEN (esm-theme)
+//  LOGIN APP — Styles hérités du système de thème EGEN (esm-theme)
 //  Toutes les valeurs visuelles viennent des variables CSS injectées par le
 //  ThemeEngine depuis theme.default.json (ou tout autre thème chargé).
 //  Convention de nommage : concaténation des clés JSON avec "-".
@@ -13,10 +13,18 @@
 // =============================================================================
 
 // ─── Typography helpers ───────────────────────────────────────────────────────
-.bodyShort01 { @include type.type-style('body-compact-01'); }
-.productiveHeading03 { @include type.type-style('heading-03'); }
-.label01 { @include type.type-style('label-01'); }
-.caption01 { @include type.type-style('legal-01'); }
+.bodyShort01 {
+  @include type.type-style('body-compact-01');
+}
+.productiveHeading03 {
+  @include type.type-style('heading-03');
+}
+.label01 {
+  @include type.type-style('label-01');
+}
+.caption01 {
+  @include type.type-style('legal-01');
+}
 
 // ─── Back button ─────────────────────────────────────────────────────────────
 .backButton {
@@ -24,8 +32,13 @@
   padding-left: 0;
   color: var(--colors-surface-foreground) !important;
 
-  svg { margin-right: layout.$spacing-03; order: 1; }
-  span { order: 2; }
+  svg {
+    margin-right: layout.$spacing-03;
+    order: 1;
+  }
+  span {
+    order: 2;
+  }
 }
 
 // ─── Page container ───────────────────────────────────────────────────────────
@@ -84,7 +97,9 @@
 }
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
-.center { text-align: center; }
+.center {
+  text-align: center;
+}
 
 .logo {
   margin-bottom: layout.$spacing-07;

@@ -75,9 +75,9 @@
     "@egen/esm-routes": "workspace:*",
     "@egen/esm-state": "workspace:*",
     "@egen/esm-styleguide": "workspace:*",
+    "@egen/esm-tenant": "workspace:*",
     "@egen/esm-translations": "workspace:*",
-    "@egen/esm-utils": "workspace:*",
-    "@eigen/esm-tenant": "workspace:*"
+    "@egen/esm-utils": "workspace:*"
   },
   "peerDependencies": {
     "dayjs": "1.x",

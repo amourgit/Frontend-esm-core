@@ -1,5 +1,5 @@
 // ============================================================================
-//  @eigen/esm-tenant — Composants React : Provider + Guards
+//  @egen/esm-tenant — Composants React : Provider + Guards
 // ============================================================================
 //
 //  TenantProvider :
@@ -23,19 +23,8 @@
 //    composable avec n'importe quel design system.
 // ============================================================================
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-  type FC,
-} from 'react';
-import type {
-  TenantDefinition,
-  TenantAccessOptions,
-  TenantAccessResult,
-} from '../types';
+import React, { createContext, useContext, useEffect, useState, type ReactNode, type FC } from 'react';
+import type { TenantDefinition, TenantAccessOptions, TenantAccessResult } from '../types';
 import {
   useTenant,
   useTenantAccess,
@@ -86,11 +75,7 @@ export interface TenantProviderProps {
  */
 export const TenantProvider: FC<TenantProviderProps> = ({ children }) => {
   const tenant = useTenant();
-  return (
-    <TenantContext.Provider value={{ tenant }}>
-      {children}
-    </TenantContext.Provider>
-  );
+  return <TenantContext.Provider value={{ tenant }}>{children}</TenantContext.Provider>;
 };
 
 // ---------------------------------------------------------------------------
@@ -114,7 +99,7 @@ export interface TenantGuardProps extends TenantAccessOptions {
  * ```tsx
  * // L'accès est bloqué si l'app n'est pas dans tenant.allowedApps
  * <TenantGuard
- *   appName="eigen-academique"
+ *   appName="egen-academique"
  *   fallback={<AccessDenied />}
  * >
  *   <AcademiqueApp />

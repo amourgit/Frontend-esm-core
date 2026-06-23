@@ -1,9 +1,9 @@
 // ============================================================================
-//  @eigen/esm-tenant — Types publics
+//  @egen/esm-tenant — Types publics
 // ============================================================================
 //
 //  Ce fichier définit l'ensemble du contrat de type du système multi-tenant
-//  EIGEN. Il est conçu pour être agnostique du domaine métier : aucune
+//  EGEN. Il est conçu pour être agnostique du domaine métier : aucune
 //  référence à un secteur (santé, académique, ERP, etc.) ne doit apparaître
 //  ici. La couche métier est définie dans les apps consommatrices.
 //
@@ -30,12 +30,12 @@
 //  3. Query param    : ?tenant=acme
 //  4. HTTP header    : X-Tenant-ID (lu depuis la réponse du backend lors du login)
 //  5. JWT claim      : token.tenantId ou token.tid
-//  6. localStorage   : eigen:tenant:active
+//  6. localStorage   : egen:tenant:active
 //  7. Config statique: window.eigenTenantId ou VITE_TENANT_ID
 //  8. Fallback       : premier tenant disponible dans la registry
 // ============================================================================
 
-import type { ThemeSchema } from '@eigen/esm-theme';
+import type { ThemeSchema } from '@egen/esm-theme';
 
 // ---------------------------------------------------------------------------
 // Identité d'un tenant
@@ -124,14 +124,14 @@ export type TenantMode = 'off' | 'single' | 'multi';
  * Chaque stratégie est essayée dans l'ordre jusqu'à ce qu'une réussisse.
  */
 export type TenantResolutionStrategy =
-  | 'subdomain'   // Lit le subdomain de window.location.hostname
-  | 'path'        // Lit un segment /t/{slug}/ ou /{slug}/ dans window.location.pathname
-  | 'query'       // Lit ?tenant= dans window.location.search
-  | 'jwt'         // Lit le claim tenantId/tid dans le JWT de session
-  | 'header'      // Lit X-Tenant-ID dans les réponses HTTP (posé lors du login)
-  | 'localStorage'// Lit eigen:tenant:active depuis localStorage
-  | 'static'      // Lit window.eigenTenantId ou import.meta.env.VITE_TENANT_ID
-  | 'first';      // Prend le premier tenant disponible dans la registry
+  | 'subdomain' // Lit le subdomain de window.location.hostname
+  | 'path' // Lit un segment /t/{slug}/ ou /{slug}/ dans window.location.pathname
+  | 'query' // Lit ?tenant= dans window.location.search
+  | 'jwt' // Lit le claim tenantId/tid dans le JWT de session
+  | 'header' // Lit X-Tenant-ID dans les réponses HTTP (posé lors du login)
+  | 'localStorage' // Lit egen:tenant:active depuis localStorage
+  | 'static' // Lit window.eigenTenantId ou import.meta.env.VITE_TENANT_ID
+  | 'first'; // Prend le premier tenant disponible dans la registry
 
 /** Configuration du chemin URL pour la stratégie "path" */
 export interface TenantPathConfig {
@@ -200,12 +200,12 @@ export interface TenantSystemConfig {
 
   /**
    * Clé localStorage utilisée pour la persistence.
-   * @default "eigen:tenant:active"
+   * @default "egen:tenant:active"
    */
   storageKey?: string;
 
   /**
-   * Si true, applique automatiquement le thème du tenant via @eigen/esm-theme.
+   * Si true, applique automatiquement le thème du tenant via @egen/esm-theme.
    * @default true
    */
   applyTheme?: boolean;
