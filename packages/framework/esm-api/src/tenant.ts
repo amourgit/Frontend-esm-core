@@ -1,5 +1,5 @@
 // ============================================================================
-//  @eigen/esm-api — Accès synchrone aux données tenant (lecture seule)
+//  @egen/esm-api — Accès synchrone aux données tenant (lecture seule)
 // ============================================================================
 //
 //  Ce module fournit des fonctions utilitaires SYNCHRONES pour accéder aux
@@ -7,14 +7,14 @@
 //  fetch, ou code non-React — exactement comme `getSessionStore()` pour la
 //  session utilisateur.
 //
-//  IMPORTANT : ce fichier NE dépend PAS de @eigen/esm-tenant. Il lit le store
-//  via le registre global `availableStores` de @eigen/esm-state (par nom "tenant"),
+//  IMPORTANT : ce fichier NE dépend PAS de @egen/esm-tenant. Il lit le store
+//  via le registre global `availableStores` de @egen/esm-state (par nom "tenant"),
 //  ce qui évite toute dépendance circulaire entre esm-api et esm-tenant.
 //  Si le store tenant n'est pas encore initialisé, les fonctions retournent null.
 //
 //  USAGE TYPIQUE (dans un intercepteur fetch) :
 //  ```ts
-//  import { getTenantId, getTenantApiBase } from '@eigen/esm-api';
+//  import { getTenantId, getTenantApiBase } from '@egen/esm-api';
 //
 //  async function myFetch(url: string, init?: RequestInit) {
 //    const tenantId = getTenantId();
@@ -29,7 +29,7 @@
 //  ```
 // ============================================================================
 
-import { getGlobalStore } from '@eigen/esm-state';
+import { getGlobalStore } from '@egen/esm-state';
 
 interface MinimalTenantState {
   activeTenant: {
@@ -89,7 +89,7 @@ export function getTenantApiBase(): string | undefined {
  *
  * @example
  * ```ts
- * import { tenantHeaders } from '@eigen/esm-api';
+ * import { tenantHeaders } from '@egen/esm-api';
  * const response = await fetch(url, { headers: { ...tenantHeaders() } });
  * ```
  * @category Tenant

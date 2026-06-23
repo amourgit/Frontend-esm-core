@@ -1,18 +1,18 @@
 // ============================================================================
-//  @eigen/esm-tenant — Store Zustand global du système tenant
+//  @egen/esm-tenant — Store Zustand global du système tenant
 // ============================================================================
 //
 //  Le store est le point central de vérité pour l'état tenant au runtime.
-//  Il suit exactement le même pattern que les autres stores EIGEN
+//  Il suit exactement le même pattern que les autres stores EGEN
 //  (esm-feature-flags, esm-state) pour une intégration sans friction.
 //
 //  IMPORTANT — SINGLETON MODULE FEDERATION :
 //  Ce module DOIT être partagé en singleton via Module Federation pour que
 //  toutes les microfrontends lisent le même état. Configurez :
-//    shared: { '@eigen/esm-tenant': { singleton: true, eager: true } }
+//    shared: { '@egen/esm-tenant': { singleton: true, eager: true } }
 // ============================================================================
 
-import { createGlobalStore } from '@eigen/esm-state';
+import { createGlobalStore } from '@egen/esm-state';
 import type { TenantStore, TenantDefinition, TenantMode, TenantStatus, TenantSystemConfig } from '../types';
 
 const DEFAULT_CONFIG: TenantSystemConfig = {
@@ -25,12 +25,12 @@ const DEFAULT_CONFIG: TenantSystemConfig = {
 
 /**
  * Store global Zustand du système tenant.
- * Enregistré sous le nom "tenant" dans le registre EIGEN.
+ * Enregistré sous le nom "tenant" dans le registre EGEN.
  *
  * Usage direct (avancé) :
  * ```ts
- * import { tenantStore } from '@eigen/esm-tenant';
- * import { useStore } from '@eigen/esm-react-utils';
+ * import { tenantStore } from '@egen/esm-tenant';
+ * import { useStore } from '@egen/esm-react-utils';
  *
  * const { activeTenant, mode } = useStore(tenantStore);
  * ```

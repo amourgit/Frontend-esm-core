@@ -114,8 +114,8 @@ export {
 } from './config/app-config';
 
 // ── Store (accès direct via useStore(tenantStore) dans esm-react-utils) ─────
-// Usage: import { tenantStore } from '@eigen/esm-tenant';
-//        import { useStore } from '@eigen/esm-react-utils';
+// Usage: import { tenantStore } from '@egen/esm-tenant';
+//        import { useStore } from '@egen/esm-react-utils';
 //        const { activeTenant, mode, availableTenants } = useStore(tenantStore);
 export {
   tenantStore,

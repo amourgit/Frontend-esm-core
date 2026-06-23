@@ -377,7 +377,7 @@ export function run(configUrls: Array<string>) {
       // Note: on ne réinitialise pas tout le moteur, on charge juste l'URL
       // via applyAppThemeOverride si le backend renvoie le schema JSON
       // eslint-disable-next-line no-console
-      console.info(`[eigen/esm-tenant] Chargement thème tenant depuis: ${themeUrl}`);
+      console.info(`[egen/esm-tenant] Chargement thème tenant depuis: ${themeUrl}`);
     }
   });
 
@@ -391,7 +391,7 @@ export function run(configUrls: Array<string>) {
     //   applyTheme: true,
     // }
     // Non bloquant : l'app démarre même si le système tenant échoue
-    console.warn('[eigen/esm-tenant] Initialisation tenant échouée (mode dégradé):', err);
+    console.warn('[egen/esm-tenant] Initialisation tenant échouée (mode dégradé):', err);
   });
 
   return Promise.all([import('@egen/esm-styleguide/src/index'), themeReady, tenantReady]).then(([_styleguide]) => {

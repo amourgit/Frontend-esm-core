@@ -2,7 +2,7 @@
 //  @egen/esm-tenant — Hooks React
 // ============================================================================
 //
-//  Tous les hooks suivent le même pattern que les hooks EIGEN existants
+//  Tous les hooks suivent le même pattern que les hooks EGEN existants
 //  (useFeatureFlag, useSession, useStore) pour une cohérence maximale.
 //
 //  USAGE DANS UNE APP MICROFRONTEND :
@@ -14,11 +14,11 @@
 //    useTenantAccess,
 //    useAvailableTenants,
 //    useSwitchTenant,
-//  } from '@eigen/esm-tenant';
+//  } from '@egen/esm-tenant';
 //
 //  function MyPage() {
 //    const tenant = useTenant();
-//    const { allowed, reason } = useTenantAccess({ appName: 'eigen-academique' });
+//    const { allowed, reason } = useTenantAccess({ appName: 'egen-academique' });
 //    if (!allowed) return <AccessDenied reason={reason} />;
 //    return <div>Bienvenue dans {tenant?.name}</div>;
 //  }
@@ -72,7 +72,7 @@ function useTenantStoreSelector<T>(select: (state: ReturnType<typeof tenantStore
  *
  * @example
  * ```tsx
- * import { useTenant } from '@eigen/esm-framework';
+ * import { useTenant } from '@egen/esm-framework';
  *
  * function Header() {
  *   const tenant = useTenant();
@@ -126,7 +126,7 @@ export function useIsMultiTenant(): boolean {
  * @category Tenant
  * @example
  * ```tsx
- * import { useSwitchTenant } from '@eigen/esm-framework';
+ * import { useSwitchTenant } from '@egen/esm-framework';
  *
  * function TenantSwitcher({ targetId }: { targetId: string }) {
  *   const { switchTo, switching } = useSwitchTenant();
@@ -169,7 +169,7 @@ export function useSwitchTenant(): {
  * @category Tenant
  * @example
  * ```tsx
- * const { allowed, reason } = useTenantAccess({ appName: 'eigen-academique' });
+ * const { allowed, reason } = useTenantAccess({ appName: 'egen-academique' });
  * if (!allowed) return <TenantDenied reason={reason} />;
  * ```
  */

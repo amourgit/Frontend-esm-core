@@ -1,14 +1,14 @@
 // ============================================================================
-//  @eigen/esm-react-utils — Re-export des hooks tenant
+//  @egen/esm-react-utils — Re-export des hooks tenant
 // ============================================================================
 //
-//  Les hooks tenant sont définis dans @eigen/esm-tenant mais exposés ici
-//  pour que les apps puissent tout importer depuis @eigen/esm-framework
-//  (ou @eigen/esm-react-utils) sans dépendance directe sur esm-tenant.
+//  Les hooks tenant sont définis dans @egen/esm-tenant mais exposés ici
+//  pour que les apps puissent tout importer depuis @egen/esm-framework
+//  (ou @egen/esm-react-utils) sans dépendance directe sur esm-tenant.
 //
 //  C'est exactement le même pattern que :
-//   - useFeatureFlag  → importé de @eigen/esm-feature-flags, réexporté ici
-//   - useSession      → défini ici, consomme @eigen/esm-api
+//   - useFeatureFlag  → importé de @egen/esm-feature-flags, réexporté ici
+//   - useSession      → défini ici, consomme @egen/esm-api
 //
 //  USAGE APPS :
 //  ```tsx
@@ -18,7 +18,7 @@
 //    useTenantFeatureFlag, useTenantPermission,
 //    TenantProvider, TenantGuard, TenantRequired,
 //    TenantSelector, TenantSuspendedBoundary,
-//  } from '@eigen/esm-framework';
+//  } from '@egen/esm-framework';
 //  ```
 // ============================================================================
 
@@ -45,7 +45,7 @@ export {
   TenantSuspendedBoundary,
   TenantSelector,
   useTenantContext,
-} from '@eigen/esm-tenant';
+} from '@egen/esm-tenant';
 
 export type {
   TenantDefinition,
@@ -60,4 +60,4 @@ export type {
   TenantSuspendedBoundaryProps,
   TenantSelectorProps,
   TenantSelectorRenderProps,
-} from '@eigen/esm-tenant';
+} from '@egen/esm-tenant';
