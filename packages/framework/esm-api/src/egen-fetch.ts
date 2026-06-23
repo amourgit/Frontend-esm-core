@@ -139,6 +139,21 @@ export function egenFetch<T = any>(path: string, fetchInit: FetchConfig = {}): P
     fetchInit.headers['Disable-WWW-Authenticate'] = 'true';
   }
 
+  /* Inject the X-Tenant-ID header automatically if a tenant is active.
+   * This allows the backend to scope requests to the correct tenant without
+   * requiring each caller to handle this manually.
+   * The caller can override this by passing 'X-Tenant-ID' explicitly.
+   * In mode "off" (no tenant system), getTenantId() returns undefined
+   * and no header is injected — zero overhead.
+   */
+  if (typeof fetchInit.headers['X-Tenant-ID'] === 'undefined') {
+    const { getTenantId } = await import('./tenant');
+    const tenantId = getTenantId();
+    if (tenantId) {
+      fetchInit.headers['X-Tenant-ID'] = tenantId;
+    }
+  }
+
   if (path.startsWith(fhirBaseUrl)) {
     const urlUrl = new URL(url, window.location.toString());
     if (!urlUrl.searchParams.has('_summary')) {

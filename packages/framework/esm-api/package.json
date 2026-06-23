@@ -59,7 +59,8 @@
     "@egen/esm-config": "9.x",
     "@egen/esm-error-handling": "9.x",
     "@egen/esm-globals": "9.x",
-    "@egen/esm-navigation": "9.x"
+    "@egen/esm-navigation": "9.x",
+    "@eigen/esm-state": "1.x"
   },
   "devDependencies": {
     "@egen/esm-config": "workspace:*",

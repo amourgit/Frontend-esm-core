@@ -70,6 +70,7 @@
     "@egen/esm-navigation": "9.x",
     "@egen/esm-state": "9.x",
     "@egen/esm-utils": "9.x",
+    "@eigen/esm-tenant": "1.x",
     "dayjs": "1.x",
     "i18next": "25.x",
     "react": "18.x",
