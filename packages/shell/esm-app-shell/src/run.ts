@@ -47,11 +47,95 @@ import {
   type Config,
   type StyleguideConfigObject,
 } from '@egen/esm-framework/src/internal';
+import { sessionStore } from '@egen/esm-api/src/current-user';
 import { setupI18n } from './locale';
 import './routing-events';
 import './events';
 import { appName, getCoreExtensions } from './ui';
 import { setupCoreConfig } from './core-config';
+
+// =============================================================================
+//  EIGEN_DEV_NO_AUTH — Bypass d'authentification pour tests sans backend
+//
+//  Activé en positionnant EIGEN_DEV_NO_AUTH=true dans l'environnement de build.
+//  En production réelle ce flag sera absent (false), donc ce bloc est inerte.
+//
+//  Effets quand activé :
+//    1. Désactive la redirection 401 → /login dans egenFetch
+//       (via override config @egen/esm-api.redirectAuthFailure.enabled)
+//    2. Injecte une session admin fictive dans le sessionStore global
+//       pour que les composants qui appellent useSession() reçoivent un
+//       utilisateur authentifié sans appel réseau.
+// =============================================================================
+const DEV_NO_AUTH = process.env.EIGEN_DEV_NO_AUTH === 'true';
+
+function applyDevNoAuthBypass() {
+  if (!DEV_NO_AUTH) return;
+
+  console.warn(
+    '[EIGEN] ⚠️  EIGEN_DEV_NO_AUTH=true — Authentification désactivée. ' +
+      'NE PAS utiliser en production réelle.',
+  );
+
+  // ── 1. Désactiver la redirection auth-failure de egenFetch ────────────────
+  provide(
+    {
+      '@egen/esm-api': {
+        redirectAuthFailure: {
+          enabled: false,
+          url: '',
+          errors: [],
+          resolvePromise: true,
+        },
+      },
+    },
+    'eigen-dev-no-auth-config',
+  );
+
+  // ── 2. Injecter une session admin fictive dans le store global ────────────
+  // Cela évite les loaders infinis et les "Vous n'êtes pas connecté" dans les
+  // composants qui consomment useSession() / getCurrentUser().
+  sessionStore.setState({
+    loaded: true,
+    session: {
+      authenticated: true,
+      sessionId: 'dev-bypass-session',
+      user: {
+        uuid: 'dev-user-uuid',
+        display: 'Administrateur (Dev)',
+        username: 'dev-admin',
+        systemId: 'dev-admin',
+        userProperties: { defaultLocale: 'fr' },
+        person: {
+          uuid: 'dev-person-uuid',
+          display: 'Administrateur',
+        },
+        privileges: [
+          { uuid: 'p1', display: 'Get Users' },
+          { uuid: 'p2', display: 'Get Patients' },
+          { uuid: 'p3', display: 'Get Observations' },
+          { uuid: 'p4', display: 'System Developer' },
+        ],
+        roles: [
+          {
+            uuid: 'r1',
+            display: 'System Developer',
+            name: 'System Developer',
+          },
+          {
+            uuid: 'r2',
+            display: 'Administrator',
+            name: 'Administrator',
+          },
+        ],
+        retired: false,
+        allRoles: [],
+        allPrivileges: [],
+      },
+      locale: 'fr',
+    },
+  });
+}
 
 // @internal
 // used to track when the window.installedModules global is finalised
@@ -324,6 +408,11 @@ function setupOfflineCssClasses() {
 }
 
 export function run(configUrls: Array<string>) {
+  // Doit être appelé en tout premier — avant tout fetch réseau et toute
+  // initialisation d'app — pour que le config override et la session fictive
+  // soient en place avant que les modules ne les lisent.
+  applyDevNoAuthBypass();
+
   setupImportMapOverrides();
 
   const offlineEnabled = window.offlineEnabled;
