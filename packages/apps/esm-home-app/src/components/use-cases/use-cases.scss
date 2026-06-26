@@ -1,0 +1,209 @@
+// =============================================================================
+//  USE CASES — Tab switcher par profil
+// =============================================================================
+
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 6rem var(--layout-content-padding-x, 1.5rem);
+  background: color-mix(in srgb, var(--colors-primary-950, var(--colors-neutral-950)) 50%, transparent);
+}
+
+.container {
+  max-width: var(--layout-content-max-width, 1400px);
+  margin: 0 auto;
+}
+
+// ─── Header ───────────────────────────────────────────────────────────────────
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sectionLabel {
+  display: inline-block;
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--colors-secondary-400, var(--colors-primary-400));
+  margin-bottom: 1rem;
+  background: color-mix(in srgb, var(--colors-secondary-500, var(--colors-primary-500)) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--colors-secondary-400, var(--colors-primary-400)) 25%, transparent);
+  border-radius: var(--border-radius-full, 9999px);
+  padding: 0.3rem 1rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: var(--typography-font-weight-bold, 700);
+  letter-spacing: -0.025em;
+  color: var(--colors-surface-foreground);
+  margin: 0 0 1rem;
+  line-height: 1.2;
+}
+
+.sectionSubtitle {
+  font-size: var(--typography-font-size-base-size, 1rem);
+  line-height: 1.6;
+  color: var(--colors-surface-muted-foreground);
+  margin: 0;
+}
+
+// ─── Tabs ─────────────────────────────────────────────────────────────────────
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+  padding: 0.4rem;
+  background: color-mix(in srgb, var(--colors-surface-foreground) 5%, transparent);
+  border: 1px solid var(--colors-border-divider);
+  border-radius: var(--border-radius-2xl, 1.5rem);
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--border-radius-xl, 1.25rem);
+  border: none;
+  background: transparent;
+  color: var(--colors-surface-muted-foreground);
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  font-weight: var(--typography-font-weight-medium, 500);
+  cursor: pointer;
+  transition: var(--transitions-default);
+
+  &:hover:not(.tabActive) {
+    background: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent);
+    color: var(--colors-surface-foreground);
+  }
+}
+
+.tabActive {
+  background: var(--panel-card-background);
+  backdrop-filter: var(--panel-card-backdrop-filter);
+  border: var(--panel-card-border);
+  color: var(--colors-surface-foreground);
+  box-shadow: var(--shadows-sm);
+}
+
+.tabIcon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.tabLabel {
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+// ─── Panneau ──────────────────────────────────────────────────────────────────
+.panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  padding: 3rem;
+  border-radius: var(--border-radius-2xl, 1.5rem);
+  background: var(--panel-md-background);
+  backdrop-filter: var(--panel-md-backdrop-filter);
+  -webkit-backdrop-filter: var(--panel-md-backdrop-filter);
+  border: var(--panel-md-border);
+  box-shadow: var(--panel-md-box-shadow);
+  animation: fadeIn var(--animation-duration-moderate, 300ms) var(--animation-easing-smooth, ease);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.panelLeft {
+  display: flex;
+  flex-direction: column;
+}
+
+.panelIcon {
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+}
+
+.panelTitle {
+  font-size: clamp(1.4rem, 2.5vw, 1.875rem);
+  font-weight: var(--typography-font-weight-bold, 700);
+  color: var(--colors-surface-foreground);
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+}
+
+.panelDescription {
+  font-size: var(--typography-font-size-base-size, 1rem);
+  line-height: 1.65;
+  color: var(--colors-surface-muted-foreground);
+  margin: 0;
+}
+
+.panelRight {
+  display: flex;
+  align-items: center;
+}
+
+.featureList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  font-size: var(--typography-font-size-base-size, 1rem);
+  color: var(--colors-surface-foreground);
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--border-radius-lg, 1rem);
+  background: color-mix(in srgb, var(--colors-surface-foreground) 4%, transparent);
+  border: 1px solid var(--colors-border-divider);
+  transition: var(--transitions-default);
+
+  &:hover {
+    background: color-mix(in srgb, var(--colors-primary-400) 8%, transparent);
+    border-color: color-mix(in srgb, var(--colors-primary-400) 25%, transparent);
+  }
+}
+
+.featureCheck {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--border-radius-full);
+  background: color-mix(in srgb, var(--colors-primary-500) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--colors-primary-400) 40%, transparent);
+  color: var(--colors-primary-400);
+  font-size: 0.75rem;
+  font-weight: var(--typography-font-weight-bold, 700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}

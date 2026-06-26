@@ -1,0 +1,75 @@
+// =============================================================================
+//  STATS — Bande de chiffres clés
+// =============================================================================
+
+.statsSection {
+  position: relative;
+  z-index: 1;
+  padding: 4rem var(--layout-content-padding-x, 1.5rem);
+  border-top: 1px solid var(--colors-border-divider);
+  border-bottom: 1px solid var(--colors-border-divider);
+  background: color-mix(in srgb, var(--colors-primary-500) 4%, transparent);
+  backdrop-filter: blur(var(--effects-blur-sm, 8px));
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  max-width: var(--layout-content-max-width, 1400px);
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.statCard {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-radius: var(--border-radius-xl, 1.25rem);
+  background: var(--panel-card-background);
+  border: var(--panel-card-border);
+  backdrop-filter: var(--panel-card-backdrop-filter);
+  box-shadow: var(--panel-card-box-shadow);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s var(--animation-easing-smooth, ease), transform 0.6s var(--animation-easing-smooth, ease);
+
+  &:nth-child(1) { transition-delay: 0ms; }
+  &:nth-child(2) { transition-delay: 100ms; }
+  &:nth-child(3) { transition-delay: 200ms; }
+  &:nth-child(4) { transition-delay: 300ms; }
+}
+
+.statCardVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.statValue {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: var(--typography-font-weight-extrabold, 800);
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--colors-primary-300), var(--colors-primary-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.statSuffix {
+  font-size: 60%;
+  vertical-align: super;
+}
+
+.statLabel {
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  color: var(--colors-surface-muted-foreground);
+  font-weight: var(--typography-font-weight-medium, 500);
+}

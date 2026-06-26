@@ -1,0 +1,69 @@
+{
+  "name": "@egen/esm-home-app",
+  "version": "1.0.0",
+  "license": "MPL-2.0",
+  "description": "Page d'accueil SaaS publique du framework EIGEN — présentation produit, fonctionnalités, tarifs et cas d'usages.",
+  "browser": "dist/egen-esm-home-app.js",
+  "main": "src/index.ts",
+  "source": true,
+  "scripts": {
+    "start": "egen develop",
+    "serve": "rspack serve --mode=development",
+    "debug": "npm run serve",
+    "test": "cross-env TZ=UTC vitest run --passWithNoTests",
+    "test:watch": "cross-env TZ=UTC vitest watch",
+    "build": "rspack --mode=production",
+    "build:development": "rspack --mode=development",
+    "analyze": "rspack --mode=production --env analyze=true",
+    "typescript": "tsc",
+    "lint": "eslint src --ext ts,tsx",
+    "extract-translations": "i18next 'src/**/*.component.tsx' 'src/**/*.extension.tsx' --config='../../../tools/i18next-parser.config.js'",
+    "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests"
+  },
+  "keywords": [
+    "eigen",
+    "egen",
+    "microfrontends",
+    "landing",
+    "saas"
+  ],
+  "browserslist": [
+    "extends browserslist-config-egen"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amourgit/Frontend-esm-core.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@carbon/react": "^1.92.1",
+    "lodash-es": "^4.17.21"
+  },
+  "peerDependencies": {
+    "@carbon/react": "1.x",
+    "@egen/esm-framework": "9.x",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "react-i18next": "16.x",
+    "react-router-dom": "6.x",
+    "rxjs": "6.x",
+    "swr": "2.x"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.2",
+    "cross-env": "^10.1.0",
+    "egen": "workspace:*",
+    "happy-dom": "^20.6.0",
+    "i18next": "^25.5.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^16.0.0",
+    "react-router-dom": "^6.3.0",
+    "rxjs": "^6.5.3",
+    "sass": "^1.98.0",
+    "swr": "2.2.5",
+    "vitest": "^4.1.2"
+  }
+}

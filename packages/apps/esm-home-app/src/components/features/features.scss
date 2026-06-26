@@ -1,0 +1,146 @@
+// =============================================================================
+//  FEATURES — Grille de fonctionnalités
+// =============================================================================
+
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 6rem var(--layout-content-padding-x, 1.5rem);
+}
+
+.container {
+  max-width: var(--layout-content-max-width, 1400px);
+  margin: 0 auto;
+}
+
+// ─── En-tête de section ───────────────────────────────────────────────────────
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sectionLabel {
+  display: inline-block;
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--colors-primary-400);
+  margin-bottom: 1rem;
+  background: color-mix(in srgb, var(--colors-primary-500) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--colors-primary-400) 25%, transparent);
+  border-radius: var(--border-radius-full, 9999px);
+  padding: 0.3rem 1rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: var(--typography-font-weight-bold, 700);
+  letter-spacing: -0.025em;
+  color: var(--colors-surface-foreground);
+  margin: 0 0 1rem;
+  line-height: 1.2;
+}
+
+.sectionSubtitle {
+  font-size: var(--typography-font-size-base-size, 1rem);
+  line-height: var(--typography-font-size-base-line-height, 1.5rem);
+  color: var(--colors-surface-muted-foreground);
+  margin: 0;
+}
+
+// ─── Grille ───────────────────────────────────────────────────────────────────
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Carte ────────────────────────────────────────────────────────────────────
+.card {
+  position: relative;
+  padding: 1.75rem;
+  border-radius: var(--border-radius-xl, 1.25rem);
+  background: var(--panel-card-background);
+  backdrop-filter: var(--panel-card-backdrop-filter);
+  -webkit-backdrop-filter: var(--panel-card-backdrop-filter);
+  border: var(--panel-card-border);
+  box-shadow: var(--panel-card-box-shadow);
+  transition: transform var(--animation-duration-moderate, 300ms) var(--animation-easing-smooth, ease),
+              box-shadow var(--animation-duration-moderate, 300ms) ease,
+              opacity 0.5s ease;
+  opacity: 0;
+  transform: translateY(24px);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadows-glassLg);
+    border-color: color-mix(in srgb, var(--colors-primary-400) 35%, transparent);
+  }
+
+  // Highlight subtil du premier card (IAM)
+  &:first-child::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--colors-primary-500) 8%, transparent),
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+}
+
+.cardVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cardIcon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.cardTag {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: var(--typography-font-weight-semibold, 600);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--colors-primary-300);
+  background: color-mix(in srgb, var(--colors-primary-500) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--colors-primary-400) 20%, transparent);
+  border-radius: var(--border-radius-full, 9999px);
+  padding: 0.2rem 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.cardTitle {
+  font-size: var(--typography-font-size-base-size, 1rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  color: var(--colors-surface-foreground);
+  margin: 0 0 0.5rem;
+  line-height: 1.3;
+}
+
+.cardDescription {
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  line-height: 1.55;
+  color: var(--colors-surface-muted-foreground);
+  margin: 0;
+}

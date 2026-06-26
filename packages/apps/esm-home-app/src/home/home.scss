@@ -1,0 +1,58 @@
+// =============================================================================
+//  HOME PAGE — Styles globaux de la landing page
+//  Fond sombre + reset de base pour la page publique.
+//  Toutes les valeurs visuelles viennent des CSS vars du thème EIGEN.
+// =============================================================================
+
+// ─── Page wrapper ─────────────────────────────────────────────────────────────
+.page {
+  // Fond sombre sous-jacent
+  min-height: 100vh;
+  background-color: var(--colors-neutral-950);
+  color: var(--colors-surface-foreground);
+  font-family: var(--typography-font-family-body, 'Poppins', ui-sans-serif, sans-serif);
+  font-size: var(--typography-font-size-base-size, 1rem);
+  line-height: var(--typography-font-size-base-line-height, 1.5rem);
+
+  // Scrollbar custom (navigateurs Webkit)
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--colors-primary-500) 30%, transparent) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--colors-primary-500) 35%, transparent);
+    border-radius: var(--border-radius-full, 9999px);
+  }
+}
+
+// ─── Hero section : section plein écran ───────────────────────────────────────
+.heroWrapper {
+  position: relative;
+}
+
+// ─── Skip link accessibilité ──────────────────────────────────────────────────
+.skipLink {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 9999;
+  background: var(--colors-primary-600);
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius-md, 0.75rem);
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  text-decoration: none;
+  transition: top 0.2s ease;
+
+  &:focus {
+    top: 1rem;
+  }
+}
