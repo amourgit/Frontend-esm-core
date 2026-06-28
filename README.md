@@ -494,14 +494,14 @@ Le serveur peut injecter ces variables dans `index.html` sans rebuild. Utile pou
 ```html
 <!-- index.html — injecté par le serveur -->
 <script>
-  window.eigenTenantMode = 'multi';
-  window.eigenTenantId = 'acme';
-  window.eigenTenantRegistryUrl = '/api/tenants';
-  window.eigenTenantApplyTheme = 'true';
-  window.eigenTenantPersist = 'true';
-  window.eigenTenantResolutionOrder = 'subdomain,jwt,localStorage';
-  window.eigenTenantPathPrefix = '/t/';
-  window.eigenTenantJwtClaim = 'tenantId';
+  window.egenTenantMode = 'multi';
+  window.egenTenantId = 'acme';
+  window.egenTenantRegistryUrl = '/api/tenants';
+  window.egenTenantApplyTheme = 'true';
+  window.egenTenantPersist = 'true';
+  window.egenTenantResolutionOrder = 'subdomain,jwt,localStorage';
+  window.egenTenantPathPrefix = '/t/';
+  window.egenTenantJwtClaim = 'tenantId';
 </script>
 ```
 
@@ -586,7 +586,7 @@ En mode `"multi"`, EGEN essaie les stratégies dans l'ordre configuré jusqu'à 
 | `jwt` | Claim JWT de session | `token.tenantId = "acme"` |
 | `header` | Header `X-Tenant-ID` (stocké au login) | Propagé par le backend |
 | `localStorage` | `localStorage['egen:tenant:active']` | Survie aux rechargements |
-| `static` | `window.eigenTenantId` / `VITE_TENANT_ID` | Config fixe |
+| `static` | `window.egenTenantId` / `VITE_TENANT_ID` | Config fixe |
 | `first` | Premier tenant de la registry | Fallback ultime |
 
 ### API — Hooks React

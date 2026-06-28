@@ -3,7 +3,7 @@
     "id": "mef-gabon",
     "name": "Ministère de l'Éducation — Gabon",
     "slug": "mef",
-    "domains": ["mef", "mef.eigen.gabon.gov.ga"],
+    "domains": ["mef", "mef.egen.gabon.gov.ga"],
     "locale": "fr-GA",
     "timezone": "Africa/Libreville",
     "active": true,
@@ -14,9 +14,9 @@
       "billing": false
     },
     "allowedApps": [
-      "@eigen/esm-national-dashboard-app",
-      "@eigen/esm-curriculum-app",
-      "@eigen/esm-reports-app"
+      "@egen/esm-national-dashboard-app",
+      "@egen/esm-curriculum-app",
+      "@egen/esm-reports-app"
     ],
     "permissions": {
       "manage-tenants": true,
@@ -34,7 +34,7 @@
     "id": "lycee-lb",
     "name": "Lycée National Léon Mba",
     "slug": "lycee-lb",
-    "domains": ["lycee-lb", "lycee-lb.eigen.gabon.gov.ga"],
+    "domains": ["lycee-lb", "lycee-lb.egen.gabon.gov.ga"],
     "locale": "fr-GA",
     "timezone": "Africa/Libreville",
     "active": true,
@@ -45,10 +45,10 @@
       "billing": true
     },
     "allowedApps": [
-      "@eigen/esm-school-dashboard-app",
-      "@eigen/esm-grades-app",
-      "@eigen/esm-attendance-app",
-      "@eigen/esm-schedule-app"
+      "@egen/esm-school-dashboard-app",
+      "@egen/esm-grades-app",
+      "@egen/esm-attendance-app",
+      "@egen/esm-schedule-app"
     ],
     "permissions": {
       "manage-students": true,
@@ -69,7 +69,7 @@
     "id": "univ-omar-bongo",
     "name": "Université Omar Bongo",
     "slug": "uob",
-    "domains": ["uob", "uob.eigen.gabon.gov.ga"],
+    "domains": ["uob", "uob.egen.gabon.gov.ga"],
     "locale": "fr-GA",
     "timezone": "Africa/Libreville",
     "active": true,
@@ -80,10 +80,10 @@
       "billing": true
     },
     "allowedApps": [
-      "@eigen/esm-university-dashboard-app",
-      "@eigen/esm-grades-app",
-      "@eigen/esm-attendance-app",
-      "@eigen/esm-research-app"
+      "@egen/esm-university-dashboard-app",
+      "@egen/esm-grades-app",
+      "@egen/esm-attendance-app",
+      "@egen/esm-research-app"
     ],
     "meta": {
       "plan": "institution",
@@ -94,9 +94,9 @@
   },
   {
     "id": "demo-tenant",
-    "name": "Tenant Démo EIGEN",
+    "name": "Tenant Démo EGEN",
     "slug": "demo",
-    "domains": ["demo", "demo.eigen.gabon.gov.ga"],
+    "domains": ["demo", "demo.egen.gabon.gov.ga"],
     "locale": "fr-GA",
     "timezone": "Africa/Libreville",
     "active": true,
@@ -116,7 +116,7 @@
     "id": "suspended-example",
     "name": "Établissement Suspendu (Exemple)",
     "slug": "suspended",
-    "domains": ["suspended", "suspended.eigen.gabon.gov.ga"],
+    "domains": ["suspended", "suspended.egen.gabon.gov.ga"],
     "locale": "fr-GA",
     "timezone": "Africa/Libreville",
     "active": true,

@@ -146,11 +146,11 @@ function resolveByLocalStorage(storageKey: string): TenantId | undefined {
   }
 }
 
-/** Résolution depuis une config statique (window.eigenTenantId / env) */
+/** Résolution depuis une config statique (window.egenTenantId / env) */
 function resolveByStatic(defaultTenantId?: string): TenantId | undefined {
   const fromWindow =
     typeof window !== 'undefined'
-      ? ((window as unknown as Record<string, unknown>)['eigenTenantId'] as string | undefined)
+      ? ((window as unknown as Record<string, unknown>)['egenTenantId'] as string | undefined)
       : undefined;
 
   const fromEnv =

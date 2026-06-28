@@ -43,9 +43,9 @@ export function isLocalhostOrIp(hostname: string): boolean {
  * n'est configuré explicitement.
  *
  * Règle : retire le premier segment du hostname.
- * Ex: "lycee-lb.eigen.gabon.gov.ga" → "eigen.gabon.gov.ga"
+ * Ex: "lycee-lb.egen.gabon.gov.ga" → "egen.gabon.gov.ga"
  *
- * Pour les domaines simples (ex: "eigen.gabon.gov.ga" sans sous-domaine),
+ * Pour les domaines simples (ex: "egen.gabon.gov.ga" sans sous-domaine),
  * retourne le hostname lui-même.
  *
  * ATTENTION : cette heuristique est imprécise pour les TLD multi-niveaux
@@ -134,8 +134,8 @@ export function analyzeSubdomain(hostname: string, rootDomain: string): Subdomai
  * quand le système de sous-domaine ne peut pas rediriger directement.
  *
  * @example
- * buildLoginUrlWithTenant('/eigen/spa/login', 'lycee-lb')
- * // → '/eigen/spa/login?tenant=lycee-lb'
+ * buildLoginUrlWithTenant('/egen/spa/login', 'lycee-lb')
+ * // → '/egen/spa/login?tenant=lycee-lb'
  */
 export function buildLoginUrlWithTenant(loginUrl: string, tenantSlug: string): string {
   try {
@@ -152,8 +152,8 @@ export function buildLoginUrlWithTenant(loginUrl: string, tenantSlug: string): s
  * Construit l'URL complète du sous-domaine tenant.
  *
  * @example
- * buildTenantSubdomainUrl('lycee-lb', 'eigen.gabon.gov.ga', '/eigen/spa/home')
- * // → 'https://lycee-lb.eigen.gabon.gov.ga/eigen/spa/home'
+ * buildTenantSubdomainUrl('lycee-lb', 'egen.gabon.gov.ga', '/egen/spa/home')
+ * // → 'https://lycee-lb.egen.gabon.gov.ga/egen/spa/home'
  */
 export function buildTenantSubdomainUrl(tenantSlug: string, rootDomain: string, path: string): string {
   const protocol = window.location.protocol;

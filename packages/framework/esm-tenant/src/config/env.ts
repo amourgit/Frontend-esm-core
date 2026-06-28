@@ -10,35 +10,35 @@
 //  VARIABLES SUPPORTÉES :
 //  ──────────────────────
 //
-//  VITE_TENANT_MODE / window.eigenTenantMode
+//  VITE_TENANT_MODE / window.egenTenantMode
 //    "off" | "single" | "multi"
 //    Contrôle global du système. "off" = système complètement désactivé.
 //
-//  VITE_TENANT_ID / window.eigenTenantId
+//  VITE_TENANT_ID / window.egenTenantId
 //    string
 //    En mode "single", identifiant du tenant forcé.
 //
-//  VITE_TENANT_REGISTRY_URL / window.eigenTenantRegistryUrl
+//  VITE_TENANT_REGISTRY_URL / window.egenTenantRegistryUrl
 //    string (URL)
 //    URL d'un JSON de registry de tenants (TenantDefinition[]).
 //
-//  VITE_TENANT_THEME_APPLY / window.eigenTenantApplyTheme
+//  VITE_TENANT_THEME_APPLY / window.egenTenantApplyTheme
 //    "true" | "false"
 //    Active/désactive l'application automatique du thème tenant. Défaut: "true".
 //
-//  VITE_TENANT_PERSIST / window.eigenTenantPersist
+//  VITE_TENANT_PERSIST / window.egenTenantPersist
 //    "true" | "false"
 //    Active/désactive la persistance localStorage du tenant actif. Défaut: "true".
 //
-//  VITE_TENANT_RESOLUTION_ORDER / window.eigenTenantResolutionOrder
+//  VITE_TENANT_RESOLUTION_ORDER / window.egenTenantResolutionOrder
 //    string (CSV) ex: "subdomain,jwt,localStorage"
 //    Ordre des stratégies de résolution.
 //
-//  VITE_TENANT_PATH_PREFIX / window.eigenTenantPathPrefix
+//  VITE_TENANT_PATH_PREFIX / window.egenTenantPathPrefix
 //    string ex: "/t/"
 //    Préfixe de path pour la stratégie de résolution "path".
 //
-//  VITE_TENANT_JWT_CLAIM / window.eigenTenantJwtClaim
+//  VITE_TENANT_JWT_CLAIM / window.egenTenantJwtClaim
 //    string ex: "tenantId" | "tid" | "org"
 //    Nom du claim JWT portant l'ID tenant.
 // ============================================================================
@@ -105,21 +105,19 @@ function parseResolutionOrder(value: string | undefined): TenantResolutionStrate
  * peuvent être surchargées par la config passée à `setupTenantSystem()`.
  *
  * Priorité pour chaque option :
- *   1. window.eigenXxx  (injection runtime par le serveur)
+ *   1. window.egenXxx  (injection runtime par le serveur)
  *   2. import.meta.env.VITE_XXX  (injection build time)
  *   3. Valeur par défaut codée ici
  */
 export function resolveConfigFromEnv(): Partial<TenantSystemConfig> {
-  const mode = parseTenantMode(readConfig('eigenTenantMode', 'VITE_TENANT_MODE'));
-  const defaultTenantId = readConfig('eigenTenantId', 'VITE_TENANT_ID');
-  const registryUrl = readConfig('eigenTenantRegistryUrl', 'VITE_TENANT_REGISTRY_URL');
-  const applyTheme = parseBool(readConfig('eigenTenantApplyTheme', 'VITE_TENANT_THEME_APPLY'), true);
-  const persistActive = parseBool(readConfig('eigenTenantPersist', 'VITE_TENANT_PERSIST'), true);
-  const resolutionOrder = parseResolutionOrder(
-    readConfig('eigenTenantResolutionOrder', 'VITE_TENANT_RESOLUTION_ORDER'),
-  );
-  const pathPrefix = readConfig('eigenTenantPathPrefix', 'VITE_TENANT_PATH_PREFIX');
-  const jwtClaim = readConfig('eigenTenantJwtClaim', 'VITE_TENANT_JWT_CLAIM');
+  const mode = parseTenantMode(readConfig('egenTenantMode', 'VITE_TENANT_MODE'));
+  const defaultTenantId = readConfig('egenTenantId', 'VITE_TENANT_ID');
+  const registryUrl = readConfig('egenTenantRegistryUrl', 'VITE_TENANT_REGISTRY_URL');
+  const applyTheme = parseBool(readConfig('egenTenantApplyTheme', 'VITE_TENANT_THEME_APPLY'), true);
+  const persistActive = parseBool(readConfig('egenTenantPersist', 'VITE_TENANT_PERSIST'), true);
+  const resolutionOrder = parseResolutionOrder(readConfig('egenTenantResolutionOrder', 'VITE_TENANT_RESOLUTION_ORDER'));
+  const pathPrefix = readConfig('egenTenantPathPrefix', 'VITE_TENANT_PATH_PREFIX');
+  const jwtClaim = readConfig('egenTenantJwtClaim', 'VITE_TENANT_JWT_CLAIM');
 
   const config: Partial<TenantSystemConfig> = {
     mode,
@@ -142,6 +140,6 @@ export function resolveConfigFromEnv(): Partial<TenantSystemConfig> {
  * Utile pour des décisions de branching très précoces (ex: dans index.html).
  */
 export function isTenantModeEnabledFromEnv(): boolean {
-  const mode = parseTenantMode(readConfig('eigenTenantMode', 'VITE_TENANT_MODE'));
+  const mode = parseTenantMode(readConfig('egenTenantMode', 'VITE_TENANT_MODE'));
   return mode !== 'off';
 }

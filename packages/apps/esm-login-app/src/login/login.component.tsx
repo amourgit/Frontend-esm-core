@@ -13,12 +13,7 @@ import {
   useConnectivity,
   useSession,
 } from '@egen/esm-framework';
-import {
-  useTenant,
-  useTenantMode,
-  storeHeaderTenantId,
-  getTenantStoreState,
-} from '@egen/esm-tenant';
+import { useTenant, useTenantMode, storeHeaderTenantId, getTenantStoreState } from '@egen/esm-tenant';
 import { type ConfigSchema } from '../config-schema';
 import Logo from '../logo.component';
 import Footer from '../footer.component';
@@ -89,9 +84,7 @@ const Login: React.FC = () => {
   }, [location.search]);
 
   // Tenant effectif : activeTenant (résolu par sous-domaine) > query param
-  const effectiveTenantSlug = isMultiTenant
-    ? (activeTenant?.id ?? tenantFromQuery ?? null)
-    : null;
+  const effectiveTenantSlug = isMultiTenant ? activeTenant?.id ?? tenantFromQuery ?? null : null;
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -180,14 +173,11 @@ const Login: React.FC = () => {
           // Persiste le tenant actif en localStorage pour que les prochains
           // rechargements le retrouvent via la stratégie 'header'.
           if (isMultiTenant && effectiveTenantSlug) {
-            storeHeaderTenantId(
-              effectiveTenantSlug,
-              getTenantStoreState().config.storageKey ?? 'egen:tenant:active',
-            );
+            storeHeaderTenantId(effectiveTenantSlug, getTenantStoreState().config.storageKey ?? 'egen:tenant:active');
           }
 
-          // TODO(EIGEN): La condition sur sessionLocation était liée à OpenMRS.
-          // Dans EIGEN, on navigue directement vers la route de succès.
+          // TODO(EGEN): La condition sur sessionLocation était liée à OpenMRS.
+          // Dans EGEN, on navigue directement vers la route de succès.
           //
           // COMMENTÉ — ancienne logique OpenMRS :
           // if (session.sessionLocation) { ... } else { navigate('/login/location'); }

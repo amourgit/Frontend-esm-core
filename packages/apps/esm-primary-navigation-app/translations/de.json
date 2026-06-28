@@ -6,7 +6,7 @@
   "changeDefaultLocaleExplanation": "Lassen Sie dieses Kontrollkästchen deaktiviert, um die Sprache nur für diese Sitzung zu ändern",
   "changeLanguage": "Sprache ändern",
   "changingLanguage": "Sprache ändern",
-  "noPathInDashboardExtension": "Die Dashboard-Erweiterung kann nicht gerendert werden, wenn die Eigenschaft „path“ im Konfigurationsschema nicht festgelegt ist",
+  "noPathInDashboardExtension": "Die Dashboard-Erweiterung kann nicht gerendert werden, wenn die Egenschaft „path“ im Konfigurationsschema nicht festgelegt ist",
   "notifications": "Benachrichtigungen",
   "userMenu": "Benutzermenü",
   "userMenuOptions": "Optionen im Benutzermenü",

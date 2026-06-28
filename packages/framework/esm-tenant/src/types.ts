@@ -31,7 +31,7 @@
 //  4. HTTP header    : X-Tenant-ID (lu depuis la réponse du backend lors du login)
 //  5. JWT claim      : token.tenantId ou token.tid
 //  6. localStorage   : egen:tenant:active
-//  7. Config statique: window.eigenTenantId ou VITE_TENANT_ID
+//  7. Config statique: window.egenTenantId ou VITE_TENANT_ID
 //  8. Fallback       : premier tenant disponible dans la registry
 // ============================================================================
 
@@ -130,7 +130,7 @@ export type TenantResolutionStrategy =
   | 'jwt' // Lit le claim tenantId/tid dans le JWT de session
   | 'header' // Lit X-Tenant-ID dans les réponses HTTP (posé lors du login)
   | 'localStorage' // Lit egen:tenant:active depuis localStorage
-  | 'static' // Lit window.eigenTenantId ou import.meta.env.VITE_TENANT_ID
+  | 'static' // Lit window.egenTenantId ou import.meta.env.VITE_TENANT_ID
   | 'first'; // Prend le premier tenant disponible dans la registry
 
 /** Configuration du chemin URL pour la stratégie "path" */
@@ -152,9 +152,9 @@ export interface TenantSystemConfig {
   /**
    * Mode de fonctionnement du système.
    * Peut être surchargé par :
-   *  - `window.eigenTenantMode`
+   *  - `window.egenTenantMode`
    *  - `import.meta.env.VITE_TENANT_MODE`
-   *  - `EIGEN_TENANT_MODE` (via injection HTML)
+   *  - `EGEN_TENANT_MODE` (via injection HTML)
    *
    * @default "off"
    */
@@ -176,7 +176,7 @@ export interface TenantSystemConfig {
 
   /**
    * En mode "single", identifiant du tenant forcé.
-   * Si non défini, cherché dans window.eigenTenantId / VITE_TENANT_ID.
+   * Si non défini, cherché dans window.egenTenantId / VITE_TENANT_ID.
    */
   defaultTenantId?: TenantId;
 

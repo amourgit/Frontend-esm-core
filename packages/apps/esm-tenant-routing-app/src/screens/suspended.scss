@@ -1,6 +1,6 @@
 // =============================================================================
 //  SUSPENDED PAGE — Styles
-//  100 % CSS vars du thème EIGEN — zéro valeur codée en dur.
+//  100 % CSS vars du thème EGEN — zéro valeur codée en dur.
 // =============================================================================
 
 .page {
@@ -62,8 +62,14 @@
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 // ─── Icône ────────────────────────────────────────────────────────────────────
@@ -142,7 +148,10 @@
   text-decoration: none;
   transition: var(--transitions-colors);
 
-  &:hover { color: var(--colors-primary-200); text-decoration: underline; }
+  &:hover {
+    color: var(--colors-primary-200);
+    text-decoration: underline;
+  }
 }
 
 // ─── Bouton retour ────────────────────────────────────────────────────────────
@@ -166,7 +175,9 @@
     box-shadow: var(--shadows-glow);
   }
 
-  &:active { transform: translateY(0); }
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 // ─── Tenant ID ────────────────────────────────────────────────────────────────

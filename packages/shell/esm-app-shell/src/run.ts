@@ -55,9 +55,9 @@ import { appName, getCoreExtensions } from './ui';
 import { setupCoreConfig } from './core-config';
 
 // =============================================================================
-//  EIGEN_DEV_NO_AUTH — Bypass d'authentification pour tests sans backend
+//  EGEN_DEV_NO_AUTH — Bypass d'authentification pour tests sans backend
 //
-//  Activé en positionnant EIGEN_DEV_NO_AUTH=true dans l'environnement de build.
+//  Activé en positionnant EGEN_DEV_NO_AUTH=true dans l'environnement de build.
 //  En production réelle ce flag sera absent (false), donc ce bloc est inerte.
 //
 //  Effets quand activé :
@@ -67,14 +67,13 @@ import { setupCoreConfig } from './core-config';
 //       pour que les composants qui appellent useSession() reçoivent un
 //       utilisateur authentifié sans appel réseau.
 // =============================================================================
-const DEV_NO_AUTH = process.env.EIGEN_DEV_NO_AUTH === 'true';
+const DEV_NO_AUTH = process.env.EGEN_DEV_NO_AUTH === 'true';
 
 function applyDevNoAuthBypass() {
   if (!DEV_NO_AUTH) return;
 
   console.warn(
-    '[EIGEN] ⚠️  EIGEN_DEV_NO_AUTH=true — Authentification désactivée. ' +
-      'NE PAS utiliser en production réelle.',
+    '[EGEN] ⚠️  EGEN_DEV_NO_AUTH=true — Authentification désactivée. ' + 'NE PAS utiliser en production réelle.',
   );
 
   // ── 1. Désactiver la redirection auth-failure de egenFetch ────────────────
@@ -89,7 +88,7 @@ function applyDevNoAuthBypass() {
         },
       },
     },
-    'eigen-dev-no-auth-config',
+    'egen-dev-no-auth-config',
   );
 
   // ── 2. Injecter une session admin fictive dans le store global ────────────
@@ -453,7 +452,7 @@ export function run(configUrls: Array<string>) {
   //
   // Configuration :
   //   .env              → VITE_TENANT_MODE=multi | single | off
-  //   window.*          → window.eigenTenantMode = 'multi'  (injection serveur)
+  //   window.*          → window.egenTenantMode = 'multi'  (injection serveur)
   //   setupTenantSystem → options inline ci-dessous (priorité maximale)
 
   // Branche le moteur de thème sur le système tenant.

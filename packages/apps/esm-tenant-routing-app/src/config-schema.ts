@@ -2,7 +2,7 @@ import { Type } from '@egen/esm-framework';
 
 // =============================================================================
 //  ESM TENANT ROUTING APP — Schéma de configuration runtime
-//  Toutes les valeurs sont surchargables via le système de config EIGEN.
+//  Toutes les valeurs sont surchargables via le système de config EGEN.
 // =============================================================================
 
 export const configSchema = {
@@ -11,9 +11,9 @@ export const configSchema = {
     _type: Type.String,
     _default: '',
     _description:
-      'Domaine racine de la plateforme (ex: "eigen.gabon.gov.ga"). ' +
+      'Domaine racine de la plateforme (ex: "egen.gabon.gov.ga"). ' +
       'Tout hostname qui est exactement ce domaine (sans sous-domaine) est ' +
-      'considéré comme l\'URL globale sans tenant. ' +
+      "considéré comme l'URL globale sans tenant. " +
       'Laissé vide → détecté automatiquement en soustrayant le premier segment.',
   },
 
@@ -21,7 +21,7 @@ export const configSchema = {
   landingPageUrl: {
     _type: Type.String,
     _default: '${egenSpaBase}/home',
-    _description: 'URL de la page d\'accueil globale (sans tenant). Redirection quand aucun sous-domaine.',
+    _description: "URL de la page d'accueil globale (sans tenant). Redirection quand aucun sous-domaine.",
   },
 
   loginUrl: {
@@ -55,14 +55,13 @@ export const configSchema = {
   backendValidationEndpoint: {
     _type: Type.String,
     _default: '${egenBase}/ws/rest/v1/tenant/{slug}/exists',
-    _description: 'Endpoint backend de validation de l\'existence d\'un tenant par slug.',
+    _description: "Endpoint backend de validation de l'existence d'un tenant par slug.",
   },
 
   skipRoutesRegex: {
     _type: Type.String,
     _default: '^(login|logout|home|tenant-suspended|change-password)',
-    _description:
-      'Regex des routes exemptées de la garde de routage (pas de redirection sur ces routes).',
+    _description: 'Regex des routes exemptées de la garde de routage (pas de redirection sur ces routes).',
   },
 
   // ── Gestion erreurs ───────────────────────────────────────────────────────

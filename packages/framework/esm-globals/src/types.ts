@@ -56,58 +56,58 @@ declare global {
 
     // ── Tenant system globals ──────────────────────────────────────────────
     // Injectées par le serveur dans index.html pour configuration runtime.
-    // Priorité : window.eigenXxx > import.meta.env.VITE_* > valeur par défaut.
+    // Priorité : window.egenXxx > import.meta.env.VITE_* > valeur par défaut.
 
     /**
      * Mode du système tenant : "off" | "single" | "multi".
      * Surcharge VITE_TENANT_MODE.
      * @default "off"
      */
-    eigenTenantMode?: 'off' | 'single' | 'multi';
+    egenTenantMode?: 'off' | 'single' | 'multi';
 
     /**
      * Identifiant du tenant actif (mode "single") ou tenant par défaut.
      * Surcharge VITE_TENANT_ID.
      */
-    eigenTenantId?: string;
+    egenTenantId?: string;
 
     /**
      * URL d'un fichier JSON de registry de tenants (TenantDefinition[]).
      * Surcharge VITE_TENANT_REGISTRY_URL.
      */
-    eigenTenantRegistryUrl?: string;
+    egenTenantRegistryUrl?: string;
 
     /**
      * "true" | "false" — active l'application automatique du thème tenant.
      * Surcharge VITE_TENANT_THEME_APPLY.
      */
-    eigenTenantApplyTheme?: string;
+    egenTenantApplyTheme?: string;
 
     /**
      * "true" | "false" — active la persistance localStorage du tenant actif.
      * Surcharge VITE_TENANT_PERSIST.
      */
-    eigenTenantPersist?: string;
+    egenTenantPersist?: string;
 
     /**
      * Ordre des stratégies de résolution, CSV.
      * Ex: "subdomain,jwt,localStorage"
      * Surcharge VITE_TENANT_RESOLUTION_ORDER.
      */
-    eigenTenantResolutionOrder?: string;
+    egenTenantResolutionOrder?: string;
 
     /**
      * Préfixe de path URL pour la stratégie "path".
      * Ex: "/t/" pour /t/{tenantSlug}/...
      * Surcharge VITE_TENANT_PATH_PREFIX.
      */
-    eigenTenantPathPrefix?: string;
+    egenTenantPathPrefix?: string;
 
     /**
      * Claim JWT portant l'ID tenant. Ex: "tenantId", "tid", "org".
      * Surcharge VITE_TENANT_JWT_CLAIM.
      */
-    eigenTenantJwtClaim?: string;
+    egenTenantJwtClaim?: string;
   }
 }
 

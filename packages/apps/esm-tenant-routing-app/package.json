@@ -2,7 +2,7 @@
   "name": "@egen/esm-tenant-routing-app",
   "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "Garde de routage multi-tenant EIGEN — résolution des sous-domaines, redirections auth et navigation tenant-aware.",
+  "description": "Garde de routage multi-tenant EGEN — résolution des sous-domaines, redirections auth et navigation tenant-aware.",
   "browser": "dist/egen-esm-tenant-routing-app.js",
   "main": "src/index.ts",
   "source": true,
@@ -18,7 +18,7 @@
     "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests"
   },
   "keywords": [
-    "eigen",
+    "egen",
     "egen",
     "microfrontends",
     "tenant",
