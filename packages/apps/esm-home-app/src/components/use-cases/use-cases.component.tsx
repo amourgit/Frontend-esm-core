@@ -60,12 +60,15 @@ const UseCases: React.FC = () => {
       <div className={styles.container}>
         {/* En-tête */}
         <div className={styles.sectionHeader}>
-          <span className={styles.sectionLabel}>{t('ucSectionLabel', 'Cas d\'usages')}</span>
+          <span className={styles.sectionLabel}>{t('ucSectionLabel', "Cas d'usages")}</span>
           <h2 id="usecases-heading" className={styles.sectionTitle}>
-            {t('ucSectionTitle', 'Une plateforme pour chaque acteur de l\'éducation')}
+            {t('ucSectionTitle', "Une plateforme pour chaque acteur de l'éducation")}
           </h2>
           <p className={styles.sectionSubtitle}>
-            {t('ucSectionSubtitle', 'EIGEN s\'adapte aux rôles et aux besoins de toutes les parties prenantes du système éducatif gabonais.')}
+            {t(
+              'ucSectionSubtitle',
+              "EGEN s'adapte aux rôles et aux besoins de toutes les parties prenantes du système éducatif gabonais.",
+            )}
           </p>
         </div>
 
@@ -95,7 +98,9 @@ const UseCases: React.FC = () => {
           aria-labelledby={`tab-${active.id}`}
         >
           <div className={styles.panelLeft}>
-            <div className={styles.panelIcon} aria-hidden="true">{active.icon}</div>
+            <div className={styles.panelIcon} aria-hidden="true">
+              {active.icon}
+            </div>
             <h3 className={styles.panelTitle}>{t(active.title, active.title)}</h3>
             <p className={styles.panelDescription}>{t(active.description, active.description)}</p>
           </div>
@@ -103,7 +108,9 @@ const UseCases: React.FC = () => {
             <ul className={styles.featureList} aria-label={t('ucFeatureListLabel', 'Fonctionnalités incluses')}>
               {active.features.map((feat, i) => (
                 <li key={i} className={styles.featureItem}>
-                  <span className={styles.featureCheck} aria-hidden="true">✓</span>
+                  <span className={styles.featureCheck} aria-hidden="true">
+                    ✓
+                  </span>
                   <span>{t(feat, feat)}</span>
                 </li>
               ))}

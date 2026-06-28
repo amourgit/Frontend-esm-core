@@ -1,6 +1,6 @@
 // =============================================================================
 //  NAVBAR — Styles glass sticky
-//  Convention : toutes valeurs visuelles → CSS vars du thème EIGEN.
+//  Convention : toutes valeurs visuelles → CSS vars du thème EGEN.
 //    panel.light.header.* → var(--panel-header-*)    [résolu via data-theme]
 //    colors.primary.400   → var(--colors-primary-400)
 //    border-radius.full   → var(--border-radius-full)
@@ -178,9 +178,15 @@
     transition: var(--transitions-transform), var(--transitions-opacity);
     transform-origin: center;
 
-    &:nth-child(1) { width: 100%; }
-    &:nth-child(2) { width: 75%; }
-    &:nth-child(3) { width: 100%; }
+    &:nth-child(1) {
+      width: 100%;
+    }
+    &:nth-child(2) {
+      width: 75%;
+    }
+    &:nth-child(3) {
+      width: 100%;
+    }
   }
 
   &:hover {

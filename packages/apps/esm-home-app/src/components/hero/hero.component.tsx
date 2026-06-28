@@ -74,7 +74,7 @@ const Hero: React.FC = () => {
         <p className={styles.description}>
           {t(
             'heroDescription',
-            'Une plateforme SaaS modulaire et sécurisée conçue pour connecter établissements, enseignants, apprenants et administrations au sein d\'un écosystème unifié.',
+            "Une plateforme SaaS modulaire et sécurisée conçue pour connecter établissements, enseignants, apprenants et administrations au sein d'un écosystème unifié.",
           )}
         </p>
 
@@ -83,7 +83,13 @@ const Hero: React.FC = () => {
           <a href={demoUrl} className={styles.ctaPrimary}>
             <span>{t('requestDemo', 'Demander une démo')}</span>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </a>
           <a href={loginUrl} className={styles.ctaSecondary}>
@@ -112,13 +118,16 @@ const Hero: React.FC = () => {
             <span className={styles.mockupDot} style={{ background: '#ef4444' }} />
             <span className={styles.mockupDot} style={{ background: '#f59e0b' }} />
             <span className={styles.mockupDot} style={{ background: '#22c55e' }} />
-            <span className={styles.mockupUrl}>eigen.gabon.gov.ga</span>
+            <span className={styles.mockupUrl}>egen.gabon.gov.ga</span>
           </div>
           <div className={styles.mockupContent}>
             {/* Sidebar simulée */}
             <div className={styles.mockupSidebar}>
               {[...Array(6)].map((_, i) => (
-                <div key={i} className={`${styles.mockupSidebarItem} ${i === 0 ? styles.mockupSidebarItemActive : ''}`} />
+                <div
+                  key={i}
+                  className={`${styles.mockupSidebarItem} ${i === 0 ? styles.mockupSidebarItemActive : ''}`}
+                />
               ))}
             </div>
             {/* Contenu principal simulé */}

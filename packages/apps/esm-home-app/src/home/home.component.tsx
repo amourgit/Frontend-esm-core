@@ -12,7 +12,7 @@ import Footer from '../components/footer/footer.component';
 import styles from './home.scss';
 
 // =============================================================================
-//  HOME PAGE — Orchestrateur de la landing page publique EIGEN
+//  HOME PAGE — Orchestrateur de la landing page publique EGEN
 //
 //  Pas de navigation primaire, pas de garde d'auth.
 //  Le fond sombre global est appliqué ici : il s'étend derrière tous les

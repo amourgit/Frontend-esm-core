@@ -2,13 +2,13 @@ import { Type } from '@egen/esm-framework';
 
 // =============================================================================
 //  ESM HOME APP — Schéma de configuration runtime
-//  Toutes les valeurs sont surchargables via le système de config EIGEN/EGEN.
+//  Toutes les valeurs sont surchargables via le système de config EGEN/EGEN.
 // =============================================================================
 
 export const configSchema = {
   productName: {
     _type: Type.String,
-    _default: 'EIGEN',
+    _default: 'EGEN',
     _description: "Nom commercial du produit affiché dans la page d'accueil.",
   },
   tagline: {
@@ -35,11 +35,11 @@ export const configSchema = {
     src: {
       _type: Type.String,
       _default: '',
-      _description: 'URL du logo. Vide = sprite SVG EIGEN intégré.',
+      _description: 'URL du logo. Vide = sprite SVG EGEN intégré.',
     },
     alt: {
       _type: Type.String,
-      _default: 'EIGEN Logo',
+      _default: 'EGEN Logo',
       _description: 'Texte alternatif du logo.',
     },
   },

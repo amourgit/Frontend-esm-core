@@ -116,12 +116,12 @@ const Features: React.FC = () => {
         <div className={styles.sectionHeader}>
           <span className={styles.sectionLabel}>{t('featuresSectionLabel', 'Fonctionnalités')}</span>
           <h2 id="features-heading" className={styles.sectionTitle}>
-            {t('featuresSectionTitle', 'Tout ce dont vous avez besoin pour digitaliser l\'éducation')}
+            {t('featuresSectionTitle', "Tout ce dont vous avez besoin pour digitaliser l'éducation")}
           </h2>
           <p className={styles.sectionSubtitle}>
             {t(
               'featuresSectionSubtitle',
-              'EIGEN regroupe l\'ensemble des outils nécessaires à la gestion, au suivi et à l\'amélioration de l\'enseignement à l\'échelle nationale.',
+              "EGEN regroupe l'ensemble des outils nécessaires à la gestion, au suivi et à l'amélioration de l'enseignement à l'échelle nationale.",
             )}
           </p>
         </div>

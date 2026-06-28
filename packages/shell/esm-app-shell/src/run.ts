@@ -384,17 +384,17 @@ export function run(configUrls: Array<string>) {
           const remoteSchema = await res.json();
           applyAppThemeOverride(`tenant-${tenantId}-url`, remoteSchema, { priority: 9 });
         } else {
-          console.warn(`[eigen/esm-tenant] Thème distant inaccessible (${res.status}): ${themeUrl}`);
+          console.warn(`[egen/esm-tenant] Thème distant inaccessible (${res.status}): ${themeUrl}`);
         }
       } catch (err) {
-        console.warn(`[eigen/esm-tenant] Impossible de charger le thème depuis ${themeUrl}:`, err);
+        console.warn(`[egen/esm-tenant] Impossible de charger le thème depuis ${themeUrl}:`, err);
       }
     }
   });
 
   // Non bloquant : le shell démarre même si le système tenant échoue.
   const tenantReady = setupTenantSystem().catch((err) => {
-    console.warn('[eigen/esm-tenant] Initialisation tenant échouée (mode dégradé):', err);
+    console.warn('[egen/esm-tenant] Initialisation tenant échouée (mode dégradé):', err);
   });
 
   return Promise.all([import('@egen/esm-styleguide/src/index'), themeReady, tenantReady]).then(([_styleguide]) => {

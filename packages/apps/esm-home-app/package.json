@@ -2,7 +2,7 @@
   "name": "@egen/esm-home-app",
   "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "Page d'accueil SaaS publique du framework EIGEN — présentation produit, fonctionnalités, tarifs et cas d'usages.",
+  "description": "Page d'accueil SaaS publique du framework EGEN — présentation produit, fonctionnalités, tarifs et cas d'usages.",
   "browser": "dist/egen-esm-home-app.js",
   "main": "src/index.ts",
   "source": true,
@@ -21,7 +21,7 @@
     "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests"
   },
   "keywords": [
-    "eigen",
+    "egen",
     "egen",
     "microfrontends",
     "landing",
