@@ -1,0 +1,9 @@
+{
+  "suspendedBadge": "Espace suspendu",
+  "suspendedTitle": "Espace temporairement suspendu",
+  "suspendedTitleWith": "{{name}} est temporairement suspendu",
+  "suspendedDefaultMsg": "Cet espace est temporairement indisponible. Veuillez contacter l'administrateur de la plateforme.",
+  "suspendedContact": "Pour toute demande de réactivation, contactez :",
+  "suspendedGoHome": "Retour à l'accueil",
+  "suspendedTenantId": "Référence :"
+}

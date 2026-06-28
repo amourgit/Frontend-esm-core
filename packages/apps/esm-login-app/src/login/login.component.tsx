@@ -13,6 +13,12 @@ import {
   useConnectivity,
   useSession,
 } from '@egen/esm-framework';
+import {
+  useTenant,
+  useTenantMode,
+  storeHeaderTenantId,
+  getTenantStoreState,
+} from '@egen/esm-tenant';
 import { type ConfigSchema } from '../config-schema';
 import Logo from '../logo.component';
 import Footer from '../footer.component';
@@ -67,6 +73,25 @@ const Login: React.FC = () => {
     state: LoginReferrer;
   };
   const navigate = useNavigate();
+
+  // ── Contexte multi-tenant ─────────────────────────────────────────────────
+  // En mode multi-tenant, on récupère le tenant résolu depuis l'URL (sous-domaine
+  // ou query param ?tenant= injecté par l'app de routage) pour l'inclure dans
+  // la requête d'authentification et l'en-tête X-Tenant-ID.
+  const tenantMode = useTenantMode();
+  const activeTenant = useTenant();
+  const isMultiTenant = tenantMode === 'multi';
+
+  // Lire le tenant depuis le query param (fallback quand pas de sous-domaine en dev)
+  const tenantFromQuery = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get('tenant') ?? params.get('tenantId') ?? null;
+  }, [location.search]);
+
+  // Tenant effectif : activeTenant (résolu par sous-domaine) > query param
+  const effectiveTenantSlug = isMultiTenant
+    ? (activeTenant?.id ?? tenantFromQuery ?? null)
+    : null;
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -151,10 +176,18 @@ const Login: React.FC = () => {
         const authenticated = sessionStore?.session?.authenticated;
 
         if (authenticated) {
-          // TODO(EGEN): La condition sur sessionLocation était liée à OpenMRS.
-          // Dans EGEN, on navigue directement vers la route de succès sans
-          // attendre de sélection de location. La logique de location sera
-          // redéfinie ultérieurement selon le contexte applicatif.
+          // ── Persistance du tenant après login (mode multi-tenant) ──────────────
+          // Persiste le tenant actif en localStorage pour que les prochains
+          // rechargements le retrouvent via la stratégie 'header'.
+          if (isMultiTenant && effectiveTenantSlug) {
+            storeHeaderTenantId(
+              effectiveTenantSlug,
+              getTenantStoreState().config.storageKey ?? 'egen:tenant:active',
+            );
+          }
+
+          // TODO(EIGEN): La condition sur sessionLocation était liée à OpenMRS.
+          // Dans EIGEN, on navigue directement vers la route de succès.
           //
           // COMMENTÉ — ancienne logique OpenMRS :
           // if (session.sessionLocation) { ... } else { navigate('/login/location'); }
@@ -243,6 +276,18 @@ const Login: React.FC = () => {
               <div className={styles.center}>
                 <Logo t={t} />
               </div>
+
+              {/* Badge tenant — affiché uniquement en mode multi-tenant si un tenant est résolu */}
+              {isMultiTenant && effectiveTenantSlug && (
+                <div className={styles.tenantBadgeWrapper}>
+                  <span className={styles.tenantBadge}>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+                      <circle cx="6" cy="6" r="4" />
+                    </svg>
+                    {activeTenant?.name ?? effectiveTenantSlug}
+                  </span>
+                </div>
+              )}
 
               <form onSubmit={handleSubmit}>
                 <div className={styles.inputGroup}>
