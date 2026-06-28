@@ -1,0 +1,130 @@
+[
+  {
+    "id": "mef-gabon",
+    "name": "Ministère de l'Éducation — Gabon",
+    "slug": "mef",
+    "domains": ["mef", "mef.eigen.gabon.gov.ga"],
+    "locale": "fr-GA",
+    "timezone": "Africa/Libreville",
+    "active": true,
+    "suspended": false,
+    "featureFlags": {
+      "analytics": true,
+      "ai-assistant": true,
+      "billing": false
+    },
+    "allowedApps": [
+      "@eigen/esm-national-dashboard-app",
+      "@eigen/esm-curriculum-app",
+      "@eigen/esm-reports-app"
+    ],
+    "permissions": {
+      "manage-tenants": true,
+      "view-all-schools": true,
+      "export-data": true
+    },
+    "meta": {
+      "plan": "national",
+      "logoUrl": "",
+      "primaryColor": "#0043a4",
+      "sector": "government"
+    }
+  },
+  {
+    "id": "lycee-lb",
+    "name": "Lycée National Léon Mba",
+    "slug": "lycee-lb",
+    "domains": ["lycee-lb", "lycee-lb.eigen.gabon.gov.ga"],
+    "locale": "fr-GA",
+    "timezone": "Africa/Libreville",
+    "active": true,
+    "suspended": false,
+    "featureFlags": {
+      "analytics": true,
+      "ai-assistant": false,
+      "billing": true
+    },
+    "allowedApps": [
+      "@eigen/esm-school-dashboard-app",
+      "@eigen/esm-grades-app",
+      "@eigen/esm-attendance-app",
+      "@eigen/esm-schedule-app"
+    ],
+    "permissions": {
+      "manage-students": true,
+      "manage-teachers": true,
+      "view-reports": true,
+      "export-data": false
+    },
+    "meta": {
+      "plan": "institution",
+      "logoUrl": "",
+      "primaryColor": "#1a56db",
+      "sector": "secondary-education",
+      "city": "Libreville",
+      "province": "Estuaire"
+    }
+  },
+  {
+    "id": "univ-omar-bongo",
+    "name": "Université Omar Bongo",
+    "slug": "uob",
+    "domains": ["uob", "uob.eigen.gabon.gov.ga"],
+    "locale": "fr-GA",
+    "timezone": "Africa/Libreville",
+    "active": true,
+    "suspended": false,
+    "featureFlags": {
+      "analytics": true,
+      "ai-assistant": true,
+      "billing": true
+    },
+    "allowedApps": [
+      "@eigen/esm-university-dashboard-app",
+      "@eigen/esm-grades-app",
+      "@eigen/esm-attendance-app",
+      "@eigen/esm-research-app"
+    ],
+    "meta": {
+      "plan": "institution",
+      "primaryColor": "#7c3aed",
+      "sector": "higher-education",
+      "city": "Libreville"
+    }
+  },
+  {
+    "id": "demo-tenant",
+    "name": "Tenant Démo EIGEN",
+    "slug": "demo",
+    "domains": ["demo", "demo.eigen.gabon.gov.ga"],
+    "locale": "fr-GA",
+    "timezone": "Africa/Libreville",
+    "active": true,
+    "suspended": false,
+    "featureFlags": {
+      "analytics": true,
+      "ai-assistant": true,
+      "billing": false
+    },
+    "meta": {
+      "plan": "starter",
+      "primaryColor": "#059669",
+      "sector": "demo"
+    }
+  },
+  {
+    "id": "suspended-example",
+    "name": "Établissement Suspendu (Exemple)",
+    "slug": "suspended",
+    "domains": ["suspended", "suspended.eigen.gabon.gov.ga"],
+    "locale": "fr-GA",
+    "timezone": "Africa/Libreville",
+    "active": true,
+    "suspended": true,
+    "suspendedMessage": "Cet espace a été suspendu suite à un impayé. Veuillez régulariser votre situation auprès du service commercial CIVITAS.",
+    "meta": {
+      "plan": "institution",
+      "sector": "secondary-education"
+    }
+  }
+]

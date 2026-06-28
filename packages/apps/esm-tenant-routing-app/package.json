@@ -1,72 +1,64 @@
 {
-  "name": "@egen/esm-login-app",
-  "version": "9.0.2",
+  "name": "@egen/esm-tenant-routing-app",
+  "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "The login microfrontend for the Egen SPA",
-  "browser": "dist/egen-esm-login-app.js",
+  "description": "Garde de routage multi-tenant EIGEN — résolution des sous-domaines, redirections auth et navigation tenant-aware.",
+  "browser": "dist/egen-esm-tenant-routing-app.js",
   "main": "src/index.ts",
   "source": true,
   "scripts": {
     "start": "egen develop",
-    "serve": "rspack serve --mode=development",
-    "debug": "npm run serve",
-    "test": "cross-env TZ=UTC vitest run --passWithNoTests",
-    "test:watch": "cross-env TZ=UTC vitest watch",
     "build": "rspack --mode=production",
     "build:development": "rspack --mode=development",
-    "analyze": "rspack --mode=production --env analyze=true",
+    "test": "cross-env TZ=UTC vitest run --passWithNoTests",
+    "test:watch": "cross-env TZ=UTC vitest watch",
     "typescript": "tsc",
     "lint": "eslint src --ext ts,tsx",
-    "extract-translations": "i18next 'src/**/*.component.tsx' 'src/**/*.extension.tsx' 'src/**/*.modal.tsx' 'src/**/*.resource.ts' --config='../../../tools/i18next-parser.config.js'",
+    "extract-translations": "i18next 'src/**/*.component.tsx' --config='../../../tools/i18next-parser.config.js'",
     "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests"
   },
   "keywords": [
+    "eigen",
     "egen",
-    "microfrontends"
+    "microfrontends",
+    "tenant",
+    "routing",
+    "guard"
   ],
   "browserslist": [
     "extends browserslist-config-egen"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/egen/egen-esm-core.git"
+    "url": "git+https://github.com/amourgit/Frontend-esm-core.git"
   },
-  "bugs": {
-    "url": "https://github.com/egen/egen-esm-core/issues"
-  },
-  "homepage": "https://github.com/egen/egen-esm-core#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@carbon/react": "^1.92.1",
-    "@hookform/resolvers": "^3.6.0",
-    "lodash-es": "^4.17.21",
-    "react-hook-form": "^7.52.2",
-    "zod": "^3.23.8",
-    "@egen/esm-tenant": "workspace:*"
+    "@egen/esm-tenant": "workspace:*",
+    "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
     "@egen/esm-framework": "9.x",
+    "@egen/esm-tenant": "workspace:*",
     "react": "18.x",
     "react-dom": "18.x",
     "react-i18next": "16.x",
     "react-router-dom": "6.x",
     "rxjs": "6.x",
-    "swr": "2.x",
-    "@egen/esm-tenant": "workspace:*"
+    "swr": "2.x"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.2",
     "cross-env": "^10.1.0",
     "egen": "workspace:*",
     "happy-dom": "^20.6.0",
-    "i18next": "^25.5.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^16.0.0",
-    "react-is": "^17.0.2",
     "react-router-dom": "^6.3.0",
     "rxjs": "^6.5.3",
     "sass": "^1.98.0",

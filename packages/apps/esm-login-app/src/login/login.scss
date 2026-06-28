@@ -290,3 +290,29 @@
     color: var(--colors-primary-300) !important;
   }
 }
+
+// ─── Badge tenant (mode multi-tenant) ────────────────────────────────────────
+.tenantBadgeWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.tenantBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  letter-spacing: 0.04em;
+  color: var(--colors-primary-300);
+  background: color-mix(in srgb, var(--colors-primary-500) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--colors-primary-400) 30%, transparent);
+  border-radius: var(--border-radius-full, 9999px);
+  padding: 0.35rem 1rem;
+
+  svg {
+    color: var(--colors-primary-400);
+    flex-shrink: 0;
+  }
+}

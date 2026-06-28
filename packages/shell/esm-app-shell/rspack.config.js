@@ -525,6 +525,9 @@ module.exports = (env, argv = []) => {
         'process.env.BUILD_VERSION': JSON.stringify(`${version}-${timestamp}`),
         'process.env.FRAMEWORK_VERSION': JSON.stringify(frameworkVersion),
         'process.env.NODE_ENV': JSON.stringify(mode),
+        // Flag de bypass auth pour les tests sans backend.
+        // Positionner EIGEN_DEV_NO_AUTH=true dans le .env pour désactiver le login.
+        'process.env.EIGEN_DEV_NO_AUTH': JSON.stringify(process.env.EIGEN_DEV_NO_AUTH || 'false'),
       }),
       new BundleAnalyzerPlugin({
         analyzerMode: env?.analyze ? 'static' : 'disabled',
