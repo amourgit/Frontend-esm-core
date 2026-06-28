@@ -1,9 +1,9 @@
 {
   "suspendedBadge": "Space suspended",
-  "suspendedTitle": "Space temporarily suspended",
-  "suspendedTitleWith": "{{name}} is temporarily suspended",
-  "suspendedDefaultMsg": "This space is temporarily unavailable. Please contact the platform administrator.",
   "suspendedContact": "For any reactivation request, contact:",
+  "suspendedDefaultMsg": "This space is temporarily unavailable. Please contact the platform administrator.",
   "suspendedGoHome": "Back to home",
-  "suspendedTenantId": "Reference:"
+  "suspendedTenantId": "Reference:",
+  "suspendedTitle": "Space temporarily suspended",
+  "suspendedTitleWith": "{{name}} is temporarily suspended"
 }

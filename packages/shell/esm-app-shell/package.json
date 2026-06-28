@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@carbon/react": "^1.92.1",
+    "@egen/esm-api": "workspace:*",
     "@egen/esm-framework": "workspace:*",
     "@egen/esm-styleguide": "workspace:*",
     "@egen/esm-theme": "workspace:*",
@@ -55,8 +56,7 @@
     "single-spa": "^6.0.3",
     "swc-loader": "0.2.7",
     "swr": "2.2.5",
-    "webpack-pwa-manifest": "4.3.0",
-    "@egen/esm-api": "workspace:*"
+    "webpack-pwa-manifest": "4.3.0"
   },
   "devDependencies": {
     "@swc/core": "1.15.21",
