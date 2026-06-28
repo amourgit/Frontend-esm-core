@@ -47,7 +47,7 @@ import {
   type Config,
   type StyleguideConfigObject,
 } from '@egen/esm-framework/src/internal';
-import { sessionStore } from '@egen/esm-api/src/current-user';
+import { sessionStore } from '@egen/esm-api';
 import { setupI18n } from './locale';
 import './routing-events';
 import './events';
@@ -95,44 +95,40 @@ function applyDevNoAuthBypass() {
   // ── 2. Injecter une session admin fictive dans le store global ────────────
   // Cela évite les loaders infinis et les "Vous n'êtes pas connecté" dans les
   // composants qui consomment useSession() / getCurrentUser().
+  // Le type attendu est LoadedSessionStore : { loaded: true, session: Session }
+  // où Session est { authenticated, sessionId, user?: LoggedInUser, locale? }
   sessionStore.setState({
     loaded: true,
     session: {
       authenticated: true,
       sessionId: 'dev-bypass-session',
+      locale: 'fr',
+      allowedLocales: ['fr', 'en'],
       user: {
         uuid: 'dev-user-uuid',
         display: 'Administrateur (Dev)',
         username: 'dev-admin',
         systemId: 'dev-admin',
+        locale: 'fr',
+        allowedLocales: ['fr', 'en'],
         userProperties: { defaultLocale: 'fr' },
         person: {
           uuid: 'dev-person-uuid',
           display: 'Administrateur',
+          links: [],
         },
         privileges: [
-          { uuid: 'p1', display: 'Get Users' },
-          { uuid: 'p2', display: 'Get Patients' },
-          { uuid: 'p3', display: 'Get Observations' },
-          { uuid: 'p4', display: 'System Developer' },
+          { uuid: 'p1', display: 'Get Users', links: [] },
+          { uuid: 'p4', display: 'System Developer', links: [] },
         ],
         roles: [
-          {
-            uuid: 'r1',
-            display: 'System Developer',
-            name: 'System Developer',
-          },
-          {
-            uuid: 'r2',
-            display: 'Administrator',
-            name: 'Administrator',
-          },
+          { uuid: 'r1', display: 'System Developer', name: 'System Developer', links: [] },
+          { uuid: 'r2', display: 'Administrator', name: 'Administrator', links: [] },
         ],
         retired: false,
         allRoles: [],
         allPrivileges: [],
       },
-      locale: 'fr',
     },
   });
 }

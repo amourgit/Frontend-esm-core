@@ -129,7 +129,7 @@ export {
 } from './context/store';
 
 // ── Registry (accès bas niveau) ────────────────────────────────────────────
-export { getAllTenants, getTenantById, isTenantRegistryLoaded } from './context/registry';
+export { getAllTenants, getTenantById, getTenantByDomain, isTenantRegistryLoaded } from './context/registry';
 
 // ── Résolution d'environnement ─────────────────────────────────────────────
 export { resolveConfigFromEnv, isTenantModeEnabledFromEnv } from './config/env';
