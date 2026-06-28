@@ -59,7 +59,7 @@
     "webpack-pwa-manifest": "4.3.0"
   },
   "devDependencies": {
-    "@swc/core": "1.15.21",
+    "@swc/core": "1.15.43",
     "cross-env": "^10.1.0",
     "dotenv": "^16.0.3",
     "react-is": "^17.0.2",
