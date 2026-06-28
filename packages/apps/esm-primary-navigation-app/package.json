@@ -40,7 +40,8 @@
   },
   "dependencies": {
     "@carbon/react": "^1.92.1",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "@eigen/esm-tenant": "workspace:*"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
@@ -50,7 +51,8 @@
     "react-i18next": "16.x",
     "react-router-dom": "6.x",
     "rxjs": "6.x",
-    "single-spa": "6.x"
+    "single-spa": "6.x",
+    "@eigen/esm-tenant": "workspace:*"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.2",

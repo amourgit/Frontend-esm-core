@@ -94,6 +94,17 @@ const Login: React.FC = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const usernameInputRef = useRef<HTMLInputElement>(null);
 
+  // Marquer la route comme publique dès le montage (supprime le gap topNav)
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute('data-public-route', 'true');
+    root.setAttribute('data-theme', 'dark');
+    return () => {
+      root.removeAttribute('data-public-route');
+      root.removeAttribute('data-theme');
+    };
+  }, []);
+
   useEffect(() => {
     if (!user) {
       if (loginProvider.type === 'oauth2' || loginProvider.type === 'custom') {

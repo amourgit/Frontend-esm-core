@@ -16,14 +16,16 @@ const SuspendedPage: React.FC = () => {
   const config = useConfig<ConfigSchema>();
   const tenant = useTenant();
 
-  // Forcer data-theme dark (page publique, pas de nav)
+  // Forcer data-theme dark + marquer route publique (supprime le gap topNav)
   useEffect(() => {
     const root = document.documentElement;
     const prev = root.getAttribute('data-theme');
     root.setAttribute('data-theme', 'dark');
+    root.setAttribute('data-public-route', 'true');
     return () => {
       if (prev) root.setAttribute('data-theme', prev);
       else root.removeAttribute('data-theme');
+      root.removeAttribute('data-public-route');
     };
   }, []);
 

@@ -7,7 +7,8 @@ import {
   useLayoutType,
   useLeftNavStore,
   useSession,
-} from '@egen/esm-framework';
+} from '@eigen/esm-framework';
+import { useTenant, useTenantMode } from '@eigen/esm-tenant';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { isDesktop } from '../../utils';
@@ -89,41 +90,43 @@ const HeaderItems: React.FC = () => {
   );
 };
 
+// =============================================================================
+//  NAVBAR — Barre de navigation des espaces tenant authentifiés
+//
+//  Ce composant est monté UNIQUEMENT sur les routes non-publiques (via le
+//  routeRegex de routes.json qui exclut login, logout, home, etc.).
+//
+//  Logique de rendu :
+//    1. Utilisateur authentifié → rend le Header Carbon complet
+//    2. Non authentifié → redirige vers /login (avec slug tenant si mode multi)
+//
+//  useSession() utilise Suspense — ce composant est wrappé dans une limite
+//  Suspense par HeaderContainer (Carbon) ou la limite racine de l'app.
+// =============================================================================
 const Navbar: React.FC = () => {
   const session = useSession();
+  const tenantMode = useTenantMode();
+  const activeTenant = useTenant();
   const egenSpaBase = window['getEgenSpaBase']();
 
-  if (session?.user?.person) {
-    // TODO(EGEN): La logique de sélection de location (sessionLocation) était
-    // liée à OpenMRS. Elle n'a plus de sens dans EGEN — la notion de
-    // "session location" sera redéfinie selon le contexte applicatif (ex: absence
-    // de sous-domaine dans l'URL). En attendant, on rend la navbar directement
-    // sans conditionner sur sessionLocation.
-    //
-    // COMMENTÉ — ancienne logique OpenMRS :
-    // return session.sessionLocation ? (
-    //   <HeaderContainer render={HeaderItems}></HeaderContainer>
-    // ) : (
-    //   <Navigate
-    //     to={`/login/location`}
-    //     state={{
-    //       referrer: window.location.pathname.slice(
-    //         window.location.pathname.indexOf(egenSpaBase) + egenSpaBase.length - 1,
-    //       ),
-    //     }}
-    //   />
-    // );
+  const currentReferrer = window.location.pathname.slice(
+    window.location.pathname.indexOf(egenSpaBase) + egenSpaBase.length - 1,
+  );
+
+  if (session?.authenticated && session?.user?.person) {
     return <HeaderContainer render={HeaderItems}></HeaderContainer>;
   }
 
+  // Non connecté — injecter le tenant dans l'URL de login si mode multi-tenant
+  const tenantParam =
+    tenantMode === 'multi' && activeTenant?.id
+      ? `?tenant=${encodeURIComponent(activeTenant.id)}`
+      : '';
+
   return (
     <Navigate
-      to={`/login`}
-      state={{
-        referrer: window.location.pathname.slice(
-          window.location.pathname.indexOf(egenSpaBase) + egenSpaBase.length - 1,
-        ),
-      }}
+      to={`/login${tenantParam}`}
+      state={{ referrer: currentReferrer }}
     />
   );
 };

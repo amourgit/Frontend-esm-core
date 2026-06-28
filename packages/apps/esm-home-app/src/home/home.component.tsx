@@ -33,18 +33,16 @@ import styles from './home.scss';
 const HomePage: React.FC = () => {
   const { i18n } = useTranslation();
 
-  // Force le mode sombre sur la page d'accueil publique
-  // (même philosophie que la page login : fond sombre, glassmorphism)
+  // Force le mode sombre et marque la route comme publique (supprime le topNav gap)
   useEffect(() => {
     const root = document.documentElement;
-    const prev = root.getAttribute('data-theme');
+    const prevTheme = root.getAttribute('data-theme');
     root.setAttribute('data-theme', 'dark');
+    root.setAttribute('data-public-route', 'true');
     return () => {
-      if (prev) {
-        root.setAttribute('data-theme', prev);
-      } else {
-        root.removeAttribute('data-theme');
-      }
+      if (prevTheme) root.setAttribute('data-theme', prevTheme);
+      else root.removeAttribute('data-theme');
+      root.removeAttribute('data-public-route');
     };
   }, []);
 

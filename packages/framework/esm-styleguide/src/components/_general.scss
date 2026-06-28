@@ -5,6 +5,33 @@ html {
   scroll-behavior: smooth;
 }
 
+// =============================================================================
+//  LAYOUT PUBLIC — Routes sans navigation primaire (landing, login, suspended)
+//
+//  Quand html[data-public-route="true"] est positionné par une app publique
+//  (esm-home-app, esm-login-app, etc.), on supprime la hauteur réservée au
+//  topNav et on étend le conteneur d'apps en plein écran.
+//
+//  Ce mécanisme est symétrique à data-theme : les apps publiques le posent
+//  à leur montage et le retirent à leur démontage.
+// =============================================================================
+
+html[data-public-route='true'] {
+  #eigen-top-nav-app-container {
+    height: 0 !important;
+    overflow: hidden;
+  }
+
+  #eigen-apps-container {
+    min-height: 100vh;
+  }
+
+  #eigen-left-nav-container,
+  #eigen-workspaces-container {
+    display: none;
+  }
+}
+
 .egen-app-error {
   padding: layout.$spacing-11;
   width: 100%;
