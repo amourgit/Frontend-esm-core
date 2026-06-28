@@ -8,7 +8,7 @@ import {
   useLeftNavStore,
   useSession,
 } from '@eigen/esm-framework';
-import { useTenant, useTenantMode } from '@eigen/esm-tenant';
+import { useTenantMode } from '@eigen/esm-tenant';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { isDesktop } from '../../utils';
@@ -93,39 +93,44 @@ const HeaderItems: React.FC = () => {
 // =============================================================================
 //  NAVBAR — Barre de navigation des espaces tenant authentifiés
 //
-//  Ce composant est monté UNIQUEMENT sur les routes non-publiques (via le
-//  routeRegex de routes.json qui exclut login, logout, home, etc.).
+//  RESPONSABILITÉ :
+//    • Rend le Carbon Header EIGEN quand l'utilisateur est connecté.
+//    • En mode SINGLE/OFF : redirige vers /login si non connecté
+//      (car le Guard tenant est silencieux dans ces modes).
+//    • En mode MULTI : NE redirige PAS (le TenantRoutingGuard le fait déjà).
+//      Rendre null évite une navigation simultanée contradictoire.
 //
-//  Logique de rendu :
-//    1. Utilisateur authentifié → rend le Header Carbon complet
-//    2. Non authentifié → redirige vers /login (avec slug tenant si mode multi)
-//
-//  useSession() utilise Suspense — ce composant est wrappé dans une limite
-//  Suspense par HeaderContainer (Carbon) ou la limite racine de l'app.
+//  RÈGLE D'OR :
+//    Mode multi  → Guard redirige vers /login,  Navbar rend null
+//    Mode single → Guard silencieux,             Navbar redirige vers /login
 // =============================================================================
 const Navbar: React.FC = () => {
   const session = useSession();
   const tenantMode = useTenantMode();
-  const activeTenant = useTenant();
   const egenSpaBase = window['getEgenSpaBase']();
 
   const currentReferrer = window.location.pathname.slice(
     window.location.pathname.indexOf(egenSpaBase) + egenSpaBase.length - 1,
   );
 
+  // ── Utilisateur connecté → rendre le Header (tous modes) ───────────────
   if (session?.authenticated && session?.user?.person) {
-    return <HeaderContainer render={HeaderItems}></HeaderContainer>;
+    return <HeaderContainer render={HeaderItems} />;
   }
 
-  // Non connecté — injecter le tenant dans l'URL de login si mode multi-tenant
-  const tenantParam =
-    tenantMode === 'multi' && activeTenant?.id
-      ? `?tenant=${encodeURIComponent(activeTenant.id)}`
-      : '';
+  // ── Non connecté, mode MULTI → Guard gère la redirection ───────────────
+  // Le TenantRoutingGuard a déjà (ou va) émettre navigate({ to: '/login?tenant=...' }).
+  // On retourne null pour éviter deux navigate() simultanés contradictoires.
+  if (tenantMode === 'multi') {
+    return null;
+  }
 
+  // ── Non connecté, mode SINGLE / OFF → Navbar gère la redirection ───────
+  // Le Guard est silencieux (skip) dans ces modes. C'est la Navbar qui
+  // assure le rôle de garde d'authentification.
   return (
     <Navigate
-      to={`/login${tenantParam}`}
+      to="/login"
       state={{ referrer: currentReferrer }}
     />
   );

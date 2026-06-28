@@ -30,11 +30,8 @@ export const configSchema = {
     _description: 'URL de la page de login. Redirection quand tenant résolu mais utilisateur non connecté.',
   },
 
-  tenantDashboardUrl: {
-    _type: Type.String,
-    _default: '${egenSpaBase}/home',
-    _description: 'URL de destination après résolution tenant + authentification réussie.',
-  },
+  // tenantDashboardUrl supprimé — le Guard ne redirige plus les utilisateurs connectés
+  // vers un dashboard. La navigation post-auth est gérée par la Navbar + Single-SPA.
 
   tenantSuspendedUrl: {
     _type: Type.String,
@@ -78,7 +75,7 @@ export interface ConfigSchema {
   rootDomain: string;
   landingPageUrl: string;
   loginUrl: string;
-  tenantDashboardUrl: string;
+  // tenantDashboardUrl removed
   tenantSuspendedUrl: string;
   validateSubdomainWithBackend: boolean;
   backendValidationEndpoint: string;
