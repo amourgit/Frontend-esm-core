@@ -50,7 +50,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-testing-library": "^7.1.1",
     "fake-indexeddb": "^4.0.2",
-    "fork-ts-checker-webpack-plugin": "^7.2.13",
+    "fork-ts-checker-webpack-plugin": "^9.1.0",
     "husky": "^8.0.3",
     "i18next-parser": "^9.3.0",
     "identity-obj-proxy": "^3.0.0",
@@ -62,7 +62,7 @@
     "timezone-mock": "^1.2.2",
     "turbo": "^2.5.2",
     "typescript": "^5.8.3",
-    "webpack": "^5.105.3"
+    "webpack": "^5.108.1"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix --max-warnings 0",
