@@ -1,4 +1,6 @@
-import { Header, HeaderContainer, HeaderGlobalBar, HeaderMenuButton } from '@carbon/react';
+import React, { useCallback, useState , useMemo} from 'react';
+import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 import {
   ConfigurableLink,
   ExtensionSlot,
@@ -9,84 +11,130 @@ import {
   useSession,
 } from '@egen/esm-framework';
 import { useTenantMode } from '@egen/esm-tenant';
-import React, { useCallback, useMemo, useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { isDesktop } from '../../utils';
 import Logo from '../logo/logo.component';
+import ContextSwitcher from './context-switcher/context-switcher.component';
+import SearchBar from './search-bar/search-bar.component';
+import BreadcrumbNav from './breadcrumb/breadcrumb.component';
+import AppMenuButton from './app-menu-button.component';
+import UserMenuButton from './user-menu-button.component';
 import NotificationsMenuPanel from '../navbar-header-panels/notifications-menu-panel.component';
 import SideMenuPanel from '../navbar-header-panels/side-menu-panel.component';
 import styles from './navbar.scss';
 
+// =============================================================================
+//  HEADER ITEMS — Contenu du niveau 1 de la topbar
+//
+//  Layout (space-between) :
+//
+//  [LEFT]  ContextSwitcher  |  Logo
+//  [MID]   ExtensionSlot top-nav-info-slot  (slot libre, invisible si vide)
+//  [RIGHT] SearchBar  ·  top-nav-actions-slot  ·  Notifications  ·  User  ·  Apps
+//
+//  Deux niveaux empilés verticalement :
+//    Niveau 1 : cette barre principale
+//    Niveau 2 : BreadcrumbNav (fil d'Ariane, invisible si slot vide)
+// =============================================================================
+
 const HeaderItems: React.FC = () => {
+  const { t } = useTranslation();
   const config = useConfig();
-  const [activeHeaderPanel, setActiveHeaderPanel] = useState<string>(null);
+  const [activeHeaderPanel, setActiveHeaderPanel] = useState<string | null>(null);
   const layout = useLayoutType();
   const { slotName, mode } = useLeftNavStore();
   const navMenuItems = useAssignedExtensions(slotName);
+
   const isActivePanel = useCallback((panelName: string) => activeHeaderPanel === panelName, [activeHeaderPanel]);
 
   const togglePanel = useCallback((panelName: string) => {
-    setActiveHeaderPanel((activeHeaderPanel) => (activeHeaderPanel === panelName ? null : panelName));
+    setActiveHeaderPanel((prev) => (prev === panelName ? null : panelName));
   }, []);
 
   const hidePanel = useCallback(
     (panelName: string) => () => {
-      setActiveHeaderPanel((activeHeaderPanel) => (activeHeaderPanel === panelName ? null : activeHeaderPanel));
+      setActiveHeaderPanel((prev) => (prev === panelName ? null : prev));
     },
     [],
   );
 
-  const showHamburger = useMemo(
-    () => (!isDesktop(layout) || mode === 'collapsed') && mode !== 'hidden' && navMenuItems.length > 0,
-    [navMenuItems.length, layout, mode],
-  );
+  const showHamburger = (!isDesktop(layout) || mode === 'collapsed') && mode !== 'hidden' && navMenuItems.length > 0;
 
   return (
-    <>
-      <Header aria-label="Egen" className={styles.topNavHeader}>
-        {showHamburger && (
-          <HeaderMenuButton
-            aria-label="Open menu"
-            isCollapsible
-            className={styles.headerMenuButton}
-            onClick={() => {
-              togglePanel('sideMenu');
-            }}
-            onMouseDown={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
-            isActive={isActivePanel('sideMenu')}
-          />
-        )}
-        <ConfigurableLink to={config.logo.link}>
-          <div className={showHamburger ? '' : styles.spacedLogo}>
+    // Wrapper à deux niveaux
+    <div className={styles.topNavWrapper}>
+      {/* ══ NIVEAU 1 — Barre principale ══════════════════════════════════════ */}
+      <Header aria-label={t('primaryNavigation', 'Navigation principale EIGEN')} className={styles.topNavHeader}>
+        {/* ── LEFT : hamburger + context switcher + séparateur + logo ── */}
+        <div className={styles.leftSection}>
+          {showHamburger && (
+            <HeaderMenuButton
+              aria-label={t('openMenu', 'Ouvrir le menu')}
+              isCollapsible
+              className={styles.headerMenuButton}
+              onClick={() => togglePanel('sideMenu')}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              isActive={isActivePanel('sideMenu')}
+            />
+          )}
+
+          {/* Context Switcher (visible uniquement en mode multi-tenant) */}
+          <ContextSwitcher />
+
+          {/* Séparateur vertical */}
+          <div className={styles.divider} aria-hidden="true" />
+
+          {/* Logo cliquable → /home du SPA */}
+          <ConfigurableLink to={config.logo?.link ?? '${egenSpaBase}/home'} className={styles.logoLink}>
             <Logo />
-          </div>
-        </ConfigurableLink>
-        <div className={styles.divider} />
-        <ExtensionSlot name="top-nav-info-slot" className={styles.topNavInfoSlot} />
-        <HeaderGlobalBar className={styles.headerGlobalBar}>
+          </ConfigurableLink>
+        </div>
+
+        {/* ── CENTRE : slot libre pour injections par les apps ── */}
+        {/*   Invisible si aucune extension n'y est rattachée.     */}
+        <div className={styles.centerSection}>
+          <ExtensionSlot name="top-nav-info-slot" className={styles.topNavInfoSlot} />
+        </div>
+
+        {/* ── RIGHT : search + actions + notifications + user + apps ── */}
+        <HeaderGlobalBar className={styles.rightSection}>
+          {/* Barre de recherche animée */}
+          <SearchBar />
+
+          {/* Actions injectables (ex: bouton aide, raccourcis) */}
           <ExtensionSlot
             name="top-nav-actions-slot"
             state={{ isActivePanel, togglePanel, hidePanel }}
             className={styles.topNavActionsSlot}
           />
-          <ExtensionSlot
-            name="notifications-menu-button-slot"
-            state={{
-              isActivePanel: isActivePanel,
-              togglePanel: togglePanel,
-            }}
-          />
+
+          {/* Notifications */}
+          <ExtensionSlot name="notifications-menu-button-slot" state={{ isActivePanel, togglePanel }} />
+
+          {/* Utilisateur connecté */}
+          <UserMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
+
+          {/* Applications */}
+          <AppMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
+
+          {/* Aide (slot extensible) */}
           <ExtensionSlot
             name="top-nav-app-menu-slot"
             state={{ isActivePanel, togglePanel, hidePanel }}
             className={styles.topNavActionsSlot}
           />
-          <SideMenuPanel hidePanel={hidePanel('sideMenu')} expanded={isActivePanel('sideMenu')} />
-          <NotificationsMenuPanel expanded={isActivePanel('notificationsMenu')} />
         </HeaderGlobalBar>
+
+        {/* ── Panneaux slides (side menu + notifications) ── */}
+        <SideMenuPanel hidePanel={hidePanel('sideMenu')} expanded={isActivePanel('sideMenu')} />
+        <NotificationsMenuPanel expanded={isActivePanel('notificationsMenu')} />
       </Header>
-    </>
+
+      {/* ══ NIVEAU 2 — Fil d'Ariane (breadcrumb) ═════════════════════════════
+           Invisible si le slot "top-nav-breadcrumb-slot" n'a aucune extension.
+           Chaque app monte ses éléments de breadcrumb dans ce slot.          */}
+      <BreadcrumbNav />
+    </div>
   );
 };
 
@@ -113,14 +161,12 @@ const Navbar: React.FC = () => {
     window.location.pathname.indexOf(egenSpaBase) + egenSpaBase.length - 1,
   );
 
-  // ── Utilisateur connecté → rendre le Header (tous modes) ───────────────
+  // Connecté → rendre la topbar complète (tous modes)
   if (session?.authenticated && session?.user?.person) {
     return <HeaderContainer render={HeaderItems} />;
   }
 
-  // ── Non connecté, mode MULTI → Guard gère la redirection ───────────────
-  // Le TenantRoutingGuard a déjà (ou va) émettre navigate({ to: '/login?tenant=...' }).
-  // On retourne null pour éviter deux navigate() simultanés contradictoires.
+  // Non connecté, mode multi → Guard TenantRoutingGuard gère la redirection
   if (tenantMode === 'multi') {
     return null;
   }

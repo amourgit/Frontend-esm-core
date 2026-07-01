@@ -1,51 +1,185 @@
+// =============================================================================
+//  NAVBAR — Styles de la navigation principale EIGEN
+//
+//  Philosophie : ZÉRO valeur codée en dur.
+//  TOUT vient des CSS vars injectées par esm-theme depuis theme.default.json.
+//
+//  Convention de nommage CSS vars (identique à esm-login-app) :
+//    panel.dark.header.*    → var(--panel-header-*)    [résolu via data-theme]
+//    colors.primary.500     → var(--colors-primary-500)
+//    shadows.md             → var(--shadows-md)
+//    transitions.default    → var(--transitions-default)
+//    border-radius.xl       → var(--border-radius-xl)
+//
+//  Structure (2 niveaux superposés) :
+//    .topNavWrapper
+//      .topNavHeader  (Carbon <Header>) — niveau 1 — hauteur fixe 48px
+//        .leftSection   [ context-switcher | divider | logo ]
+//        .centerSection [ top-nav-info-slot ]
+//        .rightSection  [ search | actions | notifs | user | apps ]
+//      BreadcrumbNav                    — niveau 2 — hauteur 32px (caché si slot vide)
+// =============================================================================
+
 @use '@carbon/layout';
-@use '@egen/esm-styleguide/src/vars' as *;
+@use '@igen/esm-styleguide/src/vars' as *;
+
+// ─── Wrapper deux niveaux ────────────────────────────────────────────────────
+.topNavWrapper {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: var(--own-offline-banner-height, 0);
+  z-index: var(--z-index-sticky, 200);
+}
+
+// ─── Niveau 1 — Barre principale ─────────────────────────────────────────────
+.topNavHeader {
+  // Override Carbon : fond glass du thème EIGEN
+  background: var(--panel-header-background) !important;
+  backdrop-filter: var(--panel-header-backdrop-filter) !important;
+  -webkit-backdrop-filter: var(--panel-header-backdrop-filter) !important;
+  border-bottom: 1px solid var(--panel-header-border) !important;
+  box-shadow: var(--panel-header-box-shadow) !important;
+
+  // Layout : distribué en 3 zones (left | center | right)
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 1rem !important;
+  height: var(--layout-header-height, 48px) !important;
+  gap: 0.5rem !important;
+
+  // Override Carbon qui force un max-width
+  max-width: none !important;
+}
+
+// ─── Zone gauche ─────────────────────────────────────────────────────────────
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.headerMenuButton {
+  height: 36px;
+  width: 36px;
+  padding: layout.$spacing-03;
+  margin: 0;
+  border-radius: var(--border-radius-md, 0.75rem);
+  color: var(--colors-surface-foreground) !important;
+  background: transparent !important;
+
+  &:hover {
+    background: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent) !important;
+  }
+}
+
+// Séparateur vertical gauche (entre context-switcher et logo)
+.divider {
+  width: 1px;
+  height: 20px;
+  background: color-mix(in srgb, var(--colors-surface-foreground) 15%, transparent);
+  flex-shrink: 0;
+  border-radius: var(--border-radius-full, 9999px);
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 0.25rem;
+  border-radius: var(--border-radius-md, 0.75rem);
+  transition: var(--transitions-opacity);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// ─── Zone centrale ───────────────────────────────────────────────────────────
+// Conteneur invisible au repos — les apps y injectent ce qu'elles veulent.
+.centerSection {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.topNavInfoSlot {
+  display: flex;
+  align-items: center;
+  gap: layout.$spacing-03;
+  // Texte petit — conforme à la directive
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  color: color-mix(in srgb, var(--colors-surface-foreground) 65%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+// ─── Zone droite ─────────────────────────────────────────────────────────────
+.rightSection {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.125rem !important;
+  flex-shrink: 0;
+}
 
 .topNavActionsSlot {
   display: flex;
   align-items: center;
+  gap: 0;
 
+  // Override des liens Carbon dans le slot
   > a {
-    color: white;
+    color: color-mix(in srgb, var(--colors-surface-foreground) 70%, transparent);
     text-decoration: none;
-    margin: 0 layout.$spacing-04;
+    transition: var(--transitions-colors);
+
+    &:hover {
+      color: var(--colors-surface-foreground);
+    }
   }
 }
 
-.headerGlobalBarButton {
-  @include brand-02(background-color);
+// ─── Boutons d'action globaux (Carbon HeaderGlobalAction) ────────────────────
+// Override complet pour matcher le design EIGEN (pas le thème Carbon par défaut)
+:global(.cds--header__action) {
+  color: color-mix(in srgb, var(--colors-surface-foreground) 70%, transparent) !important;
+  background: transparent !important;
+  border-radius: var(--border-radius-md, 0.75rem) !important;
+  width: 36px !important;
+  height: 36px !important;
+  transition: var(--transitions-default) !important;
+
+  &:hover {
+    background: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent) !important;
+    color: var(--colors-surface-foreground) !important;
+  }
+
+  &:global(.cds--header__action--active),
+  &.headerGlobalBarButton {
+    background: color-mix(in srgb, var(--colors-primary-500) 15%, transparent) !important;
+    color: var(--colors-primary-300) !important;
+  }
 }
 
-.topNavHeader {
-  top: var(--egen-offline-banner-height);
-}
-
-.activePanel {
-  @include brand-01(background-color);
-}
-
-.headerMenuButton {
-  height: layout.$spacing-09;
-  width: layout.$spacing-09;
-  padding: layout.$spacing-04;
-  margin-inline-end: layout.$spacing-02;
-}
-
-.spacedLogo {
-  margin-inline-start: layout.$spacing-05;
-}
-
-.divider {
-  width: 1px;
-  height: layout.$spacing-06;
-  background-color: rgba(244, 244, 244, 0.4);
-  margin-inline-start: layout.$spacing-04;
-}
-
-.topNavInfoSlot {
-  gap: layout.$spacing-03;
-}
-
+// ─── Panel wrapper ────────────────────────────────────────────────────────────
 .panelWrapper {
   display: contents;
+}
+
+// ─── État actif panel ─────────────────────────────────────────────────────────
+.activePanel {
+  background: color-mix(in srgb, var(--colors-primary-500) 15%, transparent) !important;
+  color: var(--colors-primary-300) !important;
+}
+
+.headerGlobalBarButton {
+  background: color-mix(in srgb, var(--colors-primary-500) 15%, transparent) !important;
+  color: var(--colors-primary-300) !important;
 }
