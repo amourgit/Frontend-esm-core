@@ -16,6 +16,7 @@ import { dashboardConfigSchema } from './components/dashboard/dashboard.componen
 import genericLinkComponent, { genericLinkConfigSchema } from './components/generic-link/generic-link.component';
 import UserMenuButton from './components/navbar/user-menu-button.component';
 import AppMenuButton from './components/navbar/app-menu-button.component';
+import BreadcrumbNav from './components/navbar/breadcrumb/breadcrumb.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -66,3 +67,8 @@ export const linkComponent = getSyncLifecycle(genericLinkComponent, {
 export const navGroup = getSyncLifecycle(NavGroup, options);
 
 export const dashboard = getAsyncLifecycle(() => import('./components/dashboard/dashboard.component'), options);
+
+export const breadcrumbNav = getSyncLifecycle(BreadcrumbNav, {
+  featureName: 'breadcrumb-nav',
+  moduleName,
+});
