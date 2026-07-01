@@ -17,17 +17,17 @@ html {
 // =============================================================================
 
 html[data-public-route='true'] {
-  #eigen-top-nav-app-container {
+  #egen-top-nav-app-container {
     height: 0 !important;
     overflow: hidden;
   }
 
-  #eigen-apps-container {
+  #egen-apps-container {
     min-height: 100vh;
   }
 
-  #eigen-left-nav-container,
-  #eigen-workspaces-container {
+  #egen-left-nav-container,
+  #egen-workspaces-container {
     display: none;
   }
 }

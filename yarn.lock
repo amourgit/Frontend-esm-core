@@ -1152,6 +1152,7 @@ __metadata:
   resolution: "@egen/esm-primary-navigation-app@workspace:packages/apps/esm-primary-navigation-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
+    "@egen/esm-tenant": "workspace:*"
     "@vitest/coverage-v8": "npm:^4.1.2"
     egen: "workspace:*"
     happy-dom: "npm:^20.6.0"
@@ -1168,6 +1169,7 @@ __metadata:
   peerDependencies:
     "@carbon/react": 1.x
     "@egen/esm-framework": 9.x
+    "@egen/esm-tenant": "workspace:*"
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x

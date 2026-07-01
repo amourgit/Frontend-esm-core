@@ -7,8 +7,8 @@ import {
   useLayoutType,
   useLeftNavStore,
   useSession,
-} from '@eigen/esm-framework';
-import { useTenantMode } from '@eigen/esm-tenant';
+} from '@egen/esm-framework';
+import { useTenantMode } from '@egen/esm-tenant';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { isDesktop } from '../../utils';
@@ -94,7 +94,7 @@ const HeaderItems: React.FC = () => {
 //  NAVBAR — Barre de navigation des espaces tenant authentifiés
 //
 //  RESPONSABILITÉ :
-//    • Rend le Carbon Header EIGEN quand l'utilisateur est connecté.
+//    • Rend le Carbon Header EGEN quand l'utilisateur est connecté.
 //    • En mode SINGLE/OFF : redirige vers /login si non connecté
 //      (car le Guard tenant est silencieux dans ces modes).
 //    • En mode MULTI : NE redirige PAS (le TenantRoutingGuard le fait déjà).
@@ -128,12 +128,7 @@ const Navbar: React.FC = () => {
   // ── Non connecté, mode SINGLE / OFF → Navbar gère la redirection ───────
   // Le Guard est silencieux (skip) dans ces modes. C'est la Navbar qui
   // assure le rôle de garde d'authentification.
-  return (
-    <Navigate
-      to="/login"
-      state={{ referrer: currentReferrer }}
-    />
-  );
+  return <Navigate to="/login" state={{ referrer: currentReferrer }} />;
 };
 
 export default Navbar;

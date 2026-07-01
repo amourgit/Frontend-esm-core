@@ -16,7 +16,7 @@ import styles from './root.scss';
 //  Routes publiques (null) :
 //    /login/*              Page de connexion
 //    /logout/*             Déconnexion
-//    /home/*               Landing page publique EIGEN SaaS
+//    /home/*               Landing page publique EGEN SaaS
 //    /change-password/*    Changement de mot de passe
 //    /tenant-suspended/*   Page de suspension tenant
 //

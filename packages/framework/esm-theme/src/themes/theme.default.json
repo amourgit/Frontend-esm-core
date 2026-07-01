@@ -206,7 +206,7 @@
     },
     "fontSize": {
       "xs": {
-        "size": "0.75rem",
+        "size": "12rem",
         "lineHeight": "1rem"
       },
       "sm": {

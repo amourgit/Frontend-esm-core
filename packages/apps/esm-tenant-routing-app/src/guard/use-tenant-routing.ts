@@ -1,11 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { useSession, useConfig, navigate, interpolateUrl } from '@eigen/esm-framework';
-import {
-  useTenantMode,
-  useTenantStatus,
-  useTenant,
-  getTenantByDomain,
-} from '@eigen/esm-tenant';
+import { useSession, useConfig, navigate, interpolateUrl } from '@egen/esm-framework';
+import { useTenantMode, useTenantStatus, useTenant, getTenantByDomain } from '@egen/esm-tenant';
 import { analyzeSubdomain, buildLoginUrlWithTenant } from './subdomain-utils';
 import { type ConfigSchema } from '../config-schema';
 
@@ -108,7 +103,7 @@ export function useTenantRouting(): RoutingDecision {
   }
 
   // Pas de sous-domaine sur le root domain → l'utilisateur est sur
-  // l'URL globale de la plateforme (ex: eigen.gabon.gov.ga/quelque-chose)
+  // l'URL globale de la plateforme (ex: egen.gabon.gov.ga/quelque-chose)
   // sans être dans un espace tenant. On le renvoie à la landing globale.
   if (analysis.isRootDomain || !analysis.hasSubdomain) {
     return { action: 'redirect-global-landing', reason: 'no-subdomain' };
@@ -154,10 +149,7 @@ export function useTenantRouting(): RoutingDecision {
 //  Séparé du hook de décision pour faciliter les tests unitaires.
 //  Chaque décision n'est exécutée qu'une seule fois (navigatedRef).
 // =============================================================================
-export function useTenantRoutingNavigator(
-  decision: RoutingDecision,
-  config: ConfigSchema,
-): void {
+export function useTenantRoutingNavigator(decision: RoutingDecision, config: ConfigSchema): void {
   const navigatedRef = useRef<string>('');
 
   useEffect(() => {
