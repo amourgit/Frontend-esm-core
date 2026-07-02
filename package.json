@@ -7,7 +7,13 @@
     "packages/apps/*",
     "packages/framework/*",
     "packages/shell/*",
-    "packages/tooling/*"
+    "packages/tooling/*",
+    "packages/framework/esm-ai-config",
+    "packages/framework/esm-ai-events",
+    "packages/framework/esm-ai-context",
+    "packages/framework/esm-ai-tools",
+    "packages/framework/esm-ai-extensions",
+    "packages/framework/esm-ai-framework"
   ],
   "scripts": {
     "run:egen": "egen",
