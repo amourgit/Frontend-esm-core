@@ -12,6 +12,7 @@ import {
   useConfig,
   useConnectivity,
   useSession,
+  applyDevAuthBypassForLogin,
 } from '@egen/esm-framework';
 import { useTenant, useTenantMode, storeHeaderTenantId, getTenantStoreState } from '@egen/esm-tenant';
 import { type ConfigSchema } from '../config-schema';
@@ -175,7 +176,18 @@ const Login: React.FC = () => {
 
       try {
         setIsLoggingIn(true);
-        const sessionStore = await refetchCurrentUser(currentUsername, currentPassword);
+
+        // ── Bypass d'authentification pour développement ───────────────────────
+        // Si EGEN_DEV_NO_AUTH=true, on skippe l'appel réseau et utilise une session fictive
+        const bypassSession = applyDevAuthBypassForLogin();
+        let sessionStore;
+
+        if (bypassSession) {
+          sessionStore = bypassSession;
+        } else {
+          sessionStore = await refetchCurrentUser(currentUsername, currentPassword);
+        }
+
         const session = sessionStore.session;
         const authenticated = sessionStore?.session?.authenticated;
 
@@ -187,10 +199,10 @@ const Login: React.FC = () => {
             storeHeaderTenantId(effectiveTenantSlug, getTenantStoreState().config.storageKey ?? 'egen:tenant:active');
           }
 
-          // TODO(EGEN): La condition sur sessionLocation était liée à OpenMRS.
+          // TODO(EGEN): La condition sur sessionLocation était liée à Egen.
           // Dans EGEN, on navigue directement vers la route de succès.
           //
-          // COMMENTÉ — ancienne logique OpenMRS :
+          // COMMENTÉ — ancienne logique Egen :
           // if (session.sessionLocation) { ... } else { navigate('/login/location'); }
           {
             let to = loginLinks?.loginSuccess || '/home';

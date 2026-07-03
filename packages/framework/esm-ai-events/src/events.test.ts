@@ -2,18 +2,11 @@
  * @vitest-environment jsdom
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  dispatchAIEvent,
-  subscribeToAIEvent,
-  observeAIEvent,
-  subscribeToAllAIEvents,
-  aiEvents$,
-  AI_EVENTS,
-} from '.';
+import { dispatchAIEvent, subscribeToAIEvent, observeAIEvent, subscribeToAllAIEvents, aiEvents$, AI_EVENTS } from '.';
 
 describe('AI Event Bus', () => {
   describe('dispatchAIEvent', () => {
-    it('notifie les subscribers de l\'événement correct', () => {
+    it("notifie les subscribers de l'événement correct", () => {
       const handler = vi.fn();
       const unsub = subscribeToAIEvent(AI_EVENTS.TOOL_EXECUTED, handler);
 
@@ -45,7 +38,7 @@ describe('AI Event Bus', () => {
 
       const payload = handler.mock.calls[0][0];
       expect(payload.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/);
-      expect(payload.eventId).toMatch(/^eigen-ai-evt-/);
+      expect(payload.eventId).toMatch(/^egen-ai-evt-/);
       unsub();
     });
 
@@ -82,7 +75,7 @@ describe('AI Event Bus', () => {
   });
 
   describe('subscribeToAIEvent', () => {
-    it('ne reçoit pas les événements d\'autres types', () => {
+    it("ne reçoit pas les événements d'autres types", () => {
       const handler = vi.fn();
       const unsub = subscribeToAIEvent(AI_EVENTS.TOOL_REGISTERED, handler);
 
@@ -128,11 +121,9 @@ describe('AI Event Bus', () => {
   });
 
   describe('observeAIEvent', () => {
-    it('retourne un Observable qui émet pour le bon type d\'événement', () => {
+    it("retourne un Observable qui émet pour le bon type d'événement", () => {
       const received: string[] = [];
-      const sub = observeAIEvent(AI_EVENTS.TOOL_REGISTERED).subscribe((p) =>
-        received.push(p.toolId),
-      );
+      const sub = observeAIEvent(AI_EVENTS.TOOL_REGISTERED).subscribe((p) => received.push(p.toolId));
 
       dispatchAIEvent(AI_EVENTS.TOOL_REGISTERED, {
         toolId: 'tool-a',
@@ -153,7 +144,7 @@ describe('AI Event Bus', () => {
   });
 
   describe('subscribeToAllAIEvents', () => {
-    it('reçoit tous les types d\'événements', () => {
+    it("reçoit tous les types d'événements", () => {
       const received: string[] = [];
       const unsub = subscribeToAllAIEvents((name) => received.push(name));
 

@@ -1,16 +1,16 @@
 // =============================================================================
-//  @eigen/esm-ai-framework — React hooks pour les consommateurs (Layer 2)
+//  @egen/esm-ai-framework — React hooks pour les consommateurs (Layer 2)
 // =============================================================================
 
 import { useSyncExternalStore, useCallback, useEffect, useRef } from 'react';
-import { useAIConfig, useAIEnabled } from '@eigen/esm-ai-config';
-import { aiContextStore, getAIContextJson } from '@eigen/esm-ai-context';
-import { getAllTools, executeTool, getToolsSchemaForLLM } from '@eigen/esm-ai-tools';
-import { sessionStore } from '@eigen/esm-api';
-import type { AIToolRequest, AIToolResult } from '@eigen/esm-ai-tools';
-import type { AIContext } from '@eigen/esm-ai-context';
+import { useAIConfig, useAIEnabled } from '@egen/esm-ai-config';
+import { aiContextStore, getAIContextJson } from '@egen/esm-ai-context';
+import { getAllTools, executeTool, getToolsSchemaForLLM } from '@egen/esm-ai-tools';
+import { sessionStore } from '@egen/esm-api';
+import type { AIToolRequest, AIToolResult } from '@egen/esm-ai-tools';
+import type { AIContext } from '@egen/esm-ai-context';
 
-export { useAIConfig, useAIEnabled } from '@eigen/esm-ai-config';
+export { useAIConfig, useAIEnabled } from '@egen/esm-ai-config';
 
 // ─── useAIContext ─────────────────────────────────────────────────────────────
 
@@ -30,11 +30,7 @@ export function useAIContext(): AIContext | null {
  * Hook React pour le contexte IA sérialisé en JSON (pour l'envoi au backend).
  */
 export function useAIContextJson(): string {
-  return useSyncExternalStore(
-    aiContextStore.subscribe,
-    getAIContextJson,
-    () => '{}',
-  );
+  return useSyncExternalStore(aiContextStore.subscribe, getAIContextJson, () => '{}');
 }
 
 // ─── useExecuteTool ───────────────────────────────────────────────────────────
@@ -72,7 +68,7 @@ export function useExecuteTool(): UseExecuteToolResult {
   const execute = useCallback(
     async (request: AIToolRequest): Promise<AIToolResult> => {
       if (executingRef.current) {
-        return { success: false, error: 'Un tool est déjà en cours d\'exécution', durationMs: 0 };
+        return { success: false, error: "Un tool est déjà en cours d'exécution", durationMs: 0 };
       }
 
       executingRef.current = true;
@@ -111,7 +107,7 @@ export function useAvailableToolsSchema(): object[] {
 
   const privileges =
     sessionState.loaded && sessionState.session?.user
-      ? (sessionState.session.user.privileges?.map((p) => p.display) ?? [])
+      ? sessionState.session.user.privileges?.map((p) => p.display) ?? []
       : [];
 
   return getToolsSchemaForLLM(privileges);

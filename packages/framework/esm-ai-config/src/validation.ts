@@ -1,8 +1,8 @@
 // =============================================================================
-//  @eigen/esm-ai-config — Validation de la configuration
+//  @egen/esm-ai-config — Validation de la configuration
 // =============================================================================
 
-import type { AIConfig, PartialAIConfig } from './types';
+import type { AIConfig, PartialAIConfig, DeepPartial } from './types';
 
 export interface ValidationResult {
   valid: boolean;
@@ -20,7 +20,11 @@ export function validateAIConfig(config: AIConfig): ValidationResult {
 
   // ── Provider ────────────────────────────────────────────────────────────────
   if (!VALID_PROVIDERS.includes(config.provider.provider as any)) {
-    errors.push(`provider.provider: valeur invalide "${config.provider.provider}". Valeurs acceptées : ${VALID_PROVIDERS.join(', ')}`);
+    errors.push(
+      `provider.provider: valeur invalide "${config.provider.provider}". Valeurs acceptées : ${VALID_PROVIDERS.join(
+        ', ',
+      )}`,
+    );
   }
 
   if (!config.provider.model || config.provider.model.trim() === '') {
@@ -45,16 +49,22 @@ export function validateAIConfig(config: AIConfig): ValidationResult {
   }
 
   if (config.backend.requestTimeoutMs < 1000) {
-    warnings.push(`backend.requestTimeoutMs: valeur très basse (${config.backend.requestTimeoutMs}ms). Recommandé : ≥ 5000ms`);
+    warnings.push(
+      `backend.requestTimeoutMs: valeur très basse (${config.backend.requestTimeoutMs}ms). Recommandé : ≥ 5000ms`,
+    );
   }
 
   if (config.backend.maxRetries > 10) {
-    warnings.push(`backend.maxRetries: valeur élevée (${config.backend.maxRetries}). Peut ralentir l'UX en cas d'erreur.`);
+    warnings.push(
+      `backend.maxRetries: valeur élevée (${config.backend.maxRetries}). Peut ralentir l'UX en cas d'erreur.`,
+    );
   }
 
   // ── Context ─────────────────────────────────────────────────────────────────
   if (config.context.maxContextSize < 1000) {
-    warnings.push(`context.maxContextSize: valeur très basse (${config.context.maxContextSize}). Le contexte sera tronqué de façon agressive.`);
+    warnings.push(
+      `context.maxContextSize: valeur très basse (${config.context.maxContextSize}). Le contexte sera tronqué de façon agressive.`,
+    );
   }
 
   if (config.context.serializationDepth < 1 || config.context.serializationDepth > 10) {
@@ -72,12 +82,18 @@ export function validateAIConfig(config: AIConfig): ValidationResult {
 
   // ── Security ────────────────────────────────────────────────────────────────
   if (config.security.toolTimeoutMs < 500) {
-    warnings.push(`security.toolTimeoutMs: valeur très basse (${config.security.toolTimeoutMs}ms). Des tools légitimes pourraient timeout.`);
+    warnings.push(
+      `security.toolTimeoutMs: valeur très basse (${config.security.toolTimeoutMs}ms). Des tools légitimes pourraient timeout.`,
+    );
   }
 
   // ── Observability ───────────────────────────────────────────────────────────
   if (!VALID_LOG_LEVELS.includes(config.observability.logLevel as any)) {
-    errors.push(`observability.logLevel: valeur invalide "${config.observability.logLevel}". Valeurs acceptées : ${VALID_LOG_LEVELS.join(', ')}`);
+    errors.push(
+      `observability.logLevel: valeur invalide "${
+        config.observability.logLevel
+      }". Valeurs acceptées : ${VALID_LOG_LEVELS.join(', ')}`,
+    );
   }
 
   return {
@@ -95,7 +111,7 @@ export function mergeConfig(base: AIConfig, override: PartialAIConfig): AIConfig
   return deepMerge(base, override) as AIConfig;
 }
 
-function deepMerge<T extends object>(target: T, source: Partial<T>): T {
+function deepMerge<T extends object>(target: T, source: DeepPartial<T>): T {
   const result = { ...target };
 
   for (const key of Object.keys(source) as (keyof T)[]) {

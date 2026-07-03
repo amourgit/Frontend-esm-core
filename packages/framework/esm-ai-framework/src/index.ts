@@ -1,5 +1,5 @@
 // =============================================================================
-//  @eigen/esm-ai-framework — API publique de la couche 1 IA EIGEN
+//  @egen/esm-ai-framework — API publique de la couche 1 IA EGEN
 //
 //  Point d'entrée unique pour tous les consommateurs de la couche IA.
 //  Re-exporte l'ensemble des primitives avec une API stable et versionnée.
@@ -11,12 +11,12 @@
 //    useAIContext,
 //    useExecuteTool,
 //    useAIEnabled,
-//  } from '@eigen/esm-ai-framework';
+//  } from '@egen/esm-ai-framework';
 //  ```
 //
 //  Usage (microfrontend — extension) :
 //  ```ts
-//  import { defineAIModule } from '@eigen/esm-ai-framework';
+//  import { defineAIModule } from '@egen/esm-ai-framework';
 //  ```
 // =============================================================================
 
@@ -41,7 +41,7 @@ export {
   type AISecurityConfig,
   type AIObservabilityConfig,
   type PartialAIConfig,
-} from '@eigen/esm-ai-config';
+} from '@egen/esm-ai-config';
 
 // ─── Événements ───────────────────────────────────────────────────────────────
 export {
@@ -54,7 +54,7 @@ export {
   AI_EVENTS,
   type AIEventName,
   type AIEventPayloadMap,
-} from '@eigen/esm-ai-events';
+} from '@egen/esm-ai-events';
 
 // ─── Contexte ─────────────────────────────────────────────────────────────────
 export {
@@ -73,7 +73,7 @@ export {
   type AIPermissionsContext,
   type AIExtensionContext,
   type AIContextProvider,
-} from '@eigen/esm-ai-context';
+} from '@egen/esm-ai-context';
 
 // ─── Tools ────────────────────────────────────────────────────────────────────
 export {
@@ -100,10 +100,10 @@ export {
   type AIToolDecorator,
   type AICapability,
   type AIToolValidationResult,
-} from '@eigen/esm-ai-tools';
+} from '@egen/esm-ai-tools';
 
 // ─── Extensions (API haut niveau pour microfrontends) ─────────────────────────
-export { defineAIModule, type AIModuleDefinition } from '@eigen/esm-ai-extensions';
+export { defineAIModule, type AIModuleDefinition } from '@egen/esm-ai-extensions';
 
 // ─── React hooks ──────────────────────────────────────────────────────────────
 export {

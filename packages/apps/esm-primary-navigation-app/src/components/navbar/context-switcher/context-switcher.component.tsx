@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { navigate, interpolateUrl, useConfig } from '@igen/esm-framework';
-import { useTenant, useTenantMode, getAllTenants } from '@igen/esm-tenant';
+import { navigate, interpolateUrl, useConfig } from '@egen/esm-framework';
+import { useTenant, useTenantMode, getAllTenants } from '@egen/esm-tenant';
 import { type ConfigSchema } from '../../../config-schema';
 import styles from './context-switcher.scss';
 

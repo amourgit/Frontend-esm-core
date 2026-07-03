@@ -1,31 +1,31 @@
 // =============================================================================
-//  @eigen/esm-ai-config — Store Zustand de configuration IA
+//  @egen/esm-ai-config — Store Zustand de configuration IA
 //
-//  Suit exactement le pattern des stores EIGEN existants :
+//  Suit exactement le pattern des stores EGEN existants :
 //    createGlobalStore + subscribeTo + getGlobalStore
-//  Compatible avec useStore() de @eigen/esm-react-utils.
+//  Compatible avec useStore() de @egen/esm-react-utils.
 // =============================================================================
 
-import { createGlobalStore, subscribeTo } from '@eigen/esm-state';
+import { createGlobalStore, subscribeTo } from '@egen/esm-state';
 import type { AIConfig, AIConfigStore, PartialAIConfig } from './types';
 import { DEFAULT_AI_CONFIG } from './defaults';
 import { validateAIConfig, mergeConfig } from './validation';
 
-/** Nom du store — doit être unique dans l'application EIGEN */
-const STORE_NAME = 'eigen:ai:config';
+/** Nom du store — doit être unique dans l'application EGEN */
+const STORE_NAME = 'egen:ai:config';
 
 /**
- * Store Zustand global de la configuration IA EIGEN.
+ * Store Zustand global de la configuration IA EGEN.
  *
  * Usage direct (avancé) :
  * ```ts
- * import { aiConfigStore } from '@eigen/esm-ai-config';
+ * import { aiConfigStore } from '@egen/esm-ai-config';
  * const { config } = aiConfigStore.getState();
  * ```
  *
  * Usage React (recommandé) :
  * ```ts
- * import { useAIConfig } from '@eigen/esm-ai-config';
+ * import { useAIConfig } from '@egen/esm-ai-config';
  * const { enabled } = useAIConfig();
  * ```
  */
@@ -52,11 +52,11 @@ export function overrideAIConfig(override: PartialAIConfig, source: AIConfigStor
   const validation = validateAIConfig(merged);
 
   if (validation.warnings.length > 0) {
-    console.warn('[EIGEN AI Config] Avertissements de configuration :', validation.warnings);
+    console.warn('[EGEN AI Config] Avertissements de configuration :', validation.warnings);
   }
 
   if (!validation.valid) {
-    console.error('[EIGEN AI Config] Configuration invalide, override rejeté :', validation.errors);
+    console.error('[EGEN AI Config] Configuration invalide, override rejeté :', validation.errors);
     aiConfigStore.setState((s) => ({ ...s, errors: validation.errors }));
     return false;
   }

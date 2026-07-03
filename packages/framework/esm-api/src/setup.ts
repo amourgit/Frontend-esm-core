@@ -1,6 +1,7 @@
 import { defineConfigSchema } from '@egen/esm-config';
 import { refetchCurrentUser } from './current-user';
 import { configSchema } from './config-schema';
+import { isDevAuthBypassEnabled } from './dev-auth-bypass';
 
 /**
  * @internal
@@ -8,5 +9,8 @@ import { configSchema } from './config-schema';
 export function setupApiModule() {
   defineConfigSchema('@egen/esm-api', configSchema);
 
-  refetchCurrentUser();
+  // Skipper l'appel réseau si le bypass d'authentification est activé
+  if (!isDevAuthBypassEnabled()) {
+    refetchCurrentUser();
+  }
 }

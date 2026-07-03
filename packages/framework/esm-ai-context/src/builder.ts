@@ -1,14 +1,14 @@
 // =============================================================================
-//  @eigen/esm-ai-context — Context Builder
+//  @egen/esm-ai-context — Context Builder
 //
-//  Agrège tous les stores EIGEN dans une représentation sérialisable stable.
+//  Agrège tous les stores EGEN dans une représentation sérialisable stable.
 //  N'expose JAMAIS les stores internes directement.
 //  Accède aux stores via leurs APIs publiques (getState(), not subscribe).
 // =============================================================================
 
-import { sessionStore } from '@eigen/esm-api';
-import { getAIConfig } from '@eigen/esm-ai-config';
-import { AI_EVENTS, dispatchAIEvent } from '@eigen/esm-ai-events';
+import { sessionStore } from '@egen/esm-api';
+import { getAIConfig } from '@egen/esm-ai-config';
+import { AI_EVENTS, dispatchAIEvent } from '@egen/esm-ai-events';
 import { collectProviderData } from './provider-registry';
 import type { AIContext, AINavigationContext, AIPermissionsContext, AIExtensionContext } from './types';
 
@@ -55,7 +55,7 @@ function safeSerialize(context: AIContext, maxSize: number): { json: string; tru
   return { json: JSON.stringify(truncated, null, 0), truncated: true };
 }
 
-// ─── Lecture des stores EIGEN ─────────────────────────────────────────────────
+// ─── Lecture des stores EGEN ─────────────────────────────────────────────────
 
 function buildUserContext(): AIContext['user'] {
   const state = sessionStore.getState();
@@ -88,8 +88,8 @@ function buildPermissionsContext(): AIPermissionsContext {
   const featureFlags: Record<string, boolean> = {};
   try {
     for (const key of Object.keys(localStorage)) {
-      if (key.startsWith('eigen:feature-flag:')) {
-        const flagName = key.replace('eigen:feature-flag:', '');
+      if (key.startsWith('egen:feature-flag:')) {
+        const flagName = key.replace('egen:feature-flag:', '');
         featureFlags[flagName] = localStorage.getItem(key) === 'true';
       }
     }
@@ -107,9 +107,9 @@ function buildPermissionsContext(): AIPermissionsContext {
 
 function buildTenantContext(): AIContext['tenant'] {
   // Accéder au tenant store via son API publique (pas d'import direct du store)
-  // On lit window.eigenTenantMode comme le fait le framework tenant
+  // On lit window.egenTenantMode comme le fait le framework tenant
   try {
-    const mode = (window as any).eigenTenantMode ?? 'off';
+    const mode = (window as any).egenTenantMode ?? 'off';
     if (mode === 'off') return null;
 
     // Tenter de lire le store tenant s'il est disponible
@@ -135,19 +135,23 @@ function buildTenantContext(): AIContext['tenant'] {
 }
 
 function buildNavigationContext(): AINavigationContext {
-  const spaBase = typeof window !== 'undefined' ? (window.getEigenSpaBase?.() ?? '/') : '/';
+  const spaBase = typeof window !== 'undefined' ? (window as any).getEgenSpaBase?.() ?? '/' : '/';
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
-  const currentRoute = pathname.startsWith(spaBase)
-    ? pathname.slice(spaBase.length) || '/'
-    : pathname;
+  const currentRoute = pathname.startsWith(spaBase) ? pathname.slice(spaBase.length) || '/' : pathname;
 
   // Lire l'historique de navigation depuis sessionStorage
   const recentRoutes: string[] = [];
   try {
-    const history: string[] = JSON.parse(sessionStorage.getItem('eigen:history') ?? '[]');
-    recentRoutes.push(...history.slice(-5).map((url) => {
-      try { return new URL(url).pathname; } catch { return url; }
-    }));
+    const history: string[] = JSON.parse(sessionStorage.getItem('egen:history') ?? '[]');
+    recentRoutes.push(
+      ...history.slice(-5).map((url) => {
+        try {
+          return new URL(url).pathname;
+        } catch {
+          return url;
+        }
+      }),
+    );
   } catch {
     // sessionStorage non disponible
   }
@@ -186,7 +190,7 @@ function buildExtensionsContext(): AIExtensionContext {
 // ─── Builder principal ────────────────────────────────────────────────────────
 
 /**
- * Construit le contexte IA complet depuis tous les stores EIGEN.
+ * Construit le contexte IA complet depuis tous les stores EGEN.
  * Cette fonction est pure — elle n'a aucun effet de bord.
  * Elle peut être appelée à tout moment pour obtenir un snapshot du contexte.
  */
@@ -201,11 +205,9 @@ export function buildAIContext(): { context: AIContext; contextJson: string; tru
     tenant: buildTenantContext(),
     navigation: buildNavigationContext(),
     permissions: buildPermissionsContext(),
-    extensions: config.context.includeActiveExtensions
-      ? buildExtensionsContext()
-      : { activeSlots: {} },
+    extensions: config.context.includeActiveExtensions ? buildExtensionsContext() : { activeSlots: {} },
     appContext: config.context.includeActiveExtensions
-      ? truncateDepth(appContext, config.context.serializationDepth) as Record<string, unknown>
+      ? (truncateDepth(appContext, config.context.serializationDepth) as Record<string, unknown>)
       : {},
   };
 

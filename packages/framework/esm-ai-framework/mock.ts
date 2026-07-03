@@ -1,5 +1,5 @@
 // =============================================================================
-//  @eigen/esm-ai-framework — Mock pour les tests des consommateurs
+//  @egen/esm-ai-framework — Mock pour les tests des consommateurs
 // =============================================================================
 
 export const initAIFramework = jest.fn ? jest.fn(() => () => {}) : () => () => {};
@@ -9,10 +9,32 @@ export const isAIFrameworkInitialized = jest.fn ? jest.fn(() => false) : () => f
 export const getAIConfig = () => ({
   enabled: false,
   schemaVersion: '1.0.0',
-  provider: { provider: 'gemini', model: 'gemini-2.5-pro', temperature: 0.7, topP: 0.95, topK: 40, maxTokens: 8192, stream: false },
-  backend: { baseUrl: '/api/ai', chatEndpoint: '/chat', streamEndpoint: '/chat/stream', requestTimeoutMs: 30000, maxRetries: 3, retryDelayMs: 1000 },
-  context: { maxContextSize: 100000, includeActiveExtensions: true, includeNavigation: true, includeModuleConfig: false, includeFeatureFlags: true, serializationDepth: 4 },
-  memory: { enabled: false, maxMessages: 50, storageKey: 'eigen:ai:memory', persist: false },
+  provider: {
+    provider: 'gemini',
+    model: 'gemini-2.5-pro',
+    temperature: 0.7,
+    topP: 0.95,
+    topK: 40,
+    maxTokens: 8192,
+    stream: false,
+  },
+  backend: {
+    baseUrl: '/api/ai',
+    chatEndpoint: '/chat',
+    streamEndpoint: '/chat/stream',
+    requestTimeoutMs: 30000,
+    maxRetries: 3,
+    retryDelayMs: 1000,
+  },
+  context: {
+    maxContextSize: 100000,
+    includeActiveExtensions: true,
+    includeNavigation: true,
+    includeModuleConfig: false,
+    includeFeatureFlags: true,
+    serializationDepth: 4,
+  },
+  memory: { enabled: false, maxMessages: 50, storageKey: 'egen:ai:memory', persist: false },
   security: { requiredPrivileges: [], validateToolsClient: true, toolTimeoutMs: 30000, auditLog: false },
   observability: { debug: false, eventsEnabled: false, analyticsEnabled: false, logLevel: 'warn' as const },
 });

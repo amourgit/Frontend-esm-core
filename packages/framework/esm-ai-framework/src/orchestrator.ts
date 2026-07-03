@@ -1,7 +1,7 @@
 // =============================================================================
-//  @eigen/esm-ai-framework — Orchestrateur central
+//  @egen/esm-ai-framework — Orchestrateur central
 //
-//  Point d'initialisation unique du système IA EIGEN.
+//  Point d'initialisation unique du système IA EGEN.
 //  Appelé UNE SEULE FOIS depuis run.ts du shell (ou startupApp d'une app hôte).
 //
 //  Responsabilités :
@@ -12,10 +12,10 @@
 //    5. Émettre l'événement SESSION_STARTED
 // =============================================================================
 
-import { getAIConfig, subscribeToAIConfig } from '@eigen/esm-ai-config';
-import { initAIContextReactivity, aiContextStore } from '@eigen/esm-ai-context';
-import { dispatchAIEvent, AI_EVENTS, enableAIEventDebugLogger } from '@eigen/esm-ai-events';
-import { registerTool, hasTool, NATIVE_TOOLS } from '@eigen/esm-ai-tools';
+import { getAIConfig, subscribeToAIConfig } from '@egen/esm-ai-config';
+import { initAIContextReactivity, aiContextStore } from '@egen/esm-ai-context';
+import { dispatchAIEvent, AI_EVENTS, enableAIEventDebugLogger } from '@egen/esm-ai-events';
+import { registerTool, hasTool, NATIVE_TOOLS } from '@egen/esm-ai-tools';
 
 let _initialized = false;
 let _cleanupContext: (() => void) | null = null;
@@ -27,7 +27,7 @@ export interface AIFrameworkInitOptions {
 }
 
 /**
- * Initialise la couche IA EIGEN.
+ * Initialise la couche IA EGEN.
  *
  * Idempotente — les appels successifs sont ignorés sauf si force=true.
  * Doit être appelée depuis startupApp() ou run.ts du shell.
@@ -78,7 +78,7 @@ export function initAIFramework(options: AIFrameworkInitOptions = {}): () => voi
 
   // ── 5. Émettre l'événement de démarrage ──────────────────────────────────────
   dispatchAIEvent(AI_EVENTS.SESSION_STARTED, {
-    sessionId: `eigen-ai-session-${Date.now()}`,
+    sessionId: `egen-ai-session-${Date.now()}`,
   });
 
   _initialized = true;

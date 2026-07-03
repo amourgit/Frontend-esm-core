@@ -1,8 +1,8 @@
 {
-  "name": "@eigen/esm-ai-events",
+  "name": "@egen/esm-ai-events",
   "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "Système d'événements IA EIGEN — bus d'événements typé, observable et extensible.",
+  "description": "Système d'événements IA EGEN — bus d'événements typé, observable et extensible.",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": true,
@@ -21,23 +21,32 @@
     "lint": "eslint src --ext ts,tsx",
     "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests"
   },
-  "keywords": ["eigen", "microfrontends", "ai", "events"],
-  "browserslist": ["extends browserslist-config-eigen"],
+  "keywords": [
+    "egen",
+    "microfrontends",
+    "ai",
+    "events"
+  ],
+  "browserslist": [
+    "extends browserslist-config-egen"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amourgit/Frontend-esm-core.git"
   },
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@eigen/esm-ai-config": "workspace:*",
+    "@egen/esm-ai-config": "workspace:*",
     "rxjs": "^6.5.3"
   },
   "peerDependencies": {
-    "@eigen/esm-ai-config": "workspace:*",
+    "@egen/esm-ai-config": "workspace:*",
     "rxjs": "^6.5.3"
   },
   "devDependencies": {
-    "@eigen/esm-ai-config": "workspace:*",
+    "@egen/esm-ai-config": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
     "@vitest/coverage-v8": "^4.1.2",

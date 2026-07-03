@@ -1,6 +1,7 @@
-import React, { useCallback, useState , useMemo} from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
+import { Header, HeaderContainer, HeaderGlobalBar, HeaderMenuButton } from '@carbon/react';
 import {
   ConfigurableLink,
   ExtensionSlot,
@@ -63,7 +64,7 @@ const HeaderItems: React.FC = () => {
     // Wrapper à deux niveaux
     <div className={styles.topNavWrapper}>
       {/* ══ NIVEAU 1 — Barre principale ══════════════════════════════════════ */}
-      <Header aria-label={t('primaryNavigation', 'Navigation principale EIGEN')} className={styles.topNavHeader}>
+      <Header aria-label={t('primaryNavigation', 'Navigation principale EGEN')} className={styles.topNavHeader}>
         {/* ── LEFT : hamburger + context switcher + séparateur + logo ── */}
         <div className={styles.leftSection}>
           {showHamburger && (

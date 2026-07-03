@@ -1,5 +1,5 @@
 // =============================================================================
-//  @eigen/esm-ai-tools — Pipeline d'exécution
+//  @egen/esm-ai-tools — Pipeline d'exécution
 //
 //  Ordre d'exécution pour chaque demande de tool :
 //    1. Résoudre le tool dans le registre
@@ -11,9 +11,10 @@
 //    7. Retourner AIToolResult
 // =============================================================================
 
-import { dispatchAIEvent, AI_EVENTS } from '@eigen/esm-ai-events';
-import { getAIConfig } from '@eigen/esm-ai-config';
-import { sessionStore } from '@eigen/esm-api';
+import type { AIContext } from '@egen/esm-ai-context';
+import { dispatchAIEvent, AI_EVENTS } from '@egen/esm-ai-events';
+import { getAIConfig } from '@egen/esm-ai-config';
+import { sessionStore } from '@egen/esm-api';
 import { getTool } from './registry';
 import { validateToolArgs, checkToolPermissions } from './validation';
 import type { AIToolRequest, AIToolResult, AIToolExecutionContext, AIToolDecorator } from './types';
@@ -34,10 +35,7 @@ function generateExecutionId(): string {
  * else console.error(result.error);
  * ```
  */
-export async function executeTool(
-  request: AIToolRequest,
-  aiContext?: import('@eigen/esm-ai-context').AIContext | null,
-): Promise<AIToolResult> {
+export async function executeTool(request: AIToolRequest, aiContext?: AIContext | null): Promise<AIToolResult> {
   const startTime = performance.now();
   const executionId = generateExecutionId();
   const config = getAIConfig();
@@ -158,7 +156,9 @@ function sanitizeForLog(args: Record<string, unknown>): Record<string, unknown> 
 
 /** Compose la chaîne de décorateurs autour de la fonction d'exécution principale */
 async function executeWithDecorators(
-  execute: AIToolExecutionContext['args'] extends infer _ ? (ctx: AIToolExecutionContext) => Promise<AIToolResult> : never,
+  execute: AIToolExecutionContext['args'] extends infer _
+    ? (ctx: AIToolExecutionContext) => Promise<AIToolResult>
+    : never,
   decorators: AIToolDecorator[],
   ctx: AIToolExecutionContext,
 ): Promise<AIToolResult> {
@@ -193,8 +193,14 @@ function withTimeout<T>(
     }, timeoutMs);
 
     promise.then(
-      (result) => { clearTimeout(timer); resolve(result); },
-      (err) => { clearTimeout(timer); reject(err); },
+      (result) => {
+        clearTimeout(timer);
+        resolve(result);
+      },
+      (err) => {
+        clearTimeout(timer);
+        reject(err);
+      },
     );
   });
 }

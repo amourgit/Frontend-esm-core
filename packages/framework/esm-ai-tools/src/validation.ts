@@ -1,5 +1,5 @@
 // =============================================================================
-//  @eigen/esm-ai-tools — Validation des arguments de tools
+//  @egen/esm-ai-tools — Validation des arguments de tools
 // =============================================================================
 
 import type { AIToolParam, AIToolValidationResult } from './types';
@@ -59,11 +59,7 @@ export function validateToolArgs(
   return { valid: errors.length === 0, errors, coercedArgs };
 }
 
-function coerceValue(
-  value: unknown,
-  name: string,
-  param: AIToolParam,
-): { coerced: unknown; error?: string } {
+function coerceValue(value: unknown, name: string, param: AIToolParam): { coerced: unknown; error?: string } {
   switch (param.type) {
     case 'string':
       if (typeof value === 'string') return { coerced: value };
@@ -90,7 +86,11 @@ function coerceValue(
     case 'object':
       if (typeof value === 'object' && !Array.isArray(value)) return { coerced: value };
       if (typeof value === 'string') {
-        try { return { coerced: JSON.parse(value) }; } catch {}
+        try {
+          return { coerced: JSON.parse(value) };
+        } catch (e) {
+          // Ignore parse errors
+        }
       }
       return { coerced: value, error: `"${name}" doit être un objet (reçu: ${typeof value})` };
 

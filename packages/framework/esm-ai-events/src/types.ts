@@ -1,7 +1,7 @@
 // =============================================================================
-//  @eigen/esm-ai-events — Types d'événements IA
+//  @egen/esm-ai-events — Types d'événements IA
 //
-//  Tous les événements du système IA EIGEN sont définis ici.
+//  Tous les événements du système IA EGEN sont définis ici.
 //  Le système d'événements permet : logging, debugging, analytics, extensions.
 // =============================================================================
 
@@ -9,46 +9,46 @@
 
 export const AI_EVENTS = {
   // Configuration
-  CONFIG_CHANGED: 'eigen:ai:config:changed',
-  CONFIG_ERROR: 'eigen:ai:config:error',
+  CONFIG_CHANGED: 'egen:ai:config:changed',
+  CONFIG_ERROR: 'egen:ai:config:error',
 
   // Contexte
-  CONTEXT_BUILT: 'eigen:ai:context:built',
-  CONTEXT_PROVIDER_REGISTERED: 'eigen:ai:context:provider:registered',
-  CONTEXT_PROVIDER_REMOVED: 'eigen:ai:context:provider:removed',
-  CONTEXT_UPDATED: 'eigen:ai:context:updated',
+  CONTEXT_BUILT: 'egen:ai:context:built',
+  CONTEXT_PROVIDER_REGISTERED: 'egen:ai:context:provider:registered',
+  CONTEXT_PROVIDER_REMOVED: 'egen:ai:context:provider:removed',
+  CONTEXT_UPDATED: 'egen:ai:context:updated',
 
   // Tools
-  TOOL_REGISTERED: 'eigen:ai:tool:registered',
-  TOOL_OVERRIDDEN: 'eigen:ai:tool:overridden',
-  TOOL_DECORATED: 'eigen:ai:tool:decorated',
-  TOOL_REMOVED: 'eigen:ai:tool:removed',
-  TOOL_EXECUTING: 'eigen:ai:tool:executing',
-  TOOL_EXECUTED: 'eigen:ai:tool:executed',
-  TOOL_FAILED: 'eigen:ai:tool:failed',
-  TOOL_TIMEOUT: 'eigen:ai:tool:timeout',
-  TOOL_PERMISSION_DENIED: 'eigen:ai:tool:permission:denied',
+  TOOL_REGISTERED: 'egen:ai:tool:registered',
+  TOOL_OVERRIDDEN: 'egen:ai:tool:overridden',
+  TOOL_DECORATED: 'egen:ai:tool:decorated',
+  TOOL_REMOVED: 'egen:ai:tool:removed',
+  TOOL_EXECUTING: 'egen:ai:tool:executing',
+  TOOL_EXECUTED: 'egen:ai:tool:executed',
+  TOOL_FAILED: 'egen:ai:tool:failed',
+  TOOL_TIMEOUT: 'egen:ai:tool:timeout',
+  TOOL_PERMISSION_DENIED: 'egen:ai:tool:permission:denied',
 
   // Capacités
-  CAPABILITY_REGISTERED: 'eigen:ai:capability:registered',
-  CAPABILITY_REMOVED: 'eigen:ai:capability:removed',
+  CAPABILITY_REGISTERED: 'egen:ai:capability:registered',
+  CAPABILITY_REMOVED: 'egen:ai:capability:removed',
 
   // Messages / Conversation
-  MESSAGE_SENT: 'eigen:ai:message:sent',
-  MESSAGE_RECEIVED: 'eigen:ai:message:received',
-  MESSAGE_ERROR: 'eigen:ai:message:error',
-  MESSAGE_STREAMING: 'eigen:ai:message:streaming',
-  MESSAGE_STREAM_END: 'eigen:ai:message:stream:end',
+  MESSAGE_SENT: 'egen:ai:message:sent',
+  MESSAGE_RECEIVED: 'egen:ai:message:received',
+  MESSAGE_ERROR: 'egen:ai:message:error',
+  MESSAGE_STREAMING: 'egen:ai:message:streaming',
+  MESSAGE_STREAM_END: 'egen:ai:message:stream:end',
 
   // Session
-  SESSION_STARTED: 'eigen:ai:session:started',
-  SESSION_ENDED: 'eigen:ai:session:ended',
-  SESSION_CLEARED: 'eigen:ai:session:cleared',
+  SESSION_STARTED: 'egen:ai:session:started',
+  SESSION_ENDED: 'egen:ai:session:ended',
+  SESSION_CLEARED: 'egen:ai:session:cleared',
 
   // Pipeline
-  PIPELINE_STARTED: 'eigen:ai:pipeline:started',
-  PIPELINE_COMPLETED: 'eigen:ai:pipeline:completed',
-  PIPELINE_FAILED: 'eigen:ai:pipeline:failed',
+  PIPELINE_STARTED: 'egen:ai:pipeline:started',
+  PIPELINE_COMPLETED: 'egen:ai:pipeline:completed',
+  PIPELINE_FAILED: 'egen:ai:pipeline:failed',
 } as const;
 
 export type AIEventName = (typeof AI_EVENTS)[keyof typeof AI_EVENTS];

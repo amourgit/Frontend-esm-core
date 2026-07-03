@@ -1,5 +1,5 @@
 // =============================================================================
-//  @eigen/esm-ai-extensions — API d'extension pour les microfrontends
+//  @egen/esm-ai-extensions — API d'extension pour les microfrontends
 //
 //  Re-exporte les primitives d'extension depuis les packages spécialisés
 //  et fournit des helpers de haut niveau pour un usage simplifié.
@@ -7,7 +7,7 @@
 //  Usage dans une app microfrontend :
 //
 //  ```ts
-//  import { defineAIModule } from '@eigen/esm-ai-extensions';
+//  import { defineAIModule } from '@egen/esm-ai-extensions';
 //
 //  export function startupApp() {
 //    defineAIModule({
@@ -22,8 +22,8 @@
 //            period: { type: 'string', required: true, description: 'Période (ex: "S1-2025")' },
 //          },
 //          execute: async (ctx) => {
-//            // Appeler l'API EIGEN
-//            const resp = await openmrsFetch(`/api/reports/${ctx.args.studentUuid}?period=${ctx.args.period}`);
+//            // Appeler l'API EGEN
+//            const resp = await egenFetch(`/api/reports/${ctx.args.studentUuid}?period=${ctx.args.period}`);
 //            return { success: true, data: await resp.json(), durationMs: 0 };
 //          },
 //        },
@@ -61,26 +61,13 @@ export {
   type AIToolDecorator,
   type AIToolResult,
   type AIToolExecutionContext,
-} from '@eigen/esm-ai-tools';
+} from '@egen/esm-ai-tools';
 
-export {
-  registerAIContextProvider,
-  removeAIContextProvider,
-  type AIContextProvider,
-} from '@eigen/esm-ai-context';
+export { registerAIContextProvider, removeAIContextProvider, type AIContextProvider } from '@egen/esm-ai-context';
 
-export {
-  overrideAIConfig,
-  subscribeToAIConfig,
-  type PartialAIConfig,
-} from '@eigen/esm-ai-config';
+export { overrideAIConfig, subscribeToAIConfig, type PartialAIConfig } from '@egen/esm-ai-config';
 
-export {
-  subscribeToAIEvent,
-  observeAIEvent,
-  AI_EVENTS,
-  type AIEventName,
-} from '@eigen/esm-ai-events';
+export { subscribeToAIEvent, observeAIEvent, AI_EVENTS, type AIEventName } from '@egen/esm-ai-events';
 
 // ─── defineAIModule — API de haut niveau ──────────────────────────────────────
 
@@ -90,12 +77,9 @@ import {
   registerCapability,
   type AIToolDefinition,
   type AICapability,
-} from '@eigen/esm-ai-tools';
+} from '@egen/esm-ai-tools';
 
-import {
-  registerAIContextProvider,
-  type AIContextProvider,
-} from '@eigen/esm-ai-context';
+import { registerAIContextProvider, type AIContextProvider } from '@egen/esm-ai-context';
 
 export interface AIModuleDefinition {
   /** Nom du module microfrontend (ex: '@school/esm-grades-app') */
@@ -130,9 +114,12 @@ export function defineAIModule(def: AIModuleDefinition): () => void {
     registerTool({ ...tool, moduleName: tool.moduleName ?? def.moduleName });
     cleanupFns.push(() => {
       try {
-        const { removeTool } = require('@eigen/esm-ai-tools');
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { removeTool } = require('@egen/esm-ai-tools');
         removeTool(tool.id);
-      } catch {}
+      } catch (e) {
+        // Ignore cleanup errors
+      }
     });
   }
 
@@ -152,9 +139,12 @@ export function defineAIModule(def: AIModuleDefinition): () => void {
     registerCapability(cap);
     cleanupFns.push(() => {
       try {
-        const { removeCapability } = require('@eigen/esm-ai-tools');
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { removeCapability } = require('@egen/esm-ai-tools');
         removeCapability(cap.id);
-      } catch {}
+      } catch (e) {
+        // Ignore cleanup errors
+      }
     });
   }
 

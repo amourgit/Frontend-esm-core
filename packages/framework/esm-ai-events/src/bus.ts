@@ -1,23 +1,18 @@
 // =============================================================================
-//  @eigen/esm-ai-events — Bus d'événements IA
+//  @egen/esm-ai-events — Bus d'événements IA
 //
 //  Utilise les CustomEvents du DOM (même pattern que esm-globals/events.ts)
 //  + un Subject RxJS pour la composition réactive.
 //  Singleton — un seul bus par application.
 // =============================================================================
 
-import { Subject, type Observable, filter, map } from 'rxjs';
-import type {
-  AIEventName,
-  AIEventPayload,
-  AIEventPayloadMap,
-  AIEventListener,
-  AIEventUnsubscribe,
-} from './types';
+import { Subject, type Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import type { AIEventName, AIEventPayload, AIEventPayloadMap, AIEventListener, AIEventUnsubscribe } from './types';
 import { AI_EVENTS } from './types';
 
 // ─── Préfixe des Custom Events DOM ────────────────────────────────────────────
-const DOM_EVENT_NS = 'eigen:ai:';
+const DOM_EVENT_NS = 'egen:ai:';
 
 // ─── Subject RxJS global ─────────────────────────────────────────────────────
 interface AIBusMessage {
@@ -35,7 +30,7 @@ export const aiEvents$: Observable<AIBusMessage> = _bus$.asObservable();
 let _eventCounter = 0;
 
 function generateEventId(): string {
-  return `eigen-ai-evt-${Date.now()}-${++_eventCounter}`;
+  return `egen-ai-evt-${Date.now()}-${++_eventCounter}`;
 }
 
 // ─── Dispatch ─────────────────────────────────────────────────────────────────
@@ -73,9 +68,7 @@ export function dispatchAIEvent<K extends AIEventName>(
 
   // Diffuser via DOM (interopérabilité cross-module)
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(
-      new CustomEvent(name, { detail: fullPayload, bubbles: false, cancelable: false }),
-    );
+    window.dispatchEvent(new CustomEvent(name, { detail: fullPayload, bubbles: false, cancelable: false }));
   }
 }
 
@@ -95,10 +88,7 @@ export function dispatchAIEvent<K extends AIEventName>(
  * unsub();
  * ```
  */
-export function subscribeToAIEvent<K extends AIEventName>(
-  name: K,
-  listener: AIEventListener<K>,
-): AIEventUnsubscribe {
+export function subscribeToAIEvent<K extends AIEventName>(name: K, listener: AIEventListener<K>): AIEventUnsubscribe {
   const subscription = _bus$
     .pipe(
       filter((msg) => msg.name === name),
@@ -145,8 +135,7 @@ export function subscribeToAllAIEvents(
 /** Active le logger de debug qui affiche tous les événements IA dans la console */
 export function enableAIEventDebugLogger(): AIEventUnsubscribe {
   return subscribeToAllAIEvents((name, payload) => {
-    console.group(`[EIGEN AI Event] ${name}`);
-    console.log('Payload:', payload);
-    console.groupEnd();
+    console.warn(`[EGEN AI Event] ${name}`);
+    console.warn('Payload:', payload);
   });
 }

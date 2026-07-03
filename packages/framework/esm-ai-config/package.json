@@ -1,8 +1,8 @@
 {
-  "name": "@eigen/esm-ai-config",
+  "name": "@egen/esm-ai-config",
   "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "Configuration typée, validée et observable pour la couche IA EIGEN. Zéro valeur codée en dur.",
+  "description": "Configuration typée, validée et observable pour la couche IA EGEN. Zéro valeur codée en dur.",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": true,
@@ -25,22 +25,31 @@
     "lint": "eslint src --ext ts,tsx",
     "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests"
   },
-  "keywords": ["eigen", "microfrontends", "ai", "config"],
-  "browserslist": ["extends browserslist-config-eigen"],
+  "keywords": [
+    "egen",
+    "microfrontends",
+    "ai",
+    "config"
+  ],
+  "browserslist": [
+    "extends browserslist-config-egen"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amourgit/Frontend-esm-core.git"
   },
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@eigen/esm-state": "workspace:*"
+    "@egen/esm-state": "workspace:*"
   },
   "peerDependencies": {
-    "@eigen/esm-state": "9.x",
+    "@egen/esm-state": "9.x",
     "rxjs": "^6.5.3"
   },
   "devDependencies": {
-    "@eigen/esm-state": "workspace:*",
+    "@egen/esm-state": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
     "@vitest/coverage-v8": "^4.1.2",

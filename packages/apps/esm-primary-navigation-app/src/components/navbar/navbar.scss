@@ -1,5 +1,5 @@
 // =============================================================================
-//  NAVBAR — Styles de la navigation principale EIGEN
+//  NAVBAR — Styles de la navigation principale EGEN
 //
 //  Philosophie : ZÉRO valeur codée en dur.
 //  TOUT vient des CSS vars injectées par esm-theme depuis theme.default.json.
@@ -21,7 +21,7 @@
 // =============================================================================
 
 @use '@carbon/layout';
-@use '@igen/esm-styleguide/src/vars' as *;
+@use '@egen/esm-styleguide/src/vars' as *;
 
 // ─── Wrapper deux niveaux ────────────────────────────────────────────────────
 .topNavWrapper {
@@ -34,7 +34,7 @@
 
 // ─── Niveau 1 — Barre principale ─────────────────────────────────────────────
 .topNavHeader {
-  // Override Carbon : fond glass du thème EIGEN
+  // Override Carbon : fond glass du thème EGEN
   background: var(--panel-header-background) !important;
   backdrop-filter: var(--panel-header-backdrop-filter) !important;
   -webkit-backdrop-filter: var(--panel-header-backdrop-filter) !important;
@@ -147,7 +147,7 @@
 }
 
 // ─── Boutons d'action globaux (Carbon HeaderGlobalAction) ────────────────────
-// Override complet pour matcher le design EIGEN (pas le thème Carbon par défaut)
+// Override complet pour matcher le design EGEN (pas le thème Carbon par défaut)
 :global(.cds--header__action) {
   color: color-mix(in srgb, var(--colors-surface-foreground) 70%, transparent) !important;
   background: transparent !important;

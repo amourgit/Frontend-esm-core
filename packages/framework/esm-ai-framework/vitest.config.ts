@@ -6,8 +6,8 @@ export default defineConfig({
     mockReset: true,
     globals: true,
     alias: {
-      '@eigen/esm-framework/src/internal': '@eigen/esm-framework/mock',
-      '@eigen/esm-framework': '@eigen/esm-framework/mock',
+      '@egen/esm-framework/src/internal': '@egen/esm-framework/mock',
+      '@egen/esm-framework': '@egen/esm-framework/mock',
     },
   },
 });

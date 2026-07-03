@@ -1,8 +1,8 @@
 // =============================================================================
-//  @eigen/esm-ai-context — Registre des Context Providers
+//  @egen/esm-ai-context — Registre des Context Providers
 // =============================================================================
 
-import { dispatchAIEvent, AI_EVENTS } from '@eigen/esm-ai-events';
+import { dispatchAIEvent, AI_EVENTS } from '@egen/esm-ai-events';
 import type { AIContextProvider } from './types';
 
 interface ProviderEntry {
@@ -114,7 +114,7 @@ export function collectProviderData(): Record<string, unknown> {
       const data = provider.provide();
       Object.assign(result, data);
     } catch (err) {
-      console.warn(`[EIGEN AI Context] Provider "${provider.id}" a échoué :`, err);
+      console.warn(`[EGEN AI Context] Provider "${provider.id}" a échoué :`, err);
     }
   }
 

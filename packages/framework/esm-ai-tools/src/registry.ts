@@ -1,11 +1,11 @@
 // =============================================================================
-//  @eigen/esm-ai-tools — Registre des tools IA
+//  @egen/esm-ai-tools — Registre des tools IA
 //
 //  Supporte : enregistrement, override, décoration, suppression.
 //  Thread-safe (synchrone — JavaScript single-threaded).
 // =============================================================================
 
-import { dispatchAIEvent, AI_EVENTS } from '@eigen/esm-ai-events';
+import { dispatchAIEvent, AI_EVENTS } from '@egen/esm-ai-events';
 import type { AIToolDefinition, AIToolDecorator, AIToolRegistryEntry, AICapability } from './types';
 
 const _tools = new Map<string, AIToolRegistryEntry>();
@@ -20,7 +20,7 @@ const _capabilities = new Map<string, AICapability>();
 export function registerTool(definition: AIToolDefinition): void {
   if (_tools.has(definition.id)) {
     throw new Error(
-      `[EIGEN AI Tools] Tool "${definition.id}" est déjà enregistré. Utiliser overrideTool() pour le remplacer.`,
+      `[EGEN AI Tools] Tool "${definition.id}" est déjà enregistré. Utiliser overrideTool() pour le remplacer.`,
     );
   }
 
@@ -78,7 +78,7 @@ export function overrideTool(definition: AIToolDefinition): void {
 export function decorateTool(toolId: string, decorator: AIToolDecorator): () => void {
   const entry = _tools.get(toolId);
   if (!entry) {
-    throw new Error(`[EIGEN AI Tools] Impossible de décorer le tool "${toolId}" : non trouvé.`);
+    throw new Error(`[EGEN AI Tools] Impossible de décorer le tool "${toolId}" : non trouvé.`);
   }
 
   entry.decorators.push(decorator);

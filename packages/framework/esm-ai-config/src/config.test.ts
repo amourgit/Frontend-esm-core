@@ -48,31 +48,31 @@ describe('buildDefaultConfig', () => {
     expect(config.memory.enabled).toBe(true);
   });
 
-  it('lit EIGEN_AI_ENABLED depuis process.env', () => {
-    const original = process.env.EIGEN_AI_ENABLED;
-    process.env.EIGEN_AI_ENABLED = 'true';
+  it('lit EGEN_AI_ENABLED depuis process.env', () => {
+    const original = process.env.EGEN_AI_ENABLED;
+    process.env.EGEN_AI_ENABLED = 'true';
     const config = buildDefaultConfig();
     expect(config.enabled).toBe(true);
-    if (original === undefined) delete process.env.EIGEN_AI_ENABLED;
-    else process.env.EIGEN_AI_ENABLED = original;
+    if (original === undefined) delete process.env.EGEN_AI_ENABLED;
+    else process.env.EGEN_AI_ENABLED = original;
   });
 
-  it('lit EIGEN_AI_TEMPERATURE depuis process.env', () => {
-    const original = process.env.EIGEN_AI_TEMPERATURE;
-    process.env.EIGEN_AI_TEMPERATURE = '0.3';
+  it('lit EGEN_AI_TEMPERATURE depuis process.env', () => {
+    const original = process.env.EGEN_AI_TEMPERATURE;
+    process.env.EGEN_AI_TEMPERATURE = '0.3';
     const config = buildDefaultConfig();
     expect(config.provider.temperature).toBe(0.3);
-    if (original === undefined) delete process.env.EIGEN_AI_TEMPERATURE;
-    else process.env.EIGEN_AI_TEMPERATURE = original;
+    if (original === undefined) delete process.env.EGEN_AI_TEMPERATURE;
+    else process.env.EGEN_AI_TEMPERATURE = original;
   });
 
-  it('retourne la valeur par défaut si la variable d\'env est invalide', () => {
-    const original = process.env.EIGEN_AI_MAX_TOKENS;
-    process.env.EIGEN_AI_MAX_TOKENS = 'not-a-number';
+  it("retourne la valeur par défaut si la variable d'env est invalide", () => {
+    const original = process.env.EGEN_AI_MAX_TOKENS;
+    process.env.EGEN_AI_MAX_TOKENS = 'not-a-number';
     const config = buildDefaultConfig();
     expect(config.provider.maxTokens).toBe(8192);
-    if (original === undefined) delete process.env.EIGEN_AI_MAX_TOKENS;
-    else process.env.EIGEN_AI_MAX_TOKENS = original;
+    if (original === undefined) delete process.env.EGEN_AI_MAX_TOKENS;
+    else process.env.EGEN_AI_MAX_TOKENS = original;
   });
 });
 
@@ -191,14 +191,14 @@ describe('mergeConfig', () => {
     expect(result.security.toolTimeoutMs).toBe(base.security.toolTimeoutMs);
   });
 
-  it('ignore les valeurs undefined dans l\'override', () => {
+  it("ignore les valeurs undefined dans l'override", () => {
     const base = makeValidConfig();
     const original = base.provider.model;
     const result = mergeConfig(base, { provider: { model: undefined } });
     expect(result.provider.model).toBe(original);
   });
 
-  it('ne mute pas l\'objet de base', () => {
+  it("ne mute pas l'objet de base", () => {
     const base = makeValidConfig();
     const originalModel = base.provider.model;
     mergeConfig(base, { provider: { model: 'new-model' } });
@@ -249,7 +249,7 @@ describe('aiConfigStore', () => {
     expect(aiConfigStore.getState().source).toBe('default');
   });
 
-  it('les subscribers sont notifiés lors d\'un override', () => {
+  it("les subscribers sont notifiés lors d'un override", () => {
     const handler = vi.fn();
     const unsubscribe = aiConfigStore.subscribe(handler);
 

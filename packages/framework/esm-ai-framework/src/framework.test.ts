@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { overrideAIConfig, resetAIConfig } from '@eigen/esm-ai-config';
-import { _clearToolRegistry, registerTool } from '@eigen/esm-ai-tools';
-import { _clearProviderRegistry } from '@eigen/esm-ai-context';
+import { overrideAIConfig, resetAIConfig } from '@egen/esm-ai-config';
+import { _clearToolRegistry, registerTool } from '@egen/esm-ai-tools';
+import { _clearProviderRegistry } from '@egen/esm-ai-context';
 import { initAIFramework, cleanupAIFramework, isAIFrameworkInitialized } from './orchestrator';
 
 function setup() {
@@ -46,23 +46,25 @@ describe('initAIFramework', () => {
     expect(isAIFrameworkInitialized()).toBe(true);
   });
 
-  it('n\'enregistre pas les tools natifs quand AI est désactivé', () => {
+  it("n'enregistre pas les tools natifs quand AI est désactivé", () => {
     // enabled = false par défaut
     initAIFramework();
-    const { hasTool } = require('@eigen/esm-ai-tools');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { hasTool } = require('@egen/esm-ai-tools');
     expect(hasTool('navigate')).toBe(false);
   });
 
   it('enregistre les tools natifs quand AI est activé', () => {
     overrideAIConfig({ enabled: true }, 'runtime');
     initAIFramework();
-    const { hasTool } = require('@eigen/esm-ai-tools');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { hasTool } = require('@egen/esm-ai-tools');
     expect(hasTool('navigate')).toBe(true);
     expect(hasTool('show_notification')).toBe(true);
     expect(hasTool('fetch_data')).toBe(true);
   });
 
-  it('n\'enregistre pas deux fois les mêmes tools si appelé avec force=true', () => {
+  it("n'enregistre pas deux fois les mêmes tools si appelé avec force=true", () => {
     overrideAIConfig({ enabled: true }, 'runtime');
     initAIFramework();
     // Enregistrer un tool custom avec l'id d'un natif pour vérifier qu'il n'est pas écrasé
@@ -75,12 +77,13 @@ describe('initAIFramework', () => {
     };
     overrideTool(customTool);
     initAIFramework({ force: true });
-    const { getTool } = require('@eigen/esm-ai-tools');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { getTool } = require('@egen/esm-ai-tools');
     // Le tool custom doit être conservé car registerTool n'écrase pas
     expect(getTool('search')?.definition.name).toBe('Custom Search');
   });
 
-  it('cleanupAIFramework réinitialise l\'état', () => {
+  it("cleanupAIFramework réinitialise l'état", () => {
     overrideAIConfig({ enabled: true }, 'runtime');
     initAIFramework();
     cleanupAIFramework();
@@ -90,6 +93,7 @@ describe('initAIFramework', () => {
 
 // Helper pour le dernier test
 function overrideTool(def: any) {
-  const { overrideTool: ot } = require('@eigen/esm-ai-tools');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { overrideTool: ot } = require('@egen/esm-ai-tools');
   ot(def);
 }

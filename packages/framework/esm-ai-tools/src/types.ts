@@ -1,6 +1,5 @@
-// =============================================================================
-//  @eigen/esm-ai-tools — Types des tools IA
-// =============================================================================
+import type { AIContext } from '@egen/esm-ai-context';
+import type { Session } from '@egen/esm-api';
 
 // ─── Schéma de paramètre ──────────────────────────────────────────────────────
 
@@ -36,9 +35,9 @@ export interface AIToolExecutionContext {
   /** Arguments validés et typés */
   args: Record<string, unknown>;
   /** Snapshot du contexte IA au moment de l'exécution */
-  aiContext?: import('@eigen/esm-ai-context').AIContext | null;
+  aiContext?: AIContext | null;
   /** Session utilisateur courante */
-  session?: import('@eigen/esm-api').Session | null;
+  session?: Session | null;
 }
 
 // ─── Définition d'un tool ─────────────────────────────────────────────────────
@@ -52,7 +51,7 @@ export interface AIToolDefinition<TArgs extends Record<string, unknown> = Record
   description: string;
   /** Schéma de paramètres (JSON Schema simplifié) */
   parameters: Record<string, AIToolParam>;
-  /** Privilèges EIGEN requis pour exécuter ce tool */
+  /** Privilèges EGEN requis pour exécuter ce tool */
   requiredPrivileges?: string[];
   /** Nom du module qui enregistre ce tool (pour le debugging et l'audit) */
   moduleName?: string;

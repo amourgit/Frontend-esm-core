@@ -1,5 +1,5 @@
 // =============================================================================
-//  @eigen/esm-ai-context — Types du contexte IA
+//  @egen/esm-ai-context — Types du contexte IA
 // =============================================================================
 
 // ─── Représentations stables (sérialisables) ──────────────────────────────────
@@ -54,7 +54,7 @@ export interface AIPermissionsContext {
 }
 
 /**
- * Contexte global EIGEN sérialisé, envoyé au backend IA.
+ * Contexte global EGEN sérialisé, envoyé au backend IA.
  * Toutes les valeurs sont sûres à sérialiser en JSON.
  * Aucune référence circulaire, aucune fonction, aucun store exposé directement.
  */

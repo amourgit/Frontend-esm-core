@@ -1,9 +1,9 @@
 // =============================================================================
-//  @eigen/esm-ai-config — Types de configuration IA
+//  @egen/esm-ai-config — Types de configuration IA
 //
 //  Toutes les valeurs proviennent de :
-//    1. Variables d'environnement (EIGEN_AI_*)
-//    2. window.eigenAi* (overrides runtime injectés par le serveur)
+//    1. Variables d'environnement (EGEN_AI_*)
+//    2. window.egenAi* (overrides runtime injectés par le serveur)
 //    3. Valeurs par défaut sécurisées
 //
 //  Aucune valeur n'est codée en dur dans le code applicatif.
@@ -11,7 +11,7 @@
 
 // ─── Provider ──────────────────────────────────────────────────────────────────
 
-/** Fournisseurs LLM supportés par le backend EIGEN IA */
+/** Fournisseurs LLM supportés par le backend EGEN IA */
 export type AIProvider = 'gemini' | 'claude' | 'openai' | 'ollama' | 'custom';
 
 // ─── Configuration principale ─────────────────────────────────────────────────
@@ -80,7 +80,7 @@ export interface AIMemoryConfig {
 }
 
 export interface AISecurityConfig {
-  /** Liste de permissions EIGEN requises pour accéder à l'IA */
+  /** Liste de permissions EGEN requises pour accéder à l'IA */
   requiredPrivileges: string[];
   /** Activer la validation des tools côté client avant exécution */
   validateToolsClient: boolean;
@@ -102,7 +102,7 @@ export interface AIObservabilityConfig {
 }
 
 /**
- * Configuration complète du système IA EIGEN.
+ * Configuration complète du système IA EGEN.
  * Agrégation de tous les sous-groupes de configuration.
  */
 export interface AIConfig {

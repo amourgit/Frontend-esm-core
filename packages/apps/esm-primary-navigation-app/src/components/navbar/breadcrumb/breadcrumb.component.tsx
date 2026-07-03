@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExtensionSlot } from '@igen/esm-framework';
+import { ExtensionSlot } from '@egen/esm-framework';
 import styles from './breadcrumb.scss';
 
 // =============================================================================
