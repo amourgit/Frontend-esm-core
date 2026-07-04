@@ -13,6 +13,7 @@ import {
   useConnectivity,
   useSession,
   applyDevAuthBypassForLogin,
+  isDevAuthBypassEnabled,
 } from '@egen/esm-framework';
 import { useTenant, useTenantMode, storeHeaderTenantId, getTenantStoreState } from '@egen/esm-tenant';
 import { type ConfigSchema } from '../config-schema';
@@ -107,6 +108,15 @@ const Login: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // En mode bypass dev (EGEN_DEV_NO_AUTH=true), l'utilisateur est déjà
+    // authentifié via la session fictive injectée par run.ts.
+    // On redirige directement vers l'accueil sans afficher le formulaire.
+    if (user && isDevAuthBypassEnabled()) {
+      const to = loginLinks?.loginSuccess || '${egenSpaBase}/home';
+      egenNavigate({ to });
+      return;
+    }
+
     if (!user) {
       if (loginProvider.type === 'oauth2' || loginProvider.type === 'custom') {
         egenNavigate({ to: loginProvider.loginUrl });
@@ -114,7 +124,7 @@ const Login: React.FC = () => {
         navigate('/login');
       }
     }
-  }, [username, navigate, location, user, loginProvider]);
+  }, [username, navigate, location, user, loginProvider, loginLinks]);
 
   useEffect(() => {
     if (showPasswordOnSeparateScreen) {

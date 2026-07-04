@@ -47,7 +47,7 @@ import {
   type Config,
   type StyleguideConfigObject,
 } from '@egen/esm-framework/src/internal';
-import { sessionStore } from '@egen/esm-api';
+import { initDevAuthBypass } from '@egen/esm-api';
 import { setupI18n } from './locale';
 import './routing-events';
 import './events';
@@ -67,69 +67,37 @@ import { setupCoreConfig } from './core-config';
 //       pour que les composants qui appellent useSession() reçoivent un
 //       utilisateur authentifié sans appel réseau.
 // =============================================================================
-const DEV_NO_AUTH = process.env.EGEN_DEV_NO_AUTH === 'true';
+//  EGEN_DEV_NO_AUTH — Bypass d'authentification pour tests sans backend
+//
+//  Activé via EGEN_DEV_NO_AUTH=true dans le .env (injecté par rspack DefinePlugin).
+//
+//  La logique est centralisée dans @igen/esm-api → initDevAuthBypass() :
+//    1. Intercepte window.fetch pour /ws/rest/v1/session → retourne session fictive
+//       (empêche getSessionStore() de détruire la session via refetchCurrentUser)
+//    2. Injecte la session fictive dans sessionStore (composants React immédiats)
+//    3. Désactive la redirection 401→/login dans egenFetch
+// =============================================================================
 
 function applyDevNoAuthBypass() {
-  if (!DEV_NO_AUTH) return;
+  // initDevAuthBypass() est no-op si EGEN_DEV_NO_AUTH !== 'true'
+  initDevAuthBypass();
 
-  console.warn(
-    '[EGEN] ⚠️  EGEN_DEV_NO_AUTH=true — Authentification désactivée. ' + 'NE PAS utiliser en production réelle.',
-  );
-
-  // ── 1. Désactiver la redirection auth-failure de egenFetch ────────────────
-  provide(
-    {
-      '@egen/esm-api': {
-        redirectAuthFailure: {
-          enabled: false,
-          url: '',
-          errors: [],
-          resolvePromise: true,
+  if (process.env.EGEN_DEV_NO_AUTH === 'true') {
+    // Désactiver la redirection 401 → /login dans egenFetch (couche réseau)
+    provide(
+      {
+        '@igen/esm-api': {
+          redirectAuthFailure: {
+            enabled: false,
+            url: '',
+            errors: [],
+            resolvePromise: true,
+          },
         },
       },
-    },
-    'egen-dev-no-auth-config',
-  );
-
-  // ── 2. Injecter une session admin fictive dans le store global ────────────
-  // Cela évite les loaders infinis et les "Vous n'êtes pas connecté" dans les
-  // composants qui consomment useSession() / getCurrentUser().
-  // Le type attendu est LoadedSessionStore : { loaded: true, session: Session }
-  // où Session est { authenticated, sessionId, user?: LoggedInUser, locale? }
-  sessionStore.setState({
-    loaded: true,
-    session: {
-      authenticated: true,
-      sessionId: 'dev-bypass-session',
-      locale: 'fr',
-      allowedLocales: ['fr', 'en'],
-      user: {
-        uuid: 'dev-user-uuid',
-        display: 'Administrateur (Dev)',
-        username: 'dev-admin',
-        systemId: 'dev-admin',
-        locale: 'fr',
-        allowedLocales: ['fr', 'en'],
-        userProperties: { defaultLocale: 'fr' },
-        person: {
-          uuid: 'dev-person-uuid',
-          display: 'Administrateur',
-          links: [],
-        },
-        privileges: [
-          { uuid: 'p1', display: 'Get Users', links: [] },
-          { uuid: 'p4', display: 'System Developer', links: [] },
-        ],
-        roles: [
-          { uuid: 'r1', display: 'System Developer', name: 'System Developer', links: [] },
-          { uuid: 'r2', display: 'Administrator', name: 'Administrator', links: [] },
-        ],
-        retired: false,
-        allRoles: [],
-        allPrivileges: [],
-      },
-    },
-  });
+      'igen-dev-no-auth-config',
+    );
+  }
 }
 
 // @internal

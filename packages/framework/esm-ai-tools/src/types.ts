@@ -1,5 +1,6 @@
-import type { AIContext } from '@egen/esm-ai-context';
-import type { Session } from '@egen/esm-api';
+// =============================================================================
+//  @eigen/esm-ai-tools — Types des tools IA
+// =============================================================================
 
 // ─── Schéma de paramètre ──────────────────────────────────────────────────────
 
@@ -34,10 +35,28 @@ export interface AIToolExecutionContext {
   executionId: string;
   /** Arguments validés et typés */
   args: Record<string, unknown>;
-  /** Snapshot du contexte IA au moment de l'exécution */
-  aiContext?: AIContext | null;
-  /** Session utilisateur courante */
-  session?: Session | null;
+  /**
+   * Snapshot du contexte IA au moment de l'exécution.
+   * Typé loosement pour éviter une dépendance circulaire esm-ai-tools → esm-ai-context.
+   * Les tools accèdent aux données via ctx.aiContext?.user, ctx.aiContext?.tenant, etc.
+   */
+  aiContext?: Record<string, unknown> | null;
+  /**
+   * Session utilisateur (sessionStore snapshot).
+   * Typé loosement pour éviter une dépendance circulaire sur @eigen/esm-api.
+   */
+  session?: {
+    authenticated: boolean;
+    user?: {
+      uuid: string;
+      display: string;
+      username: string;
+      privileges?: Array<{ display: string; uuid: string }>;
+      roles?: Array<{ name: string; display: string; uuid: string }>;
+    } | null;
+    sessionId?: string;
+    locale?: string;
+  } | null;
 }
 
 // ─── Définition d'un tool ─────────────────────────────────────────────────────
@@ -51,7 +70,7 @@ export interface AIToolDefinition<TArgs extends Record<string, unknown> = Record
   description: string;
   /** Schéma de paramètres (JSON Schema simplifié) */
   parameters: Record<string, AIToolParam>;
-  /** Privilèges EGEN requis pour exécuter ce tool */
+  /** Privilèges EIGEN requis pour exécuter ce tool */
   requiredPrivileges?: string[];
   /** Nom du module qui enregistre ce tool (pour le debugging et l'audit) */
   moduleName?: string;
