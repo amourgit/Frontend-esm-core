@@ -59,7 +59,7 @@ export const configSchema = {
   links: {
     loginSuccess: {
       _type: Type.String,
-      _default: '${egenSpaBase}/home',
+      _default: '${egenSpaBase}/',
       _description: 'The URL to redirect the user to after a successful login.',
       _validators: [validators.isUrl],
     },
@@ -113,8 +113,7 @@ export const configSchema = {
     image: {
       _type: Type.String,
       _default: '',
-      _description:
-        'URL to a background image. Relative paths are interpolated via ${egenBase} / ${egenSpaBase}.',
+      _description: 'URL to a background image. Relative paths are interpolated via ${egenBase} / ${egenSpaBase}.',
       _validators: [validators.isUrl],
     },
     color: {
@@ -186,7 +185,6 @@ export const configSchema = {
 };
 
 export interface ConfigSchema {
-
   carousel: {
     intervalMs: number;
     slides: Array<{

@@ -1,7 +1,7 @@
 // =============================================================================
-//  @eigen/esm-ai-tools — Tools natifs EIGEN
+//  @egen/esm-ai-tools — Tools natifs EGEN
 //
-//  Tous les imports utilisent les barrels publics @eigen/* officiels.
+//  Tous les imports utilisent les barrels publics @egen/* officiels.
 //  Signatures d'appel vérifiées contre les types réels du framework :
 //    showNotification(NotificationDescriptor) → { description: string, kind?, title?, ... }
 //    showSnackbar(SnackbarDescriptor)         → { title: string, subtitle?, kind?, ... }
@@ -10,11 +10,9 @@
 //    navigate({ to })
 // =============================================================================
 
-import { navigate } from '@eigen/esm-navigation';
-import { showNotification } from '@eigen/esm-styleguide/src/notifications';
-import { showSnackbar } from '@eigen/esm-styleguide/src/snackbars';
-import { showModal } from '@eigen/esm-styleguide/src/modals';
-import { egenFetch } from '@eigen/esm-api';
+import { navigate } from '@egen/esm-navigation';
+import { showNotification, showSnackbar, showModal } from '@egen/esm-styleguide/src/public';
+import { egenFetch } from '@egen/esm-api';
 import type { AIToolDefinition } from '../types';
 
 // ─── navigate ─────────────────────────────────────────────────────────────────
@@ -23,7 +21,7 @@ export const navigateTool: AIToolDefinition = {
   id: 'navigate',
   name: 'Naviguer vers une route',
   description:
-    "Navigue vers une route interne de l'application EIGEN. Utiliser pour emmener l'utilisateur sur une page spécifique.",
+    "Navigue vers une route interne de l'application EGEN. Utiliser pour emmener l'utilisateur sur une page spécifique.",
   parameters: {
     route: {
       type: 'string',
@@ -31,7 +29,7 @@ export const navigateTool: AIToolDefinition = {
       description: 'Route cible (ex: "/students/123" ou "${egenSpaBase}/home")',
     },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       navigate({ to: String(ctx.args.route) });
@@ -47,8 +45,7 @@ export const navigateTool: AIToolDefinition = {
 export const showNotificationTool: AIToolDefinition = {
   id: 'show_notification',
   name: 'Afficher une notification',
-  description:
-    "Affiche une notification inline à l'utilisateur (succès, erreur, avertissement, information).",
+  description: "Affiche une notification inline à l'utilisateur (succès, erreur, avertissement, information).",
   parameters: {
     description: {
       type: 'string',
@@ -67,10 +64,10 @@ export const showNotificationTool: AIToolDefinition = {
       type: 'number',
       required: false,
       default: 5000,
-      description: 'Durée d\'affichage en millisecondes',
+      description: "Durée d'affichage en millisecondes",
     },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       showNotification({
@@ -91,7 +88,7 @@ export const showNotificationTool: AIToolDefinition = {
 export const showSnackbarTool: AIToolDefinition = {
   id: 'show_snackbar',
   name: 'Afficher une snackbar',
-  description: 'Affiche un message snackbar temporaire en bas de l\'écran.',
+  description: "Affiche un message snackbar temporaire en bas de l'écran.",
   parameters: {
     title: { type: 'string', required: true, description: 'Titre de la snackbar (champ obligatoire)' },
     subtitle: { type: 'string', required: false, description: 'Sous-titre ou message détaillé' },
@@ -106,10 +103,10 @@ export const showSnackbarTool: AIToolDefinition = {
       type: 'number',
       required: false,
       default: 5000,
-      description: 'Durée d\'affichage',
+      description: "Durée d'affichage",
     },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       showSnackbar({
@@ -131,16 +128,16 @@ export const openModalTool: AIToolDefinition = {
   id: 'open_modal',
   name: 'Ouvrir une modale',
   description:
-    "Ouvre une modale EIGEN identifiée par son nom. La modale doit être préalablement enregistrée par une app.",
+    'Ouvre une modale EGEN identifiée par son nom. La modale doit être préalablement enregistrée par une app.',
   parameters: {
     name: { type: 'string', required: true, description: 'Nom de la modale à ouvrir' },
     props: { type: 'object', required: false, description: 'Props à passer à la modale' },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       // showModal(modalName: string, props: ModalProps = {}, onClose: () => void = () => {})
-      showModal(String(ctx.args.name), (ctx.args.props as object) ?? {}, () => {});
+      showModal(String(ctx.args.name), (ctx.args.props as Record<string, unknown>) ?? {}, () => {});
       return { success: true, durationMs: 0 };
     } catch (err) {
       return { success: false, error: String(err), durationMs: 0 };
@@ -153,11 +150,11 @@ export const openModalTool: AIToolDefinition = {
 export const copyToClipboardTool: AIToolDefinition = {
   id: 'copy_to_clipboard',
   name: 'Copier dans le presse-papier',
-  description: 'Copie du texte dans le presse-papier de l\'utilisateur.',
+  description: "Copie du texte dans le presse-papier de l'utilisateur.",
   parameters: {
     text: { type: 'string', required: true, description: 'Texte à copier' },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       const text = String(ctx.args.text);
@@ -178,7 +175,7 @@ export const copyToClipboardTool: AIToolDefinition = {
 export const downloadFileTool: AIToolDefinition = {
   id: 'download_file',
   name: 'Télécharger un fichier',
-  description: 'Déclenche le téléchargement d\'un fichier depuis une URL ou un contenu base64.',
+  description: "Déclenche le téléchargement d'un fichier depuis une URL ou un contenu base64.",
   parameters: {
     url: { type: 'string', required: false, description: 'URL du fichier à télécharger' },
     content: { type: 'string', required: false, description: 'Contenu base64 du fichier' },
@@ -190,7 +187,7 @@ export const downloadFileTool: AIToolDefinition = {
       description: 'Type MIME',
     },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       const { url, content, filename, mimeType } = ctx.args as Record<string, string>;
@@ -199,9 +196,7 @@ export const downloadFileTool: AIToolDefinition = {
       }
       const link = document.createElement('a');
       link.download = filename;
-      link.href = url
-        ? url
-        : `data:${mimeType ?? 'application/octet-stream'};base64,${content}`;
+      link.href = url ? url : `data:${mimeType ?? 'application/octet-stream'};base64,${content}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -217,8 +212,7 @@ export const downloadFileTool: AIToolDefinition = {
 export const fetchDataTool: AIToolDefinition = {
   id: 'fetch_data',
   name: 'Récupérer des données API',
-  description:
-    "Effectue une requête GET authentifiée vers l'API EIGEN via egenFetch (X-Tenant-ID automatique).",
+  description: "Effectue une requête GET authentifiée vers l'API EGEN via egenFetch (X-Tenant-ID automatique).",
   parameters: {
     endpoint: {
       type: 'string',
@@ -228,10 +222,10 @@ export const fetchDataTool: AIToolDefinition = {
     queryParams: {
       type: 'object',
       required: false,
-      description: 'Paramètres de requête supplémentaires (mergeés dans l\'URL)',
+      description: "Paramètres de requête supplémentaires (mergeés dans l'URL)",
     },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       const endpoint = String(ctx.args.endpoint);
@@ -264,7 +258,7 @@ export const refreshDataTool: AIToolDefinition = {
       description: 'Clé SWR à invalider. Si absent, invalide tout.',
     },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       const { mutate } = await import('swr');
@@ -294,14 +288,14 @@ export const switchTenantTool: AIToolDefinition = {
       description: "Slug/identifiant de l'établissement cible",
     },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       const slug = String(ctx.args.tenantSlug);
       const hostname = window.location.hostname;
       const parts = hostname.split('.');
       const rootDomain = parts.length > 2 ? parts.slice(1).join('.') : hostname;
-      const spaBase = window.getEigenSpaBase?.() ?? '/';
+      const spaBase = window.getEgenSpaBase?.() ?? '/';
       const targetUrl = `${window.location.protocol}//${slug}.${rootDomain}${spaBase}`;
       window.location.href = targetUrl;
       return { success: true, data: { targetUrl }, durationMs: 0 };
@@ -316,7 +310,7 @@ export const switchTenantTool: AIToolDefinition = {
 export const searchTool: AIToolDefinition = {
   id: 'search',
   name: 'Lancer une recherche globale',
-  description: 'Navigue vers la page de recherche EIGEN avec un terme prédéfini.',
+  description: 'Navigue vers la page de recherche EGEN avec un terme prédéfini.',
   parameters: {
     query: { type: 'string', required: true, description: 'Terme de recherche' },
     category: {
@@ -325,12 +319,12 @@ export const searchTool: AIToolDefinition = {
       description: 'Catégorie (students, courses, reports…)',
     },
   },
-  moduleName: '@eigen/esm-ai-tools',
+  moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
       const query = String(ctx.args.query);
       const category = ctx.args.category as string | undefined;
-      const spaBase = window.getEigenSpaBase?.() ?? '/';
+      const spaBase = window.getEgenSpaBase?.() ?? '/';
       const route = `${spaBase}search?q=${encodeURIComponent(query)}${
         category ? `&category=${encodeURIComponent(category)}` : ''
       }`;

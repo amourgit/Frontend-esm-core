@@ -41,8 +41,8 @@
     "@egen/esm-ai-config": "workspace:*",
     "@egen/esm-ai-events": "workspace:*",
     "@egen/esm-api": "workspace:*",
-    "@egen/esm-state": "workspace:*",
     "@egen/esm-navigation": "workspace:*",
+    "@egen/esm-state": "workspace:*",
     "@egen/esm-styleguide": "workspace:*"
   },
   "peerDependencies": {

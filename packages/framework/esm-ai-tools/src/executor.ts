@@ -1,5 +1,5 @@
 // =============================================================================
-//  @eigen/esm-ai-tools — Pipeline d'exécution
+//  @egen/esm-ai-tools — Pipeline d'exécution
 //
 //  Ordre pour chaque requête de tool :
 //    1. Résoudre le tool dans le registre
@@ -11,16 +11,17 @@
 //    7. Retourner AIToolResult
 // =============================================================================
 
-import { dispatchAIEvent, AI_EVENTS } from '@eigen/esm-ai-events';
-import { getAIConfig } from '@eigen/esm-ai-config';
-import { sessionStore } from '@eigen/esm-api';
+import { dispatchAIEvent, AI_EVENTS } from '@egen/esm-ai-events';
+import { getAIConfig } from '@egen/esm-ai-config';
+import { sessionStore } from '@egen/esm-api';
 import { getTool } from './registry';
 import { validateToolArgs, checkToolPermissions } from './validation';
 import type { AIToolRequest, AIToolResult, AIToolExecutionContext, AIToolDefinition, AIToolDecorator } from './types';
 
 // AIContext est importé dynamiquement pour éviter la dépendance circulaire
 // esm-ai-tools → esm-ai-context → esm-ai-tools
-type AIContextLazy = import('@eigen/esm-ai-context').AIContext | null | undefined;
+import type { AIContext } from '@egen/esm-ai-context';
+type AIContextLazy = AIContext | null | undefined;
 
 let _executionCounter = 0;
 function generateExecutionId(): string {
@@ -63,12 +64,7 @@ async function executeWithDecorators(
 }
 
 /** Enveloppe une Promise avec un timeout */
-function withTimeout<T>(
-  promise: Promise<T>,
-  timeoutMs: number,
-  toolId: string,
-  executionId: string,
-): Promise<T> {
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number, toolId: string, executionId: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     const timer = setTimeout(() => {
       dispatchAIEvent(AI_EVENTS.TOOL_TIMEOUT, {
@@ -81,8 +77,14 @@ function withTimeout<T>(
     }, timeoutMs);
 
     promise.then(
-      (result) => { clearTimeout(timer); resolve(result); },
-      (err) => { clearTimeout(timer); reject(err); },
+      (result) => {
+        clearTimeout(timer);
+        resolve(result);
+      },
+      (err) => {
+        clearTimeout(timer);
+        reject(err);
+      },
     );
   });
 }
@@ -91,10 +93,7 @@ function withTimeout<T>(
  * Exécute un tool via le pipeline complet.
  * Le contexte IA est optionnel et passé en référence — jamais sérialisé ici.
  */
-export async function executeTool(
-  request: AIToolRequest,
-  aiContext?: AIContextLazy,
-): Promise<AIToolResult> {
+export async function executeTool(request: AIToolRequest, aiContext?: AIContextLazy): Promise<AIToolResult> {
   const startTime = performance.now();
   const executionId = generateExecutionId();
   const config = getAIConfig();

@@ -1,5 +1,5 @@
 // =============================================================================
-//  @eigen/esm-api — Bypass d'authentification pour développement
+//  @egen/esm-api — Bypass d'authentification pour développement
 //
 //  ACTIVÉ via EGEN_DEV_NO_AUTH=true dans l'environnement de build.
 //  Ne jamais utiliser en production.
@@ -74,7 +74,7 @@ export const DEV_BYPASS_SESSION = {
     allRoles: [],
     allPrivileges: [],
   },
-} as const;
+};
 
 // ─── Interception fetch ───────────────────────────────────────────────────────
 
@@ -95,12 +95,7 @@ export function interceptSessionFetch(): void {
   const originalFetch = window.fetch.bind(window);
 
   window.fetch = async function devBypassFetch(input, init) {
-    const url =
-      typeof input === 'string'
-        ? input
-        : input instanceof Request
-        ? input.url
-        : String(input);
+    const url = typeof input === 'string' ? input : input instanceof Request ? input.url : String(input);
 
     // Intercepter uniquement le session endpoint
     if (url.includes(sessionEndpoint) || url.includes('/ws/rest/v1/session')) {
@@ -142,8 +137,7 @@ export function initDevAuthBypass(): void {
   if (!isDevAuthBypassEnabled()) return;
 
   console.warn(
-    '[EIGEN] ⚠️  EGEN_DEV_NO_AUTH=true — Bypass d\'authentification actif. ' +
-      'NE PAS utiliser en production.',
+    "[EGEN] ⚠️  EGEN_DEV_NO_AUTH=true — Bypass d'authentification actif. " + 'NE PAS utiliser en production.',
   );
 
   // Étape 1 : intercepter fetch AVANT que getSessionStore() soit appelé

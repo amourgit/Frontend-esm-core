@@ -1,5 +1,5 @@
 // =============================================================================
-//  @eigen/esm-ai-tools — Types des tools IA
+//  @egen/esm-ai-tools — Types des tools IA
 // =============================================================================
 
 // ─── Schéma de paramètre ──────────────────────────────────────────────────────
@@ -37,13 +37,13 @@ export interface AIToolExecutionContext {
   args: Record<string, unknown>;
   /**
    * Snapshot du contexte IA au moment de l'exécution.
-   * Typé loosement pour éviter une dépendance circulaire esm-ai-tools → esm-ai-context.
+   * Typé de manière permissive pour éviter une dépendance circulaire esm-ai-tools → esm-ai-context.
    * Les tools accèdent aux données via ctx.aiContext?.user, ctx.aiContext?.tenant, etc.
    */
-  aiContext?: Record<string, unknown> | null;
+  aiContext?: unknown | null;
   /**
    * Session utilisateur (sessionStore snapshot).
-   * Typé loosement pour éviter une dépendance circulaire sur @eigen/esm-api.
+   * Typé loosement pour éviter une dépendance circulaire sur @egen/esm-api.
    */
   session?: {
     authenticated: boolean;
@@ -70,7 +70,7 @@ export interface AIToolDefinition<TArgs extends Record<string, unknown> = Record
   description: string;
   /** Schéma de paramètres (JSON Schema simplifié) */
   parameters: Record<string, AIToolParam>;
-  /** Privilèges EIGEN requis pour exécuter ce tool */
+  /** Privilèges EGEN requis pour exécuter ce tool */
   requiredPrivileges?: string[];
   /** Nom du module qui enregistre ce tool (pour le debugging et l'audit) */
   moduleName?: string;
