@@ -13,7 +13,6 @@ import {
   useConnectivity,
   useSession,
   applyDevAuthBypassForLogin,
-  isDevAuthBypassEnabled,
 } from '@egen/esm-framework';
 import { useTenant, useTenantMode, storeHeaderTenantId, getTenantStoreState } from '@egen/esm-tenant';
 import { type ConfigSchema } from '../config-schema';
@@ -108,15 +107,6 @@ const Login: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // En mode bypass dev (EGEN_DEV_NO_AUTH=true), l'utilisateur est déjà
-    // authentifié via la session fictive injectée par run.ts.
-    // On redirige directement vers l'accueil sans afficher le formulaire.
-    if (user && isDevAuthBypassEnabled()) {
-      const to = loginLinks?.loginSuccess || '${egenSpaBase}/home';
-      egenNavigate({ to });
-      return;
-    }
-
     if (!user) {
       if (loginProvider.type === 'oauth2' || loginProvider.type === 'custom') {
         egenNavigate({ to: loginProvider.loginUrl });
@@ -124,7 +114,7 @@ const Login: React.FC = () => {
         navigate('/login');
       }
     }
-  }, [username, navigate, location, user, loginProvider, loginLinks]);
+  }, [username, navigate, location, user, loginProvider]);
 
   useEffect(() => {
     if (showPasswordOnSeparateScreen) {
@@ -215,7 +205,7 @@ const Login: React.FC = () => {
           // COMMENTÉ — ancienne logique Egen :
           // if (session.sessionLocation) { ... } else { navigate('/login/location'); }
           {
-            let to = loginLinks?.loginSuccess || '/home';
+            let to = loginLinks?.loginSuccess || '${egenSpaBase}/';
             if (location?.state?.referrer) {
               if (location.state.referrer.startsWith('/')) {
                 to = `\${egenSpaBase}${location.state.referrer}`;

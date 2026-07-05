@@ -35,7 +35,8 @@ export function startupApp() {
 export const root = getSyncLifecycle(primaryNavRootComponent, options);
 
 export const redirect: Application = async () => ({
-  bootstrap: async () => navigate({ to: '${egenSpaBase}/home' }),
+  // At root path: Navbar handles auth check → /login if not authenticated
+  bootstrap: async () => {},
   mount: async () => undefined,
   unmount: async () => undefined,
 });

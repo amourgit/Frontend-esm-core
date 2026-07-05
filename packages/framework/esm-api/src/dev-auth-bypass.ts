@@ -137,20 +137,16 @@ export function initDevAuthBypass(): void {
   if (!isDevAuthBypassEnabled()) return;
 
   console.warn(
-    "[EGEN] ⚠️  EGEN_DEV_NO_AUTH=true — Bypass d'authentification actif. " + 'NE PAS utiliser en production.',
+    "[EIGEN] ⚠️  EIGEN_DEV_NO_AUTH=true — Bypass dev actif. NE PAS utiliser en production.",
   );
 
-  // Étape 1 : intercepter fetch AVANT que getSessionStore() soit appelé
+  // Intercepter window.fetch pour le session endpoint.
+  // Cela évite que getSessionStore() → refetchCurrentUser() → 401
+  // détruise une éventuelle session déjà présente dans le store.
+  // La session fictive est injectée UNIQUEMENT à la soumission du formulaire
+  // (via applyDevAuthBypassForLogin dans handleSubmit), pas au démarrage.
+  // L'utilisateur doit pouvoir remplir le formulaire normalement.
   interceptSessionFetch();
-
-  // Étape 2 : injecter la session fictive directement dans le store
-  // → les composants qui lisent sessionStore.getState() directement
-  //   voient immédiatement un utilisateur authentifié
-  const bypassStore: SessionStore = {
-    loaded: true,
-    session: { ...DEV_BYPASS_SESSION },
-  };
-  sessionStore.setState(bypassStore);
 }
 
 // ─── Bypass pour la page de login ─────────────────────────────────────────────

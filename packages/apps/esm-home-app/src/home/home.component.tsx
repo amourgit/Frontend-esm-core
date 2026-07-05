@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSession, navigate, interpolateUrl } from '@igen/esm-framework';
 import Navbar from '../components/navbar/navbar.component';
 import Hero from '../components/hero/hero.component';
 import Stats from '../components/stats/stats.component';
@@ -32,6 +33,15 @@ import styles from './home.scss';
 
 const HomePage: React.FC = () => {
   const { i18n } = useTranslation();
+  const session = useSession();
+
+  // Si l'utilisateur est déjà connecté, la landing publique ne le concerne pas.
+  // On le renvoie vers l'espace authentifié (racine de primary-nav).
+  useEffect(() => {
+    if (session?.authenticated && session?.user?.person) {
+      navigate({ to: interpolateUrl('${egenSpaBase}/') });
+    }
+  }, [session]);
 
   // Force le mode sombre et marque la route comme publique (supprime le topNav gap)
   useEffect(() => {
