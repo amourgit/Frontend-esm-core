@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSession, navigate, interpolateUrl } from '@igen/esm-framework';
+import { useSession, navigate, interpolateUrl } from '@egen/esm-framework';
 import Navbar from '../components/navbar/navbar.component';
 import Hero from '../components/hero/hero.component';
 import Stats from '../components/stats/stats.component';
