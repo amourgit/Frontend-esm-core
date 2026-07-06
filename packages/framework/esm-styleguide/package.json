@@ -128,7 +128,7 @@
     "single-spa": "^6.0.3",
     "svgo": "^3.3.2",
     "swr": "2.2.5",
-    "typescript": "^5.8.3",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.2"
   }
 }
