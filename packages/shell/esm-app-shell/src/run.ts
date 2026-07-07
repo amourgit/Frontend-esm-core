@@ -388,7 +388,13 @@ export function run(configUrls: Array<string>) {
   // Le thème par défaut (theme.default.json) est toujours chargé en premier.
   const themeUrls: string[] = [
     // Thème par défaut embarqué (priority=1)
-    new URL('./assets/themes/theme.default.json', import.meta.url).href,
+    // NOTE : `window.getEgenSpaBase()` plutôt que `new URL(..., import.meta.url)` —
+    // ce dernier dépend du chunk qui exécute ce module (fragile en Module
+    // Federation, cible 'web' sans experiments.outputModule) et peut résoudre
+    // vers une URL qui 404, faisant silencieusement retomber le moteur sur le
+    // thème de secours minimal (sans aucun token `panel.*`). Même pattern que
+    // `registerEgenServiceWorker` plus bas dans ce fichier.
+    `${window.getEgenSpaBase()}assets/themes/theme.default.json`,
     // Surcharge tenant possible via variable globale (priority>1 pour prendre la main)
     ...(Array.isArray((window as any).egenThemeUrls) ? (window as any).egenThemeUrls : []),
   ];
