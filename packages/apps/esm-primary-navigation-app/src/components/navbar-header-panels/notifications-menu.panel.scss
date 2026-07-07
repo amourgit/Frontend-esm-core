@@ -1,9 +1,35 @@
+// =============================================================================
+//  NOTIFICATIONS MENU PANEL — Styles du panneau "Notifications"
+//
+//  Conversion : ancien thème Carbon clair ($ui-background, heading-03 teal)
+//  → thème EGEN "glass" sombre, cohérent avec le reste de la topbar.
+//  Surcharge locale du panel Carbon (.cds--header-panel), sans toucher au
+//  fichier partagé packages/framework/esm-styleguide/_overrides.scss.
+// =============================================================================
+
 @use '@carbon/layout';
-@use '@carbon/type';
-@use '@egen/esm-styleguide/src/vars' as *;
+
+.headerPanel {
+  width: fit-content;
+  height: max-content;
+  min-width: 320px;
+  max-width: 380px;
+  overflow: hidden;
+
+  background: var(--panel-dropdown-background) !important;
+  backdrop-filter: var(--panel-dropdown-backdrop-filter) !important;
+  -webkit-backdrop-filter: var(--panel-dropdown-backdrop-filter) !important;
+  border: var(--panel-dropdown-border) !important;
+  box-shadow: var(--panel-dropdown-box-shadow) !important;
+  border-radius: var(--border-radius-xl, 1.25rem) !important;
+}
 
 .heading {
-  @include type.type-style('heading-03');
-  color: $ui-background;
-  margin: layout.$spacing-05;
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  letter-spacing: 0.02em;
+  color: var(--colors-surface-foreground);
+  margin: 0;
+  padding: 0.75rem 1rem 0.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent);
 }

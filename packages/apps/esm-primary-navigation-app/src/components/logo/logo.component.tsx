@@ -15,7 +15,7 @@ const Logo: React.FC = () => {
       {logo?.src ? (
         <img alt={logo.alt} className={styles.logo} onError={handleImageError} src={interpolateUrl(logo.src)} />
       ) : logo?.name ? (
-        logo.name
+        <span className={styles.logoName}>{logo.name}</span>
       ) : (
         <svg aria-label="Egen Logo" role="img" width={110} height={40}>
           <use href="#egen-logo-white" />

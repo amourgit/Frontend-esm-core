@@ -1,25 +1,38 @@
+// =============================================================================
+//  USER MENU PANEL — Styles du panneau "Profil utilisateur"
+//
+//  Conversion : ancien thème Carbon clair ($field-01, $inverse-link,
+//  brand-01..03 teal) → thème EGEN "glass" sombre, cohérent avec le reste
+//  de la topbar. Structure Carbon Switcher inchangée (mêmes sélecteurs
+//  :global(.cds--switcher__item...)), seules les couleurs/typo changent.
+//  Surcharge locale du panel Carbon, sans toucher au fichier partagé
+//  packages/framework/esm-styleguide/_overrides.scss.
+// =============================================================================
+
 @use '@carbon/layout';
-@use '@carbon/type';
-@use '@egen/esm-styleguide/src/vars' as *;
-
-.bodyLong01 {
-  @include type.type-style('body-01');
-}
 
 .headerPanel {
+  width: fit-content;
   height: max-content;
-}
-
-.primaryNavContainer {
-  height: var(--egen-topnav-height);
-}
-
-.headerPanel {
+  min-width: 260px;
+  max-width: 320px;
+  overflow: hidden;
   transition: none;
+
+  background: var(--panel-dropdown-background) !important;
+  backdrop-filter: var(--panel-dropdown-backdrop-filter) !important;
+  -webkit-backdrop-filter: var(--panel-dropdown-backdrop-filter) !important;
+  border: var(--panel-dropdown-border) !important;
+  box-shadow: var(--panel-dropdown-box-shadow) !important;
+  border-radius: var(--border-radius-xl, 1.25rem) !important;
 }
 
 .fullWidth {
   width: 100%;
+}
+
+.divider {
+  border-color: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent) !important;
 }
 
 .userPanelSwitcher {
@@ -38,28 +51,30 @@
 .userPanelSwitcher :global(.cds--switcher__item-link) {
   display: flex;
   align-items: center;
-  color: $field-01;
+  color: var(--colors-surface-foreground);
   padding: 0;
   height: layout.$spacing-09;
-  @extend .bodyLong01;
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  font-weight: var(--typography-font-weight-medium, 500);
+  transition: var(--transitions-colors);
 }
 
 .userPanelSwitcher :global(.cds--switcher__item-link):hover:not(.cds--switcher__item-link--selected) {
-  color: $field-01;
-  @include brand-02(background-color);
+  color: var(--colors-surface-foreground);
+  background-color: color-mix(in srgb, var(--colors-primary-500) 12%, transparent) !important;
 }
 
 .userPanelSwitcher :global(.cds--switcher__item) svg {
   margin: 0 layout.$spacing-04;
-  fill: $field-01;
+  fill: var(--colors-surface-foreground);
   flex-shrink: 0;
 }
 
 .userPanelSwitcher :global(.cds--switcher__item) button {
-  color: $inverse-link;
+  color: var(--colors-primary-300);
 }
 
 .userPanelSwitcher :global(.cds--switcher__item) button:hover {
-  @include brand-03(background-color);
-  color: $inverse-link;
+  background-color: color-mix(in srgb, var(--colors-primary-500) 10%, transparent) !important;
+  color: var(--colors-primary-300);
 }
