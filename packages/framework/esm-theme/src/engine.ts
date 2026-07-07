@@ -411,11 +411,12 @@ export class ThemeEngine {
       }
     }
 
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-      if (prefersLight) return 'light';
-    }
-
+    // NOTE : on ne se cale plus sur `prefers-color-scheme` du système. Le thème EGEN
+    // (panels, topbar, etc.) n'expose des tokens que pour `panel.dark.*` — un système
+    // en préférence claire résolvait silencieusement en 'light' et laissait tous les
+    // `var(--panel-*)` non définis (donc le style Carbon par défaut, non thémé, restait
+    // affiché). Le mode initial est donc désormais toujours `defaultMode` ('dark'),
+    // sauf attribut `data-theme` déjà posé ou choix explicite persisté par l'utilisateur.
     return this.options.defaultMode;
   }
 
