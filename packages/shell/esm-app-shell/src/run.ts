@@ -386,16 +386,32 @@ export function run(configUrls: Array<string>) {
   // Démarrer le moteur en parallèle de l'import styleguide.
   // Les URLs de thème peuvent être surchargées via window.egenThemeUrls (optionnel).
   // Le thème par défaut (theme.default.json) est toujours chargé en premier.
+  // ── Construction des URLs de thème ──────────────────────────────────────
+  // On NE PEUT PAS utiliser `new URL('./assets/themes/...', import.meta.url)`
+  // dans un bundle rspack : import.meta.url pointe vers le fichier bundle JS,
+  // et la résolution relative rate la destination réelle du CopyPlugin
+  // (qui copie src/assets/* → dist/* SANS le préfixe 'assets/').
+  //
+  // On utilise à la place une URL construite depuis la racine de la page :
+  //   - document.baseURI  → respecte la balise <base> si présente
+  //   - window.egenPublicPath → injecté par le serveur si le contexte est sous-chemin
+  //
+  // Le fichier est accessible à : <publicPath>/themes/theme.default.json
+  function resolveThemeUrl(filename: string): string {
+    const publicPath: string =
+      (window as any).egenPublicPath ??
+      (window as any).__webpack_public_path__ ??
+      '';
+    const base = publicPath
+      ? `${window.location.origin}/${publicPath.replace(/^\/|\/$|^\//g, '')}/`
+      : document.baseURI || `${window.location.origin}/`;
+    return new URL(`themes/${filename}`, base).href;
+  }
+
   const themeUrls: string[] = [
-    // Thème par défaut embarqué (priority=1)
-    // NOTE : `window.getEgenSpaBase()` plutôt que `new URL(..., import.meta.url)` —
-    // ce dernier dépend du chunk qui exécute ce module (fragile en Module
-    // Federation, cible 'web' sans experiments.outputModule) et peut résoudre
-    // vers une URL qui 404, faisant silencieusement retomber le moteur sur le
-    // thème de secours minimal (sans aucun token `panel.*`). Même pattern que
-    // `registerEgenServiceWorker` plus bas dans ce fichier.
-    `${window.getEgenSpaBase()}assets/themes/theme.default.json`,
-    // Surcharge tenant possible via variable globale (priority>1 pour prendre la main)
+    // Thème par défaut (priority=1) — toujours chargé
+    resolveThemeUrl('theme.default.json'),
+    // Surcharge optionnelle tenant/marque : window.egenThemeUrls[] (priority>1)
     ...(Array.isArray((window as any).egenThemeUrls) ? (window as any).egenThemeUrls : []),
   ];
 
