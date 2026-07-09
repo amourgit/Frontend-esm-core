@@ -31,6 +31,55 @@
   width: 100%;
 }
 
+// ─── En-tête profil ───────────────────────────────────────────────────────────
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 0.75rem 0.625rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent);
+}
+
+.profileAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-md, 0.75rem);
+  background: linear-gradient(135deg, var(--colors-primary-600), var(--colors-primary-400));
+  color: var(--colors-on-primary, #fff);
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  font-weight: var(--typography-font-weight-bold, 700);
+  letter-spacing: -0.01em;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.0625rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.profileName {
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  color: var(--colors-surface-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profileSystemId {
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  color: color-mix(in srgb, var(--colors-surface-foreground) 50%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .divider {
   border-color: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent) !important;
 }

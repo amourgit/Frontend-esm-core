@@ -25,11 +25,69 @@
 }
 
 .heading {
-  font-size: var(--typography-font-size-sm-size, 0.875rem);
-  font-weight: var(--typography-font-weight-semibold, 600);
-  letter-spacing: 0.02em;
-  color: var(--colors-surface-foreground);
   margin: 0;
   padding: 0.75rem 1rem 0.5rem;
   border-bottom: 1px solid color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent);
+}
+
+.headingLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--colors-surface-foreground) 45%, transparent);
+
+  svg {
+    color: var(--colors-primary-400);
+    flex-shrink: 0;
+  }
+}
+
+// ─── Liste des notifications ──────────────────────────────────────────────────
+.list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 0.375rem;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--colors-surface-foreground) 20%, transparent);
+    border-radius: var(--border-radius-full, 9999px);
+  }
+}
+
+// ─── État vide ─────────────────────────────────────────────────────────────────
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 1rem;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font-size: var(--typography-font-size-sm-size, 0.875rem);
+    font-weight: var(--typography-font-weight-medium, 500);
+    color: color-mix(in srgb, var(--colors-surface-foreground) 45%, transparent);
+  }
+}
+
+.emptyIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-full, 9999px);
+  background: color-mix(in srgb, var(--colors-surface-foreground) 6%, transparent);
+  color: color-mix(in srgb, var(--colors-surface-foreground) 35%, transparent);
 }

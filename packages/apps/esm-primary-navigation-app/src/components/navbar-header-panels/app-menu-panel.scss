@@ -35,6 +35,35 @@
   border-radius: var(--border-radius-xl, 1.25rem) !important;
 }
 
+// ─── En-tête du dropdown ──────────────────────────────────────────────────────
+.dropdownHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.625rem 0.5rem;
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--colors-surface-foreground) 45%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent);
+  margin-bottom: 0.25rem;
+
+  svg {
+    color: var(--colors-primary-400);
+    flex-shrink: 0;
+  }
+}
+
+// ─── État vide ─────────────────────────────────────────────────────────────────
+.emptyState {
+  margin: 0;
+  padding: 1rem 0.625rem;
+  text-align: center;
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  color: color-mix(in srgb, var(--colors-surface-foreground) 40%, transparent);
+}
+
 // ─── Liens du menu ────────────────────────────────────────────────────────────
 .menuLink {
   display: flex;
