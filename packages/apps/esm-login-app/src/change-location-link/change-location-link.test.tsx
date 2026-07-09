@@ -20,12 +20,12 @@ describe('ChangeLocationLink', () => {
     } as Session);
   });
 
-  it('should display the `Change location` link', async () => {
+  it('should display the space search link and navigate to the location picker', async () => {
     render(<ChangeLocationLink />);
 
     const user = userEvent.setup();
     const changeLocationButton = await screen.findByRole('button', {
-      name: /Change/i,
+      name: /Rechercher un espace/i,
     });
 
     await user.click(changeLocationButton);

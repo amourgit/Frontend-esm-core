@@ -1,17 +1,51 @@
-@use '@carbon/layout';
+// =============================================================================
+//  CHANGE LOCATION LINK — Styles pied de modal Espaces
+//  100% tokens de thème EGEN (cohérent avec context-switcher.scss du
+//  primary-nav, qui possède un bouton de pied de dropdown similaire).
+// =============================================================================
 
 .changeLocationButton {
-  width: fit-content;
-  background-color: transparent;
-  color: white;
-  font-size: 14px;
-  padding: layout.$spacing-04 !important; // this gets unset in rtl language without !important
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--border-radius-md, 0.75rem);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--transitions-colors);
 
   &:hover {
-    color: white;
+    background: color-mix(in srgb, var(--colors-primary-500) 12%, transparent);
   }
 }
 
-.currentLocationText {
-  padding-inline: layout.$spacing-04;
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--colors-primary-400);
+}
+
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: var(--typography-font-weight-medium, 500);
+  color: var(--colors-primary-400);
+}
+
+.currentLocation {
+  font-size: 0.625rem;
+  color: color-mix(in srgb, var(--colors-surface-foreground) 50%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

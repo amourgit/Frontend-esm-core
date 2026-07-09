@@ -183,6 +183,9 @@
 }
 
 .dropdownFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
   border-top: 1px solid color-mix(in srgb, var(--colors-surface-foreground) 10%, transparent);
   padding: 0.375rem;
   margin-top: 0.25rem;

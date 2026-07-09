@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { navigate, interpolateUrl, useConfig, useOnClickOutside } from '@egen/esm-framework';
+import { navigate, interpolateUrl, useConfig, useOnClickOutside, ExtensionSlot } from '@egen/esm-framework';
 import { useTenant, useTenantMode, useAvailableTenants } from '@egen/esm-tenant';
 import { type ConfigSchema } from '../../config-schema';
 import styles from './context-switcher.scss';
@@ -169,6 +169,13 @@ const ContextSwitcher: React.FC = () => {
                 ? t('requestNewSpace', 'Demander un espace')
                 : t('goToGeneralSpace', "Aller à l'espace général")}
             </button>
+
+            {/* Bouton "Rechercher un espace" — relocalisé depuis l'ancien
+                bouton "Localisation" de la topbar (esm-login-app), même
+                route/service, nouveau point d'entrée uniquement. */}
+            <div onClick={() => setOpen(false)}>
+              <ExtensionSlot name="context-switcher-footer-slot" />
+            </div>
           </div>
         </div>
       )}

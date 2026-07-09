@@ -47,11 +47,11 @@
     },
     {
       "name": "location-changer",
-      "slot": "top-nav-info-slot",
+      "slot": "context-switcher-footer-slot",
       "component": "changeLocationLink",
       "online": true,
       "offline": true,
-      "order": 1
+      "order": 10
     }
   ],
   "modals": [
