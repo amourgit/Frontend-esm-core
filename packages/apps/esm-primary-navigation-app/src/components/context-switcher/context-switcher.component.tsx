@@ -1,26 +1,22 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { navigate, interpolateUrl, useConfig } from '@egen/esm-framework';
-import { useTenant, useTenantMode, getAllTenants } from '@egen/esm-tenant';
-import { type ConfigSchema } from '../../../config-schema';
+import { navigate, interpolateUrl, useConfig, useOnClickOutside } from '@egen/esm-framework';
+import { useTenant, useTenantMode, useAvailableTenants } from '@egen/esm-tenant';
+import { type ConfigSchema } from '../../config-schema';
 import styles from './context-switcher.scss';
 
 // =============================================================================
-//  CONTEXT SWITCHER — Menu déroulant de sélection d'établissement
+//  CONTEXT SWITCHER — Sélecteur d'établissement / tenant
 //
-//  Positionné à gauche de la topbar (niveau 1).
-//  Permet à l'utilisateur de choisir son contexte d'établissement.
-//  Par défaut : espace général (tenant courant).
-//  Au changement : redirige vers le portail captif du tenant cible si
-//  l'utilisateur n'y est pas authentifié, sinon vers son espace tenant.
+//  Positionné à gauche de la topbar (niveau 1), juste avant le logo.
+//  Toujours visible (modes single / off / multi) : seul le comportement du
+//  dropdown change — en single/off, la liste peut être vide ou réduite à
+//  l'établissement courant ; en multi, elle liste tous les tenants
+//  disponibles dans la registry.
+//
+//  Au changement d'établissement : redirection vers le sous-domaine du
+//  tenant cible (le portail captif y gère l'auth si nécessaire).
 // =============================================================================
-
-interface TenantOption {
-  id: string;
-  name: string;
-  slug: string;
-  active: boolean;
-}
 
 const BuildingIcon: React.FC = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -56,92 +52,64 @@ const ContextSwitcher: React.FC = () => {
   const config = useConfig<ConfigSchema>();
   const tenantMode = useTenantMode();
   const activeTenant = useTenant();
+  const availableTenants = useAvailableTenants();
   const [open, setOpen] = useState(false);
-  const [tenants, setTenants] = useState<TenantOption[]>([]);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   const isMultiTenant = tenantMode === 'multi';
 
-  // Toujours tenter de charger la liste des établissements — même en mode
-  // single/off — pour que le sélecteur reste utile (ex: liste vide gérée
-  // par l'état vide du dropdown, ou établissement unique affiché).
-  useEffect(() => {
-    const all = getAllTenants();
-    setTenants(
-      all
-        .filter((t) => !t.suspended)
-        .map((t) => ({
-          id: t.id,
-          name: t.name,
-          slug: t.id,
-          active: t.id === activeTenant?.id,
-        })),
-    );
-  }, [activeTenant?.id]);
+  const menuRef = useOnClickOutside<HTMLDivElement>(() => setOpen(false), open);
 
-  // Fermer au clic extérieur
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [open]);
+  const tenants = useMemo(
+    () =>
+      availableTenants
+        .filter((tenant) => !tenant.suspended)
+        .map((tenant) => ({
+          id: tenant.id,
+          name: tenant.name,
+          slug: tenant.slug ?? tenant.id,
+          initial: (tenant.meta?.logoText as string | undefined)?.toUpperCase() ?? tenant.name.charAt(0).toUpperCase(),
+          active: tenant.id === activeTenant?.id,
+        })),
+    [availableTenants, activeTenant?.id],
+  );
 
   const handleSelect = useCallback(
-    (tenant: TenantOption) => {
+    (tenant: (typeof tenants)[number]) => {
       setOpen(false);
       if (tenant.active) return;
-      // Construire l'URL du tenant cible
-      const protocol = window.location.protocol;
-      const port = window.location.port ? `:${window.location.port}` : '';
-      const rootDomain = window.location.hostname.split('.').slice(1).join('.') || window.location.hostname;
-      const tenantUrl = `${protocol}//${tenant.slug}.${rootDomain}${port}${interpolateUrl(config.logo.link)}`;
-      window.location.href = tenantUrl;
+      const { protocol, port, hostname } = window.location;
+      const portSegment = port ? `:${port}` : '';
+      const rootDomain = hostname.split('.').slice(1).join('.') || hostname;
+      window.location.href = `${protocol}//${tenant.slug}.${rootDomain}${portSegment}${interpolateUrl(config.logo.link)}`;
     },
     [config.logo.link],
   );
 
-  // Le switcher reste TOUJOURS visible (mode multi, single, ou off) —
-  // seul son comportement de fond change : en mode single/off il affiche
-  // simplement l'espace courant, avec la liste des établissements
-  // disponibles (potentiellement vide) dans le dropdown.
   const currentLabel = activeTenant?.name ?? t('generalSpace', 'Espace général');
-  const firstLetter = currentLabel.charAt(0).toUpperCase();
+  const currentInitial = currentLabel.charAt(0).toUpperCase();
 
   return (
     <div className={styles.wrapper} ref={menuRef}>
       <button
+        type="button"
         className={`${styles.trigger} ${open ? styles.triggerOpen : ''}`}
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={t('switchContext', 'Changer de contexte : {{name}}', { name: currentLabel })}
       >
-        {/* Avatar initiale */}
         <span className={styles.avatar} aria-hidden="true">
-          {firstLetter}
+          {currentInitial}
         </span>
-
-        {/* Nom du contexte courant */}
         <span className={styles.currentLabel}>
           <span className={styles.currentLabelSub}>{t('context', 'Contexte')}</span>
           <span className={styles.currentLabelName}>{currentLabel}</span>
         </span>
-
         <ChevronIcon open={open} />
       </button>
 
-      {/* Dropdown */}
       {open && (
-        <div
-          className={styles.dropdown}
-          role="listbox"
-          aria-label={t('selectEstablishment', 'Choisir un établissement')}
-        >
+        <div className={styles.dropdown} role="listbox" aria-label={t('selectEstablishment', "Choisir un établissement")}>
           <div className={styles.dropdownHeader}>
             <BuildingIcon />
             <span>{t('myEstablishments', 'Mes établissements')}</span>
@@ -154,12 +122,13 @@ const ContextSwitcher: React.FC = () => {
               tenants.map((tenant) => (
                 <button
                   key={tenant.id}
+                  type="button"
                   role="option"
                   aria-selected={tenant.active}
                   className={`${styles.option} ${tenant.active ? styles.optionActive : ''}`}
                   onClick={() => handleSelect(tenant)}
                 >
-                  <span className={styles.optionAvatar}>{tenant.name.charAt(0).toUpperCase()}</span>
+                  <span className={styles.optionAvatar}>{tenant.initial}</span>
                   <span className={styles.optionName}>{tenant.name}</span>
                   {tenant.active && (
                     <span className={styles.optionCheck}>
@@ -173,6 +142,7 @@ const ContextSwitcher: React.FC = () => {
 
           <div className={styles.dropdownFooter}>
             <button
+              type="button"
               className={styles.footerBtn}
               onClick={() => {
                 setOpen(false);

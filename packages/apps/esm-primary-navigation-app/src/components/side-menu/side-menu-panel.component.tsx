@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { isDesktop, LeftNavMenu, useLayoutType, useLeftNavStore, useOnClickOutside } from '@egen/esm-framework';
 import { createPortal } from 'react-dom';
+import { isDesktop, LeftNavMenu, useLayoutType, useLeftNavStore, useOnClickOutside } from '@egen/esm-framework';
 
 interface SideMenuPanelProps {
   expanded: boolean;
@@ -8,21 +8,22 @@ interface SideMenuPanelProps {
 }
 
 /**
- * This is the menu that pops up when clicking on the hamburger button
- * on the top nav. It's also responsible for rendering the left nav
- * in desktop mode (via a react portal).
+ * Menu qui s'ouvre au clic sur le bouton hamburger de la topbar.
+ * Responsable également du rendu de la nav latérale en mode desktop
+ * (via portail React vers le conteneur dédié).
  */
 const SideMenuPanel: React.FC<SideMenuPanelProps> = ({ expanded, hidePanel }) => {
   const menuRef = useOnClickOutside(hidePanel, expanded);
+  const layout = useLayoutType();
+  const { mode } = useLeftNavStore();
 
   useEffect(() => {
     window.addEventListener('popstate', hidePanel);
     return () => window.removeEventListener('popstate', hidePanel);
   }, [hidePanel]);
-  const layout = useLayoutType();
-  const { mode } = useLeftNavStore();
 
   const leftNavContainer = window.document.getElementById('egen-left-nav-container');
+
   return (
     <>
       {(!isDesktop(layout) || mode === 'collapsed') && expanded && <LeftNavMenu ref={menuRef} isChildOfHeader />}

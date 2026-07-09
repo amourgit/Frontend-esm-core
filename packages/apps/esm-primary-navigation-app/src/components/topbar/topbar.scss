@@ -1,30 +1,20 @@
 // =============================================================================
-//  NAVBAR — Styles de la navigation principale EGEN
+//  TOPBAR — Styles de la navigation principale EGEN
 //
 //  Philosophie : ZÉRO valeur codée en dur.
 //  TOUT vient des CSS vars injectées par esm-theme depuis theme.default.json.
 //
-//  Convention de nommage CSS vars (identique à esm-login-app) :
+//  Convention de nommage CSS vars :
 //    panel.dark.header.*    → var(--panel-header-*)    [résolu via data-theme]
 //    colors.primary.500     → var(--colors-primary-500)
-//    shadows.md             → var(--shadows-md)
-//    transitions.default    → var(--transitions-default)
-//    border-radius.xl       → var(--border-radius-xl)
-//
-//  Structure (2 niveaux superposés) :
-//    .topNavWrapper
-//      .topNavHeader  (Carbon <Header>) — niveau 1 — hauteur fixe 48px
-//        .leftSection   [ context-switcher | divider | logo ]
-//        .centerSection [ top-nav-info-slot ]
-//        .rightSection  [ search | actions | notifs | user | apps ]
-//      BreadcrumbNav                    — niveau 2 — hauteur 32px (caché si slot vide)
+//    shadows.md              → var(--shadows-md)
+//    transitions.default     → var(--transitions-default)
+//    border-radius.xl        → var(--border-radius-xl)
 // =============================================================================
 
 @use '@carbon/layout';
-@use '@egen/esm-styleguide/src/vars' as *;
 
-// ─── Wrapper deux niveaux ────────────────────────────────────────────────────
-.topNavWrapper {
+.topBarWrapper {
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -33,23 +23,19 @@
 }
 
 // ─── Niveau 1 — Barre principale ─────────────────────────────────────────────
-.topNavHeader {
-  // Override Carbon : fond glass du thème EGEN
+.topBarHeader {
   background: var(--panel-header-background) !important;
   backdrop-filter: var(--panel-header-backdrop-filter) !important;
   -webkit-backdrop-filter: var(--panel-header-backdrop-filter) !important;
   border-bottom: 1px solid var(--panel-header-border) !important;
   box-shadow: var(--panel-header-box-shadow) !important;
 
-  // Layout : distribué en 3 zones (left | center | right)
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
   padding: 0 1rem !important;
   height: var(--layout-header-height, 48px) !important;
   gap: 0.5rem !important;
-
-  // Override Carbon qui force un max-width
   max-width: none !important;
 }
 
@@ -75,7 +61,6 @@
   }
 }
 
-// Séparateur vertical gauche (entre context-switcher et logo)
 .divider {
   width: 1px;
   height: 20px;
@@ -98,7 +83,6 @@
 }
 
 // ─── Zone centrale ───────────────────────────────────────────────────────────
-// Conteneur invisible au repos — les apps y injectent ce qu'elles veulent.
 .centerSection {
   flex: 1;
   display: flex;
@@ -112,7 +96,6 @@
   display: flex;
   align-items: center;
   gap: layout.$spacing-03;
-  // Texte petit — conforme à la directive
   font-size: var(--typography-font-size-xs-size, 0.75rem);
   color: color-mix(in srgb, var(--colors-surface-foreground) 65%, transparent);
   white-space: nowrap;
@@ -134,7 +117,6 @@
   align-items: center;
   gap: 0;
 
-  // Override des liens Carbon dans le slot
   > a {
     color: color-mix(in srgb, var(--colors-surface-foreground) 70%, transparent);
     text-decoration: none;
@@ -144,42 +126,4 @@
       color: var(--colors-surface-foreground);
     }
   }
-}
-
-// ─── Boutons d'action globaux (Carbon HeaderGlobalAction) ────────────────────
-// Override complet pour matcher le design EGEN (pas le thème Carbon par défaut)
-:global(.cds--header__action) {
-  color: color-mix(in srgb, var(--colors-surface-foreground) 70%, transparent) !important;
-  background: transparent !important;
-  border-radius: var(--border-radius-md, 0.75rem) !important;
-  width: 36px !important;
-  height: 36px !important;
-  transition: var(--transitions-default) !important;
-
-  &:hover {
-    background: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent) !important;
-    color: var(--colors-surface-foreground) !important;
-  }
-
-  &:global(.cds--header__action--active),
-  &.headerGlobalBarButton {
-    background: color-mix(in srgb, var(--colors-primary-500) 15%, transparent) !important;
-    color: var(--colors-primary-300) !important;
-  }
-}
-
-// ─── Panel wrapper ────────────────────────────────────────────────────────────
-.panelWrapper {
-  display: contents;
-}
-
-// ─── État actif panel ─────────────────────────────────────────────────────────
-.activePanel {
-  background: color-mix(in srgb, var(--colors-primary-500) 15%, transparent) !important;
-  color: var(--colors-primary-300) !important;
-}
-
-.headerGlobalBarButton {
-  background: color-mix(in srgb, var(--colors-primary-500) 15%, transparent) !important;
-  color: var(--colors-primary-300) !important;
 }
