@@ -32,6 +32,15 @@ const NotificationsMenuPanel: React.FC<NotificationsMenuPanelProps> = ({ expande
   const notificationItems = useAssignedExtensions('notifications-nav-menu-slot');
   const isEmpty = notificationItems.length === 0;
 
+  // Ne JAMAIS rendre le panneau dans le DOM tant qu'il n'est pas ouvert.
+  // (Se fier uniquement à Carbon --header-panel--expanded pour le masquage
+  // visuel est fragile : nos surcharges CSS locales (max-width fixe pour le
+  // style glass) annulent son collapse et le panneau reste visible au
+  // chargement. Le garde ci-dessous supprime le problème à la racine.)
+  if (!expanded) {
+    return null;
+  }
+
   return (
     <HeaderPanel className={styles.headerPanel} aria-label="Notifications Panel" expanded={expanded}>
       <div className={styles.heading}>

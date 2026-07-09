@@ -60,11 +60,12 @@ const ContextSwitcher: React.FC = () => {
   const [tenants, setTenants] = useState<TenantOption[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Ne s'affiche qu'en mode multi-tenant
   const isMultiTenant = tenantMode === 'multi';
 
+  // Toujours tenter de charger la liste des établissements — même en mode
+  // single/off — pour que le sélecteur reste utile (ex: liste vide gérée
+  // par l'état vide du dropdown, ou établissement unique affiché).
   useEffect(() => {
-    if (!isMultiTenant) return;
     const all = getAllTenants();
     setTenants(
       all
@@ -76,7 +77,7 @@ const ContextSwitcher: React.FC = () => {
           active: t.id === activeTenant?.id,
         })),
     );
-  }, [isMultiTenant, activeTenant?.id]);
+  }, [activeTenant?.id]);
 
   // Fermer au clic extérieur
   useEffect(() => {
@@ -104,8 +105,10 @@ const ContextSwitcher: React.FC = () => {
     [config.logo.link],
   );
 
-  if (!isMultiTenant) return null;
-
+  // Le switcher reste TOUJOURS visible (mode multi, single, ou off) —
+  // seul son comportement de fond change : en mode single/off il affiche
+  // simplement l'espace courant, avec la liste des établissements
+  // disponibles (potentiellement vide) dans le dropdown.
   const currentLabel = activeTenant?.name ?? t('generalSpace', 'Espace général');
   const firstLetter = currentLabel.charAt(0).toUpperCase();
 
@@ -177,7 +180,7 @@ const ContextSwitcher: React.FC = () => {
               }}
             >
               <BuildingIcon />
-              {t('requestNewSpace', 'Demander un espace')}
+              {isMultiTenant ? t('requestNewSpace', 'Demander un espace') : t('goToGeneralSpace', "Aller à l'espace général")}
             </button>
           </div>
         </div>

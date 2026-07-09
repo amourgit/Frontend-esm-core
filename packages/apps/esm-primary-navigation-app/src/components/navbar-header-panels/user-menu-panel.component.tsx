@@ -21,6 +21,13 @@ const UserMenuPanel: React.FC<UserMenuPanelProps> = ({ expanded, hidePanel }) =>
   const systemId = session?.user?.systemId ?? session?.user?.username ?? '';
   const initial = useMemo(() => (displayName ? displayName.trim().charAt(0).toUpperCase() : '?'), [displayName]);
 
+  // Même garde que notifications-menu-panel : ne pas rendre le panneau tant
+  // qu'il n'est pas ouvert, pour ne pas dépendre du collapse CSS de Carbon
+  // (annulé ici par le style glass qui fixe une largeur/fond en dur).
+  if (!expanded) {
+    return null;
+  }
+
   return (
     <div style={{ display: 'inline' }}>
       <HeaderPanel className={styles.headerPanel} expanded={expanded} aria-label={t('userMenu', 'User menu')}>
