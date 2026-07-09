@@ -13,6 +13,7 @@ import BreadcrumbNav from '../breadcrumb/breadcrumb.component';
 import AppsMenuButton from '../apps-menu/apps-menu-button.component';
 import NotificationsMenuButton from '../notifications-menu/notifications-menu-button.component';
 import UserMenuButton from '../user-menu/user-menu-button.component';
+import ThemeToggleButton from '../theme-toggle/theme-toggle.component';
 import SideMenuPanel from '../side-menu/side-menu-panel.component';
 import styles from './topbar.scss';
 
@@ -96,6 +97,7 @@ const TopBarContent: React.FC = () => {
 
           <NotificationsMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
           <UserMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
+          <ThemeToggleButton />
           <AppsMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
 
           <ExtensionSlot
