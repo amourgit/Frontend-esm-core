@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@egen/esm-ai-config": "workspace:*",
+    "@egen/esm-ai-context": "workspace:*",
     "@egen/esm-ai-events": "workspace:*",
     "@egen/esm-api": "workspace:*",
     "@egen/esm-navigation": "workspace:*",
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "@egen/esm-ai-config": "workspace:*",
+    "@egen/esm-ai-context": "workspace:*",
     "@egen/esm-ai-events": "workspace:*",
     "@egen/esm-api": "workspace:*",
     "@egen/esm-state": "workspace:*",

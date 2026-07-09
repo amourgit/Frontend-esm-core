@@ -1,4 +1,4 @@
-# Système de thème EIGEN/EGEN — État des corrections
+# Système de thème EGEN/EGEN — État des corrections
 
 Généré le : 2026-07-08
 Mis à jour le : 2026-07-09 — audit complet + corrections `packages/framework/esm-theme` et environs

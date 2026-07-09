@@ -17,8 +17,6 @@ import Logo from '../logo/logo.component';
 import ContextSwitcher from './context-switcher/context-switcher.component';
 import SearchBar from './search-bar/search-bar.component';
 import BreadcrumbNav from './breadcrumb/breadcrumb.component';
-import AppMenuButton from './app-menu-button.component';
-import UserMenuButton from './user-menu-button.component';
 import NotificationsMenuPanel from '../navbar-header-panels/notifications-menu-panel.component';
 import SideMenuPanel from '../navbar-header-panels/side-menu-panel.component';
 import styles from './navbar.scss';
@@ -112,11 +110,11 @@ const HeaderItems: React.FC = () => {
           {/* Notifications */}
           <ExtensionSlot name="notifications-menu-button-slot" state={{ isActivePanel, togglePanel }} />
 
-          {/* Utilisateur connecté */}
-          <UserMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
+          {/* Utilisateur connecté (injecté via slot user-menu-button dans routes.json) */}
+          <ExtensionSlot name="user-menu-button-slot" state={{ isActivePanel, togglePanel, hidePanel }} />
 
-          {/* Applications */}
-          <AppMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
+          {/* Applications (injecté via slot app-menu-button dans routes.json) */}
+          <ExtensionSlot name="app-menu-button-slot" state={{ isActivePanel, togglePanel, hidePanel }} />
 
           {/* Aide (slot extensible) */}
           <ExtensionSlot
