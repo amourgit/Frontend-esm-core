@@ -641,6 +641,7 @@ __metadata:
   resolution: "@egen/esm-ai-tools@workspace:packages/framework/esm-ai-tools"
   dependencies:
     "@egen/esm-ai-config": "workspace:*"
+    "@egen/esm-ai-context": "workspace:*"
     "@egen/esm-ai-events": "workspace:*"
     "@egen/esm-api": "workspace:*"
     "@egen/esm-navigation": "workspace:*"

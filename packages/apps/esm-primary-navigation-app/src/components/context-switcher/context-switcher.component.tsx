@@ -80,7 +80,9 @@ const ContextSwitcher: React.FC = () => {
       const { protocol, port, hostname } = window.location;
       const portSegment = port ? `:${port}` : '';
       const rootDomain = hostname.split('.').slice(1).join('.') || hostname;
-      window.location.href = `${protocol}//${tenant.slug}.${rootDomain}${portSegment}${interpolateUrl(config.logo.link)}`;
+      window.location.href = `${protocol}//${tenant.slug}.${rootDomain}${portSegment}${interpolateUrl(
+        config.logo.link,
+      )}`;
     },
     [config.logo.link],
   );
@@ -109,7 +111,11 @@ const ContextSwitcher: React.FC = () => {
       </button>
 
       {open && (
-        <div className={styles.dropdown} role="listbox" aria-label={t('selectEstablishment', "Choisir un établissement")}>
+        <div
+          className={styles.dropdown}
+          role="listbox"
+          aria-label={t('selectEstablishment', 'Choisir un établissement')}
+        >
           <div className={styles.dropdownHeader}>
             <BuildingIcon />
             <span>{t('myEstablishments', 'Mes établissements')}</span>
@@ -150,7 +156,9 @@ const ContextSwitcher: React.FC = () => {
               }}
             >
               <BuildingIcon />
-              {isMultiTenant ? t('requestNewSpace', 'Demander un espace') : t('goToGeneralSpace', "Aller à l'espace général")}
+              {isMultiTenant
+                ? t('requestNewSpace', 'Demander un espace')
+                : t('goToGeneralSpace', "Aller à l'espace général")}
             </button>
           </div>
         </div>

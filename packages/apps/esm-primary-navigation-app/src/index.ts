@@ -1,4 +1,9 @@
-import { defineConfigSchema, defineExtensionConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen/esm-framework';
+import {
+  defineConfigSchema,
+  defineExtensionConfigSchema,
+  getAsyncLifecycle,
+  getSyncLifecycle,
+} from '@egen/esm-framework';
 import { type Application } from 'single-spa';
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';

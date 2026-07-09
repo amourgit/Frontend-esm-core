@@ -2,7 +2,15 @@ import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 import { Header, HeaderContainer, HeaderGlobalBar, HeaderMenuButton } from '@carbon/react';
-import { ConfigurableLink, ExtensionSlot, useAssignedExtensions, useConfig, useLayoutType, useLeftNavStore, useSession } from '@egen/esm-framework';
+import {
+  ConfigurableLink,
+  ExtensionSlot,
+  useAssignedExtensions,
+  useConfig,
+  useLayoutType,
+  useLeftNavStore,
+  useSession,
+} from '@egen/esm-framework';
 import { useTenantMode } from '@egen/esm-tenant';
 import { isDesktop } from '../../utils';
 import { type ConfigSchema } from '../../config-schema';

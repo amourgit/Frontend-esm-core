@@ -38,7 +38,13 @@ const AppsMenuPanel: React.FC<AppsMenuPanelProps> = ({ expanded }) => {
         <ExtensionSlot className={styles.gridSlot} name="app-menu-slot" />
 
         {externalLinks.map((link) => (
-          <a key={link.redirect} target="_blank" rel="noopener noreferrer" href={link.redirect} className={styles.gridItem}>
+          <a
+            key={link.redirect}
+            target="_blank"
+            rel="noopener noreferrer"
+            href={link.redirect}
+            className={styles.gridItem}
+          >
             <span className={styles.gridItemIcon}>
               <Launch size={16} />
             </span>

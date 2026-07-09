@@ -136,9 +136,7 @@ export function removeSessionFetchInterception(): void {
 export function initDevAuthBypass(): void {
   if (!isDevAuthBypassEnabled()) return;
 
-  console.warn(
-    "[EIGEN] ⚠️  EIGEN_DEV_NO_AUTH=true — Bypass dev actif. NE PAS utiliser en production.",
-  );
+  console.warn('[EGEN] ⚠️  EGEN_DEV_NO_AUTH=true — Bypass dev actif. NE PAS utiliser en production.');
 
   // Intercepter window.fetch pour le session endpoint.
   // Cela évite que getSessionStore() → refetchCurrentUser() → 401

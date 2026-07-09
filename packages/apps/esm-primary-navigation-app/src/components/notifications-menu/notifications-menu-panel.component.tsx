@@ -9,7 +9,13 @@ interface NotificationsMenuPanelProps {
 
 const CheckIcon: React.FC = () => (
   <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-    <path d="M2.5 8.5l3.5 3.5L13.5 4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    <path
+      d="M2.5 8.5l3.5 3.5L13.5 4"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 

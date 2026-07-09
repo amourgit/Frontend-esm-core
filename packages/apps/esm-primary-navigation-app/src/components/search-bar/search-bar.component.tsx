@@ -88,7 +88,12 @@ const SearchBar: React.FC = () => {
       />
 
       {expanded && value && (
-        <button type="button" className={styles.clearBtn} onClick={clear} aria-label={t('clearSearch', 'Effacer la recherche')}>
+        <button
+          type="button"
+          className={styles.clearBtn}
+          onClick={clear}
+          aria-label={t('clearSearch', 'Effacer la recherche')}
+        >
           <ClearIcon />
         </button>
       )}

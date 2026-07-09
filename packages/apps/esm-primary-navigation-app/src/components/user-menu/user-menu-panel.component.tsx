@@ -34,7 +34,7 @@ const UserMenuPanel: React.FC<UserMenuPanelProps> = ({ expanded }) => {
         </span>
       </div>
 
-      <Switcher className={styles.switcher} aria-label={t('userMenuOptions', "Options du menu utilisateur")}>
+      <Switcher className={styles.switcher} aria-label={t('userMenuOptions', 'Options du menu utilisateur')}>
         <ExtensionSlot className={styles.fullWidth} name="user-panel-slot" />
         <SwitcherDivider className={styles.divider} aria-hidden="true" />
         <ExtensionSlot className={styles.fullWidth} name="user-panel-bottom-slot" />
