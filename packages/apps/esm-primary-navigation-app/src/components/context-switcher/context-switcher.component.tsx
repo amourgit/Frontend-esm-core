@@ -47,6 +47,14 @@ const CheckIcon: React.FC = () => (
   </svg>
 );
 
+/** Initiales (jusqu'à 2 lettres) à partir d'un libellé : "Espace Général" → "EG". */
+const getInitials = (label: string): string => {
+  const words = label.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return '?';
+  if (words.length === 1) return words[0].charAt(0).toUpperCase();
+  return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+};
+
 const ContextSwitcher: React.FC = () => {
   const { t } = useTranslation();
   const config = useConfig<ConfigSchema>();
@@ -67,7 +75,7 @@ const ContextSwitcher: React.FC = () => {
           id: tenant.id,
           name: tenant.name,
           slug: tenant.slug ?? tenant.id,
-          initial: (tenant.meta?.logoText as string | undefined)?.toUpperCase() ?? tenant.name.charAt(0).toUpperCase(),
+          initial: (tenant.meta?.logoText as string | undefined)?.toUpperCase() ?? getInitials(tenant.name),
           active: tenant.id === activeTenant?.id,
         })),
     [availableTenants, activeTenant?.id],
@@ -87,8 +95,9 @@ const ContextSwitcher: React.FC = () => {
     [config.logo.link],
   );
 
-  const currentLabel = activeTenant?.name ?? t('generalSpace', 'Espace général');
-  const currentInitial = currentLabel.charAt(0).toUpperCase();
+  const currentLabel = activeTenant?.name ?? t('generalSpace', 'Espace Général');
+  const currentSubLabel = activeTenant ? t('establishment', 'Établissement') : t('centralSpace', 'Espace Central');
+  const currentInitial = getInitials(currentLabel);
 
   return (
     <div className={styles.wrapper} ref={menuRef}>
@@ -104,7 +113,7 @@ const ContextSwitcher: React.FC = () => {
           {currentInitial}
         </span>
         <span className={styles.currentLabel}>
-          <span className={styles.currentLabelSub}>{t('context', 'Contexte')}</span>
+          <span className={styles.currentLabelSub}>{currentSubLabel}</span>
           <span className={styles.currentLabelName}>{currentLabel}</span>
         </span>
         <ChevronIcon open={open} />

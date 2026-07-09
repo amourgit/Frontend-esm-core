@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
-import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { HeaderGlobalAction } from '@carbon/react';
-import { CloseIcon, UserAvatarIcon, useAssignedExtensions, useOnClickOutside, useSession } from '@egen/esm-framework';
+import { useAssignedExtensions, useOnClickOutside, useSession } from '@egen/esm-framework';
 import UserMenuPanel from './user-menu-panel.component';
 import { type MenuButtonProps } from '../topbar/types';
 import styles from './user-menu.scss';
@@ -16,28 +14,30 @@ const UserMenuButton: React.FC<MenuButtonProps> = ({ isActivePanel, togglePanel,
   const wrapperRef = useOnClickOutside<HTMLDivElement>(hidePanel('userMenu'), isOpen);
 
   const displayName = session?.user?.person?.display ?? session?.user?.display ?? '';
-  const initial = displayName ? displayName.trim().charAt(0).toUpperCase() : null;
+  const initial = displayName ? displayName.trim().charAt(0).toUpperCase() : '?';
+  const roleLabel = session?.user?.roles?.[0]?.display ?? '';
 
   if (!showUserMenu) return null;
 
   return (
     <div ref={wrapperRef} className={styles.panelWrapper}>
-      <HeaderGlobalAction
-        aria-label={t('userMenuTooltip', 'Mon compte')}
-        aria-labelledby="Users Avatar Icon"
-        className={classNames(styles.actionButton, { [styles.actionButtonActive]: isOpen })}
-        data-tutorial-target="user-settings"
-        isActive={isOpen}
+      <button
+        type="button"
+        className={`${styles.trigger} ${isOpen ? styles.triggerOpen : ''}`}
         onClick={() => togglePanel('userMenu')}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        aria-label={t('userMenuTooltip', 'Mon compte : {{name}}', { name: displayName })}
+        data-tutorial-target="user-settings"
       >
-        {isOpen ? (
-          <CloseIcon size={18} />
-        ) : initial ? (
-          <span className={styles.avatarInitial}>{initial}</span>
-        ) : (
-          <UserAvatarIcon size={18} />
-        )}
-      </HeaderGlobalAction>
+        <span className={styles.avatarInitial} aria-hidden="true">
+          {initial}
+        </span>
+        <span className={styles.triggerLabel}>
+          <span className={styles.triggerName}>{displayName}</span>
+          {roleLabel && <span className={styles.triggerRole}>{roleLabel}</span>}
+        </span>
+      </button>
       <UserMenuPanel expanded={isOpen} />
     </div>
   );

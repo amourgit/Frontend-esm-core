@@ -61,12 +61,13 @@
   }
 }
 
-.divider {
+.rightDivider {
   width: 1px;
   height: 20px;
   background: color-mix(in srgb, var(--colors-surface-foreground) 15%, transparent);
   flex-shrink: 0;
   border-radius: var(--border-radius-full, 9999px);
+  margin: 0 0.25rem;
 }
 
 .logoLink {

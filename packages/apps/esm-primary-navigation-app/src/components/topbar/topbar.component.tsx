@@ -19,9 +19,12 @@ import ContextSwitcher from '../context-switcher/context-switcher.component';
 import SearchBar from '../search-bar/search-bar.component';
 import BreadcrumbNav from '../breadcrumb/breadcrumb.component';
 import AppsMenuButton from '../apps-menu/apps-menu-button.component';
+import LanguageButton from '../language-button/language-button.component';
+import QuickAccessButton from '../quick-access-button/quick-access-button.component';
+import FullscreenButton from '../fullscreen-button/fullscreen-button.component';
+import ThemeToggleButton from '../theme-toggle/theme-toggle.component';
 import NotificationsMenuButton from '../notifications-menu/notifications-menu-button.component';
 import UserMenuButton from '../user-menu/user-menu-button.component';
-import ThemeToggleButton from '../theme-toggle/theme-toggle.component';
 import SideMenuPanel from '../side-menu/side-menu-panel.component';
 import styles from './topbar.scss';
 
@@ -31,9 +34,10 @@ import styles from './topbar.scss';
 //  Layout (space-between), deux niveaux empilés verticalement :
 //
 //  Niveau 1 :
-//    [LEFT]   Hamburger (mobile) · ContextSwitcher · séparateur · Logo
+//    [LEFT]   Hamburger (mobile) · Logo · SearchBar · ContextSwitcher
 //    [CENTER] ExtensionSlot top-nav-info-slot (invisible si vide)
-//    [RIGHT]  SearchBar · top-nav-actions-slot · Notifications · User · Apps
+//    [RIGHT]  AppsMenu · Langue · Raccourcis · Plein écran · Thème ·
+//             Notifications · séparateur · Utilisateur
 //  Niveau 2 :
 //    BreadcrumbNav (invisible si aucune extension n'y est rattachée)
 // =============================================================================
@@ -79,13 +83,13 @@ const TopBarContent: React.FC = () => {
             />
           )}
 
-          <ContextSwitcher />
-
-          <div className={styles.divider} aria-hidden="true" />
-
           <ConfigurableLink to={config.logo?.link ?? '${egenSpaBase}/home'} className={styles.logoLink}>
             <Logo />
           </ConfigurableLink>
+
+          <SearchBar />
+
+          <ContextSwitcher />
         </div>
 
         {/* ── CENTRE — slot libre pour injections par les apps ── */}
@@ -95,7 +99,12 @@ const TopBarContent: React.FC = () => {
 
         {/* ── RIGHT ── */}
         <HeaderGlobalBar className={styles.rightSection}>
-          <SearchBar />
+          <AppsMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
+          <LanguageButton />
+          <QuickAccessButton />
+          <FullscreenButton />
+          <ThemeToggleButton />
+          <NotificationsMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
 
           <ExtensionSlot
             name="top-nav-actions-slot"
@@ -103,10 +112,9 @@ const TopBarContent: React.FC = () => {
             className={styles.topNavActionsSlot}
           />
 
-          <NotificationsMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
+          <div className={styles.rightDivider} aria-hidden="true" />
+
           <UserMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
-          <ThemeToggleButton />
-          <AppsMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
 
           <ExtensionSlot
             name="top-nav-app-menu-slot"

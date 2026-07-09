@@ -36,7 +36,9 @@ const NotificationsMenuButton: React.FC<MenuButtonProps> = ({ isActivePanel, tog
       >
         <span className={styles.bellWrapper}>
           <BellIcon />
-          {notificationItems.length > 0 && <span className={styles.dot} aria-hidden="true" />}
+          {notificationItems.length > 0 && (
+            <span className={styles.badge}>{notificationItems.length > 9 ? '9+' : notificationItems.length}</span>
+          )}
         </span>
       </HeaderGlobalAction>
       <NotificationsMenuPanel expanded={isOpen} />

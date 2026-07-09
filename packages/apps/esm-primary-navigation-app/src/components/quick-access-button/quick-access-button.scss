@@ -23,7 +23,7 @@
   color: var(--colors-primary-300) !important;
 }
 
-.bellWrapper {
+.badgeWrapper {
   position: relative;
   display: inline-flex;
 }
@@ -36,7 +36,7 @@
   height: 15px;
   padding: 0 3px;
   border-radius: var(--border-radius-full, 9999px);
-  background: var(--colors-error-500);
+  background: var(--colors-info-500, #3b82f6);
   color: #fff;
   border: 2px solid var(--panel-header-background);
   font-size: 0.5625rem;
@@ -47,12 +47,11 @@
   line-height: 1;
 }
 
-// ─── Dropdown ─────────────────────────────────────────────────────────────
 .dropdown {
   position: absolute;
   right: 0;
   top: calc(100% + 0.5rem);
-  width: 340px;
+  width: 280px;
   max-width: 92vw;
   background: var(--panel-dropdown-background);
   backdrop-filter: var(--panel-dropdown-backdrop-filter);
@@ -62,10 +61,10 @@
   border-radius: var(--border-radius-lg, 1rem);
   padding: 0.375rem 0;
   z-index: var(--z-index-dropdown, 300);
-  animation: notifMenuIn 150ms ease-out;
+  animation: quickAccessIn 150ms ease-out;
 }
 
-@keyframes notifMenuIn {
+@keyframes quickAccessIn {
   from {
     opacity: 0;
     transform: translateY(-4px);
@@ -77,9 +76,6 @@
 }
 
 .dropdownHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 0.5rem 0.875rem 0.625rem;
   border-bottom: 1px solid color-mix(in srgb, var(--colors-surface-foreground) 10%, transparent);
   font-size: 0.6875rem;
@@ -90,23 +86,7 @@
 }
 
 .list {
-  max-height: 22rem;
+  max-height: 20rem;
   overflow-y: auto;
-}
-
-.emptyState {
-  padding: 2rem 1rem;
-  text-align: center;
-  color: color-mix(in srgb, var(--colors-surface-foreground) 50%, transparent);
-
-  p {
-    margin: 0.375rem 0 0;
-    font-size: 0.75rem;
-    font-weight: var(--typography-font-weight-medium, 500);
-  }
-}
-
-.emptyIcon {
-  display: inline-flex;
-  color: color-mix(in srgb, var(--colors-surface-foreground) 35%, transparent);
+  padding: 0.25rem;
 }

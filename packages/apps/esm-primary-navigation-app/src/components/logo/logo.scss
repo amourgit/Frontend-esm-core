@@ -1,31 +1,42 @@
 .logo {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.logoImage {
+  display: flex;
+  align-items: center;
   width: auto;
   max-width: 300px;
   height: 40px;
   overflow: hidden;
-  position: relative;
   object-fit: cover;
   object-position: left;
 }
 
-// ─── Wordmark texte (cas logo.name, sans image) ──────────────────────────────
-// Graisse forte, tracking serré, dégradé clair — 100% tokens du thème EGEN.
+// ─── Pictogramme carré dégradé ────────────────────────────────────────────────
+.logoMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--border-radius-md, 0.75rem);
+  background: linear-gradient(135deg, var(--colors-primary-500), var(--colors-primary-700));
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--colors-primary-500) 35%, transparent);
+}
+
+// ─── Wordmark texte ──────────────────────────────────────────────────────────
 .logoName {
   font-family: var(--typography-font-family-heading);
   font-weight: var(--typography-font-weight-extrabold, 800);
-  font-size: var(--typography-font-size-base-size, 0.9375rem);
+  font-size: 1rem;
   letter-spacing: -0.01em;
   line-height: 1;
   white-space: nowrap;
-  background: linear-gradient(
-    90deg,
-    var(--colors-surface-foreground) 0%,
-    color-mix(in srgb, var(--colors-surface-foreground) 85%, transparent) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  transition: var(--transitions-colors);
+  color: var(--colors-surface-foreground);
 }

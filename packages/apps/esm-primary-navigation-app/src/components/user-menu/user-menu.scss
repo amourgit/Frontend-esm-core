@@ -25,16 +25,67 @@
   color: var(--colors-primary-300) !important;
 }
 
+// ─── Trigger : avatar + nom + rôle inline ────────────────────────────────────
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 36px;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--border-radius-md, 0.75rem);
+  cursor: pointer;
+  transition: var(--transitions-default);
+
+  &:hover,
+  &.triggerOpen {
+    background: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent);
+  }
+}
+
+.triggerLabel {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+  text-align: left;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+}
+
+.triggerName {
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  font-weight: var(--typography-font-weight-semibold, 600);
+  color: var(--colors-surface-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.triggerRole {
+  font-size: 0.625rem;
+  color: color-mix(in srgb, var(--colors-surface-foreground) 55%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
 .avatarInitial {
-  width: 22px;
-  height: 22px;
-  border-radius: var(--border-radius-sm, 0.5rem);
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-full, 9999px);
   background: linear-gradient(135deg, var(--colors-primary-600), var(--colors-primary-400));
   color: var(--colors-on-primary, #fff);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: var(--typography-font-weight-bold, 700);
 }
 

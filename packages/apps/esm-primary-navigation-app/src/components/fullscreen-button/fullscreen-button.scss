@@ -1,0 +1,13 @@
+.actionButton {
+  width: 36px !important;
+  height: 36px !important;
+  color: color-mix(in srgb, var(--colors-surface-foreground) 70%, transparent) !important;
+  background: transparent !important;
+  border-radius: var(--border-radius-md, 0.75rem) !important;
+  transition: var(--transitions-default) !important;
+
+  &:hover {
+    background: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent) !important;
+    color: var(--colors-surface-foreground) !important;
+  }
+}
