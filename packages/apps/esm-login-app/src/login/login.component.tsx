@@ -15,6 +15,7 @@ import {
   applyDevAuthBypassForLogin,
 } from '@egen/esm-framework';
 import { useTenant, useTenantMode, storeHeaderTenantId, getTenantStoreState } from '@egen/esm-tenant';
+import { getThemeState } from '@egen/esm-theme';
 import { type ConfigSchema } from '../config-schema';
 import Logo from '../logo.component';
 import Footer from '../footer.component';
@@ -95,14 +96,25 @@ const Login: React.FC = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const usernameInputRef = useRef<HTMLInputElement>(null);
 
-  // Marquer la route comme publique dès le montage (supprime le gap topNav)
+  // Marquer la route comme publique dès le montage (supprime le gap topNav).
+  // La page de login force le mode sombre pour son propre branding, quel
+  // que soit le mode choisi par l'utilisateur ailleurs dans l'app.
+  //
+  // BUG CORRIGÉ : au démontage, on NE DOIT PAS simplement retirer l'attribut
+  // `data-theme` — ça laissait `<html>` sans aucun attribut de mode après la
+  // navigation login → home (aucun bloc [data-theme="dark"] ne matchait
+  // plus), donnant une UI visuellement "claire/transparente" jusqu'à ce que
+  // l'utilisateur rafraîchisse manuellement (ce qui ré-exécute
+  // resolveInitialMode() depuis zéro). On restaure à la place le mode RÉEL
+  // résolu par le moteur de thème (source de vérité unique, cf. ThemeEngine),
+  // pas un simple retrait d'attribut.
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-public-route', 'true');
     root.setAttribute('data-theme', 'dark');
     return () => {
       root.removeAttribute('data-public-route');
-      root.removeAttribute('data-theme');
+      root.setAttribute('data-theme', getThemeState()?.mode ?? 'dark');
     };
   }, []);
 

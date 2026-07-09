@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSession, navigate, interpolateUrl } from '@egen/esm-framework';
+import { getThemeState } from '@egen/esm-theme';
 import Navbar from '../components/navbar/navbar.component';
 import Hero from '../components/hero/hero.component';
 import Stats from '../components/stats/stats.component';
@@ -43,15 +44,18 @@ const HomePage: React.FC = () => {
     }
   }, [session]);
 
-  // Force le mode sombre et marque la route comme publique (supprime le topNav gap)
+  // Force le mode sombre et marque la route comme publique (supprime le topNav gap).
+  // On restaure au démontage le mode RÉEL résolu par le moteur de thème
+  // (source de vérité unique) plutôt qu'un snapshot pris au montage : si le
+  // moteur résout son mode de façon asynchrone après ce montage, un
+  // snapshot serait obsolète et on retomberait dans le même bug que
+  // esm-login-app (UI "claire" jusqu'au refresh manuel).
   useEffect(() => {
     const root = document.documentElement;
-    const prevTheme = root.getAttribute('data-theme');
     root.setAttribute('data-theme', 'dark');
     root.setAttribute('data-public-route', 'true');
     return () => {
-      if (prevTheme) root.setAttribute('data-theme', prevTheme);
-      else root.removeAttribute('data-theme');
+      root.setAttribute('data-theme', getThemeState()?.mode ?? 'dark');
       root.removeAttribute('data-public-route');
     };
   }, []);

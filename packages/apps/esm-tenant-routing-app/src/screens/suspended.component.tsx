@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig, navigate, interpolateUrl } from '@egen/esm-framework';
 import { useTenant } from '@egen/esm-tenant';
+import { getThemeState } from '@egen/esm-theme';
 import { type ConfigSchema } from '../config-schema';
 import styles from './suspended.scss';
 
@@ -16,15 +17,16 @@ const SuspendedPage: React.FC = () => {
   const config = useConfig<ConfigSchema>();
   const tenant = useTenant();
 
-  // Forcer data-theme dark + marquer route publique (supprime le gap topNav)
+  // Forcer data-theme dark + marquer route publique (supprime le gap topNav).
+  // Restauration via le mode RÉEL du moteur de thème au démontage (et non un
+  // snapshot pris au montage, potentiellement obsolète si le moteur résout
+  // son mode de façon asynchrone après ce montage).
   useEffect(() => {
     const root = document.documentElement;
-    const prev = root.getAttribute('data-theme');
     root.setAttribute('data-theme', 'dark');
     root.setAttribute('data-public-route', 'true');
     return () => {
-      if (prev) root.setAttribute('data-theme', prev);
-      else root.removeAttribute('data-theme');
+      root.setAttribute('data-theme', getThemeState()?.mode ?? 'dark');
       root.removeAttribute('data-public-route');
     };
   }, []);
