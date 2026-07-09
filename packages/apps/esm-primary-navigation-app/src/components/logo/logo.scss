@@ -11,8 +11,7 @@
 }
 
 // ─── Wordmark texte (cas logo.name, sans image) ──────────────────────────────
-// Reprend l'esprit "steex" fourni en référence : graisse forte, tracking
-// serré, dégradé clair sur fond sombre. 100% tokens du thème EGEN.
+// Graisse forte, tracking serré, dégradé clair — 100% tokens du thème EGEN.
 .logoName {
   font-family: var(--typography-font-family-heading);
   font-weight: var(--typography-font-weight-extrabold, 800);

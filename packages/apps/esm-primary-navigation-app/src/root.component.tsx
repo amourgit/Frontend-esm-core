@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Navbar from './components/navbar/navbar.component';
+import TopBar from './components/topbar/topbar.component';
 import styles from './root.scss';
 
 // =============================================================================
@@ -40,7 +40,7 @@ const Root: React.FC = () => {
           path="*"
           element={
             <div className={styles.primaryNavContainer}>
-              <Navbar />
+              <TopBar />
             </div>
           }
         />

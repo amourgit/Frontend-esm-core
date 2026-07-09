@@ -47,7 +47,7 @@ vi.mock('react-router-dom', () => ({
   Routes: ({ children }: any) => <>{children}</>,
 }));
 
-vi.mock('./components/navbar/navbar.component', () => ({
+vi.mock('./components/topbar/topbar.component', () => ({
   default: () => <div data-testid="navbar">Mock EMR</div>,
 }));
 

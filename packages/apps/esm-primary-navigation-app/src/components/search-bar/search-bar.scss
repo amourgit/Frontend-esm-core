@@ -1,9 +1,8 @@
 // =============================================================================
 //  SEARCH BAR — Styles barre de recherche animée
-//  100 % CSS vars du thème EGEN.
+//  100% tokens du thème EGEN.
 // =============================================================================
 
-// Largeur de l'icône seule vs champ ouvert
 $icon-size: 36px;
 $expanded-width: 240px;
 
@@ -38,7 +37,6 @@ $expanded-width: 240px;
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--colors-primary-500) 25%, transparent);
 }
 
-// ─── Icon button ──────────────────────────────────────────────────────────────
 .iconBtn {
   display: flex;
   align-items: center;
@@ -65,7 +63,6 @@ $expanded-width: 240px;
   }
 }
 
-// ─── Input field ──────────────────────────────────────────────────────────────
 .input {
   flex: 1;
   min-width: 0;
@@ -91,7 +88,6 @@ $expanded-width: 240px;
     color: color-mix(in srgb, var(--colors-surface-foreground) 35%, transparent);
   }
 
-  // Supprimer l'icône native du type="search"
   &::-webkit-search-cancel-button,
   &::-webkit-search-decoration {
     -webkit-appearance: none;
@@ -99,7 +95,6 @@ $expanded-width: 240px;
   }
 }
 
-// ─── Clear button ─────────────────────────────────────────────────────────────
 .clearBtn {
   display: flex;
   align-items: center;
@@ -114,7 +109,7 @@ $expanded-width: 240px;
   cursor: pointer;
   color: color-mix(in srgb, var(--colors-surface-foreground) 60%, transparent);
   transition: var(--transitions-colors);
-  animation: fadeIn 120ms ease both;
+  animation: searchClearIn 120ms ease both;
 
   &:hover {
     background: color-mix(in srgb, var(--colors-surface-foreground) 20%, transparent);
@@ -122,7 +117,7 @@ $expanded-width: 240px;
   }
 }
 
-@keyframes fadeIn {
+@keyframes searchClearIn {
   from {
     opacity: 0;
     transform: scale(0.8);

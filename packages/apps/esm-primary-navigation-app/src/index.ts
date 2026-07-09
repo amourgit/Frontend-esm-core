@@ -3,20 +3,16 @@ import {
   defineExtensionConfigSchema,
   getAsyncLifecycle,
   getSyncLifecycle,
-  navigate,
 } from '@egen/esm-framework';
 import { type Application } from 'single-spa';
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';
 import primaryNavRootComponent from './root.component';
-import userPanelComponent from './components/user-panel-switcher-item/user-panel-switcher.component';
+import userPanelComponent from './components/user-panel-switcher/user-panel-switcher.component';
 import changeLanguageLinkComponent from './components/change-language/change-language-link.extension';
 import { NavGroup, navGroupConfigSchema } from './components/nav-group/nav-group.component';
 import { dashboardConfigSchema } from './components/dashboard/dashboard.component';
 import genericLinkComponent, { genericLinkConfigSchema } from './components/generic-link/generic-link.component';
-import UserMenuButton from './components/navbar/user-menu-button.component';
-import AppMenuButton from './components/navbar/app-menu-button.component';
-import BreadcrumbNav from './components/navbar/breadcrumb/breadcrumb.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -32,19 +28,27 @@ export function startupApp() {
   defineExtensionConfigSchema('dashboard', dashboardConfigSchema);
 }
 
+// ─── Page : la TopBar (elle gère elle-même la garde d'authentification) ──────
 export const root = getSyncLifecycle(primaryNavRootComponent, options);
 
 export const redirect: Application = async () => ({
-  // At root path: Navbar handles auth check → /login if not authenticated
+  // À la racine : TopBar gère la vérification de session → /login si absente
   bootstrap: async () => {},
   mount: async () => undefined,
   unmount: async () => undefined,
 });
 
-export const userMenuButton = getSyncLifecycle(UserMenuButton, {
-  featureName: 'user-menu-button',
-  moduleName,
-});
+// ─── NOTE ARCHITECTURE ───────────────────────────────────────────────────────
+// userMenuButton, appMenuButton, notificationsMenuButton et breadcrumbNav ne
+// sont PLUS enregistrés comme extensions auto-injectées dans un slot que
+// cette app rend elle-même (ancienne indirection `top-nav-actions-slot` /
+// `top-nav-app-menu-slot` / `notifications-menu-button-slot`, jamais
+// alimentée par personne pour les notifications → bouton invisible en prod).
+// Ils sont désormais importés et composés directement dans
+// `topbar.component.tsx`. Les slots `top-nav-actions-slot` et
+// `top-nav-app-menu-slot` restent ouverts pour que D'AUTRES apps y injectent
+// des boutons additionnels (aide, raccourcis, etc.) — voir routes.json.
+// ──────────────────────────────────────────────────────────────────────────
 
 export const userPanel = getSyncLifecycle(userPanelComponent, options);
 
@@ -55,11 +59,6 @@ export const changeLanguageModal = getAsyncLifecycle(
   options,
 );
 
-export const appMenuButton = getSyncLifecycle(AppMenuButton, {
-  featureName: 'app-menu-button',
-  moduleName,
-});
-
 export const linkComponent = getSyncLifecycle(genericLinkComponent, {
   featureName: 'Link',
   moduleName,
@@ -68,8 +67,3 @@ export const linkComponent = getSyncLifecycle(genericLinkComponent, {
 export const navGroup = getSyncLifecycle(NavGroup, options);
 
 export const dashboard = getAsyncLifecycle(() => import('./components/dashboard/dashboard.component'), options);
-
-export const breadcrumbNav = getSyncLifecycle(BreadcrumbNav, {
-  featureName: 'breadcrumb-nav',
-  moduleName,
-});

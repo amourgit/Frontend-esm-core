@@ -1,30 +1,72 @@
-// =============================================================================
-//  USER MENU PANEL — Styles du panneau "Profil utilisateur"
-//
-//  Conversion : ancien thème Carbon clair ($field-01, $inverse-link,
-//  brand-01..03 teal) → thème EGEN "glass" sombre, cohérent avec le reste
-//  de la topbar. Structure Carbon Switcher inchangée (mêmes sélecteurs
-//  :global(.cds--switcher__item...)), seules les couleurs/typo changent.
-//  Surcharge locale du panel Carbon, sans toucher au fichier partagé
-//  packages/framework/esm-styleguide/_overrides.scss.
-// =============================================================================
-
 @use '@carbon/layout';
 
-.headerPanel {
+.panelWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.actionButton {
+  width: 36px !important;
+  height: 36px !important;
+  color: color-mix(in srgb, var(--colors-surface-foreground) 70%, transparent) !important;
+  background: transparent !important;
+  border-radius: var(--border-radius-md, 0.75rem) !important;
+  transition: var(--transitions-default) !important;
+
+  &:hover {
+    background: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent) !important;
+    color: var(--colors-surface-foreground) !important;
+  }
+}
+
+.actionButtonActive {
+  background: color-mix(in srgb, var(--colors-primary-500) 15%, transparent) !important;
+  color: var(--colors-primary-300) !important;
+}
+
+.avatarInitial {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--border-radius-sm, 0.5rem);
+  background: linear-gradient(135deg, var(--colors-primary-600), var(--colors-primary-400));
+  color: var(--colors-on-primary, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: var(--typography-font-weight-bold, 700);
+}
+
+// ─── Dropdown ─────────────────────────────────────────────────────────────
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
   width: fit-content;
-  height: max-content;
   min-width: 260px;
   max-width: 320px;
   overflow: hidden;
-  transition: none;
 
-  background: var(--panel-dropdown-background) !important;
-  backdrop-filter: var(--panel-dropdown-backdrop-filter) !important;
-  -webkit-backdrop-filter: var(--panel-dropdown-backdrop-filter) !important;
-  border: var(--panel-dropdown-border) !important;
-  box-shadow: var(--panel-dropdown-box-shadow) !important;
-  border-radius: var(--border-radius-xl, 1.25rem) !important;
+  background: var(--panel-dropdown-background);
+  backdrop-filter: var(--panel-dropdown-backdrop-filter);
+  -webkit-backdrop-filter: var(--panel-dropdown-backdrop-filter);
+  border: var(--panel-dropdown-border);
+  box-shadow: var(--panel-dropdown-box-shadow);
+  border-radius: var(--border-radius-xl, 1.25rem);
+  z-index: var(--z-index-dropdown, 300);
+  animation: userMenuIn 150ms ease-out;
+}
+
+@keyframes userMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .fullWidth {
@@ -84,20 +126,21 @@
   border-color: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent) !important;
 }
 
-.userPanelSwitcher {
+// ─── Carbon Switcher (extension slots user-panel-slot / bottom-slot) ────────
+.switcher {
   padding-top: layout.$spacing-05;
   align-items: start;
 }
 
-.userPanelSwitcher :global(.cds--switcher__item) {
+.switcher :global(.cds--switcher__item) {
   height: layout.$spacing-09;
 }
 
-.userPanelSwitcher :global(.cds--switcher__item:first-child) {
+.switcher :global(.cds--switcher__item:first-child) {
   margin-top: 0;
 }
 
-.userPanelSwitcher :global(.cds--switcher__item-link) {
+.switcher :global(.cds--switcher__item-link) {
   display: flex;
   align-items: center;
   color: var(--colors-surface-foreground);
@@ -108,22 +151,22 @@
   transition: var(--transitions-colors);
 }
 
-.userPanelSwitcher :global(.cds--switcher__item-link):hover:not(.cds--switcher__item-link--selected) {
+.switcher :global(.cds--switcher__item-link):hover:not(.cds--switcher__item-link--selected) {
   color: var(--colors-surface-foreground);
   background-color: color-mix(in srgb, var(--colors-primary-500) 12%, transparent) !important;
 }
 
-.userPanelSwitcher :global(.cds--switcher__item) svg {
+.switcher :global(.cds--switcher__item) svg {
   margin: 0 layout.$spacing-04;
   fill: var(--colors-surface-foreground);
   flex-shrink: 0;
 }
 
-.userPanelSwitcher :global(.cds--switcher__item) button {
+.switcher :global(.cds--switcher__item) button {
   color: var(--colors-primary-300);
 }
 
-.userPanelSwitcher :global(.cds--switcher__item) button:hover {
+.switcher :global(.cds--switcher__item) button:hover {
   background-color: color-mix(in srgb, var(--colors-primary-500) 10%, transparent) !important;
   color: var(--colors-primary-300);
 }
