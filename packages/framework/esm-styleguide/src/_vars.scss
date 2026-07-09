@@ -52,10 +52,30 @@ $brand-primary-100: #081a1c;
   #{$property}: var(--brand-03);
 }
 
+// =============================================================================
+//  --brand-01/02/03 — RECÂBLÉS SUR LE THÈME EGEN (esm-theme)
+//
+//  Historiquement ces 3 variables étaient des couleurs OpenMRS figées
+//  (teal #005d5d/#004144/#007d79), totalement indépendantes du JSON de
+//  thème. Une vingtaine de composants (nav latérale, workspaces, boutons
+//  d'action, focus rings...) les consomment encore via `@include brand-0X`
+//  ou `var(--brand-0X)` directement — donc TOUTE modification de
+//  colors.primary.* dans theme.default.json était silencieusement ignorée
+//  par ces composants, quel que soit le thème chargé.
+//
+//  Correction : `--brand-01/02/03` pointent maintenant vers l'échelle
+//  `--colors-primary-*` injectée dynamiquement par @egen/esm-theme, avec
+//  l'ancienne valeur OpenMRS conservée UNIQUEMENT comme fallback CSS natif
+//  (`var(--x, fallback)`) — actif seulement tant que le moteur de thème n'a
+//  pas encore injecté ses variables (fenêtre de quelques ms au chargement).
+//  Dès que --colors-primary-* existe dans le DOM, tous les composants
+//  legacy `brand-0X` suivent automatiquement le thème JSON, sans qu'aucun
+//  de ces ~20 fichiers n'ait besoin d'être modifié individuellement.
+// =============================================================================
 :root {
-  --brand-01: #005d5d;
-  --brand-02: #004144;
-  --brand-03: #007d79;
+  --brand-01: var(--colors-primary-600, #005d5d);
+  --brand-02: var(--colors-primary-700, #004144);
+  --brand-03: var(--colors-primary-500, #007d79);
   --bottom-nav-height: #{layout.$spacing-10};
   --workspace-header-height: #{layout.$spacing-09};
   --tablet-workspace-window-height: calc(100vh - var(--egen-navbar-height) - var(--bottom-nav-height));

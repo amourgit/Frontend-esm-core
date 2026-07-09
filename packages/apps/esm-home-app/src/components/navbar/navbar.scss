@@ -131,7 +131,7 @@
 .btnPrimary {
   font-size: var(--typography-font-size-sm-size, 0.875rem);
   font-weight: var(--typography-font-weight-semibold, 600);
-  color: #fff;
+  color: var(--colors-on-primary, #fff);
   text-decoration: none;
   padding: 0.5rem 1.5rem;
   border-radius: var(--border-radius-full, 9999px);

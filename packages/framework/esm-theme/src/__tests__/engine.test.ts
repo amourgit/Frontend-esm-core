@@ -207,3 +207,57 @@ describe('ThemeEngine — surcharge de thème scopée par app, avec priorité', 
     expect(document.getElementById('egen-theme-override-mon-app')?.textContent).toContain('#16a34a');
   });
 });
+
+describe('ThemeEngine — surcharge de thème GLOBALE (ex: tenant), sans scope DOM', () => {
+  it('applique la surcharge directement sur targetSelector (:root), pas sur un sélecteur [data-egen-app]', async () => {
+    mockFetchJson({ '/theme.json': BASE_THEME });
+    const engine = new ThemeEngine({ themeUrls: ['/theme.json'] });
+    await engine.apply();
+
+    engine.applyGlobalOverride({ colors: { primary: { '500': '#16a34a' } } }, { id: 'tenant-acme', priority: 10 });
+
+    // La balise de surcharge globale existe et cible bien :root — PAS [data-egen-app="..."]
+    const styleTag = document.getElementById('egen-theme-override-__egen_global_override__');
+    expect(styleTag).not.toBeNull();
+    const css = styleTag?.textContent ?? '';
+    expect(css).toContain(':root');
+    expect(css).not.toContain('[data-egen-app');
+    expect(css).toContain('--colors-primary-500: #16a34a');
+  });
+
+  it('ne fait PAS apparaître le scope interne dans activeOverrideScopes (détail d’implémentation caché)', async () => {
+    mockFetchJson({ '/theme.json': BASE_THEME });
+    const engine = new ThemeEngine({ themeUrls: ['/theme.json'] });
+    await engine.apply();
+
+    engine.applyGlobalOverride({ colors: { primary: { '500': '#16a34a' } } }, { priority: 10 });
+    engine.applyAppOverride('mon-app', { colors: { primary: { '500': '#0ea5e9' } } });
+
+    expect(engine.getState().activeOverrideScopes).toEqual(['mon-app']);
+  });
+
+  it('fusionne plusieurs surcharges globales par priorité (ex: tenant schema + tenant themeUrl distant)', async () => {
+    mockFetchJson({ '/theme.json': BASE_THEME });
+    const engine = new ThemeEngine({ themeUrls: ['/theme.json'] });
+    await engine.apply();
+
+    engine.applyGlobalOverride({ colors: { primary: { '500': '#111111' } } }, { id: 'tenant-schema', priority: 10 });
+    engine.applyGlobalOverride({ colors: { primary: { '500': '#222222' } } }, { id: 'tenant-remote', priority: 9 });
+
+    const css = document.getElementById('egen-theme-override-__egen_global_override__')?.textContent ?? '';
+    // priorité 10 > 9 -> #111111 gagne
+    expect(css).toContain('--colors-primary-500: #111111');
+  });
+
+  it('removeGlobalOverride() retire la surcharge et supprime la balise', async () => {
+    mockFetchJson({ '/theme.json': BASE_THEME });
+    const engine = new ThemeEngine({ themeUrls: ['/theme.json'] });
+    await engine.apply();
+
+    engine.applyGlobalOverride({ colors: { primary: { '500': '#16a34a' } } });
+    expect(document.getElementById('egen-theme-override-__egen_global_override__')).not.toBeNull();
+
+    engine.removeGlobalOverride();
+    expect(document.getElementById('egen-theme-override-__egen_global_override__')).toBeNull();
+  });
+});

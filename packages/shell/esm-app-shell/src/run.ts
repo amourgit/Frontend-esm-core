@@ -1,5 +1,5 @@
 import { start, triggerAppChange } from 'single-spa';
-import { setupThemeEngine, applyAppThemeOverride } from '@egen/esm-theme';
+import { setupThemeEngine, applyGlobalThemeOverride } from '@egen/esm-theme';
 import { setupTenantSystem, registerTenantThemeApplier } from '@egen/esm-tenant';
 import { type CalendarIdentifier } from '@internationalized/date';
 import {
@@ -403,7 +403,7 @@ export function run(configUrls: Array<string>) {
       (window as any).__webpack_public_path__ ??
       '';
     const base = publicPath
-      ? `${window.location.origin}/${publicPath.replace(/^\/|\/$|^\//g, '')}/`
+      ? `${window.location.origin}/${publicPath.replace(/^\/|\/$/g, '')}/`
       : document.baseURI || `${window.location.origin}/`;
     return new URL(`themes/${filename}`, base).href;
   }
@@ -447,16 +447,24 @@ export function run(configUrls: Array<string>) {
 
   // Branche le moteur de thème sur le système tenant.
   // Quand un tenant est activé, son thème écrase le thème global (priorité 10).
+  //
+  // IMPORTANT : on utilise `applyGlobalThemeOverride` (et NON
+  // `applyAppThemeOverride`) — un tenant doit surcharger TOUTE la page, pas
+  // seulement l'intérieur d'un conteneur `[data-egen-app="..."]` (qui
+  // n'existe nulle part dans le DOM du shell). Utiliser le mécanisme scopé
+  // par app ici aurait injecté un CSS syntaxiquement valide mais qui ne
+  // ciblait jamais aucun élément réel — la surcharge tenant aurait donc
+  // silencieusement été sans aucun effet visible, malgré aucune erreur.
   registerTenantThemeApplier(async (tenantId, schema, themeUrl) => {
     if (schema) {
-      applyAppThemeOverride(`tenant-${tenantId}`, schema, { priority: 10 });
+      applyGlobalThemeOverride(schema, { id: `tenant-${tenantId}`, priority: 10 });
     }
     if (themeUrl) {
       try {
         const res = await fetch(themeUrl);
         if (res.ok) {
           const remoteSchema = await res.json();
-          applyAppThemeOverride(`tenant-${tenantId}-url`, remoteSchema, { priority: 9 });
+          applyGlobalThemeOverride(remoteSchema, { id: `tenant-${tenantId}-url`, priority: 9 });
         } else {
           console.warn(`[egen/esm-tenant] Thème distant inaccessible (${res.status}): ${themeUrl}`);
         }

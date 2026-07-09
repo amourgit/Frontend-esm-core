@@ -36,8 +36,11 @@ html[data-public-route='true'] {
   padding: layout.$spacing-11;
   width: 100%;
   height: 100%;
-  background: white;
-  border-top: 5px solid $danger;
+  // Fallback statique conservé : cette page peut s'afficher précisément
+  // quand le moteur de thème lui-même a échoué à s'initialiser — elle ne
+  // peut donc pas dépendre exclusivement des CSS vars qu'il injecte.
+  background: var(--colors-surface-background, white);
+  border-top: 5px solid var(--colors-error-500, $danger);
 
   p {
     margin: layout.$spacing-06 0;

@@ -95,3 +95,29 @@ export function applyAppThemeOverride(
 export function removeAppThemeOverride(scope: string, id?: string): void {
   _engine?.removeAppOverride(scope, id);
 }
+
+/**
+ * Raccourci — applique une surcharge de thème GLOBALE (visible sur toute la
+ * page, sans qu'aucun conteneur n'ait besoin de porter `data-egen-app`).
+ *
+ * C'est le mécanisme à utiliser pour un thème de TENANT ou une préférence
+ * utilisateur globale — pas `applyAppThemeOverride`, qui ne s'applique qu'à
+ * l'intérieur d'un conteneur portant explicitement `data-egen-app="<scope>"`.
+ *
+ * @example
+ * ```ts
+ * // dans le run.ts du shell, une fois le tenant résolu
+ * applyGlobalThemeOverride({ colors: { primary: { '500': '#16a34a' } } }, { priority: 10 });
+ * ```
+ */
+export function applyGlobalThemeOverride(
+  schema: Partial<ThemeSchema>,
+  options?: { id?: string; priority?: number },
+): void {
+  _engine?.applyGlobalOverride(schema, options);
+}
+
+/** Raccourci pour retirer une surcharge de thème globale. */
+export function removeGlobalThemeOverride(id?: string): void {
+  _engine?.removeGlobalOverride(id);
+}

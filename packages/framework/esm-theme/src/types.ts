@@ -129,6 +129,10 @@ export interface ThemeSchema {
     warning?: ColorScale;
     error?: ColorScale;
     info?: ColorScale;
+    /** Couleur de texte/icône lisible sur un fond `colors.primary.*` (ex: boutons pleins). */
+    onPrimary?: string;
+    /** Couleur de texte/icône lisible sur un fond `colors.secondary.*`. */
+    onSecondary?: string;
     surface?: {
       light?: Partial<SurfaceTokens>;
       dark?: Partial<SurfaceTokens>;

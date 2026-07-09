@@ -22,6 +22,20 @@ import type {
   FlattenResult,
 } from './types';
 
+/**
+ * Clé de scope interne réservée pour les surcharges GLOBALES (non scopées à
+ * une app précise — ex: thème d'un tenant, qui doit s'appliquer à toute la
+ * page). Réutilise exactement le même mécanisme de fusion par priorité que
+ * les surcharges par app (`overrides` Map, `mergeBySortedPriority`), mais
+ * s'injecte sur `targetSelector` (`:root` par défaut) au lieu d'un sélecteur
+ * `[data-egen-app="..."]` — donc elle s'applique immédiatement, sans qu'
+ * aucun élément du DOM n'ait besoin de porter un attribut particulier.
+ *
+ * Ce préfixe est délibérément improbable pour ne jamais entrer en collision
+ * avec un vrai nom de scope d'app choisi par un⋅e développeur⋅se.
+ */
+const GLOBAL_OVERRIDE_SCOPE = '__egen_global_override__';
+
 const DEFAULT_OPTIONS: Required<
   Pick<
     ThemeEngineOptions,
@@ -384,12 +398,44 @@ export class ThemeEngine {
       }
     }
 
-    this.setState({ activeOverrideScopes: [...this.overrides.keys()] });
+    this.setState({ activeOverrideScopes: this.publicOverrideScopes() });
   }
 
   /** Liste les surcharges actuellement enregistrées pour un scope (debug/inspection). */
   getAppOverrides(scope: string): AppThemeOverride[] {
     return [...(this.overrides.get(scope) ?? [])];
+  }
+
+  // --------------------------------------------------------------------------
+  // API publique — surcharges GLOBALES (ex: thème tenant), sans scope DOM
+  // --------------------------------------------------------------------------
+
+  /**
+   * Enregistre (ou met à jour) une surcharge de thème GLOBALE, appliquée
+   * directement sur `targetSelector` (`:root` par défaut) — donc visible sur
+   * toute la page, sans qu'aucun conteneur n'ait besoin de porter
+   * `data-egen-app`. C'est le mécanisme à utiliser pour un thème de tenant,
+   * une préférence utilisateur globale, etc. Pour une surcharge limitée à
+   * une seule application microfrontend, utiliser `applyAppOverride` avec
+   * `data-egen-app="<scope>"` posé sur son conteneur racine à la place.
+   *
+   * Fusion par priorité identique à `applyAppOverride` : plusieurs surcharges
+   * globales peuvent coexister (ex: tenant à priority=10, thème distant du
+   * tenant à priority=9) et sont fusionnées en profondeur, la plus haute
+   * priorité gagnant clé par clé.
+   */
+  applyGlobalOverride(schema: Partial<ThemeSchema>, options: { id?: string; priority?: number } = {}): void {
+    this.applyAppOverride(GLOBAL_OVERRIDE_SCOPE, schema, options);
+  }
+
+  /** Retire une surcharge globale précise (ou toutes si `id` est omis). */
+  removeGlobalOverride(id?: string): void {
+    this.removeAppOverride(GLOBAL_OVERRIDE_SCOPE, id);
+  }
+
+  /** Liste les surcharges globales actuellement enregistrées (debug/inspection). */
+  getGlobalOverrides(): AppThemeOverride[] {
+    return this.getAppOverrides(GLOBAL_OVERRIDE_SCOPE);
   }
 
   // --------------------------------------------------------------------------
@@ -441,6 +487,7 @@ export class ThemeEngine {
     const entries = this.overrides.get(scope);
     if (!entries || entries.length === 0) {
       removeScopedCssVars(scope);
+      this.setState({ activeOverrideScopes: this.publicOverrideScopes() });
       return;
     }
 
@@ -452,9 +499,20 @@ export class ThemeEngine {
       ignoreRootKeys: this.options.ignoreRootKeys,
     });
 
-    injectScopedCssVars(`[data-egen-app='${scope}']`, cssVars, scope);
+    // La surcharge globale (tenant, etc.) s'injecte directement sur
+    // `targetSelector` (`:root`) — toutes les autres restent scopées à
+    // `[data-egen-app="<scope>"]`, nécessitant que l'app pose cet attribut
+    // sur son conteneur racine pour que la surcharge s'applique.
+    const selector = scope === GLOBAL_OVERRIDE_SCOPE ? this.options.targetSelector : `[data-egen-app='${scope}']`;
 
-    this.setState({ activeOverrideScopes: [...this.overrides.keys()] });
+    injectScopedCssVars(selector, cssVars, scope);
+
+    this.setState({ activeOverrideScopes: this.publicOverrideScopes() });
+  }
+
+  /** Scopes actifs, hors scope interne réservé aux surcharges globales (détail d'implémentation). */
+  private publicOverrideScopes(): string[] {
+    return [...this.overrides.keys()].filter((s) => s !== GLOBAL_OVERRIDE_SCOPE);
   }
 
   private setState(partial: Partial<ThemeEngineState>): void {

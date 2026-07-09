@@ -47,8 +47,20 @@ function sanitizeSegment(segment: string): string {
  * erreur d'implémentation future, injecté ailleurs qu'en `textContent`).
  * Les backslashes sont exclus (empêchent les séquences d'échappement CSS
  * permettant de reconstituer un caractère interdit, ex: `\7B` = `{`).
+ *
+ * Caractères supplémentaires autorisés (aucun d'eux ne permet de fermer une
+ * déclaration/bloc ni d'ouvrir un commentaire — même invariant de sécurité
+ * que ci-dessus, juste un VOCABULAIRE plus large) :
+ *   `&` — piles de polices avec esperluette (ex: "Poppins & Sans"),
+ *         sélecteurs imbriqués SCSS ne sont PAS concernés ici (valeurs, pas sélecteurs)
+ *   `*` — multiplication dans calc() : `calc(var(--x) * 2)`
+ *   `=` — syntaxe `in srgb` n'en a pas besoin, mais color-interpolation-method
+ *         futures (ex: `oklch(from var(--x) l c h)`) peuvent en dépendre
+ *   `@` — requêtes de fonctionnalité CSS imbriquées dans une valeur (rare mais valide)
+ *   `[` `]` — attribut CSS et notation function() avec arguments nommés modernes
+ *   `~` `^` — combinateurs texte-only jamais problématiques en valeur de propriété
  */
-const SAFE_CSS_VALUE_RE = /^[a-zA-Z0-9 ,.#%()_+\-:/!'"]*$/;
+const SAFE_CSS_VALUE_RE = /^[a-zA-Z0-9 ,.#%()_+\-:/!'"&*=@[\]~^]*$/;
 
 const MAX_VALUE_LENGTH = 1000;
 

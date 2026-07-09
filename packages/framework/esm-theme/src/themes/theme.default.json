@@ -101,6 +101,8 @@
       "900": "#1e3a8a",
       "950": "#172554"
     },
+    "onPrimary": "#ffffff",
+    "onSecondary": "#ffffff",
     "surface": {
       "light": {
         "background": "rgba(248, 250, 252, 0.85)",
@@ -206,7 +208,7 @@
     },
     "fontSize": {
       "xs": {
-        "size": "12rem",
+        "size": "0.75rem",
         "lineHeight": "1rem"
       },
       "sm": {

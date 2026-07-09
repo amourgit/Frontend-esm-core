@@ -243,6 +243,16 @@ module.exports = (env, argv = []) => {
 
   const fontPatterns = [...fontAssets].map((fontPath) => ({ from: fontPath, to: 'fonts' }));
 
+  // ── Thème EGEN : source UNIQUE de vérité ──────────────────────────────────
+  // Les fichiers JSON de thème vivent exclusivement dans le package
+  // @egen/esm-theme (packages/framework/esm-theme/src/themes/). Le shell ne
+  // possède PAS sa propre copie : il la copie/sert depuis cette unique
+  // source, pour qu'il soit structurellement impossible que le shell serve
+  // une version périmée pendant qu'un⋅e développeur⋅se édite « le » JSON de
+  // thème (cf. incident : les deux fichiers avaient divergé silencieusement,
+  // le shell servant une valeur différente de celle éditée).
+  const themeSourceDir = resolve(__dirname, '../../framework/esm-theme/src/themes');
+
   return {
     entry: resolve(__dirname, 'src/index.ts'),
     output: {
@@ -330,7 +340,15 @@ module.exports = (env, argv = []) => {
           },
         },
       ],
-      static: ['src/assets'],
+      static: [
+        'src/assets',
+        // Sert le JSON de thème canonique directement depuis le package
+        // @egen/esm-theme en dev — édition sur disque reflétée immédiatement
+        // (le fichier est lu depuis le disque à chaque requête HTTP, aucun
+        // rebuild requis) et reprise par le polling client (cf. run.ts /
+        // ThemeEngine.pollIntervalMs) pour le hot-reload visuel.
+        { directory: themeSourceDir, publicPath: `${egenPublicPath}/themes` },
+      ],
     },
     watchOptions: {
       ignored: ['.git', 'test-results'],
@@ -469,6 +487,7 @@ module.exports = (env, argv = []) => {
         patterns: [
           { from: resolve(__dirname, 'src/assets') },
           { from: resolve(cssTmpDir, egenCssFilename), to: egenCssFilename },
+          { from: themeSourceDir, to: 'themes' },
           ...fontPatterns,
           ...appPatterns,
           ...assetsPatterns,

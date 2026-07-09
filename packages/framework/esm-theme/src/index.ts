@@ -31,6 +31,8 @@ export {
   toggleThemeMode,
   applyAppThemeOverride,
   removeAppThemeOverride,
+  applyGlobalThemeOverride,
+  removeGlobalThemeOverride,
 } from './singleton';
 
 // Utilitaires bas niveau (utiles pour les outils de build, tests, storybook)
