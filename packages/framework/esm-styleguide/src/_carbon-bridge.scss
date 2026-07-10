@@ -52,31 +52,61 @@
   --cds-layer-selected: var(--colors-surface-accent, #e0e0e0);
   --cds-layer-selected-01: var(--colors-surface-accent, #e0e0e0);
   --cds-layer-selected-hover: var(--colors-surface-accent, #d1d1d1);
+  --cds-layer-selected-disabled: var(--colors-surface-muted-foreground, #8d8d8d);
+  --cds-layer-selected-inverse: var(--colors-surface-foreground, #161616);
   --cds-layer-background: var(--colors-surface-background, #ffffff);
   --cds-layer-accent: var(--colors-surface-muted, #e0e0e0);
   --cds-layer-accent-01: var(--colors-surface-muted, #e0e0e0);
+  --cds-layer-accent-02: var(--colors-surface-muted, #e0e0e0);
+  --cds-layer-accent-03: var(--colors-surface-muted, #e0e0e0);
   --cds-layer-accent-hover: var(--colors-surface-accent, #d1d1d1);
+  --cds-layer-accent-hover-01: var(--colors-surface-accent, #d1d1d1);
+  --cds-layer-accent-hover-02: var(--colors-surface-accent, #d1d1d1);
+  --cds-layer-accent-hover-03: var(--colors-surface-accent, #d1d1d1);
   --cds-layer-accent-active: var(--colors-surface-accent, #c6c6c6);
+  --cds-layer-accent-active-01: var(--colors-surface-accent, #c6c6c6);
+  --cds-layer-accent-active-02: var(--colors-surface-accent, #c6c6c6);
+  --cds-layer-accent-active-03: var(--colors-surface-accent, #c6c6c6);
+  --cds-layer-active-02: var(--colors-surface-accent, #c6c6c6);
+  --cds-layer-active-03: var(--colors-surface-accent, #c6c6c6);
+  --cds-layer-background-01: var(--colors-surface-background, #ffffff);
+  --cds-layer-background-02: var(--colors-surface-background, #ffffff);
+  --cds-layer-background-03: var(--colors-surface-background, #ffffff);
+  --cds-layer-hover-03: var(--colors-surface-muted, #e8e8e8);
+  --cds-layer-selected-02: var(--colors-surface-accent, #e0e0e0);
+  --cds-layer-selected-03: var(--colors-surface-accent, #e0e0e0);
+  --cds-layer-selected-hover-01: var(--colors-surface-accent, #d1d1d1);
+  --cds-layer-selected-hover-02: var(--colors-surface-accent, #d1d1d1);
+  --cds-layer-selected-hover-03: var(--colors-surface-accent, #d1d1d1);
 
   // ─── Champs de saisie ───────────────────────────────────────────────────────
   --cds-field: var(--panel-input-background, var(--colors-surface-muted, #f4f4f4));
   --cds-field-01: var(--panel-input-background, var(--colors-surface-muted, #f4f4f4));
   --cds-field-02: var(--colors-surface-muted, #ffffff);
+  --cds-field-03: var(--colors-surface-muted, #ffffff);
   --cds-field-hover: var(--colors-surface-muted, #e8e8e8);
   --cds-field-hover-01: var(--colors-surface-muted, #e8e8e8);
+  --cds-field-hover-02: var(--colors-surface-muted, #e8e8e8);
+  --cds-field-hover-03: var(--colors-surface-muted, #e8e8e8);
 
   // ─── Bordures ─────────────────────────────────────────────────────────────
   --cds-border-subtle: var(--colors-border-default, #e0e0e0);
   --cds-border-subtle-00: var(--colors-border-default, #e0e0e0);
   --cds-border-subtle-01: var(--colors-border-default, #e0e0e0);
   --cds-border-subtle-02: var(--colors-border-default, #e0e0e0);
+  --cds-border-subtle-03: var(--colors-border-default, #c6c6c6);
   --cds-border-subtle-selected: var(--colors-border-default, #c6c6c6);
   --cds-border-subtle-selected-01: var(--colors-border-default, #c6c6c6);
+  --cds-border-subtle-selected-02: var(--colors-border-default, #c6c6c6);
+  --cds-border-subtle-selected-03: var(--colors-border-default, #c6c6c6);
   --cds-border-strong: var(--colors-border-default, #8d8d8d);
   --cds-border-strong-01: var(--colors-border-default, #8d8d8d);
   --cds-border-strong-02: var(--colors-border-default, #8d8d8d);
+  --cds-border-strong-03: var(--colors-border-default, #8d8d8d);
   --cds-border-tile: var(--colors-border-default, #c6c6c6);
   --cds-border-tile-01: var(--colors-border-default, #c6c6c6);
+  --cds-border-tile-02: var(--colors-border-default, #c6c6c6);
+  --cds-border-tile-03: var(--colors-border-default, #c6c6c6);
   --cds-border-interactive: var(--colors-primary-500, #0f62fe);
   --cds-border-inverse: var(--colors-surface-foreground, #161616);
   --cds-border-disabled: var(--colors-border-default, #c6c6c6);
@@ -154,4 +184,11 @@
   --cds-button-danger-active: var(--colors-error-800, #750e13);
   --cds-button-separator: var(--colors-border-default, #e0e0e0);
   --cds-button-disabled: var(--colors-border-default, #c6c6c6);
+
+  // ─── Tokens "AI" (mise en avant de contenu généré, Modal/Skeleton) ────────────
+  --cds-ai-border-strong: var(--colors-primary-500, #4589ff);
+  --cds-ai-overlay: color-mix(in srgb, var(--colors-primary-900, #001141) 50%, transparent);
+  --cds-ai-drop-shadow: color-mix(in srgb, var(--colors-primary-600, #0f62fe) 10%, transparent);
+  --cds-ai-inner-shadow: color-mix(in srgb, var(--colors-primary-400, #4589ff) 10%, transparent);
+  --cds-ai-skeleton-background: var(--colors-primary-100, #d0e2ff);
 }
