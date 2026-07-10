@@ -14,7 +14,7 @@
 }
 
 .structuredListRow {
-  border-left: 2px solid #c0c0c0;
+  border-left: 2px solid var(--colors-border-default, #c0c0c0);
   :global(.cds--number input[type='number']:focus) {
     outline: 2px solid theme.$focus;
   }

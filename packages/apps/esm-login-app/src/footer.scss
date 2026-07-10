@@ -127,10 +127,10 @@
   color: rgba(120, 169, 255, 0.8) !important;
 
   svg {
-    fill: rgba(120, 169, 255, 0.8) !important;
+    fill: color-mix(in srgb, var(--colors-primary-300, #78a9ff) 80%, transparent) !important;
   }
 
   &:hover {
-    color: #78a9ff !important;
+    color: var(--colors-primary-300, #78a9ff) !important;
   }
 }

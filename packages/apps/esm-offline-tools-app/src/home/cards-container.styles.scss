@@ -6,7 +6,7 @@
   gap: layout.$spacing-05;
   padding: layout.$spacing-05;
   padding-top: 0;
-  background-color: #ededed;
+  background-color: var(--colors-surface-muted, #ededed);
 }
 
 :global(.egen-breakpoint-gt-tablet) .overviewCardContainer {

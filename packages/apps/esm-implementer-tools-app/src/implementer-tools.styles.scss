@@ -1,6 +1,4 @@
 @use '@carbon/layout';
-@use '@carbon/react/scss/themes';
-@use '@carbon/react/scss/theme';
 @use '@egen/esm-styleguide/src/vars' as *;
 
 .toolStyles {
@@ -34,9 +32,19 @@
   }
 }
 
+// =============================================================================
+//  .darkTheme — conteneur racine du panneau implementer-tools
+//
+//  Forçait auparavant un thème Carbon g90 STATIQUE
+//  (`@include theme.theme(themes.$g90)`), totalement déconnecté du JSON
+//  EGEN — d'où l'aspect "gris" indépendant du thème réellement actif.
+//  Ce panneau suit désormais le pont Carbon<->EGEN global
+//  (esm-styleguide/_carbon-bridge.scss), qui définit --cds-* à partir de
+//  colors.* du thème dynamique. Aucune règle locale à conserver ici : le
+//  nom de la classe est gardé (pour ne pas casser son usage dans le JSX)
+//  mais elle n'a plus besoin de forcer quoi que ce soit.
+// =============================================================================
 .darkTheme {
-  @include theme.theme(themes.$g90);
-
   :global(.cds--content-switcher-btn.cds--content-switcher--selected) {
     background-color: $ui-01;
   }

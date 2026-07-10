@@ -689,7 +689,7 @@ html[dir='rtl'] {
 
         nav {
           left: calc(100vw - var(--egen-sidenav-width));
-          border-left: 1px solid #e0e0e0;
+          border-left: 1px solid var(--colors-border-default, #e0e0e0);
           border-right: unset;
         }
       }
@@ -711,12 +711,12 @@ html[dir='rtl'] {
 
         .active {
           border-left: unset !important;
-          border-right: layout.$spacing-03 solid #009d9a;
+          border-right: layout.$spacing-03 solid var(--colors-primary-400, #009d9a);
         }
 
         .enabled {
           border-left: unset !important;
-          border-right: layout.$spacing-03 solid #9ef0f0;
+          border-right: layout.$spacing-03 solid var(--colors-primary-100, #9ef0f0);
         }
       }
     }
@@ -754,8 +754,8 @@ html[dir='rtl'] {
 // This is to override the green border and background color which we apply to tertiary buttons. Since this in the Notification carbon uses blue.
 .cds--actionable-notification__action-button.cds--btn--tertiary {
   background-color: transparent;
-  border: 1px solid #0f62fe;
-  color: #0f62fe;
+  border: 1px solid var(--colors-primary-600, #0f62fe);
+  color: var(--colors-primary-600, #0f62fe);
 }
 
 .egen-icon {

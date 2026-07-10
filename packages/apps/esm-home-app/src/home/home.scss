@@ -44,7 +44,7 @@
   left: 1rem;
   z-index: 9999;
   background: var(--colors-primary-600);
-  color: #fff;
+  color: var(--colors-on-primary, #fff);
   padding: 0.75rem 1.25rem;
   border-radius: var(--border-radius-md, 0.75rem);
   font-size: var(--typography-font-size-sm-size, 0.875rem);

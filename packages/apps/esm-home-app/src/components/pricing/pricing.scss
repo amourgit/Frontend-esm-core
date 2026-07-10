@@ -96,7 +96,7 @@
   width: 18px;
   height: 18px;
   border-radius: var(--border-radius-full);
-  background: #fff;
+  background: var(--colors-on-primary, #fff);
   transition: transform var(--animation-duration-normal, 200ms) var(--animation-easing-spring, ease);
 
   .toggleBtnOn & {
@@ -173,7 +173,7 @@
   font-weight: var(--typography-font-weight-bold, 700);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--colors-on-primary, #fff);
   background: linear-gradient(135deg, var(--colors-primary-600), var(--colors-primary-400));
   border-radius: var(--border-radius-full);
   padding: 0.35rem 1rem;
@@ -299,12 +299,12 @@
 .ctaBtnHighlighted {
   background: linear-gradient(135deg, var(--colors-primary-600), var(--colors-primary-500));
   border-color: transparent;
-  color: #fff;
+  color: var(--colors-on-primary, #fff);
   box-shadow: var(--shadows-primary);
 
   &:hover {
     background: linear-gradient(135deg, var(--colors-primary-500), var(--colors-primary-400));
-    color: #fff;
+    color: var(--colors-on-primary, #fff);
     box-shadow: var(--shadows-glow);
     border-color: transparent;
   }

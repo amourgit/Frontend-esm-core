@@ -15,7 +15,7 @@
 
 .initials {
   font-size: 1.75rem;
-  color: #fff;
+  color: var(--colors-on-primary, #fff);
   line-height: 1;
   user-select: none;
 }

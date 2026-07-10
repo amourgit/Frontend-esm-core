@@ -163,7 +163,7 @@
   cursor: pointer;
   font-size: var(--typography-font-size-base-size, 1rem);
   font-weight: var(--typography-font-weight-semibold, 600);
-  color: #fff;
+  color: var(--colors-on-primary, #fff);
   background: linear-gradient(135deg, var(--colors-primary-600), var(--colors-primary-500));
   box-shadow: var(--shadows-primary);
   transition: var(--transitions-default);

@@ -2,6 +2,11 @@
 
 @forward './vars';
 
+// Pont dynamique Carbon <-> EGEN : définit --cds-* à partir des tokens EGEN
+// (fix racine des fonds transparents/gris dans les composants Carbon natifs :
+// Modal, Button, Dropdown, DataTable, Tile, ContentSwitcher...)
+@forward './carbon-bridge';
+
 // EGEN Panel design tokens + mixins (consomme le moteur de thème dynamique @egen/esm-theme)
 @forward './panel';
 

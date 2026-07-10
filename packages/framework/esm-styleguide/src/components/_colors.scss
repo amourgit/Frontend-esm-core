@@ -1,31 +1,43 @@
+// =============================================================================
+//  --egen-color-* — Système de couleurs historique MIGRÉ vers le thème EGEN
+//
+//  Ces variables étaient figées en hexadécimal, indépendantes de
+//  theme.default.json (aucune n'était scopée par [data-theme]). Audit du
+//  2026-07-10 : aucun consommateur actif trouvé dans le monorepo (grep
+//  "egen-color-" hors ce fichier = 0 résultat) — probablement un système
+//  antérieur laissé en place. Conservé et migré (plutôt que supprimé) au cas
+//  où une extension externe s'y référerait encore, en respectant la même
+//  règle que partout ailleurs : plus aucune couleur figée en dur, uniquement
+//  des fallbacks CSS natifs `var(x, fallback)`.
+// =============================================================================
 :root {
-  --egen-color-bg-high-contrast: #ffffff;
-  --egen-color-bg-medium-contrast: rgba(249, 249, 249, 0.94);
-  --egen-color-bg-low-contrast: #eff1f2;
-  --egen-color-bg-lowest-contrast: #e5e5e6;
+  --egen-color-bg-high-contrast: var(--colors-surface-card, #ffffff);
+  --egen-color-bg-medium-contrast: var(--colors-surface-muted, rgba(249, 249, 249, 0.94));
+  --egen-color-bg-low-contrast: var(--colors-surface-muted, #eff1f2);
+  --egen-color-bg-lowest-contrast: var(--colors-border-default, #e5e5e6);
 
-  --egen-color-ink-high-contrast: #121212;
-  --egen-color-ink-medium-contrast: rgba(19, 19, 21, 0.6);
-  --egen-color-ink-low-contrast: rgba(60, 60, 67, 0.3);
-  --egen-color-ink-lowest-contrast: rgba(47, 60, 85, 0.18);
-  --egen-color-ink-white: #ffffff;
+  --egen-color-ink-high-contrast: var(--colors-surface-foreground, #121212);
+  --egen-color-ink-medium-contrast: var(--colors-surface-muted-foreground, rgba(19, 19, 21, 0.6));
+  --egen-color-ink-low-contrast: var(--colors-surface-muted-foreground, rgba(60, 60, 67, 0.3));
+  --egen-color-ink-lowest-contrast: var(--colors-border-default, rgba(47, 60, 85, 0.18));
+  --egen-color-ink-white: var(--colors-on-primary, #ffffff);
 
-  --egen-color-interaction-plus-two: #122c7b;
-  --egen-color-interaction-plus-one: #193faf;
-  --egen-color-interaction: #1e4bd1;
-  --egen-color-interaction-minus-one: #456de4;
-  --egen-color-interaction-minus-two: rgba(73, 133, 224, 0.12);
+  --egen-color-interaction-plus-two: var(--colors-primary-800, #122c7b);
+  --egen-color-interaction-plus-one: var(--colors-primary-700, #193faf);
+  --egen-color-interaction: var(--colors-primary-600, #1e4bd1);
+  --egen-color-interaction-minus-one: var(--colors-primary-400, #456de4);
+  --egen-color-interaction-minus-two: var(--colors-primary-100, rgba(73, 133, 224, 0.12));
 
-  --egen-color-success: #006800;
-  --egen-color-success-two: #e6f0e6;
-  --egen-color-warning: #6d5d01;
-  --egen-color-warning-two: #efede4;
-  --egen-color-danger: #b50706;
-  --egen-color-danger-two: #f8eaea;
+  --egen-color-success: var(--colors-success-700, #006800);
+  --egen-color-success-two: var(--colors-success-100, #e6f0e6);
+  --egen-color-warning: var(--colors-warning-700, #6d5d01);
+  --egen-color-warning-two: var(--colors-warning-100, #efede4);
+  --egen-color-danger: var(--colors-error-700, #b50706);
+  --egen-color-danger-two: var(--colors-error-100, #f8eaea);
 
-  --egen-color-brand-orange: #f26522;
-  --egen-color-brand-violet: #5b57a6;
-  --egen-color-brand-gold: #eea616;
-  --egen-color-brand-teal: #009384;
-  --egen-color-brand-black: #231f20;
+  --egen-color-brand-orange: var(--colors-warning-500, #f26522);
+  --egen-color-brand-violet: var(--colors-secondary-600, #5b57a6);
+  --egen-color-brand-gold: var(--colors-warning-400, #eea616);
+  --egen-color-brand-teal: var(--brand-03, #009384);
+  --egen-color-brand-black: var(--colors-surface-foreground, #231f20);
 }

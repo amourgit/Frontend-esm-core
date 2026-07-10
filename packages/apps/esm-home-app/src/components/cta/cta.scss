@@ -96,7 +96,7 @@
   gap: 0.5rem;
   font-size: var(--typography-font-size-base-size, 1rem);
   font-weight: var(--typography-font-weight-semibold, 600);
-  color: #fff;
+  color: var(--colors-on-primary, #fff);
   text-decoration: none;
   padding: 1rem 2.25rem;
   border-radius: var(--border-radius-full, 9999px);

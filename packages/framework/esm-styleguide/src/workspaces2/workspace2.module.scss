@@ -60,7 +60,7 @@ $extraWideWorkspaceWidth: 48.25rem;
     height: 100%;
     width: var(--workspaceWidth);
     border-inline-start: 1px solid $text-03;
-    background-color: #fff;
+    background-color: var(--colors-surface-card, #fff);
     will-change: width;
     transition: width 0.5s ease-in-out;
 

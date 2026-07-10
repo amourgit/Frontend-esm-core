@@ -37,7 +37,7 @@
   padding: 0 3px;
   border-radius: var(--border-radius-full, 9999px);
   background: var(--colors-info-500, #3b82f6);
-  color: #fff;
+  color: var(--colors-on-primary, #fff);
   border: 2px solid var(--panel-header-background);
   font-size: 0.5625rem;
   font-weight: var(--typography-font-weight-bold, 700);
