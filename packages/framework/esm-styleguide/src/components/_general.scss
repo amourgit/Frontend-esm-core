@@ -27,7 +27,8 @@ html[data-public-route='true'] {
   }
 
   #egen-left-nav-container,
-  #egen-workspaces-container {
+  #egen-workspaces-container,
+  #egen-footer-app-container {
     display: none;
   }
 }
@@ -80,12 +81,22 @@ html[data-public-route='true'] {
   height: var(--egen-navbar-height);
 }
 
+// Pied de page — même largeur que le contenu applicatif, sous les trois
+// colonnes (leftNav/appRoots/workspace). Vide (0 hauteur) sur les routes
+// publiques : la garde de routes de l'app footer y rend `null`.
+#egen-footer-app-container {
+  grid-area: footer;
+  width: 100%;
+}
+
 body {
   display: grid;
   grid-template-areas:
     'topNav topNav topNav'
-    'leftNav appRoots workspace';
+    'leftNav appRoots workspace'
+    'footer footer footer';
   grid-template-columns: min-content 1fr min-content;
+  grid-template-rows: min-content 1fr min-content;
   container-type: inline-size;
 }
 
@@ -97,7 +108,8 @@ body {
 
   #egen-left-nav-container,
   #egen-workspaces-container,
-  #egen-top-nav-app-container {
+  #egen-top-nav-app-container,
+  #egen-footer-app-container {
     display: none;
   }
 

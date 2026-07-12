@@ -1,0 +1,12 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "pages": [
+    {
+      "component": "root",
+      "routeRegex": "^(?!(?:login|logout|home|change-password|tenant-suspended)/?)",
+      "online": true,
+      "offline": true,
+      "containerDomId": "egen-footer-app-container"
+    }
+  ]
+}
