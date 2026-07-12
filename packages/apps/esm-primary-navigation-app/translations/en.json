@@ -1,4 +1,5 @@
 {
+  "applications": "Applications",
   "AppMenuTooltip": "App Menu",
   "cancel": "Cancel",
   "change": "Change",
@@ -9,8 +10,11 @@
   "clearSearch": "Effacer la recherche",
   "context": "Contexte",
   "generalSpace": "Espace général",
+  "goToGeneralSpace": "Aller à l'espace général",
   "myEstablishments": "Mes établissements",
+  "noApplicationsAvailable": "Aucune application disponible",
   "noEstablishments": "Aucun établissement disponible",
+  "noNewNotifications": "Aucune nouvelle notification",
   "noPathInDashboardExtension": "Cannot render the dashboard extension without the property \"path\" being set in the configuration schema",
   "notifications": "Notifications",
   "openMenu": "Ouvrir le menu",
