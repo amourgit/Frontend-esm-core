@@ -238,5 +238,24 @@ describe('Tool Registry', () => {
       const schema = getToolsSchemaForLLM(['User']);
       expect(schema.find((t: any) => t.name === 'secret-tool')).toBeUndefined();
     });
+
+    it("n'expose jamais le champ interne `required` (booléen) au niveau d'une propriété — invalide pour tout LLM (OpenAI, Gemini, ...), seul un tableau `required` au niveau racine du schéma l'est", () => {
+      registerTool(
+        makeTool({
+          id: 'navigate-like',
+          parameters: {
+            route: { type: 'string', required: true, description: 'Route cible' },
+            newTab: { type: 'boolean', required: false, default: false, description: 'Ouvrir un nouvel onglet' },
+          },
+        }),
+      );
+
+      const schema: any = getToolsSchemaForLLM([]).find((t: any) => t.name === 'navigate-like');
+
+      expect(schema.parameters.required).toEqual(['route']);
+      expect(schema.parameters.properties.route).not.toHaveProperty('required');
+      expect(schema.parameters.properties.newTab).not.toHaveProperty('required');
+      expect(schema.parameters.properties.route).toMatchObject({ type: 'string', description: 'Route cible' });
+    });
   });
 });

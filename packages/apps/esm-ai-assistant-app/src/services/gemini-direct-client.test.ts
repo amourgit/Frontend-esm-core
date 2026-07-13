@@ -20,7 +20,7 @@ describe('toGeminiContents', () => {
     expect(contents).toEqual([
       { role: 'user', parts: [{ text: 'Emmène-moi sur la page des étudiants' }] },
       { role: 'model', parts: [{ functionCall: { name: 'navigate', args: { route: '/students' } } }] },
-      { role: 'function', parts: [{ functionResponse: { name: 'navigate', response: { navigated: true } } }] },
+      { role: 'user', parts: [{ functionResponse: { name: 'navigate', response: { navigated: true } } }] },
     ]);
   });
 

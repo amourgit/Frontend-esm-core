@@ -23,12 +23,26 @@ import type { ChatMessageDTO, ChatRequestBody, ChatResponseDTO, StreamEvent, Too
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 // ─── Conversion du schéma de tools EGEN (JSON Schema) → Gemini functionDeclarations ──
-// Le schéma retourné par useAvailableToolsSchema() est déjà au format
-// { name, description, parameters: { type, properties, required } } — très
-// proche du format attendu par Gemini. On retire uniquement les champs que
-// Gemini n'accepte pas dans son sous-ensemble d'OpenAPI (ex. "default").
+// Le schéma retourné par getToolsSchemaForLLM() (voir esm-ai-tools/registry.ts)
+// place directement `tool.parameters` — le format INTERNE EGEN — comme
+// `properties`. Ce format interne annote CHAQUE propriété avec un champ
+// `required: true|false` (booléen) en plus du tableau `required: string[]`
+// déjà calculé correctement au niveau racine du schéma. Un schéma Gemini
+// (sous-ensemble OpenAPI) n'accepte `required` QUE sous forme de tableau au
+// niveau de l'objet parent — un `required` booléen sur une propriété enfant
+// est un champ invalide qui fait échouer TOUTE la requête avec 400
+// INVALID_ARGUMENT (vérifié : l'erreur survient qu'importe le modèle utilisé).
+// On retire donc `required` uniquement quand sa valeur est un booléen (celui
+// d'une propriété), en conservant intact le tableau `required` du parent.
+// On retire aussi `default`, que Gemini ignore/rejette selon les versions.
 function toGeminiFunctionDeclarations(tools: object[]): object[] {
-  return tools.map((tool) => JSON.parse(JSON.stringify(tool), (key, value) => (key === 'default' ? undefined : value)));
+  return tools.map((tool) =>
+    JSON.parse(JSON.stringify(tool), (key, value) => {
+      if (key === 'default') return undefined;
+      if (key === 'required' && typeof value === 'boolean') return undefined;
+      return value;
+    }),
+  );
 }
 
 interface GeminiPart {
@@ -38,7 +52,7 @@ interface GeminiPart {
 }
 
 interface GeminiContent {
-  role: 'user' | 'model' | 'function';
+  role: 'user' | 'model';
   parts: GeminiPart[];
 }
 
@@ -68,7 +82,12 @@ export function toGeminiContents(history: ChatMessageDTO[]): GeminiContent[] {
         role: 'model',
         parts: [{ functionCall: { name: message.toolName ?? '', args: message.toolArguments ?? {} } }],
       });
-      // Tour "function" — le résultat renvoyé au modèle.
+      // Tour "user" — le résultat renvoyé au modèle. Bien que ce tour porte
+      // sémantiquement une réponse de fonction et non un message humain,
+      // l'API Gemini n'accepte que role:'user'|'model' sur Content (voir la
+      // doc officielle ai.google.dev/gemini-api/docs/function-calling, dont
+      // tous les exemples 2026 utilisent role:'user' ici — jamais 'function',
+      // qui n'existe pas dans le schéma actuel de l'API REST).
       let response: Record<string, unknown>;
       try {
         response = JSON.parse(message.content);
@@ -76,7 +95,7 @@ export function toGeminiContents(history: ChatMessageDTO[]): GeminiContent[] {
         response = { result: message.content };
       }
       contents.push({
-        role: 'function',
+        role: 'user',
         parts: [{ functionResponse: { name: message.toolName ?? '', response } }],
       });
     }

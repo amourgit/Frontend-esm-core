@@ -164,7 +164,17 @@ export function getToolsSchemaForLLM(userPrivileges: string[]): object[] {
       description: tool.description,
       parameters: {
         type: 'object',
-        properties: tool.parameters,
+        // `tool.parameters` est le format INTERNE EGEN : chaque propriété y
+        // porte un champ `required: boolean` en plus de `type`/`description`/
+        // `enum`/`default`. Ce booléen n'existe dans AUCUN JSON Schema standard
+        // consommé par un LLM (OpenAI, Gemini, ...) — seul un tableau
+        // `required: string[]` au niveau de l'objet parent y est valide (voir
+        // ci-dessous). L'exposer tel quel dans le schéma public produirait un
+        // schéma non conforme pour tout consommateur, donc on ne garde de
+        // chaque propriété que les clés d'un JSON Schema standard.
+        properties: Object.fromEntries(
+          Object.entries(tool.parameters).map(([key, { required: _required, ...schema }]) => [key, schema]),
+        ),
         required: Object.entries(tool.parameters)
           .filter(([, p]) => p.required)
           .map(([k]) => k),
