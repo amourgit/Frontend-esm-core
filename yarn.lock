@@ -530,6 +530,38 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@egen/esm-ai-assistant-app@workspace:packages/apps/esm-ai-assistant-app":
+  version: 0.0.0-use.local
+  resolution: "@egen/esm-ai-assistant-app@workspace:packages/apps/esm-ai-assistant-app"
+  dependencies:
+    "@carbon/react": "npm:^1.92.1"
+    "@egen/esm-ai-framework": "workspace:*"
+    "@vitest/coverage-v8": "npm:^4.1.2"
+    classnames: "npm:^2.3.2"
+    cross-env: "npm:^10.1.0"
+    egen: "workspace:*"
+    happy-dom: "npm:^20.6.0"
+    i18next: "npm:^25.5.3"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    react-i18next: "npm:^16.0.0"
+    react-is: "npm:^17.0.2"
+    react-router-dom: "npm:^6.3.0"
+    rxjs: "npm:^6.5.3"
+    sass: "npm:^1.98.0"
+    vitest: "npm:^4.1.2"
+  peerDependencies:
+    "@carbon/react": 1.x
+    "@egen/esm-ai-framework": 1.x
+    "@egen/esm-framework": 9.x
+    react: 18.x
+    react-dom: 18.x
+    react-i18next: 16.x
+    react-router-dom: 6.x
+    rxjs: 6.x
+  languageName: unknown
+  linkType: soft
+
 "@egen/esm-ai-config@workspace:*, @egen/esm-ai-config@workspace:packages/framework/esm-ai-config":
   version: 0.0.0-use.local
   resolution: "@egen/esm-ai-config@workspace:packages/framework/esm-ai-config"
@@ -609,7 +641,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@egen/esm-ai-framework@workspace:packages/framework/esm-ai-framework":
+"@egen/esm-ai-framework@workspace:*, @egen/esm-ai-framework@workspace:packages/framework/esm-ai-framework":
   version: 0.0.0-use.local
   resolution: "@egen/esm-ai-framework@workspace:packages/framework/esm-ai-framework"
   dependencies:
@@ -991,6 +1023,35 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@egen/esm-footer-app@workspace:packages/apps/esm-footer-app":
+  version: 0.0.0-use.local
+  resolution: "@egen/esm-footer-app@workspace:packages/apps/esm-footer-app"
+  dependencies:
+    "@carbon/react": "npm:^1.92.1"
+    "@vitest/coverage-v8": "npm:^4.1.2"
+    cross-env: "npm:^10.1.0"
+    egen: "workspace:*"
+    happy-dom: "npm:^20.6.0"
+    i18next: "npm:^25.5.3"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    react-i18next: "npm:^16.0.0"
+    react-is: "npm:^17.0.2"
+    react-router-dom: "npm:^6.3.0"
+    rxjs: "npm:^6.5.3"
+    sass: "npm:^1.98.0"
+    vitest: "npm:^4.1.2"
+  peerDependencies:
+    "@carbon/react": 1.x
+    "@egen/esm-framework": 9.x
+    react: 18.x
+    react-dom: 18.x
+    react-i18next: 16.x
+    react-router-dom: 6.x
+    rxjs: 6.x
+  languageName: unknown
+  linkType: soft
+
 "@egen/esm-framework@workspace:*, @egen/esm-framework@workspace:packages/framework/esm-framework":
   version: 0.0.0-use.local
   resolution: "@egen/esm-framework@workspace:packages/framework/esm-framework"
@@ -1094,6 +1155,7 @@ __metadata:
   resolution: "@egen/esm-home-app@workspace:packages/apps/esm-home-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
+    "@egen/esm-theme": "workspace:*"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
     egen: "workspace:*"
@@ -1111,6 +1173,7 @@ __metadata:
   peerDependencies:
     "@carbon/react": 1.x
     "@egen/esm-framework": 9.x
+    "@egen/esm-theme": "workspace:*"
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
@@ -1158,6 +1221,7 @@ __metadata:
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@egen/esm-tenant": "workspace:*"
+    "@egen/esm-theme": "workspace:*"
     "@hookform/resolvers": "npm:^3.6.0"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
@@ -1180,6 +1244,7 @@ __metadata:
     "@carbon/react": 1.x
     "@egen/esm-framework": 9.x
     "@egen/esm-tenant": "workspace:*"
+    "@egen/esm-theme": "workspace:*"
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
@@ -1285,6 +1350,7 @@ __metadata:
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@egen/esm-tenant": "workspace:*"
+    "@egen/esm-theme": "workspace:*"
     "@vitest/coverage-v8": "npm:^4.1.2"
     egen: "workspace:*"
     happy-dom: "npm:^20.6.0"
@@ -1302,6 +1368,7 @@ __metadata:
     "@carbon/react": 1.x
     "@egen/esm-framework": 9.x
     "@egen/esm-tenant": "workspace:*"
+    "@egen/esm-theme": "workspace:*"
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
@@ -1502,6 +1569,7 @@ __metadata:
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@egen/esm-tenant": "workspace:*"
+    "@egen/esm-theme": "workspace:*"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
     egen: "workspace:*"
@@ -1519,6 +1587,7 @@ __metadata:
     "@carbon/react": 1.x
     "@egen/esm-framework": 9.x
     "@egen/esm-tenant": "workspace:*"
+    "@egen/esm-theme": "workspace:*"
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
