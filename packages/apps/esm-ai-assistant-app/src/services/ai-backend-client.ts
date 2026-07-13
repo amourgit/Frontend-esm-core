@@ -25,6 +25,13 @@ export interface ChatMessageDTO {
   /** Présent uniquement pour role: 'tool' — résultat d'exécution renvoyé au LLM */
   toolCallId?: string;
   toolName?: string;
+  /**
+   * Arguments exacts avec lesquels le tool a été appelé — nécessaire pour
+   * reconstruire, côté provider, le tour "functionCall" qui doit précéder un
+   * tour "functionResponse" (voir @egen/esm-ai-assistant-app/services/
+   * gemini-direct-client.ts). Absent pour les rôles user/assistant.
+   */
+  toolArguments?: Record<string, unknown>;
 }
 
 export interface ToolCallRequest {

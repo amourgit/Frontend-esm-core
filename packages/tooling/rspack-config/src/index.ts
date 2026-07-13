@@ -36,8 +36,9 @@
  * Telling Webpack to use `/a/b/c`? If the Webpack config is symlinked
  * from `/d/e/`, then it *might* in *some cases* try to import `/d/e/c`.
  */
-import { existsSync, statSync } from 'fs';
+import { existsSync, readFileSync, statSync } from 'fs';
 import { basename, dirname, resolve } from 'path';
+import { parse as parseDotenv } from 'dotenv';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import { TsCheckerRspackPlugin } from 'ts-checker-rspack-plugin';
 // eslint-disable-next-line no-restricted-imports
@@ -93,6 +94,85 @@ function slugify(name: string) {
 
 function fileExistsSync(name: string) {
   return existsSync(name) && statSync(name).isFile();
+}
+
+/**
+ * Remonte l'arborescence depuis `startDir` jusqu'à trouver le package.json
+ * racine du monorepo (celui qui déclare `workspaces`). Chaque app vit à une
+ * profondeur différente (packages/apps/X, packages/framework/Y, ...), donc
+ * on ne peut pas supposer un nombre fixe de niveaux.
+ */
+function findMonorepoRoot(startDir: string): string | null {
+  let dir = startDir;
+  for (let i = 0; i < 10; i++) {
+    const candidate = resolve(dir, 'package.json');
+    if (fileExistsSync(candidate)) {
+      try {
+        const pkg = JSON.parse(readFileSync(candidate, 'utf8'));
+        if (Array.isArray(pkg.workspaces) || (pkg.workspaces && Array.isArray(pkg.workspaces.packages))) {
+          return dir;
+        }
+      } catch {
+        // package.json illisible — on continue de remonter
+      }
+    }
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return null;
+}
+
+/**
+ * Charge les variables `EGEN_AI_*` depuis les fichiers `.env*` du monorepo et
+ * les prépare pour `DefinePlugin`, afin que `@egen/esm-ai-config` (qui lit
+ * `process.env.EGEN_AI_*` côté navigateur) reçoive de vraies valeurs au lieu
+ * de retomber systématiquement sur ses défauts internes.
+ *
+ * Priorité (la plus haute gagne) :
+ *   1. Variables déjà présentes dans `process.env` au lancement de la build
+ *      (utile en CI/CD, où les secrets sont injectés par l'environnement).
+ *   2. `.env.<mode>.local` (non versionné, jamais committé — clés API perso)
+ *   3. `.env.<mode>` (versionné, valeurs par défaut de dev/prod)
+ *   4. `.env` (fallback commun à tous les modes)
+ */
+function loadEgenAiEnvDefines(root: string, mode: string): Record<string, string> {
+  const monorepoRoot = findMonorepoRoot(root);
+  if (!monorepoRoot) return {};
+
+  const candidateFiles = [`.env.${mode}.local`, `.env.${mode}`, '.env.local', '.env'];
+  const merged: Record<string, string> = {};
+
+  // On empile du moins prioritaire au plus prioritaire pour que les derniers
+  // écrasent les premiers.
+  for (const file of [...candidateFiles].reverse()) {
+    const filePath = resolve(monorepoRoot, file);
+    if (!fileExistsSync(filePath)) continue;
+    try {
+      Object.assign(merged, parseDotenv(readFileSync(filePath, 'utf8')));
+    } catch {
+      // Fichier .env mal formé — ignoré silencieusement pour ne jamais faire
+      // échouer un build à cause d'une virgule ou d'un guillemet en trop.
+    }
+  }
+
+  const defines: Record<string, string> = {};
+  for (const [key, value] of Object.entries(merged)) {
+    if (!key.startsWith('EGEN_AI_')) continue;
+    defines[`process.env.${key}`] = JSON.stringify(value);
+  }
+
+  // Les variables déjà présentes dans le process courant (CI/CD, secrets
+  // d'infra) ont toujours le dernier mot sur celles lues depuis les fichiers.
+  for (const key of Object.keys(process.env)) {
+    if (!key.startsWith('EGEN_AI_')) continue;
+    const value = process.env[key];
+    if (value !== undefined) {
+      defines[`process.env.${key}`] = JSON.stringify(value);
+    }
+  }
+
+  return defines;
 }
 
 /**
@@ -288,6 +368,7 @@ export default (env: Record<string, string>, argv: Record<string, string> = {}) 
       }),
       new DefinePlugin({
         'process.env.FRAMEWORK_VERSION': JSON.stringify(frameworkVersion),
+        ...loadEgenAiEnvDefines(root, mode),
       }),
       new ModuleFederationPlugin({
         // Look in the `esm-dynamic-loading` framework package for an explanation of how modules

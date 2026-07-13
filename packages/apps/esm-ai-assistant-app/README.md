@@ -21,14 +21,35 @@ n'étaient jamais initialisés ni utilisés par aucune app du monorepo. Elle :
    complet de `@egen/esm-ai-tools` (validation d'arguments + revérification
    des permissions + timeout) — jamais en confiance aveugle du backend/LLM.
 
-## Pourquoi la clé API Gemini n'est jamais dans ce package
+## Démarrage rapide (une seule clé API à coller)
 
-Le provider (`EGEN_AI_PROVIDER=gemini`) et le modèle sont une information de
-configuration, mais l'appel réel au LLM — et donc la clé API — vit **côté
-backend** (`EGEN_AI_BACKEND_URL`, ex. `civitas-core`). Ce frontend ne parle
-qu'à ce backend, jamais directement à `generativelanguage.googleapis.com`.
-Voir `.env.development` à la racine du monorepo pour la configuration
-complète (`EGEN_AI_*`).
+Par défaut (`EGEN_AI_DIRECT_MODE=true`), le frontend appelle Gemini
+**directement**, sans backend :
+
+1. Crée une clé API gratuite sur https://aistudio.google.com/apikey
+2. Colle-la dans **`.env.development.local`** à la racine du monorepo (fichier
+   non versionné — ne jamais mettre la vraie clé dans `.env.development`) :
+   ```
+   EGEN_AI_API_KEY=colle-ta-clé-ici
+   ```
+3. Relance `yarn start`.
+
+Le modèle par défaut, `gemini-2.5-flash`, est gratuit sur le tier gratuit de
+Google AI Studio et accepte texte **et audio** en entrée.
+
+⚠️ **Ce mode expose la clé API dans le navigateur** (visible dans l'onglet
+Network des DevTools). Acceptable pour du développement local ou une démo
+interne. **Jamais pour un déploiement accessible à des utilisateurs non
+contrôlés** — voir la section suivante.
+
+## Pourquoi la clé API Gemini n'est jamais dans ce package (mode production)
+
+Avec `EGEN_AI_DIRECT_MODE=false`, le provider (`EGEN_AI_PROVIDER=gemini`) et
+le modèle restent de la configuration, mais l'appel réel au LLM — et donc la
+clé API — vit **côté backend** (`EGEN_AI_BACKEND_URL`, ex. `civitas-core`).
+Ce frontend ne parle qu'à ce backend, jamais directement à
+`generativelanguage.googleapis.com`. Voir `.env.development` à la racine du
+monorepo pour la configuration complète (`EGEN_AI_*`).
 
 ## Le tool `navigate`, bout en bout
 
