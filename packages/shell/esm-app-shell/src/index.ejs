@@ -63,6 +63,12 @@
   >
   <script type="egen-routes" src="<%= egenRoutesUrl %>"></script>
 <% } %>
+<% if (egenAiConfigDef) { %>
+    <script>
+      // Pont EGEN_AI_* (.env, build) → window.egenAi* (lu par @egen/esm-ai-config au runtime)
+      Object.assign(window, <%= egenAiConfigDef %>);
+    </script>
+<% } %>
 <% if (egenCoreRoutes) { %>
   <script type="egen-routes"><%= egenCoreRoutes %></script>
 <% } %>

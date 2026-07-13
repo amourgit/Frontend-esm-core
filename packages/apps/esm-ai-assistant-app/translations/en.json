@@ -1,16 +1,16 @@
 {
-  "conversation": "Conversation",
-  "assistantThinking": "The assistant is thinking…",
   "assistantActions": "Actions performed by the assistant",
+  "assistantClose": "Close assistant",
+  "assistantConnectionError": "Could not connect to the assistant right now.",
   "assistantError": "Something went wrong.",
   "assistantListening": "Listening…",
   "assistantMessageInput": "Message to send to the assistant",
-  "assistantStopListening": "Stop listening",
-  "assistantStartListening": "Dictate a message",
-  "assistantSend": "Send",
   "assistantNewConversation": "New conversation",
-  "assistantClose": "Close assistant",
   "assistantOpen": "Open assistant — {{name}}",
-  "assistantConnectionError": "Could not connect to the assistant right now.",
-  "assistantPoweredBy": "Powered by {{company}}"
+  "assistantPoweredBy": "Powered by {{company}}",
+  "assistantSend": "Send",
+  "assistantStartListening": "Dictate a message",
+  "assistantStopListening": "Stop listening",
+  "assistantThinking": "The assistant is thinking…",
+  "conversation": "Conversation"
 }

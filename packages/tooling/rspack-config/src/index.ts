@@ -369,7 +369,7 @@ export default (env: Record<string, string>, argv: Record<string, string> = {}) 
       }),
       new DefinePlugin({
         'process.env.FRAMEWORK_VERSION': JSON.stringify(frameworkVersion),
-        ...loadEgenAiEnvDefines(root, mode),
+        ...loadEgenAiEnvDefines(root, mode || 'development'),
       }),
       new ModuleFederationPlugin({
         // Look in the `esm-dynamic-loading` framework package for an explanation of how modules
