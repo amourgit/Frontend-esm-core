@@ -1,9 +1,9 @@
 {
-  "name": "@egen/esm-ai-agent-app",
+  "name": "@egen/esm-ai-assistant-app",
   "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "Widget conversationnel IA (Layer 2) — chat texte + vocal, branché sur le Layer 1 IA EGEN (@egen/esm-ai-framework) pour exécuter les tools natifs (navigation, notifications, recherche, ...). Présent sur toutes les pages authentifiées, aux côtés de la navbar.",
-  "browser": "dist/egen-esm-ai-agent-app.js",
+  "description": "Couche 2 IA EGEN — assistant conversationnel (texte et vocal) branché sur les packages esm-ai-* (Couche 1). Widget minimaliste accessible sur toutes les pages authentifiées, capable d'exécuter les tools natifs (navigation, notifications, recherche, etc.) au nom de l'utilisateur, dans le respect de ses privilèges.",
+  "browser": "dist/egen-esm-ai-assistant-app.js",
   "main": "src/index.ts",
   "source": true,
   "scripts": {
@@ -42,6 +42,7 @@
   "peerDependencies": {
     "@carbon/react": "1.x",
     "@egen/esm-framework": "9.x",
+    "@egen/esm-ai-framework": "1.x",
     "react": "18.x",
     "react-dom": "18.x",
     "react-i18next": "16.x",
@@ -65,10 +66,7 @@
   },
   "dependencies": {
     "@carbon/react": "^1.92.1",
-    "@egen/esm-ai-config": "workspace:*",
-    "@egen/esm-ai-context": "workspace:*",
-    "@egen/esm-ai-events": "workspace:*",
-    "@egen/esm-ai-tools": "workspace:*",
-    "classnames": "^2.5.1"
+    "@egen/esm-ai-framework": "workspace:*",
+    "classnames": "^2.3.2"
   }
 }

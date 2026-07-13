@@ -31,18 +31,6 @@ export interface AIProviderConfig {
   maxTokens: number;
   /** Activer le streaming de la réponse */
   stream: boolean;
-  /**
-   * Clé API du fournisseur LLM, pour un appel direct depuis le frontend.
-   *
-   * ⚠️ Provisoire : tant qu'aucun backend proxy IA n'est déployé (voir
-   * `AIBackendConfig`), le frontend appelle directement l'API du fournisseur
-   * avec cette clé, ce qui l'expose dans le bundle/le réseau client. Dès
-   * qu'un backend proxy IA existe, cette clé doit être retirée du frontend
-   * et déplacée côté serveur — voir `AIBackendConfig.baseUrl`.
-   */
-  apiKey: string;
-  /** URL de base de l'API du fournisseur (utilisée pour l'appel direct provisoire) */
-  apiEndpoint: string;
 }
 
 export interface AIBackendConfig {

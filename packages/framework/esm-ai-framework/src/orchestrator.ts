@@ -20,6 +20,9 @@ import { registerTool, hasTool, NATIVE_TOOLS } from '@egen/esm-ai-tools';
 let _initialized = false;
 let _cleanupContext: (() => void) | null = null;
 let _debugLoggerCleanup: (() => void) | null = null;
+// Souscription à la config, créée une seule fois (voir cleanupAIFramework) —
+// avant ce correctif, un nouvel abonnement était créé à chaque `force: true`
+// sans jamais désabonner le précédent (fuite à chaque hot-reload/remount).
 let _cleanupConfigSubscription: (() => void) | null = null;
 
 export interface AIFrameworkInitOptions {
@@ -68,6 +71,7 @@ export function initAIFramework(options: AIFrameworkInitOptions = {}): () => voi
   }
 
   // ── 4. Se réabonner si la config change (debug on/off à chaud) ───────────────
+  // Un seul abonnement vivant à la fois — cleanupAIFramework() le désinscrit.
   _cleanupConfigSubscription = subscribeToAIConfig((newConfig) => {
     if (newConfig.observability.debug && !_debugLoggerCleanup) {
       _debugLoggerCleanup = enableAIEventDebugLogger();

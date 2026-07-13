@@ -6,7 +6,7 @@
       "routeRegex": "^(?!(?:login|logout|home|change-password|tenant-suspended)/?)",
       "online": true,
       "offline": false,
-      "containerDomId": "egen-ai-agent-app-container"
+      "containerDomId": "egen-ai-assistant-app-container"
     }
   ]
 }
