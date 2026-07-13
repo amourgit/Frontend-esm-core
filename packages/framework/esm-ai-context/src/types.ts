@@ -125,6 +125,13 @@ export interface AIContextProvider {
 export interface AIContextStore {
   /** Contexte IA construit (null avant la première construction) */
   context: AIContext | null;
+  /**
+   * Version JSON du contexte, DÉJÀ tronquée selon `config.context.maxContextSize`
+   * (voir `buildAIContext()` → `safeSerialize()`). C'est cette valeur — et
+   * jamais un `JSON.stringify(context)` ad hoc — qui doit être envoyée au
+   * backend IA, pour que la troncature soit réellement effective.
+   */
+  contextJson: string;
   /** En cours de construction */
   building: boolean;
   /** Nombre de providers enregistrés */

@@ -16,6 +16,7 @@ const STORE_NAME = 'egen:ai:context';
 
 export const aiContextStore = createGlobalStore<AIContextStore>(STORE_NAME, {
   context: null,
+  contextJson: '{}',
   building: false,
   providerCount: 0,
   contextSize: 0,
@@ -42,6 +43,7 @@ function rebuildContext(): void {
     const { context, contextJson, truncated, size } = buildAIContext();
     aiContextStore.setState({
       context,
+      contextJson,
       building: false,
       contextSize: size,
       truncated,
@@ -112,8 +114,10 @@ export function getAIContext() {
 }
 
 export function getAIContextJson(): string {
-  const state = aiContextStore.getState();
-  return state.context ? JSON.stringify(state.context) : '{}';
+  // Retourne le JSON déjà calculé (et tronqué si besoin) par buildAIContext(),
+  // au lieu de re-sérialiser `state.context` (qui, lui, n'est jamais tronqué).
+  // Voir AIContextStore.contextJson.
+  return aiContextStore.getState().contextJson;
 }
 
 export function subscribeToAIContext(callback: (store: AIContextStore) => void): () => void {

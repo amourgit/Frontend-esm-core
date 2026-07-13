@@ -1,0 +1,129 @@
+// =============================================================================
+//  ASSISTANT PANEL — Styles
+//
+//  Surface flottante "glass" : utilise --panel-modal-* (voir
+//  docs/guide-composants-et-theme.md §8.4) plutôt que --colors-surface-card
+//  seul, pour hériter du flou et de l'ombre propres à l'identité visuelle
+//  EGEN sur toute surface qui flotte au-dessus du contenu.
+// =============================================================================
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: min(23.5rem, calc(100vw - 2rem));
+  height: min(34rem, calc(100vh - 7rem));
+  border-radius: var(--border-radius-xl, 1.25rem);
+  overflow: hidden;
+
+  background: var(--panel-modal-background);
+  backdrop-filter: var(--panel-modal-backdrop-filter);
+  -webkit-backdrop-filter: var(--panel-modal-backdrop-filter);
+  border: var(--panel-modal-border);
+  box-shadow: var(--panel-modal-box-shadow);
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0.875rem;
+  border-bottom: 1px solid var(--colors-border-translucent, rgba(0, 0, 0, 0.08));
+}
+
+.headerIdentity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--border-radius-full, 999px);
+  background: var(--colors-primary-600, #0043a4);
+  color: var(--colors-on-primary, #ffffff);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.assistantName {
+  font-weight: var(--typography-font-weight-semibold, 600);
+  color: var(--colors-surface-foreground, #161616);
+  font-size: var(--typography-font-size-sm-size, 0.875rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  flex-shrink: 0;
+}
+
+.headerButton {
+  width: 1.875rem;
+  height: 1.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--border-radius-md, 0.75rem);
+  background: transparent;
+  color: color-mix(in srgb, var(--colors-surface-foreground) 65%, transparent);
+  cursor: pointer;
+  transition: var(--transitions-default, all 200ms);
+
+  &:hover {
+    background: color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent);
+    color: var(--colors-surface-foreground, #161616);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--colors-border-ring, #0f62fe);
+    outline-offset: 2px;
+  }
+}
+
+.errorBanner {
+  flex-shrink: 0;
+  margin: 0 0.75rem 0.5rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--border-radius-md, 0.5rem);
+  background: var(--colors-error-50, #fff1f1);
+  color: var(--colors-error-700, #a2191f);
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+}
+
+.footer {
+  flex-shrink: 0;
+  padding: 0.5rem 0.875rem;
+  text-align: center;
+  font-size: var(--typography-font-size-xs-size, 0.6875rem);
+  color: var(--colors-surface-muted-foreground, #8d8d8d);
+  border-top: 1px solid var(--colors-border-translucent, rgba(0, 0, 0, 0.06));
+}
+
+.footerLink {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--colors-primary-600, #0043a4);
+    text-decoration: underline;
+  }
+}
+
+// ─── Responsive — plein écran sur mobile ──────────────────────────────────────
+@media (max-width: 480px) {
+  .panel {
+    width: calc(100vw - 1.25rem);
+    height: calc(100vh - 6rem);
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "conversation": "Conversation",
+  "assistantThinking": "L'assistant réfléchit…",
+  "assistantActions": "Actions exécutées par l'assistant",
+  "assistantError": "Une erreur est survenue.",
+  "assistantListening": "Je vous écoute…",
+  "assistantMessageInput": "Message à envoyer à l’assistant",
+  "assistantStopListening": "Arrêter l'écoute",
+  "assistantStartListening": "Dicter un message",
+  "assistantSend": "Envoyer",
+  "assistantNewConversation": "Nouvelle conversation",
+  "assistantClose": "Fermer l'assistant",
+  "assistantOpen": "Ouvrir l'assistant — {{name}}",
+  "assistantConnectionError": "Connexion à l'assistant impossible pour le moment.",
+  "assistantPoweredBy": "Propulsé par {{company}}"
+}

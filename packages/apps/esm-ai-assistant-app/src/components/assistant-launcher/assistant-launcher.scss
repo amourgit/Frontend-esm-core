@@ -1,0 +1,39 @@
+.launcher {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: var(--border-radius-full, 999px);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  background: var(--colors-primary-600, #0043a4);
+  color: var(--colors-on-primary, #ffffff);
+  box-shadow: var(--shadows-lg, 0 12px 32px rgba(0, 0, 0, 0.22));
+  transition: var(--transitions-default, all 200ms);
+
+  &:hover {
+    background: var(--colors-primary-700, #002d9c);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--colors-border-ring, #0f62fe);
+    outline-offset: 3px;
+  }
+}
+
+.launcherOpen {
+  background: var(--colors-surface-card, #ffffff);
+  color: var(--colors-surface-card-foreground, #161616);
+  border: 1px solid var(--colors-border-default, #e0e0e0);
+
+  &:hover {
+    background: var(--colors-surface-accent, #f4f4f4);
+  }
+}
