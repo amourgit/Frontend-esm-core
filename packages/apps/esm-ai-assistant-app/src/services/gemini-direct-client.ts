@@ -3,11 +3,12 @@
 //
 //  ⚠️  AVERTISSEMENT SÉCURITÉ
 //  Ce client appelle generativelanguage.googleapis.com DIRECTEMENT depuis le
-//  navigateur, avec la clé API dans l'URL. La clé est donc visible dans les
-//  DevTools (Network) et dans le bundle de configuration runtime de
-//  quiconque inspecte l'application. C'est acceptable pour du développement
-//  local ou une démo interne, JAMAIS pour une mise en production exposée à
-//  des utilisateurs non contrôlés — voir README.md de cette app.
+//  navigateur, avec la clé API dans l'en-tête `x-goog-api-key` de chaque
+//  requête. La clé est donc visible dans l'onglet Network des DevTools
+//  (requêtes sortantes) de quiconque inspecte l'application. C'est
+//  acceptable pour du développement local ou une démo interne, JAMAIS pour
+//  une mise en production exposée à des utilisateurs non contrôlés — voir
+//  README.md de cette app.
 //
 //  Activé uniquement si EGEN_AI_DIRECT_MODE=true (ou si EGEN_AI_API_KEY est
 //  renseignée). Sinon, `ai-backend-client.ts` (backend proxy) est utilisé.
@@ -167,13 +168,22 @@ function requireApiKey(): string {
   return provider.apiKey;
 }
 
+// Note (2026) : Google migre les clés API Gemini du format historique
+// "AIza..." (passé en query param ?key=...) vers un nouveau format "AQ.Ab..."
+// ("Auth key"), qui doit être transmis via l'en-tête HTTP `x-goog-api-key` —
+// voir sendChatMessage/streamChatMessage ci-dessous. Les clés créées
+// aujourd'hui sur https://aistudio.google.com/apikey sont déjà au nouveau
+// format par défaut. On ne valide jamais la FORME de la clé ici (un préfixe
+// est une opinion de Google qui peut encore changer) : on se contente de la
+// transmettre telle quelle et de laisser l'API trancher.
+
 export async function sendChatMessage(body: ChatRequestBody, signal?: AbortSignal): Promise<ChatResponseDTO> {
   const { provider } = getAIConfig();
   const apiKey = requireApiKey();
 
-  const response = await fetch(`${GEMINI_API_BASE}/${provider.model}:generateContent?key=${apiKey}`, {
+  const response = await fetch(`${GEMINI_API_BASE}/${provider.model}:generateContent`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
     body: JSON.stringify(buildRequestPayload(body)),
     signal,
   });
@@ -200,9 +210,9 @@ export async function streamChatMessage(
   const { provider } = getAIConfig();
   const apiKey = requireApiKey();
 
-  const response = await fetch(`${GEMINI_API_BASE}/${provider.model}:streamGenerateContent?alt=sse&key=${apiKey}`, {
+  const response = await fetch(`${GEMINI_API_BASE}/${provider.model}:streamGenerateContent?alt=sse`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
+    headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream', 'x-goog-api-key': apiKey },
     body: JSON.stringify(buildRequestPayload(body)),
     signal,
   });
