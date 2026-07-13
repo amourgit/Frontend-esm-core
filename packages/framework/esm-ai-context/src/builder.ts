@@ -198,17 +198,25 @@ export function buildAIContext(): { context: AIContext; contextJson: string; tru
   const config = getAIConfig();
   const appContext = collectProviderData();
 
+  const emptyNavigation: AINavigationContext = {
+    currentRoute: '',
+    currentUrl: '',
+    breadcrumb: [],
+    activeAppName: undefined,
+    recentRoutes: [],
+  };
+
+  const permissions = buildPermissionsContext();
+
   const context: AIContext = {
     schemaVersion: SCHEMA_VERSION,
     builtAt: new Date().toISOString(),
     user: buildUserContext(),
     tenant: buildTenantContext(),
-    navigation: buildNavigationContext(),
-    permissions: buildPermissionsContext(),
+    navigation: config.context.includeNavigation ? buildNavigationContext() : emptyNavigation,
+    permissions: config.context.includeFeatureFlags ? permissions : { ...permissions, featureFlags: {} },
     extensions: config.context.includeActiveExtensions ? buildExtensionsContext() : { activeSlots: {} },
-    appContext: config.context.includeActiveExtensions
-      ? (truncateDepth(appContext, config.context.serializationDepth) as Record<string, unknown>)
-      : {},
+    appContext: truncateDepth(appContext, config.context.serializationDepth) as Record<string, unknown>,
   };
 
   const { json, truncated } = safeSerialize(context, config.context.maxContextSize);

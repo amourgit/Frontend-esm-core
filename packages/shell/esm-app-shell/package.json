@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@carbon/react": "^1.92.1",
+    "@egen/esm-ai-framework": "workspace:*",
     "@egen/esm-api": "workspace:*",
     "@egen/esm-framework": "workspace:*",
     "@egen/esm-styleguide": "workspace:*",

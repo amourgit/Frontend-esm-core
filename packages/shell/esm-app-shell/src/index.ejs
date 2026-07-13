@@ -63,6 +63,12 @@
   >
   <script type="egen-routes" src="<%= egenRoutesUrl %>"></script>
 <% } %>
+<% if (egenAiConfigDef) { %>
+    <script>
+      // Pont EGEN_AI_* (.env, build) → window.egenAi* (lu par @egen/esm-ai-config au runtime)
+      Object.assign(window, <%= egenAiConfigDef %>);
+    </script>
+<% } %>
 <% if (egenCoreRoutes) { %>
   <script type="egen-routes"><%= egenCoreRoutes %></script>
 <% } %>
@@ -86,6 +92,7 @@
     <div id="egen-top-nav-app-container"></div>
     <div id="egen-apps-container"></div>
     <div id="egen-footer-app-container"></div>
+    <div id="egen-ai-agent-app-container"></div>
     <template id="loading-spinner">
       <div class="egen-loading-spinner">
         <div data-inline-loading="" class="cds--inline-loading" role="alert" aria-live="assertive">

@@ -75,6 +75,8 @@ import {
   registerTool,
   overrideTool,
   registerCapability,
+  removeTool,
+  removeCapability,
   type AIToolDefinition,
   type AICapability,
 } from '@egen/esm-ai-tools';
@@ -114,8 +116,6 @@ export function defineAIModule(def: AIModuleDefinition): () => void {
     registerTool({ ...tool, moduleName: tool.moduleName ?? def.moduleName });
     cleanupFns.push(() => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { removeTool } = require('@egen/esm-ai-tools');
         removeTool(tool.id);
       } catch (e) {
         // Ignore cleanup errors
@@ -139,8 +139,6 @@ export function defineAIModule(def: AIModuleDefinition): () => void {
     registerCapability(cap);
     cleanupFns.push(() => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { removeCapability } = require('@egen/esm-ai-tools');
         removeCapability(cap.id);
       } catch (e) {
         // Ignore cleanup errors

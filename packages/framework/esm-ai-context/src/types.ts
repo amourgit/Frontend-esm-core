@@ -133,4 +133,6 @@ export interface AIContextStore {
   contextSize: number;
   /** Le contexte a-t-il été tronqué ? */
   truncated: boolean;
+  /** JSON réellement envoyé au LLM (potentiellement tronqué, contrairement à `context`) */
+  contextJson: string;
 }

@@ -43,6 +43,12 @@ export function validateAIConfig(config: AIConfig): ValidationResult {
     errors.push(`provider.maxTokens: doit être entre 1 et 1 000 000 (reçu: ${config.provider.maxTokens})`);
   }
 
+  if (config.enabled && !config.provider.apiKey) {
+    warnings.push(
+      'provider.apiKey: aucune clé API configurée (EGEN_AI_API_KEY). L\'appel direct au fournisseur LLM échouera tant qu\'aucun backend proxy IA n\'est disponible.',
+    );
+  }
+
   // ── Backend ─────────────────────────────────────────────────────────────────
   if (!config.backend.baseUrl || config.backend.baseUrl.trim() === '') {
     errors.push('backend.baseUrl: ne peut pas être vide');

@@ -1,0 +1,74 @@
+{
+  "name": "@egen/esm-ai-agent-app",
+  "version": "1.0.0",
+  "license": "MPL-2.0",
+  "description": "Widget conversationnel IA (Layer 2) — chat texte + vocal, branché sur le Layer 1 IA EGEN (@egen/esm-ai-framework) pour exécuter les tools natifs (navigation, notifications, recherche, ...). Présent sur toutes les pages authentifiées, aux côtés de la navbar.",
+  "browser": "dist/egen-esm-ai-agent-app.js",
+  "main": "src/index.ts",
+  "source": true,
+  "scripts": {
+    "start": "egen develop",
+    "serve": "rspack serve --mode=development",
+    "debug": "npm run serve",
+    "test": "cross-env TZ=UTC vitest run --passWithNoTests",
+    "test:watch": "cross-env TZ=UTC vitest watch",
+    "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests",
+    "build": "rspack --mode=production",
+    "build:development": "rspack --mode=development",
+    "analyze": "rspack --mode=production --env analyze=true",
+    "typescript": "tsc",
+    "lint": "eslint src --ext ts,tsx",
+    "extract-translations": "i18next 'src/**/*.component.tsx' --config='../../../tools/i18next-parser.config.js'"
+  },
+  "keywords": [
+    "egen",
+    "microfrontends",
+    "ai"
+  ],
+  "browserslist": [
+    "extends browserslist-config-egen"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amourgit/Frontend-esm-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amourgit/Frontend-esm-core/issues"
+  },
+  "homepage": "https://github.com/amourgit/Frontend-esm-core#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@carbon/react": "1.x",
+    "@egen/esm-framework": "9.x",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "react-i18next": "16.x",
+    "react-router-dom": "6.x",
+    "rxjs": "6.x"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.2",
+    "cross-env": "^10.1.0",
+    "egen": "workspace:*",
+    "happy-dom": "^20.6.0",
+    "i18next": "^25.5.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^16.0.0",
+    "react-is": "^17.0.2",
+    "react-router-dom": "^6.3.0",
+    "rxjs": "^6.5.3",
+    "sass": "^1.98.0",
+    "vitest": "^4.1.2"
+  },
+  "dependencies": {
+    "@carbon/react": "^1.92.1",
+    "@egen/esm-ai-config": "workspace:*",
+    "@egen/esm-ai-context": "workspace:*",
+    "@egen/esm-ai-events": "workspace:*",
+    "@egen/esm-ai-tools": "workspace:*",
+    "classnames": "^2.5.1"
+  }
+}

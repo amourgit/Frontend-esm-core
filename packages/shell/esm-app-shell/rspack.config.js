@@ -42,6 +42,71 @@ const egenProxyTarget = process.env.EGEN_PROXY_TARGET || 'http://localhost:8081/
 const egenPageTitle = process.env.EGEN_PAGE_TITLE || 'Egen';
 const egenFavicon = process.env.EGEN_FAVICON || `${egenPublicPath}/favicon.ico`;
 
+/**
+ * Pont EGEN_AI_* (process.env, coté build Node) → window.egenAi* (runtime navigateur).
+ *
+ * Nécessaire car le bundle shell est construit avec rspack/webpack : il n'y a
+ * pas d'`import.meta.env` (spécifique à Vite) dans le bundle produit, et
+ * `process.env[key]` en accès dynamique (voir `esm-ai-config/src/defaults.ts`)
+ * n'est de toute façon pas remplaçable par un `DefinePlugin` (qui ne fait que
+ * du remplacement textuel statique). Sans ce pont, tout `.env` EGEN_AI_* est
+ * silencieusement ignoré dans le navigateur — seul `window.egenAi*` fonctionne.
+ *
+ * La transformation de nom DOIT rester strictement identique à celle de
+ * `readEnv()` dans `esm-ai-config/src/defaults.ts` : "EGEN_AI_MAX_TOKENS" →
+ * "egenAiMAXTOKENS" (les mots ne sont pas mis en camelCase, seuls les
+ * underscores sont supprimés — comportement hérité, pas idéal mais il faut
+ * rester cohérent des deux côtés).
+ */
+const EGEN_AI_ENV_KEYS = [
+  'EGEN_AI_ENABLED',
+  'EGEN_AI_PROVIDER',
+  'EGEN_AI_MODEL',
+  'EGEN_AI_TEMPERATURE',
+  'EGEN_AI_TOP_P',
+  'EGEN_AI_TOP_K',
+  'EGEN_AI_MAX_TOKENS',
+  'EGEN_AI_STREAM',
+  'EGEN_AI_API_KEY',
+  'EGEN_AI_API_ENDPOINT',
+  'EGEN_AI_BACKEND_URL',
+  'EGEN_AI_CHAT_ENDPOINT',
+  'EGEN_AI_STREAM_ENDPOINT',
+  'EGEN_AI_REQUEST_TIMEOUT',
+  'EGEN_AI_MAX_RETRIES',
+  'EGEN_AI_RETRY_DELAY',
+  'EGEN_AI_CONTEXT_MAX_SIZE',
+  'EGEN_AI_CONTEXT_EXTENSIONS',
+  'EGEN_AI_CONTEXT_NAVIGATION',
+  'EGEN_AI_CONTEXT_CONFIG',
+  'EGEN_AI_CONTEXT_FLAGS',
+  'EGEN_AI_CONTEXT_DEPTH',
+  'EGEN_AI_MEMORY_ENABLED',
+  'EGEN_AI_MEMORY_MAX_MESSAGES',
+  'EGEN_AI_MEMORY_KEY',
+  'EGEN_AI_MEMORY_PERSIST',
+  'EGEN_AI_REQUIRED_PRIVILEGES',
+  'EGEN_AI_VALIDATE_TOOLS',
+  'EGEN_AI_TOOL_TIMEOUT',
+  'EGEN_AI_AUDIT_LOG',
+  'EGEN_AI_DEBUG',
+  'EGEN_AI_EVENTS_ENABLED',
+  'EGEN_AI_ANALYTICS_ENABLED',
+  'EGEN_AI_LOG_LEVEL',
+];
+
+function egenAiWindowKey(envKey) {
+  return `egenAi${envKey.replace(/^EGEN_AI_/, '').replace(/_([A-Z])/g, (_, l) => l.toUpperCase())}`;
+}
+
+const egenAiWindowOverrides = EGEN_AI_ENV_KEYS.reduce((acc, key) => {
+  if (process.env[key] !== undefined) {
+    acc[egenAiWindowKey(key)] = process.env[key];
+  }
+  return acc;
+}, {});
+const egenAiConfigDef = Object.keys(egenAiWindowOverrides).length > 0 ? JSON.stringify(egenAiWindowOverrides) : null;
+
 
 console.log("EGEN_API_URL =", process.env.EGEN_API_URL);
 /**
@@ -467,6 +532,7 @@ module.exports = (env, argv = []) => {
           egenCoreRoutes: Object.keys(coreRoutes).length > 0 && JSON.stringify(coreRoutes),
           egenCssFilename,
           egenExtraAssets: egenJsCssAssets.map((fileName) => 'assets/' + basename(fileName)),
+          egenAiConfigDef,
         },
       }),
       new WebpackPwaManifest({

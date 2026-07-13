@@ -60,6 +60,8 @@ export function buildDefaultConfig(): AIConfig {
       topK: readEnvNumber('EGEN_AI_TOP_K', 40),
       maxTokens: readEnvNumber('EGEN_AI_MAX_TOKENS', 8192),
       stream: readEnvBool('EGEN_AI_STREAM', true),
+      apiKey: readEnv('EGEN_AI_API_KEY', ''),
+      apiEndpoint: readEnv('EGEN_AI_API_ENDPOINT', 'https://generativelanguage.googleapis.com/v1beta'),
     },
 
     backend: {

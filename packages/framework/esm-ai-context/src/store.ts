@@ -20,6 +20,7 @@ export const aiContextStore = createGlobalStore<AIContextStore>(STORE_NAME, {
   providerCount: 0,
   contextSize: 0,
   truncated: false,
+  contextJson: '{}',
 });
 
 // ─── Rebuild avec debounce ────────────────────────────────────────────────────
@@ -42,6 +43,7 @@ function rebuildContext(): void {
     const { context, contextJson, truncated, size } = buildAIContext();
     aiContextStore.setState({
       context,
+      contextJson,
       building: false,
       contextSize: size,
       truncated,
@@ -112,8 +114,7 @@ export function getAIContext() {
 }
 
 export function getAIContextJson(): string {
-  const state = aiContextStore.getState();
-  return state.context ? JSON.stringify(state.context) : '{}';
+  return aiContextStore.getState().contextJson;
 }
 
 export function subscribeToAIContext(callback: (store: AIContextStore) => void): () => void {
