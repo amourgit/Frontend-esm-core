@@ -34,7 +34,7 @@ Par défaut (`EGEN_AI_DIRECT_MODE=true`), le frontend appelle Gemini
    ```
 3. Relance `yarn start`.
 
-Le modèle par défaut, `gemini-2.5-flash`, est gratuit sur le tier gratuit de
+Le modèle par défaut, `gemini-2.5-flash-lite`, est gratuit sur le tier gratuit de
 Google AI Studio et accepte texte **et audio** en entrée.
 
 ⚠️ **Ce mode expose la clé API dans le navigateur** (visible dans l'onglet
