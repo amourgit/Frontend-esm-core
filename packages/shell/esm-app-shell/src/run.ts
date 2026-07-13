@@ -48,7 +48,6 @@ import {
   type StyleguideConfigObject,
 } from '@egen/esm-framework/src/internal';
 import { initDevAuthBypass } from '@egen/esm-api';
-import { initAIFramework } from '@egen/esm-ai-framework';
 import { setupI18n } from './locale';
 import './routing-events';
 import './events';
@@ -497,12 +496,6 @@ export function run(configUrls: Array<string>) {
     setupHistory();
     registerCoreExtensions();
     setupCoreConfig();
-
-    try {
-      initAIFramework();
-    } catch (err) {
-      console.warn('[egen/esm-ai-framework] Initialisation IA échouée (fonctionnalité IA indisponible) :', err);
-    }
 
     const polyfillReady =
       typeof Intl !== 'undefined' && 'DurationFormat' in Intl
