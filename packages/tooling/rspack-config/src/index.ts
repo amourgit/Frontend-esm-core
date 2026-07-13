@@ -136,11 +136,12 @@ function findMonorepoRoot(startDir: string): string | null {
  *   3. `.env.<mode>` (versionné, valeurs par défaut de dev/prod)
  *   4. `.env` (fallback commun à tous les modes)
  */
-function loadEgenAiEnvDefines(root: string, mode: string): Record<string, string> {
+function loadEgenAiEnvDefines(root: string, mode: string | undefined): Record<string, string> {
+  const resolvedMode = mode ?? 'development';
   const monorepoRoot = findMonorepoRoot(root);
   if (!monorepoRoot) return {};
 
-  const candidateFiles = [`.env.${mode}.local`, `.env.${mode}`, '.env.local', '.env'];
+  const candidateFiles = [`.env.${resolvedMode}.local`, `.env.${resolvedMode}`, '.env.local', '.env'];
   const merged: Record<string, string> = {};
 
   // On empile du moins prioritaire au plus prioritaire pour que les derniers

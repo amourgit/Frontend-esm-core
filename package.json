@@ -25,7 +25,7 @@
     "build:apps": "turbo run build --filter='@egen/*-app'",
     "document": "turbo run document",
     "setup": "yarn install && turbo run build",
-    "start": "egen develop",
+    "start": "egen develop --sources \"packages/apps/*\"",
     "verify": "turbo run lint test typescript",
     "postinstall": "husky install",
     "test": "turbo run test",
