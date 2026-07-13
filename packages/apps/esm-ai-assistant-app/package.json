@@ -41,8 +41,8 @@
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
-    "@egen/esm-framework": "9.x",
     "@egen/esm-ai-framework": "1.x",
+    "@egen/esm-framework": "9.x",
     "react": "18.x",
     "react-dom": "18.x",
     "react-i18next": "16.x",
