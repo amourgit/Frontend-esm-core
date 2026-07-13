@@ -31,6 +31,21 @@ export interface AIProviderConfig {
   maxTokens: number;
   /** Activer le streaming de la réponse */
   stream: boolean;
+  /**
+   * Clé API du provider (EGEN_AI_API_KEY), utilisée UNIQUEMENT en mode direct
+   * (voir `directMode`). En production, la clé doit vivre côté backend
+   * (`AIBackendConfig.baseUrl`) — jamais dans un bundle navigateur. Ce champ
+   * n'existe que pour permettre un démarrage rapide en développement/
+   * prototypage, sans devoir déployer/configurer un backend proxy au
+   * préalable.
+   */
+  apiKey: string;
+  /**
+   * Si `true` (ou si `apiKey` est renseignée), le frontend appelle le
+   * provider LLM directement depuis le navigateur au lieu de passer par
+   * `AIBackendConfig` — voir l'avertissement de sécurité sur `apiKey`.
+   */
+  directMode: boolean;
 }
 
 export interface AIBackendConfig {

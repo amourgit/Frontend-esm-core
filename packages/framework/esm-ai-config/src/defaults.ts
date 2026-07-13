@@ -60,6 +60,8 @@ export function buildDefaultConfig(): AIConfig {
       topK: readEnvNumber('EGEN_AI_TOP_K', 40),
       maxTokens: readEnvNumber('EGEN_AI_MAX_TOKENS', 8192),
       stream: readEnvBool('EGEN_AI_STREAM', true),
+      apiKey: readEnv('EGEN_AI_API_KEY', ''),
+      directMode: readEnvBool('EGEN_AI_DIRECT_MODE', false),
     },
 
     backend: {

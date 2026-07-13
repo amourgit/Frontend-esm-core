@@ -28,13 +28,24 @@ import {
   AI_EVENTS,
 } from '@egen/esm-ai-framework';
 import { loadPersistedMessages, persistMessages, clearPersistedMessages } from '../services/conversation-memory';
-import {
-  sendChatMessage,
-  streamChatMessage,
-  type ChatMessageDTO,
-  type StreamEvent,
-  type ToolCallRequest,
-} from '../services/ai-backend-client';
+import * as backendTransport from '../services/ai-backend-client';
+import * as directTransport from '../services/gemini-direct-client';
+import type { ChatMessageDTO, StreamEvent, ToolCallRequest } from '../services/ai-backend-client';
+
+/**
+ * Sélectionne le transport à utiliser pour parler au LLM :
+ *   - EGEN_AI_DIRECT_MODE=true (ou EGEN_AI_API_KEY renseignée) → appel direct
+ *     du provider depuis le navigateur (voir gemini-direct-client.ts et son
+ *     avertissement de sécurité).
+ *   - Sinon → backend proxy (EGEN_AI_BACKEND_URL), le chemin recommandé en
+ *     production.
+ * Résolu à CHAQUE appel (pas une fois au chargement du module) pour rester
+ * cohérent avec un changement de config à chaud (ex. tests, multi-tenant).
+ */
+function resolveTransport() {
+  const { provider } = getAIConfig();
+  return provider.directMode || provider.apiKey ? directTransport : backendTransport;
+}
 
 export interface AssistantToolCall {
   id: string;
@@ -155,6 +166,7 @@ export function useAIChat(): UseAIChatResult {
           content: JSON.stringify(result.success ? (result.data ?? { success: true }) : { error: result.error }),
           toolCallId: call.id,
           toolName: call.tool,
+          toolArguments: call.arguments,
         });
       }
 
@@ -178,6 +190,7 @@ export function useAIChat(): UseAIChatResult {
       }
 
       const config = getAIConfig();
+      const transport = resolveTransport();
       const controller = new AbortController();
       abortRef.current = controller;
 
@@ -192,7 +205,7 @@ export function useAIChat(): UseAIChatResult {
         let accumulated = '';
         const pendingToolCalls: ToolCallRequest[] = [];
 
-        await streamChatMessage(
+        await transport.streamChatMessage(
           requestBody,
           (event: StreamEvent) => {
             if (event.type === 'token') {
@@ -223,7 +236,7 @@ export function useAIChat(): UseAIChatResult {
       }
 
       // ── Mode non-streaming (EGEN_AI_STREAM=false) ──────────────────────────
-      const response = await sendChatMessage(requestBody, controller.signal);
+      const response = await transport.sendChatMessage(requestBody, controller.signal);
       updateAssistantMessage(assistantMessageId, (m) => ({
         ...m,
         content: m.content + response.message,
