@@ -63,7 +63,7 @@ const AssistantPanel: React.FC<AssistantPanelProps> = ({ onClose }) => {
 
       {error && (
         <div className={styles.errorBanner} role="alert">
-          {t('assistantConnectionError', "Connexion à l'assistant impossible pour le moment.")}
+          {error}
         </div>
       )}
 
