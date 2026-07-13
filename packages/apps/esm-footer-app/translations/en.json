@@ -1,5 +1,5 @@
 {
   "appFooter": "Application footer",
-  "footerLinks": "Footer links",
-  "footerCopyright": "© {{year}} {{company}}"
+  "footerCopyright": "© {{year}} {{company}}",
+  "footerLinks": "Footer links"
 }
