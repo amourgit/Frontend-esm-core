@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { toGeminiContents, parseGeminiResponse } from './gemini-direct-client';
+import { toGeminiContents, parseGeminiResponse, parseSseDataFrame } from './gemini-direct-client';
 import type { ChatMessageDTO } from './ai-backend-client';
 
 describe('toGeminiContents', () => {
@@ -31,6 +31,29 @@ describe('toGeminiContents', () => {
     ];
 
     expect(toGeminiContents(history)).toEqual([{ role: 'user', parts: [{ text: 'Bonjour' }] }]);
+  });
+});
+
+describe('parseSseDataFrame', () => {
+  it("reconstruit un JSON dont Gemini a étalé le contenu sur plusieurs lignes physiques, sans répéter 'data:'", () => {
+    // Cas réel observé sur l'API Gemini (streamGenerateContent) : le JSON
+    // d'un même évènement continue sur la ligne suivante sans préfixe
+    // "data:" — un parseur qui ne lit que la première ligne du bloc perd
+    // silencieusement tout le texte de la réponse.
+    const frame =
+      'data: {"candidates": [{"content": {"parts": [{"text": "Bonjour"}],"role": "model"},"index": 0}],"usageMetadata": {"promptTokenCount": 1483,"candidatesTokenCount": 1,"totalTokenCount": 1484,\n' +
+      '"promptTokensDetails": [{"modality": "TEXT","tokenCount": 1483}],"serviceTier": "standard"},"modelVersion": "gemini-3.1-flash-lite","responseId": "abc"}';
+
+    const parsed = parseSseDataFrame(frame);
+
+    expect(parsed).not.toBeNull();
+    expect(parsed.candidates[0].content.parts[0].text).toBe('Bonjour');
+    expect(parsed.usageMetadata.totalTokenCount).toBe(1484);
+  });
+
+  it('retourne null pour un bloc qui n’est pas un évènement data: (ex. commentaire keep-alive SSE)', () => {
+    expect(parseSseDataFrame(': keep-alive')).toBeNull();
+    expect(parseSseDataFrame('')).toBeNull();
   });
 });
 

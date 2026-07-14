@@ -130,9 +130,13 @@ export async function streamChatMessage(
       buffer = frames.pop() ?? '';
 
       for (const frame of frames) {
-        const dataLine = frame.split('\n').find((line) => line.startsWith('data:'));
-        if (!dataLine) continue;
-        const raw = dataLine.slice(5).trim();
+        // Voir gemini-direct-client.ts : un bloc SSE peut étaler le JSON
+        // d'un même évènement sur plusieurs lignes physiques sans répéter
+        // le préfixe "data:". On traite donc le bloc entier comme un seul
+        // JSON plutôt que de ne lire que sa première ligne.
+        const trimmedFrame = frame.trim();
+        if (!trimmedFrame.startsWith('data:')) continue;
+        const raw = trimmedFrame.slice(5).trim();
         if (!raw) continue;
 
         try {

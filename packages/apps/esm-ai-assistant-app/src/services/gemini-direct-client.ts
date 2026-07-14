@@ -50,6 +50,14 @@ interface GeminiPart {
   text?: string;
   functionCall?: { name: string; args: Record<string, unknown> };
   functionResponse?: { name: string; response: Record<string, unknown> };
+  /**
+   * Marque une part comme faisant partie du raisonnement interne du modèle
+   * (Gemini 3.x, "thinking") plutôt que de la réponse finale. Ne doit
+   * JAMAIS être affichée à l'utilisateur — filtrée explicitement partout
+   * où l'on lit `part.text`, même si elle n'apparaît pas par défaut sans
+   * `thinkingConfig.includeThoughts: true` (qu'on ne définit pas ici).
+   */
+  thought?: boolean;
 }
 
 interface GeminiContent {
@@ -113,6 +121,7 @@ export function parseGeminiResponse(json: any): ChatResponseDTO {
   const toolCalls: ToolCallRequest[] = [];
 
   for (const part of parts) {
+    if (part.thought) continue; // raisonnement interne — jamais affiché
     if (part.text) {
       message += part.text;
     } else if (part.functionCall) {
@@ -177,6 +186,25 @@ function requireApiKey(): string {
 // est une opinion de Google qui peut encore changer) : on se contente de la
 // transmettre telle quelle et de laisser l'API trancher.
 
+/**
+ * Parse un unique bloc SSE (le texte entre deux lignes vides du flux) en
+ * JSON. Traite tout le bloc — pas seulement sa première ligne — car Gemini
+ * étale parfois le JSON d'un même évènement sur plusieurs lignes physiques
+ * sans répéter le préfixe "data:" (voir streamChatMessage). Retourne `null`
+ * si le bloc n'est pas un évènement `data:` exploitable.
+ */
+export function parseSseDataFrame(frame: string): any | null {
+  const trimmedFrame = frame.trim();
+  if (!trimmedFrame.startsWith('data:')) return null;
+  const raw = trimmedFrame.slice(5).trim();
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 export async function sendChatMessage(body: ChatRequestBody, signal?: AbortSignal): Promise<ChatResponseDTO> {
   const { provider } = getAIConfig();
   const apiKey = requireApiKey();
@@ -237,20 +265,19 @@ export async function streamChatMessage(
       buffer = frames.pop() ?? '';
 
       for (const frame of frames) {
-        const dataLine = frame.split('\n').find((line) => line.startsWith('data:'));
-        if (!dataLine) continue;
-        const raw = dataLine.slice(5).trim();
-        if (!raw) continue;
-
-        let json: any;
-        try {
-          json = JSON.parse(raw);
-        } catch {
-          continue;
-        }
+        // Un bloc SSE peut étaler le JSON d'un même évènement sur PLUSIEURS
+        // lignes physiques, sans répéter le préfixe "data:" sur les lignes
+        // de continuation (constaté en pratique sur l'API Gemini). Ne
+        // prendre que la première ligne (comme le fait un parseur SSE
+        // "ligne par ligne" naïf) tronque le JSON et fait échouer
+        // silencieusement le parsing — perdant tout le texte de la
+        // réponse sans la moindre erreur visible.
+        const json = parseSseDataFrame(frame);
+        if (!json) continue;
 
         const parts: GeminiPart[] = json?.candidates?.[0]?.content?.parts ?? [];
         for (const part of parts) {
+          if (part.thought) continue; // raisonnement interne — jamais affiché
           if (part.text) {
             onEvent({ type: 'token', text: part.text });
           } else if (part.functionCall) {
