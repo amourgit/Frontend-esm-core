@@ -54,7 +54,7 @@ export function buildDefaultConfig(): AIConfig {
 
     provider: {
       provider: readEnv('EGEN_AI_PROVIDER', 'gemini') as AIConfig['provider']['provider'],
-      model: readEnv('EGEN_AI_MODEL', 'gemini-2.5-flash-lite'),
+      model: readEnv('EGEN_AI_MODEL', 'gemini-3.1-flash-lite'),
       temperature: readEnvNumber('EGEN_AI_TEMPERATURE', 0.7),
       topP: readEnvNumber('EGEN_AI_TOP_P', 0.95),
       topK: readEnvNumber('EGEN_AI_TOP_K', 40),
