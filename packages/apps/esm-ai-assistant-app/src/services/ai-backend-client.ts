@@ -119,33 +119,49 @@ export async function streamChatMessage(
   const decoder = new TextDecoder();
   let buffer = '';
 
+  // Traite un morceau de buffer déjà décodé : découpe en blocs SSE séparés
+  // par une ligne vide, traite chacun, et renvoie le reliquat incomplet.
+  // Normalise CRLF → LF avant de découper : sur un flux terminé en "\r\n\r\n",
+  // la sous-chaîne "\n\n" littérale n'apparaît jamais (il y a toujours un \r
+  // entre les deux \n), donc aucun bloc n'est jamais isolé et tout le flux
+  // reste bloqué dans le buffer sans qu'aucun évènement ne soit traité —
+  // silence total côté UI, sans la moindre erreur.
+  const processBuffer = (text: string): string => {
+    const normalized = text.replace(/\r\n/g, '\n');
+    const frames = normalized.split('\n\n');
+    const remainder = frames.pop() ?? '';
+
+    for (const frame of frames) {
+      // Voir gemini-direct-client.ts : un bloc SSE peut étaler le JSON
+      // d'un même évènement sur plusieurs lignes physiques sans répéter
+      // le préfixe "data:". On traite donc le bloc entier comme un seul
+      // JSON plutôt que de ne lire que sa première ligne.
+      const trimmedFrame = frame.trim();
+      if (!trimmedFrame.startsWith('data:')) continue;
+      const raw = trimmedFrame.slice(5).trim();
+      if (!raw) continue;
+
+      try {
+        const event = JSON.parse(raw) as StreamEvent;
+        onEvent(event);
+      } catch {
+        // Ligne non-JSON (commentaire SSE, keep-alive) — ignorée silencieusement.
+      }
+    }
+
+    return remainder;
+  };
+
   try {
     for (;;) {
       const { value, done } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const frames = buffer.split('\n\n');
-      // La dernière "frame" peut être incomplète — on la remet en buffer.
-      buffer = frames.pop() ?? '';
-
-      for (const frame of frames) {
-        // Voir gemini-direct-client.ts : un bloc SSE peut étaler le JSON
-        // d'un même évènement sur plusieurs lignes physiques sans répéter
-        // le préfixe "data:". On traite donc le bloc entier comme un seul
-        // JSON plutôt que de ne lire que sa première ligne.
-        const trimmedFrame = frame.trim();
-        if (!trimmedFrame.startsWith('data:')) continue;
-        const raw = trimmedFrame.slice(5).trim();
-        if (!raw) continue;
-
-        try {
-          const event = JSON.parse(raw) as StreamEvent;
-          onEvent(event);
-        } catch {
-          // Ligne non-JSON (commentaire SSE, keep-alive) — ignorée silencieusement.
-        }
+      if (done) {
+        buffer += decoder.decode();
+        processBuffer(buffer + '\n\n');
+        break;
       }
+
+      buffer = processBuffer(buffer + decoder.decode(value, { stream: true }));
     }
   } finally {
     reader.releaseLock();

@@ -255,44 +255,64 @@ export async function streamChatMessage(
   let buffer = '';
   const seenToolCallSignatures = new Set<string>();
 
+  // Traite un morceau de buffer déjà décodé : découpe en blocs SSE séparés
+  // par une ligne vide, traite chacun, et renvoie le reliquat incomplet.
+  const processBuffer = (text: string): string => {
+    // Certains environnements (proxys, certains navigateurs) terminent les
+    // lignes SSE en CRLF ("\r\n") plutôt qu'en LF seul ("\n"). Si on ne
+    // découpe que sur "\n\n" littéral, la séquence "\r\n\r\n" ne matche
+    // JAMAIS (il y a toujours un \r entre les deux \n) : aucun bloc n'est
+    // alors jamais isolé, et tout le flux reste bloqué dans le buffer sans
+    // qu'aucun token ne soit traité — silence total côté UI, sans la
+        // moindre erreur. On normalise donc CRLF → LF avant de découper.
+    const normalized = text.replace(/\r\n/g, '\n');
+    const frames = normalized.split('\n\n');
+    const remainder = frames.pop() ?? '';
+
+    for (const frame of frames) {
+      // Un bloc SSE peut étaler le JSON d'un même évènement sur PLUSIEURS
+      // lignes physiques, sans répéter le préfixe "data:" sur les lignes
+      // de continuation (constaté en pratique sur l'API Gemini). Ne
+      // prendre que la première ligne (comme le fait un parseur SSE
+      // "ligne par ligne" naïf) tronque le JSON et fait échouer
+      // silencieusement le parsing — perdant tout le texte de la
+      // réponse sans la moindre erreur visible.
+      const json = parseSseDataFrame(frame);
+      if (!json) continue;
+
+      const parts: GeminiPart[] = json?.candidates?.[0]?.content?.parts ?? [];
+      for (const part of parts) {
+        if (part.thought) continue; // raisonnement interne — jamais affiché
+        if (part.text) {
+          onEvent({ type: 'token', text: part.text });
+        } else if (part.functionCall) {
+          const signature = `${part.functionCall.name}:${JSON.stringify(part.functionCall.args ?? {})}`;
+          if (seenToolCallSignatures.has(signature)) continue; // évite les doublons entre frames partielles
+          seenToolCallSignatures.add(signature);
+          onEvent({
+            type: 'tool_call',
+            id: `gemini-call-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            tool: part.functionCall.name,
+            arguments: part.functionCall.args ?? {},
+          });
+        }
+      }
+    }
+
+    return remainder;
+  };
+
   try {
     for (;;) {
       const { value, done } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const frames = buffer.split('\n\n');
-      buffer = frames.pop() ?? '';
-
-      for (const frame of frames) {
-        // Un bloc SSE peut étaler le JSON d'un même évènement sur PLUSIEURS
-        // lignes physiques, sans répéter le préfixe "data:" sur les lignes
-        // de continuation (constaté en pratique sur l'API Gemini). Ne
-        // prendre que la première ligne (comme le fait un parseur SSE
-        // "ligne par ligne" naïf) tronque le JSON et fait échouer
-        // silencieusement le parsing — perdant tout le texte de la
-        // réponse sans la moindre erreur visible.
-        const json = parseSseDataFrame(frame);
-        if (!json) continue;
-
-        const parts: GeminiPart[] = json?.candidates?.[0]?.content?.parts ?? [];
-        for (const part of parts) {
-          if (part.thought) continue; // raisonnement interne — jamais affiché
-          if (part.text) {
-            onEvent({ type: 'token', text: part.text });
-          } else if (part.functionCall) {
-            const signature = `${part.functionCall.name}:${JSON.stringify(part.functionCall.args ?? {})}`;
-            if (seenToolCallSignatures.has(signature)) continue; // évite les doublons entre frames partielles
-            seenToolCallSignatures.add(signature);
-            onEvent({
-              type: 'tool_call',
-              id: `gemini-call-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-              tool: part.functionCall.name,
-              arguments: part.functionCall.args ?? {},
-            });
-          }
-        }
+      if (done) {
+        // Traite tout reliquat restant (dernier bloc sans "\n\n" final).
+        buffer += decoder.decode();
+        processBuffer(buffer + '\n\n');
+        break;
       }
+
+      buffer = processBuffer(buffer + decoder.decode(value, { stream: true }));
     }
     onEvent({ type: 'done' });
   } finally {
