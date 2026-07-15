@@ -167,6 +167,7 @@ export function useAIChat(): UseAIChatResult {
           toolCallId: call.id,
           toolName: call.tool,
           toolArguments: call.arguments,
+          toolThoughtSignature: call.thoughtSignature,
         });
       }
 
@@ -212,7 +213,12 @@ export function useAIChat(): UseAIChatResult {
               accumulated += event.text;
               updateAssistantMessage(assistantMessageId, (m) => ({ ...m, content: accumulated, status: 'streaming' }));
             } else if (event.type === 'tool_call') {
-              pendingToolCalls.push({ id: event.id, tool: event.tool, arguments: event.arguments });
+              pendingToolCalls.push({
+                id: event.id,
+                tool: event.tool,
+                arguments: event.arguments,
+                thoughtSignature: event.thoughtSignature,
+              });
             } else if (event.type === 'error') {
               throw new Error(event.error);
             }

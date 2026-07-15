@@ -32,12 +32,22 @@ export interface ChatMessageDTO {
    * gemini-direct-client.ts). Absent pour les rôles user/assistant.
    */
   toolArguments?: Record<string, unknown>;
+  /** Voir ToolCallRequest.thoughtSignature — transite avec le résultat pour être réinjecté dans le tour modèle reconstruit. */
+  toolThoughtSignature?: string;
 }
 
 export interface ToolCallRequest {
   id: string;
   tool: string;
   arguments: Record<string, unknown>;
+  /**
+   * Signature opaque que Gemini associe à un appel de fonction (modèles
+   * 3.x, "thinking"). Doit être renvoyée telle quelle dans le tour modèle
+   * reconstruit qui précède la réponse de fonction, sous peine de 400
+   * ("Function call is missing a thought_signature"). Absente pour les
+   * autres providers — champ optionnel, ignoré s'il n'est pas fourni.
+   */
+  thoughtSignature?: string;
 }
 
 export interface ChatRequestBody {
@@ -59,7 +69,7 @@ export interface ChatResponseDTO {
 /** Événements du flux SSE de streaming */
 export type StreamEvent =
   | { type: 'token'; text: string }
-  | { type: 'tool_call'; id: string; tool: string; arguments: Record<string, unknown> }
+  | { type: 'tool_call'; id: string; tool: string; arguments: Record<string, unknown>; thoughtSignature?: string }
   | { type: 'done' }
   | { type: 'error'; error: string };
 

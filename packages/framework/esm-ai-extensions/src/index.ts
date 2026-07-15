@@ -44,6 +44,13 @@
 //          description: 'Permet à l\'IA de consulter et résumer les notes d\'un étudiant.',
 //        },
 //      ],
+//      routes: [
+//        {
+//          path: '/grades/:studentUuid',
+//          description: 'Affiche le bulletin de notes d\'un étudiant.',
+//          params: [{ name: 'studentUuid', type: 'string', required: true, description: 'UUID de l\'étudiant' }],
+//        },
+//      ],
 //    });
 //  }
 //  ```
@@ -56,11 +63,17 @@ export {
   removeTool,
   registerCapability,
   removeCapability,
+  registerRoute,
+  removeRoute,
+  getAllRoutes,
+  getRoutesCatalogForLLM,
   type AIToolDefinition,
   type AICapability,
   type AIToolDecorator,
   type AIToolResult,
   type AIToolExecutionContext,
+  type AIRouteDefinition,
+  type AIRouteParam,
 } from '@egen/esm-ai-tools';
 
 export { registerAIContextProvider, removeAIContextProvider, type AIContextProvider } from '@egen/esm-ai-context';
@@ -77,8 +90,11 @@ import {
   registerCapability,
   removeTool,
   removeCapability,
+  registerRoute,
+  removeRoute,
   type AIToolDefinition,
   type AICapability,
+  type AIRouteDefinition,
 } from '@egen/esm-ai-tools';
 
 import { registerAIContextProvider, type AIContextProvider } from '@egen/esm-ai-context';
@@ -94,6 +110,12 @@ export interface AIModuleDefinition {
   contextProviders?: AIContextProvider[];
   /** Capacités déclaratives */
   capabilities?: AICapability[];
+  /**
+   * Routes déclarées par ce module, pour que le LLM les consulte (contexte
+   * IA + tool `list_routes`) au lieu de deviner un chemin de navigation.
+   * Voir @egen/esm-ai-tools/routes.ts pour le format attendu.
+   */
+  routes?: AIRouteDefinition[];
 }
 
 /**
@@ -140,6 +162,18 @@ export function defineAIModule(def: AIModuleDefinition): () => void {
     cleanupFns.push(() => {
       try {
         removeCapability(cap.id);
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+    });
+  }
+
+  // Enregistrer les routes
+  for (const route of def.routes ?? []) {
+    registerRoute({ ...route, moduleName: route.moduleName ?? def.moduleName });
+    cleanupFns.push(() => {
+      try {
+        removeRoute(route.path);
       } catch (e) {
         // Ignore cleanup errors
       }

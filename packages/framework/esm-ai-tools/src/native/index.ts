@@ -14,6 +14,7 @@ import { navigate } from '@egen/esm-navigation';
 import { showNotification, showSnackbar, showModal } from '@egen/esm-styleguide/src/public';
 import { egenFetch } from '@egen/esm-api';
 import type { AIToolDefinition } from '../types';
+import { getRoutesCatalogForLLM } from '../routes';
 
 // ─── navigate ─────────────────────────────────────────────────────────────────
 
@@ -21,19 +22,36 @@ export const navigateTool: AIToolDefinition = {
   id: 'navigate',
   name: 'Naviguer vers une route',
   description:
-    "Navigue vers une route interne de l'application EGEN. Utiliser pour emmener l'utilisateur sur une page spécifique.",
+    "Navigue vers une route interne de l'application EGEN. Utiliser pour emmener l'utilisateur sur une page " +
+    'spécifique. IMPORTANT : ne JAMAIS deviner un chemin. Le chemin exact doit provenir soit du catalogue de ' +
+    "routes déjà fourni dans le contexte, soit d'un appel préalable au tool list_routes si le contexte ne " +
+    "suffit pas ou semble incomplet.",
   parameters: {
     route: {
       type: 'string',
       required: true,
-      description: 'Route cible (ex: "/students/123" ou "${egenSpaBase}/home")',
+      description: 'Route applicative cible, relative à la racine de la SPA (ex: "/students/123", "/login").',
     },
   },
   moduleName: '@egen/esm-ai-tools',
   execute: async (ctx) => {
     try {
-      navigate({ to: String(ctx.args.route) });
-      return { success: true, data: { route: ctx.args.route }, durationMs: 0 };
+      const route = String(ctx.args.route);
+      // navigate() (voir @egen/esm-navigation) ne déclenche une vraie
+      // navigation SPA (navigateToUrl) QUE si la cible commence déjà par
+      // egenSpaBase (ex: "/egen/spa") — sinon elle fait un rechargement
+      // complet de page (window.location.assign), ce qui casse l'état de
+      // l'application et l'expérience de navigation. On ne peut pas
+      // compter sur le LLM pour toujours préfixer ${egenSpaBase} lui-même
+      // (il renvoie naturellement des chemins "logiques" comme "/login") —
+      // c'est donc CE tool, de façon déterministe, qui résout la route
+      // reçue vers le chemin SPA correct avant d'appeler navigate().
+      const isAbsoluteUrl = /^[a-z][a-z0-9+.-]*:\/\//i.test(route);
+      const isAlreadyResolved = route.includes('${egenBase}') || route.includes('${egenSpaBase}');
+      const target = isAbsoluteUrl || isAlreadyResolved ? route : `\${egenSpaBase}${route.startsWith('/') ? '' : '/'}${route}`;
+
+      navigate({ to: target });
+      return { success: true, data: { route: target }, durationMs: 0 };
     } catch (err) {
       return { success: false, error: String(err), durationMs: 0 };
     }
@@ -336,10 +354,31 @@ export const searchTool: AIToolDefinition = {
   },
 };
 
+// ─── list_routes ──────────────────────────────────────────────────────────────
+
+export const listRoutesTool: AIToolDefinition = {
+  id: 'list_routes',
+  name: 'Lister les routes disponibles',
+  description:
+    "Retourne le catalogue des routes de l'application connues (chemin, description, paramètres attendus). " +
+    "À appeler AVANT navigate quand on n'est pas certain à 100% du chemin exact d'une page — ne JAMAIS deviner " +
+    "un chemin de navigation : soit il figure déjà dans le contexte fourni, soit il faut appeler ce tool pour le vérifier.",
+  parameters: {},
+  moduleName: '@egen/esm-ai-tools',
+  execute: async () => {
+    try {
+      return { success: true, data: { routes: getRoutesCatalogForLLM() }, durationMs: 0 };
+    } catch (err) {
+      return { success: false, error: String(err), durationMs: 0 };
+    }
+  },
+};
+
 // ─── Export groupé ────────────────────────────────────────────────────────────
 
 export const NATIVE_TOOLS: AIToolDefinition[] = [
   navigateTool,
+  listRoutesTool,
   showNotificationTool,
   showSnackbarTool,
   openModalTool,

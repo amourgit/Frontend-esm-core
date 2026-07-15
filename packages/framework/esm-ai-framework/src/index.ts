@@ -92,6 +92,10 @@ export {
   validateToolArgs,
   checkToolPermissions,
   NATIVE_TOOLS,
+  registerRoute,
+  removeRoute,
+  getAllRoutes,
+  getRoutesCatalogForLLM,
   type AIToolDefinition,
   type AIToolParam,
   type AIToolResult,
@@ -100,6 +104,8 @@ export {
   type AIToolDecorator,
   type AICapability,
   type AIToolValidationResult,
+  type AIRouteDefinition,
+  type AIRouteParam,
 } from '@egen/esm-ai-tools';
 
 // ─── Extensions (API haut niveau pour microfrontends) ─────────────────────────

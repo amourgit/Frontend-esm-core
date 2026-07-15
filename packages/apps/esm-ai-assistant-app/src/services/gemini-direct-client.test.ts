@@ -32,6 +32,26 @@ describe('toGeminiContents', () => {
 
     expect(toGeminiContents(history)).toEqual([{ role: 'user', parts: [{ text: 'Bonjour' }] }]);
   });
+
+  it('réinjecte thoughtSignature dans le tour modèle reconstruit quand Gemini en avait fourni une (modèles 3.x)', () => {
+    const history: ChatMessageDTO[] = [
+      {
+        role: 'tool',
+        content: JSON.stringify({ navigated: true }),
+        toolCallId: 'call-1',
+        toolName: 'navigate',
+        toolArguments: { route: '/students' },
+        toolThoughtSignature: 'EjQKMgabc123',
+      },
+    ];
+
+    const [modelTurn] = toGeminiContents(history);
+
+    expect(modelTurn.parts[0]).toEqual({
+      functionCall: { name: 'navigate', args: { route: '/students' } },
+      thoughtSignature: 'EjQKMgabc123',
+    });
+  });
 });
 
 describe('parseSseDataFrame', () => {

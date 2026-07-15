@@ -51,6 +51,14 @@ interface GeminiPart {
   functionCall?: { name: string; args: Record<string, unknown> };
   functionResponse?: { name: string; response: Record<string, unknown> };
   /**
+   * Signature opaque liée au raisonnement interne du modèle (Gemini 3.x).
+   * Peut apparaître sur n'importe quelle part, y compris `functionCall` —
+   * dans ce cas, elle DOIT être renvoyée telle quelle dans le tour modèle
+   * reconstruit qui précède la réponse de fonction correspondante, sous
+   * peine de 400 ("Function call is missing a thought_signature").
+   */
+  thoughtSignature?: string;
+  /**
    * Marque une part comme faisant partie du raisonnement interne du modèle
    * (Gemini 3.x, "thinking") plutôt que de la réponse finale. Ne doit
    * JAMAIS être affichée à l'utilisateur — filtrée explicitement partout
@@ -87,9 +95,17 @@ export function toGeminiContents(history: ChatMessageDTO[]): GeminiContent[] {
       }
     } else if (message.role === 'tool') {
       // Tour "model" reconstruit — annonce l'appel de fonction que Gemini a demandé.
+      // thoughtSignature DOIT être réinjectée telle quelle si Gemini l'avait
+      // fournie à l'origine (modèles 3.x) — sans elle, l'appel suivant échoue
+      // avec 400 "Function call is missing a thought_signature".
       contents.push({
         role: 'model',
-        parts: [{ functionCall: { name: message.toolName ?? '', args: message.toolArguments ?? {} } }],
+        parts: [
+          {
+            functionCall: { name: message.toolName ?? '', args: message.toolArguments ?? {} },
+            ...(message.toolThoughtSignature ? { thoughtSignature: message.toolThoughtSignature } : {}),
+          },
+        ],
       });
       // Tour "user" — le résultat renvoyé au modèle. Bien que ce tour porte
       // sémantiquement une réponse de fonction et non un message humain,
@@ -131,6 +147,7 @@ export function parseGeminiResponse(json: any): ChatResponseDTO {
         id: `gemini-call-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         tool: part.functionCall.name,
         arguments: part.functionCall.args ?? {},
+        thoughtSignature: part.thoughtSignature,
       });
     }
   }
@@ -294,6 +311,7 @@ export async function streamChatMessage(
             id: `gemini-call-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
             tool: part.functionCall.name,
             arguments: part.functionCall.args ?? {},
+            thoughtSignature: part.thoughtSignature,
           });
         }
       }
