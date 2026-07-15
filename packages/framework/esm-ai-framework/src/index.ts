@@ -106,6 +106,12 @@ export {
   type AIToolValidationResult,
   type AIRouteDefinition,
   type AIRouteParam,
+  registerUIAction,
+  getVisibleUIActions,
+  getUIActionElement,
+  subscribeToUIActions,
+  type AIUIActionDefinition,
+  type AIUIActionKind,
 } from '@egen/esm-ai-tools';
 
 // ─── Extensions (API haut niveau pour microfrontends) ─────────────────────────
@@ -117,5 +123,6 @@ export {
   useAIContextJson,
   useExecuteTool,
   useAvailableToolsSchema,
+  useAIActionable,
   type UseExecuteToolResult,
 } from './hooks';

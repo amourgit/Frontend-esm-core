@@ -50,6 +50,7 @@
   "peerDependencies": {
     "@carbon/react": "1.x",
     "@egen/esm-framework": "9.x",
+    "@egen/esm-ai-framework": "1.x",
     "@egen/esm-tenant": "workspace:*",
     "@egen/esm-theme": "workspace:*",
     "react": "18.x",

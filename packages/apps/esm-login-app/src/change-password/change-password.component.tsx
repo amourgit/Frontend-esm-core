@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FieldError, useForm, type SubmitHandler } from 'react-hook-form';
 import { Button, Form, PasswordInput, InlineLoading, Tile } from '@carbon/react';
 import { showSnackbar } from '@egen/esm-framework';
+import { useAIActionable } from '@egen/esm-ai-framework';
 import { changeUserPassword } from './change-password.resource';
 import Logo from '../logo.component';
 import styles from './change-password.scss';
@@ -73,6 +74,39 @@ const ChangePassword: React.FC = () => {
 
   const onError = useCallback(() => setIsChangingPassword(false), []);
 
+  // ── Rendre ce formulaire "actionnable" par l'assistant IA ──────────────────
+  // Chaque champ/bouton est enregistré dans le catalogue d'actions UI tant
+  // qu'il est monté à l'écran (voir useAIActionable). Aucun "workflow de
+  // changement de mot de passe" n'est codé ici ni ailleurs : le LLM reçoit ce
+  // catalogue dans son contexte et compose lui-même la séquence
+  // navigate → fill_field (x3) → click_element nécessaire pour répondre à
+  // une demande de l'utilisateur, quelle que soit sa formulation.
+  const oldPasswordRef = useAIActionable<HTMLInputElement>({
+    id: 'change-password:old-password',
+    kind: 'fill',
+    label: t('oldPassword', 'Old password'),
+    description: "Mot de passe actuel de l'utilisateur, requis pour confirmer le changement.",
+  });
+  const newPasswordRef = useAIActionable<HTMLInputElement>({
+    id: 'change-password:new-password',
+    kind: 'fill',
+    label: t('newPassword', 'New password'),
+    description: 'Nouveau mot de passe souhaité.',
+  });
+  const passwordConfirmationRef = useAIActionable<HTMLInputElement>({
+    id: 'change-password:confirmation',
+    kind: 'fill',
+    label: t('confirmPassword', 'Confirm new password'),
+    description: 'Doit être identique au nouveau mot de passe pour valider le formulaire.',
+  });
+  const submitRef = useAIActionable<HTMLButtonElement>({
+    id: 'change-password:submit',
+    kind: 'click',
+    label: t('change', 'Change Password'),
+    description:
+      'Soumet le formulaire de changement de mot de passe. Ne cliquer que lorsque les 3 champs ci-dessus sont remplis.',
+  });
+
   return (
     <div className={styles.container}>
       <Tile className={styles.changePasswordCard}>
@@ -85,6 +119,7 @@ const ChangePassword: React.FC = () => {
             control={control}
             render={({ field: { onChange, value } }) => (
               <PasswordInput
+                ref={oldPasswordRef}
                 id="oldPassword"
                 invalid={!!errors?.oldPassword}
                 invalidText={
@@ -106,6 +141,7 @@ const ChangePassword: React.FC = () => {
             control={control}
             render={({ field: { onChange, value } }) => (
               <PasswordInput
+                ref={newPasswordRef}
                 id="newPassword"
                 invalid={!!errors?.newPassword}
                 invalidText={
@@ -127,6 +163,7 @@ const ChangePassword: React.FC = () => {
             control={control}
             render={({ field: { onChange, value } }) => (
               <PasswordInput
+                ref={passwordConfirmationRef}
                 id="passwordConfirmation"
                 invalid={!!errors?.passwordConfirmation}
                 invalidText={
@@ -143,7 +180,7 @@ const ChangePassword: React.FC = () => {
               />
             )}
           />
-          <Button className={styles.submitButton} disabled={isChangingPassword} type="submit">
+          <Button ref={submitRef} className={styles.submitButton} disabled={isChangingPassword} type="submit">
             {isChangingPassword ? (
               <InlineLoading description={t('changingPassword', 'Changing password') + '...'} />
             ) : (

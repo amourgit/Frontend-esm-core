@@ -1,5 +1,11 @@
 import { defineConfigSchema, getSyncLifecycle } from '@egen/esm-framework';
-import { initAIFramework, defineAIModule, getRoutesCatalogForLLM } from '@egen/esm-ai-framework';
+import {
+  initAIFramework,
+  defineAIModule,
+  getRoutesCatalogForLLM,
+  getVisibleUIActions,
+  subscribeToUIActions,
+} from '@egen/esm-ai-framework';
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';
 import { BASE_EGEN_ROUTES } from './base-routes';
@@ -41,6 +47,17 @@ export function startupApp() {
         name: 'Catalogue des routes disponibles',
         priority: 5,
         provide: () => ({ availableRoutes: getRoutesCatalogForLLM() }),
+      },
+      {
+        id: 'ai-assistant:available-ui-actions',
+        name: "Catalogue des actions UI visibles à l'écran",
+        priority: 5,
+        // Un bouton/champ apparaît ou disparaît en permanence (montage/
+        // démontage de composants React à chaque navigation) — sans ce
+        // `subscribe`, le contexte IA resterait figé sur l'état de l'écran
+        // au moment du premier calcul, au lieu de refléter l'écran courant.
+        provide: () => ({ availableUIActions: getVisibleUIActions() }),
+        subscribe: (onChange) => subscribeToUIActions(onChange),
       },
     ],
   });

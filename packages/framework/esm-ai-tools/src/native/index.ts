@@ -15,6 +15,7 @@ import { showNotification, showSnackbar, showModal } from '@egen/esm-styleguide/
 import { egenFetch } from '@egen/esm-api';
 import type { AIToolDefinition } from '../types';
 import { getRoutesCatalogForLLM } from '../routes';
+import { getVisibleUIActions, getUIActionElement, setNativeInputValue } from '../ui-actions';
 
 // ─── navigate ─────────────────────────────────────────────────────────────────
 
@@ -374,11 +375,113 @@ export const listRoutesTool: AIToolDefinition = {
   },
 };
 
+// ─── list_ui_actions ──────────────────────────────────────────────────────────
+
+export const listUIActionsTool: AIToolDefinition = {
+  id: 'list_ui_actions',
+  name: "Lister les actions possibles sur l'écran courant",
+  description:
+    "Retourne le catalogue des boutons, liens et champs actuellement VISIBLES à l'écran (id, description, type). " +
+    "Ce catalogue est déjà fourni dans le contexte à chaque message et se met à jour automatiquement quand l'écran " +
+    "change — appeler ce tool seulement si le contexte semble tronqué ou pour revérifier après une navigation. " +
+    "Ne JAMAIS deviner un id d'action : un id n'existe que s'il apparaît ici ou dans le contexte.",
+  parameters: {},
+  moduleName: '@egen/esm-ai-tools',
+  execute: async () => {
+    try {
+      return { success: true, data: { actions: getVisibleUIActions() }, durationMs: 0 };
+    } catch (err) {
+      return { success: false, error: String(err), durationMs: 0 };
+    }
+  },
+};
+
+// ─── click_element ────────────────────────────────────────────────────────────
+
+export const clickElementTool: AIToolDefinition = {
+  id: 'click_element',
+  name: 'Cliquer sur un élément',
+  description:
+    "Clique sur un bouton ou un lien de l'écran actuel, identifié par son id (voir le catalogue d'actions du " +
+    "contexte, ou list_ui_actions). N'agit QUE sur un élément actuellement visible à l'écran.",
+  parameters: {
+    actionId: {
+      type: 'string',
+      required: true,
+      description: "Identifiant exact de l'action, tel que fourni dans le catalogue — jamais deviné.",
+    },
+  },
+  moduleName: '@egen/esm-ai-tools',
+  execute: async (ctx) => {
+    try {
+      const actionId = String(ctx.args.actionId);
+      const el = getUIActionElement(actionId);
+      if (!el) {
+        return {
+          success: false,
+          error: `Aucun élément visible à l'écran avec l'id "${actionId}". Vérifie le catalogue d'actions courant avant de réessayer.`,
+          durationMs: 0,
+        };
+      }
+      el.click();
+      return { success: true, data: { actionId }, durationMs: 0 };
+    } catch (err) {
+      return { success: false, error: String(err), durationMs: 0 };
+    }
+  },
+};
+
+// ─── fill_field ────────────────────────────────────────────────────────────────
+
+export const fillFieldTool: AIToolDefinition = {
+  id: 'fill_field',
+  name: 'Remplir un champ',
+  description:
+    "Renseigne la valeur d'un champ de formulaire de l'écran actuel, identifié par son id (voir le catalogue " +
+    "d'actions du contexte, ou list_ui_actions). N'agit QUE sur un champ actuellement visible à l'écran.",
+  parameters: {
+    actionId: {
+      type: 'string',
+      required: true,
+      description: "Identifiant exact du champ, tel que fourni dans le catalogue — jamais deviné.",
+    },
+    value: {
+      type: 'string',
+      required: true,
+      description: 'Valeur à saisir dans le champ.',
+    },
+  },
+  moduleName: '@egen/esm-ai-tools',
+  execute: async (ctx) => {
+    try {
+      const actionId = String(ctx.args.actionId);
+      const el = getUIActionElement(actionId);
+      if (!el) {
+        return {
+          success: false,
+          error: `Aucun champ visible à l'écran avec l'id "${actionId}". Vérifie le catalogue d'actions courant avant de réessayer.`,
+          durationMs: 0,
+        };
+      }
+      if (!(el instanceof HTMLInputElement) && !(el instanceof HTMLTextAreaElement)) {
+        return { success: false, error: `L'élément "${actionId}" n'est pas un champ de formulaire.`, durationMs: 0 };
+      }
+      setNativeInputValue(el, String(ctx.args.value));
+      return { success: true, data: { actionId }, durationMs: 0 };
+    } catch (err) {
+      return { success: false, error: String(err), durationMs: 0 };
+    }
+  },
+};
+
 // ─── Export groupé ────────────────────────────────────────────────────────────
 
 export const NATIVE_TOOLS: AIToolDefinition[] = [
   navigateTool,
   listRoutesTool,
+  listUIActionsTool,
+  clickElementTool,
+  fillFieldTool,
   showNotificationTool,
   showSnackbarTool,
   openModalTool,

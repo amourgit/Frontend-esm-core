@@ -3,11 +3,12 @@
 // =============================================================================
 
 import { useSyncExternalStore, useCallback, useEffect, useRef } from 'react';
+import type { RefObject } from 'react';
 import { useAIConfig, useAIEnabled } from '@egen/esm-ai-config';
 import { aiContextStore, getAIContextJson } from '@egen/esm-ai-context';
-import { getAllTools, executeTool, getToolsSchemaForLLM } from '@egen/esm-ai-tools';
+import { getAllTools, executeTool, getToolsSchemaForLLM, registerUIAction } from '@egen/esm-ai-tools';
 import { sessionStore } from '@egen/esm-api';
-import type { AIToolRequest, AIToolResult } from '@egen/esm-ai-tools';
+import type { AIToolRequest, AIToolResult, AIUIActionDefinition } from '@egen/esm-ai-tools';
 import type { AIContext } from '@egen/esm-ai-context';
 
 export { useAIConfig, useAIEnabled } from '@egen/esm-ai-config';
@@ -111,6 +112,42 @@ export function useAvailableToolsSchema(): object[] {
       : [];
 
   return getToolsSchemaForLLM(privileges);
+}
+
+// ─── useAIActionable ──────────────────────────────────────────────────────────
+
+/**
+ * Rend un élément DOM "actionnable" par l'assistant IA : l'enregistre dans le
+ * registre d'actions UI (voir @egen/esm-ai-tools/ui-actions.ts) tant qu'il est
+ * monté, et le retire automatiquement au démontage. Le LLM le découvre alors
+ * via le contexte (catalogue des actions visibles) ou le tool list_ui_actions,
+ * et peut le déclencher via click_element / fill_field — sans qu'AUCUN
+ * workflow ne soit codé en dur : c'est le LLM qui compose la séquence.
+ *
+ * ```tsx
+ * const submitRef = useAIActionable<HTMLButtonElement>({
+ *   id: 'change-password:submit',
+ *   kind: 'click',
+ *   label: 'Valider le changement de mot de passe',
+ *   description: 'Soumet le formulaire une fois les 3 champs remplis.',
+ * });
+ * return <Button ref={submitRef} type="submit">Confirmer</Button>;
+ * ```
+ *
+ * `def` doit être stable entre les rendus (un objet recréé à chaque rendu
+ * réenregistre inutilement à chaque fois) — mémoïser avec useMemo si construit
+ * dynamiquement.
+ */
+export function useAIActionable<T extends HTMLElement>(def: AIUIActionDefinition): RefObject<T> {
+  const ref = useRef<T>(null);
+
+  useEffect(() => {
+    if (!ref.current) return undefined;
+    return registerUIAction(def, ref.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [def.id, def.kind, def.label, def.description]);
+
+  return ref;
 }
 
 // ─── Shim helper ─────────────────────────────────────────────────────────────

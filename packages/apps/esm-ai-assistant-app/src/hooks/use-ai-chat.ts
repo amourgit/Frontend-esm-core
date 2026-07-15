@@ -91,6 +91,14 @@ function describeToolCall(tool: string, args: Record<string, unknown>): string {
       return `Copie dans le presse-papier`;
     case 'open_modal':
       return `Ouverture de « ${String(args.name ?? '')} »`;
+    case 'click_element':
+      return `Clic sur « ${String(args.actionId ?? '')} »`;
+    case 'fill_field':
+      return `Remplissage de « ${String(args.actionId ?? '')} »`;
+    case 'list_ui_actions':
+      return `Consultation des actions disponibles à l'écran`;
+    case 'list_routes':
+      return `Consultation des routes disponibles`;
     default:
       return `Exécution de « ${tool} »`;
   }

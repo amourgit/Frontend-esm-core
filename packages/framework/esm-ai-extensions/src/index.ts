@@ -67,6 +67,10 @@ export {
   removeRoute,
   getAllRoutes,
   getRoutesCatalogForLLM,
+  registerUIAction,
+  getVisibleUIActions,
+  getUIActionElement,
+  subscribeToUIActions,
   type AIToolDefinition,
   type AICapability,
   type AIToolDecorator,
@@ -74,6 +78,8 @@ export {
   type AIToolExecutionContext,
   type AIRouteDefinition,
   type AIRouteParam,
+  type AIUIActionDefinition,
+  type AIUIActionKind,
 } from '@egen/esm-ai-tools';
 
 export { registerAIContextProvider, removeAIContextProvider, type AIContextProvider } from '@egen/esm-ai-context';
