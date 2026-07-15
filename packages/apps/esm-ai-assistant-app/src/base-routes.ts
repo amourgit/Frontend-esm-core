@@ -4,11 +4,16 @@ import type { AIRouteDefinition } from '@egen/esm-ai-framework';
 //  Routes de base EGEN — connues de TOUT déploiement (shell + apps publiques),
 //  déclarées ici pour que le LLM les consulte au lieu de les deviner.
 //
-//  C'est exactement la même liste que les routes publiques exclues dans
-//  root.component.tsx et src/routes.json (login, logout, home,
-//  change-password, tenant-suspended) — dupliquée intentionnellement,
-//  comme le reste du monorepo (voir root.component.tsx), pour ne créer
-//  aucun couplage de build avec les autres apps.
+//  Deux catégories :
+//    • Routes publiques (login, logout, home, change-password,
+//      tenant-suspended) — exactement la même liste que les routes exclues
+//      dans root.component.tsx et src/routes.json, dupliquée
+//      intentionnellement (comme le reste du monorepo), pour ne créer aucun
+//      couplage de build avec les autres apps.
+//    • Autres apps de base présentes par défaut dans le monorepo
+//      (ex: offline-tools) — authentifiées, mais suffisamment "cœur de
+//      plateforme" pour être déclarées ici plutôt que de dépendre de
+//      chaque app pour s'auto-déclarer.
 //
 //  Toute app métier (@school/esm-grades-app, etc.) devrait déclarer SES
 //  PROPRES routes de la même façon, via defineAIModule({ routes: [...] })
@@ -35,5 +40,11 @@ export const BASE_EGEN_ROUTES: AIRouteDefinition[] = [
   {
     path: '/tenant-suspended',
     description: "Page affichée quand l'établissement (tenant) de l'utilisateur est suspendu.",
+  },
+  {
+    path: '/offline-tools',
+    description:
+      "Page de gestion du mode hors-ligne : opt-in/opt-out du mode offline, liste des patients " +
+      'synchronisés localement et des actions en attente de synchronisation.',
   },
 ];
