@@ -7,10 +7,18 @@
 //  fetch, ou code non-React — exactement comme `getSessionStore()` pour la
 //  session utilisateur.
 //
-//  IMPORTANT : ce fichier NE dépend PAS de @egen/esm-tenant. Il lit le store
-//  via le registre global `availableStores` de @egen/esm-state (par nom "tenant"),
-//  ce qui évite toute dépendance circulaire entre esm-api et esm-tenant.
-//  Si le store tenant n'est pas encore initialisé, les fonctions retournent null.
+//  IMPORTANT : ce fichier NE dépend PAS de @egen/esm-tenant AU RUNTIME. Il
+//  lit le store via le registre global `availableStores` de @egen/esm-state
+//  (par nom "tenant"), ce qui évite toute dépendance circulaire/bundle entre
+//  esm-api et esm-tenant. Si le store tenant n'est pas encore initialisé,
+//  les fonctions retournent null.
+//
+//  Le SEUL lien avec @egen/esm-tenant est un `import type` ci-dessous — il
+//  est intégralement effacé à la compilation (aucun code, aucun bundle,
+//  aucun import runtime). Il garantit seulement que `MinimalTenantState`
+//  reste un sous-ensemble structurellement compatible du vrai
+//  `TenantDefinition`/`TenantStore` et ne dérive pas silencieusement d'eux
+//  au fil du temps (risque qu'avait l'ancienne interface dupliquée à la main).
 //
 //  USAGE TYPIQUE (dans un intercepteur fetch) :
 //  ```ts
@@ -27,23 +35,25 @@
 //    });
 //  }
 //  ```
+//
+//  Pour un accès RÉACTIF (React), ou pour des fonctionnalités qui ne
+//  dépendent pas d'un couplage runtime minimal (flags/permissions, écoute
+//  des changements de tenant), préférer les hooks/fonctions de
+//  @egen/esm-tenant directement (useTenant, useTenantFeatureFlag,
+//  onTenantChange, tenantHasPermission...) plutôt que ce module, qui ne
+//  couvre volontairement que la surface HTTP/synchrone minimale.
 // ============================================================================
 
 import { getGlobalStore } from '@egen/esm-state';
+import type { TenantDefinition, TenantMode } from '@egen/esm-tenant';
 
-interface MinimalTenantState {
-  activeTenant: {
-    id: string;
-    name: string;
-    apiBaseUrl?: string;
-    locale?: string;
-    timezone?: string;
-    featureFlags?: Record<string, boolean>;
-    permissions?: Record<string, boolean | string[]>;
-    meta?: Record<string, unknown>;
-  } | null;
-  mode: 'off' | 'single' | 'multi';
-}
+type MinimalTenantState = {
+  activeTenant: Pick<
+    TenantDefinition,
+    'id' | 'name' | 'apiBaseUrl' | 'locale' | 'timezone' | 'featureFlags' | 'permissions' | 'meta'
+  > | null;
+  mode: TenantMode;
+};
 
 function getTenantState(): MinimalTenantState | null {
   const store = getGlobalStore<MinimalTenantState>('tenant');

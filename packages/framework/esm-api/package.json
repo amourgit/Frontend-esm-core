@@ -67,6 +67,7 @@
     "@egen/esm-error-handling": "workspace:*",
     "@egen/esm-globals": "workspace:*",
     "@egen/esm-navigation": "workspace:*",
+    "@egen/esm-tenant": "workspace:*",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.15.21",
     "@vitest/coverage-v8": "^4.1.2",

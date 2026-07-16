@@ -9,17 +9,29 @@
 //  USAGE RECOMMANDÉ DANS UNE APP :
 //  ─────────────────────────────────
 //  import {
-//    // React hooks
+//    // React hooks — usage courant dans les composants
 //    useTenant, useTenantMode, useTenantAccess, useAvailableTenants,
 //    useSwitchTenant, useTenantFeatureFlag, useTenantPermission,
 //    // React components
 //    TenantProvider, TenantGuard, TenantRequired, TenantSelector,
 //    TenantSuspendedBoundary,
-//    // API non-React (services, intercepteurs)
-//    getCurrentTenant, getCurrentTenantId, getTenantApiBaseUrl,
-//    getTenantHeaders, fetchWithTenant, isTenantSystemActive,
-//    tenantHasFeatureFlag, tenantHasPermission, onTenantChange,
-//    // Config par app
+//    // API non-React (registry complète, permissions, feature flags,
+//    // abonnement aux changements) — pour l'accès HTTP/service simple
+//    // (ID tenant, headers, base URL API), préférer @egen/esm-api à la
+//    // place (getTenantId, tenantHeaders, getTenantApiBase, egenFetch) :
+//    // c'est cette version qui est câblée dans le client HTTP central du
+//    // monorepo. Voir les JSDoc @deprecated dans utils/tenant-utils.ts.
+//    getTenantDefinition, isTenantSystemActive,
+//    tenantHasFeatureFlag, tenantHasPermission, onTenantChange, buildTenantUrl,
+//    // Utilitaires de domaine (hostname ↔ tenant) — source unique, à
+//    // réutiliser plutôt que de réimplémenter localement
+//    inferRootDomain, extractSubdomain, buildTenantSubdomainUrl,
+//    // Config fine des permissions par app (registerAppTenantConfig +
+//    // TenantGuard/useTenantAccess) : infrastructure prête à l'emploi,
+//    // actuellement NON adoptée par les apps de ce monorepo (aucun appel à
+//    // registerAppTenantConfig, aucun <TenantGuard> monté nulle part) — à
+//    // activer explicitement app par app selon les besoins réels de
+//    // permissions, plutôt que supposée déjà active.
 //    registerAppTenantConfig,
 //    // Setup (shell uniquement)
 //    setupTenantSystem, switchTenant, reloadTenantRegistry,

@@ -36,10 +36,10 @@ export function startupApp() {
   defineConfigSchema(moduleName, configSchema);
 }
 
-/** Composant racine — monte le guard invisible + la route /tenant-suspended */
+/** Composant racine — monte uniquement le guard invisible (TenantRoutingGuard) */
 export const root = getSyncLifecycle(rootComponent, options);
 
-/** Page de suspension tenant — peut être référencée directement si besoin */
+/** Page de suspension tenant — enregistrée et montée indépendamment (route exacte "tenant-suspended") */
 export const suspendedPage = getAsyncLifecycle(
   () => import('./screens/suspended.component'),
   options,

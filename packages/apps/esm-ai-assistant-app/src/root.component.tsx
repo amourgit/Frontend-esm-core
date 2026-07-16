@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useTenantFeatureFlag } from '@egen/esm-tenant';
 import AssistantWidget from './components/assistant-widget/assistant-widget.component';
 import styles from './root.scss';
 
@@ -24,11 +25,25 @@ import styles from './root.scss';
 //    /change-password/*    Changement de mot de passe
 //    /tenant-suspended/*   Page de suspension tenant
 //
-//  Routes authentifiées (widget rendu) :
+//  Routes authentifiées (widget rendu, sous réserve du feature flag tenant
+//  "ai-assistant" — voir ci-dessous) :
 //    /*                    Toutes les autres routes (espaces tenant)
+//
+//  GATING PAR TENANT (@egen/esm-tenant) :
+//  ────────────────────────────────────────
+//  useTenantFeatureFlag('ai-assistant', true) — le SECOND argument (true)
+//  est important : c'est le defaultValue, utilisé quand aucun tenant n'est
+//  résolu (mode "off"/"single", ou registry pas encore chargée) OU quand le
+//  tenant actif ne déclare pas explicitement ce flag. Modèle "opt-out" :
+//  l'assistant reste actif par défaut partout: seul un tenant qui déclare
+//  EXPLICITEMENT `featureFlags: { "ai-assistant": false }` dans sa
+//  TenantDefinition (registry) le désactive. Ça évite toute régression pour
+//  les déploiements qui n'utilisent pas (encore) le système multi-tenant.
 // =============================================================================
 
 const Root: React.FC = () => {
+  const aiAssistantEnabledForTenant = useTenantFeatureFlag('ai-assistant', true);
+
   return (
     <BrowserRouter basename={window.getEgenSpaBase()}>
       <Routes>
@@ -43,9 +58,11 @@ const Root: React.FC = () => {
         <Route
           path="*"
           element={
-            <div className={styles.assistantAppContainer}>
-              <AssistantWidget />
-            </div>
+            aiAssistantEnabledForTenant ? (
+              <div className={styles.assistantAppContainer}>
+                <AssistantWidget />
+              </div>
+            ) : null
           }
         />
       </Routes>
