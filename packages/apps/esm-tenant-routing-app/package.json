@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@carbon/react": "^1.92.1",
+    "@egen/esm-state": "workspace:*",
     "@egen/esm-tenant": "workspace:*",
     "@egen/esm-theme": "workspace:*",
     "lodash-es": "^4.17.21"
@@ -44,6 +45,7 @@
   "peerDependencies": {
     "@carbon/react": "1.x",
     "@egen/esm-framework": "9.x",
+    "@egen/esm-state": "9.x",
     "@egen/esm-tenant": "workspace:*",
     "@egen/esm-theme": "workspace:*",
     "react": "18.x",

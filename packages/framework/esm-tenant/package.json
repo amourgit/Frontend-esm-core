@@ -24,6 +24,7 @@
     "@egen/esm-state": "workspace:*"
   },
   "peerDependencies": {
+    "@egen/esm-state": "9.x",
     "@egen/esm-theme": "9.x",
     "react": "^18.0.0",
     "rxjs": "^6.5.3"
