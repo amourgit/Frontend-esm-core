@@ -6,9 +6,9 @@ import { useSyncExternalStore, useCallback, useEffect, useRef } from 'react';
 import type { RefObject } from 'react';
 import { useAIConfig, useAIEnabled } from '@egen/esm-ai-config';
 import { aiContextStore, getAIContextJson } from '@egen/esm-ai-context';
-import { getAllTools, executeTool, getToolsSchemaForLLM, registerUIAction } from '@egen/esm-ai-tools';
+import { getAllTools, executeTool, getToolsSchemaForLLM, registerUIAction, registerObservable } from '@egen/esm-ai-tools';
 import { sessionStore } from '@egen/esm-api';
-import type { AIToolRequest, AIToolResult, AIUIActionDefinition } from '@egen/esm-ai-tools';
+import type { AIToolRequest, AIToolResult, AIUIActionDefinition, AIObservableDefinition } from '@egen/esm-ai-tools';
 import type { AIContext } from '@egen/esm-ai-context';
 
 export { useAIConfig, useAIEnabled } from '@egen/esm-ai-config';
@@ -146,6 +146,47 @@ export function useAIActionable<T extends HTMLElement>(def: AIUIActionDefinition
     return registerUIAction(def, ref.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [def.id, def.kind, def.label, def.description]);
+
+  return ref;
+}
+
+// ─── useAIObservable ──────────────────────────────────────────────────────────
+
+/**
+ * Rend un élément DOM "observable" par l'assistant IA : contenu descriptif
+ * (message d'état, liste, tableau, carte) que le LLM doit CONNAÎTRE sans
+ * pouvoir le déclencher — voir @egen/esm-ai-tools/observables.ts. Enregistré
+ * tant que l'élément est monté, retiré automatiquement au démontage.
+ *
+ * `getData` est réévalué à CHAQUE lecture du catalogue (pas seulement au
+ * montage) — inutile de re-render ou de re-déclarer ce hook quand la donnée
+ * change ; seule une variation de `id`/`kind`/`label`/`description`/`state`
+ * déclenche un nouvel enregistrement.
+ *
+ * ```tsx
+ * const tableRef = useAIObservable<HTMLDivElement>({
+ *   id: 'students-list:table',
+ *   kind: 'table',
+ *   label: 'Liste des étudiants',
+ *   description: 'Étudiants inscrits, avec leur statut.',
+ *   getData: () => students.map((s) => ({ nom: s.name, statut: s.status })),
+ * });
+ * return <div ref={tableRef}>...</div>;
+ * ```
+ */
+export function useAIObservable<T extends HTMLElement>(def: AIObservableDefinition): RefObject<T> {
+  const ref = useRef<T>(null);
+
+  // Toujours la dernière closure de getData, sans provoquer de
+  // ré-enregistrement à chaque changement de donnée (voir commentaire ci-dessus).
+  const getDataRef = useRef(def.getData);
+  getDataRef.current = def.getData;
+
+  useEffect(() => {
+    if (!ref.current) return undefined;
+    return registerObservable({ ...def, getData: () => getDataRef.current() }, ref.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [def.id, def.kind, def.label, def.description, def.state]);
 
   return ref;
 }

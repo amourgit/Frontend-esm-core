@@ -5,6 +5,8 @@ import {
   getRoutesCatalogForLLM,
   getVisibleUIActions,
   subscribeToUIActions,
+  getObservablesCatalogForLLM,
+  subscribeToObservables,
 } from '@egen/esm-ai-framework';
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';
@@ -58,6 +60,15 @@ export function startupApp() {
         // au moment du premier calcul, au lieu de refléter l'écran courant.
         provide: () => ({ availableUIActions: getVisibleUIActions() }),
         subscribe: (onChange) => subscribeToUIActions(onChange),
+      },
+      {
+        id: 'ai-assistant:available-observables',
+        name: "Catalogue du contenu descriptif visible à l'écran",
+        priority: 5,
+        // Voir @egen/esm-ai-tools/observables.ts — position et données sont
+        // recalculées à chaque lecture, jamais mises en cache ici non plus.
+        provide: () => ({ availableObservables: getObservablesCatalogForLLM() }),
+        subscribe: (onChange) => subscribeToObservables(onChange),
       },
     ],
   });

@@ -99,6 +99,10 @@ function describeToolCall(tool: string, args: Record<string, unknown>): string {
       return `Consultation des actions disponibles à l'écran`;
     case 'list_routes':
       return `Consultation des routes disponibles`;
+    case 'list_observables':
+      return `Consultation du contenu affiché à l'écran`;
+    case 'describe_screen':
+      return `Analyse de l'écran courant`;
     default:
       return `Exécution de « ${tool} »`;
   }

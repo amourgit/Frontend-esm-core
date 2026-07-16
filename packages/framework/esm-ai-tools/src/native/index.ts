@@ -16,6 +16,10 @@ import { egenFetch } from '@egen/esm-api';
 import type { AIToolDefinition } from '../types';
 import { getRoutesCatalogForLLM } from '../routes';
 import { getVisibleUIActions, getUIActionElement, setNativeInputValue } from '../ui-actions';
+import { getObservablesCatalogForLLM } from '../observables';
+import { describeCurrentScreen } from './describe-screen';
+
+export type { DescribedElement, DescribedHeading, ScreenDescription } from './describe-screen';
 
 // ─── navigate ─────────────────────────────────────────────────────────────────
 
@@ -474,12 +478,58 @@ export const fillFieldTool: AIToolDefinition = {
   },
 };
 
+// ─── list_observables ─────────────────────────────────────────────────────────
+
+export const listObservablesTool: AIToolDefinition = {
+  id: 'list_observables',
+  name: "Lister le contenu descriptif de l'écran",
+  description:
+    "Retourne le catalogue du contenu descriptif actuellement visible à l'écran (messages, listes, tableaux, " +
+    "cartes) déclaré par l'application — position, état sémantique et données structurées. Ce catalogue est déjà " +
+    "fourni dans le contexte à chaque message et se met à jour automatiquement ; appeler ce tool seulement si le " +
+    "contexte semble tronqué ou pour revérifier après un changement d'écran.",
+  parameters: {},
+  moduleName: '@egen/esm-ai-tools',
+  execute: async () => {
+    try {
+      return { success: true, data: { observables: getObservablesCatalogForLLM() }, durationMs: 0 };
+    } catch (err) {
+      return { success: false, error: String(err), durationMs: 0 };
+    }
+  },
+};
+
+// ─── describe_screen ──────────────────────────────────────────────────────────
+
+export const describeScreenTool: AIToolDefinition = {
+  id: 'describe_screen',
+  name: "Décrire l'écran courant",
+  description:
+    "Décrit l'écran actuellement affiché en lisant sa structure réelle (titres, éléments interactifs visibles " +
+    "avec leur nom, leur état et leur position, contenu descriptif déclaré). À utiliser en FILET DE SECOURS " +
+    "quand le catalogue d'actions/observables du contexte semble insuffisant pour comprendre une page — par " +
+    "exemple une page qui n'a pas explicitement déclaré ses éléments. Ne remplace PAS click_element/fill_field : " +
+    "une fois l'élément identifié ici, s'il ne figure pas dans le catalogue d'actions, informer l'utilisateur " +
+    "que cette action précise n'est pas encore prise en charge plutôt que de tenter une manipulation directe du DOM.",
+  parameters: {},
+  moduleName: '@egen/esm-ai-tools',
+  execute: async () => {
+    try {
+      return { success: true, data: describeCurrentScreen(), durationMs: 0 };
+    } catch (err) {
+      return { success: false, error: String(err), durationMs: 0 };
+    }
+  },
+};
+
 // ─── Export groupé ────────────────────────────────────────────────────────────
 
 export const NATIVE_TOOLS: AIToolDefinition[] = [
   navigateTool,
   listRoutesTool,
   listUIActionsTool,
+  listObservablesTool,
+  describeScreenTool,
   clickElementTool,
   fillFieldTool,
   showNotificationTool,

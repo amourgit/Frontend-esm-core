@@ -71,6 +71,9 @@ export {
   getVisibleUIActions,
   getUIActionElement,
   subscribeToUIActions,
+  registerObservable,
+  getObservablesCatalogForLLM,
+  subscribeToObservables,
   type AIToolDefinition,
   type AICapability,
   type AIToolDecorator,
@@ -80,6 +83,9 @@ export {
   type AIRouteParam,
   type AIUIActionDefinition,
   type AIUIActionKind,
+  type AIObservableDefinition,
+  type AIObservableKind,
+  type AIObservableSnapshot,
 } from '@egen/esm-ai-tools';
 
 export { registerAIContextProvider, removeAIContextProvider, type AIContextProvider } from '@egen/esm-ai-context';

@@ -112,6 +112,15 @@ export {
   subscribeToUIActions,
   type AIUIActionDefinition,
   type AIUIActionKind,
+  registerObservable,
+  getObservablesCatalogForLLM,
+  subscribeToObservables,
+  type AIObservableDefinition,
+  type AIObservableKind,
+  type AIObservableSnapshot,
+  type DescribedElement,
+  type DescribedHeading,
+  type ScreenDescription,
 } from '@egen/esm-ai-tools';
 
 // ─── Extensions (API haut niveau pour microfrontends) ─────────────────────────
@@ -124,5 +133,6 @@ export {
   useExecuteTool,
   useAvailableToolsSchema,
   useAIActionable,
+  useAIObservable,
   type UseExecuteToolResult,
 } from './hooks';

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { navigateTool, clickElementTool, fillFieldTool } from './index';
+import { navigateTool, clickElementTool, fillFieldTool, describeScreenTool, listObservablesTool } from './index';
 import { registerUIAction, _clearUIActionRegistry } from '../ui-actions';
+import { registerObservable, _clearObservableRegistry } from '../observables';
 
 const mockNavigate = vi.fn();
 
@@ -99,5 +100,44 @@ describe('fillFieldTool', () => {
     const result = await fillFieldTool.execute({ args: { actionId: 'not-a-field', value: 'x' } } as any);
 
     expect(result.success).toBe(false);
+  });
+});
+
+describe('listObservablesTool', () => {
+  beforeEach(() => {
+    _clearObservableRegistry();
+    document.body.innerHTML = '';
+  });
+
+  it('retourne le catalogue courant des observables visibles', async () => {
+    const el = document.createElement('div');
+    document.body.appendChild(el);
+    registerObservable(
+      { id: 'summary', kind: 'card', label: 'Résumé', description: '...', getData: () => ({ total: 3 }) },
+      el,
+    );
+
+    const result = await listObservablesTool.execute({ args: {} } as any);
+
+    expect(result.success).toBe(true);
+    expect((result.data as any).observables).toEqual([expect.objectContaining({ id: 'summary' })]);
+  });
+});
+
+describe('describeScreenTool', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it("décrit l'écran courant sans lever d'exception", async () => {
+    const heading = document.createElement('h1');
+    heading.textContent = 'Accueil';
+    document.body.appendChild(heading);
+
+    const result = await describeScreenTool.execute({ args: {} } as any);
+
+    expect(result.success).toBe(true);
+    expect(result.data).toHaveProperty('headings');
+    expect(result.data).toHaveProperty('interactiveElements');
   });
 });
