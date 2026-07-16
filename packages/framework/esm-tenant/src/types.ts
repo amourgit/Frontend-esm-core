@@ -128,9 +128,14 @@ export type TenantResolutionStrategy =
   | 'path' // Lit un segment /t/{slug}/ ou /{slug}/ dans window.location.pathname
   | 'query' // Lit ?tenant= dans window.location.search
   | 'jwt' // Lit le claim tenantId/tid dans le JWT de session
-  | 'header' // Lit X-Tenant-ID dans les réponses HTTP (posé lors du login)
+  | 'header' // Relit en localStorage le tenant déjà résolu côté client au moment
+  // du login (voir storeHeaderTenantId()). ATTENTION : malgré son nom, cette
+  // stratégie ne lit JAMAIS un en-tête HTTP réel renvoyé par le backend — il
+  // n'y a aujourd'hui aucune confirmation serveur du tenant. C'est un simple
+  // report post-login d'une valeur déjà connue côté client (utile pour
+  // survivre à un rechargement quand aucune autre stratégie ne s'applique).
   | 'localStorage' // Lit egen:tenant:active depuis localStorage
-  | 'static' // Lit window.egenTenantId ou import.meta.env.VITE_TENANT_ID
+  | 'static' // Lit window.egenTenantId (voir config/env.ts)
   | 'first'; // Prend le premier tenant disponible dans la registry
 
 /** Configuration du chemin URL pour la stratégie "path" */
@@ -151,10 +156,8 @@ export interface TenantJwtConfig {
 export interface TenantSystemConfig {
   /**
    * Mode de fonctionnement du système.
-   * Peut être surchargé par :
-   *  - `window.egenTenantMode`
-   *  - `import.meta.env.VITE_TENANT_MODE`
-   *  - `EGEN_TENANT_MODE` (via injection HTML)
+   * Peut être surchargé par `EGEN_TENANT_MODE` (.env), relayé au runtime via
+   * `window.egenTenantMode` — voir `config/env.ts`.
    *
    * @default "off"
    */
@@ -176,7 +179,7 @@ export interface TenantSystemConfig {
 
   /**
    * En mode "single", identifiant du tenant forcé.
-   * Si non défini, cherché dans window.egenTenantId / VITE_TENANT_ID.
+   * Si non défini, cherché dans `window.egenTenantId` (EGEN_TENANT_ID).
    */
   defaultTenantId?: TenantId;
 
@@ -185,6 +188,20 @@ export interface TenantSystemConfig {
    * Format attendu : TenantDefinition[]
    */
   registryUrl?: string;
+
+  /**
+   * Domaine racine explicite utilisé pour dériver un sous-domaine tenant
+   * (ex: "egen.gabon.gov.ga"). Sert de source unique de vérité pour toute
+   * inférence hostname → tenant/racine ailleurs dans le système (guard de
+   * routage, sélecteur de tenant) — voir `utils/domain-utils.ts`.
+   *
+   * Si absent, une heuristique best-effort est utilisée (retire le premier
+   * label du hostname), imprécise sur les TLD à plusieurs niveaux
+   * (ex: "gov.ga"). Recommandé en production.
+   *
+   * Surchargé par `window.egenTenantRootDomain` (EGEN_TENANT_ROOT_DOMAIN).
+   */
+  rootDomain?: string;
 
   /**
    * Tenants définis statiquement (fusionnés avec la registry distante).

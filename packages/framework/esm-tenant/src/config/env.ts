@@ -2,72 +2,60 @@
 //  @egen/esm-tenant — Résolution de la configuration depuis l'environnement
 // ============================================================================
 //
-//  Ce module lit les variables de contrôle depuis :
-//  1. Variables d'environnement de build (Vite/Webpack : import.meta.env.VITE_*)
-//  2. Variables globales window (injectées par le serveur dans index.html)
-//  3. Valeurs par défaut intégrées
+//  Ce projet est construit avec rspack (pas Vite) : il n'y a pas
+//  d'`import.meta.env` réellement peuplé dans le bundle produit, et un accès
+//  dynamique par clé (`import.meta.env[key]`) ne serait de toute façon pas
+//  remplaçable par un `DefinePlugin` (qui ne fait que du remplacement
+//  textuel statique d'expressions littérales). C'est le même principe déjà
+//  documenté pour `process.env[key]` dans `esm-ai-config/src/defaults.ts`.
 //
-//  VARIABLES SUPPORTÉES :
-//  ──────────────────────
+//  La configuration passe donc par un unique canal : des variables globales
+//  `window.egenTenant*`, injectées côté serveur/build dans `index.html` par
+//  le shell (`esm-app-shell/rspack.config.js` + `src/index.ejs`), sur le
+//  modèle exact du pont déjà utilisé pour `EGEN_AI_*` → `window.egenAi*`.
 //
-//  VITE_TENANT_MODE / window.egenTenantMode
-//    "off" | "single" | "multi"
-//    Contrôle global du système. "off" = système complètement désactivé.
+//  VARIABLE D'ENVIRONNEMENT (.env, lue côté build par le shell)  →  GLOBAL RUNTIME
+//  ──────────────────────────────────────────────────────────────────────────────
+//  EGEN_TENANT_MODE               → window.egenTenantMode
+//    "off" | "single" | "multi" — contrôle global du système. "off" = désactivé.
 //
-//  VITE_TENANT_ID / window.egenTenantId
-//    string
-//    En mode "single", identifiant du tenant forcé.
+//  EGEN_TENANT_ID                 → window.egenTenantId
+//    string — en mode "single", identifiant du tenant forcé.
 //
-//  VITE_TENANT_REGISTRY_URL / window.egenTenantRegistryUrl
-//    string (URL)
-//    URL d'un JSON de registry de tenants (TenantDefinition[]).
+//  EGEN_TENANT_REGISTRY_URL       → window.egenTenantRegistryUrl
+//    string (URL) — URL d'un JSON de registry de tenants (TenantDefinition[]).
 //
-//  VITE_TENANT_THEME_APPLY / window.egenTenantApplyTheme
-//    "true" | "false"
-//    Active/désactive l'application automatique du thème tenant. Défaut: "true".
+//  EGEN_TENANT_THEME_APPLY        → window.egenTenantApplyTheme
+//    "true" | "false" — application automatique du thème tenant. Défaut: "true".
 //
-//  VITE_TENANT_PERSIST / window.egenTenantPersist
-//    "true" | "false"
-//    Active/désactive la persistance localStorage du tenant actif. Défaut: "true".
+//  EGEN_TENANT_PERSIST            → window.egenTenantPersist
+//    "true" | "false" — persistance localStorage du tenant actif. Défaut: "true".
 //
-//  VITE_TENANT_RESOLUTION_ORDER / window.egenTenantResolutionOrder
+//  EGEN_TENANT_RESOLUTION_ORDER   → window.egenTenantResolutionOrder
 //    string (CSV) ex: "subdomain,jwt,localStorage"
-//    Ordre des stratégies de résolution.
 //
-//  VITE_TENANT_PATH_PREFIX / window.egenTenantPathPrefix
-//    string ex: "/t/"
-//    Préfixe de path pour la stratégie de résolution "path".
+//  EGEN_TENANT_PATH_PREFIX        → window.egenTenantPathPrefix
+//    string ex: "/t/" — préfixe de path pour la stratégie "path".
 //
-//  VITE_TENANT_JWT_CLAIM / window.egenTenantJwtClaim
+//  EGEN_TENANT_JWT_CLAIM          → window.egenTenantJwtClaim
 //    string ex: "tenantId" | "tid" | "org"
-//    Nom du claim JWT portant l'ID tenant.
+//
+//  EGEN_TENANT_ROOT_DOMAIN        → window.egenTenantRootDomain
+//    string ex: "egen.gabon.gov.ga" — domaine racine explicite, utilisé par
+//    toute logique de dérivation hostname ↔ tenant (voir utils/domain-utils.ts).
+//
+//  Voir les types `Window` étendus dans `@egen/esm-globals` pour la
+//  déclaration TypeScript de chacun de ces globals.
 // ============================================================================
 
 import type { TenantMode, TenantResolutionStrategy, TenantSystemConfig } from '../types';
 
-// Helpers pour lire les deux sources (env build + window runtime)
-const env = (key: string): string | undefined => {
-  // Vite
-  if (typeof import.meta !== 'undefined') {
-    const metaEnv = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
-    if (metaEnv) {
-      const v = metaEnv[key];
-      if (v !== undefined && v !== '') return v;
-    }
-  }
-  return undefined;
-};
-
-const win = (key: string): string | undefined => {
+/** Lit une valeur de config depuis `window.<key>`, ou `undefined` si absente/vide. */
+function win(key: string): string | undefined {
   if (typeof window === 'undefined') return undefined;
   const v = (window as unknown as Record<string, unknown>)[key];
   if (v !== undefined && v !== null && v !== '') return String(v);
   return undefined;
-};
-
-/** Lit une valeur de config en cherchant d'abord dans window, puis dans import.meta.env */
-function readConfig(windowKey: string, envKey: string): string | undefined {
-  return win(windowKey) ?? env(envKey);
 }
 
 function parseBool(value: string | undefined, fallback: boolean): boolean {
@@ -100,24 +88,21 @@ function parseResolutionOrder(value: string | undefined): TenantResolutionStrate
 }
 
 /**
- * Résout la configuration du système tenant depuis les variables d'environnement
- * et les globals window. Les valeurs lues ici sont des valeurs par défaut qui
- * peuvent être surchargées par la config passée à `setupTenantSystem()`.
- *
- * Priorité pour chaque option :
- *   1. window.egenXxx  (injection runtime par le serveur)
- *   2. import.meta.env.VITE_XXX  (injection build time)
- *   3. Valeur par défaut codée ici
+ * Résout la configuration du système tenant depuis les globals `window.egenTenant*`
+ * (voir en-tête de fichier). Les valeurs lues ici sont des valeurs par défaut
+ * qui peuvent être surchargées par la config passée explicitement à
+ * `setupTenantSystem({...})` (priorité maximale, voir setup.ts).
  */
 export function resolveConfigFromEnv(): Partial<TenantSystemConfig> {
-  const mode = parseTenantMode(readConfig('egenTenantMode', 'VITE_TENANT_MODE'));
-  const defaultTenantId = readConfig('egenTenantId', 'VITE_TENANT_ID');
-  const registryUrl = readConfig('egenTenantRegistryUrl', 'VITE_TENANT_REGISTRY_URL');
-  const applyTheme = parseBool(readConfig('egenTenantApplyTheme', 'VITE_TENANT_THEME_APPLY'), true);
-  const persistActive = parseBool(readConfig('egenTenantPersist', 'VITE_TENANT_PERSIST'), true);
-  const resolutionOrder = parseResolutionOrder(readConfig('egenTenantResolutionOrder', 'VITE_TENANT_RESOLUTION_ORDER'));
-  const pathPrefix = readConfig('egenTenantPathPrefix', 'VITE_TENANT_PATH_PREFIX');
-  const jwtClaim = readConfig('egenTenantJwtClaim', 'VITE_TENANT_JWT_CLAIM');
+  const mode = parseTenantMode(win('egenTenantMode'));
+  const defaultTenantId = win('egenTenantId');
+  const registryUrl = win('egenTenantRegistryUrl');
+  const applyTheme = parseBool(win('egenTenantApplyTheme'), true);
+  const persistActive = parseBool(win('egenTenantPersist'), true);
+  const resolutionOrder = parseResolutionOrder(win('egenTenantResolutionOrder'));
+  const pathPrefix = win('egenTenantPathPrefix');
+  const jwtClaim = win('egenTenantJwtClaim');
+  const rootDomain = win('egenTenantRootDomain');
 
   const config: Partial<TenantSystemConfig> = {
     mode,
@@ -130,6 +115,7 @@ export function resolveConfigFromEnv(): Partial<TenantSystemConfig> {
   if (resolutionOrder) config.resolutionOrder = resolutionOrder;
   if (pathPrefix) config.pathConfig = { prefix: pathPrefix };
   if (jwtClaim) config.jwtConfig = { claim: jwtClaim };
+  if (rootDomain) config.rootDomain = rootDomain;
 
   return config;
 }
@@ -140,6 +126,5 @@ export function resolveConfigFromEnv(): Partial<TenantSystemConfig> {
  * Utile pour des décisions de branching très précoces (ex: dans index.html).
  */
 export function isTenantModeEnabledFromEnv(): boolean {
-  const mode = parseTenantMode(readConfig('egenTenantMode', 'VITE_TENANT_MODE'));
-  return mode !== 'off';
+  return parseTenantMode(win('egenTenantMode')) !== 'off';
 }

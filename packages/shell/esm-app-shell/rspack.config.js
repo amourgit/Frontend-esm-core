@@ -107,6 +107,39 @@ const egenAiWindowOverrides = EGEN_AI_ENV_KEYS.reduce((acc, key) => {
 }, {});
 const egenAiConfigDef = Object.keys(egenAiWindowOverrides).length > 0 ? JSON.stringify(egenAiWindowOverrides) : null;
 
+/**
+ * Pont EGEN_TENANT_* (process.env, coté build Node) → window.egenTenant*
+ * (runtime navigateur). Même raison d'être que le pont EGEN_AI_* ci-dessus —
+ * voir @egen/esm-tenant/src/config/env.ts pour le détail complet et le
+ * tableau de correspondance. Sans ce pont, tout `.env` EGEN_TENANT_* est
+ * silencieusement ignoré et `setupTenantSystem()` démarre toujours en
+ * mode "off", quelle que soit la configuration.
+ *
+ * Contrairement au pont EGEN_AI_*, la correspondance nom↔nom n'est PAS
+ * mécanique (ex: EGEN_TENANT_THEME_APPLY → egenTenantApplyTheme inverse
+ * l'ordre des mots) : on utilise donc une table explicite plutôt qu'une
+ * fonction de transformation générique, pour rester sans ambiguïté.
+ */
+const EGEN_TENANT_ENV_TO_WINDOW_KEY = {
+  EGEN_TENANT_MODE: 'egenTenantMode',
+  EGEN_TENANT_ID: 'egenTenantId',
+  EGEN_TENANT_REGISTRY_URL: 'egenTenantRegistryUrl',
+  EGEN_TENANT_THEME_APPLY: 'egenTenantApplyTheme',
+  EGEN_TENANT_PERSIST: 'egenTenantPersist',
+  EGEN_TENANT_RESOLUTION_ORDER: 'egenTenantResolutionOrder',
+  EGEN_TENANT_PATH_PREFIX: 'egenTenantPathPrefix',
+  EGEN_TENANT_JWT_CLAIM: 'egenTenantJwtClaim',
+  EGEN_TENANT_ROOT_DOMAIN: 'egenTenantRootDomain',
+};
+
+const egenTenantWindowOverrides = Object.entries(EGEN_TENANT_ENV_TO_WINDOW_KEY).reduce((acc, [envKey, winKey]) => {
+  if (process.env[envKey] !== undefined) {
+    acc[winKey] = process.env[envKey];
+  }
+  return acc;
+}, {});
+const egenTenantConfigDef =
+  Object.keys(egenTenantWindowOverrides).length > 0 ? JSON.stringify(egenTenantWindowOverrides) : null;
 
 console.log("EGEN_API_URL =", process.env.EGEN_API_URL);
 /**
@@ -533,6 +566,7 @@ module.exports = (env, argv = []) => {
           egenCssFilename,
           egenExtraAssets: egenJsCssAssets.map((fileName) => 'assets/' + basename(fileName)),
           egenAiConfigDef,
+          egenTenantConfigDef,
         },
       }),
       new WebpackPwaManifest({

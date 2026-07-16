@@ -1,7 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { navigate, interpolateUrl, useConfig, useOnClickOutside, ExtensionSlot } from '@egen/esm-framework';
-import { useTenant, useTenantMode, useAvailableTenants } from '@egen/esm-tenant';
+import {
+  useTenant,
+  useTenantMode,
+  useAvailableTenants,
+  getTenantStoreState,
+  buildTenantSubdomainUrl,
+  inferRootDomain,
+} from '@egen/esm-tenant';
 import { type ConfigSchema } from '../../config-schema';
 import styles from './context-switcher.scss';
 
@@ -85,12 +92,13 @@ const ContextSwitcher: React.FC = () => {
     (tenant: (typeof tenants)[number]) => {
       setOpen(false);
       if (tenant.active) return;
-      const { protocol, port, hostname } = window.location;
-      const portSegment = port ? `:${port}` : '';
-      const rootDomain = hostname.split('.').slice(1).join('.') || hostname;
-      window.location.href = `${protocol}//${tenant.slug}.${rootDomain}${portSegment}${interpolateUrl(
-        config.logo.link,
-      )}`;
+      // rootDomain vient du système tenant (EGEN_TENANT_ROOT_DOMAIN, voir
+      // setupTenantSystem) — même source que celle utilisée par le guard de
+      // routage (esm-tenant-routing-app), pour ne jamais diverger entre les
+      // deux. buildTenantSubdomainUrl retombe sur une heuristique best-effort
+      // si rootDomain n'est pas configuré.
+      const rootDomain = inferRootDomain(window.location.hostname, getTenantStoreState().config.rootDomain);
+      window.location.href = buildTenantSubdomainUrl(tenant.slug, rootDomain, interpolateUrl(config.logo.link));
     },
     [config.logo.link],
   );

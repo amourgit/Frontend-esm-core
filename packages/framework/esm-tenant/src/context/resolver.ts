@@ -11,7 +11,9 @@
 //  2. path       — clair mais nécessite une config de routing côté app
 //  3. query      — utile pour le dev / preview
 //  4. jwt        — lecture du claim dans le token de session
-//  5. header     — propagé par le backend lors du login
+//  5. header     — reprend en localStorage le tenant déjà résolu côté
+//                   client au moment du login (ne lit PAS un header HTTP
+//                   réel — voir TenantResolutionStrategy dans types.ts)
 //  6. localStorage — survie aux rechargements
 //  7. static     — config globale window / env
 //  8. first      — dernier recours (premier tenant disponible)
@@ -43,7 +45,7 @@ function resolveByPath(config?: TenantSystemConfig['pathConfig']): TenantId | un
     const slug = rest.split('/')[0];
     if (slug) {
       const tenant = getTenantById(slug);
-      return tenant?.id ?? slug;
+      if (tenant) return tenant.id;
     }
   }
 
@@ -66,7 +68,7 @@ function resolveByQuery(): TenantId | undefined {
   const value = params.get('tenant') ?? params.get('tenantId') ?? params.get('tid');
   if (!value) return undefined;
   const tenant = getTenantById(value);
-  return tenant?.id ?? value;
+  return tenant?.id;
 }
 
 /** Résolution depuis le header HTTP X-Tenant-ID (posé en localStorage lors du login) */
@@ -76,7 +78,7 @@ function resolveByHeader(storageKey: string): TenantId | undefined {
     const value = window.localStorage.getItem(`${storageKey}:header`);
     if (!value) return undefined;
     const tenant = getTenantById(value);
-    return tenant?.id ?? value;
+    return tenant?.id;
   } catch {
     return undefined;
   }
@@ -98,7 +100,7 @@ function resolveByJwt(jwtConfig?: TenantSystemConfig['jwtConfig']): TenantId | u
     const value = payload?.[claim] ?? payload?.['tid'] ?? payload?.['tenant_id'];
     if (!value) return undefined;
     const tenant = getTenantById(String(value));
-    return tenant?.id ?? String(value);
+    return tenant?.id;
   } catch {
     return undefined;
   }
@@ -140,28 +142,23 @@ function resolveByLocalStorage(storageKey: string): TenantId | undefined {
     const value = window.localStorage.getItem(storageKey);
     if (!value) return undefined;
     const tenant = getTenantById(value);
-    return tenant?.id ?? value;
+    return tenant?.id;
   } catch {
     return undefined;
   }
 }
 
-/** Résolution depuis une config statique (window.egenTenantId / env) */
+/** Résolution depuis une config statique (window.egenTenantId, voir config/env.ts) */
 function resolveByStatic(defaultTenantId?: string): TenantId | undefined {
   const fromWindow =
     typeof window !== 'undefined'
       ? ((window as unknown as Record<string, unknown>)['egenTenantId'] as string | undefined)
       : undefined;
 
-  const fromEnv =
-    typeof import.meta !== 'undefined'
-      ? (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.['VITE_TENANT_ID']
-      : undefined;
-
-  const value = defaultTenantId ?? fromWindow ?? fromEnv;
+  const value = defaultTenantId ?? fromWindow;
   if (!value) return undefined;
   const tenant = getTenantById(value);
-  return tenant?.id ?? value;
+  return tenant?.id;
 }
 
 /** Résolution par défaut : premier tenant actif disponible dans la registry */

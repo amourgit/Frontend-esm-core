@@ -83,15 +83,39 @@ describe('setupTenantSystem — mode "multi"', () => {
 });
 
 describe('setupTenantSystem — tenant suspendu', () => {
-  it('passe en status "suspended"', async () => {
+  it('passe en status "suspended" ET peuple activeTenant avec ses métadonnées', async () => {
     await setupTenantSystem({
       mode: 'single',
       staticTenants: [{ id: 'suspended', name: 'Suspended', suspended: true, suspendedMessage: 'Maintenance' }],
       defaultTenantId: 'suspended',
       applyTheme: false,
     });
-    expect(getTenantStoreState().status).toBe('suspended');
-    expect(getTenantStoreState().error).toBe('Maintenance');
+    const state = getTenantStoreState();
+    expect(state.status).toBe('suspended');
+    // activeTenant DOIT être peuplé — c'est ce qui permet à useTenant(),
+    // useTenantIsSuspended() et à la page /tenant-suspended de connaître le
+    // tenant concerné et d'afficher son message personnalisé. Une régression
+    // ici (activeTenant qui redevient null) casse silencieusement l'écran de
+    // suspension dans esm-tenant-routing-app sans qu'aucun test ne le
+    // détecte ailleurs — ne pas retirer cette assertion.
+    expect(state.activeTenant?.id).toBe('suspended');
+    expect(state.activeTenant?.suspended).toBe(true);
+    expect(state.activeTenant?.suspendedMessage).toBe('Maintenance');
+    // Le message vit sur activeTenant.suspendedMessage, pas dans `error`
+    // (réservé aux erreurs système réelles : registry vide, fetch échoué…).
+    expect(state.error).toBeNull();
+  });
+
+  it('ne persiste pas un tenant suspendu comme dernier tenant actif', async () => {
+    await setupTenantSystem({
+      mode: 'single',
+      staticTenants: [{ id: 'suspended', name: 'Suspended', suspended: true }],
+      defaultTenantId: 'suspended',
+      applyTheme: false,
+      persistActive: true,
+      storageKey: 'egen:tenant:test-suspended',
+    });
+    expect(localStorage.getItem('egen:tenant:test-suspended')).toBeNull();
   });
 });
 

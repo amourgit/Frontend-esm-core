@@ -91,7 +91,20 @@ async function activateTenant(
   previousTenant: TenantDefinition | null = null,
 ): Promise<void> {
   if (tenant.suspended) {
-    setTenantStoreStatus('suspended', tenant.suspendedMessage ?? `Le tenant "${tenant.id}" est suspendu.`);
+    // IMPORTANT : on peuple quand même `activeTenant` (au lieu de laisser le
+    // store à `null`) — `setActiveTenantInStore` dérive déjà correctement
+    // `status: 'suspended'` à partir de `tenant.suspended`. Sans ceci,
+    // useTenant()/useTenantIsSuspended()/TenantSuspendedBoundary et la page
+    // /tenant-suspended n'ont aucun moyen de savoir QUEL tenant est
+    // suspendu ni d'afficher son `suspendedMessage` personnalisé — ils ne
+    // voient qu'un statut "suspended" sans aucune donnée associée.
+    //
+    // On ne persiste pas ce tenant (un tenant suspendu ne doit pas devenir
+    // "le dernier tenant actif" pour la prochaine session), on n'applique
+    // pas son thème et on ne déclenche pas les évènements/callback
+    // d'activation (`esm:tenant-activated`, `onTenantActivated`) : un
+    // tenant suspendu n'est pas réellement "actif" au sens fonctionnel.
+    setActiveTenantInStore(tenant);
     console.warn(`[egen/esm-tenant] ⚠️  Tenant "${tenant.id}" suspendu.`);
     return;
   }

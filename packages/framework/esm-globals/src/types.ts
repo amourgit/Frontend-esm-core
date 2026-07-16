@@ -55,59 +55,69 @@ declare global {
     i18next: i18n;
 
     // ── Tenant system globals ──────────────────────────────────────────────
-    // Injectées par le serveur dans index.html pour configuration runtime.
-    // Priorité : window.egenXxx > import.meta.env.VITE_* > valeur par défaut.
+    // Injectées par le shell (esm-app-shell/rspack.config.js + src/index.ejs)
+    // à partir des variables EGEN_TENANT_* de .env, sur le modèle exact du
+    // pont EGEN_AI_* → window.egenAi*. Lues par @egen/esm-tenant/config/env.ts.
+    // C'est l'UNIQUE canal de configuration par environnement — il n'existe
+    // pas d'équivalent `import.meta.env` fonctionnel dans ce projet (rspack).
 
     /**
      * Mode du système tenant : "off" | "single" | "multi".
-     * Surcharge VITE_TENANT_MODE.
+     * Depuis EGEN_TENANT_MODE.
      * @default "off"
      */
     egenTenantMode?: 'off' | 'single' | 'multi';
 
     /**
      * Identifiant du tenant actif (mode "single") ou tenant par défaut.
-     * Surcharge VITE_TENANT_ID.
+     * Depuis EGEN_TENANT_ID.
      */
     egenTenantId?: string;
 
     /**
      * URL d'un fichier JSON de registry de tenants (TenantDefinition[]).
-     * Surcharge VITE_TENANT_REGISTRY_URL.
+     * Depuis EGEN_TENANT_REGISTRY_URL.
      */
     egenTenantRegistryUrl?: string;
 
     /**
      * "true" | "false" — active l'application automatique du thème tenant.
-     * Surcharge VITE_TENANT_THEME_APPLY.
+     * Depuis EGEN_TENANT_THEME_APPLY.
      */
     egenTenantApplyTheme?: string;
 
     /**
      * "true" | "false" — active la persistance localStorage du tenant actif.
-     * Surcharge VITE_TENANT_PERSIST.
+     * Depuis EGEN_TENANT_PERSIST.
      */
     egenTenantPersist?: string;
 
     /**
      * Ordre des stratégies de résolution, CSV.
      * Ex: "subdomain,jwt,localStorage"
-     * Surcharge VITE_TENANT_RESOLUTION_ORDER.
+     * Depuis EGEN_TENANT_RESOLUTION_ORDER.
      */
     egenTenantResolutionOrder?: string;
 
     /**
      * Préfixe de path URL pour la stratégie "path".
      * Ex: "/t/" pour /t/{tenantSlug}/...
-     * Surcharge VITE_TENANT_PATH_PREFIX.
+     * Depuis EGEN_TENANT_PATH_PREFIX.
      */
     egenTenantPathPrefix?: string;
 
     /**
      * Claim JWT portant l'ID tenant. Ex: "tenantId", "tid", "org".
-     * Surcharge VITE_TENANT_JWT_CLAIM.
+     * Depuis EGEN_TENANT_JWT_CLAIM.
      */
     egenTenantJwtClaim?: string;
+
+    /**
+     * Domaine racine explicite (ex: "egen.gabon.gov.ga"), utilisé pour toute
+     * dérivation hostname ↔ sous-domaine tenant (voir
+     * @egen/esm-tenant utils/domain-utils.ts). Depuis EGEN_TENANT_ROOT_DOMAIN.
+     */
+    egenTenantRootDomain?: string;
   }
 }
 

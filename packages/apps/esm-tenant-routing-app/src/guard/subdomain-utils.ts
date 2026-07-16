@@ -3,7 +3,17 @@
 //
 //  Ces fonctions sont pures (pas d'effet de bord, pas de dépendance réseau).
 //  Elles constituent la couche de détection bas-niveau du guard de routage.
+//
+//  La logique bas-niveau de dérivation hostname ↔ domaine racine vit dans
+//  @egen/esm-tenant (utils/domain-utils.ts) — SOURCE UNIQUE partagée avec
+//  esm-primary-navigation-app (sélecteur de tenant), pour éviter que les deux
+//  apps divergent sur l'interprétation d'un même hostname. Ne pas
+//  réimplémenter `inferRootDomain`/`isLocalhostOrIp` localement ici.
 // =============================================================================
+
+import { isLocalhostOrIp, inferRootDomain } from '@egen/esm-tenant';
+
+export { isLocalhostOrIp, inferRootDomain, buildTenantSubdomainUrl } from '@egen/esm-tenant';
 
 /**
  * Résultat de l'analyse d'un hostname vis-à-vis du domaine racine.
@@ -24,48 +34,12 @@ export interface SubdomainAnalysis {
 }
 
 /**
- * Hôtes qui sont toujours considérés comme "localhost" (pas de logique tenant).
- */
-const LOCALHOST_HOSTNAMES = new Set(['localhost', '127.0.0.1', '0.0.0.0', '::1']);
-
-/**
- * Détermine si un hostname est un localhost ou une IP privée.
- */
-export function isLocalhostOrIp(hostname: string): boolean {
-  if (LOCALHOST_HOSTNAMES.has(hostname)) return true;
-  // IPv4 : 192.168.x.x, 10.x.x.x, 172.16-31.x.x
-  if (/^(\d{1,3}\.){3}\d{1,3}$/.test(hostname)) return true;
-  return false;
-}
-
-/**
- * Déduit le domaine racine depuis le hostname courant si aucun rootDomain
- * n'est configuré explicitement.
- *
- * Règle : retire le premier segment du hostname.
- * Ex: "lycee-lb.egen.gabon.gov.ga" → "egen.gabon.gov.ga"
- *
- * Pour les domaines simples (ex: "egen.gabon.gov.ga" sans sous-domaine),
- * retourne le hostname lui-même.
- *
- * ATTENTION : cette heuristique est imprécise pour les TLD multi-niveaux
- * (gov.ga, co.uk…). Il est fortement recommandé de configurer `rootDomain`
- * explicitement en production.
- */
-export function inferRootDomain(hostname: string): string {
-  const parts = hostname.split('.');
-  // Pour un domaine de type "a.b.c.d", le root est "b.c.d"
-  // Pour un domaine de type "a.b", le root est "a.b" (aucun sous-domaine)
-  if (parts.length <= 2) return hostname;
-  return parts.slice(1).join('.');
-}
-
-/**
  * Analyse le hostname courant pour détecter la présence d'un sous-domaine
  * par rapport au domaine racine configuré.
  *
  * @param hostname  Le hostname à analyser (window.location.hostname)
- * @param rootDomain  Le domaine racine de référence. Si vide, inféré automatiquement.
+ * @param rootDomain  Le domaine racine de référence. Si vide, inféré automatiquement
+ *   (voir `inferRootDomain` — préférer une valeur explicite en production).
  */
 export function analyzeSubdomain(hostname: string, rootDomain: string): SubdomainAnalysis {
   const isLocalhost = isLocalhostOrIp(hostname);
@@ -82,7 +56,7 @@ export function analyzeSubdomain(hostname: string, rootDomain: string): Subdomai
     };
   }
 
-  const effectiveRoot = rootDomain.trim() || inferRootDomain(hostname);
+  const effectiveRoot = inferRootDomain(hostname, rootDomain);
 
   // Le hostname est-il exactement le root domain ?
   const isRootDomain = hostname === effectiveRoot;
@@ -146,17 +120,4 @@ export function buildLoginUrlWithTenant(loginUrl: string, tenantSlug: string): s
     const separator = loginUrl.includes('?') ? '&' : '?';
     return `${loginUrl}${separator}tenant=${encodeURIComponent(tenantSlug)}`;
   }
-}
-
-/**
- * Construit l'URL complète du sous-domaine tenant.
- *
- * @example
- * buildTenantSubdomainUrl('lycee-lb', 'egen.gabon.gov.ga', '/egen/spa/home')
- * // → 'https://lycee-lb.egen.gabon.gov.ga/egen/spa/home'
- */
-export function buildTenantSubdomainUrl(tenantSlug: string, rootDomain: string, path: string): string {
-  const protocol = window.location.protocol;
-  const port = window.location.port ? `:${window.location.port}` : '';
-  return `${protocol}//${tenantSlug}.${rootDomain}${port}${path}`;
 }

@@ -14,7 +14,10 @@ export const configSchema = {
       'Domaine racine de la plateforme (ex: "egen.gabon.gov.ga"). ' +
       'Tout hostname qui est exactement ce domaine (sans sous-domaine) est ' +
       "considéré comme l'URL globale sans tenant. " +
-      'Laissé vide → détecté automatiquement en soustrayant le premier segment.',
+      'Laissé vide → repli sur le rootDomain configuré au niveau du système ' +
+      'tenant (EGEN_TENANT_ROOT_DOMAIN, voir @egen/esm-tenant setupTenantSystem), ' +
+      'puis sur une détection automatique par soustraction du premier segment ' +
+      '(imprécise sur les TLD à plusieurs niveaux — à éviter en production).',
   },
 
   // ── Routes de destination ─────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useSession, useConfig, navigate, interpolateUrl } from '@egen/esm-framework';
-import { useTenantMode, useTenantStatus, useTenant, getTenantByDomain } from '@egen/esm-tenant';
+import { useTenantMode, useTenantStatus, useTenant, getTenantByDomain, getTenantStoreState } from '@egen/esm-tenant';
 import { analyzeSubdomain, buildLoginUrlWithTenant } from './subdomain-utils';
 import { type ConfigSchema } from '../config-schema';
 
@@ -94,8 +94,12 @@ export function useTenantRouting(): RoutingDecision {
   }
 
   // ── 4. Analyser le hostname pour détecter un sous-domaine ─────────────
+  //  Priorité : config propre à cette app > rootDomain configuré au niveau
+  //  du système tenant (EGEN_TENANT_ROOT_DOMAIN, voir setupTenantSystem) >
+  //  heuristique best-effort (voir inferRootDomain).
   const hostname = window.location.hostname;
-  const analysis = analyzeSubdomain(hostname, config.rootDomain);
+  const effectiveRootDomain = config.rootDomain || getTenantStoreState().config.rootDomain || '';
+  const analysis = analyzeSubdomain(hostname, effectiveRootDomain);
 
   // Dev (localhost / IP) → skip : pas de logique tenant en local
   if (analysis.isLocalhost) {

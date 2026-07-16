@@ -69,6 +69,12 @@
       Object.assign(window, <%= egenAiConfigDef %>);
     </script>
 <% } %>
+<% if (egenTenantConfigDef) { %>
+    <script>
+      // Pont EGEN_TENANT_* (.env, build) → window.egenTenant* (lu par @egen/esm-tenant au runtime)
+      Object.assign(window, <%= egenTenantConfigDef %>);
+    </script>
+<% } %>
 <% if (egenCoreRoutes) { %>
   <script type="egen-routes"><%= egenCoreRoutes %></script>
 <% } %>

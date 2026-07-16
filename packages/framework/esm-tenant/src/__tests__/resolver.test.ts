@@ -72,3 +72,24 @@ describe('persistActiveTenant', () => {
     expect(localStorage.getItem('egen:tenant:active')).toBe('acme');
   });
 });
+
+describe('chaînage des stratégies — un candidat inconnu ne doit pas arrêter la résolution', () => {
+  it('poursuit vers la stratégie suivante si la query ne correspond à aucun tenant enregistré', () => {
+    Object.defineProperty(window, 'location', {
+      value: { hostname: 'app.com', pathname: '/', search: '?tenant=tenant-inconnu' },
+      writable: true,
+    });
+    localStorage.setItem('egen:tenant:active', 'civitas');
+    // 'query' résout "tenant-inconnu", qui n'existe pas dans la registry :
+    // la chaîne doit continuer vers 'localStorage' plutôt que de retourner
+    // "tenant-inconnu" tel quel (régression testée : voir resolver.ts).
+    const id = resolveActiveTenantId({ ...BASE_CONFIG, resolutionOrder: ['query', 'localStorage'] });
+    expect(id).toBe('civitas');
+  });
+
+  it('retourne undefined si toutes les stratégies produisent des candidats inconnus', () => {
+    localStorage.setItem('egen:tenant:active', 'tenant-inconnu');
+    const id = resolveActiveTenantId({ ...BASE_CONFIG, resolutionOrder: ['localStorage'] });
+    expect(id).toBeUndefined();
+  });
+});

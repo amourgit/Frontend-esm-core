@@ -438,12 +438,14 @@ export function run(configUrls: Array<string>) {
 
   // ── Tenant system setup ─────────────────────────────────────────────────
   // Initialisé juste avant le boot des apps, après le moteur de thème.
-  // COMPLÈTEMENT INERTE si VITE_TENANT_MODE="off" ou absent — zéro overhead.
+  // COMPLÈTEMENT INERTE si EGEN_TENANT_MODE="off" ou absent — zéro overhead.
   //
-  // Configuration :
-  //   .env              → VITE_TENANT_MODE=multi | single | off
-  //   window.*          → window.egenTenantMode = 'multi'  (injection serveur)
-  //   setupTenantSystem → options inline ci-dessous (priorité maximale)
+  // Configuration (voir @egen/esm-tenant/src/config/env.ts pour le détail) :
+  //   .env (build)      → EGEN_TENANT_MODE=multi | single | off, etc.
+  //   window.* (runtime) → window.egenTenantMode = 'multi' (pont injecté par
+  //                        rspack.config.js + index.ejs, seul canal
+  //                        fonctionnel — pas d'import.meta.env dans ce build)
+  //   setupTenantSystem  → options inline ci-dessous (priorité maximale)
 
   // Branche le moteur de thème sur le système tenant.
   // Quand un tenant est activé, son thème écrase le thème global (priorité 10).

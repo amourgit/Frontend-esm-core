@@ -39,6 +39,9 @@ export type {
   TenantAccessResult,
   TenantActivatedEvent,
   TenantChangedEvent,
+  TenantResolutionStrategy,
+  TenantPathConfig,
+  TenantJwtConfig,
 } from './types';
 
 export type { AppTenantConfig } from './config/app-config';
@@ -133,3 +136,15 @@ export { getAllTenants, getTenantById, getTenantByDomain, isTenantRegistryLoaded
 
 // ── Résolution d'environnement ─────────────────────────────────────────────
 export { resolveConfigFromEnv, isTenantModeEnabledFromEnv } from './config/env';
+
+// ── Utilitaires de domaine (hostname ↔ tenant) ─────────────────────────────
+// Source unique de vérité — voir utils/domain-utils.ts. À utiliser par toute
+// app qui doit construire ou analyser une URL de sous-domaine tenant (garde
+// de routage, sélecteur de tenant, etc.) plutôt que de réimplémenter la
+// même heuristique localement.
+export {
+  isLocalhostOrIp,
+  inferRootDomain,
+  extractSubdomain,
+  buildTenantSubdomainUrl,
+} from './utils/domain-utils';
