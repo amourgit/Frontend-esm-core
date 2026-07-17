@@ -71,7 +71,7 @@ import { setupCoreConfig } from './core-config';
 //
 //  Activé via EGEN_DEV_NO_AUTH=true dans le .env (injecté par rspack DefinePlugin).
 //
-//  La logique est centralisée dans @igen/esm-api → initDevAuthBypass() :
+//  La logique est centralisée dans @egen/esm-api → initDevAuthBypass() :
 //    1. Intercepte window.fetch pour /ws/rest/v1/session → retourne session fictive
 //       (empêche getSessionStore() de détruire la session via refetchCurrentUser)
 //    2. Injecte la session fictive dans sessionStore (composants React immédiats)
@@ -86,7 +86,7 @@ function applyDevNoAuthBypass() {
     // Désactiver la redirection 401 → /login dans egenFetch (couche réseau)
     provide(
       {
-        '@igen/esm-api': {
+        '@egen/esm-api': {
           redirectAuthFailure: {
             enabled: false,
             url: '',
@@ -95,7 +95,7 @@ function applyDevNoAuthBypass() {
           },
         },
       },
-      'igen-dev-no-auth-config',
+      'egen-dev-no-auth-config',
     );
   }
 }
