@@ -12,6 +12,9 @@
       "require": "./src/index.ts",
       "default": "./dist/index.js"
     },
+    "./package.json": {
+      "default": "./package.json"
+    },
     "./src/public": {
       "types": "./dist/public.d.ts",
       "default": "./dist/public.js"
