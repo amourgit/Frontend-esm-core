@@ -34,7 +34,9 @@
   "dependencies": {
     "@carbon/react": "^1.92.1",
     "@egen/esm-api": "workspace:*",
+    "@egen/esm-config": "workspace:*",
     "@egen/esm-framework": "workspace:*",
+    "@egen/esm-react-utils": "workspace:*",
     "@egen/esm-state": "workspace:*",
     "@egen/esm-styleguide": "workspace:*",
     "@egen/esm-tenant": "workspace:*",

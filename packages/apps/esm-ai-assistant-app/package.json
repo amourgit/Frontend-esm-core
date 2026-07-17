@@ -42,7 +42,10 @@
   "peerDependencies": {
     "@carbon/react": "1.x",
     "@egen/esm-ai-framework": "1.x",
+    "@egen/esm-api": "9.x",
+    "@egen/esm-config": "9.x",
     "@egen/esm-framework": "9.x",
+    "@egen/esm-react-utils": "9.x",
     "@egen/esm-state": "9.x",
     "@egen/esm-tenant": "workspace:*",
     "react": "18.x",
@@ -69,6 +72,9 @@
   "dependencies": {
     "@carbon/react": "^1.92.1",
     "@egen/esm-ai-framework": "workspace:*",
+    "@egen/esm-api": "workspace:*",
+    "@egen/esm-config": "workspace:*",
+    "@egen/esm-react-utils": "workspace:*",
     "@egen/esm-state": "workspace:*",
     "@egen/esm-tenant": "workspace:*",
     "classnames": "^2.3.2"

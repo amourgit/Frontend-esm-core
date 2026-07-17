@@ -40,12 +40,20 @@
   },
   "dependencies": {
     "@carbon/icons-react": "^11.58.0",
+    "@egen/esm-api": "workspace:*",
+    "@egen/esm-config": "workspace:*",
+    "@egen/esm-react-utils": "workspace:*",
+    "@egen/esm-state": "workspace:*",
     "lodash-es": "^4.17.21",
     "swr": "2.2.5"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
+    "@egen/esm-api": "9.x",
+    "@egen/esm-config": "9.x",
     "@egen/esm-framework": "9.x",
+    "@egen/esm-react-utils": "9.x",
+    "@egen/esm-state": "9.x",
     "react": "18.x",
     "react-dom": "18.x",
     "react-i18next": "16.x",
