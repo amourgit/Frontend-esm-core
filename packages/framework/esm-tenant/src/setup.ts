@@ -274,7 +274,23 @@ export async function reloadTenantRegistry(): Promise<void> {
 
     if (state.activeTenant) {
       const refreshed = getTenantById(state.activeTenant.id);
-      if (refreshed) await activateTenant(refreshed, state.config, state.activeTenant);
+      if (refreshed) {
+        await activateTenant(refreshed, state.config, state.activeTenant);
+      } else {
+        // Le tenant actif a disparu de la registry rechargée (supprimé,
+        // renommé...) — on ne laisse PAS le store pointer silencieusement
+        // sur des données obsolètes (activeTenant resterait un objet qui
+        // n'existe plus nulle part dans allTenants), ce qui tromperait tout
+        // code qui vérifie l'existence via la registry après coup.
+        console.warn(
+          `[egen/esm-tenant] Le tenant actif "${state.activeTenant.id}" n'existe plus dans la registry rechargée.`,
+        );
+        // setTenantStoreStatus seul ne touche que status/error — il faut
+        // explicitement vider activeTenant, sans quoi le store garderait un
+        // objet tenant qui n'est plus dans allTenants.
+        setActiveTenantInStore(null);
+        setTenantStoreStatus('error', `Le tenant "${state.activeTenant.id}" n'existe plus.`);
+      }
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

@@ -59,6 +59,30 @@ function isPublicRoute(skipRegex: string): boolean {
   }
 }
 
+let warnedAboutUnimplementedBackendValidation = false;
+
+/**
+ * `validateSubdomainWithBackend` n'est aujourd'hui PAS implémenté : la
+ * résolution reste purement basée sur la registry locale (getTenantByDomain),
+ * quelle que soit cette config. L'implémenter proprement demanderait de
+ * transformer ce hook (aujourd'hui synchrone et pur) en une machine à état
+ * asynchrone (idle → validating → resolved), ce qui n'a pas été fait ici
+ * pour ne pas introduire une logique de routage async non testée contre un
+ * vrai backend. Un avertissement explicite (une seule fois) vaut mieux
+ * qu'un no-op silencieux pour quiconque active ce flag en pensant qu'il
+ * fait quelque chose.
+ */
+function warnIfBackendValidationRequested(config: ConfigSchema): void {
+  if (config.validateSubdomainWithBackend && !warnedAboutUnimplementedBackendValidation) {
+    warnedAboutUnimplementedBackendValidation = true;
+    console.warn(
+      '[egen-tenant-routing] validateSubdomainWithBackend=true mais cette fonctionnalité ' +
+        `n'est pas implémentée : la validation reste purement locale (registry). ` +
+        `L'endpoint configuré (${config.backendValidationEndpoint}) n'est jamais appelé.`,
+    );
+  }
+}
+
 // =============================================================================
 //  useTenantRouting — Calcule la décision de routage (synchrone, pur)
 //
@@ -74,6 +98,8 @@ export function useTenantRouting(): RoutingDecision {
   const activeTenant = useTenant();
   // session : throw si pas encore chargé → géré par Suspense parent
   const session = useSession();
+
+  warnIfBackendValidationRequested(config);
 
   // ── 1. Système tenant désactivé ou mode single ─────────────────────────
   //  Le Guard est entièrement silencieux. La Navbar gère l'auth seule.

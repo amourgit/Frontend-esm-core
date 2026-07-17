@@ -47,9 +47,11 @@ export const configSchema = {
     _type: Type.Boolean,
     _default: false,
     _description:
-      'Si true, effectue une validation du sous-domaine avec le backend ' +
-      '(requête à /api/tenants/{slug}/exists) avant de résoudre le tenant. ' +
-      'Si false, la validation se fait uniquement via la registry locale.',
+      'PAS ENCORE IMPLÉMENTÉ (voir use-tenant-routing.ts) — activer ce flag ' +
+      "déclenche uniquement un avertissement console, aucun appel réseau n'est " +
+      'effectué. Prévu : validation du sous-domaine auprès du backend ' +
+      '(backendValidationEndpoint) avant de résoudre le tenant, en complément ' +
+      'de la registry locale.',
   },
 
   backendValidationEndpoint: {

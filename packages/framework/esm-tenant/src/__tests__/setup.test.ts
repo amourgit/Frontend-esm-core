@@ -3,7 +3,7 @@
 // ============================================================================
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { setupTenantSystem, switchTenant } from '../setup';
+import { setupTenantSystem, switchTenant, reloadTenantRegistry } from '../setup';
 import { resetTenantRegistry } from '../context/registry';
 import { resetTenantStore, getTenantStoreState } from '../context/store';
 
@@ -141,5 +141,45 @@ describe('switchTenant', () => {
     await setupTenantSystem({ mode: 'off' });
     await switchTenant('b'); // doit juste warn, pas planter
     expect(getTenantStoreState().activeTenant).toBeNull();
+  });
+});
+
+describe('reloadTenantRegistry', () => {
+  it('vide activeTenant si le tenant actif a disparu de la registry rechargée', async () => {
+    const staticTenants = [
+      { id: 'a', name: 'Tenant A' },
+      { id: 'b', name: 'Tenant B' },
+    ];
+    await setupTenantSystem({
+      mode: 'multi',
+      staticTenants,
+      defaultTenantId: 'a',
+      resolutionOrder: ['static'],
+      applyTheme: false,
+    });
+    expect(getTenantStoreState().activeTenant?.id).toBe('a');
+
+    // Simule la suppression du tenant "a" côté registry (même référence
+    // d'array que celle capturée dans la config au setup).
+    staticTenants.splice(0, 1);
+    await reloadTenantRegistry();
+
+    const state = getTenantStoreState();
+    expect(state.activeTenant).toBeNull();
+    expect(state.status).toBe('error');
+  });
+
+  it('réactive normalement le tenant actif toujours présent', async () => {
+    const staticTenants = [{ id: 'a', name: 'Tenant A' }];
+    await setupTenantSystem({
+      mode: 'multi',
+      staticTenants,
+      defaultTenantId: 'a',
+      resolutionOrder: ['static'],
+      applyTheme: false,
+    });
+    await reloadTenantRegistry();
+    expect(getTenantStoreState().activeTenant?.id).toBe('a');
+    expect(getTenantStoreState().status).toBe('active');
   });
 });
