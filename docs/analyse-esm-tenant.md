@@ -6,6 +6,37 @@
 
 ---
 
+## 0. État des corrections (17 juillet 2026)
+
+Tous les points ci-dessous ont été corrigés et poussés sur `main`, sauf le §6
+(permissions fines par app) qui reste une décision volontairement différée.
+
+| # | Constat | Statut | Commit |
+|---|---|---|---|
+| 1 | Système tenant inerte par défaut (pont `.env` cassé) | ✅ Corrigé — pont `EGEN_TENANT_*` → `window.egenTenant*` ajouté (même modèle que `EGEN_AI_*`), branche `import.meta.env` morte supprimée | `6957a18` |
+| 2 | Risque de store dupliqué via Module Federation | ✅ Corrigé — `@egen/esm-state` + `@egen/esm-tenant` déclarés en peerDependencies partout où nécessaire et ajoutés au `shared` du shell | `660283a` |
+| 3 | Suspension d'un tenant → page cassée | ✅ Corrigé — `activateTenant()` peuple désormais `activeTenant` même quand suspendu ; assertion manquante ajoutée au test existant | `6957a18` |
+| 4 | Permissions fines par app jamais câblées | 🟡 Décision explicite : infrastructure conservée telle quelle (fonctionnelle, testée), **non adoptée automatiquement** — activer `registerAppTenantConfig`/`TenantGuard` par app est une décision de conception à faire consciemment app par app, pas quelque chose qu'il est sûr de deviner et de câbler à l'aveugle. Documentation clarifiée en conséquence (`index.ts`). Voir aussi le point 5bis ci-dessous pour ce qui a effectivement été câblé. | `1554b10` |
+| 5 | Duplication esm-api ↔ esm-tenant | ✅ Corrigé — type dupliqué remplacé par un `import type` (zéro coût runtime) ; fonctions redondantes marquées `@deprecated` avec pointeur explicite, sans breaking change | `1554b10` |
+| 5bis | Assistant IA non gaté par tenant (demande explicite) | ✅ Câblé — `useTenantFeatureFlag('ai-assistant', true)` (modèle opt-out, zéro régression hors multi-tenant) | `1554b10` |
+| 6 | Résolveur : candidat invalide arrête la chaîne | ✅ Corrigé — toutes les stratégies sont maintenant strictes ; tests de régression ajoutés | `6957a18` |
+| 7 | Stratégie "header" trompeuse | ✅ Documentation corrigée (comportement réel inchangé — c'est un choix valide, seul le nom/la doc induisaient en erreur) | `6957a18` |
+| 8 | Triple implémentation du domaine racine | ✅ Corrigé — source unique `@egen/esm-tenant/utils/domain-utils.ts`, `rootDomain` exposé via le store et propagé aux deux apps consommatrices | `6957a18` |
+| 9 | Chevauchement de routes `/tenant-suspended` | ✅ Corrigé — `root.component.tsx` ne monte plus que le guard ; `suspendedPage` reste seule propriétaire de la route | `1554b10` |
+| 9.1 | `validateSubdomainWithBackend` jamais implémenté | 🟡 Laissé non implémenté (implémenter un vrai appel réseau demanderait de refondre le guard en machine à état async — risque trop élevé sans backend réel à tester) mais rendu explicite : avertissement console + description de config corrigées, plus de no-op silencieux | `f97ebe4` |
+| 9.2 | `buildTenantSubdomainUrl` non utilisée | ✅ Résolu de fait — maintenant utilisée par `context-switcher.component.tsx` suite à la déduplication du §8 | `6957a18` |
+| 9.3 | Dépendance fantôme `esm-app-shell` | ✅ Corrigé — déclarée explicitement dans `package.json` | `660283a` |
+| 9.4 | Types non exportés du barrel | ✅ Corrigé — `TenantResolutionStrategy`/`TenantPathConfig`/`TenantJwtConfig` exportés | `6957a18` |
+| 9.5 | `VITE_ROOT_DOMAIN` mort | ✅ Corrigé — renommé `EGEN_TENANT_ROOT_DOMAIN`, réellement câblé (voir §1 et §8) | `6957a18` |
+| 9.6 | Ambiguïté ID/slug dans `getTenantById` | ⚪ Non traité — edge case mineur, laissé tel quel (voir §9 ci-dessous pour le détail) | — |
+| 9.7 | État figé après suppression d'un tenant | ✅ Corrigé — `reloadTenantRegistry()` vide explicitement `activeTenant` si le tenant a disparu | `f97ebe4` |
+
+Le reste de ce document est le rapport d'analyse **original**, conservé tel
+quel comme trace du diagnostic — les sections ci-dessous décrivent donc les
+bugs tels qu'ils étaient avant correction.
+
+---
+
 ## 1. Résumé exécutif
 
 Le package `@egen/esm-tenant` est **bien conçu sur le papier** : types complets, séparation claire des responsabilités (registry / resolver / store / hooks / setup), documentation abondante en tête de chaque fichier, tests unitaires présents. Mais l'audit fait ressortir un écart important entre **ce que le code prétend faire** et **ce qui se passe réellement une fois déployé** :
