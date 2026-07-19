@@ -58,12 +58,12 @@ const TopBarContent: React.FC = () => {
   const [demoFilledValue, setDemoFilledValue] = useState('');
 
   // ── DÉMO TEMPORAIRE — StaggeredMenuPanel / MenuToggleButton ────────────────
-  // Le côté ('left' | 'right') n'est PAS figé en dur dans le JSX : c'est une
-  // variable de state, pour pouvoir brancher un comportement dynamique
-  // dessus ensuite (config, préférence utilisateur, RTL...) sans retoucher
-  // le rendu. Pour l'instant elle démarre à 'right'.
+  // Le côté ('left' | 'right') vient de config.staggeredMenu.position
+  // (packages/apps/esm-primary-navigation-app/src/config-schema.ts),
+  // configurable par les intégrateurs sans toucher au code — comportement
+  // dynamique demandé, plus de state local à part.
   const [staggeredMenuOpen, setStaggeredMenuOpen] = useState(false);
-  const [staggeredMenuPosition, setStaggeredMenuPosition] = useState<'left' | 'right'>('right');
+  const staggeredMenuPosition = config.staggeredMenu.position;
   const demoStaggeredItems = [
     { label: 'Accueil', ariaLabel: "Aller à l'accueil", link: '#' },
     { label: 'Applications', ariaLabel: 'Voir les applications', link: '#' },
@@ -187,8 +187,7 @@ const TopBarContent: React.FC = () => {
       <BreadcrumbNav />
 
       {/* ══ DÉMO TEMPORAIRE — StaggeredMenuPanel — À RETIRER après validation ══
-          Le côté (position) vient de staggeredMenuPosition, pas d'un littéral
-          en dur — prêt à recevoir un comportement dynamique (§ prochaine étape). */}
+          position vient de config.staggeredMenu.position (config-schema.ts). */}
       <StaggeredMenuPanel
         isOpen={staggeredMenuOpen}
         onClose={() => setStaggeredMenuOpen(false)}
