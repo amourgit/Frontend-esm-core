@@ -40,3 +40,4 @@ export {
   type Workspace2DefinitionProps,
 } from './workspaces2';
 export * from './staggered-menu';
+export * from './cascading-nav-dropdown';
