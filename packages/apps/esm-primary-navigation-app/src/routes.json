@@ -6,7 +6,7 @@
   "pages": [
     {
       "component": "root",
-      "routeRegex": "^(?!(?:login|logout|home|change-password|tenant-suspended)/?)",
+      "routeRegex": "^(?!(?:login|logout|change-password|tenant-suspended)/?)",
       "online": true,
       "offline": true,
       "containerDomId": "egen-top-nav-app-container"

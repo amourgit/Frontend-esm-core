@@ -4,9 +4,9 @@ import rootComponent from './root.component';
 
 // =============================================================================
 //  ESM HOME APP — Point d'entrée
-//  Application publique SaaS : page d'accueil EGEN.
-//  Aucune résolution d'authentification n'est nécessaire ici — cette app
-//  est volontairement autonome et ne dépend pas de la navigation primaire.
+//  Écran d'accueil de l'espace authentifié : vitrine interne des composants
+//  de base (@egen/esm-styleguide). Rendue dans le contenu de la SPA pendant
+//  que @egen/esm-primary-navigation-app affiche sa TopBar au-dessus.
 // =============================================================================
 
 const moduleName = '@egen/esm-home-app';

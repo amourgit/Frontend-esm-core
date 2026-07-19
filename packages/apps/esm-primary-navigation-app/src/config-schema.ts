@@ -43,14 +43,6 @@ export const configSchema = {
     _default: [],
     _description: 'The external links to be showcased in the app menu',
   },
-  staggeredMenu: {
-    position: {
-      _type: Type.String,
-      _default: 'right',
-      _description: 'The side of the screen on which the staggered menu panel slides in from.',
-      _validators: [validators.oneOf(['left', 'right'])],
-    },
-  },
 };
 
 export type ConfigSchema = {
@@ -61,7 +53,4 @@ export type ConfigSchema = {
     link: string;
   };
   externalRefLinks: { title: string; redirect: string }[];
-  staggeredMenu: {
-    position: 'left' | 'right';
-  };
 };

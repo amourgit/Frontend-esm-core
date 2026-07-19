@@ -2,7 +2,11 @@ import {
   defineConfigSchema,
   defineExtensionConfigSchema,
   getAsyncLifecycle,
+  getSessionStore,
   getSyncLifecycle,
+  interpolateUrl,
+  navigate,
+  sessionStore,
 } from '@egen/esm-framework';
 import { type Application } from 'single-spa';
 import { configSchema } from './config-schema';
@@ -31,12 +35,46 @@ export function startupApp() {
 // ─── Page : la TopBar (elle gère elle-même la garde d'authentification) ──────
 export const root = getSyncLifecycle(primaryNavRootComponent, options);
 
-export const redirect: Application = async () => ({
-  // À la racine : TopBar gère la vérification de session → /login si absente
-  bootstrap: async () => {},
-  mount: async () => undefined,
-  unmount: async () => undefined,
-});
+// ─── Racine du SPA (/) — démarre sur l'écran d'accueil (@egen/esm-home-app) ──
+// La TopBar (page 'root' ci-dessus) matche AUSSI la racine ("" ne commence
+// par aucun des préfixes exclus du routeRegex) et gère elle-même la garde de
+// session (→ /login si absente). Cette page 'redirect', montée en parallèle
+// uniquement sur le chemin exact "/", pousse l'utilisateur AUTHENTIFIÉ vers
+// /home dès que la session est résolue — sans elle, la racine resterait
+// vide pour un utilisateur connecté (aucune app de contenu ne matche "/" par
+// défaut). Si la session n'est pas (encore) authentifiée, cette page ne fait
+// STRICTEMENT rien : c'est la TopBar qui décide seule du redirect vers
+// /login, pour ne jamais avoir deux navigations concurrentes.
+export const redirect: Application = async () => {
+  let unsubscribe: (() => void) | undefined;
+
+  const redirectToHomeIfAuthenticated = (): boolean => {
+    const state = getSessionStore();
+    if (state.loaded && state.session?.authenticated) {
+      navigate({ to: interpolateUrl('${egenSpaBase}/home') });
+      return true;
+    }
+    return false;
+  };
+
+  return {
+    bootstrap: async () => {},
+    mount: async () => {
+      if (!redirectToHomeIfAuthenticated()) {
+        unsubscribe = sessionStore.subscribe(() => {
+          if (redirectToHomeIfAuthenticated()) {
+            unsubscribe?.();
+            unsubscribe = undefined;
+          }
+        });
+      }
+    },
+    unmount: async () => {
+      unsubscribe?.();
+      unsubscribe = undefined;
+    },
+  };
+};
 
 // ─── NOTE ARCHITECTURE ───────────────────────────────────────────────────────
 // userMenuButton, appMenuButton, notificationsMenuButton et breadcrumbNav ne

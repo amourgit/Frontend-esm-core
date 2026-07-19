@@ -7,7 +7,7 @@ import styles from './root.scss';
 //  ROOT — Composant racine de l'app de navigation primaire
 //
 //  Ce composant est monté via un routeRegex qui EXCLUT déjà toutes les routes
-//  publiques (login, logout, home, change-password, tenant-suspended).
+//  publiques (login, logout, change-password, tenant-suspended).
 //
 //  Ce composant sert de double-garde (défense en profondeur) :
 //  si le routeRegex venait à matcher par erreur une route publique,
@@ -16,12 +16,14 @@ import styles from './root.scss';
 //  Routes publiques (null) :
 //    /login/*              Page de connexion
 //    /logout/*             Déconnexion
-//    /home/*               Landing page publique EGEN SaaS
 //    /change-password/*    Changement de mot de passe
 //    /tenant-suspended/*   Page de suspension tenant
 //
 //  Routes authentifiées (Navbar rendue) :
-//    /*                    Toutes les autres routes (espaces tenant)
+//    /*                    Toutes les autres routes (espaces tenant), y
+//                           compris /home — désormais l'écran d'accueil
+//                           authentifié (@egen/esm-home-app), plus une
+//                           landing page publique.
 // =============================================================================
 
 const Root: React.FC = () => {
@@ -31,7 +33,6 @@ const Root: React.FC = () => {
         {/* ── Routes publiques — rendu null (défense en profondeur) ── */}
         <Route path="login/*" element={null} />
         <Route path="logout/*" element={null} />
-        <Route path="home/*" element={null} />
         <Route path="change-password/*" element={null} />
         <Route path="tenant-suspended/*" element={null} />
 

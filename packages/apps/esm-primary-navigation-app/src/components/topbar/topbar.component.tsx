@@ -4,10 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { Header, HeaderContainer, HeaderGlobalBar, HeaderMenuButton } from '@carbon/react';
 import {
   ConfigurableLink,
-  DynamicField,
   ExtensionSlot,
-  MenuToggleButton,
-  StaggeredMenuPanel,
   useAssignedExtensions,
   useConfig,
   useLayoutType,
@@ -53,27 +50,6 @@ const TopBarContent: React.FC = () => {
   const { slotName, mode } = useLeftNavStore();
   const navMenuItems = useAssignedExtensions(slotName);
 
-  // ── DÉMO TEMPORAIRE — DynamicField (à retirer après validation visuelle) ──
-  const [demoOutlinedValue, setDemoOutlinedValue] = useState('');
-  const [demoFilledValue, setDemoFilledValue] = useState('');
-
-  // ── DÉMO TEMPORAIRE — StaggeredMenuPanel / MenuToggleButton ────────────────
-  // Le côté ('left' | 'right') vient de config.staggeredMenu.position
-  // (packages/apps/esm-primary-navigation-app/src/config-schema.ts),
-  // configurable par les intégrateurs sans toucher au code — comportement
-  // dynamique demandé, plus de state local à part.
-  const [staggeredMenuOpen, setStaggeredMenuOpen] = useState(false);
-  const staggeredMenuPosition = config.staggeredMenu.position;
-  const demoStaggeredItems = [
-    { label: 'Accueil', ariaLabel: "Aller à l'accueil", link: '#' },
-    { label: 'Applications', ariaLabel: 'Voir les applications', link: '#' },
-    { label: 'Paramètres', ariaLabel: 'Ouvrir les paramètres', link: '#' },
-  ];
-  const demoStaggeredSocials = [
-    { label: 'GitHub', link: 'https://github.com/amourgit' },
-    { label: 'LinkedIn', link: 'https://linkedin.com' },
-  ];
-
   const isActivePanel = useCallback((panelName: string) => activeHeaderPanel === panelName, [activeHeaderPanel]);
 
   const togglePanel = useCallback((panelName: string) => {
@@ -118,29 +94,6 @@ const TopBarContent: React.FC = () => {
 
         {/* ── CENTRE — slot libre pour injections par les apps ── */}
         <div className={styles.centerSection}>
-          {/* ══ DÉMO TEMPORAIRE — DynamicField — À RETIRER après validation visuelle ══ */}
-          <div className={styles.fieldsDemo}>
-            <DynamicField
-              variant="outlined"
-              size="sm"
-              label="Outlined"
-              placeholder=" "
-              value={demoOutlinedValue}
-              onChange={setDemoOutlinedValue}
-              className={styles.fieldsDemoItem}
-            />
-            <DynamicField
-              variant="filled"
-              size="sm"
-              label="Filled"
-              placeholder=" "
-              value={demoFilledValue}
-              onChange={setDemoFilledValue}
-              className={styles.fieldsDemoItem}
-            />
-          </div>
-          {/* ══ FIN DÉMO TEMPORAIRE ══════════════════════════════════════════ */}
-
           <ExtensionSlot name="top-nav-info-slot" className={styles.topNavInfoSlot} />
         </div>
 
@@ -161,16 +114,6 @@ const TopBarContent: React.FC = () => {
 
           <div className={styles.rightDivider} aria-hidden="true" />
 
-          {/* ══ DÉMO TEMPORAIRE — MenuToggleButton — À RETIRER après validation ══ */}
-          <MenuToggleButton
-            isOpen={staggeredMenuOpen}
-            onToggle={() => setStaggeredMenuOpen((prev) => !prev)}
-            menuButtonColor="var(--colors-surface-foreground)"
-            openMenuButtonColor="var(--colors-surface-foreground)"
-            changeMenuColorOnOpen
-          />
-          {/* ══ FIN DÉMO TEMPORAIRE ══════════════════════════════════════════ */}
-
           <UserMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
 
           <ExtensionSlot
@@ -185,22 +128,6 @@ const TopBarContent: React.FC = () => {
 
       {/* ══ NIVEAU 2 — Fil d'Ariane ═══════════════════════════════════════ */}
       <BreadcrumbNav />
-
-      {/* ══ DÉMO TEMPORAIRE — StaggeredMenuPanel — À RETIRER après validation ══
-          position vient de config.staggeredMenu.position (config-schema.ts). */}
-      <StaggeredMenuPanel
-        isOpen={staggeredMenuOpen}
-        onClose={() => setStaggeredMenuOpen(false)}
-        position={staggeredMenuPosition}
-        items={demoStaggeredItems}
-        socialItems={demoStaggeredSocials}
-        displaySocials
-        displayItemNumbering
-        colors={['var(--colors-secondary-300)', 'var(--colors-primary-600)']}
-        accentColor="var(--colors-primary-600)"
-        closeOnClickAway
-      />
-      {/* ══ FIN DÉMO TEMPORAIRE ══════════════════════════════════════════════ */}
     </div>
   );
 };

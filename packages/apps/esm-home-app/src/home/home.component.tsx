@@ -1,110 +1,123 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSession, navigate, interpolateUrl } from '@egen/esm-framework';
-import { getThemeState } from '@egen/esm-theme';
-import Navbar from '../components/navbar/navbar.component';
-import Hero from '../components/hero/hero.component';
-import Stats from '../components/stats/stats.component';
-import Features from '../components/features/features.component';
-import UseCases from '../components/use-cases/use-cases.component';
-import Pricing from '../components/pricing/pricing.component';
-import Testimonials from '../components/testimonials/testimonials.component';
-import Cta from '../components/cta/cta.component';
-import Footer from '../components/footer/footer.component';
+import {
+  DynamicField,
+  MenuToggleButton,
+  StaggeredMenuPanel,
+  useConfig,
+} from '@egen/esm-framework';
+import type { ConfigSchema } from '../config-schema';
 import styles from './home.scss';
 
 // =============================================================================
-//  HOME PAGE — Orchestrateur de la landing page publique EGEN
+//  HOME PAGE — Écran d'accueil authentifié
 //
-//  Pas de navigation primaire, pas de garde d'auth.
-//  Le fond sombre global est appliqué ici : il s'étend derrière tous les
-//  composants enfants qui utilisent les CSS vars du thème (via data-theme).
+//  Cette page n'a plus de navigation propre : elle est rendue par la SPA
+//  DANS l'espace authentifié (la TopBar de @egen/esm-primary-navigation-app
+//  s'affiche naturellement au-dessus, comme pour n'importe quelle autre
+//  route du tenant — voir routes.json de esm-primary-navigation-app).
 //
-//  Sections (dans l'ordre) :
-//    1. Navbar sticky (glass)
-//    2. Hero (accroche + mockup)
-//    3. Stats (chiffres clés)
-//    4. Features (grille de 8 fonctionnalités)
-//    5. Use Cases (tab switcher par profil)
-//    6. Pricing (3 tiers FCFA avec toggle annuel)
-//    7. Testimonials (carrousel)
-//    8. CTA (appel à l'action final)
-//    9. Footer (nav + légal + réseaux)
+//  Rôle actuel : vitrine de test des composants de base en cours de
+//  construction dans @egen/esm-styleguide, avant leur diffusion dans les
+//  vraies apps. Chaque composant testé ici est ajouté dans une section
+//  dédiée, avec ses variantes.
 // =============================================================================
 
-const HomePage: React.FC = () => {
-  const { i18n } = useTranslation();
-  const session = useSession();
+const ComponentShowcasePage: React.FC = () => {
+  const { t } = useTranslation();
+  const config = useConfig<ConfigSchema>();
 
-  // Si l'utilisateur est déjà connecté, la landing publique ne le concerne pas.
-  // On le renvoie vers l'espace authentifié (racine de primary-nav).
-  useEffect(() => {
-    if (session?.authenticated && session?.user?.person) {
-      navigate({ to: interpolateUrl('${egenSpaBase}/') });
-    }
-  }, [session]);
+  // ── Démo : DynamicField (@egen/esm-styleguide/fields) ──────────────────────
+  const [outlinedValue, setOutlinedValue] = useState('');
+  const [filledValue, setFilledValue] = useState('');
+  const [standardValue, setStandardValue] = useState('');
 
-  // Force le mode sombre et marque la route comme publique (supprime le topNav gap).
-  // On restaure au démontage le mode RÉEL résolu par le moteur de thème
-  // (source de vérité unique) plutôt qu'un snapshot pris au montage : si le
-  // moteur résout son mode de façon asynchrone après ce montage, un
-  // snapshot serait obsolète et on retomberait dans le même bug que
-  // esm-login-app (UI "claire" jusqu'au refresh manuel).
-  useEffect(() => {
-    const root = document.documentElement;
-    root.setAttribute('data-theme', 'dark');
-    root.setAttribute('data-public-route', 'true');
-    return () => {
-      root.setAttribute('data-theme', getThemeState()?.mode ?? 'dark');
-      root.removeAttribute('data-public-route');
-    };
-  }, []);
-
-  // Synchronisation de la langue html
-  useEffect(() => {
-    document.documentElement.lang = i18n.language ?? 'fr';
-  }, [i18n.language]);
+  // ── Démo : StaggeredMenuPanel / MenuToggleButton (@egen/esm-styleguide/staggered-menu) ──
+  const [staggeredMenuOpen, setStaggeredMenuOpen] = useState(false);
+  const staggeredMenuPosition = config.staggeredMenu.position;
+  const demoStaggeredItems = [
+    { label: 'Accueil', ariaLabel: "Aller à l'accueil", link: '#' },
+    { label: 'Applications', ariaLabel: 'Voir les applications', link: '#' },
+    { label: 'Paramètres', ariaLabel: 'Ouvrir les paramètres', link: '#' },
+  ];
+  const demoStaggeredSocials = [
+    { label: 'GitHub', link: 'https://github.com/amourgit' },
+    { label: 'LinkedIn', link: 'https://linkedin.com' },
+  ];
 
   return (
     <div className={styles.page}>
-      {/* ── Navigation sticky ── */}
-      <Navbar />
+      <header className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{config.pageTitle}</h1>
+        <p className={styles.pageSubtitle}>
+          {t('showcaseSubtitle', 'Composants @egen/esm-styleguide en cours de validation visuelle.')}
+        </p>
+      </header>
 
-      {/* ── Contenu principal ── */}
-      <main id="main-content" tabIndex={-1}>
-        {/* Skip link pour l'accessibilité */}
-        <a href="#main-content" className={styles.skipLink}>
-          Aller au contenu principal
-        </a>
+      <main className={styles.sections}>
+        {/* ── Section : DynamicField ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>DynamicField</h2>
+          <p className={styles.sectionDescription}>
+            {t('showcaseFieldsDescription', 'Champ de saisie unique, multi-variante (outlined / filled / standard).')}
+          </p>
+          <div className={styles.fieldsGrid}>
+            <DynamicField
+              variant="outlined"
+              label="Outlined"
+              value={outlinedValue}
+              onChange={setOutlinedValue}
+            />
+            <DynamicField
+              variant="filled"
+              label="Filled"
+              value={filledValue}
+              onChange={setFilledValue}
+            />
+            <DynamicField
+              variant="standard"
+              label="Standard"
+              value={standardValue}
+              onChange={setStandardValue}
+            />
+          </div>
+        </section>
 
-        {/* 1. Hero */}
-        <div className={styles.heroWrapper}>
-          <Hero />
-        </div>
-
-        {/* 2. Stats */}
-        <Stats />
-
-        {/* 3. Fonctionnalités */}
-        <Features />
-
-        {/* 4. Cas d'usages */}
-        <UseCases />
-
-        {/* 5. Tarifs */}
-        <Pricing />
-
-        {/* 6. Témoignages */}
-        <Testimonials />
-
-        {/* 7. CTA final */}
-        <Cta />
+        {/* ── Section : StaggeredMenu ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>StaggeredMenuPanel</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseMenuDescription',
+              "Panneau de navigation latéral animé (GSAP), côté piloté par config.staggeredMenu.position.",
+            )}
+          </p>
+          <div className={styles.menuTrigger}>
+            <MenuToggleButton
+              isOpen={staggeredMenuOpen}
+              onToggle={() => setStaggeredMenuOpen((prev) => !prev)}
+              menuButtonColor="var(--colors-surface-foreground)"
+              openMenuButtonColor="var(--colors-surface-foreground)"
+              changeMenuColorOnOpen
+            />
+          </div>
+        </section>
       </main>
 
-      {/* ── Pied de page ── */}
-      <Footer />
+      <StaggeredMenuPanel
+        isOpen={staggeredMenuOpen}
+        onClose={() => setStaggeredMenuOpen(false)}
+        position={staggeredMenuPosition}
+        items={demoStaggeredItems}
+        socialItems={demoStaggeredSocials}
+        displaySocials
+        displayItemNumbering
+        colors={['var(--colors-secondary-300)', 'var(--colors-primary-600)']}
+        accentColor="var(--colors-primary-600)"
+        closeOnClickAway
+      />
     </div>
   );
 };
 
-export default HomePage;
+export default ComponentShowcasePage;

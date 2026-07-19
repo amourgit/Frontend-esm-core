@@ -4,8 +4,12 @@ import HomePage from './home/home.component';
 
 // =============================================================================
 //  ROOT — Composant racine de l'app Home
-//  Gère le routing interne minimal de la page d'accueil publique.
-//  Pas de navigation primaire, pas de guard d'authentification.
+//
+//  Écran d'accueil de l'espace AUTHENTIFIÉ (route 'home', incluse dans les
+//  routes privées de @egen/esm-primary-navigation-app — voir routes.json de
+//  cette app-ci et le routeRegex de esm-primary-navigation-app). La TopBar
+//  s'affiche naturellement au-dessus : cette app ne gère plus sa propre
+//  navigation ni de garde d'authentification.
 // =============================================================================
 
 const Root: React.FC = () => {

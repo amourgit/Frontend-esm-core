@@ -1,79 +1,32 @@
-import { Type } from '@egen/esm-framework';
+import { Type, validators } from '@egen/esm-framework';
 
 // =============================================================================
 //  ESM HOME APP — Schéma de configuration runtime
-//  Toutes les valeurs sont surchargables via le système de config EGEN/EGEN.
+//
+//  Cette app sert désormais d'écran d'accueil authentifié — vitrine interne
+//  des composants de base (@egen/esm-styleguide) en cours de développement.
+//  Toutes les valeurs sont surchargables via le système de config EGEN.
 // =============================================================================
 
 export const configSchema = {
-  productName: {
+  pageTitle: {
     _type: Type.String,
-    _default: 'EGEN',
-    _description: "Nom commercial du produit affiché dans la page d'accueil.",
+    _default: 'Vitrine des composants',
+    _description: "Titre affiché en haut de la page d'accueil.",
   },
-  tagline: {
-    _type: Type.String,
-    _default: "L'Écosystème Numérique de l'Éducation du Gabon",
-    _description: 'Accroche principale affichée dans la section hero.',
-  },
-  contactUrl: {
-    _type: Type.String,
-    _default: 'mailto:contact@civitas-gabon.com',
-    _description: 'URL ou lien de contact pour les CTA.',
-  },
-  loginUrl: {
-    _type: Type.String,
-    _default: '${egenSpaBase}/login',
-    _description: "URL vers la page de connexion (bouton 'Se connecter').",
-  },
-  demoUrl: {
-    _type: Type.String,
-    _default: 'mailto:demo@civitas-gabon.com',
-    _description: "URL pour demander une démo (bouton 'Demander une démo').",
-  },
-  logo: {
-    src: {
+  staggeredMenu: {
+    position: {
       _type: Type.String,
-      _default: '',
-      _description: 'URL du logo. Vide = sprite SVG EGEN intégré.',
-    },
-    alt: {
-      _type: Type.String,
-      _default: 'EGEN Logo',
-      _description: 'Texte alternatif du logo.',
-    },
-  },
-  footer: {
-    copyrightHolder: {
-      _type: Type.String,
-      _default: 'CIVITAS Gabon',
-      _description: 'Nom de la société dans le copyright du footer.',
-    },
-    links: {
-      _type: Type.Array,
-      _default: [],
-      _description: 'Liens additionnels dans le footer.',
-      _elements: {
-        _type: Type.Object,
-        label: { _type: Type.String, _required: true },
-        href: { _type: Type.String, _required: true },
-      },
+      _default: 'right',
+      _description: 'Côté depuis lequel la démo StaggeredMenuPanel de cette page glisse.',
+      _validators: [validators.oneOf(['left', 'right'])],
     },
   },
 };
 
 export interface ConfigSchema {
-  productName: string;
-  tagline: string;
-  contactUrl: string;
-  loginUrl: string;
-  demoUrl: string;
-  logo: {
-    src: string;
-    alt: string;
-  };
-  footer: {
-    copyrightHolder: string;
-    links: Array<{ label: string; href: string }>;
+  pageTitle: string;
+  staggeredMenu: {
+    position: 'left' | 'right';
   };
 }
