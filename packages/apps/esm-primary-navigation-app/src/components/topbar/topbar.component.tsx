@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { Header, HeaderContainer, HeaderGlobalBar, HeaderMenuButton } from '@carbon/react';
 import {
   ConfigurableLink,
+  DynamicField,
   ExtensionSlot,
   useAssignedExtensions,
   useConfig,
@@ -50,6 +51,10 @@ const TopBarContent: React.FC = () => {
   const { slotName, mode } = useLeftNavStore();
   const navMenuItems = useAssignedExtensions(slotName);
 
+  // ── DÉMO TEMPORAIRE — DynamicField (à retirer après validation visuelle) ──
+  const [demoOutlinedValue, setDemoOutlinedValue] = useState('');
+  const [demoFilledValue, setDemoFilledValue] = useState('');
+
   const isActivePanel = useCallback((panelName: string) => activeHeaderPanel === panelName, [activeHeaderPanel]);
 
   const togglePanel = useCallback((panelName: string) => {
@@ -94,6 +99,29 @@ const TopBarContent: React.FC = () => {
 
         {/* ── CENTRE — slot libre pour injections par les apps ── */}
         <div className={styles.centerSection}>
+          {/* ══ DÉMO TEMPORAIRE — DynamicField — À RETIRER après validation visuelle ══ */}
+          <div className={styles.fieldsDemo}>
+            <DynamicField
+              variant="outlined"
+              size="sm"
+              label="Outlined"
+              placeholder=" "
+              value={demoOutlinedValue}
+              onChange={setDemoOutlinedValue}
+              className={styles.fieldsDemoItem}
+            />
+            <DynamicField
+              variant="filled"
+              size="sm"
+              label="Filled"
+              placeholder=" "
+              value={demoFilledValue}
+              onChange={setDemoFilledValue}
+              className={styles.fieldsDemoItem}
+            />
+          </div>
+          {/* ══ FIN DÉMO TEMPORAIRE ══════════════════════════════════════════ */}
+
           <ExtensionSlot name="top-nav-info-slot" className={styles.topNavInfoSlot} />
         </div>
 
