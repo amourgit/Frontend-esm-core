@@ -39,3 +39,4 @@ export {
   type Workspace2Definition,
   type Workspace2DefinitionProps,
 } from './workspaces2';
+export * from './staggered-menu';

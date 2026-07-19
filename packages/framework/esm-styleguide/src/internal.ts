@@ -31,3 +31,4 @@ export * from './toasts/toast.component';
 export * from './workspaces';
 export * from './workspaces2';
 export * from './workspaces2/workspace-windows-and-menu.component';
+export * from './staggered-menu';
