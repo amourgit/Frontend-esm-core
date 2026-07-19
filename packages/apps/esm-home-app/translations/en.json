@@ -1,5 +1,7 @@
 {
   "showcaseSubtitle": "@egen/esm-styleguide components under visual validation.",
   "showcaseFieldsDescription": "Single, multi-variant input field (outlined / filled / standard).",
-  "showcaseMenuDescription": "Animated (GSAP) side navigation panel, side driven by config.staggeredMenu.position."
+  "showcaseMenuDescription": "Animated (GSAP) side navigation panel, side driven by config.staggeredMenu.position.",
+  "showcaseCascadingNavDescription": "Cascading navigation dropdown, opens downward or upward based on the direction prop.",
+  "showcaseSheetDescription": "Draggable modal sheet, anchored top or bottom based on the side prop."
 }

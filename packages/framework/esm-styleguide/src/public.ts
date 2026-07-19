@@ -41,3 +41,4 @@ export {
 } from './workspaces2';
 export * from './staggered-menu';
 export * from './cascading-nav-dropdown';
+export * from './sheet';

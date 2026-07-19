@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  CascadingNavDropdown,
   DynamicField,
   MenuToggleButton,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
   StaggeredMenuPanel,
   useConfig,
+  type NavigationItem,
 } from '@egen/esm-framework';
 import type { ConfigSchema } from '../config-schema';
 import styles from './home.scss';
@@ -43,6 +53,35 @@ const ComponentShowcasePage: React.FC = () => {
   const demoStaggeredSocials = [
     { label: 'GitHub', link: 'https://github.com/amourgit' },
     { label: 'LinkedIn', link: 'https://linkedin.com' },
+  ];
+
+  // ── Démo : CascadingNavDropdown (@egen/esm-styleguide/cascading-nav-dropdown) ──
+  const demoNavigationTree: NavigationItem[] = [
+    {
+      id: 'education',
+      label: 'Éducation',
+      children: [
+        { id: 'eigen', label: 'EIGEN', path: '#' },
+        { id: 'iam-central', label: 'IAM Central', path: '#' },
+        {
+          id: 'egen-suite',
+          label: 'Suite EGEN',
+          children: [
+            { id: 'esm-styleguide', label: 'esm-styleguide', path: '#' },
+            { id: 'esm-tenant', label: 'esm-tenant', path: '#' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'civitas',
+      label: 'CIVITAS',
+      children: [
+        { id: 'civitas-site', label: 'Site CIVITAS', path: '#' },
+        { id: 'cae', label: 'CIVITAS Acquisition Engine', path: '#' },
+      ],
+    },
+    { id: 'edugabon', label: 'EDUGABON', path: '#' },
   ];
 
   return (
@@ -100,6 +139,73 @@ const ComponentShowcasePage: React.FC = () => {
               openMenuButtonColor="var(--colors-surface-foreground)"
               changeMenuColorOnOpen
             />
+          </div>
+        </section>
+
+        {/* ── Section : CascadingNavDropdown ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>CascadingNavDropdown</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseCascadingNavDescription',
+              'Dropdown de navigation en cascade, ouverture vers le bas ou vers le haut selon la prop direction.',
+            )}
+          </p>
+          <div className={styles.demoRow}>
+            <CascadingNavDropdown
+              items={demoNavigationTree}
+              triggerLabel="Direction: bas"
+              direction="down"
+              searchable
+              onNavigate={(path) => window.alert(`Navigate: ${path}`)}
+            />
+            <CascadingNavDropdown
+              items={demoNavigationTree}
+              triggerLabel="Direction: haut"
+              direction="up"
+              searchable
+              onNavigate={(path) => window.alert(`Navigate: ${path}`)}
+            />
+          </div>
+        </section>
+
+        {/* ── Section : Sheet ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Sheet</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseSheetDescription',
+              'Panneau modal glissable (drag), ancré en haut ou en bas selon la prop side.',
+            )}
+          </p>
+          <div className={styles.demoRow}>
+            <Sheet side="top">
+              <SheetTrigger className={styles.demoButton}>Ouvrir (haut)</SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Sheet — side=&quot;top&quot;</SheetTitle>
+                  <SheetDescription>Glisse depuis le haut de l'écran. Fermeture en glissant vers le haut.</SheetDescription>
+                </SheetHeader>
+                <p>Contenu de démonstration.</p>
+                <SheetFooter>
+                  <SheetClose className={styles.demoButton}>Fermer</SheetClose>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
+
+            <Sheet side="bottom">
+              <SheetTrigger className={styles.demoButton}>Ouvrir (bas)</SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Sheet — side=&quot;bottom&quot;</SheetTitle>
+                  <SheetDescription>Glisse depuis le bas de l'écran. Fermeture en glissant vers le bas.</SheetDescription>
+                </SheetHeader>
+                <p>Contenu de démonstration.</p>
+                <SheetFooter>
+                  <SheetClose className={styles.demoButton}>Fermer</SheetClose>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
           </div>
         </section>
       </main>

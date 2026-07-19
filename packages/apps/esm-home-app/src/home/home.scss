@@ -62,3 +62,27 @@
 .menuTrigger {
   display: inline-flex;
 }
+
+.demoRow {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.demoButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: var(--typography-font-size-sm-size);
+  font-weight: var(--typography-font-weight-medium, 500);
+  color: var(--colors-surface-foreground);
+  background: var(--colors-surface-muted);
+  border: 1px solid var(--colors-border-default, transparent);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: var(--transitions-colors);
+
+  &:hover {
+    background: var(--colors-surface-accent, var(--colors-surface-muted));
+  }
+}
