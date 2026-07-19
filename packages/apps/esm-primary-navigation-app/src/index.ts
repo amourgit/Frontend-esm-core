@@ -6,7 +6,6 @@ import {
   getSyncLifecycle,
   interpolateUrl,
   navigate,
-  sessionStore,
 } from '@egen/esm-framework';
 import { type Application } from 'single-spa';
 import { configSchema } from './config-schema';
@@ -49,7 +48,7 @@ export const redirect: Application = async () => {
   let unsubscribe: (() => void) | undefined;
 
   const redirectToHomeIfAuthenticated = (): boolean => {
-    const state = getSessionStore();
+    const state = getSessionStore().getState();
     if (state.loaded && state.session?.authenticated) {
       navigate({ to: interpolateUrl('${egenSpaBase}/home') });
       return true;
@@ -61,7 +60,7 @@ export const redirect: Application = async () => {
     bootstrap: async () => {},
     mount: async () => {
       if (!redirectToHomeIfAuthenticated()) {
-        unsubscribe = sessionStore.subscribe(() => {
+        unsubscribe = getSessionStore().subscribe(() => {
           if (redirectToHomeIfAuthenticated()) {
             unsubscribe?.();
             unsubscribe = undefined;
