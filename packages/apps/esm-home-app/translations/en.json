@@ -3,5 +3,7 @@
   "showcaseFieldsDescription": "Single, multi-variant input field (outlined / filled / standard).",
   "showcaseMenuDescription": "Animated (GSAP) side navigation panel, side driven by config.staggeredMenu.position.",
   "showcaseCascadingNavDescription": "Cascading navigation dropdown, opens downward or upward based on the direction prop.",
-  "showcaseSheetDescription": "Draggable modal sheet, anchored top or bottom based on the side prop."
+  "showcaseSheetDescription": "Draggable modal sheet, anchored top or bottom based on the side prop.",
+  "showcaseToastDescription": "'Liquid glass' notification, 3 variants: default (countdown), transfer (real progress), actions (customizable commands).",
+  "showcaseGlassCardDescription": "Standalone liquid glass effect (blur + distortion + highlights), used internally by Toast."
 }

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   CascadingNavDropdown,
   DynamicField,
+  LiquidGlassCard,
   MenuToggleButton,
   Sheet,
   SheetClose,
@@ -12,6 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  showToast,
   StaggeredMenuPanel,
   useConfig,
   type NavigationItem,
@@ -83,6 +85,34 @@ const ComponentShowcasePage: React.FC = () => {
     },
     { id: 'edugabon', label: 'EDUGABON', path: '#' },
   ];
+
+  // ── Démo : Toast (@egen/esm-styleguide/toasts) ──────────────────────────────
+  const handleTransferDemo = () => {
+    const toastKey = `demo-transfer-${Date.now()}`;
+    let progress = 0;
+    showToast({
+      toastKey,
+      variant: 'transfer',
+      kind: 'info',
+      title: 'rapport-annuel.pdf',
+      description: 'Téléversement en cours…',
+      progress,
+    });
+    const interval = setInterval(() => {
+      progress += 10;
+      showToast({
+        toastKey,
+        variant: 'transfer',
+        kind: 'info',
+        title: 'rapport-annuel.pdf',
+        description: progress >= 100 ? 'Terminé.' : 'Téléversement en cours…',
+        progress,
+      });
+      if (progress >= 100) {
+        clearInterval(interval);
+      }
+    }, 400);
+  };
 
   return (
     <div className={styles.page}>
@@ -207,6 +237,88 @@ const ComponentShowcasePage: React.FC = () => {
               </SheetContent>
             </Sheet>
           </div>
+        </section>
+
+        {/* ── Section : Toast ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Toast</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseToastDescription',
+              "Notification 'verre liquide', 3 variantes : default (compte à rebours), transfer (progression réelle), actions (commandes personnalisables).",
+            )}
+          </p>
+          <div className={styles.demoRow}>
+            <button
+              type="button"
+              className={styles.demoButton}
+              onClick={() =>
+                showToast({
+                  kind: 'success',
+                  title: 'Enregistré',
+                  description: 'Les modifications ont bien été sauvegardées.',
+                })
+              }
+            >
+              Toast: default
+            </button>
+            <button type="button" className={styles.demoButton} onClick={handleTransferDemo}>
+              Toast: transfer
+            </button>
+            <button
+              type="button"
+              className={styles.demoButton}
+              onClick={() =>
+                showToast({
+                  kind: 'info',
+                  variant: 'actions',
+                  duration: 0,
+                  title: 'Nouvelle demande de rôle',
+                  description: 'Amour Ngoua demande le rôle « Administrateur tenant ».',
+                  actions: [
+                    { label: 'Refuser', kind: 'danger', onClick: () => showToast({ kind: 'error', description: 'Demande refusée.' }) },
+                    { label: 'Approuver', kind: 'primary', onClick: () => showToast({ kind: 'success', description: 'Demande approuvée.' }) },
+                  ],
+                })
+              }
+            >
+              Toast: actions
+            </button>
+            <button
+              type="button"
+              className={styles.demoButton}
+              onClick={() =>
+                showToast({
+                  kind: 'error',
+                  critical: true,
+                  title: 'Échec de la synchronisation',
+                  description: 'Le serveur EDUNET_GABON_BACKEND est injoignable.',
+                })
+              }
+            >
+              Toast: error
+            </button>
+          </div>
+        </section>
+
+        {/* ── Section : LiquidGlassCard ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>LiquidGlassCard</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseGlassCardDescription',
+              'Effet de verre liquide autonome (flou + distorsion + reflets), utilisé en interne par Toast.',
+            )}
+          </p>
+          <LiquidGlassCard
+            blurIntensity="lg"
+            shadowIntensity="md"
+            glowIntensity="md"
+            borderRadius="var(--border-radius-lg)"
+            className={styles.glassCardDemo}
+          >
+            <p className={styles.glassCardDemoText}>Contenu affiché à travers le verre.</p>
+          </LiquidGlassCard>
         </section>
       </main>
 

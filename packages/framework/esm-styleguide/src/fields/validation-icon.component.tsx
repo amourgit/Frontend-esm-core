@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { CheckmarkFilledIcon, WarningIcon } from '../icons/icons';
-import { ErrorFilledIcon } from './icons/error-filled.icon';
+import { ErrorFilledIcon } from '../icons/error-filled.icon';
 import type { ValidationRule, ValidationRuleType } from './dynamic-field.types';
 import styles from './dynamic-field.module.scss';
 

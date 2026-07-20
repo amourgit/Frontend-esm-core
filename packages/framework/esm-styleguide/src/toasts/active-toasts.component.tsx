@@ -18,13 +18,18 @@ const ActiveToasts: React.FC<ActiveToastsProps> = ({ subject }) => {
   useEffect(() => {
     const subscription = subject.subscribe((toast) =>
       setToasts((toasts) => [
-        ...toasts.filter(
-          (t) =>
-            t.description !== toast.description ||
-            t.kind !== toast.kind ||
-            t.title !== toast.title ||
-            t.actionButtonLabel !== toast.actionButtonLabel ||
-            t.onActionButtonClick !== toast.onActionButtonClick,
+        ...toasts.filter((t) =>
+          toast.toastKey
+            ? // Identité stable explicite (nouveau, additif) : remplace le toast
+              // portant la même toastKey — permet des mises à jour en temps réel
+              // (ex. barre de progression) sans empiler de nouvelles instances.
+              t.toastKey !== toast.toastKey
+            : // Comportement historique inchangé : dédoublonnage par contenu.
+              t.description !== toast.description ||
+              t.kind !== toast.kind ||
+              t.title !== toast.title ||
+              t.actionButtonLabel !== toast.actionButtonLabel ||
+              t.onActionButtonClick !== toast.onActionButtonClick,
         ),
         toast,
       ]),
@@ -36,7 +41,7 @@ const ActiveToasts: React.FC<ActiveToastsProps> = ({ subject }) => {
   return (
     <>
       {toasts.map((toast) => (
-        <Toast key={toast.id} toast={toast} closeToast={() => closeToast(toast)} />
+        <Toast key={toast.toastKey ?? toast.id} toast={toast} closeToast={() => closeToast(toast)} />
       ))}
     </>
   );

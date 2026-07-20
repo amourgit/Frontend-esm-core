@@ -86,3 +86,15 @@
     background: var(--colors-surface-accent, var(--colors-surface-muted));
   }
 }
+
+.glassCardDemo {
+  display: inline-flex;
+  padding: 2rem 3rem;
+}
+
+.glassCardDemoText {
+  margin: 0;
+  color: var(--colors-surface-foreground);
+  font-size: var(--typography-font-size-sm-size);
+  font-weight: var(--typography-font-weight-medium, 500);
+}
