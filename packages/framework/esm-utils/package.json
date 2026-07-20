@@ -65,7 +65,7 @@
   "devDependencies": {
     "@egen/esm-globals": "workspace:*",
     "@swc/cli": "0.8.1",
-    "@swc/core": "1.15.21",
+    "@swc/core": "1.15.46",
     "@types/fhir": "0.0.31",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.0.0",
