@@ -1,7 +1,7 @@
 {
   "showcaseSubtitle": "Composants @egen/esm-styleguide en cours de validation visuelle.",
   "showcaseFieldsDescription": "Champ de saisie unique, multi-variante (outlined / filled / standard).",
-  "showcaseMenuDescription": "Panneau de navigation latéral animé (GSAP), côté piloté par config.staggeredMenu.position.",
+  "showcaseMenuDescription": "Panneau de navigation latéral animé (GSAP) — côté configurable : gauche ou droite.",
   "showcaseCascadingNavDescription": "Dropdown de navigation en cascade, ouverture vers le bas ou vers le haut selon la prop direction.",
   "showcaseSheetDescription": "Panneau modal glissable (drag), ancré en haut ou en bas selon la prop side.",
   "showcaseToastDescription": "Notification 'verre liquide', 3 variantes : default (compte à rebours), transfer (progression réelle), actions (commandes personnalisables).",

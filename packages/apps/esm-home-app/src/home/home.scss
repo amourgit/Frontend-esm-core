@@ -98,3 +98,34 @@
   font-size: var(--typography-font-size-sm-size);
   font-weight: var(--typography-font-weight-medium, 500);
 }
+
+.sideToggle {
+  display: inline-flex;
+  border: 1px solid var(--colors-border-default, transparent);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.sideToggleButton {
+  padding: 0.5rem 0.875rem;
+  font-size: var(--typography-font-size-sm-size);
+  font-weight: var(--typography-font-weight-medium, 500);
+  color: var(--colors-surface-muted-foreground);
+  background: var(--colors-surface-card);
+  border: none;
+  cursor: pointer;
+  transition: var(--transitions-colors);
+
+  &:not(:last-child) {
+    border-right: 1px solid var(--colors-border-default, transparent);
+  }
+
+  &:hover {
+    background: var(--colors-surface-muted);
+  }
+
+  &[data-active] {
+    background: var(--colors-primary-500);
+    color: var(--colors-on-primary, #fff);
+  }
+}

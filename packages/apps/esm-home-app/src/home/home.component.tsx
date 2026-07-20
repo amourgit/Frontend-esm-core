@@ -46,7 +46,10 @@ const ComponentShowcasePage: React.FC = () => {
 
   // ── Démo : StaggeredMenuPanel / MenuToggleButton (@egen/esm-styleguide/staggered-menu) ──
   const [staggeredMenuOpen, setStaggeredMenuOpen] = useState(false);
-  const staggeredMenuPosition = config.staggeredMenu.position;
+  // Défaut = config.staggeredMenu.position, mais surchargeable en direct dans
+  // la vitrine via le contrôle gauche/droite ci-dessous — pour tester les deux
+  // sens sans devoir changer la config à chaque fois.
+  const [staggeredMenuPosition, setStaggeredMenuPosition] = useState<'left' | 'right'>(config.staggeredMenu.position);
   const demoStaggeredItems = [
     { label: 'Accueil', ariaLabel: "Aller à l'accueil", link: '#' },
     { label: 'Applications', ariaLabel: 'Voir les applications', link: '#' },
@@ -158,10 +161,29 @@ const ComponentShowcasePage: React.FC = () => {
           <p className={styles.sectionDescription}>
             {t(
               'showcaseMenuDescription',
-              "Panneau de navigation latéral animé (GSAP), côté piloté par config.staggeredMenu.position.",
+              'Panneau de navigation latéral animé (GSAP) — côté configurable : gauche ou droite.',
             )}
           </p>
-          <div className={styles.menuTrigger}>
+          <div className={styles.demoRow}>
+            <div className={styles.sideToggle} role="group" aria-label="Côté d'ouverture">
+              <button
+                type="button"
+                className={styles.sideToggleButton}
+                data-active={staggeredMenuPosition === 'left' || undefined}
+                onClick={() => setStaggeredMenuPosition('left')}
+              >
+                ◀ Gauche
+              </button>
+              <button
+                type="button"
+                className={styles.sideToggleButton}
+                data-active={staggeredMenuPosition === 'right' || undefined}
+                onClick={() => setStaggeredMenuPosition('right')}
+              >
+                Droite ▶
+              </button>
+            </div>
+
             <MenuToggleButton
               isOpen={staggeredMenuOpen}
               onToggle={() => setStaggeredMenuOpen((prev) => !prev)}
