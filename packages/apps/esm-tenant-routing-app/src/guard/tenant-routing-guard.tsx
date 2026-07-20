@@ -10,7 +10,8 @@ import { useTenantRouting, useTenantRoutingNavigator } from './use-tenant-routin
 //    TenantRoutingGuard (public, wrappé dans Suspense)
 //      └─ TenantRoutingGuardInner  ← appelle useSession() (peut throw)
 //
-//  Ce composant est monté sur toutes les routes sauf /home (routeRegex).
+//  Ce composant est monté sur TOUTES les routes (routeRegex ".*"), y compris
+//  /home — désormais l'écran d'accueil authentifié, pas une route publique.
 //  Il ne rend RIEN dans le DOM. Il observe tenant + session et émet
 //  navigate() uniquement quand nécessaire, selon la séparation stricte :
 //

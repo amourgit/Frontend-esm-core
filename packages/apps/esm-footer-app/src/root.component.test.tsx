@@ -7,7 +7,7 @@ import Root from './root.component';
 vi.mock('react-router-dom', () => ({
   BrowserRouter: ({ children }: any) => <>{children}</>,
   Route: ({ children, element, path }: any) => {
-    const publicPaths = ['login/*', 'logout/*', 'home/*', 'change-password/*', 'tenant-suspended/*'];
+    const publicPaths = ['login/*', 'logout/*', 'change-password/*', 'tenant-suspended/*'];
     if (publicPaths.includes(path)) {
       return null;
     }

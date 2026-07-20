@@ -3,7 +3,7 @@
   "pages": [
     {
       "component": "root",
-      "routeRegex": "^(?!(?:home)/?)",
+      "routeRegex": ".*",
       "online": true,
       "offline": false
     },
