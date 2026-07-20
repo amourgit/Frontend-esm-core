@@ -129,3 +129,47 @@
     color: var(--colors-on-primary, #fff);
   }
 }
+
+.folderGalleryRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.profileCardDemo {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--colors-surface-card);
+  padding: 1rem;
+}
+
+.profileCardAvatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--border-radius-full, 9999px);
+  background: var(--colors-primary-500);
+  color: var(--colors-on-primary, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--typography-font-weight-bold, 700);
+  font-size: var(--typography-font-size-lg-size);
+}
+
+.profileCardName {
+  margin: 0;
+  color: var(--colors-surface-foreground);
+  font-size: var(--typography-font-size-sm-size);
+  font-weight: var(--typography-font-weight-semibold, 600);
+}
+
+.profileCardRole {
+  margin: 0;
+  color: var(--colors-surface-muted-foreground);
+  font-size: var(--typography-font-size-xs-size);
+}

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   CascadingNavDropdown,
   DynamicField,
+  FolderGallery,
   LiquidGlassCard,
   MenuToggleButton,
   Sheet,
@@ -116,6 +117,36 @@ const ComponentShowcasePage: React.FC = () => {
       }
     }, 400);
   };
+
+  // ── Démo : FolderGallery (@egen/esm-styleguide/containers/folder-gallery) ──
+  // Dossier n°1 : des photos (nature "image")
+  const demoPhotoItems = [
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=800&auto=format&fit=crop',
+  ].map((src, i) => ({
+    id: i,
+    content: <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />,
+  }));
+
+  // Dossier n°2 : des cartes profils (nature "texte + mise en page"), pas des images —
+  // preuve que 'items' accepte n'importe quel contenu React.
+  const demoProfileItems = [
+    { name: 'Amour N.', role: 'Fondateur' },
+    { name: 'Samuel M.', role: 'Développeur' },
+    { name: 'Équipe EGEN', role: 'Produit' },
+  ].map((person, i) => ({
+    id: i,
+    content: (
+      <div className={styles.profileCardDemo}>
+        <div className={styles.profileCardAvatar}>{person.name.charAt(0)}</div>
+        <p className={styles.profileCardName}>{person.name}</p>
+        <p className={styles.profileCardRole}>{person.role}</p>
+      </div>
+    ),
+  }));
 
   return (
     <div className={styles.page}>
@@ -341,6 +372,27 @@ const ComponentShowcasePage: React.FC = () => {
           >
             <p className={styles.glassCardDemoText}>Contenu affiché à travers le verre.</p>
           </LiquidGlassCard>
+        </section>
+
+        {/* ── Section : FolderGallery ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>FolderGallery</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseFolderGalleryDescription',
+              "Dossier interactif générique — 'items' accepte n'importe quel contenu React. Deux exemples ci-dessous : photos et cartes profils.",
+            )}
+          </p>
+          <div className={styles.folderGalleryRow}>
+            <FolderGallery title="Photography.gallery" hint="Glisser une photo vers le bas pour fermer" items={demoPhotoItems} />
+            <FolderGallery
+              title="Équipe.dossier"
+              hint="Glisser une carte vers le bas pour fermer"
+              items={demoProfileItems}
+              itemWidth="12rem"
+              itemHeight="14rem"
+            />
+          </div>
         </section>
       </main>
 

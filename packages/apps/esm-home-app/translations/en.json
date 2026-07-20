@@ -5,5 +5,6 @@
   "showcaseCascadingNavDescription": "Cascading navigation dropdown, opens downward or upward based on the direction prop.",
   "showcaseSheetDescription": "Draggable modal sheet, anchored top or bottom based on the side prop.",
   "showcaseToastDescription": "'Liquid glass' notification, 3 variants: default (countdown), transfer (real progress), actions (customizable commands).",
-  "showcaseGlassCardDescription": "Standalone liquid glass effect (blur + distortion + highlights), used internally by Toast."
+  "showcaseGlassCardDescription": "Standalone liquid glass effect (blur + distortion + highlights), used internally by Toast.",
+  "showcaseFolderGalleryDescription": "Generic interactive folder — 'items' accepts any React content. Two examples below: photos and profile cards."
 }
