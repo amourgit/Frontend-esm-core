@@ -65,9 +65,9 @@
     "single-spa": "6.x"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^4.1.2",
+    "@vitest/coverage-v8": "^4.1.10",
     "egen": "workspace:*",
-    "happy-dom": "^20.6.0",
+    "happy-dom": "^20.11.0",
     "i18next": "^25.5.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -76,6 +76,6 @@
     "react-router-dom": "^6.3.0",
     "rxjs": "^6.5.3",
     "sass": "^1.98.0",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.10"
   }
 }
