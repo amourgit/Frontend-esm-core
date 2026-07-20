@@ -5,7 +5,11 @@ import classNames from 'classnames';
 import { useSheetContext } from './sheet.context';
 import styles from './sheet.module.scss';
 
-export interface SheetOverlayProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SheetOverlayProps
+  extends Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    'onDrag' | 'onDragStart' | 'onDragEnd' | 'onAnimationStart' | 'onAnimationEnd'
+  > {
   className?: string;
 }
 
