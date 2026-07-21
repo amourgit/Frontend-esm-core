@@ -7,5 +7,6 @@
   "showcaseToastDescription": "'Liquid glass' notification, 3 variants: default (countdown), transfer (real progress), actions (customizable commands).",
   "showcaseGlassCardDescription": "Standalone liquid glass effect (blur + distortion + highlights), used internally by Toast.",
   "showcaseFolderGalleryDescription": "Generic interactive folder — 'items' accepts any React content. Two examples below: photos and profile cards.",
-  "showcaseDecoratedCardDescription": "8 ready-to-use decorative variants — no imposed size, content dictates size."
+  "showcaseDecoratedCardDescription": "8 ready-to-use decorative variants — no imposed size, content dictates size.",
+  "showcaseMediaPlayerDescription": "Media-player-style album view — cover, tracks, track detail panel and artist panel, all via props. Click the first track or the + button to see the artist."
 }

@@ -6,6 +6,7 @@ import {
   DynamicField,
   FolderGallery,
   LiquidGlassCard,
+  MediaPlayer,
   MenuToggleButton,
   Sheet,
   SheetClose,
@@ -19,6 +20,7 @@ import {
   StaggeredMenuPanel,
   useConfig,
   type CardVariant,
+  type MediaPlayerTrack,
   type NavigationItem,
 } from '@egen/esm-framework';
 import type { ConfigSchema } from '../config-schema';
@@ -119,6 +121,28 @@ const ComponentShowcasePage: React.FC = () => {
       }
     }, 400);
   };
+
+  // ── Démo : MediaPlayer (@egen/esm-styleguide/players/media-player) ─────────
+  // Album fictif générique (aucun rapport avec l'exemple d'origine) — preuve
+  // que le composant n'a aucune donnée en dur.
+  const demoTracks: MediaPlayerTrack[] = [
+    {
+      id: 1,
+      title: 'Lueurs sur Libreville',
+      duration: '4:12',
+      credits: <span>Composé par CIVITAS Studio, 3 autres</span>,
+      detail: (
+        <p>
+          Premier morceau de la démo — ce panneau de détail ne s'ouvre QUE si
+          <code> track.detail</code> est fourni. Il peut contenir n'importe
+          quel texte ou composant React (paroles, notes de production...).
+        </p>
+      ),
+    },
+    { id: 2, title: 'Estuaire', duration: '3:47' },
+    { id: 3, title: 'Marée haute', duration: '2:58' },
+    { id: 4, title: 'Okoumé', duration: '5:03' },
+  ];
 
   // ── Démo : DecoratedCard (@egen/esm-styleguide/cards/decorated-card) ────────
   const cardVariants: CardVariant[] = ['default', 'dots', 'gradient', 'plus', 'neubrutalism', 'inner', 'lifted', 'corners'];
@@ -434,6 +458,33 @@ const ComponentShowcasePage: React.FC = () => {
               </p>
             </DecoratedCard>
           </div>
+        </section>
+
+        {/* ── Section : MediaPlayer ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>MediaPlayer</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseMediaPlayerDescription',
+              "Vue album façon lecteur média — pochette, morceaux, panneau de détail et panneau artiste, tout via props. Cliquer sur le premier morceau ou sur le bouton + pour voir l'artiste.",
+            )}
+          </p>
+          <MediaPlayer
+            title="Lueurs sur Libreville"
+            coverImageUrl="https://picsum.photos/seed/egen-album/800/800"
+            genre="Afrobeat"
+            trackCountLabel="4 morceaux"
+            year={2026}
+            tracks={demoTracks}
+            author={{
+              name: 'CIVITAS Studio',
+              photoUrl: 'https://picsum.photos/seed/egen-artist/800/800',
+              genre: 'Collectif',
+              trackCountLabel: '12 morceaux',
+              listenerCountLabel: '3,2k auditeurs',
+              bio: "Collectif de production basé à Libreville, fondé par CIVITAS pour explorer les musiques d'Afrique centrale — cette bio est un exemple, entièrement fournie via la prop 'author.bio'.",
+            }}
+          />
         </section>
       </main>
 

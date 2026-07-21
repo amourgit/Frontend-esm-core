@@ -7,5 +7,6 @@
   "showcaseToastDescription": "Notification 'verre liquide', 3 variantes : default (compte à rebours), transfer (progression réelle), actions (commandes personnalisables).",
   "showcaseGlassCardDescription": "Effet de verre liquide autonome (flou + distorsion + reflets), utilisé en interne par Toast.",
   "showcaseFolderGalleryDescription": "Dossier interactif générique — 'items' accepte n'importe quel contenu React. Deux exemples ci-dessous : photos et cartes profils.",
-  "showcaseDecoratedCardDescription": "8 variantes décoratives prêtes à l'emploi — aucune taille imposée, le contenu dicte la taille."
+  "showcaseDecoratedCardDescription": "8 variantes décoratives prêtes à l'emploi — aucune taille imposée, le contenu dicte la taille.",
+  "showcaseMediaPlayerDescription": "Vue album façon lecteur média — pochette, morceaux, panneau de détail et panneau artiste, tout via props. Cliquer sur le premier morceau ou sur le bouton + pour voir l'artiste."
 }
