@@ -1,6 +1,6 @@
-/** @category MediaPlayer */
+/** @category EntityDetailBrowser */
 import React from 'react';
-import styles from './media-player.module.scss';
+import styles from './entity-detail-browser.module.scss';
 
 /**
  * Effet de flou progressif (8 couches, flou croissant + masque en dégradé) —

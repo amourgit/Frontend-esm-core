@@ -8,5 +8,5 @@
   "showcaseGlassCardDescription": "Effet de verre liquide autonome (flou + distorsion + reflets), utilisé en interne par Toast.",
   "showcaseFolderGalleryDescription": "Dossier interactif générique — 'items' accepte n'importe quel contenu React. Deux exemples ci-dessous : photos et cartes profils.",
   "showcaseDecoratedCardDescription": "8 variantes décoratives prêtes à l'emploi — aucune taille imposée, le contenu dicte la taille.",
-  "showcaseMediaPlayerDescription": "Vue album façon lecteur média — pochette, morceaux, panneau de détail et panneau artiste, tout via props. Cliquer sur le premier morceau ou sur le bouton + pour voir l'artiste."
+  "showcaseEntityDetailBrowserDescription": "Entité + liste de sous-éléments consultables, panneau de détail et panneau d'entité liée, tout via props. Cliquer sur la première leçon ou sur le bouton + pour voir le formateur."
 }

@@ -1,13 +1,9 @@
 // ============================================================================
-//  EGEN — MediaPlayer
+//  EGEN — EntityDetailBrowser
 // ============================================================================
-//  Reconstruction complète : le composant source ne fournissait que le JSX
-//  et les noms de classes CSS, sans feuille de style. L'esthétique "verre
-//  sombre sur photo" est un choix assumé (comme FolderGallery) : le texte
-//  doit rester lisible par-dessus n'importe quelle pochette d'album/photo
-//  d'artiste fournie par l'appelant, donc une échelle de texte fixe et
-//  claire (--colors-neutral-50) est plus sûre qu'un texte théorique adaptatif
-//  qui pourrait se fondre dans une photo sombre. Zéro couleur hex/rgb figée.
+//  100% tokens du thème EGEN. Esthétique "verre sombre sur photo"
+//  volontairement fixe (comme FolderGallery) : le texte doit rester lisible
+//  par-dessus n'importe quelle image fournie par l'appelant.
 // ============================================================================
 
 @use 'sass:math';
@@ -37,7 +33,17 @@
   overflow: hidden;
 }
 
-// ── Pochette (photo nette + halo flouté derrière) ──────────────────────────
+.mainContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.mainInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+// ── Image (nette + halo flouté derrière) ────────────────────────────────────
 
 .photoWrapper {
   position: relative;
@@ -103,14 +109,14 @@
   background: color-mix(in srgb, var(--colors-neutral-50) 30%, transparent);
 }
 
-// ── Liste des morceaux ───────────────────────────────────────────────────────
+// ── Liste des items ──────────────────────────────────────────────────────────
 
-.songs {
+.items {
   display: flex;
   flex-direction: column;
 }
 
-.song {
+.item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -154,9 +160,9 @@
   transform: rotate(45deg);
 }
 
-// ── Panneau de détail du morceau ────────────────────────────────────────────
+// ── Panneau de détail de l'item ──────────────────────────────────────────────
 
-.songModal {
+.itemModal {
   position: absolute;
   left: 0;
   right: 0;
@@ -174,7 +180,7 @@
   pointer-events: none;
   transition: var(--transitions-default);
 
-  .song {
+  .item {
     padding-top: 0.75rem;
     cursor: default;
 
@@ -184,20 +190,20 @@
   }
 }
 
-.songModal--active {
+.itemModal--active {
   max-height: 26rem;
   opacity: 1;
   pointer-events: auto;
 }
 
-.songModalInfo {
+.itemModalInfo {
   position: relative;
   flex: 1;
   overflow-y: auto;
   padding: 0 0.5rem 2.5rem;
 }
 
-.songCredits {
+.itemCredits {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -210,9 +216,19 @@
   }
 }
 
-// ── Panneau artiste ──────────────────────────────────────────────────────────
+// ── Panneau d'entité liée ────────────────────────────────────────────────────
+//
+// BUG CORRIGÉ (présent dans le composant fourni à l'origine) : ce panneau
+// n'avait aucun 'display' par défaut dans sa feuille de style — un <div>
+// est 'display: block' par défaut, donc ce panneau (position absolute,
+// inset:0, z-index élevé) était TOUJOURS visible et couvrait tout le
+// contenu dès le montage, avant même le premier clic. Cliquer sur le
+// bouton "+" ne changeait donc rien à l'affichage (il était déjà là).
+// Le 'display: none' ci-dessous est l'état de repos correct ; le composant
+// bascule ensuite en 'flex' via un style inline piloté par l'état React.
 
-.modal {
+.relatedPanel {
+  display: none;
   position: absolute;
   inset: 0;
   z-index: 40;
@@ -246,7 +262,7 @@
   }
 }
 
-.modalContent {
+.relatedContent {
   position: relative;
   z-index: 10;
 }
@@ -269,7 +285,7 @@
   gap: 0.5rem;
 }
 
-.genre {
+.category {
   text-transform: capitalize;
 }
 
@@ -300,9 +316,6 @@
 
 @for $i from 1 through 8 {
   .gradientBlurLayer:nth-child(#{$i}) {
-    // Chaque couche a un masque en dégradé décalé + un flou croissant :
-    // c'est la superposition qui donne l'impression d'un flou progressif
-    // (une seule couche floutée uniformément ne rend pas cet effet).
     $stop-start: math.percentage(math.div($i - 1, 8));
     $stop-end: math.percentage(math.div($i + 1, 8));
     backdrop-filter: blur(#{$i * 1px});
@@ -314,7 +327,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .content,
-  .songModal,
+  .itemModal,
   .iconButton,
   .toggle {
     transition: none;
