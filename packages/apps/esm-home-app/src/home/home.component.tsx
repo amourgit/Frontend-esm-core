@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   CascadingNavDropdown,
+  DecoratedCard,
   DynamicField,
   FolderGallery,
   LiquidGlassCard,
@@ -17,6 +18,7 @@ import {
   showToast,
   StaggeredMenuPanel,
   useConfig,
+  type CardVariant,
   type NavigationItem,
 } from '@egen/esm-framework';
 import type { ConfigSchema } from '../config-schema';
@@ -117,6 +119,10 @@ const ComponentShowcasePage: React.FC = () => {
       }
     }, 400);
   };
+
+  // ── Démo : DecoratedCard (@egen/esm-styleguide/cards/decorated-card) ────────
+  const cardVariants: CardVariant[] = ['default', 'dots', 'gradient', 'plus', 'neubrutalism', 'inner', 'lifted', 'corners'];
+  const [selectedCardVariant, setSelectedCardVariant] = useState<CardVariant>('default');
 
   // ── Démo : FolderGallery (@egen/esm-styleguide/containers/folder-gallery) ──
   // Dossier n°1 : des photos (nature "image")
@@ -392,6 +398,41 @@ const ComponentShowcasePage: React.FC = () => {
               itemWidth="12rem"
               itemHeight="14rem"
             />
+          </div>
+        </section>
+
+        {/* ── Section : DecoratedCard ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>DecoratedCard</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseDecoratedCardDescription',
+              '8 variantes décoratives prêtes à l’emploi — aucune taille imposée, le contenu dicte la taille.',
+            )}
+          </p>
+          <div className={styles.demoRow}>
+            {cardVariants.map((variant) => (
+              <button
+                key={variant}
+                type="button"
+                className={styles.sideToggleButton}
+                data-active={selectedCardVariant === variant || undefined}
+                onClick={() => setSelectedCardVariant(variant)}
+              >
+                {variant}
+              </button>
+            ))}
+          </div>
+          <div className={styles.decoratedCardDemo}>
+            <DecoratedCard
+              variant={selectedCardVariant}
+              title="Statut du tenant"
+              description="EIGEN — Gabon (national)"
+            >
+              <p className={styles.decoratedCardBody}>
+                Variante actuelle : <strong>{selectedCardVariant}</strong>
+              </p>
+            </DecoratedCard>
           </div>
         </section>
       </main>

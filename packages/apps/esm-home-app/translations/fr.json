@@ -6,5 +6,6 @@
   "showcaseSheetDescription": "Panneau modal glissable (drag), ancré en haut ou en bas selon la prop side.",
   "showcaseToastDescription": "Notification 'verre liquide', 3 variantes : default (compte à rebours), transfer (progression réelle), actions (commandes personnalisables).",
   "showcaseGlassCardDescription": "Effet de verre liquide autonome (flou + distorsion + reflets), utilisé en interne par Toast.",
-  "showcaseFolderGalleryDescription": "Dossier interactif générique — 'items' accepte n'importe quel contenu React. Deux exemples ci-dessous : photos et cartes profils."
+  "showcaseFolderGalleryDescription": "Dossier interactif générique — 'items' accepte n'importe quel contenu React. Deux exemples ci-dessous : photos et cartes profils.",
+  "showcaseDecoratedCardDescription": "8 variantes décoratives prêtes à l'emploi — aucune taille imposée, le contenu dicte la taille."
 }

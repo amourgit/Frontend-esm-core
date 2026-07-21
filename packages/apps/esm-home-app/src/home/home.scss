@@ -173,3 +173,14 @@
   color: var(--colors-surface-muted-foreground);
   font-size: var(--typography-font-size-xs-size);
 }
+
+.decoratedCardDemo {
+  max-width: 420px;
+  margin-top: 1rem;
+}
+
+.decoratedCardBody {
+  margin: 0;
+  color: var(--colors-surface-foreground);
+  font-size: var(--typography-font-size-sm-size);
+}
