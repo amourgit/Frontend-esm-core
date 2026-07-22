@@ -1,12 +1,12 @@
 {
-  "showcaseSubtitle": "@egen/esm-styleguide components under visual validation.",
-  "showcaseFieldsDescription": "Single, multi-variant input field (outlined / filled / standard).",
-  "showcaseMenuDescription": "Animated (GSAP) side navigation panel — configurable side: left or right.",
   "showcaseCascadingNavDescription": "Cascading navigation dropdown, opens downward or upward based on the direction prop.",
-  "showcaseSheetDescription": "Draggable modal sheet, anchored top or bottom based on the side prop.",
-  "showcaseToastDescription": "'Liquid glass' notification, 3 variants: default (countdown), transfer (real progress), actions (customizable commands).",
-  "showcaseGlassCardDescription": "Standalone liquid glass effect (blur + distortion + highlights), used internally by Toast.",
-  "showcaseFolderGalleryDescription": "Generic interactive folder — 'items' accepts any React content. Two examples below: photos and profile cards.",
   "showcaseDecoratedCardDescription": "8 ready-to-use decorative variants — no imposed size, content dictates size.",
-  "showcaseEntityDetailBrowserDescription": "Entity + list of browsable sub-items, detail panel and related-entity panel, all via props. Click the first lesson or the + button to see the trainer."
+  "showcaseEntityDetailBrowserDescription": "Entity + list of browsable sub-items, detail panel and related-entity panel, all via props. Click the first lesson or the + button to see the trainer.",
+  "showcaseFieldsDescription": "Single, multi-variant input field (outlined / filled / standard).",
+  "showcaseFolderGalleryDescription": "Generic interactive folder — 'items' accepts any React content. Two examples below: photos and profile cards.",
+  "showcaseGlassCardDescription": "Standalone liquid glass effect (blur + distortion + highlights), used internally by Toast.",
+  "showcaseMenuDescription": "Animated (GSAP) side navigation panel — configurable side: left or right.",
+  "showcaseSheetDescription": "Draggable modal sheet, anchored top or bottom based on the side prop.",
+  "showcaseSubtitle": "@egen/esm-styleguide components under visual validation.",
+  "showcaseToastDescription": "'Liquid glass' notification, 3 variants: default (countdown), transfer (real progress), actions (customizable commands)."
 }

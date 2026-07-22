@@ -1,7 +1,6 @@
 {
   "assistantActions": "Actions performed by the assistant",
   "assistantClose": "Close assistant",
-  "assistantConnectionError": "Could not connect to the assistant right now.",
   "assistantError": "Something went wrong.",
   "assistantListening": "Listening…",
   "assistantMessageInput": "Message to send to the assistant",
