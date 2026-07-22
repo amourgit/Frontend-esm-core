@@ -27,6 +27,7 @@ import styles from './decorated-card.module.scss';
 export const DecoratedCard = forwardRef<HTMLDivElement, CardProps>(
   ({
     variant = 'default',
+    size = 'default',
     title,
     description,
     children,
@@ -90,7 +91,7 @@ export const DecoratedCard = forwardRef<HTMLDivElement, CardProps>(
       case 'mirror':
         return (
           <div ref={ref} className={rootClassName} style={style} {...rest}>
-            <div className={styles.mirrorSurface}>{content}</div>
+            <div className={classNames(styles.mirrorSurface, styles[`mirrorSurface--${size}`])}>{content}</div>
             <div className={styles.mirrorShadow} />
           </div>
         );

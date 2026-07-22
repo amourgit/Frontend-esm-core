@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  AddIcon,
   CascadingNavDropdown,
   DecoratedCard,
   DynamicField,
@@ -457,6 +458,26 @@ const ComponentShowcasePage: React.FC = () => {
               <p className={styles.decoratedCardBody}>
                 Variante actuelle : <strong>{selectedCardVariant}</strong>
               </p>
+            </DecoratedCard>
+          </div>
+
+          <p className={styles.sectionDescription} style={{ marginTop: '1.5rem' }}>
+            Sous-variantes de taille/forme du variant <strong>mirror</strong> (prop <code>size</code>) :
+          </p>
+          <div className={styles.demoRow} style={{ alignItems: 'center' }}>
+            <DecoratedCard variant="mirror" size="sm">
+              <span className={styles.decoratedCardBody}>Small</span>
+            </DecoratedCard>
+            <DecoratedCard variant="mirror" size="default">
+              <span className={styles.decoratedCardBody} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                Generate <AddIcon size={18} />
+              </span>
+            </DecoratedCard>
+            <DecoratedCard variant="mirror" size="lg">
+              <span className={styles.decoratedCardBody}>Submit</span>
+            </DecoratedCard>
+            <DecoratedCard variant="mirror" size="icon">
+              <AddIcon size={18} />
             </DecoratedCard>
           </div>
         </section>

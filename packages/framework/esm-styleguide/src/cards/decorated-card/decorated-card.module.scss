@@ -314,3 +314,43 @@
   filter: blur(10px);
   pointer-events: none;
 }
+
+// ── Sous-variantes de taille/forme (mirror uniquement) ──────────────────────
+// Pilotent le padding du .content porté par .mirrorSurface. 'icon' est une
+// forme distincte : badge carré compact, circulaire, contenu centré.
+
+.mirrorSurface--sm .content {
+  padding: 0.5rem 1rem;
+}
+
+.mirrorSurface--default .content {
+  padding: 0.875rem 1.5rem;
+}
+
+.mirrorSurface--lg .content {
+  padding: 1rem 2rem;
+}
+
+.mirrorSurface--icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--border-radius-full, 9999px);
+}
+
+.mirrorSurface--icon .content {
+  padding: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card--mirror:has(.mirrorSurface--icon) {
+  width: auto;
+  display: inline-block;
+}
+
+.card--mirror:has(.mirrorSurface--icon) .mirrorShadow {
+  left: 10%;
+  right: 10%;
+}

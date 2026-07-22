@@ -16,6 +16,13 @@ export type CardVariant =
 export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Traitement décoratif de la bordure/du cadre. Défaut : 'default'. */
   variant?: CardVariant;
+  /**
+   * Sous-variante de forme/taille — pour l'instant utilisée par 'mirror'
+   * uniquement (pilote le padding de `.mirrorSurface`, et pour 'icon' une
+   * forme compacte circulaire dédiée). Les autres variantes l'ignorent.
+   * Défaut : 'default'.
+   */
+  size?: 'sm' | 'default' | 'lg' | 'icon';
   /** Titre optionnel — ReactNode libre (pas seulement du texte). */
   title?: React.ReactNode;
   /** Description optionnelle — ReactNode libre. */
