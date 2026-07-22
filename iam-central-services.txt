@@ -1,0 +1,2993 @@
+=== /home/president/Github/National/EGEN/IAM-Central---Frontend/src/services/UpdateService.ts ===
+// services/UpdateService.ts
+import { BaseHttpService } from "./base/BaseHttpService";
+import { OptimisticUpdateMetadata } from "../types/update.types";
+import { ConflictResolutionStrategy } from "../types/update.types";
+import { PutRequestConfig } from "../types/update.types";
+import { ApiResponse } from "../types/http.types";
+import { RequestSanitizer } from "../utils/sanitizer";
+import { UrlBuilder } from "../utils/urlBuilder";
+import { ApiError } from "../errors/ApiError";
+import { ValidationError } from "../errors/ApiError";
+import { NetworkError } from "../errors/ApiError";
+import { z } from "zod";
+import { ConflictError } from "../errors/UpdateError";
+import { PatchRequestConfig } from "../types/update.types";
+import { BulkUpdateConfig } from "../types/update.types";
+import { ConflictInfo } from "../types/update.types";
+
+export class UpdateService extends BaseHttpService {
+    private readonly optimisticUpdates = new Map<string, OptimisticUpdateMetadata>();
+    private readonly conflictStrategies = new Map<string, ConflictResolutionStrategy>();
+    private readonly versionCache = new Map<string, string>();
+  
+    /**
+     * Requête PUT pour remplacement complet de ressource
+     */
+    async put<TRequest, TResponse>(
+      config: PutRequestConfig<TRequest, TResponse>
+    ): Promise<ApiResponse<TResponse>> {
+      const {
+        endpoint,
+        resourceId,
+        body,
+        bodySchema,
+        responseSchema,
+        params,
+        headers = {},
+        transform,
+        timeout = this.defaultTimeout,
+        requireAuth = false,
+        sanitize = true,
+        validateRequest = true,
+        optimisticUpdate = false,
+        conflictResolution = 'server',
+        etag,
+        lastModified,
+        replaceStrategy = 'full',
+        retry,
+        fallback
+      } = config;
+  
+      try {
+        // Construire l'endpoint avec l'ID
+        const resourceEndpoint = this.buildResourceEndpoint(endpoint, resourceId);
+  
+        // Validation du body
+        const validatedBody = validateRequest && bodySchema
+          ? await this.validateRequestBody(bodySchema, body, resourceEndpoint)
+          : body;
+  
+        // Sanitisation
+        const sanitizedBody = sanitize ? this.sanitizeRequestBody(validatedBody) : validatedBody;
+  
+        // Gestion optimistic update
+        const optimisticId = optimisticUpdate 
+          ? await this.handleOptimisticUpdate(resourceEndpoint, resourceId, sanitizedBody, 'PUT')
+          : null;
+  
+        // Construire l'URL complète
+        const sanitizedParams = sanitize && params ? RequestSanitizer.sanitizeParams(params) : params;
+        const fullUrl = UrlBuilder.buildUrl(this.baseUrl, resourceEndpoint, sanitizedParams);
+  
+        // Headers avec gestion des conflits
+        const requestHeaders = await this.buildUpdateHeaders(
+          headers,
+          requireAuth,
+          etag,
+          lastModified
+        );
+  
+        // AbortController
+        const controller = this.createAbortController(timeout);
+  
+        // Stratégie de remplacement
+        const requestBody = replaceStrategy === 'merge' 
+          ? await this.mergeWithExisting(fullUrl, sanitizedBody, requestHeaders)
+          : sanitizedBody;
+  
+        // Exécution avec retry
+        const response = await this.executeWithRetry(
+          () => this.executePutRequest(
+            fullUrl,
+            requestBody,
+            requestHeaders,
+            controller
+          ),
+          retry
+        );
+  
+        // Gestion des conflits
+        if (response.status === 409) {
+          return this.handleConflict(
+            response,
+            config,
+            conflictResolution,
+            optimisticId
+          );
+        }
+  
+        // Traitement de la réponse
+        const rawData = await this.handleResponse(response, resourceEndpoint);
+        const processedData = transform ? transform(rawData) : rawData;
+        const validatedData = await this.validateData(responseSchema, processedData, resourceEndpoint);
+  
+        // Nettoyer optimistic update
+        if (optimisticId) {
+          this.optimisticUpdates.delete(optimisticId);
+        }
+  
+        // Mettre à jour le cache de version
+        this.updateVersionCache(resourceEndpoint, response);
+  
+        return {
+          data: validatedData,
+          status: response.status,
+          headers: response.headers,
+          cached: false
+        };
+  
+      } catch (error) {
+        await this.handleUpdateError(error, config.resourceId, optimisticUpdate);
+        
+        if (fallback !== undefined && this.shouldUseFallback(error)) {
+          return {
+            data: fallback as TResponse,
+            status: 200,
+            headers: new Headers(),
+            cached: false
+          };
+        }
+  
+        throw this.processError(error, endpoint);
+      }
+    }
+  
+    /**
+     * Requête PATCH pour mise à jour partielle
+     */
+    async patch<TRequest, TResponse>(
+      config: PatchRequestConfig<TRequest, TResponse>
+    ): Promise<ApiResponse<TResponse>> {
+      const {
+        endpoint,
+        resourceId,
+        patches,
+        patchSchema,
+        responseSchema,
+        params,
+        headers = {},
+        transform,
+        timeout = this.defaultTimeout,
+        requireAuth = false,
+        sanitize = true,
+        validatePatches = true,
+        optimisticUpdate = false,
+        conflictResolution = 'server',
+        etag,
+        lastModified,
+        patchFormat = 'merge-patch',
+        retry,
+        fallback
+      } = config;
+  
+      try {
+        // Construire l'endpoint
+        const resourceEndpoint = this.buildResourceEndpoint(endpoint, resourceId);
+  
+        // Validation des patches
+        const validatedPatches = validatePatches && patchSchema
+          ? await this.validateRequestBody(patchSchema, patches, resourceEndpoint)
+          : patches;
+  
+        // Formatage selon le type de patch
+        const formattedPatches = await this.formatPatches(
+          validatedPatches,
+          patchFormat,
+          sanitize
+        );
+  
+        // Optimistic update
+        const optimisticId = optimisticUpdate
+          ? await this.handleOptimisticUpdate(resourceEndpoint, resourceId, formattedPatches, 'PATCH')
+          : null;
+  
+        // URL complète
+        const sanitizedParams = sanitize && params ? RequestSanitizer.sanitizeParams(params) : params;
+        const fullUrl = UrlBuilder.buildUrl(this.baseUrl, resourceEndpoint, sanitizedParams);
+  
+        // Headers spécifiques au PATCH
+        const requestHeaders = await this.buildPatchHeaders(
+          headers,
+          requireAuth,
+          patchFormat,
+          etag,
+          lastModified
+        );
+  
+        // AbortController
+        const controller = this.createAbortController(timeout);
+  
+        // Exécution
+        const response = await this.executeWithRetry(
+          () => this.executePatchRequest(
+            fullUrl,
+            formattedPatches,
+            requestHeaders,
+            controller
+          ),
+          retry
+        );
+  
+        // Gestion des conflits
+        if (response.status === 409) {
+          return this.handleConflict(
+            response,
+            config as any,
+            conflictResolution,
+            optimisticId
+          );
+        }
+  
+        // Traitement réponse
+        const rawData = await this.handleResponse(response, resourceEndpoint);
+        const processedData = transform ? transform(rawData) : rawData;
+        const validatedData = await this.validateData(responseSchema, processedData, resourceEndpoint);
+  
+        // Nettoyage
+        if (optimisticId) {
+          this.optimisticUpdates.delete(optimisticId);
+        }
+  
+        this.updateVersionCache(resourceEndpoint, response);
+  
+        return {
+          data: validatedData,
+          status: response.status,
+          headers: response.headers,
+          cached: false
+        };
+  
+      } catch (error) {
+        await this.handleUpdateError(error, config.resourceId, optimisticUpdate);
+        
+        if (fallback !== undefined && this.shouldUseFallback(error)) {
+          return {
+            data: fallback as TResponse,
+            status: 200,
+            headers: new Headers(),
+            cached: false
+          };
+        }
+  
+        throw this.processError(error, endpoint);
+      }
+    }
+  
+    /**
+     * Mise à jour en lot (bulk update)
+     */
+    async bulkUpdate<TRequest, TResponse>(
+      config: BulkUpdateConfig<TRequest, TResponse>
+    ): Promise<ApiResponse<Array<{ id: string | number; data: TResponse | null; error?: Error }>>> {
+      const {
+        endpoint,
+        updates,
+        bodySchema,
+        responseSchema,
+        batchSize = 10,
+        concurrent = true,
+        stopOnError = false,
+        onProgress,
+        timeout = this.defaultTimeout,
+        requireAuth = false
+      } = config;
+  
+      try {
+        const results: Array<{ id: string | number; data: TResponse | null; error?: Error }> = [];
+        const errors: Error[] = [];
+        const batches = this.createBatches(updates, batchSize);
+  
+        for (let i = 0; i < batches.length; i++) {
+          const batch = batches[i];
+          const batchPromises = batch.map(async (update) => {
+            try {
+              const method = update.method || 'PATCH';
+              const response = method === 'PUT'
+                ? await this.put({
+                    endpoint,
+                    resourceId: update.id,
+                    body: update.data,
+                    bodySchema,
+                    responseSchema,
+                    timeout,
+                    requireAuth
+                  })
+                : await this.patch({
+                    endpoint,
+                    resourceId: update.id,
+                    patches: update.data,
+                    patchSchema: bodySchema,
+                    responseSchema,
+                    timeout,
+                    requireAuth
+                  });
+  
+              return { id: update.id, data: response.data, error: undefined };
+            } catch (error) {
+              const updateError = error as Error;
+              errors.push(updateError);
+              if (stopOnError) throw updateError;
+              return { id: update.id, data: null, error: updateError };
+            }
+          });
+  
+          const batchResults = concurrent
+            ? await Promise.all(batchPromises)
+            : await this.executeSequentially(batchPromises);
+  
+          results.push(...batchResults);
+  
+          if (onProgress) {
+            onProgress(results.length, updates.length, errors);
+          }
+        }
+  
+        return {
+          data: results,
+          status: errors.length > 0 ? 207 : 200, // Multi-Status si erreurs
+          headers: new Headers(),
+          cached: false
+        };
+  
+      } catch (error) {
+        throw this.processError(error, endpoint);
+      }
+    }
+  
+    /**
+     * Méthodes utilitaires simplifiées
+     */
+    async updateResource<TRequest, TResponse>(
+      endpoint: string,
+      resourceId: string | number,
+      data: TRequest,
+      responseSchema: z.ZodSchema<TResponse>,
+      method: 'PUT' | 'PATCH' = 'PATCH'
+    ): Promise<TResponse> {
+      const response = method === 'PUT'
+        ? await this.put({
+            endpoint,
+            resourceId,
+            body: data,
+            responseSchema
+          })
+        : await this.patch({
+            endpoint,
+            resourceId,
+            patches: data,
+            responseSchema
+          });
+  
+      return response.data;
+    }
+  
+    async updateWithOptimism<TRequest, TResponse>(
+      endpoint: string,
+      resourceId: string | number,
+      data: TRequest,
+      responseSchema: z.ZodSchema<TResponse>
+    ): Promise<TResponse> {
+      const response = await this.patch({
+        endpoint,
+        resourceId,
+        patches: data,
+        responseSchema,
+        optimisticUpdate: true
+      });
+  
+      return response.data;
+    }
+  
+    async safeUpdate<TRequest, TResponse>(
+      endpoint: string,
+      resourceId: string | number,
+      data: TRequest,
+      responseSchema: z.ZodSchema<TResponse>,
+      etag?: string
+    ): Promise<TResponse> {
+      const response = await this.put({
+        endpoint,
+        resourceId,
+        body: data,
+        responseSchema,
+        etag,
+        conflictResolution: 'client'
+      });
+  
+      return response.data;
+    }
+  
+    // Méthodes privées pour la logique interne
+    private buildResourceEndpoint(endpoint: string, resourceId: string | number): string {
+      // Vérifier si l'endpoint contient déjà un placeholder ou un ID
+      if (endpoint.includes(':id')) {
+        return endpoint.replace(':id', String(resourceId));
+      }
+      
+      if (endpoint.includes('{id}')) {
+        return endpoint.replace('{id}', String(resourceId));
+      }
+  
+      // Sinon, ajouter l'ID à la fin
+      return `${endpoint.replace(/\/$/, '')}/${resourceId}`;
+    }
+  
+    private async handleOptimisticUpdate(
+      endpoint: string,
+      resourceId: string | number,
+      data: unknown,
+      method: 'PUT' | 'PATCH'
+    ): Promise<string> {
+      const optimisticId = `${method.toLowerCase()}_${endpoint}_${resourceId}_${Date.now()}`;
+      
+      // Récupérer les données actuelles (simulé)
+      const originalData = await this.getCurrentData(endpoint, resourceId);
+      
+      // Calculer les données optimistes
+      const optimisticData = method === 'PUT' ? data : { ...originalData, ...data };
+      
+      // Stocker dans le cache optimiste
+      this.optimisticUpdates.set(optimisticId, {
+        id: optimisticId,
+        resourceId,
+        originalData,
+        optimisticData,
+        timestamp: Date.now(),
+        rollbackFn: () => {
+          // Logique de rollback - à implémenter selon votre store
+          console.log(`Rollback optimistic update for ${resourceId}`);
+        }
+      });
+  
+      return optimisticId;
+    }
+  
+    private async getCurrentData(endpoint: string, resourceId: string | number): Promise<unknown> {
+      // Cette méthode devrait récupérer les données actuelles
+      // Peut utiliser le GetService ou un cache local
+      try {
+        const getService = new (await import('./GetService')).GetService(this.baseUrl);
+        return await getService.getSimple(
+          this.buildResourceEndpoint(endpoint, resourceId),
+          z.any()
+        );
+      } catch {
+        return {};
+      }
+    }
+  
+    private async buildUpdateHeaders(
+      headers: HeadersInit,
+      requireAuth: boolean,
+      etag?: string,
+      lastModified?: string
+    ): Promise<HeadersInit> {
+      const requestHeaders = { ...this.defaultHeaders, ...headers };
+  
+      if (requireAuth) {
+        const token = await this.getAuthToken();
+        if (token) {
+          (requestHeaders as Record<string, string>)['Authorization'] = `Bearer ${token}`;
+        }
+      }
+  
+      // Headers pour la gestion des conflits
+      if (etag) {
+        (requestHeaders as Record<string, string>)['If-Match'] = etag;
+      }
+  
+      if (lastModified) {
+        (requestHeaders as Record<string, string>)['If-Unmodified-Since'] = lastModified;
+      }
+  
+      return requestHeaders;
+    }
+  
+    private async buildPatchHeaders(
+      headers: HeadersInit,
+      requireAuth: boolean,
+      patchFormat: string,
+      etag?: string,
+      lastModified?: string
+    ): Promise<HeadersInit> {
+      const baseHeaders = await this.buildUpdateHeaders(headers, requireAuth, etag, lastModified);
+      
+      // Content-Type spécifique selon le format de patch
+      const contentType = patchFormat === 'json-patch' 
+        ? 'application/json-patch+json'
+        : patchFormat === 'merge-patch'
+        ? 'application/merge-patch+json'
+        : 'application/json';
+  
+      return {
+        ...baseHeaders,
+        'Content-Type': contentType
+      };
+    }
+  
+    private async formatPatches(
+      patches: unknown,
+      format: string,
+      sanitize: boolean
+    ): Promise<unknown> {
+      if (sanitize) {
+        patches = this.sanitizeRequestBody(patches);
+      }
+  
+      switch (format) {
+        case 'json-patch':
+          return this.convertToJsonPatch(patches);
+        case 'merge-patch':
+          return patches; // Déjà au bon format
+        case 'custom':
+          return this.applyCustomPatchFormat(patches);
+        default:
+          return patches;
+      }
+    }
+  
+    private convertToJsonPatch(data: unknown): JsonPatchOperation[] {
+      // Conversion simple - à améliorer selon vos besoins
+      if (Array.isArray(data)) {
+        return data as JsonPatchOperation[];
+      }
+  
+      const operations: JsonPatchOperation[] = [];
+      if (typeof data === 'object' && data !== null) {
+        Object.entries(data as Record<string, unknown>).forEach(([key, value]) => {
+          operations.push({
+            op: 'replace',
+            path: `/${key}`,
+            value
+          });
+        });
+      }
+  
+      return operations;
+    }
+  
+    private applyCustomPatchFormat(data: unknown): unknown {
+      // Logique personnalisée pour votre format de patch
+      return data;
+    }
+  
+    private async mergeWithExisting(
+      url: string,
+      newData: unknown,
+      headers: HeadersInit
+    ): Promise<unknown> {
+      try {
+        // Récupérer les données existantes
+        const currentResponse = await fetch(url, {
+          method: 'GET',
+          headers: { ...headers, 'Content-Type': undefined } as HeadersInit
+        });
+  
+        if (currentResponse.ok) {
+          const currentData = await currentResponse.json();
+          return { ...currentData, ...newData };
+        }
+      } catch (error) {
+        console.warn('Could not merge with existing data:', error);
+      }
+  
+      return newData;
+    }
+  
+    private async executePutRequest(
+      url: string,
+      body: unknown,
+      headers: HeadersInit,
+      controller: AbortController
+    ): Promise<Response> {
+      return fetch(url, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(body),
+        signal: controller.signal
+      });
+    }
+  
+    private async executePatchRequest(
+      url: string,
+      patches: unknown,
+      headers: HeadersInit,
+      controller: AbortController
+    ): Promise<Response> {
+      return fetch(url, {
+        method: 'PATCH',
+        headers,
+        body: JSON.stringify(patches),
+        signal: controller.signal
+      });
+    }
+  
+    private async handleConflict<TRequest, TResponse>(
+      response: Response,
+      config: PutRequestConfig<TRequest, TResponse> | PatchRequestConfig<TRequest, TResponse>,
+      strategy: string,
+      optimisticId?: string | null
+    ): Promise<ApiResponse<TResponse>> {
+      const serverData = await response.json().catch(() => ({}));
+      const conflictInfo: ConflictInfo = {
+        endpoint: config.endpoint,
+        resourceId: config.resourceId,
+        clientEtag: config.etag,
+        serverEtag: response.headers.get('ETag') || undefined
+      };
+  
+      // Rollback optimistic update
+      if (optimisticId && this.optimisticUpdates.has(optimisticId)) {
+        const optimisticData = this.optimisticUpdates.get(optimisticId)!;
+        optimisticData.rollbackFn();
+        this.optimisticUpdates.delete(optimisticId);
+      }
+  
+      switch (strategy) {
+        case 'client':
+          throw new ConflictError('Resource modified by another process', conflictInfo, serverData);
+        
+        case 'server':
+          // Accepter les données du serveur
+          const validatedServerData = await this.validateData(
+            config.responseSchema,
+            serverData,
+            config.endpoint
+          );
+          return {
+            data: validatedServerData,
+            status: 200,
+            headers: response.headers,
+            cached: false
+          };
+        
+        case 'merge':
+          return this.attemptMerge(config, serverData, conflictInfo);
+        
+        default:
+          throw new ConflictError('Resource conflict', conflictInfo, serverData);
+      }
+    }
+  
+    private async attemptMerge<TRequest, TResponse>(
+      config: PutRequestConfig<TRequest, TResponse> | PatchRequestConfig<TRequest, TResponse>,
+      serverData: unknown,
+      conflictInfo: ConflictInfo
+    ): Promise<ApiResponse<TResponse>> {
+      try {
+        const clientData = 'body' in config ? config.body : config.patches;
+        const mergedData = { ...serverData, ...clientData };
+        
+        // Re-tenter la mise à jour avec les données fusionnées
+        const newEtag = conflictInfo.serverEtag;
+        
+        if ('body' in config) {
+          return this.put({
+            ...config,
+            body: mergedData as TRequest,
+            etag: newEtag,
+            conflictResolution: 'client' // Éviter boucle infinie
+          });
+        } else {
+          return this.patch({
+            ...config,
+            patches: mergedData as TRequest,
+            etag: newEtag,
+            conflictResolution: 'client'
+          });
+        }
+      } catch (error) {
+        throw new ConflictError('Merge failed', conflictInfo, serverData);
+      }
+    }
+  
+    private updateVersionCache(endpoint: string, response: Response): void {
+      const etag = response.headers.get('ETag');
+      if (etag) {
+        this.versionCache.set(endpoint, etag);
+      }
+    }
+  
+    private async handleUpdateError(
+      error: unknown,
+      resourceId: string | number,
+      optimisticUpdate: boolean
+    ): Promise<void> {
+      if (optimisticUpdate) {
+        // Rollback tous les optimistic updates pour cette ressource
+        for (const [id, metadata] of this.optimisticUpdates.entries()) {
+          if (metadata.resourceId === resourceId) {
+            metadata.rollbackFn();
+            this.optimisticUpdates.delete(id);
+          }
+        }
+      }
+    }
+  
+    private createBatches<T>(items: T[], batchSize: number): T[][] {
+      const batches: T[][] = [];
+      for (let i = 0; i < items.length; i += batchSize) {
+        batches.push(items.slice(i, i + batchSize));
+      }
+      return batches;
+    }
+  
+    private async executeSequentially<T>(promises: Promise<T>[]): Promise<T[]> {
+      const results: T[] = [];
+      for (const promise of promises) {
+        results.push(await promise);
+      }
+      return results;
+    }
+  
+    // Méthodes utilitaires héritées
+    private sanitizeRequestBody(body: unknown): unknown {
+      if (typeof body === 'object' && body !== null) {
+        return RequestSanitizer.sanitizeParams(body as Record<string, unknown>);
+      }
+      return body;
+    }
+  
+    private async validateRequestBody<T>(
+      schema: z.ZodSchema<T>,
+      body: T,
+      endpoint: string
+    ): Promise<T> {
+      try {
+        return await schema.parseAsync(body);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          throw new ValidationError(
+            'Request body validation failed',
+            error.issues,
+            endpoint
+          );
+        }
+        throw error;
+      }
+    }
+  
+    private async validateData<T>(
+      schema: z.ZodSchema<T>,
+      data: unknown,
+      endpoint: string
+    ): Promise<T> {
+      try {
+        return await schema.parseAsync(data);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          throw new ValidationError(
+            'Response validation failed',
+            error.issues,
+            endpoint
+          );
+        }
+        throw error;
+      }
+    }
+  
+    private shouldUseFallback(error: unknown): boolean {
+      return error instanceof NetworkError || 
+             (error instanceof ApiError && error.status >= 500);
+    }
+  
+    private processError(error: unknown, endpoint: string): Error {
+      if (error instanceof ApiError || error instanceof ValidationError || error instanceof ConflictError) {
+        return error;
+      }
+  
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        return new NetworkError('Network connection failed', error as Error, endpoint);
+      }
+  
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return new NetworkError('Request timeout', error as Error, endpoint);
+      }
+  
+      return new ApiError('Unknown error occurred', 500, 'UNKNOWN_ERROR', endpoint);
+    }
+  
+    private async getAuthToken(): Promise<string | null> {
+      if (typeof window !== 'undefined') {
+        return this.getToken();
+      }
+      return null;
+    }
+  
+    /**
+     * Méthodes de gestion publiques
+     */
+    public getOptimisticUpdates(): OptimisticUpdateMetadata[] {
+      return Array.from(this.optimisticUpdates.values());
+    }
+  
+    public rollbackOptimisticUpdate(optimisticId: string): boolean {
+      const update = this.optimisticUpdates.get(optimisticId);
+      if (update) {
+        update.rollbackFn();
+        this.optimisticUpdates.delete(optimisticId);
+        return true;
+      }
+      return false;
+    }
+  
+    public rollbackAllOptimistic(resourceId?: string | number): void {
+      for (const [id, metadata] of this.optimisticUpdates.entries()) {
+        if (!resourceId || metadata.resourceId === resourceId) {
+          metadata.rollbackFn();
+          this.optimisticUpdates.delete(id);
+        }
+      }
+    }
+  
+    public getVersionCache(): Map<string, string> {
+      return new Map(this.versionCache);
+    }
+  
+    public clearVersionCache(): void {
+      this.versionCache.clear();
+    }
+  
+    public registerConflictStrategy(
+      endpoint: string,
+      strategy: ConflictResolutionStrategy
+    ): void {
+      this.conflictStrategies.set(endpoint, strategy);
+    }
+  }
+=== /home/president/Github/National/EGEN/IAM-Central---Frontend/src/services/GetService.ts ===
+// services/GetService.ts
+import { BaseHttpService } from "./base/BaseHttpService";
+import { GetRequestConfig } from "../types/http.types";
+import { ApiResponse } from "../types/http.types";
+import { RequestSanitizer } from "../utils/sanitizer";
+import { UrlBuilder } from "../utils/urlBuilder";
+import { ApiError } from "../errors/ApiError";
+import { ValidationError } from "../errors/ApiError";
+import { NetworkError } from "../errors/ApiError";
+import { z } from "zod";
+
+// Types pour l'authentification
+interface AuthConfig {
+  type: 'bearer' | 'cookie' | 'custom';
+  token?: string;
+  cookieName?: string;
+  customHeader?: string;
+  customValue?: string;
+}
+
+// Interface étendue pour les cookies
+interface CookieConfig {
+  name: string;
+  value: string;
+  domain?: string;
+  path?: string;
+  secure?: boolean;
+  httpOnly?: boolean;
+}
+
+export class GetService extends BaseHttpService {
+  private readonly cache = new Map<string, { data: unknown; timestamp: number; ttl: number }>();
+
+  /**
+   * Effectue une requête GET avec validation et configuration avancée
+   */
+  async get<TResponse>(config: GetRequestConfig<TResponse>): Promise<ApiResponse<TResponse>> {
+    const {
+      endpoint,
+      params,
+      headers = {},
+      schema,
+      transform,
+      cache = 'default',
+      revalidate,
+      timeout = this.defaultTimeout,
+      requireAuth = false,
+      sanitize = true,
+      retry,
+      fallback,
+      // Nouvelles options d'authentification
+      authConfig,
+      withCredentials = false,
+      cookieNames = []
+    } = config;
+
+    try {
+      // Construire l'URL avec les paramètres
+      const sanitizedParams = sanitize && params ? RequestSanitizer.sanitizeParams(params) : params;
+      const fullUrl = UrlBuilder.buildUrl(this.baseUrl, endpoint, sanitizedParams);
+
+      // Vérifier le cache local si applicable
+      const cacheKey = this.generateCacheKey(fullUrl, headers);
+      const cachedData = this.getCachedData(cacheKey);
+      
+      if (cachedData && cache !== 'no-cache') {
+        return {
+          data: cachedData as TResponse,
+          status: 200,
+          headers: new Headers(),
+          cached: true
+        };
+      }
+
+      // Construire les headers avec authentification complète
+      const requestHeaders = await this.buildHeaders(headers, requireAuth, authConfig, cookieNames);
+
+      // Créer l'AbortController pour le timeout
+      const controller = this.createAbortController(timeout);
+
+      // Configuration de la requête avec support des cookies
+      const fetchConfig: RequestInit = {
+        method: 'GET',
+        headers: requestHeaders,
+        signal: controller.signal,
+        cache,
+        next: revalidate ? { revalidate } : undefined,
+        // Support des cookies
+        credentials: withCredentials ? 'include' : 'same-origin',
+      };
+
+      // Exécuter la requête avec retry
+      const response = await this.executeWithRetry(
+        () => fetch(fullUrl, fetchConfig),
+        retry
+      );
+
+      // Traiter la réponse
+      const rawData = await this.handleResponse(response, endpoint);
+
+      // Transformer les données si nécessaire
+      const processedData = transform ? transform(rawData) : rawData;
+
+      // Valider avec Zod
+      const validatedData = await this.validateData(schema, processedData, endpoint);
+
+      // Mettre en cache si nécessaire
+      if (cache !== 'no-cache' && revalidate) {
+        this.setCachedData(cacheKey, validatedData, revalidate * 1000);
+      }
+
+      return {
+        data: validatedData as TResponse,
+        status: response.status,
+        headers: response.headers,
+        cached: false
+      };
+
+    } catch (error) {
+      // Gestion des erreurs avec fallback
+      if (fallback !== undefined && this.shouldUseFallback(error)) {
+        return {
+          data: fallback,
+          status: 200,
+          headers: new Headers(),
+          cached: false
+        };
+      }
+
+      throw this.processError(error, endpoint);
+    }
+  }
+
+  /**
+   * Méthode utilitaire pour les requêtes GET simples avec auth automatique
+   */
+  async getSimple<TResponse>(
+    endpoint: string,
+    schema: z.ZodSchema<TResponse>,
+    params?: Record<string, unknown>,
+    withAuth: boolean = false
+  ): Promise<TResponse> {
+    const response = await this.get({ 
+      endpoint, 
+      schema, 
+      params,
+      requireAuth: withAuth,
+      withCredentials: withAuth 
+    });
+    return response.data;
+  }
+
+  /**
+   * Méthode spécifique pour les requêtes authentifiées
+   */
+  async getAuthenticated<TResponse>(
+    endpoint: string,
+    schema: z.ZodSchema<TResponse>,
+    params?: Record<string, unknown>,
+    authConfig?: AuthConfig
+  ): Promise<TResponse> {
+    const response = await this.get({
+      endpoint,
+      schema,
+      params,
+      requireAuth: true,
+      withCredentials: true,
+      authConfig,
+      cookieNames: ['authToken', 'sessionId', 'refreshToken'] // Cookies d'auth courants
+    });
+    return response.data;
+  }
+
+  /**
+   * Méthode pour les requêtes GET avec pagination et auth
+   */
+  async getPaginated<TResponse>(
+    endpoint: string,
+    schema: z.ZodSchema<TResponse>,
+    page: number = 1,
+    limit: number = 10,
+    additionalParams?: Record<string, unknown>,
+    requireAuth: boolean = false
+  ): Promise<TResponse> {
+    const params = {
+      page,
+      limit,
+      ...additionalParams
+    };
+
+    return requireAuth 
+      ? this.getAuthenticated(endpoint, schema, params)
+      : this.getSimple(endpoint, schema, params);
+  }
+
+  // === MÉTHODES PRIVÉES AMÉLIORÉES ===
+
+  private async buildHeaders(
+    headers: HeadersInit, 
+    requireAuth: boolean, 
+    authConfig?: AuthConfig,
+    cookieNames: string[] = []
+  ): Promise<HeadersInit> {
+    const requestHeaders = { ...this.defaultHeaders, ...headers };
+
+    if (requireAuth || authConfig) {
+      await this.addAuthenticationHeaders(requestHeaders, authConfig);
+    }
+
+    // Ajouter les cookies spécifiques si demandés
+    if (cookieNames.length > 0) {
+      this.addCookieHeaders(requestHeaders, cookieNames);
+    }
+
+    return requestHeaders;
+  }
+
+  private async addAuthenticationHeaders(
+    headers: Record<string, string>,
+    authConfig?: AuthConfig
+  ): Promise<void> {
+    if (authConfig) {
+      // Configuration personnalisée d'authentification
+      switch (authConfig.type) {
+        case 'bearer':
+          const token = authConfig.token || await this.getAuthToken();
+          if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+          }
+          break;
+
+        case 'cookie':
+          if (authConfig.cookieName) {
+            const cookieValue = this.getCookieValue(authConfig.cookieName);
+            if (cookieValue && authConfig.cookieName) {
+              headers['Cookie'] = `${authConfig.cookieName}=${cookieValue}`;
+            }
+          }
+          break;
+
+        case 'custom':
+          if (authConfig.customHeader && authConfig.customValue) {
+            headers[authConfig.customHeader] = authConfig.customValue;
+          }
+          break;
+      }
+    } else {
+      // Authentification par défaut (Bearer token)
+      const token = await this.getAuthToken();
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+  }
+
+  private addCookieHeaders(headers: Record<string, string>, cookieNames: string[]): void {
+    const cookies: string[] = [];
+    
+    cookieNames.forEach(cookieName => {
+      const cookieValue = this.getCookieValue(cookieName);
+      if (cookieValue) {
+        cookies.push(`${cookieName}=${cookieValue}`);
+      }
+    });
+
+    if (cookies.length > 0) {
+      // Ajouter aux cookies existants ou créer nouveau header
+      const existingCookies = headers['Cookie'];
+      headers['Cookie'] = existingCookies 
+        ? `${existingCookies}; ${cookies.join('; ')}`
+        : cookies.join('; ');
+    }
+  }
+
+  private async getAuthToken(): Promise<string | null> {
+    // Priorité : cookies -> localStorage -> sessionStorage
+    
+    // 1. Essayer les cookies d'abord
+    const cookieToken = this.getCookieValue('authToken') || 
+                       this.getCookieValue('access_token') ||
+                       this.getCookieValue('token');
+    
+    if (cookieToken) {
+      return cookieToken;
+    }
+
+    // 2. Ensuite localStorage
+    if (typeof window !== 'undefined') {
+      const localToken = this.getToken() || 
+                        localStorage.getItem('access_token') ||
+                        localStorage.getItem('token');
+      
+      if (localToken) {
+        return localToken;
+      }
+
+      // 3. Finalement sessionStorage
+      const sessionToken = this.getToken() ||
+                          sessionStorage.getItem('access_token') ||
+                          sessionStorage.getItem('token');
+      
+      return sessionToken;
+    }
+
+    return null;
+  }
+
+  private getCookieValue(name: string): string | null {
+    if (typeof document === 'undefined') {
+      return null; // Mode server-side
+    }
+
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    
+    if (parts.length === 2) {
+      const cookieValue = parts.pop()?.split(';').shift();
+      return cookieValue || null;
+    }
+    
+    return null;
+  }
+
+  /**
+   * Méthode utilitaire pour définir des cookies (côté client)
+   */
+  public setCookie(config: CookieConfig): void {
+    if (typeof document === 'undefined') {
+      console.warn('setCookie can only be used in browser environment');
+      return;
+    }
+
+    let cookieString = `${config.name}=${config.value}`;
+    
+    if (config.domain) cookieString += `; domain=${config.domain}`;
+    if (config.path) cookieString += `; path=${config.path}`;
+    if (config.secure) cookieString += `; secure`;
+    if (config.httpOnly) cookieString += `; httpOnly`;
+
+    document.cookie = cookieString;
+  }
+
+  /**
+   * Méthode utilitaire pour supprimer des cookies
+   */
+  public deleteCookie(name: string, path: string = '/', domain?: string): void {
+    if (typeof document === 'undefined') {
+      console.warn('deleteCookie can only be used in browser environment');
+      return;
+    }
+
+    let cookieString = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+    if (domain) cookieString += `; domain=${domain}`;
+    
+    document.cookie = cookieString;
+  }
+
+  // === MÉTHODES PRIVÉES ORIGINALES ===
+
+  private generateCacheKey(url: string, headers: HeadersInit): string {
+    const headersString = JSON.stringify(headers);
+    return `${url}:${headersString}`;
+  }
+
+  private getCachedData(key: string): unknown | null {
+    const cached = this.cache.get(key);
+    if (!cached) return null;
+
+    const isExpired = Date.now() - cached.timestamp > cached.ttl;
+    if (isExpired) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    return cached.data;
+  }
+
+  private setCachedData(key: string, data: unknown, ttl: number): void {
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+      ttl
+    });
+  }
+
+  private async validateData<T>(
+    schema: z.ZodSchema<T>,
+    data: unknown,
+    endpoint: string
+  ): Promise<T> {
+    try {
+      return await schema.parseAsync(data);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        throw new ValidationError(
+          'Response validation failed',
+          error.issues,
+          endpoint
+        );
+      }
+      throw error;
+    }
+  }
+
+  private shouldUseFallback(error: unknown): boolean {
+    return error instanceof NetworkError || 
+           (error instanceof ApiError && error.status >= 500);
+  }
+
+  private processError(error: unknown, endpoint: string): Error {
+    if (error instanceof ApiError || error instanceof ValidationError) {
+      return error;
+    }
+
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      return new NetworkError('Network connection failed', error as Error, endpoint);
+    }
+
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      return new NetworkError('Request timeout', error as Error, endpoint);
+    }
+
+    return new ApiError('Unknown error occurred', 500, 'UNKNOWN_ERROR', endpoint);
+  }
+
+  /**
+   * Méthode pour nettoyer le cache
+   */
+  public clearCache(): void {
+    this.cache.clear();
+  }
+
+  /**
+   * Méthode pour obtenir les statistiques du cache
+   */
+  public getCacheStats(): { size: number; keys: string[] } {
+    return {
+      size: this.cache.size,
+      keys: Array.from(this.cache.keys())
+    };
+  }
+}
+=== /home/president/Github/National/EGEN/IAM-Central---Frontend/src/services/DeleteService.ts ===
+// services/DeleteService.ts
+import { BaseHttpService } from "./base/BaseHttpService";
+import { OptimisticDeleteMetadata } from "../types/delete.types";
+import { DeleteConfirmation } from "../types/delete.types";
+import { ScheduledDeleteConfig } from "../types/delete.types";
+import { DeletedResourceInfo } from "../types/delete.types";
+import { DeleteRequestConfig } from "../types/delete.types";
+import { ApiResponse } from "../types/http.types";
+import { UrlBuilder } from "../utils/urlBuilder";
+import { ApiError } from "../errors/ApiError";
+import { DeleteError, DependencyError, PermissionDeniedError, ProtectedResourceError } from "../errors/DeleteError";
+import { ValidationError } from "../errors/ValidatatorError";
+import { NetworkError } from "../errors/NetworkError";
+
+
+
+
+export class DeleteService extends BaseHttpService {
+    private readonly optimisticDeletes = new Map<string, OptimisticDeleteMetadata>();
+    private readonly confirmationTokens = new Map<string, DeleteConfirmation>();
+    private readonly scheduledDeletes = new Map<string, ScheduledDeleteConfig>();
+    private readonly deletedResources = new Map<string, DeletedResourceInfo>();
+  
+    /**
+     * Suppression simple d'une ressource
+     */
+    async delete<TResponse = void>(
+      config: DeleteRequestConfig<TResponse>
+    ): Promise<ApiResponse<TResponse | void>> {
+      const {
+        endpoint,
+        resourceId,
+        params,
+        headers = {},
+        responseSchema,
+        transform,
+        timeout = this.defaultTimeout,
+        requireAuth = false,
+        optimisticDelete = false,
+        confirmationToken,
+        cascade = false,
+        softDelete = false,
+        forceDelete = false,
+        backupBeforeDelete = false,
+        reason,
+        dependencies = [],
+        retry
+      } = config;
+  
+      try {
+        // Construire l'endpoint
+        const resourceEndpoint = resourceId 
+          ? this.buildResourceEndpoint(endpoint, resourceId)
+          : endpoint;
+  
+        // Vérifications pré-suppression
+        await this.preDeleteChecks(resourceEndpoint, resourceId, forceDelete);
+  
+        // Backup si demandé
+        let backupData: unknown = null;
+        if (backupBeforeDelete) {
+          backupData = await this.createBackup(resourceEndpoint, resourceId);
+        }
+  
+        // Optimistic delete
+        const optimisticId = optimisticDelete
+          ? await this.handleOptimisticDelete(resourceEndpoint, resourceId, softDelete, backupData)
+          : null;
+  
+        // Construire l'URL avec paramètres de suppression
+        const deleteParams = this.buildDeleteParams(params, {
+          cascade,
+          softDelete,
+          force: forceDelete,
+          reason,
+          confirmationToken
+        });
+  
+        const fullUrl = UrlBuilder.buildUrl(this.baseUrl, resourceEndpoint, deleteParams);
+  
+        // Headers
+        const requestHeaders = await this.buildDeleteHeaders(
+          headers,
+          requireAuth,
+          confirmationToken,
+          dependencies
+        );
+  
+        // AbortController
+        const controller = this.createAbortController(timeout);
+  
+        // Exécution avec retry
+        const response = await this.executeWithRetry(
+          () => this.executeDeleteRequest(fullUrl, requestHeaders, controller),
+          retry
+        );
+  
+        // Traitement de la réponse
+        let responseData: TResponse | void = undefined;
+        
+        if (response.status !== 204) { // 204 No Content
+          const rawData = await this.handleDeleteResponse(response, resourceEndpoint);
+          responseData = rawData ? (transform ? transform(rawData) : rawData) : undefined;
+          
+          if (responseSchema && responseData !== undefined) {
+            responseData = await this.validateData(responseSchema, responseData, resourceEndpoint);
+          }
+        }
+  
+        // Enregistrer les informations de suppression
+        if (resourceId) {
+          this.recordDeletion(resourceId, endpoint, softDelete, reason);
+        }
+  
+        // Nettoyer optimistic delete
+        if (optimisticId) {
+          this.optimisticDeletes.delete(optimisticId);
+        }
+  
+        return {
+          data: responseData,
+          status: response.status,
+          headers: response.headers,
+          cached: false
+        };
+  
+      } catch (error) {
+        await this.handleDeleteError(error, resourceId, optimisticDelete);
+        throw this.processDeleteError(error, endpoint, resourceId);
+      }
+    }
+  
+    /**
+     * Suppression en lot (bulk delete)
+     */
+    async bulkDelete<TResponse = void>(
+      config: BulkDeleteConfig<TResponse>
+    ): Promise<ApiResponse<Array<{ id: string | number; success: boolean; error?: Error; data?: TResponse }>>> {
+      const {
+        endpoint,
+        resourceIds,
+        responseSchema,
+        batchSize = 10,
+        concurrent = false,
+        stopOnError = false,
+        cascade = false,
+        softDelete = false,
+        onProgress,
+        confirmationTokens,
+        timeout = this.defaultTimeout,
+        requireAuth = false
+      } = config;
+  
+      try {
+        const results: Array<{ id: string | number; success: boolean; error?: Error; data?: TResponse }> = [];
+        const errors: Error[] = [];
+        const batches = this.createBatches(resourceIds, batchSize);
+  
+        for (let i = 0; i < batches.length; i++) {
+          const batch = batches[i];
+          const batchPromises = batch.map(async (resourceId) => {
+            try {
+              const response = await this.delete({
+                endpoint,
+                resourceId,
+                responseSchema,
+                cascade,
+                softDelete,
+                confirmationToken: confirmationTokens?.get(resourceId),
+                timeout,
+                requireAuth
+              });
+  
+              return { id: resourceId, success: true, data: response.data };
+            } catch (error) {
+              const deleteError = error as Error;
+              errors.push(deleteError);
+              if (stopOnError) throw deleteError;
+              return { id: resourceId, success: false, error: deleteError };
+            }
+          });
+  
+          const batchResults = concurrent
+            ? await Promise.all(batchPromises)
+            : await this.executeSequentially(batchPromises);
+  
+          results.push(...batchResults);
+  
+          if (onProgress) {
+            onProgress(results.length, resourceIds.length, errors);
+          }
+        }
+  
+        return {
+          data: results,
+          status: errors.length > 0 ? 207 : 200, // Multi-Status si erreurs
+          headers: new Headers(),
+          cached: false
+        };
+  
+      } catch (error) {
+        throw this.processDeleteError(error, endpoint);
+      }
+    }
+  
+    /**
+     * Suppression conditionnelle
+     */
+    async conditionalDelete<TResponse = void>(
+      config: ConditionalDeleteConfig<TResponse>
+    ): Promise<ApiResponse<{ deletedCount: number; deletedIds: Array<string | number>; dryRun?: boolean }>> {
+      const {
+        endpoint,
+        conditions,
+        conditionsSchema,
+        responseSchema,
+        dryRun = false,
+        maxItems = 100,
+        cascade = false,
+        softDelete = false,
+        timeout = this.defaultTimeout,
+        requireAuth = false
+      } = config;
+  
+      try {
+        // Valider les conditions
+        const validatedConditions = conditionsSchema
+          ? await this.validateData(conditionsSchema, conditions, endpoint)
+          : conditions;
+  
+        // Construire les paramètres de requête
+        const queryParams = {
+          ...validatedConditions,
+          dryRun,
+          maxItems,
+          cascade,
+          softDelete
+        };
+  
+        const fullUrl = UrlBuilder.buildUrl(this.baseUrl, endpoint, queryParams);
+        const requestHeaders = await this.buildDeleteHeaders({}, requireAuth);
+        const controller = this.createAbortController(timeout);
+  
+        const response = await this.executeDeleteRequest(fullUrl, requestHeaders, controller);
+        const rawData = await this.handleDeleteResponse(response, endpoint);
+  
+        const result = {
+          deletedCount: rawData?.deletedCount || 0,
+          deletedIds: rawData?.deletedIds || [],
+          dryRun
+        };
+  
+        return {
+          data: result,
+          status: response.status,
+          headers: response.headers,
+          cached: false
+        };
+  
+      } catch (error) {
+        throw this.processDeleteError(error, endpoint);
+      }
+    }
+  
+    /**
+     * Demander une confirmation de suppression
+     */
+    async requestDeleteConfirmation(
+      endpoint: string,
+      resourceId: string | number,
+      options: { 
+        cascade?: boolean;
+        reason?: string;
+        expirationMinutes?: number;
+      } = {}
+    ): Promise<DeleteConfirmation> {
+      const { cascade = false, reason, expirationMinutes = 15 } = options;
+  
+      try {
+        const resourceEndpoint = this.buildResourceEndpoint(endpoint, resourceId);
+        const confirmationEndpoint = `${resourceEndpoint}/confirm-delete`;
+  
+        const requestBody = {
+          cascade,
+          reason,
+          expirationMinutes
+        };
+  
+        const response = await fetch(
+          UrlBuilder.buildUrl(this.baseUrl, confirmationEndpoint),
+          {
+            method: 'POST',
+            headers: await this.buildDeleteHeaders({}, true),
+            body: JSON.stringify(requestBody)
+          }
+        );
+  
+        const rawData = await this.handleResponse(response, confirmationEndpoint);
+        
+        const confirmation: DeleteConfirmation = {
+          token: rawData.token,
+          expiresAt: new Date(rawData.expiresAt),
+          resourceInfo: rawData.resourceInfo,
+          warnings: rawData.warnings
+        };
+  
+        // Stocker localement
+        this.confirmationTokens.set(`${resourceId}`, confirmation);
+  
+        return confirmation;
+  
+      } catch (error) {
+        throw this.processDeleteError(error, endpoint, resourceId);
+      }
+    }
+  
+    /**
+     * Planifier une suppression
+     */
+    async scheduleDelete(config: ScheduledDeleteConfig): Promise<{ scheduleId: string; scheduledFor: Date }> {
+      const {
+        endpoint,
+        resourceId,
+        scheduledFor,
+        timezone = 'UTC',
+        recurring,
+        notifyBeforeDelete,
+        cascade = false,
+        softDelete = false,
+        reason
+      } = config;
+  
+      try {
+        const scheduleEndpoint = `${endpoint}/schedule-delete`;
+        const scheduleData = {
+          resourceId,
+          scheduledFor: typeof scheduledFor === 'string' ? scheduledFor : scheduledFor.toISOString(),
+          timezone,
+          recurring,
+          notifyBeforeDelete,
+          cascade,
+          softDelete,
+          reason
+        };
+  
+        const response = await fetch(
+          UrlBuilder.buildUrl(this.baseUrl, scheduleEndpoint),
+          {
+            method: 'POST',
+            headers: await this.buildDeleteHeaders({}, true),
+            body: JSON.stringify(scheduleData)
+          }
+        );
+  
+        const result = await this.handleResponse(response, scheduleEndpoint);
+        
+        const scheduleInfo = {
+          scheduleId: result.scheduleId,
+          scheduledFor: new Date(result.scheduledFor)
+        };
+  
+        // Stocker localement
+        if (resourceId) {
+          this.scheduledDeletes.set(`${resourceId}`, config);
+        }
+  
+        return scheduleInfo;
+  
+      } catch (error) {
+        throw this.processDeleteError(error, endpoint, resourceId);
+      }
+    }
+  
+    /**
+     * Restaurer une ressource supprimée (soft delete)
+     */
+    async restore<TResponse = void>(
+      config: RestoreConfig<TResponse>
+    ): Promise<ApiResponse<TResponse | void>> {
+      const {
+        endpoint,
+        resourceId,
+        responseSchema,
+        restorePoint,
+        cascadeRestore = false,
+        timeout = this.defaultTimeout,
+        requireAuth = true
+      } = config;
+  
+      try {
+        const resourceEndpoint = this.buildResourceEndpoint(endpoint, resourceId);
+        const restoreEndpoint = `${resourceEndpoint}/restore`;
+  
+        const restoreData = {
+          restorePoint,
+          cascadeRestore
+        };
+  
+        const requestHeaders = await this.buildDeleteHeaders({}, requireAuth);
+        const controller = this.createAbortController(timeout);
+  
+        const response = await fetch(
+          UrlBuilder.buildUrl(this.baseUrl, restoreEndpoint),
+          {
+            method: 'POST',
+            headers: requestHeaders,
+            body: JSON.stringify(restoreData),
+            signal: controller.signal
+          }
+        );
+  
+        let responseData: TResponse | void = undefined;
+        
+        if (response.status !== 204) {
+          const rawData = await this.handleResponse(response, restoreEndpoint);
+          responseData = rawData;
+          
+          if (responseSchema && responseData !== undefined) {
+            responseData = await this.validateData(responseSchema, responseData, restoreEndpoint);
+          }
+        }
+  
+        // Retirer des ressources supprimées
+        this.deletedResources.delete(`${resourceId}`);
+  
+        return {
+          data: responseData,
+          status: response.status,
+          headers: response.headers,
+          cached: false
+        };
+  
+      } catch (error) {
+        throw this.processDeleteError(error, endpoint, resourceId);
+      }
+    }
+  
+    /**
+     * Méthodes utilitaires simples
+     */
+    async deleteResource(
+      endpoint: string,
+      resourceId: string | number,
+      options: {
+        soft?: boolean;
+        cascade?: boolean;
+        confirm?: boolean;
+      } = {}
+    ): Promise<void> {
+      const { soft = false, cascade = false, confirm = false } = options;
+  
+      let confirmationToken: string | undefined;
+      
+      if (confirm) {
+        const confirmation = await this.requestDeleteConfirmation(endpoint, resourceId, { cascade });
+        confirmationToken = confirmation.token;
+      }
+  
+      await this.delete({
+        endpoint,
+        resourceId,
+        softDelete: soft,
+        cascade,
+        confirmationToken
+      });
+    }
+  
+    async softDelete(
+      endpoint: string,
+      resourceId: string | number,
+      reason?: string
+    ): Promise<void> {
+      await this.delete({
+        endpoint,
+        resourceId,
+        softDelete: true,
+        reason
+      });
+    }
+  
+    async forceDelete(
+      endpoint: string,
+      resourceId: string | number,
+      confirmationToken?: string
+    ): Promise<void> {
+      await this.delete({
+        endpoint,
+        resourceId,
+        forceDelete: true,
+        confirmationToken
+      });
+    }
+  
+    async cascadeDelete(
+      endpoint: string,
+      resourceId: string | number,
+      confirmationToken?: string
+    ): Promise<void> {
+      await this.delete({
+        endpoint,
+        resourceId,
+        cascade: true,
+        confirmationToken
+      });
+    }
+  
+    // Méthodes privées pour la logique interne
+    private buildResourceEndpoint(endpoint: string, resourceId: string | number): string {
+      if (endpoint.includes(':id')) {
+        return endpoint.replace(':id', String(resourceId));
+      }
+      
+      if (endpoint.includes('{id}')) {
+        return endpoint.replace('{id}', String(resourceId));
+      }
+  
+      return `${endpoint.replace(/\/$/, '')}/${resourceId}`;
+    }
+  
+    private async preDeleteChecks(
+      endpoint: string,
+      resourceId?: string | number,
+      force: boolean = false
+    ): Promise<void> {
+      if (!force && resourceId) {
+        // Vérifier si la ressource est protégée
+        const isProtected = await this.checkResourceProtection(endpoint, resourceId);
+        if (isProtected.protected) {
+          throw new ProtectedResourceError(
+            isProtected.reason || 'Resource is protected',
+            resourceId,
+            isProtected.type || 'user_defined',
+            isProtected.canOverride
+          );
+        }
+  
+        // Vérifier les dépendances
+        const dependencies = await this.checkDependencies(endpoint, resourceId);
+        if (dependencies.length > 0) {
+          throw new DependencyError(
+            `Resource has ${dependencies.length} dependencies`,
+            resourceId,
+            dependencies,
+            'cascade'
+          );
+        }
+      }
+    }
+  
+    private async checkResourceProtection(
+      endpoint: string,
+      resourceId: string | number
+    ): Promise<{
+      protected: boolean;
+      type?: 'system' | 'business_critical' | 'user_defined' | 'regulatory';
+      reason?: string;
+      canOverride?: boolean;
+    }> {
+      try {
+        const checkEndpoint = `${endpoint}/${resourceId}/protection`;
+        const response = await fetch(UrlBuilder.buildUrl(this.baseUrl, checkEndpoint), {
+          method: 'GET',
+          headers: await this.buildDeleteHeaders({}, true)
+        });
+  
+        if (response.ok) {
+          return await response.json();
+        }
+      } catch (error) {
+        console.warn('Could not check resource protection:', error);
+      }
+  
+      return { protected: false };
+    }
+  
+    private async checkDependencies(
+      endpoint: string,
+      resourceId: string | number
+    ): Promise<Array<{ id: string | number; type: string; name?: string }>> {
+      try {
+        const depsEndpoint = `${endpoint}/${resourceId}/dependencies`;
+        const response = await fetch(UrlBuilder.buildUrl(this.baseUrl, depsEndpoint), {
+          method: 'GET',
+          headers: await this.buildDeleteHeaders({}, true)
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          return data.dependencies || [];
+        }
+      } catch (error) {
+        console.warn('Could not check dependencies:', error);
+      }
+  
+      return [];
+    }
+  
+    private async createBackup(
+      endpoint: string,
+      resourceId?: string | number
+    ): Promise<unknown> {
+      if (!resourceId) return null;
+  
+      try {
+        const getService = new (await import('./GetService')).GetService(this.baseUrl);
+        return await getService.getSimple(
+          this.buildResourceEndpoint(endpoint, resourceId),
+          z.any()
+        );
+      } catch (error) {
+        console.warn('Could not create backup:', error);
+        return null;
+      }
+    }
+  
+    private async handleOptimisticDelete(
+      endpoint: string,
+      resourceId?: string | number,
+      softDelete: boolean = false,
+      backupData?: unknown
+    ): Promise<string> {
+      if (!resourceId) return '';
+  
+      const optimisticId = `delete_${endpoint}_${resourceId}_${Date.now()}`;
+      
+      this.optimisticDeletes.set(optimisticId, {
+        id: optimisticId,
+        resourceId,
+        originalData: backupData,
+        timestamp: Date.now(),
+        softDelete,
+        rollbackFn: async () => {
+          console.log(`Rollback optimistic delete for ${resourceId}`);
+          // Logique de rollback - restaurer dans l'UI
+        },
+        restoreFn: async () => {
+          if (softDelete && backupData) {
+            console.log(`Restore ${resourceId} from backup`);
+          }
+        }
+      });
+  
+      return optimisticId;
+    }
+  
+    private buildDeleteParams(
+      baseParams: Record<string, unknown> = {},
+      deleteOptions: {
+        cascade?: boolean;
+        softDelete?: boolean;
+        force?: boolean;
+        reason?: string;
+        confirmationToken?: string;
+      }
+    ): Record<string, unknown> {
+      const params = { ...baseParams };
+      
+      if (deleteOptions.cascade) params.cascade = true;
+      if (deleteOptions.softDelete) params.soft = true;
+      if (deleteOptions.force) params.force = true;
+      if (deleteOptions.reason) params.reason = deleteOptions.reason;
+      if (deleteOptions.confirmationToken) params.confirmation_token = deleteOptions.confirmationToken;
+      
+      return params;
+    }
+  
+    private async buildDeleteHeaders(
+      headers: HeadersInit,
+      requireAuth: boolean,
+      confirmationToken?: string,
+      dependencies?: string[]
+    ): Promise<HeadersInit> {
+      const requestHeaders = { ...this.defaultHeaders, ...headers };
+  
+      if (requireAuth) {
+        const token = await this.getAuthToken();
+        if (token) {
+          (requestHeaders as Record<string, string>)['Authorization'] = `Bearer ${token}`;
+        }
+      }
+  
+      if (confirmationToken) {
+        (requestHeaders as Record<string, string>)['X-Confirmation-Token'] = confirmationToken;
+      }
+  
+      if (dependencies && dependencies.length > 0) {
+        (requestHeaders as Record<string, string>)['X-Dependencies'] = dependencies.join(',');
+      }
+  
+      return requestHeaders;
+    }
+  
+    private async executeDeleteRequest(
+      url: string,
+      headers: HeadersInit,
+      controller: AbortController
+    ): Promise<Response> {
+      return fetch(url, {
+        method: 'DELETE',
+        headers,
+        signal: controller.signal
+      });
+    }
+  
+    private async handleDeleteResponse(response: Response, endpoint: string): Promise<unknown> {
+      if (response.status === 204) {
+        return null; // No Content
+      }
+  
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => 'Unknown error');
+        throw new ApiError(
+          `DELETE ${response.status}: ${errorText}`,
+          response.status,
+          response.statusText,
+          endpoint
+        );
+      }
+  
+      const contentType = response.headers.get('Content-Type') || '';
+      
+      if (contentType.includes('application/json')) {
+        return response.json();
+      }
+      
+      return response.text();
+    }
+  
+    private recordDeletion(
+      resourceId: string | number,
+      endpoint: string,
+      softDelete: boolean,
+      reason?: string
+    ): void {
+      this.deletedResources.set(`${resourceId}`, {
+        id: resourceId,
+        type: endpoint,
+        deletedAt: new Date(),
+        reason,
+        canRestore: softDelete,
+        restoreUntil: softDelete ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : undefined // 30 jours
+      });
+    }
+  
+    private async handleDeleteError(
+      error: unknown,
+      resourceId?: string | number,
+      optimisticDelete: boolean = false
+    ): Promise<void> {
+      if (optimisticDelete && resourceId) {
+        // Rollback tous les optimistic deletes pour cette ressource
+        for (const [id, metadata] of this.optimisticDeletes.entries()) {
+          if (metadata.resourceId === resourceId) {
+            await metadata.rollbackFn();
+            this.optimisticDeletes.delete(id);
+          }
+        }
+      }
+    }
+  
+    private processDeleteError(error: unknown, endpoint: string, resourceId?: string | number): Error {
+      if (error instanceof DeleteError || 
+          error instanceof DependencyError || 
+          error instanceof PermissionDeniedError || 
+          error instanceof ProtectedResourceError) {
+        return error;
+      }
+  
+      if (error instanceof ApiError) {
+        // Convertir certains codes en erreurs spécialisées
+        switch (error.status) {
+          case 403:
+            return new PermissionDeniedError(
+              'Insufficient permissions to delete resource',
+              resourceId || 'unknown',
+              ['delete']
+            );
+          case 409:
+            return new DependencyError(
+              'Cannot delete resource due to dependencies',
+              resourceId || 'unknown',
+              [],
+              'cascade'
+            );
+          case 422:
+            return new ProtectedResourceError(
+              'Resource is protected and cannot be deleted',
+              resourceId || 'unknown',
+              'user_defined',
+              false
+            );
+          default:
+            return error;
+        }
+      }
+  
+      if (error instanceof ValidationError || error instanceof NetworkError) {
+        return error;
+      }
+  
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        return new NetworkError('Network connection failed', error as Error, endpoint);
+      }
+  
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return new NetworkError('Request timeout', error as Error, endpoint);
+      }
+  
+      return new DeleteError(
+        'Unknown delete error occurred',
+        resourceId,
+        undefined
+      );
+    }
+  
+    private createBatches<T>(items: T[], batchSize: number): T[][] {
+      const batches: T[][] = [];
+      for (let i = 0; i < items.length; i += batchSize) {
+        batches.push(items.slice(i, i + batchSize));
+      }
+      return batches;
+    }
+  
+    private async executeSequentially<T>(promises: Promise<T>[]): Promise<T[]> {
+      const results: T[] = [];
+      for (const promise of promises) {
+        results.push(await promise);
+      }
+      return results;
+    }
+  
+    private async validateData<T>(
+      schema: z.ZodSchema<T>,
+      data: unknown,
+      endpoint: string
+    ): Promise<T> {
+      try {
+        return await schema.parseAsync(data);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          throw new ValidationError(
+            'Response validation failed',
+            error.issues,
+            endpoint
+          );
+        }
+        throw error;
+      }
+    }
+  
+    private async getAuthToken(): Promise<string | null> {
+      if (typeof window !== 'undefined') {
+        return this.getToken();
+      }
+      return null;
+    }
+  
+    /**
+     * Méthodes de gestion publiques
+     */
+    public getOptimisticDeletes(): OptimisticDeleteMetadata[] {
+      return Array.from(this.optimisticDeletes.values());
+    }
+  
+    public rollbackOptimisticDelete(optimisticId: string): boolean {
+      const deleteOp = this.optimisticDeletes.get(optimisticId);
+      if (deleteOp) {
+        deleteOp.rollbackFn();
+        this.optimisticDeletes.delete(optimisticId);
+        return true;
+      }
+      return false;
+    }
+  
+    public async restoreFromOptimistic(optimisticId: string): Promise<boolean> {
+      const deleteOp = this.optimisticDeletes.get(optimisticId);
+      if (deleteOp) {
+        await deleteOp.restoreFn();
+        this.optimisticDeletes.delete(optimisticId);
+        return true;
+      }
+      return false;
+    }
+  
+    public getDeletedResources(): DeletedResourceInfo[] {
+      return Array.from(this.deletedResources.values());
+    }
+  
+    public getScheduledDeletes(): Map<string, ScheduledDeleteConfig> {
+      return new Map(this.scheduledDeletes);
+    }
+  
+    public cancelScheduledDelete(resourceId: string | number): boolean {
+      return this.scheduledDeletes.delete(`${resourceId}`);
+    }
+  
+    public getConfirmationTokens(): Map<string, DeleteConfirmation> {
+      return new Map(this.confirmationTokens);
+    }
+  
+    public clearExpiredTokens(): void {
+      const now = new Date();
+      for (const [key, confirmation] of this.confirmationTokens.entries()) {
+        if (confirmation.expiresAt < now) {
+          this.confirmationTokens.delete(key);
+        }
+      }
+    }
+  
+    public clearDeletedResourcesHistory(): void {
+      this.deletedResources.clear();
+    }
+  }
+=== /home/president/Github/National/EGEN/IAM-Central---Frontend/src/services/HttpServiceFactory.ts ===
+// services/HttpServiceFactory.ts
+import { GetService } from "./GetService";
+import { PostService } from "./PostService";
+import { UpdateService } from "./UpdateService";
+import { DeleteService } from "./DeleteService";
+
+// services/HttpServiceFactory.ts (mise à jour finale)
+export class HttpServiceFactory {
+  private static getInstances = new Map<string, GetService>();
+  private static postInstances = new Map<string, PostService>();
+  private static updateInstances = new Map<string, UpdateService>();
+  private static deleteInstances = new Map<string, DeleteService>();
+
+  static createGetService(
+    baseUrl?: string,
+    defaultHeaders?: HeadersInit,
+    defaultTimeout?: number
+  ): GetService {
+    const key = this.generateKey(baseUrl, defaultHeaders, defaultTimeout);
+    if (!this.getInstances.has(key)) {
+      this.getInstances.set(key, new GetService(baseUrl, defaultHeaders, defaultTimeout));
+    }
+    return this.getInstances.get(key)!;
+  }
+
+  static createPostService(
+    baseUrl?: string,
+    defaultHeaders?: HeadersInit,
+    defaultTimeout?: number
+  ): PostService {
+    const key = this.generateKey(baseUrl, defaultHeaders, defaultTimeout);
+    if (!this.postInstances.has(key)) {
+      this.postInstances.set(key, new PostService(baseUrl, defaultHeaders, defaultTimeout));
+    }
+    return this.postInstances.get(key)!;
+  }
+
+  static createUpdateService(
+    baseUrl?: string,
+    defaultHeaders?: HeadersInit,
+    defaultTimeout?: number
+  ): UpdateService {
+    const key = this.generateKey(baseUrl, defaultHeaders, defaultTimeout);
+    if (!this.updateInstances.has(key)) {
+      this.updateInstances.set(key, new UpdateService(baseUrl, defaultHeaders, defaultTimeout));
+    }
+    return this.updateInstances.get(key)!;
+  }
+
+  static createDeleteService(
+    baseUrl?: string,
+    defaultHeaders?: HeadersInit,
+    defaultTimeout?: number
+  ): DeleteService {
+    const key = this.generateKey(baseUrl, defaultHeaders, defaultTimeout);
+    if (!this.deleteInstances.has(key)) {
+      this.deleteInstances.set(key, new DeleteService(baseUrl, defaultHeaders, defaultTimeout));
+    }
+    return this.deleteInstances.get(key)!;
+  }
+
+  static createCompleteHttpService(
+    baseUrl?: string,
+    defaultHeaders?: HeadersInit,
+    defaultTimeout?: number
+  ) {
+    return {
+      get: this.createGetService(baseUrl, defaultHeaders, defaultTimeout),
+      post: this.createPostService(baseUrl, defaultHeaders, defaultTimeout),
+      update: this.createUpdateService(baseUrl, defaultHeaders, defaultTimeout),
+      delete: this.createDeleteService(baseUrl, defaultHeaders, defaultTimeout)
+    };
+  }
+
+  private static generateKey(
+    baseUrl?: string,
+    defaultHeaders?: HeadersInit,
+    defaultTimeout?: number
+  ): string {
+    return `${baseUrl || 'default'}-${JSON.stringify(defaultHeaders || {})}-${defaultTimeout || 10000}`;
+  }
+
+  static clearInstances(): void {
+    this.getInstances.clear();
+    this.postInstances.clear();
+    this.updateInstances.clear();
+    this.deleteInstances.clear();
+  }
+}
+=== /home/president/Github/National/EGEN/IAM-Central---Frontend/src/services/base/BaseHttpService.ts ===
+// ============================================================
+// src/services/base/BaseHttpService.ts
+// SERVICE LEGACY — NEUTRALISÉ
+//
+// Ces services ne sont plus utilisés par l'application principale.
+// La gestion des tokens est entièrement prise en charge par :
+//   - lib/http-client.ts       (requêtes API sécurisées)
+//   - lib/security/token-manager.ts (tokens en mémoire)
+//   - app/api/auth/            (Route Handlers, cookies HttpOnly)
+//
+// Ce fichier est conservé pour compatibilité avec src/types/ uniquement.
+// NE PAS utiliser getToken(), setToken(), removeToken() de cette classe.
+// ============================================================
+
+import { ApiError }       from '../../errors/ApiError';
+import { RetryConfig }    from '../../types/http.types';
+import { z }              from 'zod';
+import { ValidationError } from '../../errors/ValidatatorError';
+import { NetworkError }   from '../../errors/NetworkError';
+import { ConflictError }  from '../../errors/ConflitsError';
+import { DeleteError }    from '../../errors/DeleteError';
+
+export abstract class BaseHttpService {
+  protected readonly baseUrl:         string;
+  protected readonly defaultHeaders:  HeadersInit;
+  protected readonly defaultTimeout:  number;
+
+  constructor(
+    baseUrl:         string       = process.env.NEXT_PUBLIC_API_BASE_URL || '',
+    defaultHeaders:  HeadersInit  = {},
+    defaultTimeout:  number       = 10000
+  ) {
+    this.baseUrl        = baseUrl;
+    this.defaultHeaders = {
+      'Content-Type':    'application/json',
+      'Accept':          'application/json',
+      'X-Requested-With':'XMLHttpRequest',
+      ...defaultHeaders,
+    };
+    this.defaultTimeout = defaultTimeout;
+  }
+
+  protected async executeWithRetry<T>(
+    operation:   () => Promise<T>,
+    retryConfig?: RetryConfig
+  ): Promise<T> {
+    if (!retryConfig) return operation();
+
+    let lastError: Error = new Error('Unknown error');
+    const { attempts, delay, exponentialBackoff = true } = retryConfig;
+
+    for (let attempt = 1; attempt <= attempts; attempt++) {
+      try {
+        return await operation();
+      } catch (error) {
+        lastError = error as Error;
+        if (attempt < attempts) {
+          const waitMs = exponentialBackoff ? delay * Math.pow(2, attempt - 1) : delay;
+          await new Promise((res) => setTimeout(res, waitMs));
+        }
+      }
+    }
+    throw lastError;
+  }
+
+  // ── Token : redirigé vers tokenManager (sécurisé) ────────
+  // @deprecated — Utiliser lib/security/token-manager.ts directement
+  protected getToken(): string | null {
+    if (typeof window === 'undefined') return null;
+    // Import dynamique pour éviter les dépendances circulaires au build
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { tokenManager } = require('@/lib/security/token-manager');
+      return tokenManager.getAccessToken();
+    } catch {
+      return null;
+    }
+  }
+
+  // @deprecated — Les tokens sont gérés par les Route Handlers
+  protected setToken(_token: string): void {
+    console.warn('[BaseHttpService] setToken() est déprécié. Utiliser /api/auth/set-tokens.');
+  }
+
+  // @deprecated — Les tokens sont gérés par les Route Handlers
+  protected removeToken(): void {
+    console.warn('[BaseHttpService] removeToken() est déprécié. Utiliser /api/auth/logout.');
+  }
+
+  protected handleError(error: unknown): never {
+    if (error instanceof ApiError)        throw error;
+    if (error instanceof ValidationError) throw error;
+    if (error instanceof NetworkError)    throw error;
+    if (error instanceof ConflictError)   throw error;
+    if (error instanceof DeleteError)     throw error;
+
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new NetworkError('Erreur réseau — vérifiez votre connexion');
+    }
+    throw new ApiError('Erreur inattendue', 500, error);
+  }
+
+  protected buildUrl(path: string, params?: Record<string, unknown>): string {
+    const url = new URL(path, this.baseUrl);
+    if (params) {
+      Object.entries(params)
+        .filter(([, v]) => v !== undefined && v !== null)
+        .forEach(([k, v]) => url.searchParams.append(k, String(v)));
+    }
+    return url.toString();
+  }
+
+  protected async buildHeaders(extra: Record<string, string> = {}): Promise<HeadersInit> {
+    const token = this.getToken();
+    return {
+      ...this.defaultHeaders,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...extra,
+    };
+  }
+
+  protected async validateResponse<T>(
+    response: Response,
+    schema?: z.ZodSchema<T>
+  ): Promise<T> {
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      throw new ApiError(
+        body?.detail || body?.message || response.statusText,
+        response.status,
+        body
+      );
+    }
+    const data = await response.json();
+    if (schema) {
+      const result = schema.safeParse(data);
+      if (!result.success) throw new ValidationError('Données invalides', result.error.errors);
+      return result.data;
+    }
+    return data as T;
+  }
+}
+
+=== /home/president/Github/National/EGEN/IAM-Central---Frontend/src/services/PostService.ts ===
+// services/PostService.ts
+import { BaseHttpService } from "./base/BaseHttpService";
+import { BatchRequestConfig, FileUploadConfig, PostRequestConfig } from "../types/post.types";
+import { ApiResponse, RetryConfig } from "../types/http.types";
+import { RequestSanitizer } from "../utils/sanitizer";
+import { UrlBuilder } from "../utils/urlBuilder";
+import { ApiError } from "../errors/ApiError";
+import { ValidationError } from "../errors/ApiError";
+import { NetworkError } from "../errors/ApiError";
+import { z } from "zod";
+
+
+export class PostService extends BaseHttpService {
+    private readonly pendingRequests = new Map<string, Promise<ApiResponse<unknown>>>();
+    private readonly optimisticCache = new Map<string, { data: unknown; timestamp: number }>();
+  
+    /**
+     * Requête POST standard avec validation complète
+     */
+    async post<TRequest, TResponse>(
+      config: PostRequestConfig<TRequest, TResponse>
+    ): Promise<ApiResponse<TResponse>> {
+      const {
+        endpoint,
+        body,
+        bodySchema,
+        responseSchema,
+        params,
+        headers = {},
+        transform,
+        timeout = this.defaultTimeout,
+        requireAuth = false,
+        sanitize = true,
+        validateRequest = true,
+        optimisticUpdate = false,
+        idempotencyKey,
+        retry,
+        fallback
+      } = config;
+  
+      try {
+        // Validation du body si demandée
+        const validatedBody = validateRequest && bodySchema 
+          ? await this.validateRequestBody(bodySchema, body, endpoint)
+          : body;
+  
+        // Sanitisation si nécessaire
+        const sanitizedBody = sanitize ? this.sanitizeRequestBody(validatedBody) : validatedBody;
+  
+        // Gestion de l'optimistic update
+        const optimisticId = optimisticUpdate ? this.generateOptimisticId(endpoint, sanitizedBody) : null;
+        if (optimisticUpdate && optimisticId) {
+          this.setOptimisticData(optimisticId, sanitizedBody);
+        }
+  
+        // Construire l'URL
+        const sanitizedParams = sanitize && params ? RequestSanitizer.sanitizeParams(params) : params;
+        const fullUrl = UrlBuilder.buildUrl(this.baseUrl, endpoint, sanitizedParams);
+  
+        // Gestion de l'idempotency
+        const requestKey = idempotencyKey || this.generateRequestKey(fullUrl, sanitizedBody);
+        
+        // Vérifier si une requête identique est en cours
+        if (this.pendingRequests.has(requestKey)) {
+          return this.pendingRequests.get(requestKey) as Promise<ApiResponse<TResponse>>;
+        }
+  
+        // Construire les headers
+        const requestHeaders = await this.buildPostHeaders(headers, requireAuth, idempotencyKey);
+  
+        // Créer l'AbortController
+        const controller = this.createAbortController(timeout);
+  
+        // Créer la promesse de requête
+        const requestPromise = this.executePostRequest<TResponse>(
+          fullUrl,
+          sanitizedBody,
+          requestHeaders,
+          controller,
+          responseSchema,
+          transform,
+          retry,
+          endpoint
+        );
+  
+        // Stocker la requête en cours
+        this.pendingRequests.set(requestKey, requestPromise);
+  
+        // Nettoyer après la requête
+        const result = await requestPromise;
+        this.pendingRequests.delete(requestKey);
+  
+        // Nettoyer l'optimistic update en cas de succès
+        if (optimisticId) {
+          this.optimisticCache.delete(optimisticId);
+        }
+  
+        return result;
+  
+      } catch (error) {
+        // Nettoyer en cas d'erreur
+        const requestKey = idempotencyKey || this.generateRequestKey(endpoint, body);
+        this.pendingRequests.delete(requestKey);
+  
+        // Gestion du fallback
+        if (fallback !== undefined && this.shouldUseFallback(error)) {
+          return {
+            data: fallback,
+            status: 200,
+            headers: new Headers(),
+            cached: false
+          };
+        }
+  
+        throw this.processError(error, endpoint);
+      }
+    }
+  
+    /**
+     * Upload de fichiers avec support multi-fichiers
+     */
+    async uploadFiles<TResponse>(
+      config: FileUploadConfig<TResponse>
+    ): Promise<ApiResponse<TResponse>> {
+      const {
+        endpoint,
+        files,
+        fieldName = 'files',
+        additionalFields = {},
+        params,
+        timeout = 30000, // Timeout plus long pour les uploads
+        requireAuth = false,
+        responseSchema,
+        maxFileSize,
+        allowedTypes,
+        onProgress,
+        retry
+      } = config;
+  
+      try {
+        // Validation des fichiers
+        const fileArray = Array.from(files);
+        this.validateFiles(fileArray, maxFileSize, allowedTypes);
+  
+        // Construire FormData
+        const formData = new FormData();
+        
+        fileArray.forEach((file, index) => {
+          const name = fileArray.length > 1 ? `${fieldName}[${index}]` : fieldName;
+          formData.append(name, file);
+        });
+  
+        // Ajouter les champs additionnels
+        Object.entries(additionalFields).forEach(([key, value]) => {
+          formData.append(key, String(value));
+        });
+  
+        // Construire l'URL
+        const fullUrl = UrlBuilder.buildUrl(this.baseUrl, endpoint, params);
+  
+        // Headers pour upload (pas de Content-Type, le navigateur le gère)
+        const headers = await this.buildUploadHeaders(requireAuth);
+  
+        // AbortController avec timeout étendu
+        const controller = this.createAbortController(timeout);
+  
+        // Exécuter l'upload avec retry
+        const response = await this.executeWithRetry(
+          () => this.executeUploadRequest(fullUrl, formData, headers, controller, onProgress),
+          retry
+        );
+  
+        // Traiter la réponse
+        const rawData = await this.handleResponse(response, endpoint);
+        const processedData = rawData;
+        const validatedData = await this.validateData(responseSchema, processedData, endpoint);
+  
+        return {
+          data: validatedData,
+          status: response.status,
+          headers: response.headers,
+          cached: false
+        };
+  
+      } catch (error) {
+        throw this.processError(error, endpoint);
+      }
+    }
+  
+    /**
+     * Requêtes POST en lot (batch)
+     */
+    async postBatch<TRequest, TResponse>(
+      config: BatchRequestConfig<TRequest, TResponse>
+    ): Promise<ApiResponse<TResponse[]>> {
+      const {
+        endpoint,
+        requests,
+        bodySchema,
+        responseSchema,
+        batchSize = 5,
+        concurrent = false,
+        stopOnError = false,
+        onBatchProgress,
+        timeout = this.defaultTimeout,
+        requireAuth = false
+      } = config;
+  
+      try {
+        const results: TResponse[] = [];
+        const errors: Error[] = [];
+        const batches = this.createBatches(requests, batchSize);
+  
+        for (let i = 0; i < batches.length; i++) {
+          const batch = batches[i];
+          const batchPromises = batch.map(request => 
+            this.post({
+              endpoint,
+              body: request,
+              bodySchema,
+              responseSchema,
+              timeout,
+              requireAuth
+            }).then(response => response.data)
+            .catch(error => {
+              errors.push(error);
+              if (stopOnError) throw error;
+              return null;
+            })
+          );
+  
+          const batchResults = concurrent 
+            ? await Promise.all(batchPromises)
+            : await this.executeSequentially(batchPromises);
+  
+          results.push(...batchResults.filter(result => result !== null));
+          
+          // Callback de progression
+          if (onBatchProgress) {
+            onBatchProgress(results.length, requests.length);
+          }
+        }
+  
+        // Si des erreurs et stopOnError est false, les logger
+        if (errors.length > 0 && !stopOnError) {
+          console.warn(`Batch completed with ${errors.length} errors:`, errors);
+        }
+  
+        return {
+          data: results,
+          status: 207, // Multi-Status
+          headers: new Headers(),
+          cached: false
+        };
+  
+      } catch (error) {
+        throw this.processError(error, endpoint);
+      }
+    }
+  
+    /**
+     * Méthodes utilitaires simples
+     */
+    async postSimple<TRequest, TResponse>(
+      endpoint: string,
+      body: TRequest,
+      responseSchema: z.ZodSchema<TResponse>,
+      bodySchema?: z.ZodSchema<TRequest>
+    ): Promise<TResponse> {
+      const response = await this.post({
+        endpoint,
+        body,
+        bodySchema,
+        responseSchema
+      });
+      return response.data;
+    }
+  
+    async createResource<TRequest, TResponse>(
+      endpoint: string,
+      data: TRequest,
+      responseSchema: z.ZodSchema<TResponse>
+    ): Promise<TResponse> {
+      return this.postSimple(endpoint, data, responseSchema);
+    }
+  
+    async submitForm<TFormData, TResponse>(
+      endpoint: string,
+      formData: TFormData,
+      responseSchema: z.ZodSchema<TResponse>,
+      optimistic: boolean = false
+    ): Promise<TResponse> {
+      const response = await this.post({
+        endpoint,
+        body: formData,
+        responseSchema,
+        optimisticUpdate: optimistic
+      });
+      return response.data;
+    }
+  
+    // Méthodes privées pour la logique interne
+    private async executePostRequest<TResponse>(
+      url: string,
+      body: unknown,
+      headers: HeadersInit,
+      controller: AbortController,
+      responseSchema: z.ZodSchema<TResponse>,
+      transform?: (data: unknown) => TResponse,
+      retry?: RetryConfig,
+      endpoint?: string
+    ): Promise<ApiResponse<TResponse>> {
+      const response = await this.executeWithRetry(
+        () => fetch(url, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(body),
+          signal: controller.signal
+        }),
+        retry
+      );
+  
+      const rawData = await this.handleResponse(response, endpoint || url);
+      const processedData = transform ? transform(rawData) : rawData;
+      const validatedData = await this.validateData(responseSchema, processedData, endpoint || url);
+  
+      return {
+        data: validatedData,
+        status: response.status,
+        headers: response.headers,
+        cached: false
+      };
+    }
+  
+    private async executeUploadRequest(
+      url: string,
+      formData: FormData,
+      headers: HeadersInit,
+      controller: AbortController,
+      onProgress?: (progress: ProgressEvent) => void
+    ): Promise<Response> {
+      if (onProgress && 'XMLHttpRequest' in globalThis) {
+        // Utiliser XMLHttpRequest pour le suivi de progression
+        return new Promise<Response>((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          
+          xhr.upload.addEventListener('progress', onProgress);
+          
+          xhr.onload = () => {
+            const response = new Response(xhr.response, {
+              status: xhr.status,
+              statusText: xhr.statusText,
+              headers: new Headers()
+            });
+            resolve(response);
+          };
+          
+          xhr.onerror = () => reject(new NetworkError('Upload failed'));
+          xhr.ontimeout = () => reject(new NetworkError('Upload timeout'));
+          
+          xhr.open('POST', url);
+          Object.entries(headers as Record<string, string>).forEach(([key, value]) => {
+            xhr.setRequestHeader(key, value);
+          });
+          
+          controller.signal.addEventListener('abort', () => xhr.abort());
+          
+          xhr.send(formData);
+        });
+      } else {
+        // Fallback vers fetch standard
+        return fetch(url, {
+          method: 'POST',
+          headers,
+          body: formData,
+          signal: controller.signal
+        });
+      }
+    }
+  
+    private async executeSequentially<T>(promises: (() => Promise<T>)[]): Promise<T[]> {
+      const results: T[] = [];
+      for (const promiseFactory of promises) {
+        results.push(await promiseFactory());
+      }
+      return results;
+    }
+  
+    private createBatches<T>(items: T[], batchSize: number): T[][] {
+      const batches: T[][] = [];
+      for (let i = 0; i < items.length; i += batchSize) {
+        batches.push(items.slice(i, i + batchSize));
+      }
+      return batches;
+    }
+  
+    private validateFiles(files: File[], maxFileSize?: number, allowedTypes?: string[]): void {
+      files.forEach(file => {
+        if (maxFileSize && file.size > maxFileSize) {
+          throw new ValidationError(
+            `File ${file.name} exceeds maximum size of ${maxFileSize} bytes`,
+            []
+          );
+        }
+        
+        if (allowedTypes && !allowedTypes.includes(file.type)) {
+          throw new ValidationError(
+            `File ${file.name} has unsupported type ${file.type}`,
+            []
+          );
+        }
+      });
+    }
+  
+    private async validateRequestBody<T>(
+      schema: z.ZodSchema<T>,
+      body: T,
+      endpoint: string
+    ): Promise<T> {
+      try {
+        return await schema.parseAsync(body);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          throw new ValidationError(
+            'Request body validation failed',
+            error.issues,
+            endpoint
+          );
+        }
+        throw error;
+      }
+    }
+  
+    private sanitizeRequestBody(body: unknown): unknown {
+      if (typeof body === 'object' && body !== null) {
+        return RequestSanitizer.sanitizeParams(body as Record<string, unknown>);
+      }
+      return body;
+    }
+  
+    private generateOptimisticId(endpoint: string, body: unknown): string {
+      return `optimistic_${endpoint}_${JSON.stringify(body)}_${Date.now()}`;
+    }
+  
+    private setOptimisticData(id: string, data: unknown): void {
+      this.optimisticCache.set(id, {
+        data,
+        timestamp: Date.now()
+      });
+    }
+  
+    private generateRequestKey(endpoint: string, body: unknown): string {
+      return `${endpoint}_${JSON.stringify(body)}`;
+    }
+  
+    private async buildPostHeaders(
+      headers: HeadersInit,
+      requireAuth: boolean,
+      idempotencyKey?: string
+    ): Promise<HeadersInit> {
+      const requestHeaders = { ...this.defaultHeaders, ...headers };
+  
+      if (requireAuth) {
+        const token = await this.getAuthToken();
+        if (token) {
+          (requestHeaders as Record<string, string>)['Authorization'] = `Bearer ${token}`;
+        }
+      }
+  
+      if (idempotencyKey) {
+        (requestHeaders as Record<string, string>)['Idempotency-Key'] = idempotencyKey;
+      }
+  
+      return requestHeaders;
+    }
+  
+    private async buildUploadHeaders(requireAuth: boolean): Promise<HeadersInit> {
+      const headers: Record<string, string> = {
+        // Pas de Content-Type pour FormData, le navigateur le gère
+      };
+  
+      if (requireAuth) {
+        const token = await this.getAuthToken();
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+      }
+  
+      return headers;
+    }
+  
+    private async getAuthToken(): Promise<string | null> {
+      if (typeof window !== 'undefined') {
+        return this.getToken();
+      }
+      return null;
+    }
+  
+    private async validateData<T>(
+      schema: z.ZodSchema<T>,
+      data: unknown,
+      endpoint: string
+    ): Promise<T> {
+      try {
+        return await schema.parseAsync(data);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          throw new ValidationError(
+            'Response validation failed',
+            error.issues,
+            endpoint
+          );
+        }
+        throw error;
+      }
+    }
+  
+    private shouldUseFallback(error: unknown): boolean {
+      return error instanceof NetworkError || 
+             (error instanceof ApiError && error.status >= 500);
+    }
+  
+    private processError(error: unknown, endpoint: string): Error {
+      if (error instanceof ApiError || error instanceof ValidationError) {
+        return error;
+      }
+  
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        return new NetworkError('Network connection failed', error as Error, endpoint);
+      }
+  
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return new NetworkError('Request timeout', error as Error, endpoint);
+      }
+  
+      return new ApiError('Unknown error occurred', 500, 'UNKNOWN_ERROR', endpoint);
+    }
+  
+    /**
+     * Nettoyage des caches et requêtes en cours
+     */
+    public clearPendingRequests(): void {
+      this.pendingRequests.clear();
+    }
+  
+    public clearOptimisticCache(): void {
+      this.optimisticCache.clear();
+    }
+  
+    public getPendingRequestsCount(): number {
+      return this.pendingRequests.size;
+    }
+  }
