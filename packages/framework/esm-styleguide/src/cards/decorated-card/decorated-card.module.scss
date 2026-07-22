@@ -266,3 +266,51 @@
   background: var(--colors-surface-card);
   @include glass.glass-surface;
 }
+
+// ── mirror ───────────────────────────────────────────────────────────────────
+// Effet "miroir" : PAS de backdrop-filter (contrairement à 'glass') — le
+// relief vient uniquement d'un dégradé de surface + reflets internes +
+// une ombre portée floutée, posée en couche séparée derrière la carte
+// (comme l'original : un <div> "shadow" distinct du bouton lui-même).
+
+.card--mirror {
+  position: relative;
+}
+
+.mirrorSurface {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--border-radius-xl);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--colors-surface-card) 100%, var(--colors-surface-translucent) 40%),
+    var(--colors-surface-card)
+  );
+  border: 1px solid var(--colors-surface-translucent-border, rgba(255, 255, 255, 0.8));
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in srgb, var(--colors-surface-translucent) 80%, transparent),
+    inset 0 -1px 0 0 color-mix(in srgb, var(--colors-surface-foreground) 6%, transparent),
+    0 1px 2px 0 color-mix(in srgb, var(--colors-surface-foreground) 8%, transparent);
+  transition: var(--transitions-default);
+}
+
+.card--mirror:hover .mirrorSurface {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--colors-surface-card) 100%, var(--colors-surface-translucent) 55%),
+    var(--colors-surface-card)
+  );
+}
+
+.mirrorShadow {
+  position: absolute;
+  z-index: 0;
+  left: 6%;
+  right: 6%;
+  bottom: -0.5rem;
+  height: 1rem;
+  border-radius: var(--border-radius-full, 9999px);
+  background: color-mix(in srgb, var(--colors-surface-foreground) 20%, transparent);
+  filter: blur(10px);
+  pointer-events: none;
+}

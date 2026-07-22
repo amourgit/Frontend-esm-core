@@ -10,7 +10,8 @@ export type CardVariant =
   | 'inner'
   | 'lifted'
   | 'corners'
-  | 'glass';
+  | 'glass'
+  | 'mirror';
 
 export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Traitement décoratif de la bordure/du cadre. Défaut : 'default'. */

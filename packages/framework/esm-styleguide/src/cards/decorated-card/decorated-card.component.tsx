@@ -87,6 +87,14 @@ export const DecoratedCard = forwardRef<HTMLDivElement, CardProps>(
           </div>
         );
 
+      case 'mirror':
+        return (
+          <div ref={ref} className={rootClassName} style={style} {...rest}>
+            <div className={styles.mirrorSurface}>{content}</div>
+            <div className={styles.mirrorShadow} />
+          </div>
+        );
+
       default:
         // 'default', 'neubrutalism', 'lifted' — pas de décoration additionnelle,
         // uniquement le cadre (bordure/ombre) porté par card--{variant}.
