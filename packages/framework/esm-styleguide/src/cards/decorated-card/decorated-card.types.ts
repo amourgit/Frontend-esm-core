@@ -9,7 +9,8 @@ export type CardVariant =
   | 'neubrutalism'
   | 'inner'
   | 'lifted'
-  | 'corners';
+  | 'corners'
+  | 'glass';
 
 export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Traitement décoratif de la bordure/du cadre. Défaut : 'default'. */

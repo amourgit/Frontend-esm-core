@@ -9,6 +9,7 @@
 
 // EGEN Panel design tokens + mixins (consomme le moteur de thème dynamique @egen/esm-theme)
 @forward './panel';
+@forward './glass';
 
 @forward './components/general';
 @forward './components/canvas';

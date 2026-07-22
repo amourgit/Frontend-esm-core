@@ -9,6 +9,8 @@
 //  thème sombre, donc la couleur d'ombre s'adapte automatiquement.
 // ============================================================================
 
+@use '../../glass' as glass;
+
 .card {
   position: relative;
   width: 100%;
@@ -250,4 +252,17 @@
   border-right-width: 2px;
   border-bottom-width: 2px;
   border-bottom-right-radius: var(--border-radius-md);
+}
+
+// ── glass ────────────────────────────────────────────────────────────────────
+// Glassmorphisme du LiquidGlassButton d'origine, porté tel quel dans le
+// thème central (effects.glass.* — voir theme.default.json) et consommé ici
+// via le mixin partagé glass.glass-surface (packages/framework/esm-styleguide/
+// src/_glass.scss). Design non retouché — seul le conteneur passe de bouton
+// à carte (border-radius plus généreux, fond opaque de base, padding hérité
+// du .content standard du DecoratedCard).
+.card--glass {
+  border-radius: var(--border-radius-xl);
+  background: var(--colors-surface-card);
+  @include glass.glass-surface;
 }

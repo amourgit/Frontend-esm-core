@@ -145,7 +145,7 @@ const ComponentShowcasePage: React.FC = () => {
   ];
 
   // ── Démo : DecoratedCard (@egen/esm-styleguide/cards/decorated-card) ────────
-  const cardVariants: CardVariant[] = ['default', 'dots', 'gradient', 'plus', 'neubrutalism', 'inner', 'lifted', 'corners'];
+  const cardVariants: CardVariant[] = ['default', 'dots', 'gradient', 'plus', 'neubrutalism', 'inner', 'lifted', 'corners', 'glass'];
   const [selectedCardVariant, setSelectedCardVariant] = useState<CardVariant>('default');
 
 
