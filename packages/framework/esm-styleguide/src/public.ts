@@ -52,3 +52,4 @@ export * from './sheet';
 export * from './glass-card';
 export * from './containers';
 export * from './master-detail';
+export * from './modals';

@@ -1,4 +1,5 @@
 {
+  "showcaseCardModalDescription": "Generic modal whose container is any of the card variants above — freely combine variant, animation, and draggable.",
   "showcaseCascadingNavDescription": "Cascading navigation dropdown, opens downward or upward based on the direction prop.",
   "showcaseDecoratedCardDescription": "8 ready-to-use decorative variants — no imposed size, content dictates size.",
   "showcaseEntityDetailBrowserDescription": "Entity + list of browsable sub-items, detail panel and related-entity panel, all via props. Click the first lesson or the + button to see the trainer.",

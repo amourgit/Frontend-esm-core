@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AddIcon,
+  CardModal,
   CascadingNavDropdown,
   DecoratedCard,
   DynamicField,
@@ -20,6 +21,7 @@ import {
   showToast,
   StaggeredMenuPanel,
   useConfig,
+  type CardModalAnimationPreset,
   type CardVariant,
   type EntityDetailBrowserItem,
   type NavigationItem,
@@ -148,6 +150,24 @@ const ComponentShowcasePage: React.FC = () => {
   // ── Démo : DecoratedCard (@egen/esm-styleguide/cards/decorated-card) ────────
   const cardVariants: CardVariant[] = ['default', 'dots', 'gradient', 'plus', 'neubrutalism', 'inner', 'lifted', 'corners', 'glass', 'mirror'];
   const [selectedCardVariant, setSelectedCardVariant] = useState<CardVariant>('default');
+
+  // ── Démo : CardModal (@egen/esm-styleguide/modals/card-modal) ───────────────
+  // Combinaisons entièrement libres : n'importe quelle variante de carte
+  // ci-dessus × n'importe quelle animation × déplaçable ou non.
+  const modalAnimations: CardModalAnimationPreset[] = [
+    'fade',
+    'scale',
+    'zoom',
+    'slide-up',
+    'slide-down',
+    'slide-left',
+    'slide-right',
+    'none',
+  ];
+  const [selectedModalCardVariant, setSelectedModalCardVariant] = useState<CardVariant>('glass');
+  const [selectedModalAnimation, setSelectedModalAnimation] = useState<CardModalAnimationPreset>('scale');
+  const [modalDraggable, setModalDraggable] = useState(false);
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
 
   // ── Démo : FolderGallery (@egen/esm-styleguide/containers/folder-gallery) ──
@@ -480,6 +500,78 @@ const ComponentShowcasePage: React.FC = () => {
               <AddIcon size={18} />
             </DecoratedCard>
           </div>
+        </section>
+
+        {/* ── Section : CardModal ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>CardModal</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseCardModalDescription',
+              "Modal générique dont le conteneur est n'importe quelle variante de carte ci-dessus — combinez librement variante, animation et déplaçable.",
+            )}
+          </p>
+
+          <p className={styles.decoratedCardBody} style={{ marginBottom: '0.5rem' }}>
+            Variante de carte du modal :
+          </p>
+          <div className={styles.demoRow}>
+            {cardVariants.map((variant) => (
+              <button
+                key={variant}
+                type="button"
+                className={styles.sideToggleButton}
+                data-active={selectedModalCardVariant === variant || undefined}
+                onClick={() => setSelectedModalCardVariant(variant)}
+              >
+                {variant}
+              </button>
+            ))}
+          </div>
+
+          <p className={styles.decoratedCardBody} style={{ margin: '1rem 0 0.5rem' }}>
+            Animation d'ouverture/fermeture :
+          </p>
+          <div className={styles.demoRow}>
+            {modalAnimations.map((anim) => (
+              <button
+                key={anim}
+                type="button"
+                className={styles.sideToggleButton}
+                data-active={selectedModalAnimation === anim || undefined}
+                onClick={() => setSelectedModalAnimation(anim)}
+              >
+                {anim}
+              </button>
+            ))}
+          </div>
+
+          <div className={styles.demoRow} style={{ marginTop: '1rem', alignItems: 'center' }}>
+            <label className={styles.decoratedCardBody} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input type="checkbox" checked={modalDraggable} onChange={(e) => setModalDraggable(e.target.checked)} />
+              Déplaçable à la souris
+            </label>
+            <button type="button" className={styles.demoButton} onClick={() => setIsDemoModalOpen(true)}>
+              Ouvrir le modal
+            </button>
+          </div>
+
+          <CardModal
+            open={isDemoModalOpen}
+            onOpenChange={setIsDemoModalOpen}
+            cardVariant={selectedModalCardVariant}
+            cardProps={{
+              title: 'Confirmation',
+              description: `Carte : ${selectedModalCardVariant} — Animation : ${selectedModalAnimation}`,
+            }}
+            animation={selectedModalAnimation}
+            draggable={modalDraggable}
+          >
+            <p className={styles.decoratedCardBody}>
+              Contenu du modal — entièrement libre, passé via <code>children</code>. Ferme-le avec la croix,
+              Échap, un clic en dehors{modalDraggable ? ', ou déplace-le avant de le fermer' : ''}.
+            </p>
+          </CardModal>
         </section>
 
         {/* ── Section : EntityDetailBrowser ── */}
