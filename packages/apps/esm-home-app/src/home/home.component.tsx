@@ -151,7 +151,7 @@ const ComponentShowcasePage: React.FC = () => {
   const cardVariants: CardVariant[] = ['default', 'dots', 'gradient', 'plus', 'neubrutalism', 'inner', 'lifted', 'corners', 'glass', 'mirror'];
   const [selectedCardVariant, setSelectedCardVariant] = useState<CardVariant>('default');
 
-  // ── Démo : CardModal (@egen/esm-styleguide/modals/card-modal) ───────────────
+  // ── Démo : CardModal (@egen/esm-styleguide/dialogs/card-modal) ──────────────
   // Combinaisons entièrement libres : n'importe quelle variante de carte
   // ci-dessus × n'importe quelle animation × déplaçable ou non.
   const modalAnimations: CardModalAnimationPreset[] = [
