@@ -268,10 +268,61 @@
   border-bottom-color: var(--colors-primary-500);
 }
 
-// ── États de validation — communs aux 3 variantes ──────────────────────────
-// Chaque état surcharge la couleur de bordure/label sur les 3 variantes à la
-// fois, en ciblant `.fieldControl` (bordure) indépendamment de son origine
-// (panel-surface pour outlined, border-bottom pour filled/standard).
+// ── Variante KINETIC — label dont chaque lettre s'anime individuellement ──
+// Même structure de bordure que STANDARD (bordure basse uniquement), mais le
+// positionnement/l'animation du label ne passent PAS par les transitions CSS
+// partagées (:focus/:placeholder-shown) : c'est piloté par framer-motion
+// (voir kinetic-label.component.tsx), d'où une classe dédiée
+// (.kineticLabelWrapper) plutôt que .label, pour ne jamais hériter des
+// règles de flottaison CSS des 3 autres variantes.
+
+.field--kinetic .fieldControl {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--colors-border-input);
+  transition: var(--transitions-colors);
+}
+
+.field--kinetic .input {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.field--kinetic.field--has-left-icon .input {
+  padding-left: 1.5rem;
+}
+
+.field--kinetic .fieldControl:focus-within {
+  border-bottom-color: var(--colors-primary-500);
+}
+
+.kineticLabelWrapper {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.field--kinetic.field--has-left-icon .kineticLabelWrapper {
+  left: 1.5rem;
+}
+
+.kineticLabel {
+  display: inline-flex;
+}
+
+.kineticLetter {
+  display: inline-block;
+  font-size: var(--typography-font-size-sm-size);
+  color: var(--colors-surface-foreground);
+}
+
+// ── États de validation — communs aux 4 variantes ──────────────────────────
+// Chaque état surcharge la couleur de bordure/label sur toutes les variantes
+// à la fois, en ciblant `.fieldControl` (bordure) indépendamment de son
+// origine (panel-surface pour outlined, border-bottom pour filled/standard/kinetic).
 
 @each $severity in ('success', 'warning', 'error') {
   .field--#{$severity} .fieldControl {
@@ -290,19 +341,22 @@
 
 .field--outlined.field--success .fieldControl:focus-within,
 .field--filled.field--success .fieldControl:focus-within,
-.field--standard.field--success .fieldControl:focus-within {
+.field--standard.field--success .fieldControl:focus-within,
+.field--kinetic.field--success .fieldControl:focus-within {
   border-color: var(--colors-success-500);
 }
 
 .field--outlined.field--warning .fieldControl:focus-within,
 .field--filled.field--warning .fieldControl:focus-within,
-.field--standard.field--warning .fieldControl:focus-within {
+.field--standard.field--warning .fieldControl:focus-within,
+.field--kinetic.field--warning .fieldControl:focus-within {
   border-color: var(--colors-warning-500);
 }
 
 .field--outlined.field--error .fieldControl:focus-within,
 .field--filled.field--error .fieldControl:focus-within,
-.field--standard.field--error .fieldControl:focus-within {
+.field--standard.field--error .fieldControl:focus-within,
+.field--kinetic.field--error .fieldControl:focus-within {
   border-color: var(--colors-error-500);
 }
 

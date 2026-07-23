@@ -41,7 +41,7 @@ export interface FieldIcon {
 }
 
 /** Variante visuelle du champ — toutes trois pilotées à 100% par les tokens du thème EGEN. */
-export type DynamicFieldVariant = 'filled' | 'standard' | 'outlined';
+export type DynamicFieldVariant = 'filled' | 'standard' | 'outlined' | 'kinetic';
 
 /** Taille du champ — mappée sur les tailles `--panel-*` du thème (`panel-size`). */
 export type DynamicFieldSize = 'sm' | 'md' | 'lg';

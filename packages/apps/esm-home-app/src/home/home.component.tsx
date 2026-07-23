@@ -51,6 +51,7 @@ const ComponentShowcasePage: React.FC = () => {
   const [outlinedValue, setOutlinedValue] = useState('');
   const [filledValue, setFilledValue] = useState('');
   const [standardValue, setStandardValue] = useState('');
+  const [kineticValue, setKineticValue] = useState('');
 
   // ── Démo : StaggeredMenuPanel / MenuToggleButton (@egen/esm-styleguide/staggered-menu) ──
   const [staggeredMenuOpen, setStaggeredMenuOpen] = useState(false);
@@ -215,7 +216,7 @@ const ComponentShowcasePage: React.FC = () => {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>DynamicField</h2>
           <p className={styles.sectionDescription}>
-            {t('showcaseFieldsDescription', 'Champ de saisie unique, multi-variante (outlined / filled / standard).')}
+            {t('showcaseFieldsDescription', 'Champ de saisie unique, multi-variante (outlined / filled / standard / kinetic).')}
           </p>
           <div className={styles.fieldsGrid}>
             <DynamicField
@@ -235,6 +236,12 @@ const ComponentShowcasePage: React.FC = () => {
               label="Standard"
               value={standardValue}
               onChange={setStandardValue}
+            />
+            <DynamicField
+              variant="kinetic"
+              label="Kinetic"
+              value={kineticValue}
+              onChange={setKineticValue}
             />
           </div>
         </section>

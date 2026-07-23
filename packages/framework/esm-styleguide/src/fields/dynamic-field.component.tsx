@@ -3,6 +3,7 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { FieldIconComponent } from './field-icon.component';
 import { ValidationIcon } from './validation-icon.component';
+import { KineticLabel } from './kinetic-label.component';
 import { useFieldValidation } from './use-field-validation.hook';
 import { defaultValidation, type DynamicFieldProps } from './dynamic-field.types';
 import styles from './dynamic-field.module.scss';
@@ -11,11 +12,13 @@ import styles from './dynamic-field.module.scss';
  * `DynamicField` — champ de saisie unique, dynamique et personnalisable, destiné à
  * remplacer au cas par cas n'importe quel champ texte des apps EGEN.
  *
- * Trois variantes visuelles (`variant`), pilotées uniquement par des classes CSS —
- * aucune logique de style en JS :
+ * Quatre variantes visuelles (`variant`), pilotées uniquement par des classes CSS —
+ * aucune logique de style en JS (sauf `kinetic`, animée lettre par lettre) :
  * - `outlined` (par défaut) : cadre complet façon "panel" (`--panel-input-*`).
  * - `filled` : fond plein arrondi en haut, bordure inférieure épaisse.
  * - `standard` : pas de fond, simple bordure inférieure (le plus discret).
+ * - `kinetic` : label dont chaque lettre s'anime individuellement (décalage +
+ *   changement de couleur, en cascade) lors du focus/remplissage — via framer-motion.
  *
  * Le label flotte au-dessus du texte saisi (pattern "floating label"), l'icône de
  * validation glisse depuis la droite lors d'un changement de sévérité, et une
@@ -64,6 +67,9 @@ export const DynamicField: React.FC<DynamicFieldProps> = ({
   const helpId = `${fieldId}-help`;
 
   const [inputValue, setInputValue] = useState(value);
+  // Uniquement utilisé par variant='kinetic' (les 3 autres variantes restent
+  // pilotées à 100% par CSS, via :focus/:placeholder-shown — voir le fichier .scss).
+  const [isFocused, setIsFocused] = useState(false);
   const fieldRef = useRef<HTMLDivElement>(null);
 
   const { currentValidation, isAnimating } = useFieldValidation(inputValue, validation, onValidationChange);
@@ -114,8 +120,14 @@ export const DynamicField: React.FC<DynamicFieldProps> = ({
           name={name}
           value={inputValue}
           onChange={handleInputChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
+          onFocus={(e) => {
+            setIsFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            onBlur?.(e);
+          }}
           disabled={disabled}
           required={required}
           autoComplete={autoComplete}
@@ -126,7 +138,13 @@ export const DynamicField: React.FC<DynamicFieldProps> = ({
           aria-invalid={currentValidation?.type === 'error' ? true : undefined}
         />
 
-        {label && (
+        {label && variant === 'kinetic' && (
+          <label htmlFor={fieldId} className={styles.kineticLabelWrapper}>
+            <KineticLabel label={label} active={isFocused || inputValue.length > 0} required={required} />
+          </label>
+        )}
+
+        {label && variant !== 'kinetic' && (
           <label htmlFor={fieldId} className={styles.label}>
             {hasLabelIcon && <FieldIconComponent fieldIcon={fieldIcon} className={styles.labelIconGlyph} />}
             <span className={styles.labelText}>
