@@ -1,13 +1,26 @@
 /** @category CardModal */
-import React, { useCallback, useEffect, useId, useState } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import classNames from 'classnames';
-import { CloseIcon } from '../../icons';
+import { CloseIcon, MaximizeIcon } from '../../icons';
 import { DecoratedCard } from '../../cards/decorated-card';
 import { cardModalAnimationPresets } from './card-modal.animations';
 import type { CardModalAnimationConfig, CardModalProps } from './card-modal.types';
 import styles from './card-modal.module.scss';
+
+interface DockState {
+  side: 'left' | 'right';
+  y: number;
+}
+
+const clampDockY = (y: number, size: number): number => {
+  if (typeof window === 'undefined') {
+    return y;
+  }
+  const margin = 8;
+  return Math.min(Math.max(y, margin + size / 2), window.innerHeight - margin - size / 2);
+};
 
 const isPresetConfig = (
   animation: CardModalProps['animation'],
@@ -58,6 +71,11 @@ export const CardModal: React.FC<CardModalProps> = ({
   cardVariant = 'default',
   cardProps,
   draggable = false,
+  dockable = false,
+  dockIcon,
+  dockEdgeThreshold = 80,
+  dockUndockDistance = 120,
+  dockSize = 56,
   closeOnOverlayClick = true,
   closeOnEscape = true,
   showOverlay = true,
@@ -71,6 +89,8 @@ export const CardModal: React.FC<CardModalProps> = ({
 }) => {
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const [mounted, setMounted] = useState(false);
+  const [dock, setDock] = useState<DockState | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
 
   const isControlled = open !== undefined;
@@ -89,6 +109,43 @@ export const CardModal: React.FC<CardModalProps> = ({
   const close = useCallback(() => setOpen(false), [setOpen]);
 
   useEffect(() => setMounted(true), []);
+
+  // Chaque (ré)ouverture démarre non-ancrée — l'ancrage est un état
+  // d'interaction éphémère, pas une préférence à retenir entre deux ouvertures.
+  useEffect(() => {
+    if (isOpen) {
+      setDock(null);
+    }
+  }, [isOpen]);
+
+  // ── Détection d'ancrage en coin (additif — ne s'exécute que si dockable) ──
+  // Utilisé à la fois par le panneau plein (pour ancrer au relâchement près
+  // d'un bord) et par la bulle ancrée (pour la repositionner verticalement,
+  // ou la déployer si on la glisse assez loin du bord vers le centre).
+  const handlePanelDragEnd = useCallback(() => {
+    if (!dockable || !panelRef.current || typeof window === 'undefined') {
+      return;
+    }
+    const rect = panelRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    if (dock) {
+      const edgeX = dock.side === 'left' ? 0 : window.innerWidth;
+      if (Math.abs(centerX - edgeX) > dockUndockDistance) {
+        setDock(null);
+      } else {
+        setDock({ side: dock.side, y: clampDockY(centerY, dockSize) });
+      }
+      return;
+    }
+
+    if (centerX <= dockEdgeThreshold) {
+      setDock({ side: 'left', y: clampDockY(centerY, dockSize) });
+    } else if (centerX >= window.innerWidth - dockEdgeThreshold) {
+      setDock({ side: 'right', y: clampDockY(centerY, dockSize) });
+    }
+  }, [dockable, dock, dockEdgeThreshold, dockUndockDistance, dockSize]);
 
   useEffect(() => {
     if (!isOpen || !lockScroll) {
@@ -128,7 +185,7 @@ export const CardModal: React.FC<CardModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <div className={styles.root}>
-          {showOverlay && (
+          {showOverlay && !dock && (
             <motion.div
               className={classNames(styles.overlay, overlayClassName)}
               initial={{ opacity: 0 }}
@@ -140,36 +197,71 @@ export const CardModal: React.FC<CardModalProps> = ({
             />
           )}
 
-          <div className={styles.centerLayer}>
+          {dock ? (
+            // ── Bulle ancrée — moitié visible sur le bord, façon widget iOS/macOS ──
             <motion.div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={cardProps?.title ? titleId : undefined}
-              className={classNames(styles.panel, className)}
-              style={{ width, ...style }}
-              variants={variants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={transition}
-              drag={draggable}
+              ref={panelRef}
+              className={classNames(styles.dockBubble, styles[`dockBubble--${dock.side}`])}
+              style={{
+                top: dock.y,
+                width: dockSize,
+                height: dockSize,
+                [dock.side]: -(dockSize / 2),
+              }}
+              drag
               dragMomentum={false}
-              dragElastic={0.12}
-              whileDrag={draggable ? { cursor: 'grabbing' } : undefined}
+              dragElastic={0.2}
+              onDragEnd={handlePanelDragEnd}
+              initial={{ scale: 0.3, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.3, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+              whileDrag={{ cursor: 'grabbing' }}
+              role="button"
+              tabIndex={0}
+              aria-label="Déployer le modal"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setDock(null);
+                }
+              }}
             >
-              <DecoratedCard variant={cardVariant} {...cardProps}>
-                {showCloseButton &&
-                  (renderCloseButton ? (
-                    renderCloseButton(close)
-                  ) : (
-                    <button type="button" className={styles.closeButton} onClick={close} aria-label="Fermer">
-                      <CloseIcon size={18} />
-                    </button>
-                  ))}
-                {children}
-              </DecoratedCard>
+              {dockIcon ?? <MaximizeIcon size={20} />}
             </motion.div>
-          </div>
+          ) : (
+            <div className={styles.centerLayer}>
+              <motion.div
+                ref={panelRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={cardProps?.title ? titleId : undefined}
+                className={classNames(styles.panel, className)}
+                style={{ width, ...style }}
+                variants={variants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={transition}
+                drag={draggable}
+                dragMomentum={false}
+                dragElastic={0.12}
+                onDragEnd={dockable ? handlePanelDragEnd : undefined}
+                whileDrag={draggable ? { cursor: 'grabbing' } : undefined}
+              >
+                <DecoratedCard variant={cardVariant} {...cardProps}>
+                  {showCloseButton &&
+                    (renderCloseButton ? (
+                      renderCloseButton(close)
+                    ) : (
+                      <button type="button" className={styles.closeButton} onClick={close} aria-label="Fermer">
+                        <CloseIcon size={18} />
+                      </button>
+                    ))}
+                  {children}
+                </DecoratedCard>
+              </motion.div>
+            </div>
+          )}
         </div>
       )}
     </AnimatePresence>

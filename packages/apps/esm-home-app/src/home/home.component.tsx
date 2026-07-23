@@ -167,6 +167,7 @@ const ComponentShowcasePage: React.FC = () => {
   const [selectedModalCardVariant, setSelectedModalCardVariant] = useState<CardVariant>('glass');
   const [selectedModalAnimation, setSelectedModalAnimation] = useState<CardModalAnimationPreset>('scale');
   const [modalDraggable, setModalDraggable] = useState(false);
+  const [modalDockable, setModalDockable] = useState(false);
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
 
@@ -551,6 +552,18 @@ const ComponentShowcasePage: React.FC = () => {
               <input type="checkbox" checked={modalDraggable} onChange={(e) => setModalDraggable(e.target.checked)} />
               Déplaçable à la souris
             </label>
+            <label
+              className={styles.decoratedCardBody}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', opacity: modalDraggable ? 1 : 0.5 }}
+            >
+              <input
+                type="checkbox"
+                checked={modalDockable}
+                disabled={!modalDraggable}
+                onChange={(e) => setModalDockable(e.target.checked)}
+              />
+              Ancrable en coin (façon iOS/macOS)
+            </label>
             <button type="button" className={styles.demoButton} onClick={() => setIsDemoModalOpen(true)}>
               Ouvrir le modal
             </button>
@@ -566,10 +579,12 @@ const ComponentShowcasePage: React.FC = () => {
             }}
             animation={selectedModalAnimation}
             draggable={modalDraggable}
+            dockable={modalDraggable && modalDockable}
           >
             <p className={styles.decoratedCardBody}>
               Contenu du modal — entièrement libre, passé via <code>children</code>. Ferme-le avec la croix,
-              Échap, un clic en dehors{modalDraggable ? ', ou déplace-le avant de le fermer' : ''}.
+              Échap, un clic en dehors{modalDraggable ? ', ou déplace-le avant de le fermer' : ''}
+              {modalDockable ? '. Glisse-le près du bord gauche ou droit pour l’ancrer en bulle' : ''}.
             </p>
           </CardModal>
         </section>

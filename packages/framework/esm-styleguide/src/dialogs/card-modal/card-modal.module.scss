@@ -72,3 +72,35 @@
     transition: none;
   }
 }
+
+// ── Bulle ancrée (dockable) ──────────────────────────────────────────────────
+// Position fixe sur le bord gauche/droit de l'écran, moitié visible (l'autre
+// moitié est décalée hors-écran via le style inline left/-dockSize/2 ou
+// right/-dockSize/2, calculé en JS car dockSize est une prop dynamique).
+
+.dockBubble {
+  position: fixed;
+  z-index: var(--z-index-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-full, 9999px);
+  background: var(--colors-surface-card);
+  border: 1px solid var(--colors-surface-translucent-border, rgba(255, 255, 255, 0.8));
+  box-shadow: var(--shadows-lg);
+  color: var(--colors-surface-foreground);
+  cursor: grab;
+  pointer-events: auto;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.dockBubble--left {
+  padding-left: 15%;
+}
+
+.dockBubble--right {
+  padding-right: 15%;
+}

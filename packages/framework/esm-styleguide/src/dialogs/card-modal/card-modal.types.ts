@@ -52,6 +52,22 @@ export interface CardModalProps {
   // ── Comportement ─────────────────────────────────────────────────────────────
   /** Autorise à attraper la carte et la déplacer à la souris. Défaut : false. */
   draggable?: boolean;
+  /**
+   * Ancrage en coin façon widget iOS/macOS — nécessite `draggable`. Glisser
+   * le modal près du bord gauche/droit de l'écran le réduit en petite bulle
+   * circulaire à moitié visible sur ce bord (contenant `dockIcon`) ;
+   * on la redéplace verticalement le long du bord, ou on la glisse vers le
+   * centre pour la déployer à nouveau en modal complet. Défaut : false.
+   */
+  dockable?: boolean;
+  /** Icône affichée dans la bulle ancrée. Défaut : `<MaximizeIcon />`. */
+  dockIcon?: React.ReactNode;
+  /** Distance (px) au bord de l'écran en dessous de laquelle un relâchement ancre le modal. Défaut : 80. */
+  dockEdgeThreshold?: number;
+  /** Distance (px) de glissement vers le centre, une fois ancré, au-delà de laquelle le modal se déploie à nouveau. Défaut : 120. */
+  dockUndockDistance?: number;
+  /** Diamètre (px) de la bulle ancrée. Défaut : 56. */
+  dockSize?: number;
   closeOnOverlayClick?: boolean;
   closeOnEscape?: boolean;
   showOverlay?: boolean;
