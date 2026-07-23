@@ -10,6 +10,7 @@
 // ============================================================================
 
 @use '../../glass' as glass;
+@use './decoration-bleed' as bleed;
 
 .card {
   position: relative;
@@ -154,23 +155,23 @@
 }
 
 .plusIcon--topLeft {
-  top: -0.75rem;
-  left: -0.75rem;
+  top: -#{bleed.$decoration-bleed};
+  left: -#{bleed.$decoration-bleed};
 }
 
 .plusIcon--topRight {
-  top: -0.75rem;
-  right: -0.75rem;
+  top: -#{bleed.$decoration-bleed};
+  right: -#{bleed.$decoration-bleed};
 }
 
 .plusIcon--bottomLeft {
-  bottom: -0.75rem;
-  left: -0.75rem;
+  bottom: -#{bleed.$decoration-bleed};
+  left: -#{bleed.$decoration-bleed};
 }
 
 .plusIcon--bottomRight {
-  bottom: -0.75rem;
-  right: -0.75rem;
+  bottom: -#{bleed.$decoration-bleed};
+  right: -#{bleed.$decoration-bleed};
 }
 
 // ── neubrutalism ─────────────────────────────────────────────────────────────

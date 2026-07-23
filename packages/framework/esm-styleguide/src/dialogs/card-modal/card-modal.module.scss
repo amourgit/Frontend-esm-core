@@ -7,6 +7,7 @@
 // ============================================================================
 
 @use '../../panel' as panel;
+@use '../../cards/decorated-card/decoration-bleed' as bleed;
 
 .triggerWrap {
   display: inline-block;
@@ -38,8 +39,32 @@
 
 .panel {
   position: relative;
-  max-width: 100%;
-  max-height: 90vh;
+
+  // ── Anomalie corrigée ────────────────────────────────────────────────────
+  // Certaines variantes de DecoratedCard (plus, mirror, corners) débordent
+  // volontairement de leur propre boîte pour leur décoration (icônes
+  // d'angle, ombre portée...) — voir decorated-card/_decoration-bleed.scss.
+  // `.panel` étant le premier ancêtre avec `overflow: auto`, il rognait ce
+  // débordement en scrollbar dès que la carte le touchait, même quand le
+  // CONTENU tenait largement dans `max-height` : ça donnait l'impression
+  // (à tort) que la variante de carte choisie était elle-même posée dans
+  // une carte/boîte supplémentaire.
+  //
+  // Correctif : `.panel` se réserve `$decoration-bleed` de marge sur
+  // chaque bord via `padding`, en `box-sizing: content-box` pour que ce
+  // padding s'ajoute à `width`/`max-width`/`max-height` au lieu de les
+  // rogner — la carte affichée garde exactement la taille pilotée par la
+  // prop `width` du CardModal, rien ne change visuellement dans le cas
+  // normal. Le scroll réel (contenu plus grand que `max-height`) continue
+  // de fonctionner exactement comme avant.
+  // +1px : marge de sécurité contre l'arrondi sous-pixel (le débordement
+  // décoratif et cette marge partagent la même valeur `$decoration-bleed` —
+  // sans ce +1px, un arrondi de rendu différent entre les deux calculs
+  // pourrait, dans de rares cas, faire réapparaître 1px de scrollbar).
+  box-sizing: content-box;
+  max-width: calc(100% - (#{bleed.$decoration-bleed} + 1px) * 2);
+  max-height: calc(90vh - (#{bleed.$decoration-bleed} + 1px) * 2);
+  padding: calc(#{bleed.$decoration-bleed} + 1px);
   overflow: auto;
   pointer-events: auto;
 }
