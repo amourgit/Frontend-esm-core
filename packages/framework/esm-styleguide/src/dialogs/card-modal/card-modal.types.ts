@@ -83,6 +83,4 @@ export interface CardModalProps {
   className?: string;
   style?: React.CSSProperties;
   overlayClassName?: string;
-  /** Largeur maximale du modal. Défaut : '32rem'. */
-  width?: string;
 }

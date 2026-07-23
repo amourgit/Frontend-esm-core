@@ -22,9 +22,8 @@ const clampDockY = (y: number, size: number): number => {
   return Math.min(Math.max(y, margin + size / 2), window.innerHeight - margin - size / 2);
 };
 
-const isPresetConfig = (
-  animation: CardModalProps['animation'],
-): animation is CardModalAnimationConfig => typeof animation === 'object' && animation !== null;
+const isPresetConfig = (animation: CardModalProps['animation']): animation is CardModalAnimationConfig =>
+  typeof animation === 'object' && animation !== null;
 
 /**
  * `CardModal` — modal générique dont le CONTENEUR VISUEL est n'importe
@@ -85,7 +84,6 @@ export const CardModal: React.FC<CardModalProps> = ({
   className,
   style,
   overlayClassName,
-  width = '32rem',
 }) => {
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const [mounted, setMounted] = useState(false);
@@ -236,7 +234,7 @@ export const CardModal: React.FC<CardModalProps> = ({
                 aria-modal="true"
                 aria-labelledby={cardProps?.title ? titleId : undefined}
                 className={classNames(styles.panel, className)}
-                style={{ width, ...style }}
+                style={style}
                 variants={variants}
                 initial="initial"
                 animate="animate"
