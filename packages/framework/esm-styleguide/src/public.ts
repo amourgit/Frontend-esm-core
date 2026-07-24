@@ -54,3 +54,4 @@ export * from './containers';
 export * from './master-detail';
 export * from './dialogs';
 export * from './selections';
+export * from './carousel';

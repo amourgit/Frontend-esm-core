@@ -8,6 +8,7 @@ import {
   DynamicField,
   EntityDetailBrowser,
   FolderGallery,
+  ImageSwiper,
   LiquidGlassCard,
   MenuToggleButton,
   Select,
@@ -150,6 +151,15 @@ const ComponentShowcasePage: React.FC = () => {
     { id: 2, title: 'Le système de thème (tokens)', meta: '18 min' },
     { id: 3, title: 'Composants et variantes', meta: '22 min' },
     { id: 4, title: 'Bonnes pratiques SCSS', meta: '15 min' },
+  ];
+
+  // ── Démo : ImageSwiper (@egen/esm-styleguide/carousel/image-swiper) ────────
+  const demoSwiperImages = [
+    'https://picsum.photos/seed/swiper-1/400/560',
+    'https://picsum.photos/seed/swiper-2/400/560',
+    'https://picsum.photos/seed/swiper-3/400/560',
+    'https://picsum.photos/seed/swiper-4/400/560',
+    'https://picsum.photos/seed/swiper-5/400/560',
   ];
 
   // ── Démo : Select (@egen/esm-styleguide/selections/select-popover) ─────────
@@ -650,6 +660,18 @@ const ComponentShowcasePage: React.FC = () => {
             <SelectTrigger />
             <SelectContent title="Tenants" searchable searchPlaceholder="Rechercher un tenant…" />
           </Select>
+        </section>
+
+        {/* ── Section : ImageSwiper ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>ImageSwiper</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseImageSwiperDescription',
+              "Pile de cartes swipable (effet 3D empilé, façon Tinder) — glisse une carte à gauche ou à droite pour la faire tourner en fin de pile.",
+            )}
+          </p>
+          <ImageSwiper images={demoSwiperImages} />
         </section>
       </main>
 
