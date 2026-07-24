@@ -9,5 +9,6 @@
   "showcaseMenuDescription": "Animated (GSAP) side navigation panel — configurable side: left or right.",
   "showcaseSheetDescription": "Draggable modal sheet, anchored top or bottom based on the side prop.",
   "showcaseSubtitle": "@egen/esm-styleguide components under visual validation.",
-  "showcaseToastDescription": "'Liquid glass' notification, 3 variants: default (countdown), transfer (real progress), actions (customizable commands)."
+  "showcaseToastDescription": "'Liquid glass' notification, 3 variants: default (countdown), transfer (real progress), actions (customizable commands).",
+  "showcaseSelectDescription": "Generic selection popover (compound component) — trigger + panel with search, avatar/initial fallback, fully customizable rendering."
 }

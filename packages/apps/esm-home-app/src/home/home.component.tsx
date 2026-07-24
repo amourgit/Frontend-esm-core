@@ -10,6 +10,9 @@ import {
   FolderGallery,
   LiquidGlassCard,
   MenuToggleButton,
+  Select,
+  SelectContent,
+  SelectTrigger,
   Sheet,
   SheetClose,
   SheetContent,
@@ -24,6 +27,7 @@ import {
   type CardModalAnimationPreset,
   type CardVariant,
   type EntityDetailBrowserItem,
+  type SelectOption,
   type NavigationItem,
 } from '@egen/esm-framework';
 import type { ConfigSchema } from '../config-schema';
@@ -147,6 +151,15 @@ const ComponentShowcasePage: React.FC = () => {
     { id: 3, title: 'Composants et variantes', meta: '22 min' },
     { id: 4, title: 'Bonnes pratiques SCSS', meta: '15 min' },
   ];
+
+  // ── Démo : Select (@egen/esm-styleguide/selections/select-popover) ─────────
+  const demoTenants: SelectOption[] = [
+    { id: 'eigen-national', name: 'EIGEN — Gabon (national)', plan: 'Établissement', logo: 'https://picsum.photos/seed/tenant-eigen/64' },
+    { id: 'iam-central', name: 'IAM Central', plan: 'Plateforme', logo: 'https://picsum.photos/seed/tenant-iam/64' },
+    { id: 'civitas', name: 'CIVITAS', plan: 'Entreprise', logo: 'https://picsum.photos/seed/tenant-civitas/64' },
+    { id: 'edugabon', name: 'EDUGABON', plan: 'Établissement' },
+  ];
+  const [selectedTenantId, setSelectedTenantId] = useState('eigen-national');
 
   // ── Démo : DecoratedCard (@egen/esm-styleguide/cards/decorated-card) ────────
   const cardVariants: CardVariant[] = ['default', 'dots', 'gradient', 'plus', 'neubrutalism', 'inner', 'lifted', 'corners', 'glass', 'mirror'];
@@ -622,6 +635,21 @@ const ComponentShowcasePage: React.FC = () => {
                 "Collectif de formation basé à Libreville, fondé par CIVITAS — cette description est un exemple, entièrement fournie via la prop 'relatedEntity.description'.",
             }}
           />
+        </section>
+
+        {/* ── Section : Select ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Select</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseSelectDescription',
+              "Popover de sélection générique (compound component) — déclencheur + panneau avec recherche, avatar/repli sur l'initiale, rendu entièrement personnalisable.",
+            )}
+          </p>
+          <Select options={demoTenants} selectedOptionId={selectedTenantId} onOptionChange={(o) => setSelectedTenantId(o.id)}>
+            <SelectTrigger />
+            <SelectContent title="Tenants" searchable searchPlaceholder="Rechercher un tenant…" />
+          </Select>
         </section>
       </main>
 
