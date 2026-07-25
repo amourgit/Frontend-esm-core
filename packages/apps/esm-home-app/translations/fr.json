@@ -11,5 +11,6 @@
   "showcaseEntityDetailBrowserDescription": "Entité + liste de sous-éléments consultables, panneau de détail et panneau d'entité liée, tout via props. Cliquer sur la première leçon ou sur le bouton + pour voir le formateur.",
   "showcaseCardModalDescription": "Modal générique dont le conteneur est n'importe quelle variante de carte ci-dessus — combinez librement variante, animation et déplaçable.",
   "showcaseSelectDescription": "Popover de sélection générique (compound component) — déclencheur + panneau avec recherche, avatar/repli sur l'initiale, rendu entièrement personnalisable.",
-  "showcaseImageSwiperDescription": "Pile de cartes swipable (effet 3D empilé, façon Tinder) — glisse une carte à gauche ou à droite pour la faire tourner en fin de pile."
+  "showcaseImageSwiperDescription": "Pile de cartes swipable (effet 3D empilé, façon Tinder) — glisse une carte à gauche ou à droite pour la faire tourner en fin de pile.",
+  "showcaseCircularGalleryDescription": "Galerie à pastilles circulaires (GSAP + MotionPathPlugin) — clique une miniature pour la déployer en plein cadre, avec rebond à la fermeture. Défilement automatique toutes les 4,5s."
 }

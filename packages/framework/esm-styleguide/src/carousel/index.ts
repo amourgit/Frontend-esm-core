@@ -4,3 +4,4 @@
 //  carrousels, etc.
 // ============================================================================
 export * from './image-swiper';
+export * from './circular-gallery';

@@ -11,5 +11,6 @@
   "showcaseSubtitle": "@egen/esm-styleguide components under visual validation.",
   "showcaseToastDescription": "'Liquid glass' notification, 3 variants: default (countdown), transfer (real progress), actions (customizable commands).",
   "showcaseSelectDescription": "Generic selection popover (compound component) — trigger + panel with search, avatar/initial fallback, fully customizable rendering.",
-  "showcaseImageSwiperDescription": "Swipeable card stack (stacked 3D effect, Tinder-style) — swipe a card left or right to send it to the back of the stack."
+  "showcaseImageSwiperDescription": "Swipeable card stack (stacked 3D effect, Tinder-style) — swipe a card left or right to send it to the back of the stack.",
+  "showcaseCircularGalleryDescription": "Circular-pill gallery (GSAP + MotionPathPlugin) — click a thumbnail to expand it full-frame, with a bounce on close. Autoplays every 4.5s."
 }

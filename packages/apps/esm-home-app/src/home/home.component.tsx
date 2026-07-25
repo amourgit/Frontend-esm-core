@@ -4,6 +4,7 @@ import {
   AddIcon,
   CardModal,
   CascadingNavDropdown,
+  CircularGallery,
   DecoratedCard,
   DynamicField,
   EntityDetailBrowser,
@@ -160,6 +161,16 @@ const ComponentShowcasePage: React.FC = () => {
     'https://picsum.photos/seed/swiper-3/400/560',
     'https://picsum.photos/seed/swiper-4/400/560',
     'https://picsum.photos/seed/swiper-5/400/560',
+  ];
+
+  // ── Démo : CircularGallery (@egen/esm-styleguide/carousel/circular-gallery) ──
+  const demoCircularGalleryImages = [
+    { title: 'Pochette 1', url: 'https://picsum.photos/seed/circular-1/600/600' },
+    { title: 'Pochette 2', url: 'https://picsum.photos/seed/circular-2/600/600' },
+    { title: 'Pochette 3', url: 'https://picsum.photos/seed/circular-3/600/600' },
+    { title: 'Pochette 4', url: 'https://picsum.photos/seed/circular-4/600/600' },
+    { title: 'Pochette 5', url: 'https://picsum.photos/seed/circular-5/600/600' },
+    { title: 'Pochette 6', url: 'https://picsum.photos/seed/circular-6/600/600' },
   ];
 
   // ── Démo : Select (@egen/esm-styleguide/selections/select-popover) ─────────
@@ -672,6 +683,18 @@ const ComponentShowcasePage: React.FC = () => {
             )}
           </p>
           <ImageSwiper images={demoSwiperImages} />
+        </section>
+
+        {/* ── Section : CircularGallery ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>CircularGallery</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseCircularGalleryDescription',
+              "Galerie à pastilles circulaires (GSAP + MotionPathPlugin) — clique une miniature pour la déployer en plein cadre, avec rebond à la fermeture. Défilement automatique toutes les 4,5s.",
+            )}
+          </p>
+          <CircularGallery images={demoCircularGalleryImages} />
         </section>
       </main>
 
