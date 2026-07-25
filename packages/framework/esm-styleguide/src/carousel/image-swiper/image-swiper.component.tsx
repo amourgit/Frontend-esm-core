@@ -48,7 +48,7 @@ export const ImageSwiper: React.FC<ImageSwiperProps> = ({
 
   const getCards = useCallback((): HTMLElement[] => {
     if (!cardStackRef.current) return [];
-    return Array.from(cardStackRef.current.querySelectorAll(`.${styles.imageCard}`)) as HTMLElement[];
+    return Array.from(cardStackRef.current.querySelectorAll('[data-image-swiper-card]')) as HTMLElement[];
   }, []);
 
   const getActiveCard = useCallback((): HTMLElement | null => {
@@ -197,6 +197,7 @@ export const ImageSwiper: React.FC<ImageSwiperProps> = ({
       {cardOrder.map((originalIndex, displayIndex) => (
         <article
           key={`${images[originalIndex]}-${originalIndex}`}
+          data-image-swiper-card
           className={styles.imageCard}
           style={
             {
