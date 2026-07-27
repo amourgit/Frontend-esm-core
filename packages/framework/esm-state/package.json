@@ -57,7 +57,7 @@
     "access": "public"
   },
   "dependencies": {
-    "zustand": "^4.5.5"
+    "zustand": "^4.5.7"
   },
   "peerDependencies": {
     "@egen/esm-globals": "9.x",
@@ -71,7 +71,7 @@
     "@vitest/coverage-v8": "^4.1.2",
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
-    "dayjs": "^1.11.13",
+    "dayjs": "^1.11.21",
     "i18next": "^25.5.3",
     "react": "^18.3.1",
     "rimraf": "^6.1.3",
