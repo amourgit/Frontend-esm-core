@@ -25,12 +25,14 @@ import {
   SheetTrigger,
   showToast,
   StaggeredMenuPanel,
+  TestimonialCardStack,
   useConfig,
   type CardModalAnimationPreset,
   type CardVariant,
   type EntityDetailBrowserItem,
   type SelectOption,
   type NavigationItem,
+  type TestimonialItem,
 } from '@egen/esm-framework';
 import type { ConfigSchema } from '../config-schema';
 import styles from './home.scss';
@@ -171,6 +173,25 @@ const ComponentShowcasePage: React.FC = () => {
     { title: 'Pochette 4', url: 'https://picsum.photos/seed/circular-4/600/600' },
     { title: 'Pochette 5', url: 'https://picsum.photos/seed/circular-5/600/600' },
     { title: 'Pochette 6', url: 'https://picsum.photos/seed/circular-6/600/600' },
+  ];
+
+  // ── Démo : TestimonialCardStack (@egen/esm-styleguide/carousel/testimonial-card) ──
+  const demoTestimonials: TestimonialItem[] = [
+    {
+      id: 1,
+      testimonial: 'Un outil qui a changé notre façon de travailler au quotidien.',
+      author: 'Amina N.',
+    },
+    {
+      id: 2,
+      testimonial: 'Déploiement multi-tenant en quelques jours seulement.',
+      author: 'Jean-Pierre O.',
+    },
+    {
+      id: 3,
+      testimonial: 'Le support est remarquable, toujours réactif.',
+      author: 'Chantal M.',
+    },
   ];
 
   // ── Démo : Select (@egen/esm-styleguide/selections/select-popover) ─────────
@@ -695,6 +716,18 @@ const ComponentShowcasePage: React.FC = () => {
             )}
           </p>
           <CircularGallery images={demoCircularGalleryImages} />
+        </section>
+
+        {/* ── Section : TestimonialCardStack ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>TestimonialCardStack</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseTestimonialCardDescription',
+              'Pile de témoignages glissable (verre translucide) — glisse la carte de devant vers la gauche pour la faire tourner en fin de pile.',
+            )}
+          </p>
+          <TestimonialCardStack testimonials={demoTestimonials} />
         </section>
       </main>
 

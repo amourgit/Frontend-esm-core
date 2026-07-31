@@ -5,3 +5,4 @@
 // ============================================================================
 export * from './image-swiper';
 export * from './circular-gallery';
+export * from './testimonial-card';
