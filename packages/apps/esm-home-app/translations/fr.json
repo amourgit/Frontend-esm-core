@@ -13,5 +13,6 @@
   "showcaseSelectDescription": "Popover de sélection générique (compound component) — déclencheur + panneau avec recherche, avatar/repli sur l'initiale, rendu entièrement personnalisable.",
   "showcaseImageSwiperDescription": "Pile de cartes swipable (effet 3D empilé, façon Tinder) — glisse une carte à gauche ou à droite pour la faire tourner en fin de pile.",
   "showcaseCircularGalleryDescription": "Galerie à pastilles circulaires (GSAP + MotionPathPlugin) — clique une miniature pour la déployer en plein cadre, avec rebond à la fermeture. Défilement automatique toutes les 4,5s.",
-  "showcaseTestimonialCardDescription": "Pile de témoignages glissable (verre translucide) — glisse la carte de devant vers la gauche pour la faire tourner en fin de pile."
+  "showcaseTestimonialCardDescription": "Pile de témoignages glissable (verre translucide) — glisse la carte de devant vers la gauche pour la faire tourner en fin de pile.",
+  "showcaseInteractiveSelectorDescription": "Sélecteur à panneaux extensibles — clique un panneau pour l'étirer en plein cadre, les autres se replient en bandeau. Entrée en cascade au chargement."
 }

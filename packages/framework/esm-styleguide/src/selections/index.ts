@@ -5,3 +5,4 @@
 //  langues, utilisateurs, rôles, etc.
 // ============================================================================
 export * from './select-popover';
+export * from './interactive-selector';

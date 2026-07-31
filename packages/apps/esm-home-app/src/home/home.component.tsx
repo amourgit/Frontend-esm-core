@@ -25,17 +25,68 @@ import {
   SheetTrigger,
   showToast,
   StaggeredMenuPanel,
+  InteractiveSelector,
   TestimonialCardStack,
   useConfig,
   type CardModalAnimationPreset,
   type CardVariant,
   type EntityDetailBrowserItem,
+  type InteractiveSelectorOption,
   type SelectOption,
   type NavigationItem,
   type TestimonialItem,
 } from '@egen/esm-framework';
 import type { ConfigSchema } from '../config-schema';
 import styles from './home.scss';
+
+// =============================================================================
+//  Icônes de démo — InteractiveSelector (@egen/esm-styleguide/selections)
+//
+//  Le composant source utilisait react-icons/fa (FaCampground, FaFire...),
+//  librairie absente du monorepo (aucune trace dans les package.json — le
+//  set d'icônes du projet est @egen/esm-styleguide/icons, un registre fermé
+//  de pictos administratifs/médicaux sans équivalent thématique "glamping").
+//  InteractiveSelector lui-même reste 100% agnostique (icon: ReactNode) —
+//  ces 5 SVG minimalistes (currentColor, 24px, même esprit que les icônes
+//  Font Awesome d'origine) n'existent que pour CETTE démo, localement, sans
+//  polluer le registre d'icônes partagé.
+// =============================================================================
+
+const DemoTentIcon = () => (
+  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3 L21 19 H3 Z" />
+    <path d="M12 3 L12 19" />
+    <path d="M8.5 19 L12 12 L15.5 19" />
+  </svg>
+);
+
+const DemoFireIcon = () => (
+  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2c1 3-3 4-3 7a3 3 0 0 0 6 0c0-1-1-2-1-2 2 1 3 3 3 5a5 5 0 0 1-10 0c0-4 3-6 3-8 0-1 0-2 2-2Z" />
+  </svg>
+);
+
+const DemoWaterIcon = () => (
+  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2c4 5 7 8.5 7 12a7 7 0 0 1-14 0c0-3.5 3-7 7-12Z" />
+  </svg>
+);
+
+const DemoHotTubIcon = () => (
+  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 17c1.5 1.5 3 1.5 4.5 0s3-1.5 4.5 0 3 1.5 4.5 0 3-1.5 4.5 0" />
+    <rect x="4" y="10" width="16" height="7" rx="1.5" />
+    <path d="M7 10V7a2 2 0 0 1 4 0M13 10V6a2 2 0 0 1 4 0v4" />
+  </svg>
+);
+
+const DemoHikingIcon = () => (
+  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="4" r="2" />
+    <path d="M9 21l2.5-6.5L9 11l1-3 3 2 2 6-2 5" />
+    <path d="M13 8l4 1.5-1 4" />
+  </svg>
+);
 
 // =============================================================================
 //  HOME PAGE — Écran d'accueil authentifié
@@ -173,6 +224,40 @@ const ComponentShowcasePage: React.FC = () => {
     { title: 'Pochette 4', url: 'https://picsum.photos/seed/circular-4/600/600' },
     { title: 'Pochette 5', url: 'https://picsum.photos/seed/circular-5/600/600' },
     { title: 'Pochette 6', url: 'https://picsum.photos/seed/circular-6/600/600' },
+  ];
+
+  // ── Démo : InteractiveSelector (@egen/esm-styleguide/selections) ───────────
+  const demoInteractiveSelectorOptions: InteractiveSelectorOption[] = [
+    {
+      title: 'Luxury Tent',
+      description: 'Cozy glamping under the stars',
+      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+      icon: <DemoTentIcon />,
+    },
+    {
+      title: 'Campfire Feast',
+      description: "Gourmet s'mores & stories",
+      image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80',
+      icon: <DemoFireIcon />,
+    },
+    {
+      title: 'Lakeside Retreat',
+      description: 'Private dock & canoe rides',
+      image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+      icon: <DemoWaterIcon />,
+    },
+    {
+      title: 'Mountain Spa',
+      description: 'Outdoor sauna & hot tub',
+      image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=800&q=80',
+      icon: <DemoHotTubIcon />,
+    },
+    {
+      title: 'Guided Adventure',
+      description: 'Expert-led nature tours',
+      image: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=800&q=80',
+      icon: <DemoHikingIcon />,
+    },
   ];
 
   // ── Démo : TestimonialCardStack (@egen/esm-styleguide/carousel/testimonial-card) ──
@@ -716,6 +801,22 @@ const ComponentShowcasePage: React.FC = () => {
             )}
           </p>
           <CircularGallery images={demoCircularGalleryImages} />
+        </section>
+
+        {/* ── Section : InteractiveSelector ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>InteractiveSelector</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseInteractiveSelectorDescription',
+              "Sélecteur à panneaux extensibles — clique un panneau pour l'étirer en plein cadre, les autres se replient en bandeau. Entrée en cascade au chargement.",
+            )}
+          </p>
+          <InteractiveSelector
+            title="Escape in Style"
+            subtitle="Discover luxurious camping experiences in nature's most breathtaking spots."
+            options={demoInteractiveSelectorOptions}
+          />
         </section>
 
         {/* ── Section : TestimonialCardStack ── */}
