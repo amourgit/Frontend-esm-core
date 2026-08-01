@@ -26,12 +26,14 @@ import {
   showToast,
   StaggeredMenuPanel,
   InteractiveSelector,
+  LayoutGrid,
   TestimonialCardStack,
   useConfig,
   type CardModalAnimationPreset,
   type CardVariant,
   type EntityDetailBrowserItem,
   type InteractiveSelectorOption,
+  type LayoutGridItem,
   type SelectOption,
   type NavigationItem,
   type TestimonialItem,
@@ -257,6 +259,58 @@ const ComponentShowcasePage: React.FC = () => {
       description: 'Expert-led nature tours',
       image: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=800&q=80',
       icon: <DemoHikingIcon />,
+    },
+  ];
+
+  // ── Démo : LayoutGrid (@egen/esm-styleguide/containers) ─────────────────────
+  const demoLayoutGridItems: LayoutGridItem[] = [
+    {
+      id: 1,
+      thumbnail: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80',
+      content: (
+        <div>
+          <h3 className={styles.layoutGridContentTitle}>Salle de classe moderne</h3>
+          <p className={styles.layoutGridContentText}>
+            Un espace pensé pour l'apprentissage collaboratif, avec un accès direct aux ressources numériques.
+          </p>
+        </div>
+      ),
+    },
+    {
+      id: 2,
+      thumbnail: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80',
+      content: (
+        <div>
+          <h3 className={styles.layoutGridContentTitle}>Bibliothèque universitaire</h3>
+          <p className={styles.layoutGridContentText}>
+            Un lieu calme pour approfondir les cours, consulter les archives et préparer les examens.
+          </p>
+        </div>
+      ),
+    },
+    {
+      id: 3,
+      thumbnail: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80',
+      content: (
+        <div>
+          <h3 className={styles.layoutGridContentTitle}>Travaux pratiques</h3>
+          <p className={styles.layoutGridContentText}>
+            Des équipements modernes pour relier la théorie à la pratique dans chaque filière.
+          </p>
+        </div>
+      ),
+    },
+    {
+      id: 4,
+      thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80',
+      content: (
+        <div>
+          <h3 className={styles.layoutGridContentTitle}>Vie de campus</h3>
+          <p className={styles.layoutGridContentText}>
+            Des espaces partagés pour se retrouver entre les cours et faire vivre la communauté étudiante.
+          </p>
+        </div>
+      ),
     },
   ];
 
@@ -829,6 +883,18 @@ const ComponentShowcasePage: React.FC = () => {
             )}
           </p>
           <TestimonialCardStack testimonials={demoTestimonials} />
+        </section>
+
+        {/* ── Section : LayoutGrid ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>LayoutGrid</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseLayoutGridDescription',
+              "Grille de cartes — clique une carte pour l'étirer en plein cadre (transition de layout partagée), un voile sombre apparaît derrière. Reclique le voile pour refermer.",
+            )}
+          </p>
+          <LayoutGrid items={demoLayoutGridItems} />
         </section>
       </main>
 

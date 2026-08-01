@@ -5,3 +5,4 @@
 //  ce qu'ils affichent) — dossiers, grilles, piles, etc.
 // ============================================================================
 export * from './folder-gallery';
+export * from './layout-grid';
