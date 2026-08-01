@@ -25,12 +25,17 @@ import {
   SheetTrigger,
   showToast,
   StaggeredMenuPanel,
+  Carousel,
+  SliderContainer,
+  Slider,
+  ThumbsSlider,
   InteractiveSelector,
   LayoutGrid,
   TestimonialCardStack,
   useConfig,
   type CardModalAnimationPreset,
   type CardVariant,
+  type EmblaOptionsType,
   type EntityDetailBrowserItem,
   type InteractiveSelectorOption,
   type LayoutGridItem,
@@ -38,6 +43,7 @@ import {
   type NavigationItem,
   type TestimonialItem,
 } from '@egen/esm-framework';
+import Autoplay from 'embla-carousel-autoplay';
 import type { ConfigSchema } from '../config-schema';
 import styles from './home.scss';
 
@@ -226,6 +232,16 @@ const ComponentShowcasePage: React.FC = () => {
     { title: 'Pochette 4', url: 'https://picsum.photos/seed/circular-4/600/600' },
     { title: 'Pochette 5', url: 'https://picsum.photos/seed/circular-5/600/600' },
     { title: 'Pochette 6', url: 'https://picsum.photos/seed/circular-6/600/600' },
+  ];
+
+  // ── Démo : Carousel/ThumbsSlider (@egen/esm-styleguide/carousel/slider) ─────
+  const verticalSliderOptions: EmblaOptionsType = { loop: false, axis: 'y' };
+  const demoVerticalSliderImages = [
+    { src: 'https://images.unsplash.com/photo-1759395073808-17782f3d8d66?q=80&w=1471&auto=format&fit=crop', alt: 'Slide 1' },
+    { src: 'https://images.unsplash.com/photo-1759434192768-fe3facebd5f6?q=80&w=1471&auto=format&fit=crop', alt: 'Slide 2' },
+    { src: 'https://images.unsplash.com/photo-1758641008040-28cdd59ca8fb?q=80&w=687&auto=format&fit=crop', alt: 'Slide 3' },
+    { src: 'https://images.unsplash.com/photo-1618220649687-ba860f3176e7?q=80&w=1474&auto=format&fit=crop', alt: 'Slide 4' },
+    { src: 'https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?q=80&w=765&auto=format&fit=crop', alt: 'Slide 5' },
   ];
 
   // ── Démo : InteractiveSelector (@egen/esm-styleguide/selections) ───────────
@@ -895,6 +911,34 @@ const ComponentShowcasePage: React.FC = () => {
             )}
           </p>
           <LayoutGrid items={demoLayoutGridItems} />
+        </section>
+
+        {/* ── Section : Carousel (vertical, miniatures, autoplay) ── */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Carousel · ThumbsSlider</h2>
+          <p className={styles.sectionDescription}>
+            {t(
+              'showcaseVerticalSliderDescription',
+              'Carrousel vertical à défilement automatique (2s), navigation par rail de miniatures synchronisé.',
+            )}
+          </p>
+          <div className={styles.verticalSliderWrapper}>
+            <Carousel
+              options={verticalSliderOptions}
+              plugins={[Autoplay({ playOnInit: true, delay: 2000, stopOnMouseEnter: false, stopOnInteraction: false })]}
+              dir="ltr"
+              className={styles.verticalSliderRoot}
+            >
+              <SliderContainer className={styles.verticalSliderViewport}>
+                {demoVerticalSliderImages.map((image) => (
+                  <Slider key={image.alt} className={styles.verticalSliderSlide} thumbnailSrc={image.src}>
+                    <img src={image.src} alt={image.alt} className={styles.verticalSliderImage} />
+                  </Slider>
+                ))}
+              </SliderContainer>
+              <ThumbsSlider className={styles.verticalSliderThumbs} />
+            </Carousel>
+          </div>
         </section>
       </main>
 

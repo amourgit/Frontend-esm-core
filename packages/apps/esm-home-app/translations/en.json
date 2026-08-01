@@ -15,5 +15,6 @@
   "showcaseCircularGalleryDescription": "Circular-pill gallery (GSAP + MotionPathPlugin) — click a thumbnail to expand it full-frame, with a bounce on close. Autoplays every 4.5s.",
   "showcaseTestimonialCardDescription": "Swipeable testimonial stack (translucent glass) — swipe the front card left to send it to the back of the stack.",
   "showcaseInteractiveSelectorDescription": "Expanding-panel selector — click a panel to stretch it full-frame, the others collapse to a strip. Cascading entrance on load.",
-  "showcaseLayoutGridDescription": "Card grid — click a card to stretch it full-frame (shared layout transition), a dark scrim appears behind it. Click the scrim again to close."
+  "showcaseLayoutGridDescription": "Card grid — click a card to stretch it full-frame (shared layout transition), a dark scrim appears behind it. Click the scrim again to close.",
+  "showcaseVerticalSliderDescription": "Vertical auto-playing carousel (2s), navigation via a synced thumbnail rail."
 }

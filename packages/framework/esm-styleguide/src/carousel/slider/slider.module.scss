@@ -1,0 +1,142 @@
+// ============================================================================
+//  EGEN — Carousel (compound components : Carousel / SliderContainer /
+//  Slider / ThumbsSlider / SliderDotButton)
+// ============================================================================
+//  Reconstruit sur embla-carousel (React) selon son pattern officiel "synced
+//  thumbnails" — le fichier source original (bibliothèque tierce non
+//  fournie) n'a pas pu être converti directement, voir échange précédent.
+//  Structure DOM conforme aux docs embla : .viewport (overflow: hidden)
+//  porte la ref, .container est la piste flex translatée par embla en
+//  interne (ne jamais lui appliquer de transition CSS sur transform).
+// ============================================================================
+
+.root {
+  position: relative;
+}
+
+// ── Slides principaux ────────────────────────────────────────────────────────
+
+.viewport {
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+}
+
+.container--x {
+  flex-direction: row;
+  height: 100%;
+}
+
+.container--y {
+  flex-direction: column;
+  width: 100%;
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.slide--x {
+  height: 100%;
+}
+
+.slide--y {
+  width: 100%;
+}
+
+// ── Rail de miniatures ───────────────────────────────────────────────────────
+
+.thumbsViewport {
+  overflow: hidden;
+}
+
+.thumbsContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.thumbsContainer--x {
+  flex-direction: row;
+}
+
+.thumbsContainer--y {
+  flex-direction: column;
+}
+
+.thumb {
+  flex: 0 0 auto;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  background: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all var(--animation-duration-normal) var(--animation-easing-in-out);
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--colors-primary-500);
+    outline-offset: 2px;
+  }
+}
+
+.thumbsContainer--y .thumb {
+  width: 100%;
+}
+
+.thumbsContainer--x .thumb {
+  height: 100%;
+}
+
+.thumb--active {
+  opacity: 1;
+  border-color: var(--colors-on-primary);
+}
+
+.thumbImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+// ── Puces (alternative à ThumbsSlider) ───────────────────────────────────────
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: none;
+  border-radius: var(--border-radius-full);
+  background: var(--colors-neutral-300);
+  cursor: pointer;
+  transition: all var(--animation-duration-normal) var(--animation-easing-in-out);
+
+  &:focus-visible {
+    outline: 2px solid var(--colors-primary-500);
+    outline-offset: 2px;
+  }
+}
+
+.dot--active {
+  width: 1.5rem;
+  background: var(--colors-primary-500);
+}

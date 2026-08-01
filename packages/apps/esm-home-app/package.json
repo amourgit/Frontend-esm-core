@@ -44,6 +44,7 @@
     "@egen/esm-react-utils": "workspace:*",
     "@egen/esm-state": "workspace:*",
     "@egen/esm-theme": "workspace:*",
+    "embla-carousel-autoplay": "^8.6.0",
     "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
