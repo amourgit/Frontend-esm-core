@@ -26,9 +26,17 @@
 .root {
   position: relative;
   width: 100%;
-  height: 100%;
   padding: 2.5rem; // Tailwind p-10
   display: grid;
+  // BUGFIX : l'original s'appuie sur `h-full` en cascade depuis un ancêtre
+  // de hauteur définie (page plein écran dans la démo source). Dans une
+  // page de contenu normale (.section, hauteur automatique), height:100%
+  // se propage contre un ancêtre indéfini et toute la chaîne (cartes,
+  // image en position:absolute qui ne contribue à aucune hauteur
+  // intrinsèque) s'effondre à 0px — composant invisible. grid-auto-rows
+  // donne aux cellules une hauteur concrète, autonome vis-à-vis du
+  // contexte d'accueil.
+  grid-auto-rows: 20rem;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem; // Tailwind gap-4
   max-width: 80rem; // Tailwind max-w-7xl

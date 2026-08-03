@@ -21,6 +21,14 @@
   overflow: hidden;
 }
 
+.viewport--x {
+  touch-action: pan-y;
+}
+
+.viewport--y {
+  touch-action: pan-x;
+}
+
 .container {
   display: flex;
 }
@@ -32,7 +40,19 @@
 
 .container--y {
   flex-direction: column;
+  // BUGFIX (drag/slide cassé sur l'axe vertical) : sans hauteur explicite
+  // ici, .container--y reste en hauteur automatique (basée sur son
+  // contenu) — un pourcentage indéfini. `flex: 0 0 100%` sur .slide (axe
+  // principal = hauteur en direction colonne) ne peut alors pas se
+  // résoudre contre une taille indéfinie et retombe sur la taille
+  // intrinsèque du contenu (spec CSS flexbox, §9.2.2) : chaque slide se
+  // retrouve avec une hauteur incohérente, ce qui casse le calcul des
+  // points d'ancrage d'embla — le glissement anime mais ne "prend" jamais
+  // (retour systématique au slide de départ). height: 100% (contre
+  // .viewport, qui a lui une hauteur définie fournie par l'appelant)
+  // referme la chaîne.
   width: 100%;
+  height: 100%;
 }
 
 .slide {
@@ -63,15 +83,27 @@
 
 .thumbsContainer--x {
   flex-direction: row;
+  height: 100%;
 }
 
 .thumbsContainer--y {
+  // Même raisonnement que .container--y ci-dessus : nécessaire pour que
+  // `flex: 1 1 0` (voir .thumb) distribue correctement la hauteur
+  // disponible entre les miniatures.
   flex-direction: column;
+  height: 100%;
 }
 
 .thumb {
-  flex: 0 0 auto;
-  aspect-ratio: 1;
+  // BUGFIX (miniatures qui débordent du cadre de l'image courante) :
+  // taille fixe (aspect-ratio: 1) remplacée par une répartition flexible
+  // de l'espace disponible — toutes les miniatures se partagent
+  // équitablement la hauteur du rail (elle-même bornée à la hauteur du
+  // carrousel principal côté appelant), quel que soit leur nombre. Jamais
+  // de dépassement, jamais besoin de defiler le rail.
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
   padding: 0;
   border: 2px solid transparent;
   border-radius: var(--border-radius-md);
@@ -81,8 +113,10 @@
   opacity: 0.6;
   transition: all var(--animation-duration-normal) var(--animation-easing-in-out);
 
+  // Se rétablit en pleine opacité au survol — UNIQUEMENT la miniature
+  // survolée (:hover ne cible jamais les frères, c'est déjà le cas nativement).
   &:hover {
-    opacity: 0.85;
+    opacity: 1;
   }
 
   &:focus-visible {

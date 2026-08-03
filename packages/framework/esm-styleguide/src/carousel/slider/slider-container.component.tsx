@@ -15,7 +15,7 @@ export function SliderContainer({ children, className }: SliderContainerProps) {
   const { axis, mainViewportRef } = useCarouselContext();
 
   return (
-    <div ref={mainViewportRef} className={classNames(styles.viewport, className)}>
+    <div ref={mainViewportRef} className={classNames(styles.viewport, styles[`viewport--${axis}`], className)}>
       <div className={classNames(styles.container, styles[`container--${axis}`])}>{children}</div>
     </div>
   );
