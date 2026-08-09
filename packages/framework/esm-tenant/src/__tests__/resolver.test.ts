@@ -54,6 +54,30 @@ describe('resolveActiveTenantId — subdomain', () => {
     const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['subdomain'] });
     expect(result).toBeUndefined();
   });
+
+  it(
+    'capture le sous-domaine sur *.localhost sans configuration explicite (RFC 6761) — ' +
+      'régression du 9 août 2026 : "civitas.localhost" retournait undefined',
+    () => {
+      setHostname('civitas.localhost');
+      const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['subdomain'] });
+      expect(result).toEqual({ tenantId: 'civitas', source: 'subdomain' });
+    },
+  );
+
+  it(
+    'cas exact du bug rapporté : rootDomain de prod configuré par erreur pour du dev en ' +
+      '*.localhost → aucune capture possible (à corriger côté config, pas côté résolveur)',
+    () => {
+      setHostname('civitas.localhost');
+      const result = resolveActiveTenantId({
+        mode: 'multi',
+        resolutionOrder: ['subdomain'],
+        rootDomain: 'egen.gabon.gov.ga', // mauvaise config pour ce hostname
+      });
+      expect(result).toBeUndefined();
+    },
+  );
 });
 
 describe('resolveActiveTenantId — path', () => {
@@ -69,6 +93,19 @@ describe('resolveActiveTenantId — path', () => {
     });
     expect(result).toEqual({ tenantId: 'acme', source: 'path' });
   });
+
+  it(
+    'ne capture RIEN sans préfixe configuré — régression du 9 août 2026 : deviner le ' +
+      'premier segment confondait le SPA base ("/egen/spa/home" → "egen") avec un tenant',
+    () => {
+      Object.defineProperty(window, 'location', {
+        value: { ...window.location, hostname: 'localhost', pathname: '/egen/spa/home', search: '' },
+        writable: true,
+      });
+      const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['path'] });
+      expect(result).toBeUndefined();
+    },
+  );
 });
 
 describe('resolveActiveTenantId — query', () => {

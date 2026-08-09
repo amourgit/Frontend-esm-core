@@ -56,6 +56,15 @@ export function inferRootDomain(hostname: string, explicitRootDomain?: string): 
   const trimmed = explicitRootDomain?.trim();
   if (trimmed) return trimmed;
 
+  // Cas spécial : *.localhost (RFC 6761) — convention standard pour tester
+  // le multi-tenant par sous-domaine en local sans configuration DNS ni
+  // /etc/hosts (les navigateurs résolvent automatiquement tout <x>.localhost
+  // vers 127.0.0.1). "localhost" est alors le domaine racine, quel que soit
+  // le nombre de labels (ex: "civitas.localhost" → racine "localhost").
+  if (hostname === 'localhost' || hostname.endsWith('.localhost')) {
+    return 'localhost';
+  }
+
   const parts = hostname.split('.');
   if (parts.length <= 2) return hostname;
   return parts.slice(1).join('.');

@@ -92,10 +92,14 @@ export type TenantResolutionStrategy =
 
 /** Configuration du chemin URL pour la stratégie "path" */
 export interface TenantPathConfig {
-  /** Préfixe de path attendu (ex: "/t/" pour /t/acme/...) */
+  /**
+   * Préfixe de path attendu (ex: "/t/" pour /t/acme/...), après retrait du
+   * SPA base (window.getEgenSpaBase()). Si absent, la stratégie "path" ne
+   * capture RIEN — voir context/resolver.ts pour la justification : deviner
+   * un "premier segment" sans convention explicite confondrait un vrai
+   * segment de route (ex: "/home", "/patient") avec un slug de tenant.
+   */
   prefix?: string;
-  /** Position du segment id dans le path (0 = premier segment après spaBase) */
-  segment?: number;
 }
 
 /** Configuration de la capture JWT */

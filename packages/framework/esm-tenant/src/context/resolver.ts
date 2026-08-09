@@ -35,25 +35,60 @@ function resolveBySubdomain(rootDomain?: string): TenantId | undefined {
 
   const effectiveRoot = inferRootDomain(hostname, rootDomain);
   const subdomain = extractSubdomain(hostname, effectiveRoot);
+
+  // Diagnostic : un rootDomain a été EXPLICITEMENT configuré mais ne
+  // correspond pas du tout au hostname courant (ni égal, ni suffixe) — la
+  // stratégie "subdomain" ne pourra JAMAIS rien capturer tant que ce n'est
+  // pas corrigé, quel que soit le sous-domaine réellement utilisé dans
+  // l'URL. Sans ce warning, ce cas échoue en silence (retourne juste
+  // undefined) et passe pour "aucun tenant dans l'URL" au lieu d'être
+  // identifié comme une erreur de configuration.
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    rootDomain &&
+    hostname !== effectiveRoot &&
+    !hostname.endsWith(`.${effectiveRoot}`)
+  ) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[egen/esm-tenant] ⚠️ EGEN_TENANT_ROOT_DOMAIN="${effectiveRoot}" configuré, mais le hostname ` +
+        `courant "${hostname}" n'en est pas un sous-domaine. La stratégie "subdomain" ne capturera ` +
+        `jamais rien ici tant que rootDomain n'est pas corrigé (ou retiré pour utiliser la détection ` +
+        `automatique).`,
+    );
+  }
+
   return subdomain ?? undefined;
 }
 
-/** Capture par segment de path URL */
+/**
+ * Capture par segment de path URL. Ne capture QUE si un `prefix` explicite
+ * est configuré (ex: "/t/") — sans convention connue, cette stratégie
+ * retourne undefined plutôt que de deviner un "premier segment" générique.
+ *
+ * Une ancienne variante devinait le premier segment du path en l'absence de
+ * préfixe configuré (ex: `parts[0]`) — dangereux dans une app single-spa où
+ * TOUT pathname a un premier segment "significatif" qui n'est presque
+ * jamais un tenant (ex: "/egen/spa/home" → aurait capturé "egen", le SPA
+ * base lui-même, comme si c'était un tenant). Corrigé le 9 août 2026.
+ */
 function resolveByPath(config?: TenantSystemConfig['pathConfig']): TenantId | undefined {
   if (typeof window === 'undefined') return undefined;
-  const prefix = config?.prefix ?? '/t/';
-  const pathname = window.location.pathname;
+  const prefix = config?.prefix;
+  if (!prefix) return undefined;
 
-  if (prefix && pathname.startsWith(prefix)) {
-    const rest = pathname.slice(prefix.length);
-    const slug = rest.split('/')[0];
-    if (slug) return slug;
+  const spaBase =
+    typeof (window as unknown as { getEgenSpaBase?: () => string }).getEgenSpaBase === 'function'
+      ? (window as unknown as { getEgenSpaBase: () => string }).getEgenSpaBase()
+      : '';
+  let pathname = window.location.pathname;
+  if (spaBase && pathname.startsWith(spaBase)) {
+    pathname = pathname.slice(spaBase.length) || '/';
   }
 
-  // Stratégie segment (sans préfixe)
-  const segment = config?.segment ?? 0;
-  const parts = pathname.split('/').filter(Boolean);
-  const slug = parts[segment];
+  if (!pathname.startsWith(prefix)) return undefined;
+  const rest = pathname.slice(prefix.length);
+  const slug = rest.split('/')[0];
   return slug || undefined;
 }
 
