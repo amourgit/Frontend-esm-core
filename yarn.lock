@@ -11170,7 +11170,7 @@ __metadata:
     copy-webpack-plugin: "npm:11.0.0"
     cross-env: "npm:^10.1.0"
     css-loader: "npm:5.2.7"
-    ejs: "npm:5.0.1"
+    ejs: "npm:6.0.1"
     glob: "npm:13.0.6"
     html-webpack-plugin: "npm:5.6.6"
     html-webpack-tags-plugin: "npm:3.0.2"
@@ -11205,12 +11205,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"ejs@npm:5.0.1":
-  version: 5.0.1
-  resolution: "ejs@npm:5.0.1"
+"ejs@npm:6.0.1":
+  version: 6.0.1
+  resolution: "ejs@npm:6.0.1"
   bin:
     ejs: bin/cli.js
-  checksum: 10/72b0476020930ba11446f24b5f5ecb282b2419b2fbefc5be03b8b29e4618a0d4bfbf1a9daf2f58eb5319d7e51b6c914d74c7a44bf3a121ed093ada99b231407a
+  checksum: 10/16ff6a9073256c6854607e8e5669f8b96b5b6e43e40dd58c6c85d43a13c4b0423ae1a78326fef2626777410b553b9c2071ab6fe07e14564345c493bc532f4714
   languageName: node
   linkType: hard
 
