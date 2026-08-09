@@ -1,184 +1,124 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useSession, useConfig, navigate, interpolateUrl } from '@egen/esm-framework';
-import { useTenantMode, useTenantStatus, useTenant, getTenantByDomain, getTenantStoreState } from '@egen/esm-tenant';
+import { useTenantMode, useTenant } from '@egen/esm-tenant';
 import { analyzeSubdomain, buildLoginUrlWithTenant } from './subdomain-utils';
 import { type ConfigSchema } from '../config-schema';
 
 // =============================================================================
-//  USE TENANT ROUTING — Logique de routage multi-tenant
+//  GARDE DE ROUTAGE TENANT — logique de décision (hook, sans JSX)
 //
-//  ┌─────────────────────────────────────────────────────────────────────────┐
-//  │  PRINCIPE DE SÉPARATION DES RESPONSABILITÉS                             │
-//  │                                                                         │
-//  │  esm-tenant-routing-app  (ce fichier)                                  │
-//  │    → Valide que le contexte TENANT est correct                         │
-//  │    → Redirige si pas de tenant (landing globale)                       │
-//  │    → Redirige si tenant inconnu ou suspendu                            │
-//  │    → En mode multi + tenant valide + non connecté → /login?tenant=slug │
-//  │    → Partout ailleurs : SKIP (ne touche pas à la navigation)           │
-//  │                                                                         │
-//  │  esm-primary-navigation-app/Navbar                                     │
-//  │    → Rend le Carbon Header quand l'utilisateur est connecté            │
-//  │    → En mode SINGLE/OFF seulement : redirige vers /login si non conn.  │
-//  │    → En mode MULTI : ne redirige PAS (le Guard ci-dessus le fait)      │
-//  │                                                                         │
-//  │  RÈGLE D'OR : jamais les deux n'émettent navigate() en même temps.     │
-//  │    Mode multi  → Guard redirige,  Navbar observe                       │
-//  │    Mode single → Guard silent,    Navbar redirige                      │
-//  └─────────────────────────────────────────────────────────────────────────┘
+//  REFONTE DU 8 AOÛT 2026 — RÔLE STRICTEMENT RÉDUIT :
+//  ────────────────────────────────────────────────────
+//  Ce hook ne fait plus AUCUNE vérification de validité du tenant (existence
+//  dans une registry, statut suspendu). Le sous-domaine capturé dans l'URL
+//  est accepté tel quel — c'est le rôle du backend de décider s'il est
+//  valide, via les réponses normales des appels API (401/403/404 gérés
+//  comme des erreurs API classiques, pas ici).
 //
-//  useSession() utilise React Suspense : il throw une Promise si la session
-//  n'est pas encore chargée. Le composant TenantRoutingGuard wrappé dans
-//  <Suspense fallback={null}> gère ce cas.
+//  Ce qui reste ICI est de la navigation pure, indépendante de la validité
+//  du tenant :
+//    1. Système "off" ou mode "single" → rien à faire, laisser passer.
+//    2. Route publique (login, logout, home...) → laisser passer.
+//    3. localhost / IP (dev sans domaine réel) → laisser passer.
+//    4. Aucun sous-domaine dans l'URL (utilisateur sur le domaine racine)
+//       → rediriger vers la landing globale (pas une "invalidation" du
+//       tenant, juste une UX : il n'y a rien à afficher côté tenant ici).
+//    5. Sous-domaine présent, utilisateur non authentifié → rediriger vers
+//       /login avec le tenant en query param (login.component.tsx le
+//       persiste ensuite via storeHeaderTenantId()).
+//    6. Sous-domaine présent, authentifié → rien à faire, laisser l'app
+//       s'afficher normalement.
+//
+//  Architecture en 2 hooks (inchangée depuis la version précédente) :
+//    useTenantRouting()          → calcule la décision (pur, testable)
+//    useTenantRoutingNavigator() → exécute le navigate() correspondant
 // =============================================================================
+
+export type RoutingAction = 'idle' | 'skip' | 'redirect-login' | 'redirect-global-landing';
 
 export type RoutingDecision =
   | { action: 'idle' }
   | { action: 'skip'; reason: string }
-  | { action: 'redirect-global-landing'; reason: string }
-  | { action: 'redirect-login'; tenantSlug: string }
-  | { action: 'redirect-suspended'; tenantSlug: string; message?: string }
-  | { action: 'redirect-unknown-tenant'; slug: string };
+  | { action: 'redirect-global-landing' }
+  | { action: 'redirect-login'; tenantSlug: string };
 
-// ── Helpers ────────────────────────────────────────────────────────────────
+const PUBLIC_ROUTE_SEGMENTS = ['login', 'logout'];
 
-/**
- * Retourne true si le path courant est une route publique exemptée
- * de toute logique de routage tenant.
- */
-function isPublicRoute(skipRegex: string): boolean {
-  const path = window.location.pathname;
-  const spaBase = window.getEgenSpaBase?.() ?? '/';
-  const relativePath = path.startsWith(spaBase)
-    ? path.slice(spaBase.length).replace(/^\//, '')
-    : path.replace(/^\//, '');
-  try {
-    return new RegExp(skipRegex, 'i').test(relativePath);
-  } catch {
-    return false;
+function isPublicRoute(pathname: string, skipRoutesRegex?: string): boolean {
+  if (skipRoutesRegex) {
+    try {
+      if (new RegExp(skipRoutesRegex).test(pathname)) return true;
+    } catch {
+      // Regex invalide dans la config — ignorée silencieusement, on continue
+      // avec les segments publics par défaut ci-dessous.
+    }
   }
+
+  const spaBase =
+    typeof window !== 'undefined' && typeof window.getEgenSpaBase === 'function' ? window.getEgenSpaBase() : '';
+  const relative = spaBase && pathname.startsWith(spaBase) ? pathname.slice(spaBase.length) : pathname;
+  const firstSegment = relative.split('/').filter(Boolean)[0];
+
+  return PUBLIC_ROUTE_SEGMENTS.includes(firstSegment ?? '');
 }
 
-let warnedAboutUnimplementedBackendValidation = false;
-
-/**
- * `validateSubdomainWithBackend` n'est aujourd'hui PAS implémenté : la
- * résolution reste purement basée sur la registry locale (getTenantByDomain),
- * quelle que soit cette config. L'implémenter proprement demanderait de
- * transformer ce hook (aujourd'hui synchrone et pur) en une machine à état
- * asynchrone (idle → validating → resolved), ce qui n'a pas été fait ici
- * pour ne pas introduire une logique de routage async non testée contre un
- * vrai backend. Un avertissement explicite (une seule fois) vaut mieux
- * qu'un no-op silencieux pour quiconque active ce flag en pensant qu'il
- * fait quelque chose.
- */
-function warnIfBackendValidationRequested(config: ConfigSchema): void {
-  if (config.validateSubdomainWithBackend && !warnedAboutUnimplementedBackendValidation) {
-    warnedAboutUnimplementedBackendValidation = true;
-    console.warn(
-      '[egen-tenant-routing] validateSubdomainWithBackend=true mais cette fonctionnalité ' +
-        `n'est pas implémentée : la validation reste purement locale (registry). ` +
-        `L'endpoint configuré (${config.backendValidationEndpoint}) n'est jamais appelé.`,
-    );
-  }
-}
-
-// =============================================================================
-//  useTenantRouting — Calcule la décision de routage (synchrone, pur)
-//
-//  Ce hook est appelé depuis l'intérieur d'une limite Suspense
-//  (TenantRoutingGuard → Suspense → TenantRoutingGuardInner).
-//  useSession() peut donc throw sans conséquence.
-// =============================================================================
+/** Calcule la décision de routage courante (pur — ne navigue jamais). */
 export function useTenantRouting(): RoutingDecision {
+  const location = useLocation();
   const config = useConfig<ConfigSchema>();
   const tenantMode = useTenantMode();
-  const tenantStatus = useTenantStatus();
-  // activeTenant : résolu par le store tenant (subdomain, header, jwt, etc.)
-  const activeTenant = useTenant();
-  // session : throw si pas encore chargé → géré par Suspense parent
-  const session = useSession();
+  const tenantId = useTenant();
+  const sessionStore = useSession();
 
-  warnIfBackendValidationRequested(config);
+  const isAuthenticated = Boolean(sessionStore?.session?.authenticated);
 
-  // ── 1. Système tenant désactivé ou mode single ─────────────────────────
-  //  Le Guard est entièrement silencieux. La Navbar gère l'auth seule.
-  if (tenantMode === 'off' || tenantMode === 'single') {
-    return { action: 'skip', reason: `tenant-mode-${tenantMode}` };
-  }
+  const analysis = useMemo(() => {
+    if (typeof window === 'undefined') return null;
+    return analyzeSubdomain(window.location.hostname, config.rootDomain);
+  }, [config.rootDomain]);
 
-  // ── 2. Route publique exemptée → skip ──────────────────────────────────
-  //  login, logout, home (landing), change-password, tenant-suspended.
-  //  Ces routes gèrent elles-mêmes leur contexte.
-  if (isPublicRoute(config.skipRoutesRegex)) {
-    return { action: 'skip', reason: 'public-route' };
-  }
-
-  // ── 3. Tenant store pas encore initialisé → attendre ──────────────────
-  if (tenantStatus === 'idle' || tenantStatus === 'loading') {
-    return { action: 'idle' };
-  }
-
-  // ── 4. Analyser le hostname pour détecter un sous-domaine ─────────────
-  //  Priorité : config propre à cette app > rootDomain configuré au niveau
-  //  du système tenant (EGEN_TENANT_ROOT_DOMAIN, voir setupTenantSystem) >
-  //  heuristique best-effort (voir inferRootDomain).
-  const hostname = window.location.hostname;
-  const effectiveRootDomain = config.rootDomain || getTenantStoreState().config.rootDomain || '';
-  const analysis = analyzeSubdomain(hostname, effectiveRootDomain);
-
-  // Dev (localhost / IP) → skip : pas de logique tenant en local
-  if (analysis.isLocalhost) {
-    return { action: 'skip', reason: 'localhost-dev' };
-  }
-
-  // Pas de sous-domaine sur le root domain → l'utilisateur est sur
-  // l'URL globale de la plateforme (ex: egen.gabon.gov.ga/quelque-chose)
-  // sans être dans un espace tenant. On le renvoie à la landing globale.
-  if (analysis.isRootDomain || !analysis.hasSubdomain) {
-    return { action: 'redirect-global-landing', reason: 'no-subdomain' };
-  }
-
-  // ── 5. Sous-domaine détecté — valider dans la registry ────────────────
-  const tenantFromRegistry = getTenantByDomain(hostname);
-
-  if (!tenantFromRegistry) {
-    // Sous-domaine inconnu de la registry
-    if (config.unknownTenantBehavior === 'show-error') {
-      return { action: 'redirect-unknown-tenant', slug: analysis.subdomain! };
+  return useMemo<RoutingDecision>(() => {
+    // 1. Système désactivé ou tenant forcé statiquement → rien à décider ici.
+    if (tenantMode === 'off' || tenantMode === 'single') {
+      return { action: 'idle' };
     }
-    return { action: 'redirect-global-landing', reason: 'unknown-tenant' };
-  }
 
-  // ── 6. Tenant suspendu ─────────────────────────────────────────────────
-  if (tenantFromRegistry.suspended) {
-    return {
-      action: 'redirect-suspended',
-      tenantSlug: tenantFromRegistry.id,
-      message: tenantFromRegistry.suspendedMessage,
-    };
-  }
+    // 2. Route publique → laisser passer sans condition.
+    if (isPublicRoute(location.pathname, config.skipRoutesRegex)) {
+      return { action: 'skip', reason: 'public-route' };
+    }
 
-  // ── 7. Tenant valide — vérifier l'authentification ────────────────────
-  //  Le Guard est la SEULE source d'auth-redirect en mode multi-tenant.
-  //  La Navbar (primary-nav) NE redirige PAS vers login en mode multi,
-  //  pour éviter les navigations simultanées contradictoires.
-  if (!session.authenticated) {
-    return { action: 'redirect-login', tenantSlug: tenantFromRegistry.id };
-  }
+    if (!analysis) {
+      return { action: 'idle' };
+    }
 
-  // ── 8. Tenant valide + utilisateur connecté ────────────────────────────
-  //  Le Guard n'interfère plus. L'utilisateur est au bon endroit.
-  //  La Navbar rend le Carbon Header. Single-SPA route normalement.
-  return { action: 'skip', reason: 'tenant-ok-authenticated' };
+    // 3. Dev / environnement sans domaine réel → laisser passer.
+    if (analysis.isLocalhost) {
+      return { action: 'skip', reason: 'localhost' };
+    }
+
+    // 4. Aucun sous-domaine dans l'URL → landing globale.
+    if (!analysis.hasSubdomain) {
+      return { action: 'redirect-global-landing' };
+    }
+
+    // 5. Sous-domaine présent (= un tenant est capturé, voir `tenantId`),
+    //    mais utilisateur non authentifié → login, tenant transmis en query.
+    if (!isAuthenticated) {
+      return { action: 'redirect-login', tenantSlug: tenantId ?? analysis.subdomain! };
+    }
+
+    // 6. Sous-domaine présent + authentifié → rien à faire, l'app s'affiche.
+    return { action: 'skip', reason: 'tenant-ok-authenticated' };
+  }, [tenantMode, tenantId, location.pathname, analysis, isAuthenticated, config.skipRoutesRegex]);
 }
 
-// =============================================================================
-//  useTenantRoutingNavigator — Exécute les navigate() en réaction aux décisions
-//
-//  Séparé du hook de décision pour faciliter les tests unitaires.
-//  Chaque décision n'est exécutée qu'une seule fois (navigatedRef).
-// =============================================================================
+/**
+ * Exécute les navigate() en réaction aux décisions de useTenantRouting().
+ * Séparé du hook de décision pour faciliter les tests unitaires.
+ * Chaque décision n'est exécutée qu'une seule fois (navigatedRef).
+ */
 export function useTenantRoutingNavigator(decision: RoutingDecision, config: ConfigSchema): void {
   const navigatedRef = useRef<string>('');
 
@@ -202,21 +142,6 @@ export function useTenantRoutingNavigator(decision: RoutingDecision, config: Con
         const loginBase = interpolateUrl(config.loginUrl);
         const urlWithTenant = buildLoginUrlWithTenant(loginBase, decision.tenantSlug);
         navigate({ to: urlWithTenant });
-        break;
-      }
-
-      case 'redirect-suspended': {
-        navigatedRef.current = key;
-        navigate({ to: interpolateUrl(config.tenantSuspendedUrl) });
-        break;
-      }
-
-      case 'redirect-unknown-tenant': {
-        navigatedRef.current = key;
-        const base = interpolateUrl(config.landingPageUrl);
-        navigate({
-          to: `${base}?error=unknown-tenant&slug=${encodeURIComponent(decision.slug)}`,
-        });
         break;
       }
     }

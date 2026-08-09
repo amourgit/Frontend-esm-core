@@ -5,11 +5,11 @@ import type { AIRouteDefinition } from '@egen/esm-ai-framework';
 //  déclarées ici pour que le LLM les consulte au lieu de les deviner.
 //
 //  Deux catégories :
-//    • Routes publiques (login, logout, home, change-password,
-//      tenant-suspended) — exactement la même liste que les routes exclues
-//      dans root.component.tsx et src/routes.json, dupliquée
-//      intentionnellement (comme le reste du monorepo), pour ne créer aucun
-//      couplage de build avec les autres apps.
+//    • Routes publiques (login, logout, home, change-password) — exactement
+//      la même liste que les routes exclues dans root.component.tsx et
+//      src/routes.json, dupliquée intentionnellement (comme le reste du
+//      monorepo), pour ne créer aucun couplage de build avec les autres
+//      apps.
 //    • Autres apps de base présentes par défaut dans le monorepo
 //      (ex: offline-tools) — authentifiées, mais suffisamment "cœur de
 //      plateforme" pour être déclarées ici plutôt que de dépendre de
@@ -18,6 +18,10 @@ import type { AIRouteDefinition } from '@egen/esm-ai-framework';
 //  Toute app métier (@school/esm-grades-app, etc.) devrait déclarer SES
 //  PROPRES routes de la même façon, via defineAIModule({ routes: [...] })
 //  dans son propre startupApp() — voir @egen/esm-ai-extensions.
+//
+//  Refonte du 8 août 2026 : "/tenant-suspended" retirée — cette route
+//  n'existe plus (suppression du système de vérification de tenant côté
+//  frontend, voir @egen/esm-tenant/src/types.ts).
 // =============================================================================
 
 export const BASE_EGEN_ROUTES: AIRouteDefinition[] = [
@@ -36,10 +40,6 @@ export const BASE_EGEN_ROUTES: AIRouteDefinition[] = [
   {
     path: '/change-password',
     description: 'Formulaire de changement de mot de passe.',
-  },
-  {
-    path: '/tenant-suspended',
-    description: "Page affichée quand l'établissement (tenant) de l'utilisateur est suspendu.",
   },
   {
     path: '/offline-tools',

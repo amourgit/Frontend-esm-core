@@ -1,28 +1,32 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { navigate, interpolateUrl, useConfig, useOnClickOutside, ExtensionSlot } from '@egen/esm-framework';
-import {
-  useTenant,
-  useTenantMode,
-  useAvailableTenants,
-  getTenantStoreState,
-  buildTenantSubdomainUrl,
-  inferRootDomain,
-} from '@egen/esm-tenant';
+import { useTenant, useTenantMode } from '@egen/esm-tenant';
 import { type ConfigSchema } from '../../config-schema';
 import styles from './context-switcher.scss';
 
 // =============================================================================
-//  CONTEXT SWITCHER — Sélecteur d'établissement / tenant
+//  CONTEXT SWITCHER — Indicateur d'établissement / tenant courant
 //
 //  Positionné à gauche de la topbar (niveau 1), juste avant le logo.
-//  Toujours visible (modes single / off / multi) : seul le comportement du
-//  dropdown change — en single/off, la liste peut être vide ou réduite à
-//  l'établissement courant ; en multi, elle liste tous les tenants
-//  disponibles dans la registry.
 //
-//  Au changement d'établissement : redirection vers le sous-domaine du
-//  tenant cible (le portail captif y gère l'auth si nécessaire).
+//  Refonte du 8 août 2026 : ce composant affichait auparavant un menu
+//  déroulant listant "mes établissements" (useAvailableTenants), issu de la
+//  registry statique de tenants. Cette registry a été supprimée (voir
+//  @egen/esm-tenant/src/types.ts) — le frontend ne connaît plus QUE l'ID du
+//  tenant capturé dans l'URL courante, rien d'autre sur les autres espaces
+//  auxquels l'utilisateur pourrait avoir accès.
+//
+//  Ce composant est donc désormais un simple INDICATEUR du tenant courant
+//  (pas de sélection entre plusieurs espaces connus côté frontend). Les
+//  actions "aller à l'espace général" / "demander un espace" / "rechercher
+//  un espace" restent disponibles, car elles ne dépendent d'aucune donnée
+//  de registry.
+//
+//  Pour réintroduire un vrai sélecteur multi-espaces (liste des
+//  établissements auxquels l'utilisateur connecté a accès), il faudrait un
+//  endpoint backend dédié (ex: GET /api/me/tenants) — hors périmètre de
+//  cette refonte, qui porte uniquement sur la capture du tenant courant.
 // =============================================================================
 
 const BuildingIcon: React.FC = () => (
@@ -48,11 +52,13 @@ const ChevronIcon: React.FC<{ open: boolean }> = ({ open }) => (
   </svg>
 );
 
-const CheckIcon: React.FC = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-    <path d="M2.5 7l3 3 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+/** "mef-gabon" → "Mef Gabon" — humanise un slug brut pour affichage (aucun nom serveur disponible). */
+const humanizeTenantId = (id: string): string =>
+  id
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 
 /** Initiales (jusqu'à 2 lettres) à partir d'un libellé : "Espace Général" → "EG". */
 const getInitials = (label: string): string => {
@@ -66,45 +72,20 @@ const ContextSwitcher: React.FC = () => {
   const { t } = useTranslation();
   const config = useConfig<ConfigSchema>();
   const tenantMode = useTenantMode();
-  const activeTenant = useTenant();
-  const availableTenants = useAvailableTenants();
+  const activeTenantId = useTenant();
   const [open, setOpen] = useState(false);
 
   const isMultiTenant = tenantMode === 'multi';
 
   const menuRef = useOnClickOutside<HTMLDivElement>(() => setOpen(false), open);
 
-  const tenants = useMemo(
-    () =>
-      availableTenants
-        .filter((tenant) => !tenant.suspended)
-        .map((tenant) => ({
-          id: tenant.id,
-          name: tenant.name,
-          slug: tenant.slug ?? tenant.id,
-          initial: (tenant.meta?.logoText as string | undefined)?.toUpperCase() ?? getInitials(tenant.name),
-          active: tenant.id === activeTenant?.id,
-        })),
-    [availableTenants, activeTenant?.id],
-  );
+  const handleGoToGeneralSpace = useCallback(() => {
+    setOpen(false);
+    navigate({ to: interpolateUrl(config.logo.link) });
+  }, [config.logo.link]);
 
-  const handleSelect = useCallback(
-    (tenant: (typeof tenants)[number]) => {
-      setOpen(false);
-      if (tenant.active) return;
-      // rootDomain vient du système tenant (EGEN_TENANT_ROOT_DOMAIN, voir
-      // setupTenantSystem) — même source que celle utilisée par le guard de
-      // routage (esm-tenant-routing-app), pour ne jamais diverger entre les
-      // deux. buildTenantSubdomainUrl retombe sur une heuristique best-effort
-      // si rootDomain n'est pas configuré.
-      const rootDomain = inferRootDomain(window.location.hostname, getTenantStoreState().config.rootDomain);
-      window.location.href = buildTenantSubdomainUrl(tenant.slug, rootDomain, interpolateUrl(config.logo.link));
-    },
-    [config.logo.link],
-  );
-
-  const currentLabel = activeTenant?.name ?? t('generalSpace', 'Espace Général');
-  const currentSubLabel = activeTenant ? t('establishment', 'Établissement') : t('centralSpace', 'Espace Central');
+  const currentLabel = activeTenantId ? humanizeTenantId(activeTenantId) : t('generalSpace', 'Espace Général');
+  const currentSubLabel = activeTenantId ? t('establishment', 'Établissement') : t('centralSpace', 'Espace Central');
   const currentInitial = getInitials(currentLabel);
 
   return (
@@ -113,9 +94,9 @@ const ContextSwitcher: React.FC = () => {
         type="button"
         className={`${styles.trigger} ${open ? styles.triggerOpen : ''}`}
         onClick={() => setOpen((v) => !v)}
-        aria-haspopup="listbox"
+        aria-haspopup="true"
         aria-expanded={open}
-        aria-label={t('switchContext', 'Changer de contexte : {{name}}', { name: currentLabel })}
+        aria-label={t('switchContext', 'Contexte courant : {{name}}', { name: currentLabel })}
       >
         <span className={styles.avatar} aria-hidden="true">
           {currentInitial}
@@ -128,55 +109,21 @@ const ContextSwitcher: React.FC = () => {
       </button>
 
       {open && (
-        <div
-          className={styles.dropdown}
-          role="listbox"
-          aria-label={t('selectEstablishment', 'Choisir un établissement')}
-        >
+        <div className={styles.dropdown} role="menu" aria-label={t('spaceActions', 'Actions')}>
           <div className={styles.dropdownHeader}>
             <BuildingIcon />
-            <span>{t('myEstablishments', 'Mes établissements')}</span>
-          </div>
-
-          <div className={styles.dropdownList}>
-            {tenants.length === 0 ? (
-              <div className={styles.emptyState}>{t('noEstablishments', 'Aucun établissement disponible')}</div>
-            ) : (
-              tenants.map((tenant) => (
-                <button
-                  key={tenant.id}
-                  type="button"
-                  role="option"
-                  aria-selected={tenant.active}
-                  className={`${styles.option} ${tenant.active ? styles.optionActive : ''}`}
-                  onClick={() => handleSelect(tenant)}
-                >
-                  <span className={styles.optionAvatar}>{tenant.initial}</span>
-                  <span className={styles.optionName}>{tenant.name}</span>
-                  {tenant.active && (
-                    <span className={styles.optionCheck}>
-                      <CheckIcon />
-                    </span>
-                  )}
-                </button>
-              ))
-            )}
+            <span>{currentLabel}</span>
           </div>
 
           <div className={styles.dropdownFooter}>
-            <button
-              type="button"
-              className={styles.footerBtn}
-              onClick={() => {
-                setOpen(false);
-                navigate({ to: interpolateUrl('${egenSpaBase}/home') });
-              }}
-            >
-              <BuildingIcon />
-              {isMultiTenant
-                ? t('requestNewSpace', 'Demander un espace')
-                : t('goToGeneralSpace', "Aller à l'espace général")}
-            </button>
+            {isMultiTenant && (
+              <button type="button" className={styles.footerBtn} onClick={handleGoToGeneralSpace}>
+                <BuildingIcon />
+                {activeTenantId
+                  ? t('goToGeneralSpace', "Aller à l'espace général")
+                  : t('requestNewSpace', 'Demander un espace')}
+              </button>
+            )}
 
             {/* Bouton "Rechercher un espace" — relocalisé depuis l'ancien
                 bouton "Localisation" de la topbar (esm-login-app), même

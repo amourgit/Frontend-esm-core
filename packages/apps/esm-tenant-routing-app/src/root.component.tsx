@@ -15,15 +15,9 @@ import TenantRoutingGuard from './guard/tenant-routing-guard';
 //  d'accueil AUTHENTIFIÉ (vitrine de composants) — le guard doit donc aussi
 //  s'y appliquer, comme sur n'importe quelle autre route tenant.
 //
-//  La page /tenant-suspended est enregistrée et rendue indépendamment (voir
-//  `suspendedPage` dans index.ts / routes.json, route exacte "tenant-suspended").
-//  Elle n'est PAS rendue ici : le routeRegex universel de `root` (".*") matche
-//  aussi /tenant-suspended, donc dupliquer ici la route "tenant-suspended"
-//  monterait SuspendedPage deux fois en parallèle (une fois via `root`, une
-//  fois via `suspendedPage`) — chacun de ces deux composants est enregistré
-//  comme sa propre application single-spa avec sa propre fonction d'activité
-//  (voir esm-routes/src/loaders/pages.ts), donc les deux seraient actifs
-//  simultanément sur cette route.
+//  Refonte du 8 août 2026 : la page "/tenant-suspended" a été retirée avec
+//  le reste du système de vérification de tenant côté frontend — voir
+//  @egen/esm-tenant/src/types.ts.
 // =============================================================================
 
 const Root: React.FC = () => {

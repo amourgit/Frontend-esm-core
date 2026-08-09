@@ -1,95 +1,176 @@
-// ============================================================================
-//  Tests — Stratégies de résolution du tenant
-// ============================================================================
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { resolveActiveTenantId, persistActiveTenant, clearPersistedTenant, storeHeaderTenantId } from '../context/resolver';
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { resolveActiveTenantId, persistActiveTenant } from '../context/resolver';
-import { initTenantRegistry, resetTenantRegistry } from '../context/registry';
-import type { TenantSystemConfig } from '../types';
+// =============================================================================
+//  RESOLVER — Tests de la capture brute du tenant (aucune vérification de
+//  validité : chaque stratégie doit retourner exactement ce qu'elle trouve).
+// =============================================================================
 
-const BASE_CONFIG: TenantSystemConfig = {
-  mode: 'multi',
-  storageKey: 'egen:tenant:active',
-  persistActive: true,
-  applyTheme: false,
-};
+function setHostname(hostname: string) {
+  Object.defineProperty(window, 'location', {
+    value: { ...window.location, hostname, pathname: '/', search: '' },
+    writable: true,
+  });
+}
 
-beforeEach(async () => {
-  resetTenantRegistry();
-  await initTenantRegistry([
-    { id: 'acme', name: 'ACME', slug: 'acme', domains: ['acme.app.com'] },
-    { id: 'civitas', name: 'CIVITAS', active: true },
-  ]);
-  // Reset localStorage
-  localStorage.clear();
+beforeEach(() => {
+  window.localStorage.clear();
+  setHostname('localhost');
 });
 
-describe('résolution par query param', () => {
-  it('résout depuis ?tenant=acme', () => {
+describe('resolveActiveTenantId — subdomain', () => {
+  it('capture le premier label du hostname par rapport au rootDomain', () => {
+    setHostname('mef.egen.gabon.gov.ga');
+    const result = resolveActiveTenantId({
+      mode: 'multi',
+      resolutionOrder: ['subdomain'],
+      rootDomain: 'egen.gabon.gov.ga',
+    });
+    expect(result).toEqual({ tenantId: 'mef', source: 'subdomain' });
+  });
+
+  it('ne retourne rien sur le domaine racine seul (pas de sous-domaine)', () => {
+    setHostname('egen.gabon.gov.ga');
+    const result = resolveActiveTenantId({
+      mode: 'multi',
+      resolutionOrder: ['subdomain'],
+      rootDomain: 'egen.gabon.gov.ga',
+    });
+    expect(result).toBeUndefined();
+  });
+
+  it('ne fait AUCUNE vérification : un sous-domaine "inventé" est capturé tel quel', () => {
+    setHostname('nimporte-quoi.egen.gabon.gov.ga');
+    const result = resolveActiveTenantId({
+      mode: 'multi',
+      resolutionOrder: ['subdomain'],
+      rootDomain: 'egen.gabon.gov.ga',
+    });
+    expect(result).toEqual({ tenantId: 'nimporte-quoi', source: 'subdomain' });
+  });
+
+  it('ignore localhost (pas de tenant en dev sans sous-domaine réel)', () => {
+    setHostname('localhost');
+    const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['subdomain'] });
+    expect(result).toBeUndefined();
+  });
+});
+
+describe('resolveActiveTenantId — path', () => {
+  it('capture le segment après le préfixe configuré', () => {
     Object.defineProperty(window, 'location', {
-      value: { hostname: 'app.com', pathname: '/', search: '?tenant=acme' },
+      value: { ...window.location, hostname: 'localhost', pathname: '/t/acme/dashboard', search: '' },
       writable: true,
     });
-    const id = resolveActiveTenantId({ ...BASE_CONFIG, resolutionOrder: ['query'] });
-    expect(id).toBe('acme');
-  });
-});
-
-describe('résolution par localStorage', () => {
-  it('résout depuis localStorage', () => {
-    localStorage.setItem('egen:tenant:active', 'civitas');
-    const id = resolveActiveTenantId({ ...BASE_CONFIG, resolutionOrder: ['localStorage'] });
-    expect(id).toBe('civitas');
-  });
-
-  it('retourne undefined si clé absente', () => {
-    const id = resolveActiveTenantId({ ...BASE_CONFIG, resolutionOrder: ['localStorage'] });
-    expect(id).toBeUndefined();
-  });
-});
-
-describe('résolution par static (config)', () => {
-  it('résout depuis defaultTenantId', () => {
-    const id = resolveActiveTenantId({
-      ...BASE_CONFIG,
-      resolutionOrder: ['static'],
-      defaultTenantId: 'civitas',
+    const result = resolveActiveTenantId({
+      mode: 'multi',
+      resolutionOrder: ['path'],
+      pathConfig: { prefix: '/t/' },
     });
-    expect(id).toBe('civitas');
+    expect(result).toEqual({ tenantId: 'acme', source: 'path' });
   });
 });
 
-describe('résolution "first"', () => {
-  it('retourne le premier tenant actif', () => {
-    const id = resolveActiveTenantId({ ...BASE_CONFIG, resolutionOrder: ['first'] });
-    expect(['acme', 'civitas']).toContain(id);
+describe('resolveActiveTenantId — query', () => {
+  it('capture ?tenant=', () => {
+    Object.defineProperty(window, 'location', {
+      value: { ...window.location, hostname: 'localhost', pathname: '/', search: '?tenant=acme' },
+      writable: true,
+    });
+    const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['query'] });
+    expect(result).toEqual({ tenantId: 'acme', source: 'query' });
   });
 });
 
-describe('persistActiveTenant', () => {
-  it('écrit en localStorage', () => {
+describe('resolveActiveTenantId — localStorage / header', () => {
+  it('capture la valeur persistée en localStorage', () => {
     persistActiveTenant('acme', 'egen:tenant:active');
-    expect(localStorage.getItem('egen:tenant:active')).toBe('acme');
+    const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['localStorage'] });
+    expect(result).toEqual({ tenantId: 'acme', source: 'localStorage' });
+  });
+
+  it('clearPersistedTenant efface la valeur persistée', () => {
+    persistActiveTenant('acme', 'egen:tenant:active');
+    clearPersistedTenant('egen:tenant:active');
+    const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['localStorage'] });
+    expect(result).toBeUndefined();
+  });
+
+  it('storeHeaderTenantId puis stratégie "header" la relit', () => {
+    storeHeaderTenantId('acme', 'egen:tenant:active');
+    const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['header'] });
+    expect(result).toEqual({ tenantId: 'acme', source: 'header' });
   });
 });
 
-describe('chaînage des stratégies — un candidat inconnu ne doit pas arrêter la résolution', () => {
-  it('poursuit vers la stratégie suivante si la query ne correspond à aucun tenant enregistré', () => {
-    Object.defineProperty(window, 'location', {
-      value: { hostname: 'app.com', pathname: '/', search: '?tenant=tenant-inconnu' },
-      writable: true,
-    });
-    localStorage.setItem('egen:tenant:active', 'civitas');
-    // 'query' résout "tenant-inconnu", qui n'existe pas dans la registry :
-    // la chaîne doit continuer vers 'localStorage' plutôt que de retourner
-    // "tenant-inconnu" tel quel (régression testée : voir resolver.ts).
-    const id = resolveActiveTenantId({ ...BASE_CONFIG, resolutionOrder: ['query', 'localStorage'] });
-    expect(id).toBe('civitas');
+describe('resolveActiveTenantId — static', () => {
+  it('capture window.egenTenantId', () => {
+    (window as any).egenTenantId = 'acme';
+    const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['static'] });
+    expect(result).toEqual({ tenantId: 'acme', source: 'static' });
+    delete (window as any).egenTenantId;
   });
 
-  it('retourne undefined si toutes les stratégies produisent des candidats inconnus', () => {
-    localStorage.setItem('egen:tenant:active', 'tenant-inconnu');
-    const id = resolveActiveTenantId({ ...BASE_CONFIG, resolutionOrder: ['localStorage'] });
-    expect(id).toBeUndefined();
+  it('defaultTenantId de la config a priorité sur window.egenTenantId', () => {
+    (window as any).egenTenantId = 'from-window';
+    const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['static'], defaultTenantId: 'from-config' });
+    expect(result).toEqual({ tenantId: 'from-config', source: 'static' });
+    delete (window as any).egenTenantId;
+  });
+});
+
+describe('resolveActiveTenantId — jwt', () => {
+  it('extrait le claim configuré du JWT stocké', () => {
+    const payload = btoa(JSON.stringify({ tenantId: 'acme' }));
+    window.localStorage.setItem('egen:session:token', `eyJhbGciOiJIUzI1NiJ9.${payload}.signature`);
+    const result = resolveActiveTenantId({
+      mode: 'multi',
+      resolutionOrder: ['jwt'],
+      jwtConfig: { claim: 'tenantId' },
+    });
+    expect(result).toEqual({ tenantId: 'acme', source: 'jwt' });
+  });
+
+  it('retourne undefined si aucun token présent', () => {
+    const result = resolveActiveTenantId({ mode: 'multi', resolutionOrder: ['jwt'] });
+    expect(result).toBeUndefined();
+  });
+});
+
+describe('resolveActiveTenantId — ordre de priorité', () => {
+  it("respecte l'ordre : la première stratégie qui trouve une valeur gagne", () => {
+    setHostname('mef.egen.gabon.gov.ga');
+    persistActiveTenant('autre-tenant', 'egen:tenant:active');
+
+    const result = resolveActiveTenantId({
+      mode: 'multi',
+      resolutionOrder: ['localStorage', 'subdomain'],
+      rootDomain: 'egen.gabon.gov.ga',
+    });
+
+    expect(result).toEqual({ tenantId: 'autre-tenant', source: 'localStorage' });
+  });
+
+  it('passe à la stratégie suivante si la première ne trouve rien', () => {
+    setHostname('egen.gabon.gov.ga'); // pas de sous-domaine
+    persistActiveTenant('fallback-tenant', 'egen:tenant:active');
+
+    const result = resolveActiveTenantId({
+      mode: 'multi',
+      resolutionOrder: ['subdomain', 'localStorage'],
+      rootDomain: 'egen.gabon.gov.ga',
+    });
+
+    expect(result).toEqual({ tenantId: 'fallback-tenant', source: 'localStorage' });
+  });
+
+  it('retourne undefined si aucune stratégie ne trouve rien', () => {
+    setHostname('egen.gabon.gov.ga');
+    const result = resolveActiveTenantId({
+      mode: 'multi',
+      resolutionOrder: ['subdomain', 'query', 'localStorage'],
+      rootDomain: 'egen.gabon.gov.ga',
+    });
+    expect(result).toBeUndefined();
   });
 });

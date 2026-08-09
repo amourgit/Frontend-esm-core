@@ -1,6 +1,6 @@
 import { start, triggerAppChange } from 'single-spa';
-import { setupThemeEngine, applyGlobalThemeOverride } from '@egen/esm-theme';
-import { setupTenantSystem, registerTenantThemeApplier } from '@egen/esm-tenant';
+import { setupThemeEngine } from '@egen/esm-theme';
+import { setupTenantSystem } from '@egen/esm-tenant';
 import { type CalendarIdentifier } from '@internationalized/date';
 import {
   activateOfflineCapability,
@@ -437,8 +437,8 @@ export function run(configUrls: Array<string>) {
   });
 
   // ── Tenant system setup ─────────────────────────────────────────────────
-  // Initialisé juste avant le boot des apps, après le moteur de thème.
-  // COMPLÈTEMENT INERTE si EGEN_TENANT_MODE="off" ou absent — zéro overhead.
+  // Initialisé juste avant le boot des apps. COMPLÈTEMENT INERTE si
+  // EGEN_TENANT_MODE="off" ou absent — zéro overhead.
   //
   // Configuration (voir @egen/esm-tenant/src/config/env.ts pour le détail) :
   //   .env (build)      → EGEN_TENANT_MODE=multi | single | off, etc.
@@ -446,42 +446,16 @@ export function run(configUrls: Array<string>) {
   //                        rspack.config.js + index.ejs, seul canal
   //                        fonctionnel — pas d'import.meta.env dans ce build)
   //   setupTenantSystem  → options inline ci-dessous (priorité maximale)
-
-  // Branche le moteur de thème sur le système tenant.
-  // Quand un tenant est activé, son thème écrase le thème global (priorité 10).
   //
-  // IMPORTANT : on utilise `applyGlobalThemeOverride` (et NON
-  // `applyAppThemeOverride`) — un tenant doit surcharger TOUTE la page, pas
-  // seulement l'intérieur d'un conteneur `[data-egen-app="..."]` (qui
-  // n'existe nulle part dans le DOM du shell). Utiliser le mécanisme scopé
-  // par app ici aurait injecté un CSS syntaxiquement valide mais qui ne
-  // ciblait jamais aucun élément réel — la surcharge tenant aurait donc
-  // silencieusement été sans aucun effet visible, malgré aucune erreur.
-  registerTenantThemeApplier(async (tenantId, schema, themeUrl) => {
-    if (schema) {
-      applyGlobalThemeOverride(schema, { id: `tenant-${tenantId}`, priority: 10 });
-    }
-    if (themeUrl) {
-      try {
-        const res = await fetch(themeUrl);
-        if (res.ok) {
-          const remoteSchema = await res.json();
-          applyGlobalThemeOverride(remoteSchema, { id: `tenant-${tenantId}-url`, priority: 9 });
-        } else {
-          console.warn(`[egen/esm-tenant] Thème distant inaccessible (${res.status}): ${themeUrl}`);
-        }
-      } catch (err) {
-        console.warn(`[egen/esm-tenant] Impossible de charger le thème depuis ${themeUrl}:`, err);
-      }
-    }
-  });
+  // Rôle STRICT de ce système : capturer l'ID tenant depuis l'URL (sous-
+  // domaine) et le rendre disponible dans le store global + `X-Tenant-ID`
+  // sur chaque requête backend (voir @egen/esm-api). AUCUNE validation
+  // frontend (existence, statut, thème, permissions) — c'est une
+  // responsabilité backend. 100% synchrone, ne peut pas échouer : pas de
+  // `.catch()` nécessaire, pas de registry à charger.
+  setupTenantSystem();
 
-  // Non bloquant : le shell démarre même si le système tenant échoue.
-  const tenantReady = setupTenantSystem().catch((err) => {
-    console.warn('[egen/esm-tenant] Initialisation tenant échouée (mode dégradé):', err);
-  });
-
-  return Promise.all([import('@egen/esm-styleguide/src/index'), themeReady, tenantReady]).then(([_styleguide]) => {
+  return Promise.all([import('@egen/esm-styleguide/src/index'), themeReady]).then(([_styleguide]) => {
     integrateBreakpoints();
     showToasts();
     showModals();

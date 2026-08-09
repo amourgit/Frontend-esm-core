@@ -86,7 +86,7 @@ const Login: React.FC = () => {
   }, [location.search]);
 
   // Tenant effectif : activeTenant (résolu par sous-domaine) > query param
-  const effectiveTenantSlug = isMultiTenant ? activeTenant?.id ?? tenantFromQuery ?? null : null;
+  const effectiveTenantSlug = isMultiTenant ? activeTenant ?? tenantFromQuery ?? null : null;
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -309,7 +309,7 @@ const Login: React.FC = () => {
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
                       <circle cx="6" cy="6" r="4" />
                     </svg>
-                    {activeTenant?.name ?? effectiveTenantSlug}
+                    {effectiveTenantSlug}
                   </span>
                 </div>
               )}

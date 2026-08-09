@@ -3,6 +3,12 @@ import { Type } from '@egen/esm-framework';
 // =============================================================================
 //  ESM TENANT ROUTING APP — Schéma de configuration runtime
 //  Toutes les valeurs sont surchargables via le système de config EGEN.
+//
+//  Refonte du 8 août 2026 : tenantSuspendedUrl, validateSubdomainWithBackend,
+//  backendValidationEndpoint et unknownTenantBehavior ont été retirés avec
+//  la suppression de toute vérification de tenant côté frontend (registry,
+//  statut suspendu). Voir @egen/esm-tenant/src/types.ts et
+//  docs/analyse-esm-tenant.md pour l'historique de cette décision.
 // =============================================================================
 
 export const configSchema = {
@@ -30,49 +36,14 @@ export const configSchema = {
   loginUrl: {
     _type: Type.String,
     _default: '${egenSpaBase}/login',
-    _description: 'URL de la page de login. Redirection quand tenant résolu mais utilisateur non connecté.',
-  },
-
-  // tenantDashboardUrl supprimé — le Guard ne redirige plus les utilisateurs connectés
-  // vers un dashboard. La navigation post-auth est gérée par la Navbar + Single-SPA.
-
-  tenantSuspendedUrl: {
-    _type: Type.String,
-    _default: '${egenSpaBase}/tenant-suspended',
-    _description: 'URL de la page de suspension tenant.',
+    _description: 'URL de la page de login. Redirection quand un sous-domaine tenant est présent mais utilisateur non connecté.',
   },
 
   // ── Comportement ─────────────────────────────────────────────────────────
-  validateSubdomainWithBackend: {
-    _type: Type.Boolean,
-    _default: false,
-    _description:
-      'PAS ENCORE IMPLÉMENTÉ (voir use-tenant-routing.ts) — activer ce flag ' +
-      "déclenche uniquement un avertissement console, aucun appel réseau n'est " +
-      'effectué. Prévu : validation du sous-domaine auprès du backend ' +
-      '(backendValidationEndpoint) avant de résoudre le tenant, en complément ' +
-      'de la registry locale.',
-  },
-
-  backendValidationEndpoint: {
-    _type: Type.String,
-    _default: '${egenBase}/ws/rest/v1/tenant/{slug}/exists',
-    _description: "Endpoint backend de validation de l'existence d'un tenant par slug.",
-  },
-
   skipRoutesRegex: {
     _type: Type.String,
-    _default: '^(login|logout|home|tenant-suspended|change-password)',
+    _default: '^(login|logout|home|change-password)',
     _description: 'Regex des routes exemptées de la garde de routage (pas de redirection sur ces routes).',
-  },
-
-  // ── Gestion erreurs ───────────────────────────────────────────────────────
-  unknownTenantBehavior: {
-    _type: Type.String,
-    _default: 'redirect-to-landing',
-    _description:
-      'Comportement quand le sous-domaine ne correspond à aucun tenant connu. ' +
-      '"redirect-to-landing" (défaut) | "show-error"',
   },
 };
 
@@ -80,10 +51,5 @@ export interface ConfigSchema {
   rootDomain: string;
   landingPageUrl: string;
   loginUrl: string;
-  // tenantDashboardUrl removed
-  tenantSuspendedUrl: string;
-  validateSubdomainWithBackend: boolean;
-  backendValidationEndpoint: string;
   skipRoutesRegex: string;
-  unknownTenantBehavior: 'redirect-to-landing' | 'show-error';
 }

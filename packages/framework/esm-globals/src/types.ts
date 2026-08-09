@@ -60,6 +60,10 @@ declare global {
     // pont EGEN_AI_* → window.egenAi*. Lues par @egen/esm-tenant/config/env.ts.
     // C'est l'UNIQUE canal de configuration par environnement — il n'existe
     // pas d'équivalent `import.meta.env` fonctionnel dans ce projet (rspack).
+    //
+    // Refonte du 8 août 2026 : plus de registry de tenants ni de thème piloté
+    // par tenant côté frontend (egenTenantRegistryUrl / egenTenantApplyTheme
+    // retirés) — voir @egen/esm-tenant/src/types.ts.
 
     /**
      * Mode du système tenant : "off" | "single" | "multi".
@@ -73,18 +77,6 @@ declare global {
      * Depuis EGEN_TENANT_ID.
      */
     egenTenantId?: string;
-
-    /**
-     * URL d'un fichier JSON de registry de tenants (TenantDefinition[]).
-     * Depuis EGEN_TENANT_REGISTRY_URL.
-     */
-    egenTenantRegistryUrl?: string;
-
-    /**
-     * "true" | "false" — active l'application automatique du thème tenant.
-     * Depuis EGEN_TENANT_THEME_APPLY.
-     */
-    egenTenantApplyTheme?: string;
 
     /**
      * "true" | "false" — active la persistance localStorage du tenant actif.

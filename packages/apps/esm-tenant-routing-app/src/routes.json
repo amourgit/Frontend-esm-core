@@ -6,12 +6,6 @@
       "routeRegex": ".*",
       "online": true,
       "offline": false
-    },
-    {
-      "component": "suspendedPage",
-      "route": "tenant-suspended",
-      "online": true,
-      "offline": false
     }
   ],
   "extensions": []

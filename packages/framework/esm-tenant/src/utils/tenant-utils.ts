@@ -14,64 +14,30 @@
 //
 //  Les fonctions ci-dessous marquées @deprecated ont un équivalent strict
 //  côté esm-api — les utiliser depuis esm-api si le seul besoin est un accès
-//  HTTP/synchrone simple. Les fonctions NON dépréciées ci-dessous (accès à
-//  la registry complète, permissions, feature flags, abonnement aux
-//  changements, construction d'URL) n'ont pas d'équivalent côté esm-api et
-//  restent le point d'entrée normal pour ces besoins.
+//  HTTP/synchrone simple.
+//
+//  Refonte du 8 août 2026 : toutes les fonctions lisant des métadonnées de
+//  tenant (nom, feature flags, permissions, thème…) ont été retirées — ce
+//  package ne connaît plus que l'ID brut capturé. Voir types.ts.
 // ============================================================================
 
-import type { TenantDefinition, TenantId } from '../types';
-import { getTenantById as getById, getAllTenants } from '../context/registry';
-import {
-  tenantStore,
-  getActiveTenant,
-  getAvailableTenants,
-  getTenantSystemMode,
-  getTenantStoreState,
-} from '../context/store';
+import type { TenantId } from '../types';
+import { tenantStore, getActiveTenantId, getTenantSystemMode, getTenantStoreState } from '../context/store';
 
 // ---------------------------------------------------------------------------
 // Accès synchrone (hors React — pour services, intercepteurs, etc.)
 // ---------------------------------------------------------------------------
 
 /**
- * Retourne le tenant actif de manière synchrone (sans React).
+ * Retourne l'ID du tenant actif de manière synchrone (sans React).
  * Utile dans les intercepteurs fetch, les services, etc.
  *
- * @deprecated Préférer `getActiveTenantInfo()` de `@egen/esm-api` pour un
- * accès HTTP/service sans dépendance runtime sur ce package. Cette version
- * reste utile quand l'objet `TenantDefinition` complet est nécessaire (ex:
- * `allowedApps`, `themeOverride`) — `getActiveTenantInfo()` n'expose qu'un
- * sous-ensemble.
- */
-export function getCurrentTenant(): TenantDefinition | null {
-  return getActiveTenant();
-}
-
-/**
- * Retourne l'ID du tenant actif, ou `undefined` si mode "off" / pas de tenant.
- * @deprecated Utiliser `getTenantId()` de `@egen/esm-api` — c'est cette
- * version qui est utilisée par le client HTTP central (`egenFetch`).
+ * @deprecated Préférer `getTenantId()` de `@egen/esm-api` — c'est cette
+ * version qui est utilisée par le client HTTP central (`egenFetch`) et qui
+ * n'a aucune dépendance runtime sur ce package.
  */
 export function getCurrentTenantId(): TenantId | undefined {
-  return getActiveTenant()?.id;
-}
-
-/**
- * Retourne l'URL de l'API backend du tenant actif, ou `undefined`.
- * @deprecated Utiliser `getTenantApiBase()` de `@egen/esm-api`.
- * @example
- * ```ts
- * const base = getTenantApiBaseUrl() ?? window.egenBase;
- * ```
- */
-export function getTenantApiBaseUrl(): string | undefined {
-  return getActiveTenant()?.apiBaseUrl;
-}
-
-/** Retourne le tenant complet par son ID depuis la registry. */
-export function getTenantDefinition(id: TenantId): TenantDefinition | undefined {
-  return getById(id);
+  return getActiveTenantId() ?? undefined;
 }
 
 /** Retourne true si le système tenant est activé (mode !== "off"). */
@@ -90,24 +56,7 @@ export function isMultiTenantMode(): boolean {
 
 /** Retourne true si un tenant spécifique est actif. */
 export function isTenantActive(tenantId: TenantId): boolean {
-  return getActiveTenant()?.id === tenantId;
-}
-
-/**
- * Vérifie si un feature flag est activé pour le tenant courant (version non-React).
- * Modèle "opt-in" strict : `undefined` → `false`. Pour un modèle "opt-out"
- * réactif (flag actif par défaut sauf désactivation explicite), voir le hook
- * `useTenantFeatureFlag(flagName, true)` — utilisé par exemple par
- * esm-ai-assistant-app pour se désactiver par tenant.
- */
-export function tenantHasFeatureFlag(flagName: string): boolean {
-  return getActiveTenant()?.featureFlags?.[flagName] === true;
-}
-
-/** Vérifie si une permission est accordée pour le tenant courant. */
-export function tenantHasPermission(key: string): boolean {
-  const perm = getActiveTenant()?.permissions?.[key];
-  return perm === true || Array.isArray(perm);
+  return getActiveTenantId() === tenantId;
 }
 
 /**
@@ -116,18 +65,18 @@ export function tenantHasPermission(key: string): boolean {
  *
  * @example
  * ```ts
- * const unsubscribe = onTenantChange((tenant) => {
- *   refreshApiClient(tenant?.apiBaseUrl);
+ * const unsubscribe = onTenantChange((tenantId) => {
+ *   refreshApiClient(tenantId);
  * });
  * ```
  */
-export function onTenantChange(callback: (tenant: TenantDefinition | null) => void): () => void {
-  let previous: TenantDefinition | null = getActiveTenant();
+export function onTenantChange(callback: (tenantId: TenantId | null) => void): () => void {
+  let previous: TenantId | null = getActiveTenantId();
 
   return tenantStore.subscribe((state) => {
-    if (state.activeTenant?.id !== previous?.id) {
-      previous = state.activeTenant;
-      callback(state.activeTenant);
+    if (state.tenantId !== previous) {
+      previous = state.tenantId;
+      callback(state.tenantId);
     }
   });
 }
@@ -143,7 +92,7 @@ export function onTenantChange(callback: (tenant: TenantDefinition | null) => vo
  */
 export function buildTenantUrl(path: string, tenantId?: TenantId): string {
   const state = getTenantStoreState();
-  const id = tenantId ?? state.activeTenant?.id;
+  const id = tenantId ?? state.tenantId;
   if (!id || state.mode !== 'multi') return path;
 
   const prefix = state.config.pathConfig?.prefix;
@@ -163,12 +112,11 @@ export function buildTenantUrl(path: string, tenantId?: TenantId): string {
  * `egenFetch()` (aussi dans `@egen/esm-api`) injecte déjà automatiquement
  * X-Tenant-ID sur chaque requête — dans la plupart des cas, aucun appel
  * manuel n'est nécessaire (voir esm-api/src/egen-fetch.ts).
- * @example `{ 'X-Tenant-ID': 'acme' }` ou `{}` si mode "off"
+ * @example `{ 'X-Tenant-ID': 'acme' }` ou `{}` si mode "off"/aucun tenant
  */
 export function getTenantHeaders(): Record<string, string> {
-  const tenant = getActiveTenant();
-  if (!tenant) return {};
-  return { 'X-Tenant-ID': tenant.id };
+  const id = getActiveTenantId();
+  return id ? { 'X-Tenant-ID': id } : {};
 }
 
 /**
@@ -183,11 +131,11 @@ export function getTenantHeaders(): Record<string, string> {
  * ```
  */
 export async function fetchWithTenant(url: string, init: RequestInit = {}): Promise<Response> {
-  const tenantHeaders = getTenantHeaders();
+  const headers = getTenantHeaders();
   const merged: RequestInit = {
     ...init,
     headers: {
-      ...tenantHeaders,
+      ...headers,
       ...(init.headers ?? {}),
     },
   };

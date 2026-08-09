@@ -1,40 +1,44 @@
 // ============================================================================
-//  @egen/esm-tenant — Stratégies de résolution du tenant actif
+//  @egen/esm-tenant — Stratégies de capture du tenant actif
 // ============================================================================
 //
-//  Chaque stratégie tente de résoudre un TenantId depuis une source.
-//  Retourne undefined si la source n'est pas disponible ou n'est pas
-//  pertinente pour l'environnement courant.
+//  Chaque stratégie tente d'extraire un TenantId BRUT depuis une source.
+//  Retourne undefined si la source est absente ou vide. AUCUNE stratégie
+//  ne vérifie la valeur trouvée contre une liste de tenants "connus" — ce
+//  concept n'existe plus côté frontend (voir types.ts). On capture, un
+//  point c'est tout ; la validité du tenant est une question backend.
 //
-//  ORDRE PAR DÉFAUT (du plus spécifique au plus générique) :
+//  ORDRE PAR DÉFAUT (du plus déterministe au plus générique) :
 //  1. subdomain  — le plus déterministe, sans ambiguïté
 //  2. path       — clair mais nécessite une config de routing côté app
 //  3. query      — utile pour le dev / preview
 //  4. jwt        — lecture du claim dans le token de session
-//  5. header     — reprend en localStorage le tenant déjà résolu côté
+//  5. header     — reprend en localStorage le tenant déjà connu côté
 //                   client au moment du login (ne lit PAS un header HTTP
 //                   réel — voir TenantResolutionStrategy dans types.ts)
 //  6. localStorage — survie aux rechargements
 //  7. static     — config globale window / env
-//  8. first      — dernier recours (premier tenant disponible)
 // ============================================================================
 
 import type { TenantId, TenantResolutionStrategy, TenantSystemConfig } from '../types';
-import { getAllTenants, getTenantByDomain, getTenantById } from './registry';
+import { isLocalhostOrIp, inferRootDomain, extractSubdomain } from '../utils/domain-utils';
 
 // ---------------------------------------------------------------------------
 // Stratégies individuelles
 // ---------------------------------------------------------------------------
 
-/** Résolution par subdomain de window.location.hostname */
-function resolveBySubdomain(): TenantId | undefined {
+/** Capture par subdomain de window.location.hostname, par rapport à un rootDomain. */
+function resolveBySubdomain(rootDomain?: string): TenantId | undefined {
   if (typeof window === 'undefined') return undefined;
   const hostname = window.location.hostname;
-  const tenant = getTenantByDomain(hostname);
-  return tenant?.id;
+  if (isLocalhostOrIp(hostname)) return undefined;
+
+  const effectiveRoot = inferRootDomain(hostname, rootDomain);
+  const subdomain = extractSubdomain(hostname, effectiveRoot);
+  return subdomain ?? undefined;
 }
 
-/** Résolution par segment de path URL */
+/** Capture par segment de path URL */
 function resolveByPath(config?: TenantSystemConfig['pathConfig']): TenantId | undefined {
   if (typeof window === 'undefined') return undefined;
   const prefix = config?.prefix ?? '/t/';
@@ -43,52 +47,40 @@ function resolveByPath(config?: TenantSystemConfig['pathConfig']): TenantId | un
   if (prefix && pathname.startsWith(prefix)) {
     const rest = pathname.slice(prefix.length);
     const slug = rest.split('/')[0];
-    if (slug) {
-      const tenant = getTenantById(slug);
-      if (tenant) return tenant.id;
-    }
+    if (slug) return slug;
   }
 
   // Stratégie segment (sans préfixe)
   const segment = config?.segment ?? 0;
   const parts = pathname.split('/').filter(Boolean);
   const slug = parts[segment];
-  if (slug) {
-    const tenant = getTenantById(slug);
-    if (tenant) return tenant.id;
-  }
-
-  return undefined;
+  return slug || undefined;
 }
 
-/** Résolution par query param ?tenant= */
+/** Capture par query param ?tenant= */
 function resolveByQuery(): TenantId | undefined {
   if (typeof window === 'undefined') return undefined;
   const params = new URLSearchParams(window.location.search);
   const value = params.get('tenant') ?? params.get('tenantId') ?? params.get('tid');
-  if (!value) return undefined;
-  const tenant = getTenantById(value);
-  return tenant?.id;
+  return value || undefined;
 }
 
-/** Résolution depuis le header HTTP X-Tenant-ID (posé en localStorage lors du login) */
+/** Capture depuis la valeur reportée en localStorage lors du login (voir storeHeaderTenantId) */
 function resolveByHeader(storageKey: string): TenantId | undefined {
   if (typeof window === 'undefined') return undefined;
   try {
     const value = window.localStorage.getItem(`${storageKey}:header`);
-    if (!value) return undefined;
-    const tenant = getTenantById(value);
-    return tenant?.id;
+    return value || undefined;
   } catch {
     return undefined;
   }
 }
 
 /**
- * Résolution depuis un claim JWT.
- * Le JWT est lu depuis le sessionStorage (format: "Bearer <token>") ou
- * depuis localStorage (clé : "egen:session:token").
- * On ne fait QUE lire le payload — aucune vérification de signature côté frontend.
+ * Capture depuis un claim JWT.
+ * Le JWT est lu depuis le localStorage/sessionStorage (clé : "egen:session:token").
+ * On ne fait QUE lire le payload — aucune vérification de signature côté frontend
+ * (c'est le rôle du backend, à chaque requête authentifiée).
  */
 function resolveByJwt(jwtConfig?: TenantSystemConfig['jwtConfig']): TenantId | undefined {
   const claim = jwtConfig?.claim ?? 'tenantId';
@@ -98,9 +90,7 @@ function resolveByJwt(jwtConfig?: TenantSystemConfig['jwtConfig']): TenantId | u
   try {
     const payload = parseJwtPayload(token);
     const value = payload?.[claim] ?? payload?.['tid'] ?? payload?.['tenant_id'];
-    if (!value) return undefined;
-    const tenant = getTenantById(String(value));
-    return tenant?.id;
+    return value ? String(value) : undefined;
   } catch {
     return undefined;
   }
@@ -135,36 +125,25 @@ function parseJwtPayload(token: string): Record<string, unknown> | null {
   }
 }
 
-/** Résolution depuis localStorage (persistence entre rechargements) */
+/** Capture depuis localStorage (persistence entre rechargements) */
 function resolveByLocalStorage(storageKey: string): TenantId | undefined {
   if (typeof window === 'undefined') return undefined;
   try {
     const value = window.localStorage.getItem(storageKey);
-    if (!value) return undefined;
-    const tenant = getTenantById(value);
-    return tenant?.id;
+    return value || undefined;
   } catch {
     return undefined;
   }
 }
 
-/** Résolution depuis une config statique (window.egenTenantId, voir config/env.ts) */
+/** Capture depuis une config statique (window.egenTenantId, voir config/env.ts) */
 function resolveByStatic(defaultTenantId?: string): TenantId | undefined {
   const fromWindow =
     typeof window !== 'undefined'
       ? ((window as unknown as Record<string, unknown>)['egenTenantId'] as string | undefined)
       : undefined;
 
-  const value = defaultTenantId ?? fromWindow;
-  if (!value) return undefined;
-  const tenant = getTenantById(value);
-  return tenant?.id;
-}
-
-/** Résolution par défaut : premier tenant actif disponible dans la registry */
-function resolveByFirst(): TenantId | undefined {
-  const tenants = getAllTenants();
-  return tenants[0]?.id;
+  return defaultTenantId ?? fromWindow ?? undefined;
 }
 
 // ---------------------------------------------------------------------------
@@ -179,14 +158,16 @@ const DEFAULT_RESOLUTION_ORDER: TenantResolutionStrategy[] = [
   'header',
   'localStorage',
   'static',
-  'first',
 ];
 
 /**
- * Tente de résoudre le tenant actif en essayant les stratégies dans l'ordre
- * défini par la config. Retourne le premier TenantId trouvé.
+ * Tente de capturer le tenant actif en essayant les stratégies dans l'ordre
+ * défini par la config. Retourne le premier couple (TenantId, stratégie)
+ * trouvé, brut, sans aucune vérification de validité.
  */
-export function resolveActiveTenantId(config: TenantSystemConfig): TenantId | undefined {
+export function resolveActiveTenantId(
+  config: TenantSystemConfig,
+): { tenantId: TenantId; source: TenantResolutionStrategy } | undefined {
   const order = config.resolutionOrder ?? DEFAULT_RESOLUTION_ORDER;
   const storageKey = config.storageKey ?? 'egen:tenant:active';
 
@@ -195,7 +176,7 @@ export function resolveActiveTenantId(config: TenantSystemConfig): TenantId | un
 
     switch (strategy) {
       case 'subdomain':
-        result = resolveBySubdomain();
+        result = resolveBySubdomain(config.rootDomain);
         break;
       case 'path':
         result = resolveByPath(config.pathConfig);
@@ -215,17 +196,14 @@ export function resolveActiveTenantId(config: TenantSystemConfig): TenantId | un
       case 'static':
         result = resolveByStatic(config.defaultTenantId);
         break;
-      case 'first':
-        result = resolveByFirst();
-        break;
     }
 
     if (result) {
       if (process.env.NODE_ENV !== 'production') {
         // eslint-disable-next-line no-console
-        console.info(`[egen/esm-tenant] ✅ Tenant résolu via stratégie "${strategy}": "${result}"`);
+        console.info(`[egen/esm-tenant] ✅ Tenant capturé via stratégie "${strategy}": "${result}"`);
       }
-      return result;
+      return { tenantId: result, source: strategy };
     }
   }
 
@@ -234,7 +212,7 @@ export function resolveActiveTenantId(config: TenantSystemConfig): TenantId | un
 
 /**
  * Persiste le tenant actif en localStorage.
- * Appelé automatiquement après chaque activation si `persistActive: true`.
+ * Appelé automatiquement après chaque capture si `persistActive: true`.
  */
 export function persistActiveTenant(tenantId: TenantId, storageKey: string): void {
   if (typeof window === 'undefined') return;
@@ -246,8 +224,21 @@ export function persistActiveTenant(tenantId: TenantId, storageKey: string): voi
 }
 
 /**
- * Stocke la valeur du header X-Tenant-ID renvoyé par le backend.
- * À appeler dans l'intercepteur fetch/axios après chaque réponse authentifiée.
+ * Efface le tenant persisté en localStorage (ex: lors d'un switchTenant vers `null`).
+ */
+export function clearPersistedTenant(storageKey: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(storageKey);
+  } catch {
+    // ignore
+  }
+}
+
+/**
+ * Stocke la valeur du tenant déjà connu côté client au moment du login,
+ * pour qu'elle soit relue par la stratégie "header" aux prochains chargements.
+ * À appeler dans le flux de login juste après une authentification réussie.
  */
 export function storeHeaderTenantId(tenantId: TenantId, storageKey: string): void {
   if (typeof window === 'undefined') return;

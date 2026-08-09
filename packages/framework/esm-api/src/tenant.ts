@@ -1,9 +1,9 @@
 // ============================================================================
-//  @egen/esm-api — Accès synchrone aux données tenant (lecture seule)
+//  @egen/esm-api — Accès synchrone au tenant courant (lecture seule)
 // ============================================================================
 //
-//  Ce module fournit des fonctions utilitaires SYNCHRONES pour accéder aux
-//  informations du tenant courant depuis n'importe quel service, intercepteur
+//  Ce module fournit des fonctions utilitaires SYNCHRONES pour accéder à
+//  l'ID du tenant courant depuis n'importe quel service, intercepteur
 //  fetch, ou code non-React — exactement comme `getSessionStore()` pour la
 //  session utilisateur.
 //
@@ -11,47 +11,41 @@
 //  lit le store via le registre global `availableStores` de @egen/esm-state
 //  (par nom "tenant"), ce qui évite toute dépendance circulaire/bundle entre
 //  esm-api et esm-tenant. Si le store tenant n'est pas encore initialisé,
-//  les fonctions retournent null.
+//  les fonctions retournent undefined/null.
 //
 //  Le SEUL lien avec @egen/esm-tenant est un `import type` ci-dessous — il
 //  est intégralement effacé à la compilation (aucun code, aucun bundle,
 //  aucun import runtime). Il garantit seulement que `MinimalTenantState`
-//  reste un sous-ensemble structurellement compatible du vrai
-//  `TenantDefinition`/`TenantStore` et ne dérive pas silencieusement d'eux
-//  au fil du temps (risque qu'avait l'ancienne interface dupliquée à la main).
+//  reste un sous-ensemble structurellement compatible du vrai `TenantStore`
+//  et ne dérive pas silencieusement de lui au fil du temps.
+//
+//  REFONTE DU 8 AOÛT 2026 : ce module ne connaît plus que l'ID brut du
+//  tenant capturé (`tenantId`) — plus de nom, thème, locale, apiBaseUrl,
+//  permissions ou feature flags associés (ce concept de registry locale de
+//  tenants a été supprimé, voir @egen/esm-tenant/src/types.ts). Toute
+//  donnée de ce type doit désormais venir d'un appel backend explicite,
+//  scopé par le header X-Tenant-ID que ce module injecte déjà (voir
+//  `tenantHeaders()` / `egen-fetch.ts`).
 //
 //  USAGE TYPIQUE (dans un intercepteur fetch) :
 //  ```ts
-//  import { getTenantId, getTenantApiBase } from '@egen/esm-api';
+//  import { getTenantId, tenantHeaders } from '@egen/esm-api';
 //
 //  async function myFetch(url: string, init?: RequestInit) {
-//    const tenantId = getTenantId();
-//    return fetch(url, {
-//      ...init,
-//      headers: {
-//        ...(tenantId ? { 'X-Tenant-ID': tenantId } : {}),
-//        ...init?.headers,
-//      },
-//    });
+//    return fetch(url, { ...init, headers: { ...tenantHeaders(), ...init?.headers } });
 //  }
 //  ```
 //
-//  Pour un accès RÉACTIF (React), ou pour des fonctionnalités qui ne
-//  dépendent pas d'un couplage runtime minimal (flags/permissions, écoute
-//  des changements de tenant), préférer les hooks/fonctions de
-//  @egen/esm-tenant directement (useTenant, useTenantFeatureFlag,
-//  onTenantChange, tenantHasPermission...) plutôt que ce module, qui ne
+//  Pour un accès RÉACTIF (React), préférer les hooks de @egen/esm-tenant
+//  directement (useTenant, useTenantMode...) plutôt que ce module, qui ne
 //  couvre volontairement que la surface HTTP/synchrone minimale.
 // ============================================================================
 
 import { getGlobalStore } from '@egen/esm-state';
-import type { TenantDefinition, TenantMode } from '@egen/esm-tenant';
+import type { TenantMode } from '@egen/esm-tenant';
 
 type MinimalTenantState = {
-  activeTenant: Pick<
-    TenantDefinition,
-    'id' | 'name' | 'apiBaseUrl' | 'locale' | 'timezone' | 'featureFlags' | 'permissions' | 'meta'
-  > | null;
+  tenantId: string | null;
   mode: TenantMode;
 };
 
@@ -61,36 +55,13 @@ function getTenantState(): MinimalTenantState | null {
 }
 
 /**
- * Retourne l'ID du tenant actif, ou `undefined` si mode "off" / non résolu.
+ * Retourne l'ID du tenant actif, ou `undefined` si mode "off" / non capturé.
  * Synchrone — utilisable dans des intercepteurs fetch, services, etc.
  *
  * @category Tenant
  */
 export function getTenantId(): string | undefined {
-  return getTenantState()?.activeTenant?.id;
-}
-
-/**
- * Retourne l'objet tenant actif complet, ou `null`.
- * @category Tenant
- */
-export function getActiveTenantInfo(): MinimalTenantState['activeTenant'] {
-  return getTenantState()?.activeTenant ?? null;
-}
-
-/**
- * Retourne l'URL de l'API backend du tenant actif.
- * À utiliser pour construire les URLs d'appels backend dans les services.
- *
- * @example
- * ```ts
- * const base = getTenantApiBase() ?? window.egenBase;
- * const data = await egenFetch(`${base}/api/students`);
- * ```
- * @category Tenant
- */
-export function getTenantApiBase(): string | undefined {
-  return getTenantState()?.activeTenant?.apiBaseUrl;
+  return getTenantState()?.tenantId ?? undefined;
 }
 
 /**
@@ -107,23 +78,6 @@ export function getTenantApiBase(): string | undefined {
 export function tenantHeaders(): Record<string, string> {
   const id = getTenantId();
   return id ? { 'X-Tenant-ID': id } : {};
-}
-
-/**
- * Retourne la locale du tenant actif.
- * Utilisée par le système de traductions pour charger la bonne langue.
- * @category Tenant
- */
-export function getTenantLocale(): string | undefined {
-  return getTenantState()?.activeTenant?.locale;
-}
-
-/**
- * Retourne le fuseau horaire du tenant actif.
- * @category Tenant
- */
-export function getTenantTimezone(): string | undefined {
-  return getTenantState()?.activeTenant?.timezone;
 }
 
 /**

@@ -7,7 +7,7 @@ import rootComponent from './root.component';
 //  Page 404 globale : montée sur toute route qui n'est reconnue par AUCUNE
 //  autre app du système (voir le routeRegex négatif dans routes.json, qui
 //  exclut explicitement toutes les routes déjà déclarées ailleurs dans le
-//  monorepo — login, logout, change-password, tenant-suspended, home,
+//  monorepo — login, logout, change-password, home,
 //  offline-tools — et la racine vide, gérée par son propre redirect).
 //  Rendue dans le contenu de la SPA pendant que
 //  @egen/esm-primary-navigation-app affiche sa TopBar au-dessus, comme

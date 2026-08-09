@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useTenantFeatureFlag } from '@egen/esm-tenant';
 import AssistantWidget from './components/assistant-widget/assistant-widget.component';
 import styles from './root.scss';
 
@@ -8,10 +7,10 @@ import styles from './root.scss';
 //  ROOT — Composant racine de l'app assistant IA
 //
 //  Monté via un routeRegex qui EXCLUT déjà toutes les routes publiques
-//  (login, logout, change-password, tenant-suspended) — LA MÊME liste
-//  que esm-footer-app et la TopBar de esm-primary-navigation-app, afin que
-//  l'assistant soit présent sur toutes les pages authentifiées, et
-//  uniquement là où la navbar l'est aussi (voir routes.json).
+//  (login, logout, change-password) — LA MÊME liste que esm-footer-app et
+//  la TopBar de esm-primary-navigation-app, afin que l'assistant soit
+//  présent sur toutes les pages authentifiées, et uniquement là où la
+//  navbar l'est aussi (voir routes.json).
 //
 //  Ces routes sont dupliquées ici (double-garde, défense en profondeur) au
 //  lieu d'être partagées, pour que cette app reste indépendante et ne crée
@@ -22,30 +21,27 @@ import styles from './root.scss';
 //    /login/*              Page de connexion
 //    /logout/*             Déconnexion
 //    /change-password/*    Changement de mot de passe
-//    /tenant-suspended/*   Page de suspension tenant
 //
-//  Routes authentifiées (widget rendu, sous réserve du feature flag tenant
-//  "ai-assistant" — voir ci-dessous) :
+//  Routes authentifiées (widget rendu) :
 //    /*                    Toutes les autres routes (espaces tenant), y
 //                           compris /home — désormais l'écran d'accueil
 //                           authentifié (@egen/esm-home-app), plus une
 //                           landing page publique.
 //
-//  GATING PAR TENANT (@egen/esm-tenant) :
-//  ────────────────────────────────────────
-//  useTenantFeatureFlag('ai-assistant', true) — le SECOND argument (true)
-//  est important : c'est le defaultValue, utilisé quand aucun tenant n'est
-//  résolu (mode "off"/"single", ou registry pas encore chargée) OU quand le
-//  tenant actif ne déclare pas explicitement ce flag. Modèle "opt-out" :
-//  l'assistant reste actif par défaut partout: seul un tenant qui déclare
-//  EXPLICITEMENT `featureFlags: { "ai-assistant": false }` dans sa
-//  TenantDefinition (registry) le désactive. Ça évite toute régression pour
-//  les déploiements qui n'utilisent pas (encore) le système multi-tenant.
+//  Refonte du 8 août 2026 : le gating par feature flag tenant
+//  (useTenantFeatureFlag('ai-assistant', true)) a été retiré avec le reste
+//  du système de vérification de tenant côté frontend (registry,
+//  featureFlags par tenant) — voir @egen/esm-tenant/src/types.ts. En
+//  pratique le comportement effectif est identique : le modèle précédent
+//  était "opt-out" avec `true` par défaut, et aucun tenant ne déclarait
+//  explicitement `featureFlags: { "ai-assistant": false }` (il n'y avait
+//  plus de registry pour porter cette donnée). L'assistant est donc
+//  désormais actif inconditionnellement sur toutes les routes
+//  authentifiées ; toute restriction future par tenant devra passer par le
+//  backend (ex: l'API de l'assistant refuse la requête pour ce tenant).
 // =============================================================================
 
 const Root: React.FC = () => {
-  const aiAssistantEnabledForTenant = useTenantFeatureFlag('ai-assistant', true);
-
   return (
     <BrowserRouter basename={window.getEgenSpaBase()}>
       <Routes>
@@ -53,17 +49,14 @@ const Root: React.FC = () => {
         <Route path="login/*" element={null} />
         <Route path="logout/*" element={null} />
         <Route path="change-password/*" element={null} />
-        <Route path="tenant-suspended/*" element={null} />
 
         {/* ── Toutes les autres routes — espace tenant authentifié ── */}
         <Route
           path="*"
           element={
-            aiAssistantEnabledForTenant ? (
-              <div className={styles.assistantAppContainer}>
-                <AssistantWidget />
-              </div>
-            ) : null
+            <div className={styles.assistantAppContainer}>
+              <AssistantWidget />
+            </div>
           }
         />
       </Routes>

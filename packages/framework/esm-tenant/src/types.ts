@@ -2,109 +2,61 @@
 //  @egen/esm-tenant — Types publics
 // ============================================================================
 //
-//  Ce fichier définit l'ensemble du contrat de type du système multi-tenant
-//  EGEN. Il est conçu pour être agnostique du domaine métier : aucune
-//  référence à un secteur (santé, académique, ERP, etc.) ne doit apparaître
-//  ici. La couche métier est définie dans les apps consommatrices.
+//  PHILOSOPHIE DU SYSTÈME (refonte du 8 août 2026) :
+//  ─────────────────────────────────────────────────
+//  Ce package a UNE seule responsabilité : CAPTURER l'identifiant du tenant
+//  depuis l'URL (ou une autre source côté client) et le RENDRE DISPONIBLE
+//  globalement (store Zustand + window) pour que le reste du frontend
+//  (et notamment le client HTTP central, `@egen/esm-api`) puisse le
+//  consulter et l'envoyer au backend.
 //
-//  PHILOSOPHIE DU SYSTÈME :
-//  ─────────────────────────
-//  Le système supporte deux modes :
+//  Ce package NE FAIT AUCUNE VALIDATION. Il ne sait pas si un tenant
+//  "existe", s'il est "suspendu", ni quelles apps/permissions/thème lui
+//  sont associés — il n'y a plus de registry locale de tenants connus.
+//  TOUTE validation (existence, statut, permissions, thème, données
+//  métier associées au tenant) est une responsabilité BACKEND. Le frontend
+//  fait des appels API normaux avec le header `X-Tenant-ID` déjà injecté
+//  (voir `@egen/esm-api`) ; si le tenant n'existe pas ou n'est pas
+//  autorisé, c'est une réponse HTTP d'erreur normale, gérée comme
+//  n'importe quelle autre erreur API — pas une branche spéciale ici.
 //
-//  1. MODE SINGLE-TENANT (défaut) :
-//     Un seul tenant actif, défini statiquement via env vars ou config globale.
-//     Aucune UI de sélection de tenant n'est affichée. Les apps ne voient pas
-//     la différence — elles consomment les mêmes hooks/APIs que dans le mode
-//     multi-tenant.
+//  Ancienne architecture (registry statique `TenantDefinition[]`,
+//  vérifications `suspended`/`allowedApps`/`permissions`/`featureFlags`
+//  côté frontend) : SUPPRIMÉE. Elle imposait de maintenir une liste
+//  figée de tenants connus (fichier JSON à éditer manuellement à chaque
+//  nouvel enregistrement), ce qui est incompatible avec un enregistrement
+//  dynamique des tenants côté backend. Voir docs/analyse-esm-tenant.md
+//  pour l'historique complet de cette décision.
 //
-//  2. MODE MULTI-TENANT :
-//     Plusieurs tenants peuvent coexister. Un tenant est « résolu » au runtime
-//     (depuis l'URL, le localStorage, un claim JWT, ou un sélecteur UI) et
-//     son contexte est propagé à toutes les apps via un store Zustand global
-//     et un Context React.
-//
-//  RÉSOLUTION DU TENANT (par ordre de priorité décroissante) :
+//  RÉSOLUTION DU TENANT (par ordre de priorité décroissante, configurable) :
 //  ─────────────────────────────────────────────────────────────
-//  1. URL subdomain  : app.acme.com → tenantSlug = "acme"
-//  2. URL path       : /t/acme/dashboard → tenantSlug = "acme"
+//  1. URL subdomain  : acme.egen.gabon.gov.ga → tenantId = "acme"
+//  2. URL path       : /t/acme/dashboard → tenantId = "acme"
 //  3. Query param    : ?tenant=acme
-//  4. HTTP header    : X-Tenant-ID (lu depuis la réponse du backend lors du login)
-//  5. JWT claim      : token.tenantId ou token.tid
-//  6. localStorage   : egen:tenant:active
-//  7. Config statique: window.egenTenantId ou VITE_TENANT_ID
-//  8. Fallback       : premier tenant disponible dans la registry
+//  4. JWT claim      : token.tenantId ou token.tid
+//  5. header         : report post-login (voir storeHeaderTenantId())
+//  6. localStorage   : egen:tenant:active (survie aux rechargements)
+//  7. static         : window.egenTenantId (config statique)
+//
+//  Chaque stratégie retourne la valeur BRUTE trouvée, telle quelle, sans
+//  aucune vérification qu'elle correspond à un tenant "connu" — il n'y a
+//  justement plus rien de tel à consulter côté frontend.
 // ============================================================================
-
-import type { ThemeSchema } from '@egen/esm-theme';
 
 // ---------------------------------------------------------------------------
 // Identité d'un tenant
 // ---------------------------------------------------------------------------
 
-/** Identifiant unique du tenant — slug URL-safe, immuable */
+/** Identifiant du tenant — valeur brute capturée (slug URL-safe attendu, non vérifié) */
 export type TenantId = string;
 
-/** État de chargement d'un tenant */
-export type TenantStatus = 'idle' | 'loading' | 'active' | 'error' | 'suspended';
-
 /**
- * Définition complète d'un tenant.
- *
- * La plupart des champs sont optionnels pour permettre une déclaration minimale
- * (juste `id` + `name` suffisent pour bootstrapper le système).
+ * État du système tenant.
+ * - `"off"`    : mode "off", système désactivé
+ * - `"idle"`   : mode actif mais aucun tenant capturé pour l'instant (ex: URL globale sans sous-domaine)
+ * - `"active"` : un tenant est actuellement capturé
  */
-export interface TenantDefinition {
-  /** Identifiant unique, slug URL-safe (ex: "civitas", "acme-corp") */
-  id: TenantId;
-
-  /** Nom d'affichage human-friendly */
-  name: string;
-
-  /** Slug alternatif pour la résolution URL (si différent de `id`) */
-  slug?: string;
-
-  /** Domaine(s) associé(s) à ce tenant (pour la résolution par subdomain) */
-  domains?: string[];
-
-  /** Locale par défaut du tenant */
-  locale?: string;
-
-  /** Fuseau horaire par défaut */
-  timezone?: string;
-
-  /** URL de l'API backend propre à ce tenant (si architecture isolée par tenant) */
-  apiBaseUrl?: string;
-
-  /** URL du fichier de thème JSON propre à ce tenant (surcharge le thème global) */
-  themeUrl?: string;
-
-  /** Surcharge de thème inline (alternative à themeUrl, prioritaire) */
-  themeOverride?: Partial<ThemeSchema>;
-
-  /** URLs d'import maps propres à ce tenant (microfrontends spécifiques) */
-  importMapUrls?: string[];
-
-  /** Feature flags activés/désactivés pour ce tenant */
-  featureFlags?: Record<string, boolean>;
-
-  /** Permissions/rôles actifs pour ce tenant (liste des modules/apps autorisés) */
-  allowedApps?: string[];
-
-  /** Permissions granulaires (clés libres, interprétées par les apps) */
-  permissions?: Record<string, boolean | string[]>;
-
-  /** Métadonnées libres (logo, couleur brand, plan, etc.) */
-  meta?: Record<string, unknown>;
-
-  /** Indique si ce tenant est actif (par défaut true) */
-  active?: boolean;
-
-  /** Indique si ce tenant est en mode maintenance */
-  suspended?: boolean;
-
-  /** Message affiché si `suspended: true` */
-  suspendedMessage?: string;
-}
+export type TenantStatus = 'off' | 'idle' | 'active';
 
 // ---------------------------------------------------------------------------
 // Configuration du système tenant
@@ -113,40 +65,40 @@ export interface TenantDefinition {
 /**
  * Mode de fonctionnement du système tenant.
  *
- * - `"off"`         : système désactivé, aucune logique tenant, apps fonctionnent normalement
- * - `"single"`      : un seul tenant actif (défini par config), pas d'UI de sélection
- * - `"multi"`       : plusieurs tenants, résolution dynamique au runtime
+ * - `"off"`    : système désactivé, aucune logique tenant, apps fonctionnent normalement
+ * - `"single"` : un seul tenant actif, forcé par `defaultTenantId` (pas de résolution dynamique)
+ * - `"multi"`  : résolution dynamique du tenant au runtime (URL, storage, JWT…)
  */
 export type TenantMode = 'off' | 'single' | 'multi';
 
 /**
- * Stratégies de résolution du tenant actif, triées par priorité.
+ * Stratégies de capture du tenant actif, triées par priorité.
  * Chaque stratégie est essayée dans l'ordre jusqu'à ce qu'une réussisse.
+ * Chacune retourne une valeur BRUTE (non vérifiée) — voir en-tête de fichier.
  */
 export type TenantResolutionStrategy =
   | 'subdomain' // Lit le subdomain de window.location.hostname
-  | 'path' // Lit un segment /t/{slug}/ ou /{slug}/ dans window.location.pathname
+  | 'path' // Lit un segment /t/{id}/ ou /{id}/ dans window.location.pathname
   | 'query' // Lit ?tenant= dans window.location.search
   | 'jwt' // Lit le claim tenantId/tid dans le JWT de session
-  | 'header' // Relit en localStorage le tenant déjà résolu côté client au moment
+  | 'header' // Relit en localStorage le tenant déjà connu côté client au moment
   // du login (voir storeHeaderTenantId()). ATTENTION : malgré son nom, cette
-  // stratégie ne lit JAMAIS un en-tête HTTP réel renvoyé par le backend — il
-  // n'y a aujourd'hui aucune confirmation serveur du tenant. C'est un simple
-  // report post-login d'une valeur déjà connue côté client (utile pour
-  // survivre à un rechargement quand aucune autre stratégie ne s'applique).
+  // stratégie ne lit JAMAIS un en-tête HTTP réel renvoyé par le backend —
+  // c'est un simple report post-login d'une valeur déjà connue côté client
+  // (utile pour survivre à un rechargement quand aucune autre stratégie ne
+  // s'applique).
   | 'localStorage' // Lit egen:tenant:active depuis localStorage
-  | 'static' // Lit window.egenTenantId (voir config/env.ts)
-  | 'first'; // Prend le premier tenant disponible dans la registry
+  | 'static'; // Lit window.egenTenantId (voir config/env.ts)
 
 /** Configuration du chemin URL pour la stratégie "path" */
 export interface TenantPathConfig {
   /** Préfixe de path attendu (ex: "/t/" pour /t/acme/...) */
   prefix?: string;
-  /** Position du segment slug dans le path (0 = premier segment après spaBase) */
+  /** Position du segment id dans le path (0 = premier segment après spaBase) */
   segment?: number;
 }
 
-/** Configuration de la résolution JWT */
+/** Configuration de la capture JWT */
 export interface TenantJwtConfig {
   /** Nom du claim JWT contenant l'ID tenant (ex: "tenantId", "tid", "org") */
   claim: string;
@@ -164,10 +116,10 @@ export interface TenantSystemConfig {
   mode: TenantMode;
 
   /**
-   * Ordre des stratégies de résolution du tenant actif.
-   * Seule la première stratégie réussie est utilisée.
+   * Ordre des stratégies de capture du tenant actif.
+   * Seule la première stratégie ayant trouvé une valeur est utilisée.
    *
-   * @default ["subdomain", "path", "query", "jwt", "localStorage", "static", "first"]
+   * @default ["subdomain", "path", "query", "jwt", "header", "localStorage", "static"]
    */
   resolutionOrder?: TenantResolutionStrategy[];
 
@@ -184,15 +136,9 @@ export interface TenantSystemConfig {
   defaultTenantId?: TenantId;
 
   /**
-   * URL d'un fichier JSON de registry de tenants (chargé au boot).
-   * Format attendu : TenantDefinition[]
-   */
-  registryUrl?: string;
-
-  /**
-   * Domaine racine explicite utilisé pour dériver un sous-domaine tenant
+   * Domaine racine explicite utilisé pour extraire un sous-domaine tenant
    * (ex: "egen.gabon.gov.ga"). Sert de source unique de vérité pour toute
-   * inférence hostname → tenant/racine ailleurs dans le système (guard de
+   * dérivation hostname → tenant ailleurs dans le système (guard de
    * routage, sélecteur de tenant) — voir `utils/domain-utils.ts`.
    *
    * Si absent, une heuristique best-effort est utilisée (retire le premier
@@ -202,12 +148,6 @@ export interface TenantSystemConfig {
    * Surchargé par `window.egenTenantRootDomain` (EGEN_TENANT_ROOT_DOMAIN).
    */
   rootDomain?: string;
-
-  /**
-   * Tenants définis statiquement (fusionnés avec la registry distante).
-   * Utile pour les envs sans backend ou pour les tests.
-   */
-  staticTenants?: TenantDefinition[];
 
   /**
    * Si true, persist le tenant actif en localStorage pour survie aux rechargements.
@@ -222,20 +162,10 @@ export interface TenantSystemConfig {
   storageKey?: string;
 
   /**
-   * Si true, applique automatiquement le thème du tenant via @egen/esm-theme.
-   * @default true
+   * Callback appelé à chaque changement de tenant actif (y compris la
+   * capture initiale et le passage à `null`).
    */
-  applyTheme?: boolean;
-
-  /**
-   * Callback appelé après résolution et activation d'un tenant.
-   */
-  onTenantActivated?: (tenant: TenantDefinition) => void;
-
-  /**
-   * Callback appelé en cas d'erreur de résolution.
-   */
-  onError?: (err: Error) => void;
+  onTenantChange?: (tenantId: TenantId | null, source: TenantResolutionStrategy | null) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -250,16 +180,13 @@ export interface TenantStore {
   /** Statut courant */
   status: TenantStatus;
 
-  /** Tenant actuellement actif (null si aucun résolu ou mode "off") */
-  activeTenant: TenantDefinition | null;
+  /** Identifiant du tenant actuellement capturé (null si aucun ou mode "off") */
+  tenantId: TenantId | null;
 
-  /** Tous les tenants disponibles (registry complète) */
-  availableTenants: TenantDefinition[];
+  /** Stratégie ayant permis la capture (null si aucun tenant capturé) */
+  source: TenantResolutionStrategy | null;
 
-  /** Message d'erreur si status === "error" */
-  error: string | null;
-
-  /** Timestamp de la dernière résolution réussie */
+  /** Timestamp de la dernière capture réussie */
   resolvedAt: number | null;
 
   /** Configuration active du système */
@@ -267,46 +194,12 @@ export interface TenantStore {
 }
 
 // ---------------------------------------------------------------------------
-// Permissions frontend
-// ---------------------------------------------------------------------------
-
-/**
- * Résultat d'un contrôle d'accès tenant.
- * Utilisé par les guards et hooks de permission.
- */
-export interface TenantAccessResult {
-  /** L'accès est-il autorisé ? */
-  allowed: boolean;
-  /** Raison du refus (si `allowed: false`) */
-  reason?: 'no-tenant' | 'tenant-suspended' | 'app-not-allowed' | 'permission-denied' | 'mode-off';
-  /** Tenant vérifié */
-  tenant: TenantDefinition | null;
-}
-
-/**
- * Options pour le hook useTenantAccess / le guard TenantGuard.
- */
-export interface TenantAccessOptions {
-  /** Nom de l'app à vérifier dans tenant.allowedApps */
-  appName?: string;
-  /** Permission granulaire à vérifier dans tenant.permissions */
-  permission?: string;
-  /** Si true, bloque l'accès quand le mode est "off" (par défaut, mode "off" laisse tout passer) */
-  requireTenant?: boolean;
-}
-
-// ---------------------------------------------------------------------------
 // Events
 // ---------------------------------------------------------------------------
 
-/** Payload de l'événement esm:tenant-activated */
-export interface TenantActivatedEvent {
-  tenant: TenantDefinition;
-  previousTenantId: TenantId | null;
-}
-
-/** Payload de l'événement esm:tenant-changed */
+/** Payload de l'événement DOM `esm:tenant-changed`, émis à chaque capture/changement. */
 export interface TenantChangedEvent {
-  from: TenantDefinition | null;
-  to: TenantDefinition;
+  tenantId: TenantId | null;
+  previousTenantId: TenantId | null;
+  source: TenantResolutionStrategy | null;
 }

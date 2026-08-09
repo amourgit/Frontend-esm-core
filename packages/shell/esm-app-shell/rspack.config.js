@@ -115,16 +115,17 @@ const egenAiConfigDef = Object.keys(egenAiWindowOverrides).length > 0 ? JSON.str
  * silencieusement ignoré et `setupTenantSystem()` démarre toujours en
  * mode "off", quelle que soit la configuration.
  *
- * Contrairement au pont EGEN_AI_*, la correspondance nom↔nom n'est PAS
- * mécanique (ex: EGEN_TENANT_THEME_APPLY → egenTenantApplyTheme inverse
- * l'ordre des mots) : on utilise donc une table explicite plutôt qu'une
- * fonction de transformation générique, pour rester sans ambiguïté.
+ * La correspondance nom↔nom n'est pas mécanique partout : on utilise donc
+ * une table explicite plutôt qu'une fonction de transformation générique,
+ * pour rester sans ambiguïté.
+ *
+ * Refonte du 8 août 2026 : EGEN_TENANT_REGISTRY_URL / EGEN_TENANT_THEME_APPLY
+ * retirés — il n'y a plus de registry de tenants ni de thème piloté par
+ * tenant côté frontend (voir @egen/esm-tenant/src/types.ts).
  */
 const EGEN_TENANT_ENV_TO_WINDOW_KEY = {
   EGEN_TENANT_MODE: 'egenTenantMode',
   EGEN_TENANT_ID: 'egenTenantId',
-  EGEN_TENANT_REGISTRY_URL: 'egenTenantRegistryUrl',
-  EGEN_TENANT_THEME_APPLY: 'egenTenantApplyTheme',
   EGEN_TENANT_PERSIST: 'egenTenantPersist',
   EGEN_TENANT_RESOLUTION_ORDER: 'egenTenantResolutionOrder',
   EGEN_TENANT_PATH_PREFIX: 'egenTenantPathPrefix',

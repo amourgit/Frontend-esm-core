@@ -22,12 +22,6 @@
 //  EGEN_TENANT_ID                 → window.egenTenantId
 //    string — en mode "single", identifiant du tenant forcé.
 //
-//  EGEN_TENANT_REGISTRY_URL       → window.egenTenantRegistryUrl
-//    string (URL) — URL d'un JSON de registry de tenants (TenantDefinition[]).
-//
-//  EGEN_TENANT_THEME_APPLY        → window.egenTenantApplyTheme
-//    "true" | "false" — application automatique du thème tenant. Défaut: "true".
-//
 //  EGEN_TENANT_PERSIST            → window.egenTenantPersist
 //    "true" | "false" — persistance localStorage du tenant actif. Défaut: "true".
 //
@@ -46,6 +40,10 @@
 //
 //  Voir les types `Window` étendus dans `@egen/esm-globals` pour la
 //  déclaration TypeScript de chacun de ces globals.
+//
+//  Pas de EGEN_TENANT_REGISTRY_URL / EGEN_TENANT_THEME_APPLY ici : il n'y a
+//  plus de registry de tenants ni de thème piloté par tenant côté frontend
+//  (voir types.ts pour la philosophie de cette refonte).
 // ============================================================================
 
 import type { TenantMode, TenantResolutionStrategy, TenantSystemConfig } from '../types';
@@ -70,16 +68,7 @@ function parseTenantMode(value: string | undefined): TenantMode {
 
 function parseResolutionOrder(value: string | undefined): TenantResolutionStrategy[] | undefined {
   if (!value) return undefined;
-  const valid: TenantResolutionStrategy[] = [
-    'subdomain',
-    'path',
-    'query',
-    'jwt',
-    'header',
-    'localStorage',
-    'static',
-    'first',
-  ];
+  const valid: TenantResolutionStrategy[] = ['subdomain', 'path', 'query', 'jwt', 'header', 'localStorage', 'static'];
   const parsed = value
     .split(',')
     .map((s) => s.trim() as TenantResolutionStrategy)
@@ -96,8 +85,6 @@ function parseResolutionOrder(value: string | undefined): TenantResolutionStrate
 export function resolveConfigFromEnv(): Partial<TenantSystemConfig> {
   const mode = parseTenantMode(win('egenTenantMode'));
   const defaultTenantId = win('egenTenantId');
-  const registryUrl = win('egenTenantRegistryUrl');
-  const applyTheme = parseBool(win('egenTenantApplyTheme'), true);
   const persistActive = parseBool(win('egenTenantPersist'), true);
   const resolutionOrder = parseResolutionOrder(win('egenTenantResolutionOrder'));
   const pathPrefix = win('egenTenantPathPrefix');
@@ -106,12 +93,10 @@ export function resolveConfigFromEnv(): Partial<TenantSystemConfig> {
 
   const config: Partial<TenantSystemConfig> = {
     mode,
-    applyTheme,
     persistActive,
   };
 
   if (defaultTenantId) config.defaultTenantId = defaultTenantId;
-  if (registryUrl) config.registryUrl = registryUrl;
   if (resolutionOrder) config.resolutionOrder = resolutionOrder;
   if (pathPrefix) config.pathConfig = { prefix: pathPrefix };
   if (jwtClaim) config.jwtConfig = { claim: jwtClaim };

@@ -6,6 +6,76 @@
 
 ---
 
+## Session du 8 août 2026 — Diagnostic de la panne de résolution + refonte architecturale complète (suppression de la registry)
+
+**Contexte :** signalement direct — *"le système ne détecte rien, même quand un tenant est passé en sous-domaine directement dans l'URL"*, suivi d'une décision produit explicite de supprimer toute vérification de tenant côté frontend. Cette session couvre les deux : d'abord le diagnostic de la panne réelle, puis la refonte architecturale qui la rend obsolète.
+
+### Partie A — Diagnostic segmenté et validé (3 tests, exécutés sur le code réel)
+
+Un harnais de test isolé a été construit (Node + `tsx`, code source du package copié tel quel, seule dépendance interne stubée) pour diagnostiquer sans hypothèse.
+
+| # | Test | Méthode | Résultat |
+|---|---|---|---|
+| 1 | Résolveur isolé | Exécution de `resolveActiveTenantId()` réel (subdomain/path/query/header/jwt/localStorage/static) contre une registry peuplée en mémoire | ✅ **11/11** — la logique de résolution elle-même était 100% correcte |
+| 2 | Serveur HTTP réel | Reproduction fidèle des deux serveurs de dev du repo (rspack devServer natif ET le serveur Express de `egen develop`, utilisé par `yarn start`), requête vers `EGEN_TENANT_REGISTRY_URL=/tenants/registry.json` | ❌ **404 systématique**, pour deux raisons cumulatives (voir ci-dessous) |
+| 3 | Bout en bout | `setupTenantSystem()` réel (code non modifié), `window.location.hostname = "mef.egen.gabon.gov.ga"` (sous-domaine tenant valide), registry servie comme en conditions réelles | ✅ Reproduit exactement le symptôme : `activeTenant` reste `null`, `status: "error"`, **malgré** un sous-domaine tenant valide dans l'URL |
+
+**Cause racine identifiée (deux bugs cumulatifs, jamais détectés par l'audit du 16 juillet) :**
+- **Bug A** — `rspack.config.js` ne copiait jamais `public/tenants/registry.json` dans `dist/` : son `CopyRspackPlugin` énumère explicitement ses patterns (assets, thèmes, fonts…), et ce dossier n'y figurait pas.
+- **Bug B** — même copié, l'URL configurée (`/tenants/registry.json`) ignorait le préfixe `egenPublicPath` (`/egen/spa`) sous lequel tout est réellement servi — contrairement au système de thème, qui résout correctement ses URLs par rapport à ce préfixe.
+
+**Conséquence en aval, tracée jusqu'au symptôme visible :** `initTenantRegistry()` retournait 0 tenant → `setupTenantSystem()` levait `"La registry de tenants est vide"` **avant même d'essayer la stratégie `subdomain`** → `esm-tenant-routing-app` (le guard de routage) interrogeait indépendamment `getTenantByDomain()` sur cette registry vide → sous-domaine jugé "inconnu" → `unknownTenantBehavior` par défaut = `redirect-to-landing` → **redirection silencieuse vers `/home`, sans aucune erreur visible**. C'est exactement le comportement rapporté.
+
+Le correctif direct (copier `public/tenants/` dans `dist/`, corriger l'URL) était prêt à être appliqué — mais la Partie B ci-dessous le rend intégralement obsolète : il n'y a plus de registry à servir du tout.
+
+### Partie B — Refonte architecturale : suppression complète du système de registry/vérification
+
+**Décision produit :** le système reposait sur une liste statique de tenants (`registry.json`) qu'il aurait fallu éditer manuellement à chaque nouvel enregistrement — incompatible avec un enregistrement dynamique des tenants côté backend. Nouvelle règle : **le frontend capture le tenant depuis l'URL et le rend disponible globalement, sans aucune vérification. Toute validation (existence, statut, permissions) est une responsabilité backend.**
+
+#### Ce qui a été supprimé
+
+| Élément | Emplacement | Raison |
+|---|---|---|
+| `TenantDefinition` (registry) | `esm-tenant/src/types.ts` | Remplacé par un simple `TenantId` (string) — plus de métadonnées locales (nom, permissions, thème, `allowedApps`, `suspended`, `featureFlags`) |
+| `context/registry.ts` (entier) | `esm-tenant` | `initTenantRegistry`, `loadRemoteRegistry`, `getTenantByDomain`, `getTenantById`, `getAllTenants` — plus de liste à charger ni à interroger |
+| `config/app-config.ts` (entier) | `esm-tenant` | `registerAppTenantConfig`/`TenantGuard`/`checkAppTenantRequirements` — confirmé **100 % inutilisé** dans tout le monorepo avant suppression |
+| `TenantGuard`, `TenantRequired`, `TenantSuspendedBoundary`, `TenantSelector` | `esm-tenant/src/hooks/TenantProvider.tsx` | Composants de blocage/vérification de rendu — plus de donnée à vérifier |
+| `useTenantAccess`, `useTenantFeatureFlag`, `useTenantPermission`, `useTenantIsSuspended`, `useTenantMeta`, `useTenantLocale`, `useTenantTimezone`, `useTenantApiBaseUrl`, `useAvailableTenants` | `esm-tenant/src/hooks/useTenant.ts` | Toutes dépendaient de métadonnées de la registry supprimée |
+| Page + route `/tenant-suspended` | `esm-tenant-routing-app/src/screens/suspended.component.tsx` + toutes les regex de routes publiques (`esm-ai-assistant-app`, `esm-footer-app`, `esm-not-found-app`, `esm-primary-navigation-app`) | Le statut "suspendu" n'existe plus côté frontend |
+| `unknownTenantBehavior`, `tenantSuspendedUrl`, `validateSubdomainWithBackend`, `backendValidationEndpoint` | `esm-tenant-routing-app/src/config-schema.ts` | Config de vérification devenue sans objet |
+| `EGEN_TENANT_REGISTRY_URL`, `EGEN_TENANT_THEME_APPLY` (+ `window.egenTenant*` correspondants) | `.env.development`, `example.env`, `rspack.config.js`, `esm-globals/src/types.ts` | Plus de registry à charger, plus de thème piloté par tenant côté frontend |
+| `registerTenantThemeApplier` + branchement `applyGlobalThemeOverride` par tenant | `esm-app-shell/src/run.ts` | Sans registry, plus de source de données (`themeOverride`/`themeUrl`) pour ce mécanisme |
+| `public/tenants/registry.json` | `esm-app-shell/public/` | Fichier de démonstration devenu inutile |
+| Liste déroulante "mes établissements" (`useAvailableTenants`) | `esm-primary-navigation-app` — `context-switcher.component.tsx` | Nécessitait une liste de tenants connus côté frontend, qui n'existe plus. **Remplacé par un simple indicateur du tenant courant** (pas de sélection). Note : un vrai sélecteur multi-espaces nécessiterait un endpoint backend dédié (ex: `GET /api/me/tenants`) — hors périmètre de cette refonte. |
+
+#### Ce qui reste (le strict nécessaire, capture + exposition)
+
+- `setupTenantSystem()` — **100 % synchrone** désormais (plus aucun accès réseau nécessaire, plus de `.catch()` requis côté `run.ts`)
+- 7 stratégies de capture BRUTE, sans vérification : `subdomain`, `path`, `query`, `jwt`, `header` *(reprend en localStorage le tenant déjà connu côté client au login — ne lit pas un header HTTP réel)*, `localStorage`, `static`. La stratégie `first` (qui prenait le premier tenant de la registry) a été retirée — elle n'a plus de sens sans registry.
+- Store Zustand simplifié : `{ mode, status, tenantId, source, resolvedAt, config }`
+- `useTenant()` retourne désormais directement `TenantId | null` (un string), plus un objet `TenantDefinition`
+- `switchTenant(tenantId)` — change le tenant actif sans aucune vérification
+- `@egen/esm-api` (`getTenantId()`, `tenantHeaders()`, `isMultiTenant()`) — **inchangé dans son rôle**, c'est le pont déjà câblé qui injecte `X-Tenant-ID` sur chaque requête backend (`egenFetch`) ; c'est la brique qui réalise concrètement *"rendre le tenant consultable"*
+- Le guard de routage (`esm-tenant-routing-app`) garde son rôle de **navigation** (landing globale si pas de sous-domaine, redirection login si non authentifié) mais plus aucune vérification de **validité** du tenant
+
+#### Validation (test 4, sur le code réel réécrit)
+
+| Scénario | Résultat |
+|---|---|
+| Sous-domaine tenant existant, **sans aucune registry nulle part** | ✅ Capturé (`tenantId: "mef"`, `source: "subdomain"`) |
+| Sous-domaine **jamais vu, zéro configuration préalable** | ✅ Capturé directement (`tenantId: "tout-nouveau-lycee-jamais-vu"`) — **c'est exactement la demande : plus besoin de maintenir une liste** |
+| Domaine racine seul (pas de sous-domaine) | ✅ `status: "idle"`, pas d'erreur, pas de crash |
+| Lecture depuis le store global (équivalent `esm-api getTenantId()`/`tenantHeaders()`) | ✅ `X-Tenant-ID` correctement dérivé |
+| `switchTenant()` sans vérification | ✅ Changement direct, immédiat |
+
+**14/14 assertions passées.** Voir aussi le résultat 0 erreur de syntaxe sur les 28 fichiers modifiés (validation `esbuild`, en l'absence d'environnement `yarn`/`tsc` complet dans le sandbox d'exécution — un `yarn install && tsc --noEmit` de contrôle sur poste de dev reste recommandé avant la prochaine mise en prod).
+
+#### Fichiers touchés (32 au total)
+
+Réécrits : `esm-tenant/src/{types,setup,index}.ts`, `esm-tenant/src/config/env.ts`, `esm-tenant/src/context/{resolver,store}.ts`, `esm-tenant/src/hooks/{useTenant,TenantProvider}.tsx`, `esm-tenant/src/utils/tenant-utils.ts`, `esm-tenant/src/__tests__/{resolver,setup}.test.ts`, `esm-api/src/tenant.ts`, `esm-tenant-routing-app/src/{config-schema.ts,guard/use-tenant-routing.ts,index.ts,root.component.tsx}`, `esm-primary-navigation-app/src/components/context-switcher/context-switcher.component.tsx`, `esm-login-app/src/login/login.component.tsx`, `esm-ai-assistant-app/src/{root.component.tsx,root.component.test.tsx,base-routes.ts}`, `esm-app-shell/src/run.ts`, `esm-globals/src/types.ts`, `esm-app-shell/rspack.config.js`, `.env.development`, `example.env`.
+Supprimés : `esm-tenant/src/context/registry.ts`, `esm-tenant/src/config/app-config.ts`, `esm-tenant/src/__tests__/registry.test.ts`, `esm-tenant-routing-app/src/screens/suspended.{component.tsx,scss}`, `esm-app-shell/public/tenants/registry.json`.
+Nettoyés (retrait de `tenant-suspended` des regex de routes publiques) : `esm-footer-app/src/{root.component.tsx,root.component.test.tsx,routes.json}`, `esm-not-found-app/src/{index.ts,routes.json}`, `esm-primary-navigation-app/src/{root.component.tsx,routes.json}`, `esm-ai-assistant-app/src/routes.json`.
+
 ## 0. État des corrections (17 juillet 2026)
 
 Tous les points ci-dessous ont été corrigés et poussés sur `main`, sauf le §6

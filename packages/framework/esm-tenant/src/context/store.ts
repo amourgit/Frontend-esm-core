@@ -2,9 +2,15 @@
 //  @egen/esm-tenant — Store Zustand global du système tenant
 // ============================================================================
 //
-//  Le store est le point central de vérité pour l'état tenant au runtime.
-//  Il suit exactement le même pattern que les autres stores EGEN
+//  Le store est le point central de vérité pour le tenant CAPTURÉ au
+//  runtime. Il suit exactement le même pattern que les autres stores EGEN
 //  (esm-feature-flags, esm-state) pour une intégration sans friction.
+//
+//  Ce store ne contient QUE ce qui a été capturé (id, source, timestamp) —
+//  aucune métadonnée (nom, thème, permissions…) : ce concept n'existe plus
+//  côté frontend (voir types.ts). C'est exactement ce que consulte
+//  `@egen/esm-api` (getTenantId, tenantHeaders) pour injecter le header
+//  `X-Tenant-ID` sur chaque requête backend.
 //
 //  IMPORTANT — SINGLETON MODULE FEDERATION :
 //  Ce module DOIT être partagé en singleton via Module Federation pour que
@@ -13,14 +19,13 @@
 // ============================================================================
 
 import { createGlobalStore } from '@egen/esm-state';
-import type { TenantStore, TenantDefinition, TenantMode, TenantStatus, TenantSystemConfig } from '../types';
+import type { TenantStore, TenantId, TenantMode, TenantResolutionStrategy, TenantSystemConfig } from '../types';
 
 const DEFAULT_CONFIG: TenantSystemConfig = {
   mode: 'off',
-  resolutionOrder: ['subdomain', 'path', 'query', 'jwt', 'header', 'localStorage', 'static', 'first'],
+  resolutionOrder: ['subdomain', 'path', 'query', 'jwt', 'header', 'localStorage', 'static'],
   persistActive: true,
   storageKey: 'egen:tenant:active',
-  applyTheme: true,
 };
 
 /**
@@ -32,48 +37,31 @@ const DEFAULT_CONFIG: TenantSystemConfig = {
  * import { tenantStore } from '@egen/esm-tenant';
  * import { useStore } from '@egen/esm-react-utils';
  *
- * const { activeTenant, mode } = useStore(tenantStore);
+ * const { tenantId, mode } = useStore(tenantStore);
  * ```
  */
 export const tenantStore = createGlobalStore<TenantStore>('tenant', {
   mode: 'off',
-  status: 'idle',
-  activeTenant: null,
-  availableTenants: [],
-  error: null,
+  status: 'off',
+  tenantId: null,
+  source: null,
   resolvedAt: null,
   config: DEFAULT_CONFIG,
 });
-
 
 // ---------------------------------------------------------------------------
 // Mutations internes
 // ---------------------------------------------------------------------------
 
 /** @internal */
-export function setTenantStoreStatus(status: TenantStatus, error?: string): void {
-  tenantStore.setState((s) => ({ ...s, status, error: error ?? null }));
-}
-
-/** @internal */
-export function setAvailableTenants(tenants: TenantDefinition[]): void {
-  tenantStore.setState((s) => ({ ...s, availableTenants: tenants }));
-}
-
-/** @internal */
-export function setActiveTenantInStore(tenant: TenantDefinition | null): void {
+export function setActiveTenantIdInStore(tenantId: TenantId | null, source: TenantResolutionStrategy | null): void {
   tenantStore.setState((s) => ({
     ...s,
-    activeTenant: tenant,
-    status: tenant ? (tenant.suspended ? 'suspended' : 'active') : 'idle',
-    resolvedAt: tenant ? Date.now() : null,
-    error: null,
+    tenantId,
+    source,
+    status: s.mode === 'off' ? 'off' : tenantId ? 'active' : 'idle',
+    resolvedAt: tenantId ? Date.now() : null,
   }));
-}
-
-/** @internal */
-export function setTenantMode(mode: TenantMode): void {
-  tenantStore.setState((s) => ({ ...s, mode, config: { ...s.config, mode } }));
 }
 
 /** @internal */
@@ -81,6 +69,7 @@ export function setTenantConfig(config: Partial<TenantSystemConfig>): void {
   tenantStore.setState((s) => ({
     ...s,
     mode: config.mode ?? s.mode,
+    status: (config.mode ?? s.mode) === 'off' ? 'off' : s.status,
     config: { ...s.config, ...config },
   }));
 }
@@ -94,15 +83,9 @@ export function getTenantStoreState(): TenantStore {
   return tenantStore.getState();
 }
 
-/** @category Tenant */
-/** @category Tenant */
-export function getActiveTenant(): TenantDefinition | null {
-  return tenantStore.getState().activeTenant;
-}
-
-/** @category Tenant */
-export function getAvailableTenants(): TenantDefinition[] {
-  return tenantStore.getState().availableTenants;
+/** Retourne l'ID du tenant actuellement capturé, ou `null`. @category Tenant */
+export function getActiveTenantId(): TenantId | null {
+  return tenantStore.getState().tenantId;
 }
 
 /** @category Tenant */
@@ -128,10 +111,9 @@ export function resetTenantStore(): void {
   tenantStore.setState(
     {
       mode: 'off',
-      status: 'idle',
-      activeTenant: null,
-      availableTenants: [],
-      error: null,
+      status: 'off',
+      tenantId: null,
+      source: null,
       resolvedAt: null,
       config: DEFAULT_CONFIG,
     },
