@@ -65,12 +65,23 @@ export function setActiveTenantIdInStore(tenantId: TenantId | null, source: Tena
 }
 
 /** @internal */
-export function setTenantConfig(config: Partial<TenantSystemConfig>): void {
+/**
+ * @internal
+ * Remplace intégralement la config active. Attend une config COMPLÈTE et
+ * déjà résolue (c'est setupTenantSystem() qui construit cet objet complet
+ * à partir des défauts + env + options explicites — voir setup.ts). Un
+ * remplacement plutôt qu'une fusion avec l'ancienne config est essentiel
+ * pour que setupTenantSystem() reste idempotent d'un appel à l'autre : sans
+ * ça, un champ optionnel (ex: rootDomain) omis lors d'un second appel
+ * resterait silencieusement figé à sa valeur du premier appel au lieu
+ * d'être effacé.
+ */
+export function setTenantConfig(config: TenantSystemConfig): void {
   tenantStore.setState((s) => ({
     ...s,
-    mode: config.mode ?? s.mode,
-    status: (config.mode ?? s.mode) === 'off' ? 'off' : s.status,
-    config: { ...s.config, ...config },
+    mode: config.mode,
+    status: config.mode === 'off' ? 'off' : s.status,
+    config,
   }));
 }
 

@@ -87,3 +87,22 @@ export function tenantHeaders(): Record<string, string> {
 export function isMultiTenant(): boolean {
   return getTenantState()?.mode === 'multi';
 }
+
+/**
+ * S'abonne aux changements du store tenant (capture initiale, switchTenant…).
+ * Retourne un no-op si le store tenant n'est pas encore initialisé (ex:
+ * @egen/esm-tenant pas encore chargé) — non bloquant, cohérent avec le
+ * reste de ce module qui dégrade toujours silencieusement plutôt que de lever.
+ *
+ * @example
+ * ```ts
+ * import { subscribeTenant, getTenantId } from '@egen/esm-api';
+ * const unsubscribe = subscribeTenant(() => refreshFor(getTenantId()));
+ * ```
+ * @category Tenant
+ */
+export function subscribeTenant(callback: () => void): () => void {
+  const store = getGlobalStore<MinimalTenantState>('tenant');
+  if (!store) return () => {};
+  return store.subscribe(callback);
+}

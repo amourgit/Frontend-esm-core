@@ -69,9 +69,8 @@ export function useTenantRouting(): RoutingDecision {
   const config = useConfig<ConfigSchema>();
   const tenantMode = useTenantMode();
   const tenantId = useTenant();
-  const sessionStore = useSession();
-
-  const isAuthenticated = Boolean(sessionStore?.session?.authenticated);
+  const session = useSession();
+  const isAuthenticated = Boolean(session?.authenticated);
 
   const analysis = useMemo(() => {
     if (typeof window === 'undefined') return null;

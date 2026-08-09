@@ -6,7 +6,7 @@
 //  Accède aux stores via leurs APIs publiques (getState(), not subscribe).
 // =============================================================================
 
-import { sessionStore } from '@egen/esm-api';
+import { sessionStore, getTenantId, isMultiTenant } from '@egen/esm-api';
 import { getAIConfig } from '@egen/esm-ai-config';
 import { AI_EVENTS, dispatchAIEvent } from '@egen/esm-ai-events';
 import { collectProviderData } from './provider-registry';
@@ -105,33 +105,25 @@ function buildPermissionsContext(): AIPermissionsContext {
   };
 }
 
+/**
+ * Construit le contexte tenant à partir de l'API synchrone canonique de
+ * @egen/esm-api (getTenantId/isMultiTenant) — le même point d'accès que
+ * celui utilisé par egenFetch pour injecter X-Tenant-ID. Zéro dépendance
+ * directe sur @egen/esm-tenant, zéro accès spéculatif à des globals window
+ * non garantis (voir historique de cette fonction avant le 8 août 2026).
+ *
+ * `null` en mode "off" ET quand aucun tenant n'est encore capturé (ex: URL
+ * sur le domaine racine, sans sous-domaine) — dans les deux cas, il n'y a
+ * simplement rien à exposer au LLM.
+ */
 function buildTenantContext(): AIContext['tenant'] {
-  // Accéder au tenant store via son API publique (pas d'import direct du store)
-  // On lit window.egenTenantMode comme le fait le framework tenant
-  try {
-    const mode = (window as any).egenTenantMode ?? 'off';
-    if (mode === 'off') return null;
+  const tenantId = getTenantId();
+  if (!tenantId) return null;
 
-    // Tenter de lire le store tenant s'il est disponible
-    const tenantStoreKey = 'tenant';
-    const stores = (window as any).stores;
-    if (stores?.[tenantStoreKey]) {
-      const tenantState = stores[tenantStoreKey].value.getState();
-      const tenant = tenantState.activeTenant;
-      if (!tenant) return null;
-      return {
-        id: tenant.id,
-        name: tenant.name,
-        mode,
-        locale: tenant.locale,
-        timezone: tenant.timezone,
-        featureFlags: tenant.featureFlags,
-      };
-    }
-  } catch {
-    // Store tenant non disponible
-  }
-  return null;
+  return {
+    id: tenantId,
+    mode: isMultiTenant() ? 'multi' : 'single',
+  };
 }
 
 function buildNavigationContext(): AINavigationContext {

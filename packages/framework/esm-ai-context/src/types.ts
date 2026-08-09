@@ -15,13 +15,17 @@ export interface AIUserContext {
   properties: Record<string, string>;
 }
 
+/**
+ * Contexte tenant — refonte du 8 août 2026 : le frontend ne connaît plus
+ * QUE l'ID brut du tenant capturé (URL/JWT/storage…), sans aucune
+ * métadonnée locale (nom, locale, timezone, feature flags). Ce concept de
+ * registry de tenants a été supprimé — voir @egen/esm-tenant/src/types.ts.
+ * `mode` ne peut valoir que "single" | "multi" ici : en mode "off" ou sans
+ * tenant capturé, `AIContext.tenant` est `null` (voir buildTenantContext()).
+ */
 export interface AITenantContext {
   id: string;
-  name: string;
-  mode: 'off' | 'single' | 'multi';
-  locale?: string;
-  timezone?: string;
-  featureFlags?: Record<string, boolean>;
+  mode: 'single' | 'multi';
 }
 
 export interface AINavigationContext {

@@ -79,6 +79,19 @@ describe('setupTenantSystem — mode "multi"', () => {
     // La capture est déjà effective immédiatement après l'appel, sans await :
     expect(getTenantStoreState().tenantId).toBe('mef');
   });
+
+  it('est idempotent : un rootDomain omis lors d\'un second appel efface bien le premier (pas d\'accumulation silencieuse)', () => {
+    // Régression trouvée le 9 août 2026 en testant switch_tenant : avant
+    // correctif, setTenantConfig() FUSIONNAIT la nouvelle config avec
+    // l'ancienne (`{ ...s.config, ...config }`), donc un champ optionnel
+    // omis au second appel restait figé à sa valeur du premier appel au
+    // lieu d'être effacé — cassant l'idempotence de setupTenantSystem().
+    setupTenantSystem({ mode: 'multi', rootDomain: 'egen.gabon.gov.ga' });
+    expect(getTenantStoreState().config.rootDomain).toBe('egen.gabon.gov.ga');
+
+    setupTenantSystem({ mode: 'multi' }); // pas de rootDomain cette fois
+    expect(getTenantStoreState().config.rootDomain).toBeUndefined();
+  });
 });
 
 describe('setupTenantSystem — résolution depuis window.egenTenant* (pont env)', () => {

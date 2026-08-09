@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { navigateTool, clickElementTool, fillFieldTool, describeScreenTool, listObservablesTool } from './index';
+import { navigateTool, clickElementTool, fillFieldTool, describeScreenTool, listObservablesTool, switchTenantTool } from './index';
 import { registerUIAction, _clearUIActionRegistry } from '../ui-actions';
 import { registerObservable, _clearObservableRegistry } from '../observables';
 
@@ -139,5 +139,45 @@ describe('describeScreenTool', () => {
     expect(result.success).toBe(true);
     expect(result.data).toHaveProperty('headings');
     expect(result.data).toHaveProperty('interactiveElements');
+  });
+});
+
+describe('switchTenantTool', () => {
+  // Régression : ce tool réimplémentait sa propre extraction de domaine
+  // racine au lieu de réutiliser inferRootDomain/buildTenantSubdomainUrl de
+  // @egen/esm-tenant (source unique de vérité, voir utils/domain-utils.ts).
+  // Conséquence concrète du bug : un EGEN_TENANT_ROOT_DOMAIN configuré
+  // explicitement (nécessaire sur les TLD à plusieurs niveaux, ex: "gov.ga")
+  // était totalement ignoré par ce tool.
+  function setHostname(hostname: string) {
+    Object.defineProperty(window, 'location', {
+      value: { ...window.location, hostname, protocol: 'https:', port: '' },
+      writable: true,
+    });
+  }
+
+  it('utilise le rootDomain explicitement configuré (setupTenantSystem) plutôt que l\'heuristique', async () => {
+    const { setupTenantSystem } = await import('@egen/esm-tenant');
+    setupTenantSystem({ mode: 'multi', rootDomain: 'egen.gabon.gov.ga' });
+    // Hostname à 2 segments seulement ("gov.ga" à la fin) : l'heuristique
+    // best-effort (retirer le 1er label) découperait mal un TLD à plusieurs
+    // niveaux. Avec le rootDomain explicite, le résultat reste correct.
+    setHostname('mef.egen.gabon.gov.ga');
+
+    const result = await switchTenantTool.execute({ args: { tenantSlug: 'lycee-lb' } } as any);
+
+    expect(result.success).toBe(true);
+    expect((result.data as any).targetUrl).toBe('https://lycee-lb.egen.gabon.gov.ga/');
+  });
+
+  it("retombe sur l'heuristique (retire le 1er label) si aucun rootDomain n'est configuré", async () => {
+    const { setupTenantSystem } = await import('@egen/esm-tenant');
+    setupTenantSystem({ mode: 'multi' }); // pas de rootDomain
+    setHostname('mef.egen-demo.com');
+
+    const result = await switchTenantTool.execute({ args: { tenantSlug: 'lycee-lb' } } as any);
+
+    expect(result.success).toBe(true);
+    expect((result.data as any).targetUrl).toBe('https://lycee-lb.egen-demo.com/');
   });
 });

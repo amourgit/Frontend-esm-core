@@ -13,6 +13,7 @@
 import { navigate } from '@egen/esm-navigation';
 import { showNotification, showSnackbar, showModal } from '@egen/esm-styleguide/src/public';
 import { egenFetch } from '@egen/esm-api';
+import { inferRootDomain, buildTenantSubdomainUrl, getTenantStoreState } from '@egen/esm-tenant';
 import type { AIToolDefinition } from '../types';
 import { getRoutesCatalogForLLM } from '../routes';
 import { getVisibleUIActions, getUIActionElement, setNativeInputValue } from '../ui-actions';
@@ -316,10 +317,14 @@ export const switchTenantTool: AIToolDefinition = {
     try {
       const slug = String(ctx.args.tenantSlug);
       const hostname = window.location.hostname;
-      const parts = hostname.split('.');
-      const rootDomain = parts.length > 2 ? parts.slice(1).join('.') : hostname;
+      // Domaine racine : priorité au rootDomain explicitement configuré
+      // (EGEN_TENANT_ROOT_DOMAIN / setupTenantSystem({ rootDomain })), avec
+      // repli heuristique sinon — même source unique de vérité que le reste
+      // du système tenant (@egen/esm-tenant/src/utils/domain-utils.ts),
+      // au lieu d'une extraction de domaine réimplémentée localement ici.
+      const rootDomain = inferRootDomain(hostname, getTenantStoreState().config.rootDomain);
       const spaBase = window.getEgenSpaBase?.() ?? '/';
-      const targetUrl = `${window.location.protocol}//${slug}.${rootDomain}${spaBase}`;
+      const targetUrl = buildTenantSubdomainUrl(slug, rootDomain, spaBase);
       window.location.href = targetUrl;
       return { success: true, data: { targetUrl }, durationMs: 0 };
     } catch (err) {

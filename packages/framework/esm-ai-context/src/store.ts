@@ -6,7 +6,7 @@
 // =============================================================================
 
 import { createGlobalStore, subscribeTo } from '@egen/esm-state';
-import { sessionStore } from '@egen/esm-api';
+import { sessionStore, subscribeTenant } from '@egen/esm-api';
 import { AI_EVENTS, dispatchAIEvent } from '@egen/esm-ai-events';
 import { buildAIContext } from './builder';
 import { onProviderRegistryChange } from './provider-registry';
@@ -80,6 +80,12 @@ export function initAIContextReactivity(): () => void {
 
   // ── Session (auth, user, privileges) ────────────────────────────────────────
   _unsubscribers.push(sessionStore.subscribe(() => scheduleContextRebuild()));
+
+  // ── Tenant (capture initiale, switchTenant() à la volée) ────────────────────
+  // subscribeTenant() dégrade silencieusement en no-op si le store tenant
+  // n'est pas encore initialisé (voir @egen/esm-api/src/tenant.ts) — non
+  // bloquant même si @egen/esm-tenant n'est pas chargé dans ce contexte.
+  _unsubscribers.push(subscribeTenant(() => scheduleContextRebuild()));
 
   // ── Navigation (Single-SPA routing events) ──────────────────────────────────
   if (typeof window !== 'undefined') {

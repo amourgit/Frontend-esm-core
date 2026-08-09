@@ -44,7 +44,8 @@
     "@egen/esm-api": "workspace:*",
     "@egen/esm-navigation": "workspace:*",
     "@egen/esm-state": "workspace:*",
-    "@egen/esm-styleguide": "workspace:*"
+    "@egen/esm-styleguide": "workspace:*",
+    "@egen/esm-tenant": "workspace:*"
   },
   "peerDependencies": {
     "@egen/esm-api": "9.x",
