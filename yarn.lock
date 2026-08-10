@@ -546,7 +546,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     egen: "workspace:*"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -689,6 +689,7 @@ __metadata:
     "@egen/esm-navigation": "workspace:*"
     "@egen/esm-state": "workspace:*"
     "@egen/esm-styleguide": "workspace:*"
+    "@egen/esm-tenant": "workspace:*"
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -719,7 +720,7 @@ __metadata:
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     rimraf: "npm:^6.1.3"
     rxjs: "npm:^6.5.3"
@@ -756,8 +757,8 @@ __metadata:
     dexie: "npm:^3.0.3"
     dotenv: "npm:^16.0.3"
     html-webpack-plugin: "npm:5.6.6"
-    i18next: "npm:^25.5.3"
-    i18next-browser-languagedetector: "npm:^8.2.0"
+    i18next: "npm:^26.3.6"
+    i18next-browser-languagedetector: "npm:^8.2.1"
     lodash-es: "npm:^4.17.21"
     mini-css-extract-plugin: "npm:2.9.1"
     react: "npm:^18.3.1"
@@ -792,7 +793,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.13"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     rimraf: "npm:^6.1.3"
@@ -817,7 +818,7 @@ __metadata:
     "@swc/core": "npm:1.15.21"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     react: "npm:^18.3.1"
     rimraf: "npm:^6.1.3"
     single-spa: "npm:^6.0.3"
@@ -856,7 +857,7 @@ __metadata:
     fake-indexeddb: "npm:^4.0.2"
     fork-ts-checker-webpack-plugin: "npm:^7.2.13"
     husky: "npm:^8.0.3"
-    i18next-parser: "npm:^9.3.0"
+    i18next-parser: "npm:^9.4.0"
     identity-obj-proxy: "npm:^3.0.0"
     lint-staged: "npm:^15.2.9"
     prettier: "npm:^3.1.0"
@@ -884,7 +885,7 @@ __metadata:
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     rimraf: "npm:^6.1.3"
@@ -911,7 +912,7 @@ __metadata:
     egen: "workspace:*"
     fuzzy: "npm:^0.1.3"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1009,7 +1010,7 @@ __metadata:
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     rimraf: "npm:^6.1.3"
@@ -1035,7 +1036,7 @@ __metadata:
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     concurrently: "npm:^9.2.1"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     react: "npm:^18.3.1"
     rimraf: "npm:^6.1.3"
     single-spa: "npm:^6.0.3"
@@ -1059,7 +1060,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     egen: "workspace:*"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1114,7 +1115,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.13"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1168,7 +1169,7 @@ __metadata:
     egen: "workspace:*"
     fuzzy: "npm:^0.1.3"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1202,8 +1203,9 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
     egen: "workspace:*"
+    embla-carousel-autoplay: "npm:^8.6.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1244,7 +1246,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     egen: "workspace:*"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-ace: "npm:^14.0.1"
@@ -1286,7 +1288,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     egen: "workspace:*"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1329,7 +1331,7 @@ __metadata:
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     jsdom: "npm:^29.0.2"
     lodash: "npm:4.17.21"
     path-to-regexp: "npm:^8.3.0"
@@ -1339,6 +1341,46 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@egen/esm-state": 9.x
+  languageName: unknown
+  linkType: soft
+
+"@egen/esm-not-found-app@workspace:packages/apps/esm-not-found-app":
+  version: 0.0.0-use.local
+  resolution: "@egen/esm-not-found-app@workspace:packages/apps/esm-not-found-app"
+  dependencies:
+    "@carbon/react": "npm:^1.92.1"
+    "@egen/esm-api": "workspace:*"
+    "@egen/esm-config": "workspace:*"
+    "@egen/esm-react-utils": "workspace:*"
+    "@egen/esm-state": "workspace:*"
+    "@egen/esm-theme": "workspace:*"
+    "@vitest/coverage-v8": "npm:^4.1.2"
+    cross-env: "npm:^10.1.0"
+    egen: "workspace:*"
+    happy-dom: "npm:^20.6.0"
+    i18next: "npm:^26.3.6"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    react-i18next: "npm:^16.0.0"
+    react-router-dom: "npm:^6.3.0"
+    rxjs: "npm:^6.5.3"
+    sass: "npm:^1.98.0"
+    swr: "npm:2.2.5"
+    vitest: "npm:^4.1.2"
+  peerDependencies:
+    "@carbon/react": 1.x
+    "@egen/esm-api": 9.x
+    "@egen/esm-config": 9.x
+    "@egen/esm-framework": 9.x
+    "@egen/esm-react-utils": 9.x
+    "@egen/esm-state": 9.x
+    "@egen/esm-theme": "workspace:*"
+    react: 18.x
+    react-dom: 18.x
+    react-i18next: 16.x
+    react-router-dom: 6.x
+    rxjs: 6.x
+    swr: 2.x
   languageName: unknown
   linkType: soft
 
@@ -1357,7 +1399,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     egen: "workspace:*"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1399,7 +1441,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dexie: "npm:^3.0.3"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     rimraf: "npm:^6.1.3"
@@ -1430,7 +1472,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.2"
     egen: "workspace:*"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1483,7 +1525,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.13"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1534,7 +1576,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.13"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     rimraf: "npm:^6.1.3"
     rxjs: "npm:^6.6.7"
     single-spa: "npm:^6.0.3"
@@ -1563,7 +1605,7 @@ __metadata:
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.13"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     react: "npm:^18.3.1"
     rimraf: "npm:^6.1.3"
     rxjs: "npm:^6.6.7"
@@ -1604,11 +1646,14 @@ __metadata:
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
     d3: "npm:^7.8.0"
+    embla-carousel: "npm:^8.6.0"
+    embla-carousel-autoplay: "npm:^8.6.0"
+    embla-carousel-react: "npm:^8.6.0"
     framer-motion: "npm:^12.42.2"
     geopattern: "npm:^1.2.3"
     gsap: "npm:^3.12.5"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-aria-components: "npm:^1.7.1"
@@ -1702,7 +1747,6 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@egen/esm-state": 9.x
-    "@egen/esm-theme": 9.x
     react: ^18.0.0
     rxjs: ^6.5.3
   languageName: unknown
@@ -1733,8 +1777,8 @@ __metadata:
     "@swc/cli": "npm:0.8.1"
     "@swc/core": "npm:1.15.21"
     concurrently: "npm:^9.2.1"
-    i18next: "npm:^25.5.3"
-    i18next-parser: "npm:^9.3.0"
+    i18next: "npm:^26.3.6"
+    i18next-parser: "npm:^9.4.0"
     rimraf: "npm:^6.1.3"
   peerDependencies:
     i18next: 25.x
@@ -1824,7 +1868,7 @@ __metadata:
     "@storybook/addon-links": "npm:^10.2.13"
     classnames: "npm:^2.3.2"
     dayjs: "npm:^1.11.13"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.3.6"
     react: "npm:^18.3.1"
     react-aria-components: "npm:^1.7.1"
     react-dom: "npm:^18.3.1"
@@ -11221,6 +11265,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"embla-carousel-autoplay@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "embla-carousel-autoplay@npm:8.6.0"
+  peerDependencies:
+    embla-carousel: 8.6.0
+  checksum: 10/5dee505b891e93da6ac8072c2b1a6bda63533ceaef0eec77fa15425974c08242cf6b6a745159eab33f6fad886b5d05148bf06f01ce3fca87811a79e764b5aad2
+  languageName: node
+  linkType: hard
+
+"embla-carousel-react@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "embla-carousel-react@npm:8.6.0"
+  dependencies:
+    embla-carousel: "npm:8.6.0"
+    embla-carousel-reactive-utils: "npm:8.6.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.1 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+  checksum: 10/8a6338f28844f07e29df03fb09bf7e157e0aecb423b0ca7d9b9a65e4537acce4a140c94f177957518e44d5483993c1c40273b913cde7e543d0b68955efda8ffc
+  languageName: node
+  linkType: hard
+
+"embla-carousel-reactive-utils@npm:8.6.0":
+  version: 8.6.0
+  resolution: "embla-carousel-reactive-utils@npm:8.6.0"
+  peerDependencies:
+    embla-carousel: 8.6.0
+  checksum: 10/48b31931572b32b49705e6125d4f10c240fca0ee8a078867fc91f7c889f6adee95f7fd0b0fdf5dfef6d83d497115759f3f3ca2e8320e331efa0de1c9e6fb4638
+  languageName: node
+  linkType: hard
+
+"embla-carousel@npm:8.6.0, embla-carousel@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "embla-carousel@npm:8.6.0"
+  checksum: 10/6c1c4268160ce2a150c80f0c84edd4c42b47567f8ef25f56fb21819a4094cfa885614cb0837d180e8da8159ff79a077e0a2e1e679ed2c500ff52697d3ec94b78
+  languageName: node
+  linkType: hard
+
 "emoji-regex@npm:^10.3.0":
   version: 10.3.0
   resolution: "emoji-regex@npm:10.3.0"
@@ -13519,18 +13600,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^8.2.0":
-  version: 8.2.0
-  resolution: "i18next-browser-languagedetector@npm:8.2.0"
+"i18next-browser-languagedetector@npm:^8.2.1":
+  version: 8.2.1
+  resolution: "i18next-browser-languagedetector@npm:8.2.1"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
-  checksum: 10/b2e78feb256e92b219cd378b38af00404b8f667473f886d64c53588df0592bce145ad29ad7d8238c75f78a9c79f02c84d400569dd5c0ab94c751ac62a4e1f8dd
+  checksum: 10/3410c839285f70f04546b6d5960e3fe263cbefb3098afa17e4254677af8e2149f287968d4e4fb3bcbf76a0e2300761e56e0315e41f1b5ed5c1c78a2d037cc64f
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:^9.3.0":
-  version: 9.3.0
-  resolution: "i18next-parser@npm:9.3.0"
+"i18next-parser@npm:^9.4.0":
+  version: 9.4.0
+  resolution: "i18next-parser@npm:9.4.0"
   dependencies:
     "@babel/runtime": "npm:^7.25.0"
     broccoli-plugin: "npm:^4.0.7"
@@ -13551,7 +13632,7 @@ __metadata:
     vinyl-fs: "npm:^4.0.0"
   bin:
     i18next: bin/cli.js
-  checksum: 10/32b81864aa9cc27b7db41fde6fdf2c686c985e07a9b62a8dd10b4e86c8c0db7fe6ef3e569461a593521932265b31d12c091a6dda461406e54ebb0fc9ff6a55d0
+  checksum: 10/dbc7216ff4332365b0a0f8b0e0e21be78508d54daf16be21d9b262b9c8d3ff477bb002ddfe05e89e3c65357cec01fdf5ec5983a0e0b51b8587135a4fdd4c33b7
   languageName: node
   linkType: hard
 
@@ -13569,17 +13650,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^25.5.3":
-  version: 25.5.3
-  resolution: "i18next@npm:25.5.3"
-  dependencies:
-    "@babel/runtime": "npm:^7.27.6"
+"i18next@npm:^26.3.6":
+  version: 26.3.6
+  resolution: "i18next@npm:26.3.6"
   peerDependencies:
-    typescript: ^5
+    typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/eb7312b3261af4477b7e4d09ec1636372a79a8f81bb5ac9531bbb9aa498ca07f337f9ec2c89507f0d895ce6c0b1352a2ea4fbe47f665ab4feba3df2de79cbeab
+  checksum: 10/529f1dbfae6b0fe98d997af98af5d6d0a0e27ddf5b91b81c5dfccad94e3a66dceeba2d1b7327f0045085bc4d552abbf4a1efbfadd4bbb98d13a54e3310eae428
   languageName: node
   linkType: hard
 
