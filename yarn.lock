@@ -578,7 +578,7 @@ __metadata:
   dependencies:
     "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -600,7 +600,7 @@ __metadata:
     "@egen/esm-api": "workspace:*"
     "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -620,7 +620,7 @@ __metadata:
   dependencies:
     "@egen/esm-ai-config": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -642,7 +642,7 @@ __metadata:
     "@egen/esm-ai-events": "workspace:*"
     "@egen/esm-ai-tools": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -663,7 +663,7 @@ __metadata:
     "@egen/esm-api": "workspace:*"
     "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -689,8 +689,9 @@ __metadata:
     "@egen/esm-navigation": "workspace:*"
     "@egen/esm-state": "workspace:*"
     "@egen/esm-styleguide": "workspace:*"
+    "@egen/esm-tenant": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -714,7 +715,7 @@ __metadata:
     "@egen/esm-navigation": "workspace:*"
     "@egen/esm-tenant": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -750,7 +751,7 @@ __metadata:
     "@internationalized/date": "npm:^3.8.0"
     "@rspack/cli": "npm:1.7.9"
     "@rspack/core": "npm:1.7.9"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.13"
     dexie: "npm:^3.0.3"
@@ -785,7 +786,7 @@ __metadata:
     "@egen/esm-state": "workspace:*"
     "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/lodash-es": "npm:^4.17.12"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
@@ -814,7 +815,7 @@ __metadata:
     "@egen/esm-globals": "workspace:*"
     "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     i18next: "npm:^25.5.3"
@@ -833,7 +834,7 @@ __metadata:
   resolution: "@egen/esm-core@workspace:."
   dependencies:
     "@playwright/test": "npm:^1.55.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^6.8.0"
     "@testing-library/react": "npm:^16.3.0"
@@ -878,7 +879,7 @@ __metadata:
     "@egen/esm-offline": "workspace:*"
     "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/node": "npm:^22.0.0"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
@@ -939,7 +940,7 @@ __metadata:
     "@egen/esm-globals": "workspace:*"
     "@egen/esm-translations": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     happy-dom: "npm:^20.6.0"
@@ -960,7 +961,7 @@ __metadata:
   dependencies:
     "@egen/esm-globals": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
@@ -983,7 +984,7 @@ __metadata:
     "@jsep-plugin/template": "npm:^1.0.5"
     "@jsep-plugin/ternary": "npm:^1.1.4"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -1004,7 +1005,7 @@ __metadata:
     "@egen/esm-state": "workspace:*"
     "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -1033,7 +1034,7 @@ __metadata:
     "@egen/esm-globals": "workspace:*"
     "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     concurrently: "npm:^9.2.1"
     i18next: "npm:^25.5.3"
     react: "npm:^18.3.1"
@@ -1108,7 +1109,7 @@ __metadata:
     "@egen/esm-utils": "workspace:*"
     "@egen/typedoc-plugin-file-categories": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -1144,7 +1145,7 @@ __metadata:
   resolution: "@egen/esm-globals@workspace:packages/framework/esm-globals"
   dependencies:
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/fhir": "npm:0.0.31"
     concurrently: "npm:^9.2.1"
     rimraf: "npm:^6.1.3"
@@ -1202,6 +1203,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
     egen: "workspace:*"
+    embla-carousel-autoplay: "npm:^8.6.0"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
     lodash-es: "npm:^4.17.21"
@@ -1324,7 +1326,7 @@ __metadata:
   dependencies:
     "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -1339,6 +1341,46 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@egen/esm-state": 9.x
+  languageName: unknown
+  linkType: soft
+
+"@egen/esm-not-found-app@workspace:packages/apps/esm-not-found-app":
+  version: 0.0.0-use.local
+  resolution: "@egen/esm-not-found-app@workspace:packages/apps/esm-not-found-app"
+  dependencies:
+    "@carbon/react": "npm:^1.92.1"
+    "@egen/esm-api": "workspace:*"
+    "@egen/esm-config": "workspace:*"
+    "@egen/esm-react-utils": "workspace:*"
+    "@egen/esm-state": "workspace:*"
+    "@egen/esm-theme": "workspace:*"
+    "@vitest/coverage-v8": "npm:^4.1.2"
+    cross-env: "npm:^10.1.0"
+    egen: "workspace:*"
+    happy-dom: "npm:^20.6.0"
+    i18next: "npm:^25.5.3"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    react-i18next: "npm:^16.0.0"
+    react-router-dom: "npm:^6.3.0"
+    rxjs: "npm:^6.5.3"
+    sass: "npm:^1.98.0"
+    swr: "npm:2.2.5"
+    vitest: "npm:^4.1.2"
+  peerDependencies:
+    "@carbon/react": 1.x
+    "@egen/esm-api": 9.x
+    "@egen/esm-config": 9.x
+    "@egen/esm-framework": 9.x
+    "@egen/esm-react-utils": 9.x
+    "@egen/esm-state": 9.x
+    "@egen/esm-theme": "workspace:*"
+    react: 18.x
+    react-dom: 18.x
+    react-i18next: 16.x
+    react-router-dom: 6.x
+    rxjs: 6.x
+    swr: 2.x
   languageName: unknown
   linkType: soft
 
@@ -1392,7 +1434,7 @@ __metadata:
     "@egen/esm-globals": "workspace:*"
     "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/uuid": "npm:^9.0.1"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
@@ -1475,7 +1517,7 @@ __metadata:
     "@egen/esm-state": "workspace:*"
     "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/fhir": "npm:0.0.31"
     "@types/node": "npm:^22.0.0"
     "@vitest/coverage-v8": "npm:^4.1.2"
@@ -1528,7 +1570,7 @@ __metadata:
     "@egen/esm-globals": "workspace:*"
     "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -1558,7 +1600,7 @@ __metadata:
     "@egen/esm-globals": "workspace:*"
     "@egen/esm-utils": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -1598,12 +1640,15 @@ __metadata:
     "@internationalized/date": "npm:^3.8.0"
     "@react-aria/utils": "npm:^3.28.2"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/geopattern": "npm:^1.2.9"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
     d3: "npm:^7.8.0"
+    embla-carousel: "npm:^8.6.0"
+    embla-carousel-autoplay: "npm:^8.6.0"
+    embla-carousel-react: "npm:^8.6.0"
     framer-motion: "npm:^12.42.2"
     geopattern: "npm:^1.2.3"
     gsap: "npm:^3.12.5"
@@ -1693,7 +1738,7 @@ __metadata:
   dependencies:
     "@egen/esm-state": "workspace:*"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -1702,7 +1747,6 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@egen/esm-state": 9.x
-    "@egen/esm-theme": 9.x
     react: ^18.0.0
     rxjs: ^6.5.3
   languageName: unknown
@@ -1713,7 +1757,7 @@ __metadata:
   resolution: "@egen/esm-theme@workspace:packages/framework/esm-theme"
   dependencies:
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     concurrently: "npm:^9.2.1"
     cross-env: "npm:^10.1.0"
@@ -1731,7 +1775,7 @@ __metadata:
   resolution: "@egen/esm-translations@workspace:packages/framework/esm-translations"
   dependencies:
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     concurrently: "npm:^9.2.1"
     i18next: "npm:^25.5.3"
     i18next-parser: "npm:^9.3.0"
@@ -1749,7 +1793,7 @@ __metadata:
     "@formatjs/intl-durationformat": "npm:^0.7.3"
     "@internationalized/date": "npm:^3.8.0"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/fhir": "npm:0.0.31"
     "@types/lodash-es": "npm:^4.17.12"
     "@types/node": "npm:^22.0.0"
@@ -1780,7 +1824,7 @@ __metadata:
   dependencies:
     "@rspack/cli": "npm:1.7.9"
     "@rspack/core": "npm:1.7.9"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/lodash-es": "npm:^4.17.12"
     clean-webpack-plugin: "npm:4.0.0"
     copy-webpack-plugin: "npm:11.0.0"
@@ -1847,7 +1891,7 @@ __metadata:
   resolution: "@egen/typedoc-plugin-file-categories@workspace:packages/tooling/typedoc-plugin-file-categories"
   dependencies:
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@vitest/coverage-v8": "npm:^4.1.2"
     rimraf: "npm:^6.1.3"
     typedoc: "npm:^0.28.5"
@@ -1862,7 +1906,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@egen/webpack-config@workspace:packages/tooling/webpack-config"
   dependencies:
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/lodash-es": "npm:4.17.12"
     clean-webpack-plugin: "npm:4.0.0"
     copy-webpack-plugin: "npm:11.0.0"
@@ -6784,108 +6828,108 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-arm64@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-darwin-arm64@npm:1.15.21"
+"@swc/core-darwin-arm64@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-darwin-arm64@npm:1.15.47"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-x64@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-darwin-x64@npm:1.15.21"
+"@swc/core-darwin-x64@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-darwin-x64@npm:1.15.47"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm-gnueabihf@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.15.21"
+"@swc/core-linux-arm-gnueabihf@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.15.47"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-gnu@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.15.21"
+"@swc/core-linux-arm64-gnu@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-linux-arm64-gnu@npm:1.15.47"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-musl@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-linux-arm64-musl@npm:1.15.21"
+"@swc/core-linux-arm64-musl@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-linux-arm64-musl@npm:1.15.47"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-linux-ppc64-gnu@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-linux-ppc64-gnu@npm:1.15.21"
+"@swc/core-linux-ppc64-gnu@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-linux-ppc64-gnu@npm:1.15.47"
   conditions: os=linux & cpu=ppc64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-s390x-gnu@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-linux-s390x-gnu@npm:1.15.21"
+"@swc/core-linux-s390x-gnu@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-linux-s390x-gnu@npm:1.15.47"
   conditions: os=linux & cpu=s390x & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-gnu@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-linux-x64-gnu@npm:1.15.21"
+"@swc/core-linux-x64-gnu@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-linux-x64-gnu@npm:1.15.47"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-musl@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-linux-x64-musl@npm:1.15.21"
+"@swc/core-linux-x64-musl@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-linux-x64-musl@npm:1.15.47"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-win32-arm64-msvc@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.15.21"
+"@swc/core-win32-arm64-msvc@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-win32-arm64-msvc@npm:1.15.47"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-win32-ia32-msvc@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.15.21"
+"@swc/core-win32-ia32-msvc@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-win32-ia32-msvc@npm:1.15.47"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@swc/core-win32-x64-msvc@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core-win32-x64-msvc@npm:1.15.21"
+"@swc/core-win32-x64-msvc@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core-win32-x64-msvc@npm:1.15.47"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core@npm:1.15.21":
-  version: 1.15.21
-  resolution: "@swc/core@npm:1.15.21"
+"@swc/core@npm:1.15.47":
+  version: 1.15.47
+  resolution: "@swc/core@npm:1.15.47"
   dependencies:
-    "@swc/core-darwin-arm64": "npm:1.15.21"
-    "@swc/core-darwin-x64": "npm:1.15.21"
-    "@swc/core-linux-arm-gnueabihf": "npm:1.15.21"
-    "@swc/core-linux-arm64-gnu": "npm:1.15.21"
-    "@swc/core-linux-arm64-musl": "npm:1.15.21"
-    "@swc/core-linux-ppc64-gnu": "npm:1.15.21"
-    "@swc/core-linux-s390x-gnu": "npm:1.15.21"
-    "@swc/core-linux-x64-gnu": "npm:1.15.21"
-    "@swc/core-linux-x64-musl": "npm:1.15.21"
-    "@swc/core-win32-arm64-msvc": "npm:1.15.21"
-    "@swc/core-win32-ia32-msvc": "npm:1.15.21"
-    "@swc/core-win32-x64-msvc": "npm:1.15.21"
+    "@swc/core-darwin-arm64": "npm:1.15.47"
+    "@swc/core-darwin-x64": "npm:1.15.47"
+    "@swc/core-linux-arm-gnueabihf": "npm:1.15.47"
+    "@swc/core-linux-arm64-gnu": "npm:1.15.47"
+    "@swc/core-linux-arm64-musl": "npm:1.15.47"
+    "@swc/core-linux-ppc64-gnu": "npm:1.15.47"
+    "@swc/core-linux-s390x-gnu": "npm:1.15.47"
+    "@swc/core-linux-x64-gnu": "npm:1.15.47"
+    "@swc/core-linux-x64-musl": "npm:1.15.47"
+    "@swc/core-win32-arm64-msvc": "npm:1.15.47"
+    "@swc/core-win32-ia32-msvc": "npm:1.15.47"
+    "@swc/core-win32-x64-msvc": "npm:1.15.47"
     "@swc/counter": "npm:^0.1.3"
-    "@swc/types": "npm:^0.1.25"
+    "@swc/types": "npm:^0.1.27"
   peerDependencies:
     "@swc/helpers": ">=0.5.17"
   dependenciesMeta:
@@ -6916,7 +6960,7 @@ __metadata:
   peerDependenciesMeta:
     "@swc/helpers":
       optional: true
-  checksum: 10/0b3246ef93280d536ddc230e837678da5813e2794b329506bbf03f01f355fd4d84e4e1e3e704bc151405e7606be968dbd937829739d1e9bd7bd8a6fd59e52445
+  checksum: 10/0562c46c3a5f798a2d8f58a017c89592ea6ca791d153929db0cdce8f8caac46ea78edc5213b9bb222ee6f9d889aa8d05c7bf969cebeff195cab4d84675f03386
   languageName: node
   linkType: hard
 
@@ -6936,12 +6980,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/types@npm:^0.1.25":
-  version: 0.1.25
-  resolution: "@swc/types@npm:0.1.25"
+"@swc/types@npm:^0.1.27":
+  version: 0.1.28
+  resolution: "@swc/types@npm:0.1.28"
   dependencies:
     "@swc/counter": "npm:^0.1.3"
-  checksum: 10/f6741450224892d12df43e5ca7f3cc0287df644dcd672626eb0cc2a3a8e3e875f4b29eb11336f37c7240cf6e010ba59eb3a79f4fb8bee5cbd168dfc1326ff369
+  checksum: 10/9cd2b13a640c36d28235a30567dc38330e01dc54ba0ca6ff4000fc56f0be27252b91c3df4989a9ef019b9df9eb722e73fb273913675f8b891428981fb9cc9a0f
   languageName: node
   linkType: hard
 
@@ -11154,7 +11198,7 @@ __metadata:
     "@rspack/core": "npm:1.7.9"
     "@rspack/dev-server": "npm:1.1.5"
     "@swc/cli": "npm:0.8.1"
-    "@swc/core": "npm:1.15.21"
+    "@swc/core": "npm:1.15.47"
     "@types/express": "npm:^4.11.1"
     "@types/lodash": "npm:^4.17.21"
     "@types/node": "npm:^20"
@@ -11218,6 +11262,43 @@ __metadata:
   version: 1.5.286
   resolution: "electron-to-chromium@npm:1.5.286"
   checksum: 10/530ae36571f3f737431dc1f97ab176d9ec38d78e7a14a78fff78540769ef139e9011200a886864111ee26d64e647136531ff004f368f5df8cdd755c45ad97649
+  languageName: node
+  linkType: hard
+
+"embla-carousel-autoplay@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "embla-carousel-autoplay@npm:8.6.0"
+  peerDependencies:
+    embla-carousel: 8.6.0
+  checksum: 10/5dee505b891e93da6ac8072c2b1a6bda63533ceaef0eec77fa15425974c08242cf6b6a745159eab33f6fad886b5d05148bf06f01ce3fca87811a79e764b5aad2
+  languageName: node
+  linkType: hard
+
+"embla-carousel-react@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "embla-carousel-react@npm:8.6.0"
+  dependencies:
+    embla-carousel: "npm:8.6.0"
+    embla-carousel-reactive-utils: "npm:8.6.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.1 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+  checksum: 10/8a6338f28844f07e29df03fb09bf7e157e0aecb423b0ca7d9b9a65e4537acce4a140c94f177957518e44d5483993c1c40273b913cde7e543d0b68955efda8ffc
+  languageName: node
+  linkType: hard
+
+"embla-carousel-reactive-utils@npm:8.6.0":
+  version: 8.6.0
+  resolution: "embla-carousel-reactive-utils@npm:8.6.0"
+  peerDependencies:
+    embla-carousel: 8.6.0
+  checksum: 10/48b31931572b32b49705e6125d4f10c240fca0ee8a078867fc91f7c889f6adee95f7fd0b0fdf5dfef6d83d497115759f3f3ca2e8320e331efa0de1c9e6fb4638
+  languageName: node
+  linkType: hard
+
+"embla-carousel@npm:8.6.0, embla-carousel@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "embla-carousel@npm:8.6.0"
+  checksum: 10/6c1c4268160ce2a150c80f0c84edd4c42b47567f8ef25f56fb21819a4094cfa885614cb0837d180e8da8159ff79a077e0a2e1e679ed2c500ff52697d3ec94b78
   languageName: node
   linkType: hard
 
