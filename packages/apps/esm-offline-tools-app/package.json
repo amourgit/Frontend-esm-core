@@ -45,7 +45,7 @@
     "@egen/esm-react-utils": "workspace:*",
     "@egen/esm-state": "workspace:*",
     "lodash-es": "^4.17.21",
-    "swr": "2.2.5"
+    "swr": "2.5.0"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
