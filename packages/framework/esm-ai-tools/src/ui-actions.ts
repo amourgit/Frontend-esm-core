@@ -98,6 +98,14 @@ export function getUIActionElement(id: string): HTMLElement | null {
   return action.element;
 }
 
+/** Retourne la définition déclarée d'une action (sans l'élément DOM), ou `null`. */
+export function getUIActionDefinition(id: string): AIUIActionDefinition | null {
+  const action = _actions.get(id);
+  if (!action || !action.element.isConnected) return null;
+  const { element, ...rest } = action;
+  return rest;
+}
+
 /**
  * Fixe la valeur d'un champ contrôlé (React) en passant par le setter natif
  * du DOM, puis déclenche un évènement 'input' — nécessaire car assigner

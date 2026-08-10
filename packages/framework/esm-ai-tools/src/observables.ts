@@ -99,6 +99,26 @@ export function registerObservable(def: AIObservableDefinition, element: HTMLEle
   };
 }
 
+/**
+ * Résout l'élément DOM réel d'un observable, ou `null` s'il n'existe pas / n'est
+ * plus visible. Symétrique à getUIActionElement() (ui-actions.ts) — utilisé par
+ * inspect_element pour permettre l'adressage par id déclaré, en plus du selector
+ * CSS générique.
+ */
+export function getObservableElement(id: string): HTMLElement | null {
+  const obs = _observables.get(id);
+  if (!obs || !obs.element.isConnected) return null;
+  return obs.element;
+}
+
+/** Retourne la définition déclarée d'un observable (sans l'élément DOM ni getData), ou `null`. */
+export function getObservableDefinition(id: string): Omit<AIObservableDefinition, 'getData'> | null {
+  const obs = _observables.get(id);
+  if (!obs || !obs.element.isConnected) return null;
+  const { element, getData, ...rest } = obs;
+  return rest;
+}
+
 function safeGetData(getData: () => unknown, id: string): unknown {
   try {
     return getData();

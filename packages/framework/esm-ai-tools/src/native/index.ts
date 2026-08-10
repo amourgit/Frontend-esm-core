@@ -17,10 +17,12 @@ import { inferRootDomain, buildTenantSubdomainUrl, getTenantStoreState } from '@
 import type { AIToolDefinition } from '../types';
 import { getRoutesCatalogForLLM } from '../routes';
 import { getVisibleUIActions, getUIActionElement, setNativeInputValue } from '../ui-actions';
-import { getObservablesCatalogForLLM } from '../observables';
+import { getObservablesCatalogForLLM, getObservableElement } from '../observables';
 import { describeCurrentScreen } from './describe-screen';
+import { inspectDOMElement, inspectFullInterface, waitForDomSettle } from './inspect-element';
 
 export type { DescribedElement, DescribedHeading, ScreenDescription } from './describe-screen';
+export type { ElementInspectionReport, InterfaceNodeReport, FullInterfaceReport } from './inspect-element';
 
 // ─── navigate ─────────────────────────────────────────────────────────────────
 
@@ -527,6 +529,172 @@ export const describeScreenTool: AIToolDefinition = {
   },
 };
 
+// ─── inspect_element ──────────────────────────────────────────────────────────
+//
+// Complémentaire à describe_screen/list_ui_actions/list_observables (qui
+// restent légers et sémantiques, fournis à chaque message). Ce tool est la
+// plongée technique COMPLÈTE, appelée seulement quand l'agent en a
+// explicitement besoin — le résultat (volumineux, assumé) enrichit alors la
+// conversation en cours, sans jamais alourdir le contexte de base des autres
+// messages. Voir native/inspect-element.ts pour le détail de chaque section.
+
+export const inspectElementTool: AIToolDefinition = {
+  id: 'inspect_element',
+  name: "Inspecter un élément en détail",
+  description:
+    "Retourne un rapport technique et visuel COMPLET sur un élément précis de l'écran actuel : identité (tag, " +
+    "attributs, chemin DOM), géométrie et visibilité, style CSS calculé intégral (toutes les propriétés) plus " +
+    "un regroupement structuré (boîte, typographie, mise en page, visuel, interaction), la cascade de règles " +
+    "CSS qui s'appliquent (sélecteur, spécificité, feuille source), l'accessibilité, le contenu (texte/valeur, " +
+    "avec les champs sensibles toujours masqués), et — au mieux — le composant React propriétaire et ses props. " +
+    "Si l'élément a été déclaré via useAIActionable/useAIObservable, ses métadonnées fonctionnelles déclarées " +
+    "sont aussi incluses. À utiliser pour un diagnostic précis (pourquoi cet élément a tel aspect, tel " +
+    "comportement, telles données) — PAS pour une simple description générale, déjà couverte par le contexte " +
+    "et describe_screen/list_ui_actions/list_observables.",
+  parameters: {
+    actionId: {
+      type: 'string',
+      required: false,
+      description:
+        "Identifiant d'une action ou d'un observable déjà connu (catalogue du contexte, list_ui_actions, " +
+        'list_observables). Prioritaire sur selector si les deux sont fournis.',
+    },
+    selector: {
+      type: 'string',
+      required: false,
+      description:
+        "Sélecteur CSS ciblant l'élément (ex: '.card__title', '#submit-button'). Utilisé si actionId est " +
+        "absent, ou pour inspecter un élément qui n'a pas été déclaré par l'app.",
+    },
+    matchIndex: {
+      type: 'number',
+      required: false,
+      description: 'Si selector matche plusieurs éléments, index (0-based) de celui à inspecter. Défaut : 0.',
+    },
+  },
+  moduleName: '@egen/esm-ai-tools',
+  execute: async (ctx) => {
+    try {
+      const actionId = ctx.args.actionId ? String(ctx.args.actionId) : undefined;
+      const selector = ctx.args.selector ? String(ctx.args.selector) : undefined;
+      const matchIndex = typeof ctx.args.matchIndex === 'number' ? ctx.args.matchIndex : 0;
+
+      let el: Element | null = null;
+      if (actionId) {
+        el = getUIActionElement(actionId) ?? getObservableElement(actionId);
+      }
+      if (!el && selector) {
+        const matches = document.querySelectorAll(selector);
+        el = matches[matchIndex] ?? null;
+        if (!el && matches.length === 0) {
+          return { success: false, error: `Aucun élément ne correspond au sélecteur "${selector}".`, durationMs: 0 };
+        }
+        if (!el) {
+          return {
+            success: false,
+            error: `matchIndex ${matchIndex} hors limites : "${selector}" ne matche que ${matches.length} élément(s).`,
+            durationMs: 0,
+          };
+        }
+      }
+      if (!el) {
+        return {
+          success: false,
+          error: 'Fournir actionId (id connu du catalogue) ou selector (sélecteur CSS).',
+          durationMs: 0,
+        };
+      }
+
+      return { success: true, data: inspectDOMElement(el, actionId), durationMs: 0 };
+    } catch (err) {
+      return { success: false, error: String(err), durationMs: 0 };
+    }
+  },
+};
+
+// ─── inspect_interface ────────────────────────────────────────────────────────
+
+export const inspectInterfaceTool: AIToolDefinition = {
+  id: 'inspect_interface',
+  name: "Inspecter l'interface courante en détail",
+  description:
+    "Retourne le même rapport complet que inspect_element (CSS calculé intégral, cascade de règles, " +
+    "géométrie, accessibilité, contenu, React best-effort) pour CHAQUE élément significatif actuellement " +
+    "affiché à l'écran (boutons, champs, labels, titres, images, zones sémantiques...), avec la hiérarchie " +
+    "parent/enfant pour comprendre la mise en page. Rapport volumineux par nature — à réserver aux besoins " +
+    "d'un audit technique/visuel complet de l'écran, PAS pour un usage courant (préférer describe_screen, " +
+    "déjà présent dans le contexte, pour une vue d'ensemble légère).",
+  parameters: {
+    rootSelector: {
+      type: 'string',
+      required: false,
+      description:
+        "Sélecteur CSS pour limiter l'inspection à une sous-partie de l'écran (ex: '.main-content'). " +
+        "Si absent, inspecte tout <body>.",
+    },
+  },
+  moduleName: '@egen/esm-ai-tools',
+  execute: async (ctx) => {
+    try {
+      const rootSelector = ctx.args.rootSelector ? String(ctx.args.rootSelector) : undefined;
+      return { success: true, data: inspectFullInterface(rootSelector), durationMs: 0 };
+    } catch (err) {
+      return { success: false, error: String(err), durationMs: 0 };
+    }
+  },
+};
+
+// ─── navigate_and_inspect ─────────────────────────────────────────────────────
+//
+// Couvre le besoin d'inspecter N'IMPORTE QUELLE interface du projet, pas
+// seulement celle affichée actuellement — SANS système d'analyse statique
+// séparé (irréalisable de toute façon : le CSS calculé et les props React
+// n'existent qu'une fois l'élément réellement monté et rendu). La seule
+// approche fiable est de naviguer réellement vers la route, laisser le temps
+// à l'app single-spa cible de se monter, puis inspecter — ce tool enchaîne
+// les deux étapes pour réduire la friction (1 appel au lieu de navigate puis
+// inspect_interface séparément).
+
+export const navigateAndInspectTool: AIToolDefinition = {
+  id: 'navigate_and_inspect',
+  name: 'Naviguer puis inspecter une interface',
+  description:
+    "Navigue vers une route de l'application (voir navigate — même règle : ne jamais deviner un chemin, le " +
+    "prendre du catalogue de routes ou de list_routes), attend que l'écran se stabilise, puis retourne le " +
+    "même rapport complet qu'inspect_interface pour cette nouvelle interface. À utiliser pour examiner en " +
+    "détail une interface du projet différente de celle actuellement affichée.",
+  parameters: {
+    route: {
+      type: 'string',
+      required: true,
+      description: 'Route applicative cible, relative à la racine de la SPA (ex: "/students/123", "/login").',
+    },
+    rootSelector: {
+      type: 'string',
+      required: false,
+      description: "Sélecteur CSS pour limiter l'inspection à une sous-partie de l'écran cible.",
+    },
+  },
+  moduleName: '@egen/esm-ai-tools',
+  execute: async (ctx) => {
+    try {
+      const route = String(ctx.args.route);
+      const rootSelector = ctx.args.rootSelector ? String(ctx.args.rootSelector) : undefined;
+
+      const isAbsoluteUrl = /^[a-z][a-z0-9+.-]*:\/\//i.test(route);
+      const isAlreadyResolved = route.includes('${egenBase}') || route.includes('${egenSpaBase}');
+      const target = isAbsoluteUrl || isAlreadyResolved ? route : `\${egenSpaBase}${route.startsWith('/') ? '' : '/'}${route}`;
+
+      navigate({ to: target });
+      await waitForDomSettle();
+
+      return { success: true, data: { navigatedTo: target, ...inspectFullInterface(rootSelector) }, durationMs: 0 };
+    } catch (err) {
+      return { success: false, error: String(err), durationMs: 0 };
+    }
+  },
+};
+
 // ─── Export groupé ────────────────────────────────────────────────────────────
 
 export const NATIVE_TOOLS: AIToolDefinition[] = [
@@ -535,6 +703,9 @@ export const NATIVE_TOOLS: AIToolDefinition[] = [
   listUIActionsTool,
   listObservablesTool,
   describeScreenTool,
+  inspectElementTool,
+  inspectInterfaceTool,
+  navigateAndInspectTool,
   clickElementTool,
   fillFieldTool,
   showNotificationTool,

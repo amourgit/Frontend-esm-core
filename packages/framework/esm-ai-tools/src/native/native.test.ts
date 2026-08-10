@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { navigateTool, clickElementTool, fillFieldTool, describeScreenTool, listObservablesTool, switchTenantTool } from './index';
+import { navigateTool, clickElementTool, fillFieldTool, describeScreenTool, listObservablesTool, switchTenantTool, inspectElementTool, inspectInterfaceTool, navigateAndInspectTool } from './index';
 import { registerUIAction, _clearUIActionRegistry } from '../ui-actions';
 import { registerObservable, _clearObservableRegistry } from '../observables';
 
@@ -180,4 +180,96 @@ describe('switchTenantTool', () => {
     expect(result.success).toBe(true);
     expect((result.data as any).targetUrl).toBe('https://lycee-lb.egen-demo.com/');
   });
+});
+
+describe('inspectElementTool', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    _clearUIActionRegistry();
+    _clearObservableRegistry();
+  });
+
+  it('résout par actionId (élément enregistré via useAIActionable)', async () => {
+    const el = document.createElement('button');
+    el.textContent = 'Valider';
+    document.body.appendChild(el);
+    registerUIAction({ id: 'demo:submit', kind: 'click', label: 'Valider', description: 'Soumet le formulaire.' }, el);
+
+    const result = await inspectElementTool.execute({ args: { actionId: 'demo:submit' } } as any);
+
+    expect(result.success).toBe(true);
+    expect((result.data as any).identity.tagName).toBe('button');
+    expect((result.data as any).declaredMetadata.registeredAction.id).toBe('demo:submit');
+  });
+
+  it('résout par selector CSS quand aucun actionId ne correspond', async () => {
+    document.body.innerHTML = `<div class="pricing-card" id="card-1"></div>`;
+
+    const result = await inspectElementTool.execute({ args: { selector: '.pricing-card' } } as any);
+
+    expect(result.success).toBe(true);
+    expect((result.data as any).identity.id).toBe('card-1');
+  });
+
+  it('utilise matchIndex pour désambiguïser plusieurs correspondances', async () => {
+    document.body.innerHTML = `<div class="item" id="item-0"></div><div class="item" id="item-1"></div>`;
+
+    const result = await inspectElementTool.execute({ args: { selector: '.item', matchIndex: 1 } } as any);
+
+    expect(result.success).toBe(true);
+    expect((result.data as any).identity.id).toBe('item-1');
+  });
+
+  it('échoue proprement si ni actionId ni selector ne sont fournis', async () => {
+    const result = await inspectElementTool.execute({ args: {} } as any);
+    expect(result.success).toBe(false);
+  });
+
+  it('échoue proprement si le selector ne matche rien', async () => {
+    document.body.innerHTML = '';
+    const result = await inspectElementTool.execute({ args: { selector: '.introuvable' } } as any);
+    expect(result.success).toBe(false);
+    expect(result.error).toContain('introuvable');
+  });
+});
+
+describe('inspectInterfaceTool', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it("inspecte l'ensemble de l'écran courant", async () => {
+    document.body.innerHTML = `<h1>Titre</h1><button id="a">Action</button>`;
+    const result = await inspectInterfaceTool.execute({ args: {} } as any);
+
+    expect(result.success).toBe(true);
+    const tags = (result.data as any).nodes.map((n: any) => n.identity.tagName);
+    expect(tags).toContain('h1');
+    expect(tags).toContain('button');
+  });
+
+  it('respecte rootSelector pour scoper à une sous-partie de l\'écran', async () => {
+    document.body.innerHTML = `<div id="a"><button id="btn-a">x</button></div><div id="b"><button id="btn-b">y</button></div>`;
+    const result = await inspectInterfaceTool.execute({ args: { rootSelector: '#a' } } as any);
+
+    const ids = (result.data as any).nodes.map((n: any) => n.identity.id);
+    expect(ids).toContain('btn-a');
+    expect(ids).not.toContain('btn-b');
+  });
+});
+
+describe('navigateAndInspectTool', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '<button id="existing">déjà là</button>';
+    mockNavigate.mockClear();
+  });
+
+  it('navigue vers la route résolue puis retourne un rapport d\'interface', async () => {
+    const result = await navigateAndInspectTool.execute({ args: { route: '/students' } } as any);
+
+    expect(mockNavigate).toHaveBeenCalledWith({ to: '${egenSpaBase}/students' });
+    expect(result.success).toBe(true);
+    expect((result.data as any).navigatedTo).toBe('${egenSpaBase}/students');
+    expect((result.data as any).nodes.length).toBeGreaterThan(0);
+  }, 10000);
 });
