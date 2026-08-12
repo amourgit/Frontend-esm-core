@@ -2,11 +2,11 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { useConfig, useSession, type Session } from '@egen/esm-framework';
+import { useConfig, useSession, type Session } from '@egen-civitas/esm-framework';
 import { mockSession, mockUnauthenticatedSession } from '../../../__mocks__/mock-session';
 import Footer from './footer.component';
 
-vi.mock('@egen/esm-framework', () => ({
+vi.mock('@egen-civitas/esm-framework', () => ({
   useConfig: vi.fn(),
   useSession: vi.fn(),
   ConfigurableLink: ({ children, to }: any) => <a href={to}>{children}</a>,

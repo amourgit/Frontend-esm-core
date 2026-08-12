@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLayoutType } from '@egen/esm-framework';
+import { useLayoutType } from '@egen-civitas/esm-framework';
 import OfflineActions from './offline-actions.component';
 import styles from './offline-actions-entity-widget.styles.scss';
 

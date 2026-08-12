@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Link, Tile } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
-import { useConfig, ArrowRightIcon } from '@egen/esm-framework';
+import { useConfig, ArrowRightIcon } from '@egen-civitas/esm-framework';
 import { type ConfigSchema } from './config-schema';
 import styles from './footer.scss';
 

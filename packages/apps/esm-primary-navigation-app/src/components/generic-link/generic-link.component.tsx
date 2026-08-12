@@ -1,5 +1,5 @@
 import React from 'react';
-import { ConfigurableLink, Type, useConfig, validators } from '@egen/esm-framework';
+import { ConfigurableLink, Type, useConfig, validators } from '@egen-civitas/esm-framework';
 
 export const genericLinkConfigSchema = {
   title: {

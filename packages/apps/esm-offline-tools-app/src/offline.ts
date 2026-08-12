@@ -3,7 +3,7 @@ import {
   makeUrl,
   messageEgenServiceWorker,
   setupDynamicOfflineDataHandler,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import { cacheForOfflineHeaders } from './constants';
 
 export function setupOffline() {

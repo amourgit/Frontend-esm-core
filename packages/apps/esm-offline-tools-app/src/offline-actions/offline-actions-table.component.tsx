@@ -28,7 +28,7 @@ import {
   useLayoutType,
   usePagination,
   type SyncItem,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import styles from './offline-actions-table.styles.scss';
 
 export interface SyncItemWithEntity {

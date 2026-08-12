@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { egenFetch, restBaseUrl } from '@egen/esm-framework';
+import { egenFetch, restBaseUrl } from '@egen-civitas/esm-framework';
 
 export type Concept = {
   answers: Array<ConceptAnswer>;

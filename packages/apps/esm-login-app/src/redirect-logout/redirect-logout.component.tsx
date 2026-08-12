@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { navigate, setUserLanguage, useConfig, useConnectivity, useSession } from '@egen/esm-framework';
-import { clearHistory } from '@egen/esm-framework/src/internal';
+import { navigate, setUserLanguage, useConfig, useConnectivity, useSession } from '@egen-civitas/esm-framework';
+import { clearHistory } from '@egen-civitas/esm-framework/src/internal';
 import { type ConfigSchema } from '../config-schema';
 import { performLogout } from './logout.resource';
 

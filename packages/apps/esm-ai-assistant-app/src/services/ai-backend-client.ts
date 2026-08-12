@@ -1,8 +1,8 @@
 // =============================================================================
-//  @egen/esm-ai-assistant-app — Client du backend IA
+//  @egen-civitas/esm-ai-assistant-app — Client du backend IA
 //
 //  Parle au backend proxy IA (baseUrl/chatEndpoint, baseUrl/streamEndpoint —
-//  voir @egen/esm-ai-config, résolu depuis EGEN_AI_BACKEND_URL / civitas-core
+//  voir @egen-civitas/esm-ai-config, résolu depuis EGEN_AI_BACKEND_URL / civitas-core
 //  en développement). C'est CE backend qui détient la clé API du provider
 //  (Gemini) et l'appelle avec function-calling — jamais le frontend.
 //
@@ -14,10 +14,10 @@
 //  schéma des tools disponibles pour l'utilisateur courant. Le backend
 //  décide, appelle le LLM, et renvoie soit du texte, soit des demandes
 //  d'exécution de tool — exécutées ICI, côté client, via l'executor de
-//  @egen/esm-ai-tools (qui revalide lui-même permissions et arguments).
+//  @egen-civitas/esm-ai-tools (qui revalide lui-même permissions et arguments).
 // =============================================================================
 
-import { getAIConfig } from '@egen/esm-ai-framework';
+import { getAIConfig } from '@egen-civitas/esm-ai-framework';
 
 export interface ChatMessageDTO {
   role: 'user' | 'assistant' | 'tool';
@@ -28,7 +28,7 @@ export interface ChatMessageDTO {
   /**
    * Arguments exacts avec lesquels le tool a été appelé — nécessaire pour
    * reconstruire, côté provider, le tour "functionCall" qui doit précéder un
-   * tour "functionResponse" (voir @egen/esm-ai-assistant-app/services/
+   * tour "functionResponse" (voir @egen-civitas/esm-ai-assistant-app/services/
    * gemini-direct-client.ts). Absent pour les rôles user/assistant.
    */
   toolArguments?: Record<string, unknown>;

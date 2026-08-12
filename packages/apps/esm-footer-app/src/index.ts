@@ -1,4 +1,4 @@
-import { defineConfigSchema, getSyncLifecycle } from '@egen/esm-framework';
+import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';
 import footerRootComponent from './root.component';

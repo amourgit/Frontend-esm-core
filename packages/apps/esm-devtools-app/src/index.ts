@@ -1,8 +1,8 @@
-import { getAsyncLifecycle } from '@egen/esm-framework';
+import { getAsyncLifecycle } from '@egen-civitas/esm-framework';
 
 const options = {
   featureName: 'devtools',
-  moduleName: '@egen/esm-devtools-app',
+  moduleName: '@egen-civitas/esm-devtools-app',
 };
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');

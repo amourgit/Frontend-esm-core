@@ -2,17 +2,17 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { useSession, type Session } from '@egen/esm-framework';
-import { useAIEnabled } from '@egen/esm-ai-framework';
+import { useSession, type Session } from '@egen-civitas/esm-framework';
+import { useAIEnabled } from '@egen-civitas/esm-ai-framework';
 import { mockSession, mockUnauthenticatedSession } from '../../../__mocks__/mock-session';
 import AssistantWidget from './assistant-widget.component';
 
-vi.mock('@egen/esm-framework', () => ({
+vi.mock('@egen-civitas/esm-framework', () => ({
   useSession: vi.fn(),
   useOnClickOutside: () => ({ current: null }),
 }));
 
-vi.mock('@egen/esm-ai-framework', () => ({
+vi.mock('@egen-civitas/esm-ai-framework', () => ({
   useAIEnabled: vi.fn(),
 }));
 

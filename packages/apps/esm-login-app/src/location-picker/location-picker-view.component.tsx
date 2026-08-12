@@ -10,7 +10,7 @@ import {
   useConfig,
   useConnectivity,
   useSession,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import { useDefaultLocation, useLocationCount } from './location-picker.resource';
 import type { ConfigSchema } from '../config-schema';
 import type { LoginReferrer } from '../login/login.component';

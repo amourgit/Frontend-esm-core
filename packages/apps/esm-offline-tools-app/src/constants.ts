@@ -1,5 +1,5 @@
-import type { EgenOfflineHttpHeaders } from '@egen/esm-framework';
-import { egenOfflineCachingStrategyHttpHeaderName } from '@egen/esm-framework';
+import type { EgenOfflineHttpHeaders } from '@egen-civitas/esm-framework';
+import { egenOfflineCachingStrategyHttpHeaderName } from '@egen-civitas/esm-framework';
 
 export const routes = {
   home: `home`,

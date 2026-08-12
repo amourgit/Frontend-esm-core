@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useSession, useConfig, navigate, interpolateUrl } from '@egen/esm-framework';
-import { useTenantMode, useTenant } from '@egen/esm-tenant';
+import { useSession, useConfig, navigate, interpolateUrl } from '@egen-civitas/esm-framework';
+import { useTenantMode, useTenant } from '@egen-civitas/esm-tenant';
 import { analyzeSubdomain, buildLoginUrlWithTenant } from './subdomain-utils';
 import { type ConfigSchema } from '../config-schema';
 

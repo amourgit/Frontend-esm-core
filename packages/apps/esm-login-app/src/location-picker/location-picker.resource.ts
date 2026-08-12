@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSwrImmutable from 'swr/immutable';
-import { type FetchResponse, egenFetch, setUserProperties, showSnackbar, useSession } from '@egen/esm-framework';
+import { type FetchResponse, egenFetch, setUserProperties, showSnackbar, useSession } from '@egen-civitas/esm-framework';
 import { useValidateLocationUuid } from '../login.resource';
 import { type LocationResponse } from '../types';
 

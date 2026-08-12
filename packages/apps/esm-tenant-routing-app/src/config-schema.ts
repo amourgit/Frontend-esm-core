@@ -1,4 +1,4 @@
-import { Type } from '@egen/esm-framework';
+import { Type } from '@egen-civitas/esm-framework';
 
 // =============================================================================
 //  ESM TENANT ROUTING APP — Schéma de configuration runtime
@@ -7,7 +7,7 @@ import { Type } from '@egen/esm-framework';
 //  Refonte du 8 août 2026 : tenantSuspendedUrl, validateSubdomainWithBackend,
 //  backendValidationEndpoint et unknownTenantBehavior ont été retirés avec
 //  la suppression de toute vérification de tenant côté frontend (registry,
-//  statut suspendu). Voir @egen/esm-tenant/src/types.ts et
+//  statut suspendu). Voir @egen-civitas/esm-tenant/src/types.ts et
 //  docs/analyse-esm-tenant.md pour l'historique de cette décision.
 // =============================================================================
 
@@ -21,7 +21,7 @@ export const configSchema = {
       'Tout hostname qui est exactement ce domaine (sans sous-domaine) est ' +
       "considéré comme l'URL globale sans tenant. " +
       'Laissé vide → repli sur le rootDomain configuré au niveau du système ' +
-      'tenant (EGEN_TENANT_ROOT_DOMAIN, voir @egen/esm-tenant setupTenantSystem), ' +
+      'tenant (EGEN_TENANT_ROOT_DOMAIN, voir @egen-civitas/esm-tenant setupTenantSystem), ' +
       'puis sur une détection automatique par soustraction du premier segment ' +
       '(imprécise sur les TLD à plusieurs niveaux — à éviter en production).',
   },

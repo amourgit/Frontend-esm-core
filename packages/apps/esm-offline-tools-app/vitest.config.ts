@@ -7,7 +7,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./setup-tests.ts'],
     alias: {
-      '@egen/esm-framework': '@egen/esm-framework/mock',
+      '@egen-civitas/esm-framework': '@egen-civitas/esm-framework/mock',
     },
   },
 });

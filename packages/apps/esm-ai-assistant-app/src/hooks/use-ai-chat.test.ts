@@ -16,7 +16,7 @@ vi.mock('../services/conversation-memory', () => ({
 
 const mockExecute = vi.fn();
 
-vi.mock('@egen/esm-ai-framework', () => ({
+vi.mock('@egen-civitas/esm-ai-framework', () => ({
   useAIContextJson: () => '{"user":{}}',
   useAvailableToolsSchema: () => [{ name: 'navigate', description: 'Navigue', parameters: {} }],
   useExecuteTool: () => ({ execute: mockExecute, executing: false, lastResult: null, lastError: null }),
@@ -87,7 +87,7 @@ describe('useAIChat', () => {
 
     await waitFor(() => expect(result.current.sending).toBe(false));
 
-    // Le tool a bien été exécuté via le pipeline de @egen/esm-ai-tools,
+    // Le tool a bien été exécuté via le pipeline de @egen-civitas/esm-ai-tools,
     // avec les arguments exacts fournis par le LLM — jamais réinterprétés.
     expect(mockExecute).toHaveBeenCalledWith({
       tool: 'navigate',

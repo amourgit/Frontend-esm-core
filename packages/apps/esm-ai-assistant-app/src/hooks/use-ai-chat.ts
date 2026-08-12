@@ -1,5 +1,5 @@
 // =============================================================================
-//  @egen/esm-ai-assistant-app — useAIChat
+//  @egen-civitas/esm-ai-assistant-app — useAIChat
 //
 //  Orchestre un tour de conversation complet :
 //    1. Envoie le message utilisateur + historique + contexte EGEN + schéma
@@ -7,7 +7,7 @@
 //       useAvailableToolsSchema()) au backend IA.
 //    2. Si le backend (le LLM, via function-calling) demande l'exécution
 //       d'un ou plusieurs tools, les exécute ICI via useExecuteTool() —
-//       qui passe par le pipeline complet de @egen/esm-ai-tools
+//       qui passe par le pipeline complet de @egen-civitas/esm-ai-tools
 //       (validation d'arguments + vérification de permissions + timeout),
 //       jamais en confiance aveugle du LLM.
 //    3. Renvoie le(s) résultat(s) de tool au backend pour que le LLM
@@ -26,7 +26,7 @@ import {
   getAIConfig,
   dispatchAIEvent,
   AI_EVENTS,
-} from '@egen/esm-ai-framework';
+} from '@egen-civitas/esm-ai-framework';
 import { loadPersistedMessages, persistMessages, clearPersistedMessages } from '../services/conversation-memory';
 import * as backendTransport from '../services/ai-backend-client';
 import * as directTransport from '../services/gemini-direct-client';

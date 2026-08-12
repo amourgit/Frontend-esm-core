@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Switcher, SwitcherDivider } from '@carbon/react';
-import { ExtensionSlot, useSession } from '@egen/esm-framework';
+import { ExtensionSlot, useSession } from '@egen-civitas/esm-framework';
 import styles from './user-menu.scss';
 
 interface UserMenuPanelProps {

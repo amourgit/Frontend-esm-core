@@ -1,13 +1,13 @@
 // =============================================================================
-//  @egen/esm-ai-assistant-app — Persistance de la mémoire de conversation
+//  @egen-civitas/esm-ai-assistant-app — Persistance de la mémoire de conversation
 //
-//  @egen/esm-ai-config déclare AIMemoryConfig (enabled/maxMessages/storageKey/
+//  @egen-civitas/esm-ai-config déclare AIMemoryConfig (enabled/maxMessages/storageKey/
 //  persist) mais aucune couche ne lisait ni n'écrivait jusqu'ici dans ce
 //  storage. C'est le rôle de cette app (Couche 2, consommatrice) de le faire —
 //  la Couche 1 ne fait qu'exposer la configuration, pas l'implémentation.
 // =============================================================================
 
-import { getAIConfig } from '@egen/esm-ai-framework';
+import { getAIConfig } from '@egen-civitas/esm-ai-framework';
 import type { AssistantMessage } from '../hooks/use-ai-chat';
 
 export function loadPersistedMessages(): AssistantMessage[] {

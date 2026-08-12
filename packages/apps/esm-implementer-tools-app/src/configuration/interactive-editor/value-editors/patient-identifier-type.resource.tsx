@@ -1,6 +1,6 @@
 import useSWR from 'swr';
-import { type FetchResponse, restBaseUrl } from '@egen/esm-framework';
-import { egenFetch } from '@egen/esm-framework';
+import { type FetchResponse, restBaseUrl } from '@egen-civitas/esm-framework';
+import { egenFetch } from '@egen-civitas/esm-framework';
 import { useMemo } from 'react';
 
 export interface PatientIdentifierType {

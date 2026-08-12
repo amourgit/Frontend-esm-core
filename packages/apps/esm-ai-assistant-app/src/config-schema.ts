@@ -1,11 +1,11 @@
-import { Type, validators } from '@egen/esm-framework';
+import { Type, validators } from '@egen-civitas/esm-framework';
 
 // =============================================================================
 //  CONFIG SCHEMA — App Assistant IA
 //
 //  Deux familles de configuration, volontairement séparées :
 //    • Le comportement du moteur IA lui-même (provider, backend, sécurité,
-//      mémoire, contexte) est piloté par @egen/esm-ai-config (variables
+//      mémoire, contexte) est piloté par @egen-civitas/esm-ai-config (variables
 //      d'environnement EGEN_AI_*) — voir docs/theme-system-status.md et
 //      .env.development. Cette app ne redéfinit RIEN de ce périmètre.
 //    • Ce qui relève de la PRÉSENTATION du widget (identité affichée,

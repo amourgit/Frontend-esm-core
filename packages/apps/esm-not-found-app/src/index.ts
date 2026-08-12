@@ -1,4 +1,4 @@
-import { defineConfigSchema, getSyncLifecycle } from '@egen/esm-framework';
+import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import rootComponent from './root.component';
 
@@ -10,11 +10,11 @@ import rootComponent from './root.component';
 //  monorepo — login, logout, change-password, home,
 //  offline-tools — et la racine vide, gérée par son propre redirect).
 //  Rendue dans le contenu de la SPA pendant que
-//  @egen/esm-primary-navigation-app affiche sa TopBar au-dessus, comme
+//  @egen-civitas/esm-primary-navigation-app affiche sa TopBar au-dessus, comme
 //  n'importe quelle autre page de contenu.
 // =============================================================================
 
-const moduleName = '@egen/esm-not-found-app';
+const moduleName = '@egen-civitas/esm-not-found-app';
 
 const options = {
   featureName: 'not-found',

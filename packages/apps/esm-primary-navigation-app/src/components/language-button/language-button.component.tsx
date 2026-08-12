@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderGlobalAction } from '@carbon/react';
-import { showModal, useSession } from '@egen/esm-framework';
+import { showModal, useSession } from '@egen-civitas/esm-framework';
 import styles from './language-button.scss';
 
 // =============================================================================

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { navigate, interpolateUrl, useConfig, useOnClickOutside, ExtensionSlot } from '@egen/esm-framework';
-import { useTenant, useTenantMode } from '@egen/esm-tenant';
+import { navigate, interpolateUrl, useConfig, useOnClickOutside, ExtensionSlot } from '@egen-civitas/esm-framework';
+import { useTenant, useTenantMode } from '@egen-civitas/esm-tenant';
 import { type ConfigSchema } from '../../config-schema';
 import styles from './context-switcher.scss';
 
@@ -13,7 +13,7 @@ import styles from './context-switcher.scss';
 //  Refonte du 8 août 2026 : ce composant affichait auparavant un menu
 //  déroulant listant "mes établissements" (useAvailableTenants), issu de la
 //  registry statique de tenants. Cette registry a été supprimée (voir
-//  @egen/esm-tenant/src/types.ts) — le frontend ne connaît plus QUE l'ID du
+//  @egen-civitas/esm-tenant/src/types.ts) — le frontend ne connaît plus QUE l'ID du
 //  tenant capturé dans l'URL courante, rien d'autre sur les autres espaces
 //  auxquels l'utilisateur pourrait avoir accès.
 //

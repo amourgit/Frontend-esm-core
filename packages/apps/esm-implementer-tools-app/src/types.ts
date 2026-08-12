@@ -1,4 +1,4 @@
-import type { EgenAppRoutes } from '@egen/esm-framework';
+import type { EgenAppRoutes } from '@egen-civitas/esm-framework';
 
 export interface FrontendModule extends EgenAppRoutes {
   name: string;

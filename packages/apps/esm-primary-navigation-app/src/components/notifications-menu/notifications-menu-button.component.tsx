@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { HeaderGlobalAction } from '@carbon/react';
-import { useAssignedExtensions, useOnClickOutside } from '@egen/esm-framework';
+import { useAssignedExtensions, useOnClickOutside } from '@egen-civitas/esm-framework';
 import NotificationsMenuPanel from './notifications-menu-panel.component';
 import { type MenuButtonProps } from '../topbar/types';
 import styles from './notifications-menu.scss';

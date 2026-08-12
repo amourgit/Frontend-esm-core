@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { HeaderGlobalAction } from '@carbon/react';
-import { ExtensionSlot, useAssignedExtensions, useOnClickOutside } from '@egen/esm-framework';
+import { ExtensionSlot, useAssignedExtensions, useOnClickOutside } from '@egen-civitas/esm-framework';
 import styles from './quick-access-button.scss';
 
 // =============================================================================

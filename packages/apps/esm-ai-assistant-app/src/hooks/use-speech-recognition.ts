@@ -1,5 +1,5 @@
 // =============================================================================
-//  @egen/esm-ai-assistant-app — useSpeechRecognition
+//  @egen-civitas/esm-ai-assistant-app — useSpeechRecognition
 //
 //  Utilise l'API Web Speech native du navigateur (SpeechRecognition /
 //  webkitSpeechRecognition) — aucune dépendance tierce, aucun appel réseau

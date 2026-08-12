@@ -5,19 +5,13 @@
   "packageManager": "yarn@4.10.3",
   "workspaces": [
     "packages/apps/*",
-    "packages/framework/*",
-    "packages/shell/*",
-    "packages/tooling/*",
-    "packages/framework/esm-ai-config",
-    "packages/framework/esm-ai-events",
-    "packages/framework/esm-ai-context",
-    "packages/framework/esm-ai-tools",
-    "packages/framework/esm-ai-extensions",
-    "packages/framework/esm-ai-framework"
+    "/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-framework/packages/framework/*",
+    "/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-framework/packages/shell/*",
+    "/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-framework/packages/tooling/*"
   ],
   "scripts": {
     "run:egen": "egen",
-    "run:shell": "yarn workspace @egen/esm-app-shell watch",
+    "run:shell": "yarn workspace @egen-civitas/esm-app-shell watch",
     "ci:publish-next": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag next",
     "ci:publish": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag latest",
     "release": "yarn workspaces foreach --all --topological version",

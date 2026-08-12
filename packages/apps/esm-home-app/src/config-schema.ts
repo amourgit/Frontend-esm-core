@@ -1,10 +1,10 @@
-import { Type, validators } from '@egen/esm-framework';
+import { Type, validators } from '@egen-civitas/esm-framework';
 
 // =============================================================================
 //  ESM HOME APP — Schéma de configuration runtime
 //
 //  Cette app sert désormais d'écran d'accueil authentifié — vitrine interne
-//  des composants de base (@egen/esm-styleguide) en cours de développement.
+//  des composants de base (@egen-civitas/esm-styleguide) en cours de développement.
 //  Toutes les valeurs sont surchargables via le système de config EGEN.
 // =============================================================================
 

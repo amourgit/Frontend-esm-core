@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useConfig } from '@egen/esm-framework';
+import { useConfig } from '@egen-civitas/esm-framework';
 import type { ConfigSchema } from '../../config-schema';
 import type { AssistantMessage } from '../../hooks/use-ai-chat';
 import MessageBubble from '../message-bubble/message-bubble.component';

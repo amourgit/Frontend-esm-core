@@ -1,5 +1,5 @@
 import { vi, describe, expect, it, beforeEach } from 'vitest';
-import { egenFetch, isVersionSatisfied } from '@egen/esm-framework';
+import { egenFetch, isVersionSatisfied } from '@egen-civitas/esm-framework';
 import {
   checkModules,
   hasInvalidDependencies,
@@ -7,7 +7,7 @@ import {
   type ResolvedBackendModuleType,
 } from './egen-backend-dependencies';
 
-vi.mock('@egen/esm-framework', () => ({
+vi.mock('@egen-civitas/esm-framework', () => ({
   egenFetch: vi.fn(),
   isVersionSatisfied: vi.fn(),
   restBaseUrl: '/ws/rest/v1',
@@ -33,8 +33,8 @@ describe('egen-backend-dependencies', () => {
       } as any);
 
       window.installedModules = [
-        ['@egen/esm-app-1', {}],
-        ['@egen/esm-app-2', {} as any],
+        ['@egen-civitas/esm-app-1', {}],
+        ['@egen-civitas/esm-app-2', {} as any],
       ];
 
       const result = await checkModules();
@@ -50,12 +50,12 @@ describe('egen-backend-dependencies', () => {
         },
       } as any);
 
-      window.installedModules = [['@egen/esm-test-app', { backendDependencies: { 'missing-module': '1.0.0' } }]];
+      window.installedModules = [['@egen-civitas/esm-test-app', { backendDependencies: { 'missing-module': '1.0.0' } }]];
 
       const result = await checkModules();
 
       expect(result).toHaveLength(1);
-      expect(result[0].name).toBe('@egen/esm-test-app');
+      expect(result[0].name).toBe('@egen-civitas/esm-test-app');
       expect(result[0].dependencies).toHaveLength(1);
       expect(result[0].dependencies[0]).toMatchObject({
         name: 'missing-module',
@@ -75,7 +75,7 @@ describe('egen-backend-dependencies', () => {
 
       mockIsVersionSatisfied.mockReturnValue(false);
 
-      window.installedModules = [['@egen/esm-test-app', { backendDependencies: { 'webservices.rest': '^3.0.0' } }]];
+      window.installedModules = [['@egen-civitas/esm-test-app', { backendDependencies: { 'webservices.rest': '^3.0.0' } }]];
 
       const result = await checkModules();
 
@@ -97,7 +97,7 @@ describe('egen-backend-dependencies', () => {
 
       mockIsVersionSatisfied.mockReturnValue(true);
 
-      window.installedModules = [['@egen/esm-test-app', { backendDependencies: { 'webservices.rest': '^2.0.0' } }]];
+      window.installedModules = [['@egen-civitas/esm-test-app', { backendDependencies: { 'webservices.rest': '^2.0.0' } }]];
 
       const result = await checkModules();
 
@@ -128,7 +128,7 @@ describe('egen-backend-dependencies', () => {
 
       window.installedModules = [
         [
-          '@egen/esm-app-1',
+          '@egen-civitas/esm-app-1',
           {
             backendDependencies: {
               'webservices.rest': '^2.0.0',
@@ -136,7 +136,7 @@ describe('egen-backend-dependencies', () => {
             },
           },
         ],
-        ['@egen/esm-app-2', { backendDependencies: { fhir2: '^1.0.0' } }],
+        ['@egen-civitas/esm-app-2', { backendDependencies: { fhir2: '^1.0.0' } }],
       ];
 
       const result = await checkModules();
@@ -164,7 +164,7 @@ describe('egen-backend-dependencies', () => {
 
       window.installedModules = [
         [
-          '@egen/esm-test-app',
+          '@egen-civitas/esm-test-app',
           {
             backendDependencies: { 'webservices.rest': '^2.0.0' },
             optionalBackendDependencies: {
@@ -200,7 +200,7 @@ describe('egen-backend-dependencies', () => {
 
       window.installedModules = [
         [
-          '@egen/esm-test-app',
+          '@egen-civitas/esm-test-app',
           {
             backendDependencies: { 'webservices.rest': '^2.0.0' },
             optionalBackendDependencies: {
@@ -230,7 +230,7 @@ describe('egen-backend-dependencies', () => {
 
       mockIsVersionSatisfied.mockReturnValue(true);
 
-      window.installedModules = [['@egen/esm-test-app', { backendDependencies: { 'webservices.rest': '^2.0.0' } }]];
+      window.installedModules = [['@egen-civitas/esm-test-app', { backendDependencies: { 'webservices.rest': '^2.0.0' } }]];
 
       const result1 = await checkModules();
       const result2 = await checkModules();
@@ -265,7 +265,7 @@ describe('egen-backend-dependencies', () => {
       mockIsVersionSatisfied.mockReturnValue(true);
 
       window.installedModules = [
-        ['@egen/esm-test-app', { backendDependencies: { 'module-0': '1.0.0', 'module-50': '1.0.0' } }],
+        ['@egen-civitas/esm-test-app', { backendDependencies: { 'module-0': '1.0.0', 'module-50': '1.0.0' } }],
       ];
 
       const result = await checkModules();
@@ -280,7 +280,7 @@ describe('egen-backend-dependencies', () => {
 
       mockEgenFetch.mockRejectedValue(new Error('Network error'));
 
-      window.installedModules = [['@egen/esm-test-app', { backendDependencies: { 'webservices.rest': '2.0.0' } }]];
+      window.installedModules = [['@egen-civitas/esm-test-app', { backendDependencies: { 'webservices.rest': '2.0.0' } }]];
 
       const result = await checkModules();
 
@@ -305,7 +305,7 @@ describe('egen-backend-dependencies', () => {
         },
       } as any);
 
-      window.installedModules = [['@egen/esm-test-app', { backendDependencies: { 'test-module': '1.0.0' } }]];
+      window.installedModules = [['@egen-civitas/esm-test-app', { backendDependencies: { 'test-module': '1.0.0' } }]];
 
       await checkModules();
 
@@ -319,7 +319,7 @@ describe('egen-backend-dependencies', () => {
     it('should return false when all dependencies are okay', () => {
       const modules = [
         {
-          name: '@egen/esm-test-app',
+          name: '@egen-civitas/esm-test-app',
           dependencies: [
             {
               name: 'webservices.rest',
@@ -337,7 +337,7 @@ describe('egen-backend-dependencies', () => {
     it('should return false when there are no dependencies', () => {
       const modules = [
         {
-          name: '@egen/esm-test-app',
+          name: '@egen-civitas/esm-test-app',
           dependencies: [],
         },
       ];
@@ -348,7 +348,7 @@ describe('egen-backend-dependencies', () => {
     it('should return true when there are missing dependencies', () => {
       const modules = [
         {
-          name: '@egen/esm-test-app',
+          name: '@egen-civitas/esm-test-app',
           dependencies: [
             {
               name: 'missing-module',
@@ -365,7 +365,7 @@ describe('egen-backend-dependencies', () => {
     it('should return true when there are version mismatches', () => {
       const modules = [
         {
-          name: '@egen/esm-test-app',
+          name: '@egen-civitas/esm-test-app',
           dependencies: [
             {
               name: 'webservices.rest',
@@ -383,7 +383,7 @@ describe('egen-backend-dependencies', () => {
     it('should return true if any module has invalid dependencies', () => {
       const modules = [
         {
-          name: '@egen/esm-app-1',
+          name: '@egen-civitas/esm-app-1',
           dependencies: [
             {
               name: 'module-1',
@@ -394,7 +394,7 @@ describe('egen-backend-dependencies', () => {
           ],
         },
         {
-          name: '@egen/esm-app-2',
+          name: '@egen-civitas/esm-app-2',
           dependencies: [
             {
               name: 'module-2',
@@ -411,7 +411,7 @@ describe('egen-backend-dependencies', () => {
     it('should return true if any dependency in any module is invalid', () => {
       const modules = [
         {
-          name: '@egen/esm-app',
+          name: '@egen-civitas/esm-app',
           dependencies: [
             {
               name: 'module-1',

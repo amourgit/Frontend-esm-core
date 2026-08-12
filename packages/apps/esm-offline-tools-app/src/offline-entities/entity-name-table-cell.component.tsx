@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Tag } from '@carbon/react';
-import { navigate } from '@egen/esm-framework';
+import { navigate } from '@egen-civitas/esm-framework';
 import styles from './entity-name-table-cell.scss';
 
 export interface EntityNameTableCellProps {

@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useConfig } from '@egen/esm-framework';
+import { useConfig } from '@egen-civitas/esm-framework';
 import type { ConfigSchema } from '../../config-schema';
 import styles from './assistant-launcher.scss';
 

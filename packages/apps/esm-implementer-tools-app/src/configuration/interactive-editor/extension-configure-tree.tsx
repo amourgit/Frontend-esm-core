@@ -1,6 +1,6 @@
 import React from 'react';
 import EditableValue from './editable-value.component';
-import type { ExtensionSlotConfigureValueObject } from '@egen/esm-framework';
+import type { ExtensionSlotConfigureValueObject } from '@egen-civitas/esm-framework';
 
 export interface ExtensionConfigureTreeProps {
   moduleName: string;

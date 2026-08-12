@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSession, useOnClickOutside } from '@egen/esm-framework';
-import { useAIEnabled } from '@egen/esm-ai-framework';
+import { useSession, useOnClickOutside } from '@egen-civitas/esm-framework';
+import { useAIEnabled } from '@egen-civitas/esm-ai-framework';
 import AssistantLauncher from '../assistant-launcher/assistant-launcher.component';
 import AssistantPanel from '../assistant-panel/assistant-panel.component';
 import styles from './assistant-widget.scss';

@@ -1,4 +1,4 @@
-import { defineConfigSchema, getSyncLifecycle } from '@egen/esm-framework';
+import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import rootComponent from './root.component';
 
@@ -11,7 +11,7 @@ import rootComponent from './root.component';
 //
 //  Refonte du 8 août 2026 : la page "/tenant-suspended" a été retirée avec
 //  le reste du système de vérification de tenant côté frontend (registry,
-//  statut suspendu) — voir @egen/esm-tenant/src/types.ts.
+//  statut suspendu) — voir @egen-civitas/esm-tenant/src/types.ts.
 //
 //  ENREGISTREMENT RECOMMANDÉ dans routes.json (ou le spa-config du shell) :
 //
@@ -26,7 +26,7 @@ import rootComponent from './root.component';
 //  être nécessaire, mais pas sur /home (landing publique déjà accessible).
 // =============================================================================
 
-const moduleName = '@egen/esm-tenant-routing-app';
+const moduleName = '@egen-civitas/esm-tenant-routing-app';
 
 const options = {
   featureName: 'tenant-routing',

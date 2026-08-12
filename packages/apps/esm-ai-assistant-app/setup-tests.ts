@@ -1,8 +1,8 @@
 import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
-import type {} from '@egen/esm-framework';
+import type {} from '@egen-civitas/esm-framework';
 
-vi.mock('@egen/esm-framework', () => import('@egen/esm-framework/mock'));
+vi.mock('@egen-civitas/esm-framework', () => import('@egen-civitas/esm-framework/mock'));
 
 window.getEgenSpaBase = vi.fn(() => '/egen/spa/');
 

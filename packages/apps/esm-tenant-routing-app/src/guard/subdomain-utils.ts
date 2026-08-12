@@ -5,15 +5,15 @@
 //  Elles constituent la couche de détection bas-niveau du guard de routage.
 //
 //  La logique bas-niveau de dérivation hostname ↔ domaine racine vit dans
-//  @egen/esm-tenant (utils/domain-utils.ts) — SOURCE UNIQUE partagée avec
+//  @egen-civitas/esm-tenant (utils/domain-utils.ts) — SOURCE UNIQUE partagée avec
 //  esm-primary-navigation-app (sélecteur de tenant), pour éviter que les deux
 //  apps divergent sur l'interprétation d'un même hostname. Ne pas
 //  réimplémenter `inferRootDomain`/`isLocalhostOrIp` localement ici.
 // =============================================================================
 
-import { isLocalhostOrIp, inferRootDomain } from '@egen/esm-tenant';
+import { isLocalhostOrIp, inferRootDomain } from '@egen-civitas/esm-tenant';
 
-export { isLocalhostOrIp, inferRootDomain, buildTenantSubdomainUrl } from '@egen/esm-tenant';
+export { isLocalhostOrIp, inferRootDomain, buildTenantSubdomainUrl } from '@egen-civitas/esm-tenant';
 
 /**
  * Résultat de l'analyse d'un hostname vis-à-vis du domaine racine.

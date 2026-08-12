@@ -1,10 +1,10 @@
-import type { SyncItem } from '@egen/esm-framework/src/internal';
+import type { SyncItem } from '@egen-civitas/esm-framework/src/internal';
 import {
   deleteSynchronizationItem,
   getOfflineSynchronizationStore,
   showModal,
   useStore,
-} from '@egen/esm-framework/src/internal';
+} from '@egen-civitas/esm-framework/src/internal';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import OfflineActionsTable, { type SyncItemWithEntity } from './offline-actions-table.component';

@@ -24,7 +24,7 @@ import {
   getImportMapOverrideMap,
   getImportMapDisabledOverrides,
   resetImportMapOverrides,
-} from '@egen/esm-framework/src/internal';
+} from '@egen-civitas/esm-framework/src/internal';
 import type { Module } from './types';
 import styles from './list.scss';
 

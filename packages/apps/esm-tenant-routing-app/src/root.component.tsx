@@ -11,13 +11,13 @@ import TenantRoutingGuard from './guard/tenant-routing-guard';
 //  observe l'état du tenant store + la session et déclenche des navigate().
 //
 //  /home a longtemps été exclue ici (c'était la landing page publique de
-//  @egen/esm-home-app). Ce n'est plus le cas : /home est désormais l'écran
+//  @egen-civitas/esm-home-app). Ce n'est plus le cas : /home est désormais l'écran
 //  d'accueil AUTHENTIFIÉ (vitrine de composants) — le guard doit donc aussi
 //  s'y appliquer, comme sur n'importe quelle autre route tenant.
 //
 //  Refonte du 8 août 2026 : la page "/tenant-suspended" a été retirée avec
 //  le reste du système de vérification de tenant côté frontend — voir
-//  @egen/esm-tenant/src/types.ts.
+//  @egen-civitas/esm-tenant/src/types.ts.
 // =============================================================================
 
 const Root: React.FC = () => {

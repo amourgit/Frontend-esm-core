@@ -1,5 +1,5 @@
 import React from 'react';
-import { interpolateUrl, useConfig } from '@egen/esm-framework';
+import { interpolateUrl, useConfig } from '@egen-civitas/esm-framework';
 import { type TFunction } from 'i18next';
 import { type ConfigSchema } from './config-schema';
 import styles from './login/login.scss';

@@ -1,4 +1,4 @@
-import { defineConfigSchema, getSyncLifecycle } from '@egen/esm-framework';
+import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import {
   initAIFramework,
   defineAIModule,
@@ -7,7 +7,7 @@ import {
   subscribeToUIActions,
   getObservablesCatalogForLLM,
   subscribeToObservables,
-} from '@egen/esm-ai-framework';
+} from '@egen-civitas/esm-ai-framework';
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';
 import { BASE_EGEN_ROUTES } from './base-routes';
@@ -23,7 +23,7 @@ const options = {
 export function startupApp() {
   defineConfigSchema(moduleName, configSchema);
 
-  // Point d'initialisation unique de la Couche 1 IA (@egen/esm-ai-framework).
+  // Point d'initialisation unique de la Couche 1 IA (@egen-civitas/esm-ai-framework).
   // Avant cette app, rien dans le monorepo n'appelait initAIFramework() —
   // les packages esm-ai-* existaient mais n'étaient jamais branchés au
   // reste de l'application (voir orchestrator.ts, qui documente déjà que
@@ -38,7 +38,7 @@ export function startupApp() {
   // catalogue COMPLET des routes déclarées (natives + apps métier) dans le
   // contexte IA envoyé à chaque message — pour que le LLM les consulte au
   // lieu de deviner un chemin de navigation (voir base-routes.ts et
-  // @egen/esm-ai-tools/routes.ts). Le tool `list_routes` reste disponible
+  // @egen-civitas/esm-ai-tools/routes.ts). Le tool `list_routes` reste disponible
   // en complément si le contexte est tronqué ou incomplet.
   defineAIModule({
     moduleName,
@@ -65,7 +65,7 @@ export function startupApp() {
         id: 'ai-assistant:available-observables',
         name: "Catalogue du contenu descriptif visible à l'écran",
         priority: 5,
-        // Voir @egen/esm-ai-tools/observables.ts — position et données sont
+        // Voir @egen-civitas/esm-ai-tools/observables.ts — position et données sont
         // recalculées à chaque lecture, jamais mises en cache ici non plus.
         provide: () => ({ availableObservables: getObservablesCatalogForLLM() }),
         subscribe: (onChange) => subscribeToObservables(onChange),

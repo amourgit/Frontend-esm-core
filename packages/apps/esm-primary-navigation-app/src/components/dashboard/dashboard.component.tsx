@@ -11,7 +11,7 @@ import {
   type EgenReactComponentProps,
   Type,
   type IconId,
-} from '@egen/esm-framework/src/internal';
+} from '@egen-civitas/esm-framework/src/internal';
 
 export const dashboardConfigSchema = {
   title: {
@@ -76,7 +76,7 @@ export default function Dashboard({ basePath, moduleName }: DashboardProps) {
 
 // t('noPathInDashboardExtension', 'Cannot render the dashboard extension without the property "path" being set in the configuration schema')
 function DashboardInternal({ basePath }: { basePath: string }) {
-  const { t } = useTranslation('@egen/esm-primary-navigation-app');
+  const { t } = useTranslation('@egen-civitas/esm-primary-navigation-app');
   const config = useConfig<DashboardConfig>();
 
   if (!config.path) {

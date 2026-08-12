@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOnClickOutside } from '@egen/esm-framework';
+import { useOnClickOutside } from '@egen-civitas/esm-framework';
 import styles from './search-bar.scss';
 
 // =============================================================================

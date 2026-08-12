@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ConfigurableLink } from '@egen/esm-framework';
+import { ConfigurableLink } from '@egen-civitas/esm-framework';
 import { routes } from '../constants';
 
 interface OfflineToolsNavLinkProps {

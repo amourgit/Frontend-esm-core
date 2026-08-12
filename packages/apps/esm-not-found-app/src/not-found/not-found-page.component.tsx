@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { interpolateUrl, navigate, useConfig } from '@egen/esm-framework';
+import { interpolateUrl, navigate, useConfig } from '@egen-civitas/esm-framework';
 import type { ConfigSchema } from '../config-schema';
 import styles from './not-found-page.module.scss';
 

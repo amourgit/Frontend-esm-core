@@ -10,8 +10,8 @@ import {
   useLayoutType,
   useLeftNavStore,
   useSession,
-} from '@egen/esm-framework';
-import { useTenantMode } from '@egen/esm-tenant';
+} from '@egen-civitas/esm-framework';
+import { useTenantMode } from '@egen-civitas/esm-tenant';
 import { isDesktop } from '../../utils';
 import { type ConfigSchema } from '../../config-schema';
 import Logo from '../logo/logo.component';

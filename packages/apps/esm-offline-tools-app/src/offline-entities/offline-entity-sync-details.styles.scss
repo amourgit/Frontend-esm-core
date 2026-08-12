@@ -1,6 +1,6 @@
 @use '@carbon/layout';
 @use '@carbon/type';
-@use '@egen/esm-styleguide/src/vars' as *;
+@use '@egen-civitas/esm-styleguide/src/vars' as *;
 
 .productiveHeading02 {
   @include type.type-style('heading-compact-02');

@@ -1,5 +1,5 @@
 import { mutate } from 'swr';
-import { clearCurrentUser, egenFetch, refetchCurrentUser, restBaseUrl } from '@egen/esm-framework';
+import { clearCurrentUser, egenFetch, refetchCurrentUser, restBaseUrl } from '@egen-civitas/esm-framework';
 
 export async function performLogout() {
   await egenFetch(`${restBaseUrl}/session`, {

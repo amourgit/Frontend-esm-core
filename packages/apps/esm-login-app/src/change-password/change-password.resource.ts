@@ -1,4 +1,4 @@
-import { egenFetch, restBaseUrl } from '@egen/esm-framework';
+import { egenFetch, restBaseUrl } from '@egen-civitas/esm-framework';
 
 export function changeUserPassword(oldPassword: string, newPassword: string) {
   return egenFetch(`${restBaseUrl}/password`, {

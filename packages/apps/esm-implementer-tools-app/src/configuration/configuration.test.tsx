@@ -4,7 +4,7 @@ import { describe, expect, it, afterEach, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { implementerToolsConfigStore, temporaryConfigStore, Type } from '@egen/esm-framework/src/internal';
+import { implementerToolsConfigStore, temporaryConfigStore, Type } from '@egen-civitas/esm-framework/src/internal';
 import { Configuration } from './configuration.component';
 import { useConceptLookup, useGetConceptByUuid } from './interactive-editor/value-editors/concept-search.resource';
 

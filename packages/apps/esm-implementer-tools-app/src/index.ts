@@ -1,11 +1,11 @@
-import { getSyncLifecycle } from '@egen/esm-framework';
+import { getSyncLifecycle } from '@egen-civitas/esm-framework';
 import implementerToolsComponent from './implementer-tools.component';
 import globalImplementerToolsComponent from './global-implementer-tools.component';
 import implementerToolsButtonComponent from './implementer-tools.button';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
-const moduleName = '@egen/esm-implementer-tools-app';
+const moduleName = '@egen-civitas/esm-implementer-tools-app';
 const options = {
   featureName: 'Implementer Tools',
   moduleName,

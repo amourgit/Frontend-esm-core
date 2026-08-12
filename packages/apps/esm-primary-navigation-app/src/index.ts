@@ -6,7 +6,7 @@ import {
   getSyncLifecycle,
   interpolateUrl,
   navigate,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import { type Application } from 'single-spa';
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';
@@ -34,7 +34,7 @@ export function startupApp() {
 // ─── Page : la TopBar (elle gère elle-même la garde d'authentification) ──────
 export const root = getSyncLifecycle(primaryNavRootComponent, options);
 
-// ─── Racine du SPA (/) — démarre sur l'écran d'accueil (@egen/esm-home-app) ──
+// ─── Racine du SPA (/) — démarre sur l'écran d'accueil (@egen-civitas/esm-home-app) ──
 // La TopBar (page 'root' ci-dessus) matche AUSSI la racine ("" ne commence
 // par aucun des préfixes exclus du routeRegex) et gère elle-même la garde de
 // session (→ /login si absente). Cette page 'redirect', montée en parallèle

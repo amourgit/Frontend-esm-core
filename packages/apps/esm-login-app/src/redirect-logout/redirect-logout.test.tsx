@@ -13,7 +13,7 @@ import {
   useConfig,
   useConnectivity,
   useSession,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import RedirectLogout from './redirect-logout.component';
 
 vi.mock('swr', () => ({

@@ -1,4 +1,4 @@
-import { egenFetch, restBaseUrl } from '@egen/esm-framework/src/internal';
+import { egenFetch, restBaseUrl } from '@egen-civitas/esm-framework/src/internal';
 
 export type PostUserProperties = (
   userUuid: string,

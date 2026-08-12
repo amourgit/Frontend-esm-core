@@ -9,7 +9,7 @@ import {
   useConfig,
   useConnectivity,
   useSession,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import { mockConfig } from '../../__mocks__/config.mock';
 import renderWithRouter from '../test-helpers/render-with-router';
 import Login from './login.component';

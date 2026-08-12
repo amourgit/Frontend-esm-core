@@ -11,8 +11,8 @@ import {
   TableRow,
   Toggle,
 } from '@carbon/react';
-import { useStore } from '@egen/esm-framework';
-import { featureFlagsStore, setFeatureFlag } from '@egen/esm-framework/src/internal';
+import { useStore } from '@egen-civitas/esm-framework';
+import { featureFlagsStore, setFeatureFlag } from '@egen-civitas/esm-framework/src/internal';
 import styles from './feature-flags.scss';
 
 export function FeatureFlags() {

@@ -25,13 +25,13 @@ import styles from './root.scss';
 //  Routes authentifiées (widget rendu) :
 //    /*                    Toutes les autres routes (espaces tenant), y
 //                           compris /home — désormais l'écran d'accueil
-//                           authentifié (@egen/esm-home-app), plus une
+//                           authentifié (@egen-civitas/esm-home-app), plus une
 //                           landing page publique.
 //
 //  Refonte du 8 août 2026 : le gating par feature flag tenant
 //  (useTenantFeatureFlag('ai-assistant', true)) a été retiré avec le reste
 //  du système de vérification de tenant côté frontend (registry,
-//  featureFlags par tenant) — voir @egen/esm-tenant/src/types.ts. En
+//  featureFlags par tenant) — voir @egen-civitas/esm-tenant/src/types.ts. En
 //  pratique le comportement effectif est identique : le modèle précédent
 //  était "opt-out" avec `true` par défaut, et aucun tenant ne déclarait
 //  explicitement `featureFlags: { "ai-assistant": false }` (il n'y avait

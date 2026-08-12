@@ -1,4 +1,4 @@
-import { egenFetch, restBaseUrl } from '@egen/esm-framework';
+import { egenFetch, restBaseUrl } from '@egen-civitas/esm-framework';
 
 export function fetchPersonAttributeTypeByUuid(personAttributeTypeUuid: string) {
   return egenFetch(`${restBaseUrl}/personattributetype/${personAttributeTypeUuid}`, {

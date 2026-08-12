@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderGlobalAction } from '@carbon/react';
-import { getThemeEngine, getThemeState, toggleThemeMode, type ThemeMode } from '@egen/esm-theme';
+import { getThemeEngine, getThemeState, toggleThemeMode, type ThemeMode } from '@egen-civitas/esm-theme';
 import styles from './theme-toggle.scss';
 
 const SunIcon: React.FC = () => (
@@ -29,7 +29,7 @@ const MoonIcon: React.FC = () => (
 
 /**
  * Bouton de bascule clair/sombre, branché directement sur le moteur de
- * thème EGEN (`@egen/esm-theme`). Réactif : se met à jour si le mode
+ * thème EGEN (`@egen-civitas/esm-theme`). Réactif : se met à jour si le mode
  * change depuis n'importe où (autre onglet, préférence tenant, etc.),
  * via `ThemeEngine.subscribe`.
  */

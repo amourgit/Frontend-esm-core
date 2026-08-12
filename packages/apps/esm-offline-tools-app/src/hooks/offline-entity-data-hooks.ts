@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import useSWR, { type SWRResponse } from 'swr';
-import { fetchCurrentEntity, getSynchronizationItems, getDynamicOfflineDataEntries } from '@egen/esm-framework';
+import { fetchCurrentEntity, getSynchronizationItems, getDynamicOfflineDataEntries } from '@egen-civitas/esm-framework';
 import merge from 'lodash-es/merge';
 
 function useDynamicOfflineDataEntries(type: string) {

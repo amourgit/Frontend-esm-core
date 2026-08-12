@@ -31,7 +31,7 @@ import {
   syncDynamicOfflineData,
   useLayoutType,
   type DynamicOfflineDataSyncState,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import { useOfflineEntitiesWithEntries, useOfflineRegisteredEntities } from '../hooks/offline-entity-data-hooks';
 import EmptyState from './empty-state.component';
 import LastUpdatedTableCell from './last-updated-table-cell.component';

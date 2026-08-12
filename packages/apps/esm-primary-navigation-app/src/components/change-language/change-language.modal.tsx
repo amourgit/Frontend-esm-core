@@ -12,7 +12,7 @@ import {
   RadioButton,
   RadioButtonGroup,
 } from '@carbon/react';
-import { useAbortController, useSession } from '@egen/esm-framework';
+import { useAbortController, useSession } from '@egen-civitas/esm-framework';
 import { updateSessionLocale, updateUserProperties } from './change-language.resource';
 import styles from './change-language.scss';
 

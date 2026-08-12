@@ -1,4 +1,4 @@
-import { Type } from '@egen/esm-framework';
+import { Type } from '@egen-civitas/esm-framework';
 
 // =============================================================================
 //  ESM NOT FOUND APP — Schéma de configuration runtime

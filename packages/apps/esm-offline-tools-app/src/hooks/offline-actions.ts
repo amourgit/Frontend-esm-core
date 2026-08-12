@@ -1,6 +1,6 @@
 import uniq from 'lodash-es/uniq';
 import useSWR from 'swr';
-import { fetchCurrentEntity, getFullSynchronizationItems, type SyncItem } from '@egen/esm-framework/src/internal';
+import { fetchCurrentEntity, getFullSynchronizationItems, type SyncItem } from '@egen-civitas/esm-framework/src/internal';
 
 export function usePendingSyncItems() {
   return useSWR('offlineActions/pending', () => getFullSynchronizationItems());

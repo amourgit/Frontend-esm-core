@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAssignedExtensions, useOnClickOutside, useSession } from '@egen/esm-framework';
+import { useAssignedExtensions, useOnClickOutside, useSession } from '@egen-civitas/esm-framework';
 import UserMenuPanel from './user-menu-panel.component';
 import { type MenuButtonProps } from '../topbar/types';
 import styles from './user-menu.scss';

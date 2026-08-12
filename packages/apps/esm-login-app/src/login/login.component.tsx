@@ -13,9 +13,9 @@ import {
   useConnectivity,
   useSession,
   applyDevAuthBypassForLogin,
-} from '@egen/esm-framework';
-import { useTenant, useTenantMode, storeHeaderTenantId, getTenantStoreState } from '@egen/esm-tenant';
-import { getThemeState } from '@egen/esm-theme';
+} from '@egen-civitas/esm-framework';
+import { useTenant, useTenantMode, storeHeaderTenantId, getTenantStoreState } from '@egen-civitas/esm-tenant';
+import { getThemeState } from '@egen-civitas/esm-theme';
 import { type ConfigSchema } from '../config-schema';
 import Logo from '../logo.component';
 import Footer from '../footer.component';

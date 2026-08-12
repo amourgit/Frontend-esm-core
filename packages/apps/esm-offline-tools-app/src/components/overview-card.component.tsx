@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TileProps } from '@carbon/react';
 import { Button, Layer, Tile } from '@carbon/react';
-import { ArrowRightIcon, navigate } from '@egen/esm-framework';
+import { ArrowRightIcon, navigate } from '@egen-civitas/esm-framework';
 import styles from './overview-card.styles.scss';
 
 export interface OverviewCardProps extends TileProps {

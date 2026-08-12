@@ -6,7 +6,7 @@ import {
   useConnectivity,
   useLayoutType,
   useStore,
-} from '@egen/esm-framework/src/internal';
+} from '@egen-civitas/esm-framework/src/internal';
 import { Button } from '@carbon/react';
 import { Renew } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';

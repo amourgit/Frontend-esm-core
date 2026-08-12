@@ -10,7 +10,7 @@ import {
   type FetchResponse,
   type Session,
   useDebounce,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import type { LocationEntry, LocationResponse } from './types';
 
 // "swr/infinite" doesn't export InfiniteKeyedMutator directly

@@ -1,4 +1,4 @@
-import { Type, validators } from '@egen/esm-framework';
+import { Type, validators } from '@egen-civitas/esm-framework';
 
 // =============================================================================
 //  CONFIG SCHEMA — App Footer

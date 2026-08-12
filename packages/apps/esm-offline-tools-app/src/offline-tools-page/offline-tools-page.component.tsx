@@ -1,7 +1,7 @@
 import React from 'react';
 import { trimEnd } from 'lodash-es';
 import { useLocation, useParams } from 'react-router-dom';
-import { ExtensionSlot, useExtensionSlotMeta } from '@egen/esm-framework';
+import { ExtensionSlot, useExtensionSlotMeta } from '@egen-civitas/esm-framework';
 import type { OfflineToolsPageConfig } from '../types';
 
 export interface OfflineToolsPageParams {

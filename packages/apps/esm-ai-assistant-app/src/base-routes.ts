@@ -1,4 +1,4 @@
-import type { AIRouteDefinition } from '@egen/esm-ai-framework';
+import type { AIRouteDefinition } from '@egen-civitas/esm-ai-framework';
 
 // =============================================================================
 //  Routes de base EGEN — connues de TOUT déploiement (shell + apps publiques),
@@ -17,11 +17,11 @@ import type { AIRouteDefinition } from '@egen/esm-ai-framework';
 //
 //  Toute app métier (@school/esm-grades-app, etc.) devrait déclarer SES
 //  PROPRES routes de la même façon, via defineAIModule({ routes: [...] })
-//  dans son propre startupApp() — voir @egen/esm-ai-extensions.
+//  dans son propre startupApp() — voir @egen-civitas/esm-ai-extensions.
 //
 //  Refonte du 8 août 2026 : "/tenant-suspended" retirée — cette route
 //  n'existe plus (suppression du système de vérification de tenant côté
-//  frontend, voir @egen/esm-tenant/src/types.ts).
+//  frontend, voir @egen-civitas/esm-tenant/src/types.ts).
 // =============================================================================
 
 export const BASE_EGEN_ROUTES: AIRouteDefinition[] = [

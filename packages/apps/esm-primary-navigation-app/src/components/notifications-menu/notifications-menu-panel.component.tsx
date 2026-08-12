@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ExtensionSlot, useAssignedExtensions } from '@egen/esm-framework';
+import { ExtensionSlot, useAssignedExtensions } from '@egen-civitas/esm-framework';
 import styles from './notifications-menu.scss';
 
 interface NotificationsMenuPanelProps {

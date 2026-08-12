@@ -42,17 +42,17 @@ import {
   type SelectOption,
   type NavigationItem,
   type TestimonialItem,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import Autoplay from 'embla-carousel-autoplay';
 import type { ConfigSchema } from '../config-schema';
 import styles from './home.scss';
 
 // =============================================================================
-//  Icônes de démo — InteractiveSelector (@egen/esm-styleguide/selections)
+//  Icônes de démo — InteractiveSelector (@egen-civitas/esm-styleguide/selections)
 //
 //  Le composant source utilisait react-icons/fa (FaCampground, FaFire...),
 //  librairie absente du monorepo (aucune trace dans les package.json — le
-//  set d'icônes du projet est @egen/esm-styleguide/icons, un registre fermé
+//  set d'icônes du projet est @egen-civitas/esm-styleguide/icons, un registre fermé
 //  de pictos administratifs/médicaux sans équivalent thématique "glamping").
 //  InteractiveSelector lui-même reste 100% agnostique (icon: ReactNode) —
 //  ces 5 SVG minimalistes (currentColor, 24px, même esprit que les icônes
@@ -100,12 +100,12 @@ const DemoHikingIcon = () => (
 //  HOME PAGE — Écran d'accueil authentifié
 //
 //  Cette page n'a plus de navigation propre : elle est rendue par la SPA
-//  DANS l'espace authentifié (la TopBar de @egen/esm-primary-navigation-app
+//  DANS l'espace authentifié (la TopBar de @egen-civitas/esm-primary-navigation-app
 //  s'affiche naturellement au-dessus, comme pour n'importe quelle autre
 //  route du tenant — voir routes.json de esm-primary-navigation-app).
 //
 //  Rôle actuel : vitrine de test des composants de base en cours de
-//  construction dans @egen/esm-styleguide, avant leur diffusion dans les
+//  construction dans @egen-civitas/esm-styleguide, avant leur diffusion dans les
 //  vraies apps. Chaque composant testé ici est ajouté dans une section
 //  dédiée, avec ses variantes.
 // =============================================================================
@@ -114,13 +114,13 @@ const ComponentShowcasePage: React.FC = () => {
   const { t } = useTranslation();
   const config = useConfig<ConfigSchema>();
 
-  // ── Démo : DynamicField (@egen/esm-styleguide/fields) ──────────────────────
+  // ── Démo : DynamicField (@egen-civitas/esm-styleguide/fields) ──────────────────────
   const [outlinedValue, setOutlinedValue] = useState('');
   const [filledValue, setFilledValue] = useState('');
   const [standardValue, setStandardValue] = useState('');
   const [kineticValue, setKineticValue] = useState('');
 
-  // ── Démo : StaggeredMenuPanel / MenuToggleButton (@egen/esm-styleguide/staggered-menu) ──
+  // ── Démo : StaggeredMenuPanel / MenuToggleButton (@egen-civitas/esm-styleguide/staggered-menu) ──
   const [staggeredMenuOpen, setStaggeredMenuOpen] = useState(false);
   // Défaut = config.staggeredMenu.position, mais surchargeable en direct dans
   // la vitrine via le contrôle gauche/droite ci-dessous — pour tester les deux
@@ -136,7 +136,7 @@ const ComponentShowcasePage: React.FC = () => {
     { label: 'LinkedIn', link: 'https://linkedin.com' },
   ];
 
-  // ── Démo : CascadingNavDropdown (@egen/esm-styleguide/cascading-nav-dropdown) ──
+  // ── Démo : CascadingNavDropdown (@egen-civitas/esm-styleguide/cascading-nav-dropdown) ──
   const demoNavigationTree: NavigationItem[] = [
     {
       id: 'education',
@@ -165,7 +165,7 @@ const ComponentShowcasePage: React.FC = () => {
     { id: 'edugabon', label: 'EDUGABON', path: '#' },
   ];
 
-  // ── Démo : Toast (@egen/esm-styleguide/toasts) ──────────────────────────────
+  // ── Démo : Toast (@egen-civitas/esm-styleguide/toasts) ──────────────────────────────
   const handleTransferDemo = () => {
     const toastKey = `demo-transfer-${Date.now()}`;
     let progress = 0;
@@ -193,7 +193,7 @@ const ComponentShowcasePage: React.FC = () => {
     }, 400);
   };
 
-  // ── Démo : EntityDetailBrowser (@egen/esm-styleguide/master-detail/entity-detail-browser) ──
+  // ── Démo : EntityDetailBrowser (@egen-civitas/esm-styleguide/master-detail/entity-detail-browser) ──
   // Exemple générique (un cours et ses leçons) — preuve que le composant
   // n'a aucune donnée en dur et ne suppose aucun domaine particulier.
   const demoItems: EntityDetailBrowserItem[] = [
@@ -215,7 +215,7 @@ const ComponentShowcasePage: React.FC = () => {
     { id: 4, title: 'Bonnes pratiques SCSS', meta: '15 min' },
   ];
 
-  // ── Démo : ImageSwiper (@egen/esm-styleguide/carousel/image-swiper) ────────
+  // ── Démo : ImageSwiper (@egen-civitas/esm-styleguide/carousel/image-swiper) ────────
   const demoSwiperImages = [
     'https://picsum.photos/seed/swiper-1/400/560',
     'https://picsum.photos/seed/swiper-2/400/560',
@@ -224,7 +224,7 @@ const ComponentShowcasePage: React.FC = () => {
     'https://picsum.photos/seed/swiper-5/400/560',
   ];
 
-  // ── Démo : CircularGallery (@egen/esm-styleguide/carousel/circular-gallery) ──
+  // ── Démo : CircularGallery (@egen-civitas/esm-styleguide/carousel/circular-gallery) ──
   const demoCircularGalleryImages = [
     { title: 'Pochette 1', url: 'https://picsum.photos/seed/circular-1/600/600' },
     { title: 'Pochette 2', url: 'https://picsum.photos/seed/circular-2/600/600' },
@@ -234,7 +234,7 @@ const ComponentShowcasePage: React.FC = () => {
     { title: 'Pochette 6', url: 'https://picsum.photos/seed/circular-6/600/600' },
   ];
 
-  // ── Démo : Carousel/ThumbsSlider (@egen/esm-styleguide/carousel/slider) ─────
+  // ── Démo : Carousel/ThumbsSlider (@egen-civitas/esm-styleguide/carousel/slider) ─────
   const verticalSliderOptions: EmblaOptionsType = { loop: false, axis: 'y' };
   const demoVerticalSliderImages = [
     { src: 'https://images.unsplash.com/photo-1759395073808-17782f3d8d66?q=80&w=1471&auto=format&fit=crop', alt: 'Slide 1' },
@@ -244,7 +244,7 @@ const ComponentShowcasePage: React.FC = () => {
     { src: 'https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?q=80&w=765&auto=format&fit=crop', alt: 'Slide 5' },
   ];
 
-  // ── Démo : InteractiveSelector (@egen/esm-styleguide/selections) ───────────
+  // ── Démo : InteractiveSelector (@egen-civitas/esm-styleguide/selections) ───────────
   const demoInteractiveSelectorOptions: InteractiveSelectorOption[] = [
     {
       title: 'Luxury Tent',
@@ -278,7 +278,7 @@ const ComponentShowcasePage: React.FC = () => {
     },
   ];
 
-  // ── Démo : LayoutGrid (@egen/esm-styleguide/containers) ─────────────────────
+  // ── Démo : LayoutGrid (@egen-civitas/esm-styleguide/containers) ─────────────────────
   const demoLayoutGridItems: LayoutGridItem[] = [
     {
       id: 1,
@@ -330,7 +330,7 @@ const ComponentShowcasePage: React.FC = () => {
     },
   ];
 
-  // ── Démo : TestimonialCardStack (@egen/esm-styleguide/carousel/testimonial-card) ──
+  // ── Démo : TestimonialCardStack (@egen-civitas/esm-styleguide/carousel/testimonial-card) ──
   const demoTestimonials: TestimonialItem[] = [
     {
       id: 1,
@@ -349,7 +349,7 @@ const ComponentShowcasePage: React.FC = () => {
     },
   ];
 
-  // ── Démo : Select (@egen/esm-styleguide/selections/select-popover) ─────────
+  // ── Démo : Select (@egen-civitas/esm-styleguide/selections/select-popover) ─────────
   const demoTenants: SelectOption[] = [
     { id: 'eigen-national', name: 'EIGEN — Gabon (national)', plan: 'Établissement', logo: 'https://picsum.photos/seed/tenant-eigen/64' },
     { id: 'iam-central', name: 'IAM Central', plan: 'Plateforme', logo: 'https://picsum.photos/seed/tenant-iam/64' },
@@ -358,11 +358,11 @@ const ComponentShowcasePage: React.FC = () => {
   ];
   const [selectedTenantId, setSelectedTenantId] = useState('eigen-national');
 
-  // ── Démo : DecoratedCard (@egen/esm-styleguide/cards/decorated-card) ────────
+  // ── Démo : DecoratedCard (@egen-civitas/esm-styleguide/cards/decorated-card) ────────
   const cardVariants: CardVariant[] = ['default', 'dots', 'gradient', 'plus', 'neubrutalism', 'inner', 'lifted', 'corners', 'glass', 'mirror'];
   const [selectedCardVariant, setSelectedCardVariant] = useState<CardVariant>('default');
 
-  // ── Démo : CardModal (@egen/esm-styleguide/dialogs/card-modal) ──────────────
+  // ── Démo : CardModal (@egen-civitas/esm-styleguide/dialogs/card-modal) ──────────────
   // Combinaisons entièrement libres : n'importe quelle variante de carte
   // ci-dessus × n'importe quelle animation × déplaçable ou non.
   const modalAnimations: CardModalAnimationPreset[] = [
@@ -382,7 +382,7 @@ const ComponentShowcasePage: React.FC = () => {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
 
-  // ── Démo : FolderGallery (@egen/esm-styleguide/containers/folder-gallery) ──
+  // ── Démo : FolderGallery (@egen-civitas/esm-styleguide/containers/folder-gallery) ──
   // Dossier n°1 : des photos (nature "image")
   const demoPhotoItems = [
     'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop',
@@ -417,7 +417,7 @@ const ComponentShowcasePage: React.FC = () => {
       <header className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>{config.pageTitle}</h1>
         <p className={styles.pageSubtitle}>
-          {t('showcaseSubtitle', 'Composants @egen/esm-styleguide en cours de validation visuelle.')}
+          {t('showcaseSubtitle', 'Composants @egen-civitas/esm-styleguide en cours de validation visuelle.')}
         </p>
       </header>
 

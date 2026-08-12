@@ -2,7 +2,7 @@ import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
-import { navigate, type Session, useSession } from '@egen/esm-framework';
+import { navigate, type Session, useSession } from '@egen-civitas/esm-framework';
 import ChangeLocationLink from './change-location-link.extension';
 
 const mockNavigate = vi.mocked(navigate);

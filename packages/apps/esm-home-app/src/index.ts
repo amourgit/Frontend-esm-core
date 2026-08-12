@@ -1,15 +1,15 @@
-import { defineConfigSchema, getSyncLifecycle } from '@egen/esm-framework';
+import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import rootComponent from './root.component';
 
 // =============================================================================
 //  ESM HOME APP — Point d'entrée
 //  Écran d'accueil de l'espace authentifié : vitrine interne des composants
-//  de base (@egen/esm-styleguide). Rendue dans le contenu de la SPA pendant
-//  que @egen/esm-primary-navigation-app affiche sa TopBar au-dessus.
+//  de base (@egen-civitas/esm-styleguide). Rendue dans le contenu de la SPA pendant
+//  que @egen-civitas/esm-primary-navigation-app affiche sa TopBar au-dessus.
 // =============================================================================
 
-const moduleName = '@egen/esm-home-app';
+const moduleName = '@egen-civitas/esm-home-app';
 
 const options = {
   featureName: 'home',

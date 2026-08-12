@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LocationIcon, navigate, useSession } from '@egen/esm-framework';
+import { LocationIcon, navigate, useSession } from '@egen-civitas/esm-framework';
 import styles from './change-location-link.scss';
 
 // =============================================================================

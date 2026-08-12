@@ -1,5 +1,5 @@
 // =============================================================================
-//  @egen/esm-ai-assistant-app — Client direct Gemini (mode prototypage)
+//  @egen-civitas/esm-ai-assistant-app — Client direct Gemini (mode prototypage)
 //
 //  ⚠️  AVERTISSEMENT SÉCURITÉ
 //  Ce client appelle generativelanguage.googleapis.com DIRECTEMENT depuis le
@@ -18,7 +18,7 @@
 //  hooks/use-ai-chat.ts n'ait AUCUNE connaissance du provider utilisé.
 // =============================================================================
 
-import { getAIConfig } from '@egen/esm-ai-framework';
+import { getAIConfig } from '@egen-civitas/esm-ai-framework';
 import type { ChatMessageDTO, ChatRequestBody, ChatResponseDTO, StreamEvent, ToolCallRequest } from './ai-backend-client';
 
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';

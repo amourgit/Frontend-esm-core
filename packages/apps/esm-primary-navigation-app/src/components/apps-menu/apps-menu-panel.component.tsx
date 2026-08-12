@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Launch } from '@carbon/react/icons';
-import { ExtensionSlot, useAssignedExtensions, useConfig } from '@egen/esm-framework';
+import { ExtensionSlot, useAssignedExtensions, useConfig } from '@egen-civitas/esm-framework';
 import { type ConfigSchema } from '../../config-schema';
 import styles from './apps-menu.scss';
 

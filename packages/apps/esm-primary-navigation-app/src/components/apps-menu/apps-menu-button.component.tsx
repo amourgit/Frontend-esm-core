@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { HeaderGlobalAction } from '@carbon/react';
-import { CloseIcon, SwitcherIcon, useAssignedExtensions, useOnClickOutside } from '@egen/esm-framework';
+import { CloseIcon, SwitcherIcon, useAssignedExtensions, useOnClickOutside } from '@egen-civitas/esm-framework';
 import AppsMenuPanel from './apps-menu-panel.component';
 import { type MenuButtonProps } from '../topbar/types';
 import styles from './apps-menu.scss';

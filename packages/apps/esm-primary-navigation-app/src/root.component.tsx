@@ -21,7 +21,7 @@ import styles from './root.scss';
 //  Routes authentifiées (Navbar rendue) :
 //    /*                    Toutes les autres routes (espaces tenant), y
 //                           compris /home — désormais l'écran d'accueil
-//                           authentifié (@egen/esm-home-app), plus une
+//                           authentifié (@egen-civitas/esm-home-app), plus une
 //                           landing page publique.
 // =============================================================================
 

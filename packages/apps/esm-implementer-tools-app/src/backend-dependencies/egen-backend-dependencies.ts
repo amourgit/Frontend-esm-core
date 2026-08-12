@@ -1,4 +1,4 @@
-import { isVersionSatisfied, egenFetch, restBaseUrl } from '@egen/esm-framework';
+import { isVersionSatisfied, egenFetch, restBaseUrl } from '@egen-civitas/esm-framework';
 import difference from 'lodash-es/difference';
 
 export type ResolvedBackendModuleType = 'missing' | 'version-mismatch' | 'okay';

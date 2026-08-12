@@ -1,1 +1,1 @@
-export const moduleName = '@egen/esm-ai-assistant-app';
+export const moduleName = '@egen-civitas/esm-ai-assistant-app';

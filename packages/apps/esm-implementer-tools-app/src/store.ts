@@ -1,4 +1,4 @@
-import { createGlobalStore } from '@egen/esm-framework';
+import { createGlobalStore } from '@egen-civitas/esm-framework';
 
 export interface ImplementerToolsStore {
   activeItemDescription: null | ActiveItemDescription;

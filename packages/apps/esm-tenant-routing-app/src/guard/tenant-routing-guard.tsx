@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { useConfig } from '@egen/esm-framework';
+import { useConfig } from '@egen-civitas/esm-framework';
 import { type ConfigSchema } from '../config-schema';
 import { useTenantRouting, useTenantRoutingNavigator } from './use-tenant-routing';
 

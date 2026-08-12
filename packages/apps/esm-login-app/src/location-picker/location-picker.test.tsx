@@ -13,7 +13,7 @@ import {
   type LoggedInUser,
   type Session,
   type FetchResponse,
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 import {
   mockLoginLocations,
   validatingLocationFailureResponse,

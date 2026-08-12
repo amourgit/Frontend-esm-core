@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useConfig, useSession } from '@egen/esm-framework';
+import { useConfig, useSession } from '@egen-civitas/esm-framework';
 import type { ConfigSchema } from '../../config-schema';
 import { useSpeechRecognition } from '../../hooks/use-speech-recognition';
 import styles from './chat-input.scss';

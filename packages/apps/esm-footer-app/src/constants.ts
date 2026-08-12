@@ -1,1 +1,1 @@
-export const moduleName = '@egen/esm-footer-app';
+export const moduleName = '@egen-civitas/esm-footer-app';
