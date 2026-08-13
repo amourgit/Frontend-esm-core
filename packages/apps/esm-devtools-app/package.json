@@ -51,8 +51,8 @@
     "rxjs": "6.x"
   },
   "devDependencies": {
+    "@egen-civitas/egen": "workspace:*",
     "cross-env": "^10.1.0",
-    "egen": "workspace:*",
     "happy-dom": "^20.6.0",
     "i18next": "^25.5.3",
     "react": "^18.3.1",
