@@ -48,7 +48,8 @@
     "react": "18.x",
     "react-dom": "18.x",
     "react-i18next": "16.x",
-    "rxjs": "6.x"
+    "rxjs": "6.x",
+    "single-spa": "6.x"
   },
   "devDependencies": {
     "@egen-civitas/egen": "workspace:*",
@@ -67,7 +68,6 @@
     "@egen-civitas/esm-api": "workspace:*",
     "@egen-civitas/esm-config": "workspace:*",
     "@egen-civitas/esm-react-utils": "workspace:*",
-    "@egen-civitas/esm-state": "workspace:*",
-    "fuzzy": "^0.1.3"
+    "@egen-civitas/esm-state": "workspace:*"
   }
 }

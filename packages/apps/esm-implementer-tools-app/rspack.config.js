@@ -1,1 +1,1 @@
-module.exports = require('egen/default-rspack-config');
+module.exports = require('@egen-civitas/egen/default-rspack-config');
