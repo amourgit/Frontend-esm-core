@@ -6,7 +6,8 @@
   "workspaces": [
     "packages/apps/*",
     "../Frontend-esm-framework/packages/framework/*",
-    "../Frontend-esm-framework/packages/shell/*"
+    "../Frontend-esm-framework/packages/shell/*",
+    "../Frontend-esm-framework/packages/tooling/typedoc-plugin-file-categories"
   ],
   "scripts": {
     "run:egen": "node ../Frontend-esm-framework/packages/tooling/egen/dist/cli.js",
