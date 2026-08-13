@@ -7,7 +7,7 @@
   "main": "src/index.ts",
   "source": true,
   "scripts": {
-    "start": "egen develop",
+    "start": "node ../../../../Frontend-esm-framework/packages/tooling/egen/dist/cli.js develop",
     "build": "rspack --mode=production",
     "build:development": "rspack --mode=development",
     "test": "cross-env TZ=UTC vitest run --passWithNoTests",
@@ -62,7 +62,6 @@
     "swr": "2.x"
   },
   "devDependencies": {
-    "@egen-civitas/egen": "workspace:*",
     "@vitest/coverage-v8": "^4.1.2",
     "cross-env": "^10.1.0",
     "happy-dom": "^20.6.0",

@@ -6,11 +6,10 @@
   "workspaces": [
     "packages/apps/*",
     "../Frontend-esm-framework/packages/framework/*",
-    "../Frontend-esm-framework/packages/shell/*",
-    "../Frontend-esm-framework/packages/tooling/*"
+    "../Frontend-esm-framework/packages/shell/*"
   ],
   "scripts": {
-    "run:egen": "egen",
+    "run:egen": "node ../Frontend-esm-framework/packages/tooling/egen/dist/cli.js",
     "run:shell": "yarn workspace @egen-civitas/esm-app-shell watch",
     "ci:publish-next": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag next",
     "ci:publish": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag latest",
@@ -19,7 +18,7 @@
     "build:apps": "turbo run build --filter='@egen/*-app'",
     "document": "turbo run document",
     "setup": "yarn install && turbo run build",
-    "start": "egen develop --sources \"packages/apps/*\"",
+    "start": "node ../Frontend-esm-framework/packages/tooling/egen/dist/cli.js develop --sources \"packages/apps/*\"",
     "verify": "turbo run lint test typescript",
     "postinstall": "husky install",
     "test": "turbo run test",
@@ -28,7 +27,6 @@
     "storybook": "yarn workspace @egen/storybook storybook"
   },
   "devDependencies": {
-    "@egen-civitas/egen": "workspace:*",
     "@playwright/test": "^1.55.1",
     "@swc/core": "1.15.21",
     "@testing-library/dom": "^10.4.1",

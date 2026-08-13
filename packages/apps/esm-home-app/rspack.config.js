@@ -1,1 +1,1 @@
-module.exports = require('@egen-civitas/egen/default-rspack-config');
+module.exports = require('../../../../Frontend-esm-framework/packages/tooling/egen/default-rspack-config.cjs');

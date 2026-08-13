@@ -7,7 +7,7 @@
   "main": "src/index.ts",
   "source": true,
   "scripts": {
-    "start": "egen develop",
+    "start": "node ../../../../Frontend-esm-framework/packages/tooling/egen/dist/cli.js develop",
     "serve": "rspack serve --mode=development",
     "debug": "npm run serve",
     "test": "cross-env TZ=UTC vitest run --passWithNoTests",
@@ -63,7 +63,6 @@
   },
   "devDependencies": {
     "@carbon/react": "^1.92.1",
-    "@egen-civitas/egen": "workspace:*",
     "@types/lodash-es": "^4.17.12",
     "@vitest/coverage-v8": "^4.1.2",
     "cross-env": "^10.1.0",
