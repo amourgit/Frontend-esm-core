@@ -1,50 +1,14 @@
 :wave: New to our project? Be sure to review the [Egen 3 Frontend Developer Documentation](https://egen.atlassian.net/wiki/x/IABBHg). You may find the [Introduction](https://egen.atlassian.net/wiki/x/94ABCQ) especially helpful.
 
-Also see the [API documentation](./packages/framework/esm-framework/docs/API.md) for `@egen/esm-framework`, which is contained in this repository.
-
-![Egen CI](https://github.com/egen/egen-esm-core/workflows/Egen%20CI/badge.svg)
-![Check documentation](https://github.com/egen/egen-esm-core/actions/workflows/docs.yml/badge.svg)
+> **Séparation Framework / Core :** depuis la restructuration, ce dépôt (`Frontend-esm-core`) ne contient plus que le code spécifique à l'application ESM Core (les frontend modules sous `packages/apps/*`). Tout le code générique et réutilisable (`@egen-civitas/esm-*`, l'app shell, le CLI `egen`) vit désormais dans le dépôt séparé [`Frontend-esm-framework`](https://github.com/amourgit/Frontend-esm-framework), consommé ici comme dépendance (temporairement via lien relatif en attendant sa publication sur npm — voir `docs/analyse-separation-framework.md`).
 
 Below is the documentation for this repository.
 
-# O3 Frontend Core
+# ESM Core
 
-This is a [monorepo](https://yarnpkg.com/advanced/lexicon#monorepo) containing the core packages for the O3 frontend. These packages handle cross-cutting concerns such as the configuration and extension systems, the core framework, global state management, the styleguide, and more.
+This repository contains the application-specific frontend modules for ESM Core. It consumes [`Frontend-esm-framework`](https://github.com/amourgit/Frontend-esm-framework) — the app shell, the `egen` CLI, and all the `@egen-civitas/esm-*` framework packages (configuration, extension system, state management, styleguide, etc.) — as an external dependency rather than embedding that code here.
 
 ## Available Packages
-
-### Application
-
-This contains tooling and the app shell.
-
-- [egen](packages/tooling/egen)
-- [@egen/esm-app-shell](packages/shell/esm-app-shell)
-
-### Framework
-
-The following common libraries have been developed. They may also be used independently of the app shell.
-
-- [@egen/esm-api](packages/framework/esm-api): helps make API calls to the backend
-- [@egen/esm-config](packages/framework/esm-config): validation and storage of frontend configuration
-- [@egen/esm-context](packages/framework/esm-context): provides the AppContext for sharing contextual state across the app
-- [@egen/esm-dynamic-loading](packages/framework/esm-dynamic-loading): provides functionality for dynamically loading frontend modules using Webpack Module Federation dynamic remotes
-- [@egen/esm-error-handling](packages/framework/esm-error-handling): handles errors
-- [@egen/esm-expression-evaluator](packages/framework/esm-expression-evaluator): provides functions that allow evaluation of user-defined expressions in a safer way than eval()
-- [@egen/esm-extensions](packages/framework/esm-extensions): implementation of a frontend component extension system
-- [@egen/esm-feature-flags](packages/framework/esm-feature-flags): hide features that are in progress
-- [@egen/esm-globals](packages/framework/esm-globals): useful global variables and types
-- [@egen/esm-navigation](packages/framework/esm-navigation): navigation utilities, breadcrumbs, and history
-- [@egen/esm-offline](packages/framework/esm-offline): provides offline functionality
-- [@egen/esm-react-utils](packages/framework/esm-react-utils): utilities for React components
-- [@egen/esm-routes](packages/framework/esm-routes): provides helper functions for working with `routes.json` files in O3
-- [@egen/esm-state](packages/framework/esm-state): brings in state management
-- [@egen/esm-styleguide](packages/framework/esm-styleguide): styling and UI capabilities
-- [@egen/esm-translations](packages/framework/esm-translations): common translations and utilities
-- [@egen/esm-utils](packages/framework/esm-utils): general utility and helper functions
-
-All libraries are aggregated in the `@egen/esm-framework` package:
-
-- [@egen/esm-framework](packages/framework/esm-framework)
 
 ### Frontend modules
 
@@ -114,10 +78,14 @@ This will spin up a development server with hot module reloading so any changes 
 
 ### Running the tooling
 
+The `egen` CLI itself lives in `Frontend-esm-framework` (`packages/tooling/egen`), not in this repository. Build it there once, then it's invoked directly by path from this repo's `start`/`run:egen` scripts (see `package.json`):
+
 ```sh
-cd packages/tooling/egen
+# In Frontend-esm-framework
 yarn build
-./dist/cli.js
+
+# Back in this repo — run:egen forwards straight to the built CLI
+yarn run:egen --help
 ```
 
 ### Running tests
@@ -139,7 +107,7 @@ yarn turbo run test:watch
 To run tests for a specific package, pass the package name to the `--filter` flag. For example:
 
 ```bash
-yarn turbo run test --filter="@egen/esm-styleguide"
+yarn turbo run test --filter="@egen-civitas/esm-styleguide"
 ```
 
 To run a specific test file, run:
@@ -230,136 +198,23 @@ Read the [e2e testing guide](https://egen.atlassian.net/wiki/spaces/docs/pages/1
 
 ### Linking the framework
 
-You probably want to try out your changes to a framework library in a frontend module. Unfortunately, getting a working development environment for this is very finicky; no one technique works for all frontend modules all the time.
+Since the split into two repositories, testing a change to a framework library from a Core frontend module no longer needs `yarn link` or `yalc`. `Frontend-esm-framework` and `Frontend-esm-core` are cloned as sibling folders on the same machine, and this repo's `workspaces` field ([package.json](package.json)) points at the framework's `packages/framework/*` and `packages/shell/*` directly via a relative path — this is a temporary bridge until the framework is published to npm (see `docs/analyse-separation-framework.md` for the full rationale).
 
-Note that even though frontend modules import from `@egen/esm-framework`, the package you need to link is the sub-library; for example, if you are trying to test changes in `packages/framework/esm-api`, you will need to link that sub-library.
+In practice:
 
-If you're unsure whether your version of a core package is running, add a `console.log` at the top level of a file you're working on.
+1. Edit the source in `../Frontend-esm-framework/packages/framework/<the-package-you're-changing>`.
+2. Rebuild it (`yarn build` at the framework's root, or `yarn turbo run build --filter=@egen-civitas/<package-name>` for just that one).
+3. Your Core dev server (`yarn start`, see below) resolves the package's built output through the workspace link, so the change is picked up without any manual linking step.
 
-Here are the tools at your disposal for trying to get this to work:
+If you're unsure whether your version of a framework package is actually being used, add a `console.log` at the top level of a file you're working on and check whether it prints.
 
-#### Yarn link
+This whole arrangement is provisional: once `Frontend-esm-framework` is published to npm, this repo's `dependencies` will point at real published version ranges instead of the relative workspace path, exactly like any other external dependency.
 
-This should be the first thing you try. To link the styleguide, for example, you would use
+### Version and release, and framework API documentation
 
-```sh
-yarn link ../path/to/egen-esm-core/packages/framework/esm-styleguide
-```
+Versioning, releasing, and publishing `@egen-civitas/*` packages (and generating their TypeDoc API documentation) is no longer done from this repository — that process now lives in [`Frontend-esm-framework`](https://github.com/amourgit/Frontend-esm-framework), since that's where those packages are actually defined. See that repository's own README for the current process.
 
-This will add a line to the "resolutions" section of the `package.json` file which uses the `portal:` protocol. The other protocol is `link:`. If you need to make changes to the `esm-framework` package, you will need to link it in as well. However, linking `@egen/esm-framework` as a portal created by `yarn link` will not work; instead manually add the line to the `resolutions` field in the `package.json` file:
-
-```json
-"resolutions": {
-  "@egen/esm-framework": "link:../path/to/egen-esm-core/packages/framework/esm-framework"
-}
-```
-
-#### Yalc
-
-Sometimes, the build tooling will simply not work with `yarn link`. In this case, you will need to use `yalc`.
-Install `yalc` on your computer with:
-
-```sh
-npm install -g yalc
-```
-
-Then, link the repository you are working on. For `esm-api`, for example, run:
-
-```sh
-# In this repository
-cd packages/framework/esm-api
-yalc publish
-cd ../../../egen-esm-patient-chart  # for example
-yalc link @egen/esm-api
-```
-
-In order for Patient Chart to receive further updates you make to esm-api, you will need to run `yalc push` in the esm-api directory and `yalc update` in the Patient Chart directory.
-
-### Running with a local version of the core packages
-
-After linking the packages (using `yarn link` or `yalc`), the build tooling is satisfied, but you must do one more step to get the frontend to load these dependencies at runtime.
-
-Here, there are two options:
-
-#### Method 1: Using the frontend dev server
-
-In order to get your local version of the core packages to be served in your local dev server, you will need to link the tooling as well.
-
-```sh
-yarn link /path/to/esm-core/packages/tooling/egen
-```
-
-You can try using `yalc` for this as well, if `yarn link` doesn't work. Or manually create a `link:` resolution in `package.json`.
-In `packages/shell/esm-app-shell`, run:
-
-```sh
-yarn build:development --watch
-```
-
-to ensure the built app shell is updated with your changes and available to Patient Chart. Then run your Patient Chart dev server as usual, with `yarn start`.
-
-#### Method 2: Using import map overrides
-
-In this repository, start the app shell with `yarn run:shell`. Then, in the Patient Chart repository, `cd` into whatever package(s) you are working on and run `yarn serve` from there. Then use the import map override tool in the browser to tell the frontend to load your local Patient Chart packages.
-
-#### Once it's working
-
-Please note that any of these techniques will modify the `package.json` file. These changes must be undone before creating your PR. If you used `yarn link`, you can undo these changes by running:
-
-```sh
-yarn unlink --all
-```
-
-in the Patient Chart repo.
-
-### Version and release
-
-We use Yarn [workspaces](https://yarnpkg.com/features/workspaces) to handle versioning in this monorepo.
-
-To increment the version, run the following command:
-
-```sh
-yarn release [version]
-```
-
-Where version corresponds to:
-
-- `patch` for bug fixes e.g., `3.2.0` → `3.2.1`
-- `minor` for new features that are backwards-compatible e.g., `3.2.0` → `3.3.0`
-- `major` for breaking changes e.g., `3.2.0` → `4.0.0`
-
-Note that this command will not create a new tag, nor publish the packages. After running it, make a PR or merge to `main` with the resulting changeset. Note that the release commit message must resemble `(chore) Release vx.x.x` where `x.x.x` is the new version number prefixed with `v`. This is to avoid triggering a pre-release build when effecting a version bump.
-
-Once the version bump commit is merged, go to GitHub and [draft a new release](https://github.com/egen/egen-esm-core/releases/new).
-
-The tag should be prefixed with `v` (e.g., `v3.2.1`), while the release title should just be the version number (e.g., `3.2.1`). The creation of the GitHub release will cause GitHub Actions to publish the packages, completing the release process.
-
-> Don't run `npm publish`, `yarn publish`, or `lerna publish`. Use the above process.
-
-### Important Notes About Version Updates
-
-When releasing a new major version (e.g., moving from v6 to v7), you must:
-
-1. Update all peerDependencies that reference `@egen/` packages in every package that depends on them.
-2. Change the version notation from the current major version to the new one (e.g., from `6.x` to `7.x`).
-
-Example:
-
-```jsonc
-// Before (during v6)
-"peerDependencies": {
-  "@egen/esm-config": "6.x",
-  "@egen/esm-utils": "6.x"
-}
-
-// After (for v7)
-"peerDependencies": {
-  "@egen/esm-config": "7.x",
-  "@egen/esm-utils": "7.x"
-}
-```
-
-This ensures that all packages use compatible versions and breaking changes are properly tracked.
+This repo's own `package.json` is `"private": true` and isn't published; it's versioned and deployed independently of the framework.
 
 ## Design Patterns
 
@@ -370,22 +225,11 @@ For documentation about our design patterns, please visit our [design system doc
 Be sure to update the Playwright version in the [Bamboo Playwright Docker image](e2e/support/bamboo/playwright.Dockerfile) whenever making version changes.
 Also, ensure you specify fixed (pinned) versions of Playwright in the `package.json` file to maintain consistency between the Playwright version used in the Docker image for Bamboo test execution and the version used in the codebase.
 
-## Documentation
-
-The API documentation for `@egen/esm-framework` (under `packages/framework/esm-framework/docs/`) is generated by [TypeDoc](https://typedoc.org/) from the framework source. It's regenerated automatically by CI once a PR with framework changes has been approved — the bot pushes a `(chore) Add docs` commit back to the PR branch, so you don't need to run TypeDoc before submitting.
-
-To preview locally:
-
-```sh
-yarn document
-```
-
-If a PR shouldn't update the docs (rare — typically only for reverts or release-version bumps), a maintainer can apply the `skip-docs` label to bypass regeneration.
-# Frontend-esm-core
-
 ---
 
-## Système Multi-Tenant (`@egen/esm-tenant`)
+## Système Multi-Tenant (`@egen-civitas/esm-tenant`)
+
+> `esm-tenant` lui-même est un package du Framework (`Frontend-esm-framework/packages/framework/esm-tenant`) — cette section reste ici car elle documente comment les apps de **ce** dépôt le consomment et le configurent, pas son implémentation.
 
 EGEN intègre un système de gestion des tenants **configurable et non-intrusif**. Il est **désactivé par défaut** (`mode: "off"`) — les projets qui n'en ont pas besoin n'ont rien à faire et ne subissent aucun overhead.
 
@@ -424,8 +268,8 @@ C'est le point d'entrée principal. La configuration passée ici écrase tout le
 
 ```ts
 // packages/shell/esm-app-shell/src/run.ts
-import { setupTenantSystem, registerTenantThemeApplier } from '@egen/esm-tenant';
-import { applyAppThemeOverride } from '@egen/esm-theme';
+import { setupTenantSystem, registerTenantThemeApplier } from '@egen-civitas/esm-tenant';
+import { applyAppThemeOverride } from '@egen-civitas/esm-theme';
 
 // Optionnel : brancher le thème tenant sur le moteur de thème EGEN
 registerTenantThemeApplier(async (tenantId, schema, themeUrl) => {
@@ -511,7 +355,7 @@ Chaque microfrontend peut déclarer ses propres exigences tenant sans toucher à
 
 ```ts
 // Dans le run.ts ou l'entrypoint de votre app
-import { registerAppTenantConfig } from '@egen/esm-framework';
+import { registerAppTenantConfig } from '@egen-civitas/esm-framework';
 
 registerAppTenantConfig('@egen/esm-academique-app', {
   requiredApp: 'egen-academique',          // Doit être dans tenant.allowedApps
@@ -591,7 +435,7 @@ En mode `"multi"`, EGEN essaie les stratégies dans l'ordre configuré jusqu'à 
 
 ### API — Hooks React
 
-Disponibles via `@egen/esm-framework` (ou `@egen/esm-react-utils`) :
+Disponibles via `@egen-civitas/esm-framework` (ou `@egen-civitas/esm-react-utils`) :
 
 ```tsx
 import {
@@ -609,7 +453,7 @@ import {
   useTenantTimezone,    // string | undefined — ex: "Africa/Libreville"
   useTenantApiBaseUrl,  // string | undefined
   useTenantIsSuspended, // { suspended, message }
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 ```
 
 ### API — Services (non-React)
@@ -627,10 +471,10 @@ import {
   buildTenantUrl,        // ('/dashboard') => '/t/acme/dashboard'
   isTenantSystemActive,  // boolean
   isMultiTenantMode,     // boolean
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 
-// Via @egen/esm-api (sans dépendance React, utilisable dans egenFetch) :
-import { getTenantId, tenantHeaders, getTenantApiBase } from '@egen/esm-api';
+// Via @egen-civitas/esm-api (sans dépendance React, utilisable dans egenFetch) :
+import { getTenantId, tenantHeaders, getTenantApiBase } from '@egen-civitas/esm-api';
 ```
 
 > **Note :** `egenFetch` injecte automatiquement le header `X-Tenant-ID` à chaque requête quand un tenant est actif. Vous n'avez rien à faire.
@@ -644,7 +488,7 @@ import {
   TenantRequired,           // S'assure qu'un tenant est résolu avant de rendre
   TenantSuspendedBoundary,  // Écran de maintenance si tenant.suspended = true
   TenantSelector,           // Sélecteur headless (mode "multi")
-} from '@egen/esm-framework';
+} from '@egen-civitas/esm-framework';
 
 // Exemple : protéger une app
 function AcademiqueRoot() {
@@ -687,8 +531,8 @@ function TenantSwitcher() {
 Pour les intégrations avancées (DevTools, tests, monitoring) :
 
 ```ts
-import { tenantStore } from '@egen/esm-tenant';
-import { useStore } from '@egen/esm-react-utils';
+import { tenantStore } from '@egen-civitas/esm-tenant';
+import { useStore } from '@egen-civitas/esm-react-utils';
 
 // Dans un composant React
 const { activeTenant, mode, availableTenants, status, error } = useStore(tenantStore);
@@ -706,8 +550,8 @@ Pour que le store soit un singleton partagé entre tous les microfrontends, ajou
 ```js
 // webpack.config.js
 shared: {
-  '@egen/esm-tenant': { singleton: true, eager: true },
-  '@egen/esm-state':  { singleton: true, eager: true },
+  '@egen-civitas/esm-tenant': { singleton: true, eager: true },
+  '@egen-civitas/esm-state':  { singleton: true, eager: true },
 }
 ```
 
@@ -733,6 +577,6 @@ window.addEventListener('esm:tenant-activated', (e: CustomEvent) => {
 - [ ] Appeler `setupTenantSystem()` dans `run.ts` avec la config souhaitée
 - [ ] Si thème par tenant : appeler `registerTenantThemeApplier()` avant `setupTenantSystem()`
 - [ ] Définir les tenants (soit `staticTenants`, soit `registryUrl`)
-- [ ] Ajouter `@egen/esm-tenant: { singleton: true }` dans la config Module Federation
+- [ ] Ajouter `@egen-civitas/esm-tenant: { singleton: true }` dans la config Module Federation
 - [ ] Optionnel : appeler `registerAppTenantConfig()` dans chaque app qui a des exigences spécifiques
 - [ ] Optionnel : utiliser `<TenantGuard>` pour protéger les routes sensibles
