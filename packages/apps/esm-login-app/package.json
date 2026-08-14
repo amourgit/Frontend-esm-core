@@ -40,8 +40,10 @@
   },
   "dependencies": {
     "@carbon/react": "^1.92.1",
+    "@egen-civitas/esm-ai-framework": "workspace:*",
     "@egen-civitas/esm-api": "workspace:*",
     "@egen-civitas/esm-config": "workspace:*",
+    "@egen-civitas/esm-framework": "workspace:*",
     "@egen-civitas/esm-react-utils": "workspace:*",
     "@egen-civitas/esm-state": "workspace:*",
     "@egen-civitas/esm-tenant": "workspace:*",
