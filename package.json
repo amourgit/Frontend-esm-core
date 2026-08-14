@@ -29,6 +29,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.55.1",
+    "@rspack/cli": "1.7.9",
+    "@rspack/core": "1.7.9",
     "@swc/core": "1.15.21",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
