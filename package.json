@@ -10,6 +10,10 @@
     "../Frontend-esm-framework/packages/tooling/typedoc-plugin-file-categories",
     "../Frontend-esm-framework/packages/tooling/browserslist-config-egen"
   ],
+  "resolutions": {
+    "@types/react": "18.3.25",
+    "csstype": "3.2.3"
+  },
   "scripts": {
     "run:egen": "node ../Frontend-esm-framework/packages/tooling/egen/dist/cli.js",
     "run:shell": "yarn workspace @egen-civitas/esm-app-shell watch",
