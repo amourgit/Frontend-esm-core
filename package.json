@@ -4,19 +4,14 @@
   "private": true,
   "packageManager": "yarn@4.10.3",
   "workspaces": [
-    "packages/apps/*",
-    "../Frontend-esm-framework/packages/framework/*",
-    "../Frontend-esm-framework/packages/shell/*",
-    "../Frontend-esm-framework/packages/tooling/typedoc-plugin-file-categories",
-    "../Frontend-esm-framework/packages/tooling/browserslist-config-egen"
+    "packages/apps/*"
   ],
   "resolutions": {
     "@types/react": "18.3.25",
     "csstype": "3.2.3"
   },
   "scripts": {
-    "run:egen": "node ../Frontend-esm-framework/packages/tooling/egen/dist/cli.js",
-    "run:shell": "yarn workspace @egen-civitas/esm-app-shell watch",
+    "run:egen": "egen",
     "ci:publish-next": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag next",
     "ci:publish": "yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag latest",
     "release": "yarn workspaces foreach --all --topological version",
@@ -24,7 +19,7 @@
     "build:apps": "turbo run build --filter='@egen/*-app'",
     "document": "turbo run document",
     "setup": "yarn install && turbo run build",
-    "start": "node ../Frontend-esm-framework/packages/tooling/egen/dist/cli.js develop --sources \"packages/apps/*\"",
+    "start": "egen develop --sources \"packages/apps/*\"",
     "verify": "turbo run lint test typescript",
     "postinstall": "husky install",
     "test": "turbo run test",
@@ -33,6 +28,7 @@
     "storybook": "yarn workspace @egen/storybook storybook"
   },
   "devDependencies": {
+    "@egen-civitas/egen": "^1.0.0",
     "@playwright/test": "^1.55.1",
     "@rspack/cli": "1.7.9",
     "@rspack/core": "1.7.9",
@@ -46,7 +42,7 @@
     "@types/webpack-env": "^1.16.4",
     "@typescript-eslint/eslint-plugin": "^8.35.0",
     "@typescript-eslint/parser": "^8.35.0",
-    "browserslist-config-egen": "workspace:*",
+    "browserslist-config-egen": "^1.0.0",
     "classnames": "^2.3.2",
     "cross-env": "^10.1.0",
     "dotenv": "^16.0.3",

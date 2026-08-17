@@ -1,6 +1,6 @@
 :wave: New to our project? Be sure to review the [Egen 3 Frontend Developer Documentation](https://egen.atlassian.net/wiki/x/IABBHg). You may find the [Introduction](https://egen.atlassian.net/wiki/x/94ABCQ) especially helpful.
 
-> **Séparation Framework / Core :** depuis la restructuration, ce dépôt (`Frontend-esm-core`) ne contient plus que le code spécifique à l'application ESM Core (les frontend modules sous `packages/apps/*`). Tout le code générique et réutilisable (`@egen-civitas/esm-*`, l'app shell, le CLI `egen`) vit désormais dans le dépôt séparé [`Frontend-esm-framework`](https://github.com/amourgit/Frontend-esm-framework), consommé ici comme dépendance (temporairement via lien relatif en attendant sa publication sur npm — voir `docs/analyse-separation-framework.md`).
+> **Séparation Framework / Core :** depuis la restructuration, ce dépôt (`Frontend-esm-core`) ne contient plus que le code spécifique à l'application ESM Core (les frontend modules sous `packages/apps/*`). Tout le code générique et réutilisable (`@egen-civitas/esm-*`, l'app shell, le CLI `egen`) vit désormais dans le dépôt séparé [`Frontend-esm-framework`](https://github.com/amourgit/Frontend-esm-framework), publié sur npm sous le scope `@egen-civitas` et consommé ici comme une vraie dépendance externe versionnée (voir `docs/analyse-separation-framework.md` pour l'historique de la migration).
 
 Below is the documentation for this repository.
 
@@ -78,13 +78,9 @@ This will spin up a development server with hot module reloading so any changes 
 
 ### Running the tooling
 
-The `egen` CLI itself lives in `Frontend-esm-framework` (`packages/tooling/egen`), not in this repository. Build it there once, then it's invoked directly by path from this repo's `start`/`run:egen` scripts (see `package.json`):
+The `egen` CLI is defined in `Frontend-esm-framework` (`packages/tooling/egen`) but installed here as a regular devDependency (`@egen-civitas/egen`). Just run it directly:
 
 ```sh
-# In Frontend-esm-framework
-yarn build
-
-# Back in this repo — run:egen forwards straight to the built CLI
 yarn run:egen --help
 ```
 
@@ -198,21 +194,22 @@ Read the [e2e testing guide](https://egen.atlassian.net/wiki/spaces/docs/pages/1
 
 ### Linking the framework
 
-Since the split into two repositories, testing a change to a framework library from a Core frontend module no longer needs `yarn link` or `yalc`. `Frontend-esm-framework` and `Frontend-esm-core` are cloned as sibling folders on the same machine, and this repo's `workspaces` field ([package.json](package.json)) points at the framework's `packages/framework/*` and `packages/shell/*` directly via a relative path — this is a temporary bridge until the framework is published to npm (see `docs/analyse-separation-framework.md` for the full rationale).
+`Frontend-esm-framework` is now consumed as a regular published npm dependency (`@egen-civitas/*`, real semver ranges) — no more relative workspace path to a sibling clone. Day-to-day, `yarn install` here just pulls the published packages like any other dependency.
 
-In practice:
+To test a not-yet-published change to a framework package against this repo, use `yarn link` (or `yalc` if `yarn link` gives you trouble):
 
-1. Edit the source in `../Frontend-esm-framework/packages/framework/<the-package-you're-changing>`.
-2. Rebuild it (`yarn build` at the framework's root, or `yarn turbo run build --filter=@egen-civitas/<package-name>` for just that one).
-3. Your Core dev server (`yarn start`, see below) resolves the package's built output through the workspace link, so the change is picked up without any manual linking step.
+1. In `Frontend-esm-framework`, build the package you're changing (`yarn turbo run build --filter=@egen-civitas/<package-name>`), then `yarn link` inside that package's directory.
+2. Back in this repo, `yarn link @egen-civitas/<package-name>`.
+3. Restart your dev server (`yarn start`) — it now resolves that package from your local framework checkout instead of the published version.
+4. **Undo the link before opening a PR** (`yarn unlink @egen-civitas/<package-name>` in this repo, then reinstall) — a linked local path must never end up in a committed lockfile.
 
-If you're unsure whether your version of a framework package is actually being used, add a `console.log` at the top level of a file you're working on and check whether it prints.
-
-This whole arrangement is provisional: once `Frontend-esm-framework` is published to npm, this repo's `dependencies` will point at real published version ranges instead of the relative workspace path, exactly like any other external dependency.
+If you're unsure whether your linked version is actually being used, add a `console.log` at the top level of a file you're working on and check whether it prints.
 
 ### Version and release, and framework API documentation
 
 Versioning, releasing, and publishing `@egen-civitas/*` packages (and generating their TypeDoc API documentation) is no longer done from this repository — that process now lives in [`Frontend-esm-framework`](https://github.com/amourgit/Frontend-esm-framework), since that's where those packages are actually defined. See that repository's own README for the current process.
+
+> **⚠️ `.github/workflows/docs-build.yml` (and the other `docs-*.yml` workflows) need attention.** They run `yarn turbo run document`, which builds `esm-framework`'s TypeDoc output at `packages/framework/esm-framework/docs/` — a path that only ever existed here through the now-removed relative workspace link. `core`'s own `packages/` has never contained a literal `framework/` directory, so this pipeline could not have produced real output even before this change. It should be moved to live in `Frontend-esm-framework` (where the source now canonically resides) rather than patched in place — not done as part of this fix given how security-sensitive that workflow is (PR-triggered code execution, attack-file gating, artifact validation). Flagged here rather than silently left for someone to discover via a failed CI run.
 
 This repo's own `package.json` is `"private": true` and isn't published; it's versioned and deployed independently of the framework.
 

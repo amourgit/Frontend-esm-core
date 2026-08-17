@@ -1,5 +1,7 @@
 # Analyse — Séparation `Frontend-esm-framework` / `Frontend-esm-core`
 
+> **Statut : le pont temporaire par chemin relatif décrit ci-dessous a été coupé.** `workspaces` dans `package.json` ne référence plus `Frontend-esm-framework` par chemin relatif ; les apps dépendent des vrais packages `@egen-civitas/*` publiés sur npm (`1.x`). Ce document reste comme trace de l'analyse et du raisonnement qui ont mené à la séparation — pas comme description de l'état actuel du dépôt.
+
 **Date de l'analyse :** 12 août 2026
 **Périmètre :** les deux dépôts `Frontend-esm-core` et `Frontend-esm-framework`, clonés et scannés intégralement (arborescence, `package.json`, lockfiles, historique git).
 **Méthode :** lecture exhaustive des deux repos, comparaison des versions de dépendances, tentative réelle d'installation/build pour valider (pas seulement lire) l'état de la séparation, recherche de secrets commités, vérification de la disponibilité des noms npm avant publication.

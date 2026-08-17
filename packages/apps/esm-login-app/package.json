@@ -7,7 +7,7 @@
   "main": "src/index.ts",
   "source": true,
   "scripts": {
-    "start": "node ../../../../Frontend-esm-framework/packages/tooling/egen/dist/cli.js develop",
+    "start": "egen develop",
     "serve": "rspack serve --mode=development",
     "debug": "npm run serve",
     "test": "cross-env TZ=UTC vitest run --passWithNoTests",
@@ -29,25 +29,26 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/egen/egen-esm-core.git"
+    "url": "git+https://github.com/amourgit/Frontend-esm-core.git",
+    "directory": "packages/apps/esm-login-app"
   },
   "bugs": {
-    "url": "https://github.com/egen/egen-esm-core/issues"
+    "url": "https://github.com/amourgit/Frontend-esm-core/issues"
   },
-  "homepage": "https://github.com/egen/egen-esm-core#readme",
+  "homepage": "https://github.com/amourgit/Frontend-esm-core/tree/main/packages/apps/esm-login-app#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@carbon/react": "^1.92.1",
-    "@egen-civitas/esm-ai-framework": "workspace:*",
-    "@egen-civitas/esm-api": "workspace:*",
-    "@egen-civitas/esm-config": "workspace:*",
-    "@egen-civitas/esm-framework": "workspace:*",
-    "@egen-civitas/esm-react-utils": "workspace:*",
-    "@egen-civitas/esm-state": "workspace:*",
-    "@egen-civitas/esm-tenant": "workspace:*",
-    "@egen-civitas/esm-theme": "workspace:*",
+    "@egen-civitas/esm-ai-framework": "1.x",
+    "@egen-civitas/esm-api": "1.x",
+    "@egen-civitas/esm-config": "1.x",
+    "@egen-civitas/esm-framework": "1.x",
+    "@egen-civitas/esm-react-utils": "1.x",
+    "@egen-civitas/esm-state": "1.x",
+    "@egen-civitas/esm-tenant": "1.x",
+    "@egen-civitas/esm-theme": "1.x",
     "@hookform/resolvers": "^3.6.0",
     "react-hook-form": "^7.52.2",
     "zod": "^3.23.8"

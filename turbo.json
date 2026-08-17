@@ -18,8 +18,7 @@
         ".swcrc",
         "postcss.config.js",
         "translations/**",
-        "dependencies.json",
-        "$TURBO_ROOT$/packages/framework/tsconfig.json"
+        "dependencies.json"
       ],
       "outputs": [
         "dist/**"
@@ -41,8 +40,7 @@
         ".swcrc",
         "postcss.config.js",
         "translations/**",
-        "dependencies.json",
-        "$TURBO_ROOT$/packages/framework/tsconfig.json"
+        "dependencies.json"
       ],
       "outputs": [
         "dist/**"
@@ -107,8 +105,7 @@
       "inputs": [
         "src/**",
         "tsconfig.json",
-        "tsconfig.build.json",
-        "$TURBO_ROOT$/packages/framework/tsconfig.json"
+        "tsconfig.build.json"
       ]
     },
     "extract-translations": {
