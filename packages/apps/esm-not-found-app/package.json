@@ -44,6 +44,7 @@
     "@egen-civitas/esm-framework": "1.x",
     "@egen-civitas/esm-react-utils": "1.x",
     "@egen-civitas/esm-state": "1.x",
+    "@egen-civitas/esm-tenant": "1.x",
     "@egen-civitas/esm-theme": "1.x"
   },
   "peerDependencies": {
@@ -53,6 +54,7 @@
     "@egen-civitas/esm-framework": "1.x",
     "@egen-civitas/esm-react-utils": "1.x",
     "@egen-civitas/esm-state": "1.x",
+    "@egen-civitas/esm-tenant": "1.x",
     "@egen-civitas/esm-theme": "1.x",
     "react": "18.x",
     "react-dom": "18.x",
