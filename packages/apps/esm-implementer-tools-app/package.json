@@ -47,7 +47,7 @@
     "@egen-civitas/esm-react-utils": "1.x",
     "@egen-civitas/esm-state": "1.x",
     "@egen-civitas/esm-tenant": "1.x",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.18.1"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
@@ -66,7 +66,7 @@
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.2",
-    "ace-builds": "^1.43.3",
+    "ace-builds": "^1.44.0",
     "cross-env": "^10.1.0",
     "happy-dom": "^20.6.0",
     "i18next": "^25.5.3",
@@ -76,7 +76,7 @@
     "react-i18next": "^16.0.0",
     "react-is": "^17.0.2",
     "rxjs": "^6.5.3",
-    "sass": "^1.98.0",
+    "sass": "^1.103.1",
     "swr": "2.2.5",
     "vitest": "^4.1.2"
   }
