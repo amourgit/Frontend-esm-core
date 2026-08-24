@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@egen-civitas/egen": "^1.0.0",
-    "@playwright/test": "^1.55.1",
+    "@playwright/test": "^1.62.1",
     "@rspack/cli": "1.7.9",
     "@rspack/core": "1.7.9",
     "@swc/core": "1.15.21",
@@ -49,7 +49,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jest-dom": "^5.5.0",
-    "eslint-plugin-playwright": "^2.1.0",
+    "eslint-plugin-playwright": "^2.11.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-testing-library": "^7.1.1",
     "fake-indexeddb": "^4.0.2",
