@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@egen-civitas/egen": "^1.0.0",
+    "@egen-civitas/esm-app-shell": "^1.0.2",
     "@playwright/test": "^1.55.1",
     "@rspack/cli": "1.7.9",
     "@rspack/core": "1.7.9",
