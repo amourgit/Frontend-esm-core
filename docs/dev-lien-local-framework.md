@@ -1,48 +1,86 @@
 # Lien local vers `Frontend-esm-framework` en développement
 
-**Statut : actif.** Contrairement au pont temporaire décrit dans
-`docs/analyse-separation-framework.md` (retiré depuis), celui-ci est
-volontaire, documenté, et pensé pour être activé/désactivé sans douleur.
+**Statut : actif, validé par un `yarn install` réel.**
 
-## Ce qui a été fait, et pourquoi ce n'est PAS la même chose que l'ancien pont
+## Historique court — deux mécanismes essayés, un seul retenu
 
-L'ancien pont (voir `analyse-separation-framework.md`, section 2.1) ajoutait
-`../Frontend-esm-framework/packages/framework/*` directement dans
-`workspaces` : les packages du framework devenaient des **membres du
-workspace de Core**. C'est ce qui avait produit le bug de la section 2.2
-(`workspace:*` qui traînait dans des `peerDependencies` — invalide une fois
-publié) : la frontière entre "package du workspace" et "dépendance externe
-versionnée" s'était brouillée.
+**Premier essai (échec empirique) : `portal:` via `resolutions`.** Chaque
+package du framework était forcé, depuis la racine de Core, vers son
+dossier local via `resolutions` (`"@egen-civitas/esm-api":
+"portal:../Frontend-esm-framework/packages/framework/esm-api"`, etc.).
+Séduisant sur le papier — aucune dépendance déclarée ne change, la
+frontière workspace/dépendance externe reste nette — mais **`yarn install`
+plante réellement** :
 
-Ce lien-ci est différent : **aucune déclaration de dépendance n'a changé**.
-Chaque app garde exactement les mêmes ranges qu'avant
-(`@egen-civitas/esm-api: "1.x"`, etc.) — l'app continue, sur le papier, de
-dépendre de la vraie version publiée sur npm. Seul le fichier `package.json`
-racine gagne un bloc `resolutions` qui dit à Yarn : « quand tu résous
-`@egen-civitas/X`, peu importe la range demandée, prends ce dossier local
-plutôt que le tarball npm » :
+```
+Error: Assertion failed: Writing attempt prevented to
+.../Frontend-esm-framework/packages/tooling/egen/node_modules/@egen-civitas/esm-app-shell
+which is outside project root: .../Frontend-esm-core
+```
+
+Cause structurelle, pas un chemin mal écrit : `@egen-civitas/egen` (portal)
+dépend lui-même d'`@egen-civitas/esm-app-shell` (portal). Ces deux paquets
+vivent physiquement dans `Frontend-esm-framework`, un dossier **frère** de
+`Frontend-esm-core` — jamais un ancêtre. La résolution de modules Node.js
+ne remonte que vers les dossiers ancêtres ; elle ne peut jamais traverser
+vers un dossier frère. Pour que `egen` retrouve `esm-app-shell` par la
+résolution Node normale, Yarn doit donc écrire un `node_modules` **à
+l'intérieur du dossier framework lui-même** — ce que le linker
+`node-modules` refuse explicitement de faire dès que la cible sort de la
+racine du projet en cours d'installation (ici, Core). Le framework a 35
+paquets qui se dépendent mutuellement de cette façon : le problème ne se
+limite pas à `egen`, il aurait resurgi ailleurs dans le graphe.
+
+**Ce qui a été retenu : ajouter les dossiers du framework comme membres du
+workspace de Core**, exactement le mécanisme déjà utilisé (et documenté)
+dans `docs/analyse-separation-framework.md` avant qu'il soit retiré pour
+une raison différente (valider la consommation npm externe réelle — voir
+plus bas). La différence avec `portal:` : les paquets ne sont plus des
+dépendances externes redirigées, ils deviennent des membres du MÊME projet
+Yarn que Core — la résolution de modules n'a alors plus jamais besoin de
+sortir de la racine du projet, quel que soit le nombre de dépendances
+croisées entre eux.
+
+## Ce qui a été fait
 
 ```json
+// Core/package.json
+"workspaces": [
+  "packages/apps/*",
+  "../Frontend-esm-framework/packages/framework/*",
+  "../Frontend-esm-framework/packages/shell/*",
+  "../Frontend-esm-framework/packages/tooling/*"
+],
 "resolutions": {
-  "@egen-civitas/esm-api": "portal:../Frontend-esm-framework/packages/framework/esm-api",
-  ...
+  "@types/react": "18.3.25",
+  "csstype": "3.2.3"
 }
 ```
 
-Les **35 packages** du framework (tout `packages/*/*/package.json` du repo
-framework) sont couverts, pas seulement ceux actuellement importés — pour
-que la prochaine dépendance ajoutée n'oblige pas à revenir modifier ce
-fichier.
+Les 46 paquets (11 apps de Core + 35 du framework) partagent alors une
+seule installation. Yarn lie automatiquement toute dépendance
+`@egen-civitas/X: "^1.0.0"`/`"1.x"` vers le membre du workspace du même nom
+dès qu'il existe — **aucune modification des `dependencies` déclarées
+n'était nécessaire** : le framework utilise déjà des ranges semver
+classiques en interne (`^1.0.0`), jamais `workspace:*`, donc l'auto-liaison
+fonctionne sans aucun autre changement.
 
-La conséquence pratique : `npm pack` + installation externe (section 9 de
-la mission d'origine) reste la vraie preuve de "consommation externe" quand
-tu veux publier — ce lien ne remplace pas cette étape, il sert uniquement à
-itérer vite pendant que les deux repos bougent ensemble.
+## Le piège documenté à ne pas reproduire
+
+`analyse-separation-framework.md` (section 2.2) décrit un bug apparu la
+dernière fois que ce pont a été utilisé : des `peerDependencies` laissées
+en `workspace:*` dans 6 apps de Core, invalide une fois un package publié
+hors du lien workspace. **Vérifié avant ce changement : aucun
+`workspace:*` ne traîne nulle part**, ni dans Core ni dans le framework.
+Règle à garder en tête pendant que ce pont est actif : ne jamais écrire
+`workspace:*` dans une `peerDependency`/`dependency` destinée à être
+publiée — toujours une vraie range semver, même si Yarn accepterait
+`workspace:*` sans broncher pendant que le pont est en place.
 
 ## Prérequis — disposition des dossiers
 
-Les chemins `portal:` sont relatifs à `Frontend-esm-core/package.json`, et
-supposent que les deux repos sont clonés **côte à côte** :
+Les chemins `../Frontend-esm-framework/...` supposent les deux repos
+clonés **côte à côte** :
 
 ```
 un-dossier-parent/
@@ -50,57 +88,57 @@ un-dossier-parent/
 └── Frontend-esm-framework/
 ```
 
-Si ta disposition réelle est différente, ajuste les chemins dans
-`resolutions` en conséquence (recherche/remplace `../Frontend-esm-framework`
-par le chemin correct).
+Si ta disposition réelle est différente, ajuste les 3 entrées de
+`workspaces` en conséquence.
 
 ## Activation
 
 ```bash
-# 1. Une fois, dans Frontend-esm-framework : générer les dist/ que portal: va lire
-#    (dist/ est gitignored — jamais committé, doit exister sur le disque)
-cd Frontend-esm-framework && yarn install && yarn build
-
-# 2. Dans Frontend-esm-core : matérialiser les liens portal:
 cd Frontend-esm-core && yarn install
 ```
 
-Après le `yarn install` de Core, chaque `node_modules/@egen-civitas/X` est
-un lien vers le dossier réel dans `Frontend-esm-framework` (pas une copie).
+C'est tout — un seul `yarn install`, à la racine de Core. Pas besoin de
+lancer `yarn install` séparément dans le framework au préalable (Core gère
+maintenant l'installation des deux ensemble), mais ça ne fait pas de mal si
+tu veux garder le framework installable seul par ailleurs (ce n'est pas
+son mode principal de test tant que ce pont est actif).
 
 ## Workflow au quotidien
 
-Un changement de code dans le framework n'est visible dans Core qu'**après
-un rebuild du package concerné** — `portal:` donne un lien vers le dossier
-du package, pas vers ses sources compilées en direct :
+Un changement de code dans le framework n'est visible dans Core qu'après
+un **build** du package concerné — le workspace donne un lien vers le
+dossier du package, pas vers ses sources compilées en direct (les paquets
+sont consommés via leur `dist/`, comme n'importe quel paquet publié) :
 
 ```bash
-# Dans Frontend-esm-framework, après avoir modifié esm-api par exemple :
-cd packages/framework/esm-api && yarn build
-# → immédiatement visible dans Core au prochain rechargement, sans réinstall
+cd Frontend-esm-framework/packages/framework/esm-api && yarn build
+# → immédiatement visible dans Core au prochain rechargement de `yarn start`
 ```
 
-Pas de rechargement automatique à la sauvegarde pour l'instant (pas de
-`--watch`) — un `yarn build` reste nécessaire à chaque changement testé.
-Si le rythme d'itération le justifie, on peut ajouter un mode watch
-plus tard (`tsc --watch` / `swc --watch` par paquet, ou une orchestration
-Turborepo) — pas fait ici pour rester scope sur ce qui a été demandé.
+Ou, pour tout reconstruire d'un coup : `cd Frontend-esm-core && yarn build`
+reconstruira aussi les paquets du framework maintenant qu'ils font partie
+du même workspace (Turborepo suit les 46 paquets). **Point de vigilance
+non vérifié** : le `turbo.json` de Core n'a pas été pensé à l'origine pour
+piloter le build de paquets framework — si `turbo run build`/`verify`
+échoue ou se comporte bizarrement une fois le pont actif (pipeline manquant
+pour un des scripts du framework, etc.), le repli sûr est de builder le
+framework depuis son propre repo comme avant.
+
+Pas de rechargement automatique à la sauvegarde (pas de `--watch`) — un
+build reste nécessaire à chaque changement testé.
 
 ## Revenir à 100% npm publié
 
-Supprimer les entrées `portal:` du bloc `resolutions` (garder `@types/react`
-et `csstype`, qui n'ont rien à voir avec ce mécanisme), puis `yarn install`.
-Aucune autre modification à faire — les ranges `1.x`/`^1.0.x` déclarées
-partout ailleurs n'ont jamais changé.
+Retirer les 3 entrées ajoutées à `workspaces` (garder `packages/apps/*`),
+puis `yarn install`. Les apps retrouvent alors la vraie version publiée de
+chaque `@egen-civitas/*` selon la range déclarée (`1.x`/`^1.0.x`), sans
+aucune autre modification.
 
-## Non vérifié dans ce sandbox
+## Ce que ce pont NE remplace PAS
 
-`yarn install` échoue ici avec une erreur WASM
-(`CompileError: WebAssembly.Module(): size ... > maximum function size`),
-spécifique au binaire Yarn Berry dans ce container restreint (déjà
-rencontré et documenté dans `analyse-separation-framework.md`, section 3)
-— pas un problème du repo ni de ce changement. Les chemins `portal:`
-ci-dessus sont dérivés directement des champs `name`/emplacement réels de
-chaque `package.json` du framework (script généré, pas tapés à la main),
-donc corrects par construction — mais le premier `yarn install` réel doit
-être fait sur une machine sans cette limite pour confirmer.
+La vraie preuve de « consommation externe » (mission d'origine, section 5
+puis 9 de `analyse-separation-framework.md`) reste `npm pack` +
+installation du tarball dans un projet jetable, une fois prêt à publier.
+Ce pont sert uniquement à itérer vite pendant que les deux repos bougent
+ensemble ; il ne garantit pas que l'`exports` map, les fichiers inclus dans
+le paquet publié, etc. sont corrects — seul un vrai `npm pack` le prouve.
