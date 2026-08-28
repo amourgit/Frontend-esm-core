@@ -5,9 +5,9 @@
   "packageManager": "yarn@4.10.3",
   "workspaces": [
     "packages/apps/*",
-    "../Frontend-esm-framework/packages/framework/*",
-    "../Frontend-esm-framework/packages/shell/*",
-    "../Frontend-esm-framework/packages/tooling/*"
+    "/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-frameworkpackages/framework/*",
+    "/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-frameworkpackages/shell/*",
+    "/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-frameworkpackages/tooling/*"
   ],
   "resolutions": {
     "@types/react": "18.3.25",

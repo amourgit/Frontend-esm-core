@@ -7,14 +7,14 @@
 **Premier essai (échec empirique) : `portal:` via `resolutions`.** Chaque
 package du framework était forcé, depuis la racine de Core, vers son
 dossier local via `resolutions` (`"@egen-civitas/esm-api":
-"portal:../Frontend-esm-framework/packages/framework/esm-api"`, etc.).
+"portal:/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-frameworkpackages/framework/esm-api"`, etc.).
 Séduisant sur le papier — aucune dépendance déclarée ne change, la
 frontière workspace/dépendance externe reste nette — mais **`yarn install`
 plante réellement** :
 
 ```
 Error: Assertion failed: Writing attempt prevented to
-.../Frontend-esm-framework/packages/tooling/egen/node_modules/@egen-civitas/esm-app-shell
+./home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-frameworkpackages/tooling/egen/node_modules/@egen-civitas/esm-app-shell
 which is outside project root: .../Frontend-esm-core
 ```
 
@@ -47,9 +47,9 @@ croisées entre eux.
 // Core/package.json
 "workspaces": [
   "packages/apps/*",
-  "../Frontend-esm-framework/packages/framework/*",
-  "../Frontend-esm-framework/packages/shell/*",
-  "../Frontend-esm-framework/packages/tooling/*"
+  "/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-frameworkpackages/framework/*",
+  "/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-frameworkpackages/shell/*",
+  "/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-frameworkpackages/tooling/*"
 ],
 "resolutions": {
   "@types/react": "18.3.25",
@@ -79,7 +79,7 @@ publiée — toujours une vraie range semver, même si Yarn accepterait
 
 ## Prérequis — disposition des dossiers
 
-Les chemins `../Frontend-esm-framework/...` supposent les deux repos
+Les chemins `/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-framework...` supposent les deux repos
 clonés **côte à côte** :
 
 ```

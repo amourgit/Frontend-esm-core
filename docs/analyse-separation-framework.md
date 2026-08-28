@@ -32,7 +32,7 @@ Le plus gros du travail de séparation était **déjà fait** (session précéde
 
 **Corrigé** → chemin relatif :
 ```
-../Frontend-esm-framework/packages/framework/*
+/home/president/Github/National/EGEN/FRONTEND ALLs/Frontend-esm-frameworkpackages/framework/*
 ```
 **Hypothèse à confirmer de ton côté :** ce correctif suppose que `Frontend-esm-framework` est cloné en dossier frère de `Frontend-esm-core` (ce qui semble être le cas vu le chemin d'origine, `.../FRONTEND ALLs/Frontend-esm-framework/...`). Si ta disposition réelle est différente, ajuste ce chemin relatif en conséquence.
 
