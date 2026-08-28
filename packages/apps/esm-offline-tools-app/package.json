@@ -48,7 +48,7 @@
     "@egen-civitas/esm-state": "1.x",
     "@egen-civitas/esm-tenant": "1.x",
     "lodash-es": "^4.17.21",
-    "swr": "2.2.5"
+    "swr": "2.5.1"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
