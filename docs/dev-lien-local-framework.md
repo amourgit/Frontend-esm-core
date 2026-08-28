@@ -1,144 +1,86 @@
-# Lien local vers `Frontend-esm-framework` en développement
+# Lien local vers `Frontend-esm-framework` — abandonné, retour au 100% npm publié
 
-**Statut : actif, validé par un `yarn install` réel.**
+**Statut : le pont a été retiré.** `workspaces` ne contient de nouveau que
+`packages/apps/*`. Deux mécanismes essayés, tous les deux abandonnés pour
+des raisons concrètes et mesurées — voir ci-dessous. Ce document garde la
+trace pour ne pas retomber dans les deux mêmes pièges.
 
-## Historique court — deux mécanismes essayés, un seul retenu
+## Essai 1 : `portal:` via `resolutions` — échec à l'installation
 
-**Premier essai (échec empirique) : `portal:` via `resolutions`.** Chaque
-package du framework était forcé, depuis la racine de Core, vers son
-dossier local via `resolutions` (`"@egen-civitas/esm-api":
-"portal:../Frontend-esm-framework/packages/framework/esm-api"`, etc.).
-Séduisant sur le papier — aucune dépendance déclarée ne change, la
-frontière workspace/dépendance externe reste nette — mais **`yarn install`
-plante réellement** :
+Résumé : `yarn install` plantait (`Assertion failed: Writing attempt
+prevented to .../Frontend-esm-framework/... which is outside project
+root`), parce qu'un paquet portal (`egen`) dépend d'un autre paquet portal
+(`esm-app-shell`), tous deux physiquement dans un dossier **frère** de
+Core — jamais atteignable par la résolution de modules Node, qui ne
+remonte que vers les ancêtres.
 
-```
-Error: Assertion failed: Writing attempt prevented to
-.../Frontend-esm-framework/packages/tooling/egen/node_modules/@egen-civitas/esm-app-shell
-which is outside project root: .../Frontend-esm-core
-```
+## Essai 2 : `workspaces` avec chemin relatif — install réussie, runtime inutilisable
 
-Cause structurelle, pas un chemin mal écrit : `@egen-civitas/egen` (portal)
-dépend lui-même d'`@egen-civitas/esm-app-shell` (portal). Ces deux paquets
-vivent physiquement dans `Frontend-esm-framework`, un dossier **frère** de
-`Frontend-esm-core` — jamais un ancêtre. La résolution de modules Node.js
-ne remonte que vers les dossiers ancêtres ; elle ne peut jamais traverser
-vers un dossier frère. Pour que `egen` retrouve `esm-app-shell` par la
-résolution Node normale, Yarn doit donc écrire un `node_modules` **à
-l'intérieur du dossier framework lui-même** — ce que le linker
-`node-modules` refuse explicitement de faire dès que la cible sort de la
-racine du projet en cours d'installation (ici, Core). Le framework a 35
-paquets qui se dépendent mutuellement de cette façon : le problème ne se
-limite pas à `egen`, il aurait resurgi ailleurs dans le graphe.
+`yarn install` a fonctionné. Mais au lancement (`yarn start`) :
 
-**Ce qui a été retenu : ajouter les dossiers du framework comme membres du
-workspace de Core**, exactement le mécanisme déjà utilisé (et documenté)
-dans `docs/analyse-separation-framework.md` avant qu'il soit retiré pour
-une raison différente (valider la consommation npm externe réelle — voir
-plus bas). La différence avec `portal:` : les paquets ne sont plus des
-dépendances externes redirigées, ils deviennent des membres du MÊME projet
-Yarn que Core — la résolution de modules n'a alors plus jamais besoin de
-sortir de la racine du projet, quel que soit le nombre de dépendances
-croisées entre eux.
+- **Le bypass ne marchait toujours pas** : les paquets `egen` et
+  `esm-app-shell` exposent du code **compilé** (`dist/`), et ce `dist/`
+  n'avait pas été reconstruit avec les derniers correctifs sources — donc
+  aucun des correctifs n'était réellement exécuté, peu importe le
+  mécanisme de liaison.
+- **Lenteur et charge machine sévères** : 2+ minutes avant que home/login
+  se chargent, PC à la peine, malgré un `[egen] Listening` rapide et
+  `esm-devtools-app` qui se charge vite. Hypothèse la plus probable :
+  devenus membres du workspace, les 11 apps de Core ne consomment plus
+  seulement le `dist/` + `.d.ts` de chaque paquet du framework (petit,
+  rapide) — TypeScript/rspack se sont remis à traverser une bonne partie
+  des sources brutes des 35 paquets, en parallèle, pour chacune des 11
+  apps. Non confirmé par un profiling détaillé (pas fait), mais cohérent
+  avec tous les symptômes observés.
 
-## Ce qui a été fait
+Le premier problème (dist périmé) rendait de toute façon impossible de
+juger si le mécanisme de liaison marchait — mais le second (lenteur) est
+resté visible en toile de fond, en apparence indépendant du problème de
+build périmé, et suffisamment sévère pour être bloquant en soi.
 
-```json
-// Core/package.json
-"workspaces": [
-  "packages/apps/*",
-  "../Frontend-esm-framework/packages/framework/*",
-  "../Frontend-esm-framework/packages/shell/*",
-  "../Frontend-esm-framework/packages/tooling/*"
-],
-"resolutions": {
-  "@types/react": "18.3.25",
-  "csstype": "3.2.3"
-}
-```
+**Conclusion : lier tout le framework en workspace/portal n'est pas
+praticable ici pour un usage quotidien.** 35 paquets interdépendants, avec
+build compilé requis pour 2 d'entre eux (`egen`, `esm-app-shell`) et un
+risque de sur-scan TypeScript/bundler pour les 33 autres — le rapport
+effort/risque ne justifie pas l'itération instantanée espérée.
 
-Les 46 paquets (11 apps de Core + 35 du framework) partagent alors une
-seule installation. Yarn lie automatiquement toute dépendance
-`@egen-civitas/X: "^1.0.0"`/`"1.x"` vers le membre du workspace du même nom
-dès qu'il existe — **aucune modification des `dependencies` déclarées
-n'était nécessaire** : le framework utilise déjà des ranges semver
-classiques en interne (`^1.0.0`), jamais `workspace:*`, donc l'auto-liaison
-fonctionne sans aucun autre changement.
+## La bonne méthode : publier, puis consommer comme n'importe quel paquet
 
-## Le piège documenté à ne pas reproduire
-
-`analyse-separation-framework.md` (section 2.2) décrit un bug apparu la
-dernière fois que ce pont a été utilisé : des `peerDependencies` laissées
-en `workspace:*` dans 6 apps de Core, invalide une fois un package publié
-hors du lien workspace. **Vérifié avant ce changement : aucun
-`workspace:*` ne traîne nulle part**, ni dans Core ni dans le framework.
-Règle à garder en tête pendant que ce pont est actif : ne jamais écrire
-`workspace:*` dans une `peerDependency`/`dependency` destinée à être
-publiée — toujours une vraie range semver, même si Yarn accepterait
-`workspace:*` sans broncher pendant que le pont est en place.
-
-## Prérequis — disposition des dossiers
-
-Les chemins `../Frontend-esm-framework/...` supposent les deux repos
-clonés **côte à côte** :
-
-```
-un-dossier-parent/
-├── Frontend-esm-core/        (ce repo)
-└── Frontend-esm-framework/
-```
-
-Si ta disposition réelle est différente, ajuste les 3 entrées de
-`workspaces` en conséquence.
-
-## Activation
+Ce que ce repo a déjà, tout construit pour ça (`changesets`) :
 
 ```bash
-cd Frontend-esm-core && yarn install
+# Dans Frontend-esm-framework, après avoir vérifié les changements :
+yarn install && yarn build          # dist/ à jour partout
+yarn verify                          # lint + test + typecheck (optionnel mais recommandé)
+yarn release                         # `changeset version` : lit .changeset/*.md,
+                                      # bump les package.json concernés + CHANGELOG.md
+git add -A && git commit -m "chore(release): version bump"
+git push
+yarn ci:publish                      # `changeset publish` : publie sur npm (auth requise)
 ```
 
-C'est tout — un seul `yarn install`, à la racine de Core. Pas besoin de
-lancer `yarn install` séparément dans le framework au préalable (Core gère
-maintenant l'installation des deux ensemble), mais ça ne fait pas de mal si
-tu veux garder le framework installable seul par ailleurs (ce n'est pas
-son mode principal de test tant que ce pont est actif).
-
-## Workflow au quotidien
-
-Un changement de code dans le framework n'est visible dans Core qu'après
-un **build** du package concerné — le workspace donne un lien vers le
-dossier du package, pas vers ses sources compilées en direct (les paquets
-sont consommés via leur `dist/`, comme n'importe quel paquet publié) :
+Puis dans Core :
 
 ```bash
-cd Frontend-esm-framework/packages/framework/esm-api && yarn build
-# → immédiatement visible dans Core au prochain rechargement de `yarn start`
+cd Frontend-esm-core
+yarn up '@egen-civitas/*'            # ou simplement `yarn install` si les ranges
+                                      # existants (1.x / ^1.0.x) couvrent déjà
+                                      # la nouvelle version publiée
+yarn start
 ```
 
-Ou, pour tout reconstruire d'un coup : `cd Frontend-esm-core && yarn build`
-reconstruira aussi les paquets du framework maintenant qu'ils font partie
-du même workspace (Turborepo suit les 46 paquets). **Point de vigilance
-non vérifié** : le `turbo.json` de Core n'a pas été pensé à l'origine pour
-piloter le build de paquets framework — si `turbo run build`/`verify`
-échoue ou se comporte bizarrement une fois le pont actif (pipeline manquant
-pour un des scripts du framework, etc.), le repli sûr est de builder le
-framework depuis son propre repo comme avant.
+Aucune modification de `package.json` normalement nécessaire côté Core :
+les ranges déclarées (`1.x`, `^1.0.x`) couvrent déjà un bump patch/minor.
 
-Pas de rechargement automatique à la sauvegarde (pas de `--watch`) — un
-build reste nécessaire à chaque changement testé.
+Un changeset décrivant les correctifs actuels (bypass auth, tenant
+runtime-bridge) a été ajouté à `.changeset/` dans le framework — `yarn
+release` doit le trouver directement.
 
-## Revenir à 100% npm publié
+## Si le besoin d'itération rapide revient
 
-Retirer les 3 entrées ajoutées à `workspaces` (garder `packages/apps/*`),
-puis `yarn install`. Les apps retrouvent alors la vraie version publiée de
-chaque `@egen-civitas/*` selon la range déclarée (`1.x`/`^1.0.x`), sans
-aucune autre modification.
-
-## Ce que ce pont NE remplace PAS
-
-La vraie preuve de « consommation externe » (mission d'origine, section 5
-puis 9 de `analyse-separation-framework.md`) reste `npm pack` +
-installation du tarball dans un projet jetable, une fois prêt à publier.
-Ce pont sert uniquement à itérer vite pendant que les deux repos bougent
-ensemble ; il ne garantit pas que l'`exports` map, les fichiers inclus dans
-le paquet publié, etc. sont corrects — seul un vrai `npm pack` le prouve.
+Ne pas relier tout le framework d'un coup. Si un jour un vrai besoin
+d'itération immédiate se représente, envisager un périmètre beaucoup plus
+étroit — un seul paquet à la fois, sans dépendance croisée vers un autre
+paquet du framework, ET avec la cause de la lenteur TypeScript
+identifiée et corrigée au préalable (pas juste supposée) — plutôt que de
+relier les 35 d'un coup comme fait ici deux fois de suite.

@@ -4,10 +4,7 @@
   "private": true,
   "packageManager": "yarn@4.10.3",
   "workspaces": [
-    "packages/apps/*",
-    "../Frontend-esm-framework/packages/framework/*",
-    "../Frontend-esm-framework/packages/shell/*",
-    "../Frontend-esm-framework/packages/tooling/*"
+    "packages/apps/*"
   ],
   "resolutions": {
     "@types/react": "18.3.25",
