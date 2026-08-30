@@ -884,7 +884,7 @@ __metadata:
     classnames: "npm:^2.3.2"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -943,7 +943,7 @@ __metadata:
     fake-indexeddb: "npm:^4.0.2"
     fork-ts-checker-webpack-plugin: "npm:^7.2.13"
     husky: "npm:^8.0.3"
-    i18next-parser: "npm:^9.3.0"
+    i18next-parser: "npm:^9.4.0"
     identity-obj-proxy: "npm:^3.0.0"
     lint-staged: "npm:^15.2.9"
     prettier: "npm:^3.1.0"
@@ -971,7 +971,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     fuzzy: "npm:^0.1.3"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1008,7 +1008,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1047,7 +1047,7 @@ __metadata:
     "@egen-civitas/esm-tenant": "npm:1.x"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1086,7 +1086,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     embla-carousel-autoplay: "npm:^8.6.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1129,7 +1129,7 @@ __metadata:
     ace-builds: "npm:^1.43.3"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-ace: "npm:^14.0.1"
@@ -1174,7 +1174,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.52.2"
@@ -1221,7 +1221,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1264,7 +1264,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1307,7 +1307,7 @@ __metadata:
     "@egen-civitas/esm-theme": "npm:1.x"
     "@vitest/coverage-v8": "npm:^4.1.2"
     happy-dom: "npm:^20.6.0"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^26.4.0"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -11234,9 +11234,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:^9.3.0":
-  version: 9.3.0
-  resolution: "i18next-parser@npm:9.3.0"
+"i18next-parser@npm:^9.4.0":
+  version: 9.4.0
+  resolution: "i18next-parser@npm:9.4.0"
   dependencies:
     "@babel/runtime": "npm:^7.25.0"
     broccoli-plugin: "npm:^4.0.7"
@@ -11257,7 +11257,7 @@ __metadata:
     vinyl-fs: "npm:^4.0.0"
   bin:
     i18next: bin/cli.js
-  checksum: 10/32b81864aa9cc27b7db41fde6fdf2c686c985e07a9b62a8dd10b4e86c8c0db7fe6ef3e569461a593521932265b31d12c091a6dda461406e54ebb0fc9ff6a55d0
+  checksum: 10/dbc7216ff4332365b0a0f8b0e0e21be78508d54daf16be21d9b262b9c8d3ff477bb002ddfe05e89e3c65357cec01fdf5ec5983a0e0b51b8587135a4fdd4c33b7
   languageName: node
   linkType: hard
 
@@ -11286,6 +11286,18 @@ __metadata:
     typescript:
       optional: true
   checksum: 10/eb7312b3261af4477b7e4d09ec1636372a79a8f81bb5ac9531bbb9aa498ca07f337f9ec2c89507f0d895ce6c0b1352a2ea4fbe47f665ab4feba3df2de79cbeab
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^26.4.0":
+  version: 26.4.0
+  resolution: "i18next@npm:26.4.0"
+  peerDependencies:
+    typescript: ^5 || ^6 || ^7
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/22368a457a67391ab11ffd95acf0eed306cce27fdcc8828206acd9eb0ec5993e403db34edf95ec5a45d6e3914c03153b0e8509b589a77536127a6a1622970c78
   languageName: node
   linkType: hard
 
