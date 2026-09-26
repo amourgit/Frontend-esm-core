@@ -47,7 +47,9 @@
     "@egen-civitas/esm-state": "1.x",
     "@egen-civitas/esm-tenant": "1.x",
     "@egen-civitas/esm-theme": "1.x",
-    "embla-carousel-autoplay": "^8.6.0"
+    "embla-carousel-autoplay": "^8.6.0",
+    "framer-motion": "^11.18.2",
+    "lucide-react": "^0.469.0"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
