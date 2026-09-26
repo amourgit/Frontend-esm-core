@@ -188,7 +188,7 @@ var(--panel-input-border)               var(--panel-input-box-shadow)
 **Toujours utiliser `--panel-*` (pas `--colors-surface-*`) pour un élément qui
 flotte au-dessus du contenu avec un effet de flou** (dropdown, popover, topbar,
 modale custom). Voir aussi `_panel.scss` (mixins `panel-surface()`, décrits en
-[section 7.2](#72-les-mixins-panelscss--le-raccourci-recommandé)).
+[section 7.2](#72-les-mixins-_panelscss--le-raccourci-recommandé)).
 
 ### 3.3 Typographie — `--typography-*`
 

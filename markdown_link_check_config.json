@@ -12,10 +12,31 @@
       "pattern": "^https://dev.egen.alpha.vercel.com"
     },
     {
+      "pattern": "^https://egen.alpha.vercel.com"
+    },
+    {
       "pattern": "^https://www.npmjs.com/package/@egen/"
     },
     {
       "pattern": "^http://localhost"
+    },
+    {
+      "pattern": "^https://egen.atlassian.net/"
+    },
+    {
+      "pattern": "^https://github.com/amourgit/Frontend-esm-framework"
+    },
+    {
+      "pattern": "^https://github.com/egen/"
+    },
+    {
+      "pattern": "^https://aistudio.google.com/"
+    },
+    {
+      "pattern": "^https://single-spa.js.org/"
+    },
+    {
+      "pattern": "^https://user-images.githubusercontent.com/"
     }
   ],
   "retryOn429": true,
