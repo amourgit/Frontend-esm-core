@@ -44,8 +44,8 @@ import {
   type TestimonialItem,
 } from '@egen-civitas/esm-framework';
 import Autoplay from 'embla-carousel-autoplay';
-import type { ConfigSchema } from '../config-schema';
-import styles from './home.scss';
+import type { ConfigSchema } from '../../config-schema';
+import styles from './component-showcase.scss';
 
 // =============================================================================
 //  Icônes de démo — InteractiveSelector (@egen-civitas/esm-styleguide/selections)

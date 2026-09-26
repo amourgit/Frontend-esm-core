@@ -4,9 +4,11 @@ import rootComponent from './root.component';
 
 // =============================================================================
 //  ESM HOME APP — Point d'entrée
-//  Écran d'accueil de l'espace authentifié : vitrine interne des composants
-//  de base (@egen-civitas/esm-styleguide). Rendue dans le contenu de la SPA pendant
-//  que @egen-civitas/esm-primary-navigation-app affiche sa TopBar au-dessus.
+//  Écran d'accueil de l'espace authentifié (route 'home'), rendue dans le
+//  contenu de la SPA pendant que @egen-civitas/esm-primary-navigation-app
+//  affiche sa TopBar au-dessus. L'ancienne vitrine de test des composants
+//  @egen-civitas/esm-styleguide reste disponible, mise de côté sous la route
+//  'home/showcase' — voir root.component.tsx.
 // =============================================================================
 
 const moduleName = '@egen-civitas/esm-home-app';
