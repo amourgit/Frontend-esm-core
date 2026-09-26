@@ -9,7 +9,15 @@ const UserMenuButton: React.FC<MenuButtonProps> = ({ isActivePanel, togglePanel,
   const { t } = useTranslation();
   const session = useSession();
   const userMenuItems = useAssignedExtensions('user-panel-slot');
-  const showUserMenu = useMemo(() => userMenuItems.length > 0, [userMenuItems.length]);
+  const userMenuBottomItems = useAssignedExtensions('user-panel-bottom-slot');
+  // Le panneau (UserMenuPanel) rend aussi bien user-panel-slot que
+  // user-panel-bottom-slot : le bouton ne doit se cacher que si les DEUX
+  // sont vides, sinon un contenu enregistré uniquement dans le slot du bas
+  // deviendrait invisible (le bouton disparaissant avant de pouvoir l'ouvrir).
+  const showUserMenu = useMemo(
+    () => userMenuItems.length > 0 || userMenuBottomItems.length > 0,
+    [userMenuItems.length, userMenuBottomItems.length],
+  );
   const isOpen = isActivePanel('userMenu');
   const wrapperRef = useOnClickOutside<HTMLDivElement>(hidePanel('userMenu'), isOpen);
 

@@ -52,6 +52,12 @@
       "component": "dashboard",
       "online": true,
       "offline": true
+    },
+    {
+      "name": "breadcrumb-item",
+      "component": "breadcrumbItem",
+      "online": true,
+      "offline": true
     }
   ],
   "modals": [

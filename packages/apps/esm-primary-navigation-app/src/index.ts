@@ -16,6 +16,9 @@ import changeLanguageLinkComponent from './components/change-language/change-lan
 import { NavGroup, navGroupConfigSchema } from './components/nav-group/nav-group.component';
 import { dashboardConfigSchema } from './components/dashboard/dashboard.component';
 import genericLinkComponent, { genericLinkConfigSchema } from './components/generic-link/generic-link.component';
+import breadcrumbItemComponent, {
+  breadcrumbItemConfigSchema,
+} from './components/breadcrumb/breadcrumb-item.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -29,6 +32,7 @@ export function startupApp() {
   defineExtensionConfigSchema('link', genericLinkConfigSchema);
   defineExtensionConfigSchema('nav-group', navGroupConfigSchema);
   defineExtensionConfigSchema('dashboard', dashboardConfigSchema);
+  defineExtensionConfigSchema('breadcrumb-item', breadcrumbItemConfigSchema);
 }
 
 // ─── Page : la TopBar (elle gère elle-même la garde d'authentification) ──────
@@ -79,12 +83,15 @@ export const redirect: Application = async () => {
 // userMenuButton, appMenuButton, notificationsMenuButton et breadcrumbNav ne
 // sont PLUS enregistrés comme extensions auto-injectées dans un slot que
 // cette app rend elle-même (ancienne indirection `top-nav-actions-slot` /
-// `top-nav-app-menu-slot` / `notifications-menu-button-slot`, jamais
-// alimentée par personne pour les notifications → bouton invisible en prod).
-// Ils sont désormais importés et composés directement dans
-// `topbar.component.tsx`. Les slots `top-nav-actions-slot` et
-// `top-nav-app-menu-slot` restent ouverts pour que D'AUTRES apps y injectent
-// des boutons additionnels (aide, raccourcis, etc.) — voir routes.json.
+// `top-nav-trailing-slot` (anciennement `top-nav-app-menu-slot`, renommé
+// pour ne plus se confondre avec `app-menu-slot`, le slot du PANNEAU
+// applications — deux slots totalement distincts) / `notifications-menu-
+// button-slot`, jamais alimentée par personne pour les notifications →
+// bouton invisible en prod). Ils sont désormais importés et composés
+// directement dans `topbar.component.tsx`. Les slots `top-nav-actions-slot`
+// et `top-nav-trailing-slot` restent ouverts pour que D'AUTRES apps y
+// injectent des boutons additionnels (aide, raccourcis, etc.) — voir
+// routes.json.
 // ──────────────────────────────────────────────────────────────────────────
 
 export const userPanel = getSyncLifecycle(userPanelComponent, options);
@@ -102,5 +109,10 @@ export const linkComponent = getSyncLifecycle(genericLinkComponent, {
 });
 
 export const navGroup = getSyncLifecycle(NavGroup, options);
+
+// ─── Item de fil d'Ariane (niveau 2 de la topbar) ────────────────────────────
+// Composant générique déclaratif pour peupler "top-nav-breadcrumb-slot" —
+// voir breadcrumb-item.component.tsx pour le contrat et un exemple d'usage.
+export const breadcrumbItem = getSyncLifecycle(breadcrumbItemComponent, options);
 
 export const dashboard = getAsyncLifecycle(() => import('./components/dashboard/dashboard.component'), options);

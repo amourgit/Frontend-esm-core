@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useInRouterContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { InlineNotification } from '@carbon/react';
 import {
@@ -51,6 +51,15 @@ interface DashboardProps {
 export default function Dashboard({ basePath, moduleName }: DashboardProps) {
   const componentContext = useContext(ComponentContext);
   const module = moduleName ?? componentContext.extension?.extensionSlotModuleName ?? componentContext.moduleName;
+  // BUG CORRIGÉ : cette extension est générique — n'importe quelle app peut
+  // l'attacher à n'importe lequel de ses slots — donc parfois montée dans un
+  // arbre qui a déjà son propre <BrowserRouter> (ex: root.component.tsx de
+  // CETTE app), parfois non. La version d'origine enveloppait
+  // INCONDITIONNELLEMENT dans un second <BrowserRouter>, ce qui, une fois
+  // imbriqué dans un routeur existant, casse le routing relatif (deux
+  // listeners d'historique concurrents, `basename` réinitialisé à `/`).
+  // On ne monte donc un routeur que s'il n'y en a pas déjà un dans l'arbre.
+  const alreadyInRouter = useInRouterContext();
 
   const Component = useMemo(
     () =>
@@ -61,17 +70,17 @@ export default function Dashboard({ basePath, moduleName }: DashboardProps) {
     [basePath, module],
   );
 
-  return (
-    <BrowserRouter>
-      <Component
-        _extensionContext={{
-          extensionId: componentContext.extension?.extensionId,
-          extensionSlotName: componentContext.extension?.extensionSlotName,
-          extensionSlotModuleName: module,
-        }}
-      />
-    </BrowserRouter>
+  const element = (
+    <Component
+      _extensionContext={{
+        extensionId: componentContext.extension?.extensionId,
+        extensionSlotName: componentContext.extension?.extensionSlotName,
+        extensionSlotModuleName: module,
+      }}
+    />
   );
+
+  return alreadyInRouter ? element : <BrowserRouter>{element}</BrowserRouter>;
 }
 
 // t('noPathInDashboardExtension', 'Cannot render the dashboard extension without the property "path" being set in the configuration schema')
