@@ -15,44 +15,11 @@ concurrency:
 jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
 
     steps:
       - uses: actions/checkout@v6
-
-      # DIAGNOSTIC TEMPORAIRE : remplace l'action tcort par un équivalent
-      # manuel dont on peut capturer la sortie (l'action ne l'expose pas
-      # autrement que dans les logs bruts d'Actions, inaccessibles depuis
-      # l'environnement d'analyse utilisé ici).
-      - name: "[diagnostic] markdown-link-check manuel"
-        id: mlc
-        run: |
-          npm install -g markdown-link-check
-          set +e
-          FAILED=0
-          : > /tmp/mlc-output.log
-          while IFS= read -r f; do
-            echo "=== $f ===" >> /tmp/mlc-output.log
-            markdown-link-check -c markdown_link_check_config.json -q "$f" >> /tmp/mlc-output.log 2>&1
-            [ $? -ne 0 ] && FAILED=1
-          done < <(find . -maxdepth 4 -iname "*.md" -not -path "*/node_modules/*")
-          exit $FAILED
-
-      - name: "[diagnostic temporaire] Poster les logs d'échec sur la PR"
-        if: failure() && github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          tail -c 55000 /tmp/mlc-output.log > /tmp/mlc-output-tail.txt || true
-          node -e "
-            const fs = require('fs');
-            const body = '## [diagnostic temporaire] Sortie de markdown-link-check (fin du log)\n\n\`\`\`\n' + fs.readFileSync('/tmp/mlc-output-tail.txt', 'utf8') + '\n\`\`\`';
-            fs.writeFileSync('/tmp/comment-body.json', JSON.stringify({ body }));
-          "
-          curl -s -X POST \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            -d @/tmp/comment-body.json \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+      - uses: tcort/github-action-markdown-link-check@v1
+        with:
+          max-depth: 4 # exclude the API docs
+          use-quiet-mode: "yes"
+          config-file: "markdown_link_check_config.json"
