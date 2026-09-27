@@ -9,7 +9,7 @@
  * manuellement dans `useEffect` pour garder l'animation fluide et éviter de
  * la relancer à chaque re-render de React.
  */
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './gradient-wave.scss';
 
 function normalizeColor(hexCode: number): number[] {

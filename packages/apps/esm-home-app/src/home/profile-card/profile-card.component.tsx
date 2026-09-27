@@ -33,6 +33,7 @@ export function ProfileCard({ profile: initialProfile, onProfileChange, onShowTo
 
   const handleSave = (updated: UserProfile) => {
     setProfile(updated);
+    setImageError(false);
     setIsEditing(false);
     onProfileChange?.(updated);
     onShowToast?.('Profil mis à jour avec succès.', 'success');
@@ -58,13 +59,23 @@ export function ProfileCard({ profile: initialProfile, onProfileChange, onShowTo
 
           <div className={styles.avatarRow}>
             <div className={styles.avatarFrame}>
-              <img
-                src={imageError ? profile.avatarUrl : profile.avatarUrl}
-                alt={profile.name}
-                onError={() => setImageError(true)}
-                referrerPolicy="no-referrer"
-                className={styles.avatarImage}
-              />
+              {imageError ? (
+                <span className={styles.avatarFallback} aria-hidden>
+                  {profile.name
+                    .split(' ')
+                    .map((part) => part[0])
+                    .slice(0, 2)
+                    .join('')}
+                </span>
+              ) : (
+                <img
+                  src={profile.avatarUrl}
+                  alt={profile.name}
+                  onError={() => setImageError(true)}
+                  referrerPolicy="no-referrer"
+                  className={styles.avatarImage}
+                />
+              )}
             </div>
 
             {profile.verified && (

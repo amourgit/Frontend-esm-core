@@ -19,7 +19,7 @@ import styles from './quick-links.scss';
 export interface QuickLinkItem {
   id: string;
   title: string;
-  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number | string }>;
   /** Cible de navigation optionnelle — libre à l'appelant de l'utiliser ou non dans onSelectItem. */
   target?: string;
 }
