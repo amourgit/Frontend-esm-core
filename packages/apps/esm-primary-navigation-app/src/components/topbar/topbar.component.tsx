@@ -116,8 +116,13 @@ const TopBarContent: React.FC = () => {
 
           <UserMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
 
+          {/* Renommé depuis "top-nav-app-menu-slot" : le nom prêtait à
+              confusion avec le slot "app-menu-slot" (contenu du panneau
+              applications, voir apps-menu-panel.component.tsx), alors qu'il
+              s'agit d'un point d'extension totalement distinct, positionné
+              en toute fin de topbar, après le menu utilisateur. */}
           <ExtensionSlot
-            name="top-nav-app-menu-slot"
+            name="top-nav-trailing-slot"
             state={{ isActivePanel, togglePanel, hidePanel }}
             className={styles.topNavActionsSlot}
           />

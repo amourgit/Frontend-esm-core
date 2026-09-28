@@ -26,6 +26,14 @@ export const configSchema = {
       _validators: [validators.isUrl],
     },
   },
+  search: {
+    path: {
+      _type: Type.String,
+      _default: '${egenSpaBase}/search',
+      _description:
+        "The route to navigate to when a query is submitted from the topbar's search bar (appended as a `?q=` parameter). Point this at whichever app renders your search results.",
+    },
+  },
   externalRefLinks: {
     _type: Type.Array,
     _elements: {
@@ -51,6 +59,9 @@ export type ConfigSchema = {
     alt: string;
     name: string;
     link: string;
+  };
+  search: {
+    path: string;
   };
   externalRefLinks: { title: string; redirect: string }[];
 };

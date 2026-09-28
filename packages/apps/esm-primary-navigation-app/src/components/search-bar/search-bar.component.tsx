@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOnClickOutside } from '@egen-civitas/esm-framework';
+import { interpolateUrl, navigate, useConfig, useOnClickOutside } from '@egen-civitas/esm-framework';
+import { type ConfigSchema } from '../../config-schema';
 import styles from './search-bar.scss';
 
 // =============================================================================
@@ -8,6 +9,16 @@ import styles from './search-bar.scss';
 //
 //  Au repos : icône seule (32px). Au focus/clic : s'élargit vers un champ
 //  texte. Escape ou clic extérieur sans valeur : referme.
+//
+//  BUG CORRIGÉ : le composant était une pure coquille visuelle — saisir une
+//  requête et valider (Entrée) ne déclenchait strictement rien, aucun
+//  <form>/onSubmit n'existait. Il navigue maintenant réellement vers
+//  `config.search.path` (même pattern navigate + interpolateUrl que
+//  ContextSwitcher, déjà établi dans cette app), avec la requête en `?q=`.
+//  La page qui consomme ce paramètre reste à fournir par une app de contenu
+//  (aucune app de résultats de recherche n'existe encore dans ce monorepo) —
+//  exactement la même dégradation "slot ouvert, non encore alimenté" que le
+//  reste du système d'extensions de la topbar.
 // =============================================================================
 
 const SearchIcon: React.FC = () => (
@@ -25,6 +36,7 @@ const ClearIcon: React.FC = () => (
 
 const SearchBar: React.FC = () => {
   const { t } = useTranslation();
+  const { search } = useConfig<ConfigSchema>();
   const [expanded, setExpanded] = useState(false);
   const [value, setValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,7 +45,7 @@ const SearchBar: React.FC = () => {
     if (!value) setExpanded(false);
   }, [value]);
 
-  const wrapperRef = useOnClickOutside<HTMLDivElement>(collapse, expanded);
+  const wrapperRef = useOnClickOutside<HTMLFormElement>(collapse, expanded);
 
   const expand = useCallback(() => {
     setExpanded(true);
@@ -46,6 +58,17 @@ const SearchBar: React.FC = () => {
     inputRef.current?.blur();
   }, []);
 
+  const submit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      const query = value.trim();
+      if (!query) return;
+      navigate({ to: `${interpolateUrl(search.path)}?q=${encodeURIComponent(query)}` });
+      inputRef.current?.blur();
+    },
+    [value, search.path],
+  );
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       setValue('');
@@ -55,17 +78,19 @@ const SearchBar: React.FC = () => {
   }, []);
 
   return (
-    <div
+    <form
       ref={wrapperRef}
+      onSubmit={submit}
       className={`${styles.wrapper} ${expanded || value ? styles.wrapperExpanded : ''}`}
       aria-label={t('searchBar', 'Barre de recherche')}
+      role="search"
     >
       <button
-        type="button"
+        type={expanded ? 'submit' : 'button'}
         className={styles.iconBtn}
         onClick={expanded ? undefined : expand}
         onMouseEnter={!expanded ? expand : undefined}
-        aria-label={t('openSearch', 'Ouvrir la recherche')}
+        aria-label={expanded ? t('runSearch', 'Lancer la recherche') : t('openSearch', 'Ouvrir la recherche')}
         aria-expanded={expanded}
         tabIndex={expanded ? -1 : 0}
       >
@@ -97,7 +122,7 @@ const SearchBar: React.FC = () => {
           <ClearIcon />
         </button>
       )}
-    </div>
+    </form>
   );
 };
 
