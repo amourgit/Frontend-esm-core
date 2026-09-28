@@ -28,8 +28,8 @@
     "storybook": "yarn workspace @egen/storybook storybook"
   },
   "devDependencies": {
-    "@egen-civitas/egen": "^1.0.0",
-    "@egen-civitas/esm-app-shell": "^1.0.2",
+    "@egen-civitas/egen": "^2.0.1",
+    "@egen-civitas/esm-app-shell": "^2.0.0",
     "@playwright/test": "^1.55.1",
     "@rspack/cli": "1.7.9",
     "@rspack/core": "1.7.9",
