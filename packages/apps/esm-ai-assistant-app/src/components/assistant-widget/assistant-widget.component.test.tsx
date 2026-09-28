@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { useSession, type Session } from '@egen-civitas/esm-framework';
 import { useAIEnabled } from '@egen-civitas/esm-ai-framework';
@@ -48,8 +48,8 @@ describe('AssistantWidget', () => {
     mockUseSession.mockReturnValue(mockSession as unknown as Session);
     mockUseAIEnabled.mockReturnValue(true);
 
-    const { getByTestId, queryByTestId } = render(<AssistantWidget />);
-    expect(getByTestId('launcher')).toBeInTheDocument();
-    expect(queryByTestId('panel')).not.toBeInTheDocument();
+    render(<AssistantWidget />);
+    expect(screen.getByTestId('launcher')).toBeInTheDocument();
+    expect(screen.queryByTestId('panel')).not.toBeInTheDocument();
   });
 });

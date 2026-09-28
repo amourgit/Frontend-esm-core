@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { setupTenantSystem } from '@egen-civitas/esm-tenant';
 import Root from './root.component';
@@ -22,7 +22,6 @@ vi.mock('./components/assistant-widget/assistant-widget.component', () => ({
 }));
 
 afterEach(() => {
-  cleanup();
   // Remet le système tenant en mode "off" entre les tests.
   setupTenantSystem({ mode: 'off' });
 });
