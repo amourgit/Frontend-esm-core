@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HeaderGlobalAction } from '@carbon/react';
+import { TopBarIconButton } from '@egen-civitas/esm-framework';
 import { getThemeEngine, getThemeState, toggleThemeMode, type ThemeMode } from '@egen-civitas/esm-theme';
-import styles from './theme-toggle.scss';
 
 const SunIcon: React.FC = () => (
   <svg width="17" height="17" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -50,14 +49,11 @@ const ThemeToggleButton: React.FC = () => {
   const isDark = mode === 'dark';
 
   return (
-    <HeaderGlobalAction
-      aria-label={isDark ? t('switchToLightMode', 'Passer en mode clair') : t('switchToDarkMode', 'Passer en mode sombre')}
-      className={styles.actionButton}
+    <TopBarIconButton
+      label={isDark ? t('switchToLightMode', 'Passer en mode clair') : t('switchToDarkMode', 'Passer en mode sombre')}
       onClick={() => toggleThemeMode()}
-      tooltipAlignment="end"
-    >
-      {isDark ? <SunIcon /> : <MoonIcon />}
-    </HeaderGlobalAction>
+      icon={isDark ? <SunIcon /> : <MoonIcon />}
+    />
   );
 };
 

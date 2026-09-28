@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HeaderGlobalAction } from '@carbon/react';
-import styles from './fullscreen-button.scss';
+import { TopBarIconButton } from '@egen-civitas/esm-framework';
 
 const ExpandIcon: React.FC = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -47,14 +46,11 @@ const FullscreenButton: React.FC = () => {
   }, []);
 
   return (
-    <HeaderGlobalAction
-      aria-label={isFullscreen ? t('exitFullscreen', 'Quitter le plein écran') : t('enterFullscreen', 'Plein écran')}
-      className={styles.actionButton}
+    <TopBarIconButton
+      label={isFullscreen ? t('exitFullscreen', 'Quitter le plein écran') : t('enterFullscreen', 'Plein écran')}
       onClick={handleToggle}
-      tooltipAlignment="end"
-    >
-      {isFullscreen ? <CollapseIcon /> : <ExpandIcon />}
-    </HeaderGlobalAction>
+      icon={isFullscreen ? <CollapseIcon /> : <ExpandIcon />}
+    />
   );
 };
 

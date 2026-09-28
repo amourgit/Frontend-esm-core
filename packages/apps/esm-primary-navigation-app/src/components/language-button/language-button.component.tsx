@@ -1,8 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HeaderGlobalAction } from '@carbon/react';
-import { showModal, useSession } from '@egen-civitas/esm-framework';
-import styles from './language-button.scss';
+import { showModal, TopBarIconButton, useSession } from '@egen-civitas/esm-framework';
 
 // =============================================================================
 //  LANGUAGE BUTTON — Bascule rapide de langue (icône drapeau)
@@ -71,16 +69,15 @@ const LanguageButton: React.FC = () => {
   }, []);
 
   return (
-    <HeaderGlobalAction
-      aria-label={t('changeLanguage', 'Changer de langue')}
-      className={styles.actionButton}
+    <TopBarIconButton
+      label={t('changeLanguage', 'Changer de langue')}
       onClick={launchChangeLanguageModal}
-      tooltipAlignment="end"
-    >
-      <span className={styles.flag} aria-hidden="true">
-        {flag}
-      </span>
-    </HeaderGlobalAction>
+      icon={
+        <span className="text-[1.05rem] leading-none" aria-hidden="true">
+          {flag}
+        </span>
+      }
+    />
   );
 };
 

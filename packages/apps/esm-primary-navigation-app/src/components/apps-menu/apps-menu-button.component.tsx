@@ -1,8 +1,12 @@
 import React, { useMemo } from 'react';
-import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { HeaderGlobalAction } from '@carbon/react';
-import { CloseIcon, SwitcherIcon, useAssignedExtensions, useOnClickOutside } from '@egen-civitas/esm-framework';
+import {
+  CloseIcon,
+  SwitcherIcon,
+  TopBarIconButton,
+  useAssignedExtensions,
+  useOnClickOutside,
+} from '@egen-civitas/esm-framework';
 import AppsMenuPanel from './apps-menu-panel.component';
 import { type MenuButtonProps } from '../topbar/types';
 import styles from './apps-menu.scss';
@@ -18,16 +22,12 @@ const AppsMenuButton: React.FC<MenuButtonProps> = ({ isActivePanel, togglePanel,
 
   return (
     <div ref={wrapperRef} className={styles.panelWrapper}>
-      <HeaderGlobalAction
-        aria-label={t('AppMenuTooltip', 'Applications')}
-        aria-labelledby="App Menu"
-        className={classNames(styles.actionButton, { [styles.actionButtonActive]: isOpen })}
-        isActive={isOpen}
+      <TopBarIconButton
+        label={t('AppMenuTooltip', 'Applications')}
+        active={isOpen}
         onClick={() => togglePanel('appMenu')}
-        tooltipAlignment="end"
-      >
-        {isOpen ? <CloseIcon size={18} /> : <SwitcherIcon size={18} />}
-      </HeaderGlobalAction>
+        icon={isOpen ? <CloseIcon size={18} /> : <SwitcherIcon size={18} />}
+      />
       <AppsMenuPanel expanded={isOpen} />
     </div>
   );

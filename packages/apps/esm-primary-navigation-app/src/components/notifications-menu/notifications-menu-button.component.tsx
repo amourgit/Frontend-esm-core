@@ -1,8 +1,6 @@
 import React from 'react';
-import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { HeaderGlobalAction } from '@carbon/react';
-import { useAssignedExtensions, useOnClickOutside } from '@egen-civitas/esm-framework';
+import { TopBarIconButton, useAssignedExtensions, useOnClickOutside } from '@egen-civitas/esm-framework';
 import NotificationsMenuPanel from './notifications-menu-panel.component';
 import { type MenuButtonProps } from '../topbar/types';
 import styles from './notifications-menu.scss';
@@ -27,20 +25,13 @@ const NotificationsMenuButton: React.FC<MenuButtonProps> = ({ isActivePanel, tog
 
   return (
     <div ref={wrapperRef} className={styles.panelWrapper}>
-      <HeaderGlobalAction
-        aria-label={t('notifications', 'Notifications')}
-        className={classNames(styles.actionButton, { [styles.actionButtonActive]: isOpen })}
-        isActive={isOpen}
+      <TopBarIconButton
+        label={t('notifications', 'Notifications')}
+        active={isOpen}
+        badge={notificationItems.length > 9 ? '9+' : notificationItems.length}
         onClick={() => togglePanel('notificationsMenu')}
-        tooltipAlignment="end"
-      >
-        <span className={styles.bellWrapper}>
-          <BellIcon />
-          {notificationItems.length > 0 && (
-            <span className={styles.badge}>{notificationItems.length > 9 ? '9+' : notificationItems.length}</span>
-          )}
-        </span>
-      </HeaderGlobalAction>
+        icon={<BellIcon />}
+      />
       <NotificationsMenuPanel expanded={isOpen} />
     </div>
   );
