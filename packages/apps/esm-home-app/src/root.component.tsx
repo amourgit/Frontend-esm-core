@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HomePage from './home/home.component';
+import ComponentShowcasePage from './home/component-showcase/component-showcase.page';
 
 // =============================================================================
 //  ROOT — Composant racine de l'app Home
@@ -10,6 +11,12 @@ import HomePage from './home/home.component';
 //  cette app-ci et le routeRegex de esm-primary-navigation-app). La TopBar
 //  s'affiche naturellement au-dessus : cette app ne gère plus sa propre
 //  navigation ni de garde d'authentification.
+//
+//  'home/showcase' : mise de côté de l'ancienne vitrine de test des
+//  composants @egen-civitas/esm-styleguide (ex home.component.tsx). Conservée
+//  intacte et accessible — utile pour continuer à tester des composants en
+//  développement — mais elle n'est plus l'écran d'accueil par défaut, qui
+//  affiche désormais la vraie page d'accueil (portée depuis Civitas-GED).
 // =============================================================================
 
 const Root: React.FC = () => {
@@ -17,6 +24,7 @@ const Root: React.FC = () => {
     <BrowserRouter basename={window.getEgenSpaBase()}>
       <Routes>
         <Route path="home" element={<HomePage />} />
+        <Route path="home/showcase" element={<ComponentShowcasePage />} />
         <Route path="home/*" element={<HomePage />} />
       </Routes>
     </BrowserRouter>
