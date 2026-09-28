@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { HeaderGlobalAction } from '@carbon/react';
-import { ExtensionSlot, useAssignedExtensions, useOnClickOutside } from '@egen-civitas/esm-framework';
+import { ExtensionSlot, TopBarIconButton, useAssignedExtensions, useOnClickOutside } from '@egen-civitas/esm-framework';
 import styles from './quick-access-button.scss';
 
 // =============================================================================
@@ -31,18 +29,13 @@ const QuickAccessButton: React.FC = () => {
 
   return (
     <div ref={wrapperRef} className={styles.panelWrapper}>
-      <HeaderGlobalAction
-        aria-label={t('quickAccess', 'Raccourcis')}
-        className={classNames(styles.actionButton, { [styles.actionButtonActive]: open })}
-        isActive={open}
+      <TopBarIconButton
+        label={t('quickAccess', 'Raccourcis')}
+        active={open}
+        badge={items.length > 9 ? '9+' : items.length}
         onClick={() => setOpen((v) => !v)}
-        tooltipAlignment="end"
-      >
-        <span className={styles.badgeWrapper}>
-          <BagIcon />
-          <span className={styles.badge}>{items.length > 9 ? '9+' : items.length}</span>
-        </span>
-      </HeaderGlobalAction>
+        icon={<BagIcon />}
+      />
 
       {open && (
         <div className={styles.dropdown} role="menu" aria-label={t('quickAccess', 'Raccourcis')}>

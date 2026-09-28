@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
-import { Header, HeaderContainer, HeaderGlobalBar, HeaderMenuButton } from '@carbon/react';
 import {
   ConfigurableLink,
   ExtensionSlot,
+  TopBar,
+  TopBarDivider,
+  TopBarIconButton,
   useAssignedExtensions,
   useConfig,
   useLayoutType,
@@ -26,10 +28,9 @@ import ThemeToggleButton from '../theme-toggle/theme-toggle.component';
 import NotificationsMenuButton from '../notifications-menu/notifications-menu-button.component';
 import UserMenuButton from '../user-menu/user-menu-button.component';
 import SideMenuPanel from '../side-menu/side-menu-panel.component';
-import styles from './topbar.scss';
 
 // =============================================================================
-//  TOPBAR — Barre de navigation principale EGEN (design recodé de zéro)
+//  TOPBAR — Barre de navigation principale EGEN (composant TopBar Tailwind du framework)
 //
 //  Layout (space-between), deux niveaux empilés verticalement :
 //
@@ -41,6 +42,12 @@ import styles from './topbar.scss';
 //  Niveau 2 :
 //    BreadcrumbNav (invisible si aucune extension n'y est rattachée)
 // =============================================================================
+
+const MenuIcon: React.FC = () => (
+  <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+  </svg>
+);
 
 const TopBarContent: React.FC = () => {
   const { t } = useTranslation();
@@ -64,76 +71,54 @@ const TopBarContent: React.FC = () => {
   );
 
   const showHamburger = (!isDesktop(layout) || mode === 'collapsed') && mode !== 'hidden' && navMenuItems.length > 0;
+  const slotState = { isActivePanel, togglePanel, hidePanel };
 
   return (
-    <div className={styles.topBarWrapper}>
-      {/* ══ NIVEAU 1 — Barre principale ══════════════════════════════════ */}
-      <Header aria-label={t('primaryNavigation', 'Navigation principale EGEN')} className={styles.topBarHeader}>
-        {/* ── LEFT ── */}
-        <div className={styles.leftSection}>
+    <TopBar
+      ariaLabel={t('primaryNavigation', 'Navigation principale EGEN')}
+      left={
+        <>
           {showHamburger && (
-            <HeaderMenuButton
-              aria-label={t('openMenu', 'Ouvrir le menu')}
-              isCollapsible
-              className={styles.headerMenuButton}
+            <TopBarIconButton
+              label={t('openMenu', 'Ouvrir le menu')}
+              icon={<MenuIcon />}
+              active={isActivePanel('sideMenu')}
               onClick={() => togglePanel('sideMenu')}
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
-              isActive={isActivePanel('sideMenu')}
             />
           )}
-
-          <ConfigurableLink to={config.logo?.link ?? '${egenSpaBase}/home'} className={styles.logoLink}>
+          <ConfigurableLink
+            to={config.logo?.link ?? '${egenSpaBase}/home'}
+            className="flex items-center rounded-md px-1 no-underline transition-opacity hover:opacity-80"
+          >
             <Logo />
           </ConfigurableLink>
-
           <SearchBar />
-
           <ContextSwitcher />
-        </div>
-
-        {/* ── CENTRE — slot libre pour injections par les apps ── */}
-        <div className={styles.centerSection}>
-          <ExtensionSlot name="top-nav-info-slot" className={styles.topNavInfoSlot} />
-        </div>
-
-        {/* ── RIGHT ── */}
-        <HeaderGlobalBar className={styles.rightSection}>
+        </>
+      }
+      center={<ExtensionSlot name="top-nav-info-slot" className="flex items-center gap-2 truncate text-xs opacity-70" />}
+      right={
+        <>
           <AppsMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
           <LanguageButton />
           <QuickAccessButton />
           <FullscreenButton />
           <ThemeToggleButton />
           <NotificationsMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
-
-          <ExtensionSlot
-            name="top-nav-actions-slot"
-            state={{ isActivePanel, togglePanel, hidePanel }}
-            className={styles.topNavActionsSlot}
-          />
-
-          <div className={styles.rightDivider} aria-hidden="true" />
-
+          <ExtensionSlot name="top-nav-actions-slot" state={slotState} className="flex items-center" />
+          <TopBarDivider />
           <UserMenuButton isActivePanel={isActivePanel} togglePanel={togglePanel} hidePanel={hidePanel} />
-
-          {/* Renommé depuis "top-nav-app-menu-slot" : le nom prêtait à
-              confusion avec le slot "app-menu-slot" (contenu du panneau
-              applications, voir apps-menu-panel.component.tsx), alors qu'il
-              s'agit d'un point d'extension totalement distinct, positionné
-              en toute fin de topbar, après le menu utilisateur. */}
-          <ExtensionSlot
-            name="top-nav-trailing-slot"
-            state={{ isActivePanel, togglePanel, hidePanel }}
-            className={styles.topNavActionsSlot}
-          />
-        </HeaderGlobalBar>
-
-        <SideMenuPanel hidePanel={hidePanel('sideMenu')} expanded={isActivePanel('sideMenu')} />
-      </Header>
-
-      {/* ══ NIVEAU 2 — Fil d'Ariane ═══════════════════════════════════════ */}
-      <BreadcrumbNav />
-    </div>
+          {/* Point d'extension distinct de "app-menu-slot" (contenu du panneau applications) :
+              positionné en toute fin de topbar, après le menu utilisateur. */}
+          <ExtensionSlot name="top-nav-trailing-slot" state={slotState} className="flex items-center" />
+        </>
+      }
+      secondary={<BreadcrumbNav />}
+    >
+      <SideMenuPanel hidePanel={hidePanel('sideMenu')} expanded={isActivePanel('sideMenu')} />
+    </TopBar>
   );
 };
 
@@ -162,7 +147,7 @@ const TopBar: React.FC = () => {
 
   // Connecté → rendre la topbar complète (tous modes)
   if (session?.authenticated && session?.user?.person) {
-    return <HeaderContainer render={TopBarContent} />;
+    return <TopBarContent />;
   }
 
   // Non connecté, mode multi → Guard TenantRoutingGuard gère la redirection
