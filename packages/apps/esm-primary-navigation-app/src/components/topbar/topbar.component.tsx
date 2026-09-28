@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import {
   ConfigurableLink,
   ExtensionSlot,
-  TopBar,
+  TopBar as FrameworkTopBar,
   TopBarDivider,
   TopBarIconButton,
   useAssignedExtensions,
@@ -74,7 +74,7 @@ const TopBarContent: React.FC = () => {
   const slotState = { isActivePanel, togglePanel, hidePanel };
 
   return (
-    <TopBar
+    <FrameworkTopBar
       ariaLabel={t('primaryNavigation', 'Navigation principale EGEN')}
       left={
         <>
@@ -118,7 +118,7 @@ const TopBarContent: React.FC = () => {
       secondary={<BreadcrumbNav />}
     >
       <SideMenuPanel hidePanel={hidePanel('sideMenu')} expanded={isActivePanel('sideMenu')} />
-    </TopBar>
+    </FrameworkTopBar>
   );
 };
 
