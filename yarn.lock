@@ -439,7 +439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-api@npm:1.x, @egen-civitas/esm-api@npm:^1.0.0":
+"@egen-civitas/esm-api@npm:^1.0.0":
   version: 1.0.1
   resolution: "@egen-civitas/esm-api@npm:1.0.1"
   dependencies:
@@ -466,6 +466,22 @@ __metadata:
     "@egen-civitas/esm-navigation": ^1.0.0
     "@egen-civitas/esm-state": ^1.0.0
   checksum: 10/62bf81dd61ed0865812f7d5cd73a80c9ad8a30e80dc46d15b970b647fdc8e81d52dfc6845e5548e833394cd4f802979999eb80129fd1a96eceeb9fd6c1414daa
+  languageName: node
+  linkType: hard
+
+"@egen-civitas/esm-api@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@egen-civitas/esm-api@npm:1.1.1"
+  dependencies:
+    lodash-es: "npm:^4.17.21"
+  peerDependencies:
+    "@egen-civitas/esm-config": ^1.0.0
+    "@egen-civitas/esm-error-handling": ^1.0.0
+    "@egen-civitas/esm-globals": ^1.0.2
+    "@egen-civitas/esm-navigation": ^1.0.2
+    "@egen-civitas/esm-state": ^1.0.0
+    rxjs: 7.x
+  checksum: 10/076bf6d76c54b1a70e4711a204fa7a7aeef180c166a2534fc1bc451fa8bfb880d7ed21cde6b6113b5b902170b634317ef9a76f6cfafbd43a3edc0bdb886d6a36
   languageName: node
   linkType: hard
 
@@ -523,13 +539,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-context@npm:^1.0.0":
+"@egen-civitas/esm-context@npm:1.x, @egen-civitas/esm-context@npm:^1.0.0":
   version: 1.0.1
   resolution: "@egen-civitas/esm-context@npm:1.0.1"
   peerDependencies:
     "@egen-civitas/esm-globals": ^1.0.0
     "@egen-civitas/esm-state": ^1.0.0
   checksum: 10/eccbdfb354f878bfcf9bd06e79bf384fe5a0ac803dc7b41398a4cede687462677da2ff753eab15e89c550aa120e46b24ce06918dd1e30b49f877159347e7eb49
+  languageName: node
+  linkType: hard
+
+"@egen-civitas/esm-data-api@npm:1.x":
+  version: 1.0.2
+  resolution: "@egen-civitas/esm-data-api@npm:1.0.2"
+  dependencies:
+    lodash-es: "npm:^4.17.21"
+  peerDependencies:
+    "@egen-civitas/esm-api": ^1.1.1
+    "@egen-civitas/esm-offline": ^1.0.0
+    "@egen-civitas/esm-state": ^1.0.0
+    rxjs: 7.x
+  checksum: 10/111d8b4095478519f1960385ac110a4254153314c9ab9de0774be3f6e69d4eb0f8e1eed389b958d7f53a3350b4ca9651435341df5bf87cd058143623fe76a4d5
   languageName: node
   linkType: hard
 
@@ -566,7 +596,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-error-handling@npm:^1.0.0":
+"@egen-civitas/esm-error-handling@npm:1.x, @egen-civitas/esm-error-handling@npm:^1.0.0":
   version: 1.0.1
   resolution: "@egen-civitas/esm-error-handling@npm:1.0.1"
   peerDependencies:
@@ -575,7 +605,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-expression-evaluator@npm:^1.0.0":
+"@egen-civitas/esm-expression-evaluator@npm:1.x, @egen-civitas/esm-expression-evaluator@npm:^1.0.0":
   version: 1.0.1
   resolution: "@egen-civitas/esm-expression-evaluator@npm:1.0.1"
   dependencies:
@@ -587,6 +617,26 @@ __metadata:
     "@jsep-plugin/ternary": "npm:^1.1.4"
     jsep: "npm:^1.4.0"
   checksum: 10/a9328fae1feb86fe3200c6d85a3da1825af029b4205f22f93e14024ca1895dc0bf7e6adf3c0eeb21e2ef1c3c8f13f7e7f38d035e5fdb815261e9db2b0ab22386
+  languageName: node
+  linkType: hard
+
+"@egen-civitas/esm-extensions@npm:1.x":
+  version: 1.0.2
+  resolution: "@egen-civitas/esm-extensions@npm:1.0.2"
+  dependencies:
+    lodash-es: "npm:^4.17.21"
+  peerDependencies:
+    "@egen-civitas/esm-api": ^1.1.1
+    "@egen-civitas/esm-config": ^1.0.0
+    "@egen-civitas/esm-expression-evaluator": ^1.0.0
+    "@egen-civitas/esm-feature-flags": ^1.0.0
+    "@egen-civitas/esm-globals": ^1.0.0
+    "@egen-civitas/esm-state": ^1.0.0
+    "@egen-civitas/esm-translations": ^1.0.0
+    "@egen-civitas/esm-utils": ^1.0.0
+    react: 18.x
+    single-spa: 6.x
+  checksum: 10/f3c030a373e96fd5c235f5ef523439606ca05ae87842ef6f01b86225a50a0c1a11a50a1aa422d88847e363adf0d21ca3f937dfa4540fcc6a5d32412c4be691a1
   languageName: node
   linkType: hard
 
@@ -609,7 +659,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-feature-flags@npm:^1.0.0":
+"@egen-civitas/esm-feature-flags@npm:1.x, @egen-civitas/esm-feature-flags@npm:^1.0.0":
   version: 1.0.1
   resolution: "@egen-civitas/esm-feature-flags@npm:1.0.1"
   peerDependencies:
@@ -694,6 +744,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@egen-civitas/esm-globals@npm:1.x, @egen-civitas/esm-globals@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@egen-civitas/esm-globals@npm:1.0.2"
+  dependencies:
+    "@types/fhir": "npm:0.0.31"
+  peerDependencies:
+    single-spa: 6.x
+  checksum: 10/4d4e5b5cc86dfe20f1ab77c1361cd9c82905c4a6c970f61a5aa9e006893eb812b31c35ef2b919cbe5fc30beeb81f31326f8146c7455677041bcf213d49eca567
+  languageName: node
+  linkType: hard
+
 "@egen-civitas/esm-globals@npm:^1.0.0":
   version: 1.0.1
   resolution: "@egen-civitas/esm-globals@npm:1.0.1"
@@ -705,14 +766,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-globals@npm:^1.0.2":
+"@egen-civitas/esm-navigation@npm:1.x":
   version: 1.0.2
-  resolution: "@egen-civitas/esm-globals@npm:1.0.2"
+  resolution: "@egen-civitas/esm-navigation@npm:1.0.2"
   dependencies:
-    "@types/fhir": "npm:0.0.31"
+    path-to-regexp: "npm:^8.3.0"
   peerDependencies:
+    "@egen-civitas/esm-state": ^1.0.0
     single-spa: 6.x
-  checksum: 10/4d4e5b5cc86dfe20f1ab77c1361cd9c82905c4a6c970f61a5aa9e006893eb812b31c35ef2b919cbe5fc30beeb81f31326f8146c7455677041bcf213d49eca567
+  checksum: 10/6ded6f0383fec5b35bb23565097453fb3ad1627c9ba51aaeee15e7dfb30eefe281a6b5b3c52401e92743038d097e3c3bb689d8d5d9babb70f02f18eceba6e3ce
   languageName: node
   linkType: hard
 
@@ -727,7 +789,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-offline@npm:^1.0.0":
+"@egen-civitas/esm-offline@npm:1.x, @egen-civitas/esm-offline@npm:^1.0.0":
   version: 1.0.1
   resolution: "@egen-civitas/esm-offline@npm:1.0.1"
   dependencies:
@@ -881,7 +943,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-translations@npm:^1.0.0":
+"@egen-civitas/esm-translations@npm:1.x, @egen-civitas/esm-translations@npm:^1.0.0":
   version: 1.0.0
   resolution: "@egen-civitas/esm-translations@npm:1.0.0"
   dependencies:
@@ -892,7 +954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-utils@npm:^1.0.0":
+"@egen-civitas/esm-utils@npm:1.x, @egen-civitas/esm-utils@npm:^1.0.0":
   version: 1.0.1
   resolution: "@egen-civitas/esm-utils@npm:1.0.1"
   dependencies:
@@ -962,15 +1024,27 @@ __metadata:
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@egen-civitas/esm-ai-framework": "npm:1.x"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     "@vitest/coverage-v8": "npm:^4.1.2"
     classnames: "npm:^2.3.2"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
     react: "npm:^18.3.1"
@@ -978,24 +1052,36 @@ __metadata:
     react-i18next: "npm:^16.0.0"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.3.0"
-    rxjs: "npm:^6.5.3"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
+    swr: "npm:^2.2.0"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-ai-framework": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
     react-router-dom: 6.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
+    swr: 2.x
   languageName: unknown
   linkType: soft
 
@@ -1037,6 +1123,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
+    rxjs: "npm:^7.8.1"
     swc-loader: "npm:0.2.7"
     timezone-mock: "npm:^1.2.2"
     turbo: "npm:^2.5.2"
@@ -1050,13 +1137,25 @@ __metadata:
   resolution: "@egen/esm-devtools-app@workspace:packages/apps/esm-devtools-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
     fuzzy: "npm:^0.1.3"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
@@ -1064,21 +1163,34 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
     react-is: "npm:^17.0.2"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
+    swr: "npm:^2.2.0"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
+    swr: 2.x
   languageName: unknown
   linkType: soft
 
@@ -1087,14 +1199,26 @@ __metadata:
   resolution: "@egen/esm-footer-app@workspace:packages/apps/esm-footer-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
     react: "npm:^18.3.1"
@@ -1102,23 +1226,35 @@ __metadata:
     react-i18next: "npm:^16.0.0"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.3.0"
-    rxjs: "npm:^6.5.3"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
+    swr: "npm:^2.2.0"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
     react-router-dom: 6.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
+    swr: 2.x
   languageName: unknown
   linkType: soft
 
@@ -1127,34 +1263,59 @@ __metadata:
   resolution: "@egen/esm-help-menu-app@workspace:packages/apps/esm-help-menu-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
     react-is: "npm:^17.0.2"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
+    swr: "npm:^2.2.0"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
+    swr: 2.x
   languageName: unknown
   linkType: soft
 
@@ -1163,15 +1324,28 @@ __metadata:
   resolution: "@egen/esm-home-app@workspace:packages/apps/esm-home-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
     "@egen-civitas/esm-theme": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
+    embla-carousel: "npm:^8.0.0"
     embla-carousel-autoplay: "npm:^8.6.0"
     framer-motion: "npm:^11.18.2"
     happy-dom: "npm:^20.6.0"
@@ -1180,25 +1354,37 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
+    react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.3.0"
-    rxjs: "npm:^6.5.3"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
     swr: "npm:2.2.5"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
     "@egen-civitas/esm-theme": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
+    embla-carousel: 8.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
     react-router-dom: 6.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
   languageName: unknown
@@ -1209,15 +1395,27 @@ __metadata:
   resolution: "@egen/esm-implementer-tools-app@workspace:packages/apps/esm-implementer-tools-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     "@vitest/coverage-v8": "npm:^4.1.2"
     ace-builds: "npm:^1.43.3"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
     lodash-es: "npm:^4.17.21"
@@ -1226,22 +1424,32 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
     react-is: "npm:^17.0.2"
-    rxjs: "npm:^6.5.3"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
     swr: "npm:2.2.5"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
   languageName: unknown
@@ -1253,16 +1461,28 @@ __metadata:
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@egen-civitas/esm-ai-framework": "npm:1.x"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
     "@egen-civitas/esm-theme": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     "@hookform/resolvers": "npm:^3.6.0"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
     react: "npm:^18.3.1"
@@ -1271,8 +1491,9 @@ __metadata:
     react-i18next: "npm:^16.0.0"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.3.0"
-    rxjs: "npm:^6.5.3"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
     swr: "npm:2.2.5"
     vitest: "npm:^4.1.2"
     zod: "npm:^3.23.8"
@@ -1281,16 +1502,25 @@ __metadata:
     "@egen-civitas/esm-ai-framework": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
     "@egen-civitas/esm-theme": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
     react-router-dom: 6.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
   languageName: unknown
@@ -1301,39 +1531,62 @@ __metadata:
   resolution: "@egen/esm-not-found-app@workspace:packages/apps/esm-not-found-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
     "@egen-civitas/esm-theme": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
+    react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.3.0"
-    rxjs: "npm:^6.5.3"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
     swr: "npm:2.2.5"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
     "@egen-civitas/esm-theme": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
     react-router-dom: 6.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
   languageName: unknown
@@ -1344,15 +1597,27 @@ __metadata:
   resolution: "@egen/esm-offline-tools-app@workspace:packages/apps/esm-offline-tools-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     "@types/lodash-es": "npm:^4.17.12"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
     lodash-es: "npm:^4.17.21"
@@ -1361,23 +1626,33 @@ __metadata:
     react-i18next: "npm:^16.0.0"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.3.0"
-    rxjs: "npm:^6.5.3"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
     swr: "npm:2.2.5"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
     react-router-dom: 6.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
   languageName: unknown
@@ -1388,14 +1663,26 @@ __metadata:
   resolution: "@egen/esm-primary-navigation-app@workspace:packages/apps/esm-primary-navigation-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
     "@egen-civitas/esm-theme": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     "@vitest/coverage-v8": "npm:^4.1.2"
+    dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.6.0"
     i18next: "npm:^25.5.3"
     lodash-es: "npm:^4.17.21"
@@ -1404,24 +1691,36 @@ __metadata:
     react-i18next: "npm:^16.0.0"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.3.0"
-    rxjs: "npm:^6.5.3"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
+    swr: "npm:^2.2.0"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
     "@egen-civitas/esm-theme": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
     react-router-dom: 6.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
+    swr: 2.x
   languageName: unknown
   linkType: soft
 
@@ -1430,38 +1729,63 @@ __metadata:
   resolution: "@egen/esm-tenant-routing-app@workspace:packages/apps/esm-tenant-routing-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:1.x"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
     "@egen-civitas/esm-config": "npm:1.x"
+    "@egen-civitas/esm-context": "npm:1.x"
+    "@egen-civitas/esm-data-api": "npm:1.x"
+    "@egen-civitas/esm-error-handling": "npm:1.x"
+    "@egen-civitas/esm-expression-evaluator": "npm:1.x"
+    "@egen-civitas/esm-extensions": "npm:1.x"
+    "@egen-civitas/esm-feature-flags": "npm:1.x"
     "@egen-civitas/esm-framework": "npm:1.x"
+    "@egen-civitas/esm-globals": "npm:1.x"
+    "@egen-civitas/esm-navigation": "npm:1.x"
+    "@egen-civitas/esm-offline": "npm:1.x"
     "@egen-civitas/esm-react-utils": "npm:1.x"
     "@egen-civitas/esm-state": "npm:1.x"
     "@egen-civitas/esm-tenant": "npm:1.x"
     "@egen-civitas/esm-theme": "npm:1.x"
+    "@egen-civitas/esm-translations": "npm:1.x"
+    "@egen-civitas/esm-utils": "npm:1.x"
     "@vitest/coverage-v8": "npm:^4.1.2"
     cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.6.0"
+    i18next: "npm:^25.5.3"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
+    react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.3.0"
-    rxjs: "npm:^6.5.3"
+    rxjs: "npm:^7.8.1"
     sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
     swr: "npm:2.2.5"
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
     "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
     "@egen-civitas/esm-state": 1.x
     "@egen-civitas/esm-tenant": 1.x
     "@egen-civitas/esm-theme": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
+    i18next: 25.x
     react: 18.x
     react-dom: 18.x
     react-i18next: 16.x
     react-router-dom: 6.x
-    rxjs: 6.x
+    rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
   languageName: unknown
@@ -8899,6 +9223,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.10":
+  version: 1.11.23
+  resolution: "dayjs@npm:1.11.23"
+  checksum: 10/61d29544ca1553369f75541b5abf9c1bb6a978991498923a2d5721c9df3eca513b2c15ff5534de6930dc553de5d6f2b8f8047149f3528df906b21f51df637463
+  languageName: node
+  linkType: hard
+
 "dayjs@npm:^1.11.13":
   version: 1.11.13
   resolution: "dayjs@npm:1.11.13"
@@ -9368,7 +9699,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"embla-carousel@npm:8.6.0, embla-carousel@npm:^8.6.0":
+"embla-carousel@npm:8.6.0, embla-carousel@npm:^8.0.0, embla-carousel@npm:^8.6.0":
   version: 8.6.0
   resolution: "embla-carousel@npm:8.6.0"
   checksum: 10/6c1c4268160ce2a150c80f0c84edd4c42b47567f8ef25f56fb21819a4094cfa885614cb0837d180e8da8159ff79a077e0a2e1e679ed2c500ff52697d3ec94b78
@@ -14947,16 +15278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.5.3":
-  version: 6.6.7
-  resolution: "rxjs@npm:6.6.7"
-  dependencies:
-    tslib: "npm:^1.9.0"
-  checksum: 10/c8263ebb20da80dd7a91c452b9e96a178331f402344bbb40bc772b56340fcd48d13d1f545a1e3d8e464893008c5e306cc42a1552afe0d562b1a6d4e1e6262b03
-  languageName: node
-  linkType: hard
-
-"rxjs@npm:^7.4.0, rxjs@npm:^7.8.0":
+"rxjs@npm:^7.4.0, rxjs@npm:^7.8.0, rxjs@npm:^7.8.1":
   version: 7.8.2
   resolution: "rxjs@npm:7.8.2"
   dependencies:
@@ -15572,7 +15894,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"single-spa@npm:^6.0.3":
+"single-spa@npm:^6.0.0, single-spa@npm:^6.0.3":
   version: 6.0.3
   resolution: "single-spa@npm:6.0.3"
   checksum: 10/bdb00c205cf849e0392d5b734869d7fe57d99a985c05f190e281f038d1cb3c052e0e06f9216893b74ca60cce3bd5ad03b02b2144981143b4008c171b3e5e34ca
@@ -16031,6 +16353,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swr@npm:^2.2.0":
+  version: 2.5.1
+  resolution: "swr@npm:2.5.1"
+  dependencies:
+    dequal: "npm:^2.0.3"
+    use-sync-external-store: "npm:^1.6.0"
+  peerDependencies:
+    react: ^16.11.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/7ba8d069bfb2a24a76c4c572c7c517b6365182c35ba10f7ed72f16dc2c038e40cf398b6fa889112c421709df38ae26944f027b529aec133dd43ddf3f1dff19e1
+  languageName: node
+  linkType: hard
+
 "symlink-or-copy@npm:^1.1.8, symlink-or-copy@npm:^1.2.0, symlink-or-copy@npm:^1.3.1":
   version: 1.3.1
   resolution: "symlink-or-copy@npm:1.3.1"
@@ -16348,7 +16682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.9.0, tslib@npm:^1.9.3":
+"tslib@npm:^1.9.3":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: 10/7dbf34e6f55c6492637adb81b555af5e3b4f9cc6b998fb440dac82d3b42bdc91560a35a5fb75e20e24a076c651438234da6743d139e4feabf0783f3cdfe1dddb
@@ -16682,6 +17016,15 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 10/b40ad2847ba220695bff2d4ba4f4d60391c0fb4fb012faa7a4c18eb38b69181936f5edc55a522c4d20a788d1a879b73c3810952c9d0fd128d01cb3f22042c09e
+  languageName: node
+  linkType: hard
+
+"use-sync-external-store@npm:^1.6.0":
+  version: 1.7.0
+  resolution: "use-sync-external-store@npm:1.7.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/cc102e193d079dda118846627f97ac8d34059ae7e1112188ed6330bd42a6b31c209cbb39923d4d663ddc42e5969913015778397131fcd3249909756c88ba9906
   languageName: node
   linkType: hard
 
