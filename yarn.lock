@@ -492,46 +492,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-app-shell@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@egen-civitas/esm-app-shell@npm:2.0.0"
-  dependencies:
-    "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-api": "npm:^1.1.0"
-    "@egen-civitas/esm-config": "npm:^1.0.0"
-    "@egen-civitas/esm-framework": "npm:^1.0.2"
-    "@egen-civitas/esm-globals": "npm:^1.0.2"
-    "@egen-civitas/esm-offline": "npm:^1.0.0"
-    "@egen-civitas/esm-react-utils": "npm:^1.0.0"
-    "@egen-civitas/esm-state": "npm:^1.0.0"
-    "@egen-civitas/esm-styleguide": "npm:^1.0.0"
-    "@egen-civitas/esm-tenant": "npm:^1.0.0"
-    "@egen-civitas/esm-theme": "npm:^1.0.0"
-    "@egen-civitas/esm-utils": "npm:^1.0.0"
-    "@internationalized/date": "npm:^3.8.0"
-    "@rspack/cli": "npm:1.7.9"
-    "@rspack/core": "npm:1.7.9"
-    dayjs: "npm:^1.11.13"
-    dexie: "npm:^3.0.3"
-    html-webpack-plugin: "npm:5.6.6"
-    i18next: "npm:^25.5.3"
-    i18next-browser-languagedetector: "npm:^8.2.0"
-    lodash-es: "npm:^4.17.21"
-    mini-css-extract-plugin: "npm:2.9.1"
-    react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
-    react-i18next: "npm:^16.0.0"
-    react-router-dom: "npm:^6.3.0"
-    rxjs: "npm:^7.8.0"
-    semver: "npm:^7.7.3"
-    single-spa: "npm:^6.0.3"
-    swc-loader: "npm:0.2.7"
-    swr: "npm:2.2.5"
-    webpack-pwa-manifest: "npm:4.3.0"
-  checksum: 10/902366789e6c0852870c9c7283d8ddb40a5dcdcb2aa2f96b41bd88e7814838cf2e0ea21a01b8bed019a353f05c21ad2d654c913dd9d017ce181ed484aa9715ff
-  languageName: node
-  linkType: hard
-
 "@egen-civitas/esm-app-shell@npm:^2.0.1":
   version: 2.0.1
   resolution: "@egen-civitas/esm-app-shell@npm:2.0.1"
@@ -803,36 +763,6 @@ __metadata:
     "@egen-civitas/esm-state": ^1.0.0
     rxjs: 7.x
   checksum: 10/3f55adef1f1ae49f8256fa05d6073732d91fc8c7f7117548fdb6ae3d7da5024d11c9e7a709a93d609b6b48110034c9b1d2529c44fe940c0b659ad2544869c77d
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-react-utils@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@egen-civitas/esm-react-utils@npm:1.0.1"
-  dependencies:
-    lodash-es: "npm:^4.17.21"
-    single-spa-react: "npm:^6.0.2"
-  peerDependencies:
-    "@egen-civitas/esm-api": ^1.0.0
-    "@egen-civitas/esm-config": ^1.0.0
-    "@egen-civitas/esm-context": ^1.0.0
-    "@egen-civitas/esm-data-api": ^1.0.0
-    "@egen-civitas/esm-error-handling": ^1.0.0
-    "@egen-civitas/esm-extensions": ^1.0.0
-    "@egen-civitas/esm-feature-flags": ^1.0.0
-    "@egen-civitas/esm-globals": ^1.0.0
-    "@egen-civitas/esm-navigation": ^1.0.0
-    "@egen-civitas/esm-state": ^1.0.0
-    "@egen-civitas/esm-tenant": ^1.0.0
-    "@egen-civitas/esm-utils": ^1.0.0
-    dayjs: 1.x
-    i18next: 25.x
-    react: 18.x
-    react-dom: 18.x
-    react-i18next: 16.x
-    rxjs: 7.x
-    swr: 2.x
-  checksum: 10/a5bdf1761aa06b8e0b27766c9fdd6737fe8c0a1ee13be8260f824572f11d21f2f5ddf86fea307dabca016e01bd6495d33d22f678bd965d44ac0b84cacf4bec19
   languageName: node
   linkType: hard
 

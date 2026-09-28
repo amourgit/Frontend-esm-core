@@ -10,7 +10,8 @@
     "@types/react": "18.3.25",
     "csstype": "3.2.3",
     "@egen-civitas/esm-framework": "^1.1.0",
-    "@egen-civitas/esm-styleguide": "^1.2.0"
+    "@egen-civitas/esm-styleguide": "^1.2.0",
+    "@egen-civitas/esm-app-shell": "^2.0.1"
   },
   "scripts": {
     "run:egen": "egen",
