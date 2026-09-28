@@ -532,6 +532,46 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@egen-civitas/esm-app-shell@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@egen-civitas/esm-app-shell@npm:2.0.1"
+  dependencies:
+    "@carbon/react": "npm:^1.92.1"
+    "@egen-civitas/esm-api": "npm:^1.1.0"
+    "@egen-civitas/esm-config": "npm:^1.0.0"
+    "@egen-civitas/esm-framework": "npm:^1.1.0"
+    "@egen-civitas/esm-globals": "npm:^1.0.2"
+    "@egen-civitas/esm-offline": "npm:^1.0.0"
+    "@egen-civitas/esm-react-utils": "npm:^1.0.2"
+    "@egen-civitas/esm-state": "npm:^1.0.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.2.0"
+    "@egen-civitas/esm-tenant": "npm:^1.0.0"
+    "@egen-civitas/esm-theme": "npm:^1.0.0"
+    "@egen-civitas/esm-utils": "npm:^1.0.0"
+    "@internationalized/date": "npm:^3.8.0"
+    "@rspack/cli": "npm:1.7.9"
+    "@rspack/core": "npm:1.7.9"
+    dayjs: "npm:^1.11.13"
+    dexie: "npm:^3.0.3"
+    html-webpack-plugin: "npm:5.6.6"
+    i18next: "npm:^25.5.3"
+    i18next-browser-languagedetector: "npm:^8.2.0"
+    lodash-es: "npm:^4.17.21"
+    mini-css-extract-plugin: "npm:2.9.1"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    react-i18next: "npm:^16.0.0"
+    react-router-dom: "npm:^6.3.0"
+    rxjs: "npm:^7.8.0"
+    semver: "npm:^7.7.3"
+    single-spa: "npm:^6.0.3"
+    swc-loader: "npm:0.2.7"
+    swr: "npm:2.2.5"
+    webpack-pwa-manifest: "npm:4.3.0"
+  checksum: 10/602e1dfc98fc8169ca51d8bed139c87e6a06423593b155771e4379c6de628cc9eafea5d162d0b4a1b3c1067429c028f6f9d44c55534cd22470b3f59bcfa03249
+  languageName: node
+  linkType: hard
+
 "@egen-civitas/esm-config@npm:1.x, @egen-civitas/esm-config@npm:^1.0.0":
   version: 1.0.1
   resolution: "@egen-civitas/esm-config@npm:1.0.1"
@@ -1106,7 +1146,7 @@ __metadata:
   resolution: "@egen/esm-core@workspace:."
   dependencies:
     "@egen-civitas/egen": "npm:^2.0.1"
-    "@egen-civitas/esm-app-shell": "npm:^2.0.0"
+    "@egen-civitas/esm-app-shell": "npm:^2.0.1"
     "@egen-civitas/rspack-config": "npm:^1.1.0"
     "@playwright/test": "npm:^1.55.1"
     "@rspack/cli": "npm:1.7.9"
