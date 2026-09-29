@@ -919,30 +919,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/rspack-config@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@egen-civitas/rspack-config@npm:1.0.1"
-  dependencies:
-    "@rspack/cli": "npm:1.7.9"
-    "@rspack/core": "npm:1.7.9"
-    "@swc/core": "npm:1.15.21"
-    clean-webpack-plugin: "npm:4.0.0"
-    copy-webpack-plugin: "npm:11.0.0"
-    css-loader: "npm:5.2.7"
-    dotenv: "npm:^16.0.3"
-    lodash: "npm:4.17.21"
-    sass-embedded: "npm:1.89.2"
-    sass-loader: "npm:16.0.5"
-    semver: "npm:^7.7.3"
-    style-loader: "npm:3.3.4"
-    swc-loader: "npm:0.2.7"
-    ts-checker-rspack-plugin: "npm:1.1.4"
-    webpack-bundle-analyzer: "npm:4.10.2"
-    webpack-stats-plugin: "npm:1.1.3"
-  checksum: 10/e490e99bc172c01c5ed65571de4b7a81f4c3ac0ab5698cf80cf84738f0f61ad0c69d9c7ef63af1952f8f8e9ef1b19ad76f074cb6a54ce259539826d5a9c6428f
-  languageName: node
-  linkType: hard
-
 "@egen-civitas/rspack-config@npm:^1.1.0":
   version: 1.1.0
   resolution: "@egen-civitas/rspack-config@npm:1.1.0"

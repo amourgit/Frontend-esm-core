@@ -11,7 +11,8 @@
     "csstype": "3.2.3",
     "@egen-civitas/esm-framework": "^1.1.0",
     "@egen-civitas/esm-styleguide": "^1.2.0",
-    "@egen-civitas/esm-app-shell": "^2.0.1"
+    "@egen-civitas/esm-app-shell": "^2.0.1",
+    "@egen-civitas/rspack-config": "^1.1.0"
   },
   "scripts": {
     "run:egen": "egen",
