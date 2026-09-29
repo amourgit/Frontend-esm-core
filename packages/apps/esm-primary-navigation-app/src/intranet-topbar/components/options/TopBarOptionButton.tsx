@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/cn';
 
 // =============================================================================
 //  Bouton d'option de la TopBar — design GED (icône libre, sans fond, accent

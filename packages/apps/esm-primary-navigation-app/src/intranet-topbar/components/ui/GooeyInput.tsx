@@ -11,7 +11,7 @@ import React, {
   type KeyboardEvent,
 } from "react";
 import { motion } from "motion/react";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/cn";
 import { X } from "lucide-react";
 
 function GooeyFilter({ filterId, blur }: { filterId: string; blur: number }) {
