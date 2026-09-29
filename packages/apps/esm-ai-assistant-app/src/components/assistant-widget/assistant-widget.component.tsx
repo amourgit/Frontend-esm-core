@@ -33,6 +33,14 @@ const AssistantWidget: React.FC = () => {
     return () => window.removeEventListener('single-spa:routing-event', handleRouting);
   }, []);
 
+  // Bascule demandée depuis la TopBar (bouton Assistant IA du niveau 2) —
+  // événement window : aucune dépendance de code entre les deux apps.
+  useEffect(() => {
+    const handleToggle = () => setOpen((v) => !v);
+    window.addEventListener('egen:assistant-toggle', handleToggle);
+    return () => window.removeEventListener('egen:assistant-toggle', handleToggle);
+  }, []);
+
   if (!session?.authenticated || !session?.user?.person) return null;
   if (!aiEnabled) return null;
 

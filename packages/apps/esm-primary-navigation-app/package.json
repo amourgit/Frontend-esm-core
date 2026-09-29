@@ -63,8 +63,11 @@
     "@egen-civitas/esm-translations": "1.x",
     "@egen-civitas/esm-utils": "1.x",
     "@egen-civitas/tailwind-preset": "^1.2.0",
+    "@radix-ui/react-slot": "^1.3.3",
     "dayjs": "^1.11.10",
     "lodash-es": "^4.17.21",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
     "rxjs": "^7.8.1",
     "single-spa": "^6.0.0",
     "swr": "^2.2.0"

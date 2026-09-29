@@ -1,5 +1,7 @@
-@use '@egen-civitas/esm-styleguide/src/vars' as *;
-
+// La hauteur de la TopBar (2 niveaux) est variable : elle est mesurée et publiée
+// dans `--egen-topnav-height` par topbar.component.tsx (voir useTopNavHeightVariable).
 .primaryNavContainer {
-  height: var(--egen-topnav-height);
+  position: relative;
+  z-index: var(--z-index-sticky, 200);
+  width: 100%;
 }
