@@ -63,8 +63,6 @@ import { EgenLogo } from '../ui/EgenLogo';
 import { WorkspaceAndSiteSelectorsColumn } from './WorkspaceAndSiteSelectorsColumn';
 import { GooeyInput } from '../ui/GooeyInput';
 import { WaterGlassModal } from '../ui/WaterGlassModal';
-import { AssistantRobotButton } from '../assistant/AssistantRobotButton';
-import { type AssistantMode } from '../assistant/assistantModes';
 import { ExtensionSlot, interpolateUrl, navigate as frameworkNavigate, useConfig } from '@egen-civitas/esm-framework';
 import { type ConfigSchema } from '../../../config-schema';
 import {
@@ -97,13 +95,6 @@ export interface SupremeIntranetTopBarProps {
   onNotificationClick?: () => void;
   onQuickAction?: (actionName: string) => void;
 
-  // Assistant Page Overlay Props
-  isAssistantActive?: boolean;
-  onToggleAssistant?: () => void;
-  onOpenDedicatedVoice?: () => void;
-  assistantMode?: AssistantMode;
-  onSelectAssistantMode?: (mode: AssistantMode) => void;
-
   // Extensible Slots for Custom Application Extensions
   appSlotLeft?: React.ReactNode;
   appSlotCenter?: React.ReactNode;
@@ -126,11 +117,6 @@ export function SupremeIntranetTopBar({
   onSearchClick,
   onNotificationClick,
   onQuickAction,
-  isAssistantActive = false,
-  onToggleAssistant,
-  onOpenDedicatedVoice,
-  assistantMode = 'conversation',
-  onSelectAssistantMode,
   appSlotLeft,
   appSlotCenter,
   appSlotRight,
@@ -689,6 +675,7 @@ export function SupremeIntranetTopBar({
           <div className="w-full bg-transparent px-2 sm:px-4 md:px-6 lg:px-7 h-10 sm:h-11 flex items-center justify-between overflow-visible z-30">
             {isHome || showFullNav ? (
               <div className="w-full flex items-center justify-between gap-2">
+                <ExtensionSlot name="top-nav-level2-start-slot" state={slotState} className="flex items-center shrink-0" />
                 <DropdownNavigation navItems={desktopNavItems} />
                 <div className="flex items-center gap-2 shrink-0">
                   {showFullNav && (
@@ -699,40 +686,20 @@ export function SupremeIntranetTopBar({
                       Mode Fil d'ariane
                     </button>
                   )}
-                  {/* Bouton Icône Déclencheur / Retour Assistant IA 3D au Niveau 2 */}
-                  <AssistantRobotButton
-                    currentMode={assistantMode}
-                    isFullscreenActive={isAssistantActive}
-                    onSelectMode={(mode) => {
-                      if (onSelectAssistantMode) onSelectAssistantMode(mode);
-                    }}
-                    onToggleFullscreen={() => {
-                      if (onToggleAssistant) onToggleAssistant();
-                    }}
-                    onOpenDedicatedVoice={onOpenDedicatedVoice}
-                  />
+                {/* Slot de fin du niveau 2 — alimenté par d'autres apps (ex. assistant IA) */}
+                <ExtensionSlot name="top-nav-level2-end-slot" state={slotState} className="flex items-center shrink-0" />
                 </div>
               </div>
             ) : (
               <div className="w-full flex items-center justify-between gap-2">
                 <div className="flex items-center min-w-0 gap-3">
+                  <ExtensionSlot name="top-nav-level2-start-slot" state={slotState} className="flex items-center shrink-0" />
                   <BreadcrumbLevel2Nav onToggleFullMenu={() => setShowFullNav(true)} />
                   {/* Fil d'Ariane par extensions (invisible si aucune extension) */}
                   <ExtensionSlot name="top-nav-breadcrumb-slot" className={optionStyles.breadcrumbSlot} />
                 </div>
-                {/* Bouton Icône Déclencheur / Retour Assistant IA 3D au Niveau 2 */}
-                <AssistantRobotButton
-                  currentMode={assistantMode}
-                  isFullscreenActive={isAssistantActive}
-                  onSelectMode={(mode) => {
-                    if (onSelectAssistantMode) onSelectAssistantMode(mode);
-                  }}
-                  onToggleFullscreen={() => {
-                    if (onToggleAssistant) onToggleAssistant();
-                  }}
-                  onOpenDedicatedVoice={onOpenDedicatedVoice}
-                  className="ml-2"
-                />
+                {/* Slot de fin du niveau 2 — alimenté par d'autres apps (ex. assistant IA) */}
+                <ExtensionSlot name="top-nav-level2-end-slot" state={slotState} className="flex items-center shrink-0" />
               </div>
             )}
           </div>
@@ -796,18 +763,8 @@ export function SupremeIntranetTopBar({
           <div className="flex items-center gap-2 shrink-0 overflow-visible">
             {appSlotRight && <div className="flex items-center gap-1">{appSlotRight}</div>}
 
-            {/* Bouton Icône Déclencheur / Retour Assistant IA 3D au Niveau 2 GED */}
-            <AssistantRobotButton
-              currentMode={assistantMode}
-              isFullscreenActive={isAssistantActive}
-              onSelectMode={(mode) => {
-                if (onSelectAssistantMode) onSelectAssistantMode(mode);
-              }}
-              onToggleFullscreen={() => {
-                if (onToggleAssistant) onToggleAssistant();
-              }}
-              onOpenDedicatedVoice={onOpenDedicatedVoice}
-            />
+                {/* Slot de fin du niveau 2 — alimenté par d'autres apps (ex. assistant IA) */}
+                <ExtensionSlot name="top-nav-level2-end-slot" state={slotState} className="flex items-center shrink-0" />
           </div>
         </div>
       )}

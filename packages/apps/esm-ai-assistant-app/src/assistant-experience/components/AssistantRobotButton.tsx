@@ -15,11 +15,11 @@ import {
   Maximize2,
   Minimize2,
 } from 'lucide-react';
-import { type AssistantMode, ASSISTANT_MODES, type AssistantModeConfig } from './assistantModes';
-import { playXboxSound } from '../../utils/xboxAudio';
-import { WaterGlassModal } from '../ui/WaterGlassModal';
-import { useAssistantVoice } from '../../context/AssistantGlobalVoiceContext';
-import { LiveOrb } from '../ui/LiveOrb';
+import { type AssistantMode, ASSISTANT_MODES, type AssistantModeConfig } from '@egen-civitas/esm-styleguide';
+import { playXboxSound } from '@egen-civitas/esm-styleguide';
+import { WaterGlassModal } from '@egen-civitas/esm-styleguide';
+import { useAssistantBridge } from '../assistant-bridge';
+import { LiveOrb } from '@egen-civitas/esm-styleguide';
 
 interface AssistantRobotButtonProps {
   currentMode?: AssistantMode;
@@ -61,8 +61,7 @@ export function AssistantRobotButton({
     toggleVoiceSession,
     stopAgentSpeech,
     setAssistantMode,
-    voiceAvailable,
-  } = useAssistantVoice();
+  } = useAssistantBridge();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<number | null>(null);
@@ -156,10 +155,7 @@ export function AssistantRobotButton({
   const strokeDashoffset = 100 - holdProgress;
 
   return (
-    <div
-      ref={containerRef}
-      className={`relative inline-flex items-center justify-center select-none h-full ${className}`}
-    >
+    <div ref={containerRef} className={`relative inline-flex items-center justify-center select-none h-full ${className}`}>
       {/* Trigger Button Libre, sans bordure ni background restrictif, prenant 100% de la hauteur disponible */}
       <button
         type="button"
@@ -171,9 +167,7 @@ export function AssistantRobotButton({
         className={`relative h-10 w-10 sm:h-11 sm:w-11 p-0 m-0 border-0 bg-transparent shadow-none outline-none flex items-center justify-center cursor-pointer select-none touch-none transition-transform duration-200 ${
           isHolding ? 'scale-95' : justCompleted ? 'scale-110' : 'hover:scale-105 active:scale-95'
         }`}
-        title={`Assistant IA [${modeConfig.name}] — ${
-          isVoiceActive ? 'Vocal ACTIF (Audio Duplex)' : 'Clic pour configurer / Maintien 3s Overlay 3D'
-        }`}
+        title={`Assistant IA [${modeConfig.name}] — ${isVoiceActive ? 'Vocal ACTIF (Audio Duplex)' : 'Clic pour configurer / Maintien 3s Overlay 3D'}`}
         aria-label={`Assistant IA Mode ${modeConfig.name}`}
       >
         {/* Halo d'aura lumineuse subtile lors de l'activité vocale */}
@@ -183,20 +177,28 @@ export function AssistantRobotButton({
               isAgentSpeaking
                 ? 'bg-emerald-400/35 animate-pulse'
                 : isSpeaking
-                  ? 'bg-teal-400/40 animate-pulse'
-                  : 'bg-white/20'
+                ? 'bg-teal-400/40 animate-pulse'
+                : 'bg-white/20'
             }`}
           />
         )}
 
         {/* Agent WebGL LiveOrb Blanc prenant 100% de la hauteur disponible */}
         <div className="relative w-full h-full flex items-center justify-center pointer-events-none">
-          <LiveOrb size={38} variant="white" interactive={true} blink={true} />
+          <LiveOrb
+            size={38}
+            variant="white"
+            interactive={true}
+            blink={true}
+          />
         </div>
 
         {/* Anneau de maintien 3 secondes */}
         {isHolding && (
-          <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none p-0.5" viewBox="0 0 36 36">
+          <svg
+            className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none p-0.5"
+            viewBox="0 0 36 36"
+          >
             <path
               className="text-white/10"
               strokeWidth="2.5"
@@ -225,7 +227,11 @@ export function AssistantRobotButton({
           }`}
           title={`Mode: ${modeConfig.name}`}
         >
-          {isVoiceActive ? <Radio className="w-2 h-2" /> : <BadgeIcon className="w-2 h-2 stroke-[2.5]" />}
+          {isVoiceActive ? (
+            <Radio className="w-2 h-2" />
+          ) : (
+            <BadgeIcon className="w-2 h-2 stroke-[2.5]" />
+          )}
         </span>
       </button>
 
@@ -241,8 +247,12 @@ export function AssistantRobotButton({
                   <LiveOrb size={32} variant="white" interactive={true} blink={true} />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-white leading-tight">Assistant EGEN</h3>
-                  <p className="text-[10px] text-teal-300 font-medium">Avatar LiveOrb Blanc & Vocal</p>
+                  <h3 className="text-xs font-bold text-white leading-tight">
+                    Assistant EGEN
+                  </h3>
+                  <p className="text-[10px] text-teal-300 font-medium">
+                    Avatar LiveOrb Blanc & Vocal
+                  </p>
                 </div>
               </div>
 
@@ -262,81 +272,80 @@ export function AssistantRobotButton({
               </div>
             </div>
           }
+          onClose={() => setIsOpen(false)}
         >
           <div className="space-y-3">
             {/* CANAL VOCAL PERMANENT (DUAL-DUPLEX) */}
-            {voiceAvailable && (
-              <div className="p-2.5 rounded-xl bg-white/[0.04] border border-white/10 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <Radio
-                      className={`w-3.5 h-3.5 ${isVoiceActive ? 'text-emerald-400 animate-pulse' : 'text-slate-400'}`}
-                    />
-                    <span className="text-xs font-semibold text-white">Canal Vocal IA</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playXboxSound('toggle');
-                      toggleVoiceSession();
-                    }}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer border-none flex items-center gap-1 ${
-                      isVoiceActive
-                        ? 'bg-emerald-500 text-slate-950 shadow-[0_0_12px_rgba(52,211,153,0.5)]'
-                        : 'bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white'
-                    }`}
-                  >
-                    {isVoiceActive ? <Mic className="w-3 h-3" /> : <MicOff className="w-3 h-3" />}
-                    <span>{isVoiceActive ? 'ACTIF' : 'ACTIVER'}</span>
-                  </button>
+            <div className="p-2.5 rounded-xl bg-white/[0.04] border border-white/10 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <Radio className={`w-3.5 h-3.5 ${isVoiceActive ? 'text-emerald-400 animate-pulse' : 'text-slate-400'}`} />
+                  <span className="text-xs font-semibold text-white">Canal Vocal IA</span>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playXboxSound('toggle');
+                    toggleVoiceSession();
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer border-none flex items-center gap-1 ${
+                    isVoiceActive
+                      ? 'bg-emerald-500 text-slate-950 shadow-[0_0_12px_rgba(52,211,153,0.5)]'
+                      : 'bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white'
+                  }`}
+                >
+                  {isVoiceActive ? <Mic className="w-3 h-3" /> : <MicOff className="w-3 h-3" />}
+                  <span>{isVoiceActive ? 'ACTIF' : 'ACTIVER'}</span>
+                </button>
+              </div>
 
-                {/* Statut live du micro & synthèse */}
-                {isVoiceActive && (
-                  <div className="pt-1.5 border-t border-white/5 flex items-center justify-between text-[11px]">
-                    <div className="flex items-center gap-1.5 text-slate-300">
-                      {isAgentSpeaking ? (
-                        <>
-                          <Volume2 className="w-3 h-3 text-teal-300 animate-pulse" />
-                          <span className="text-teal-300 font-medium">L'IA parle</span>
-                          <div className="flex items-center gap-0.5 h-2.5 ml-1">
-                            {[40, 80, 50, 100, 60].map((h, i) => (
-                              <span
-                                key={i}
-                                className="w-0.5 bg-teal-300 rounded-full"
-                                style={{ height: `${Math.max(20, Math.min(100, (outputVolume / 100) * h))}%` }}
-                              />
-                            ))}
-                          </div>
-                        </>
-                      ) : isListening ? (
-                        <>
-                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                          <span className="text-emerald-300 font-medium">
-                            {isSpeaking ? '🗣️ Voix détectée' : '🎙️ En écoute (VAD)'}
+              {/* Statut live du micro & synthèse */}
+              {isVoiceActive && (
+                <div className="pt-1.5 border-t border-white/5 flex items-center justify-between text-[11px]">
+                  <div className="flex items-center gap-1.5 text-slate-300">
+                    {isAgentSpeaking ? (
+                      <>
+                        <Volume2 className="w-3 h-3 text-teal-300 animate-pulse" />
+                        <span className="text-teal-300 font-medium">L'IA parle</span>
+                        <div className="flex items-center gap-0.5 h-2.5 ml-1">
+                          {[40, 80, 50, 100, 60].map((h, i) => (
+                            <span
+                              key={i}
+                              className="w-0.5 bg-teal-300 rounded-full"
+                              style={{ height: `${Math.max(20, Math.min(100, (outputVolume / 100) * h))}%` }}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    ) : isListening ? (
+                      <>
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                        <span className="text-emerald-300 font-medium">
+                          {isSpeaking ? '🗣️ Voix détectée' : '🎙️ En écoute (VAD)'}
+                        </span>
+                        {isSpeaking && (
+                          <span className="font-mono text-[9px] text-emerald-400 ml-1">
+                            {audioVolume}%
                           </span>
-                          {isSpeaking && (
-                            <span className="font-mono text-[9px] text-emerald-400 ml-1">{audioVolume}%</span>
-                          )}
-                        </>
-                      ) : (
-                        <span className="text-slate-400">Prêt</span>
-                      )}
-                    </div>
-
-                    {isAgentSpeaking && (
-                      <button
-                        type="button"
-                        onClick={stopAgentSpeech}
-                        className="text-[10px] text-slate-400 hover:text-white underline cursor-pointer border-none bg-transparent"
-                      >
-                        Couper
-                      </button>
+                        )}
+                      </>
+                    ) : (
+                      <span className="text-slate-400">Prêt</span>
                     )}
                   </div>
-                )}
-              </div>
-            )}
+
+                  {isAgentSpeaking && (
+                    <button
+                      type="button"
+                      onClick={stopAgentSpeech}
+                      className="text-[10px] text-slate-400 hover:text-white underline cursor-pointer border-none bg-transparent"
+                    >
+                      Couper
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* SÉLECTION DU MODE DE FONCTIONNEMENT */}
             <div>
@@ -344,7 +353,9 @@ export function AssistantRobotButton({
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   Modes Opérationnels
                 </span>
-                <span className="text-[10px] text-teal-400 font-mono">{modeConfig.name}</span>
+                <span className="text-[10px] text-teal-400 font-mono">
+                  {modeConfig.name}
+                </span>
               </div>
 
               <div className="grid grid-cols-1 gap-1.5">
@@ -375,8 +386,12 @@ export function AssistantRobotButton({
                           <ModeIcon className="w-3.5 h-3.5" />
                         </div>
                         <div>
-                          <div className="text-xs font-semibold text-white leading-tight">{mode.name}</div>
-                          <div className="text-[10px] text-slate-400 leading-tight">{mode.tagline}</div>
+                          <div className="text-xs font-semibold text-white leading-tight">
+                            {mode.name}
+                          </div>
+                          <div className="text-[10px] text-slate-400 leading-tight">
+                            {mode.tagline}
+                          </div>
                         </div>
                       </div>
 

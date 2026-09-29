@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSession } from '@egen-civitas/esm-framework';
 import { useTenantMode } from '@egen-civitas/esm-tenant';
 import { SupremeIntranetTopBar } from '../../intranet-topbar/components/shell/SupremeIntranetTopBar';
 import { WorkspaceProvider } from '../../intranet-topbar/context/WorkspaceContext';
 import { SiteProvider } from '../../intranet-topbar/context/SiteContext';
-import { AssistantVoiceProvider, useAssistantVoice } from '../../intranet-topbar/context/AssistantGlobalVoiceContext';
 
 // =============================================================================
 //  TOPBAR — Barre de navigation principale EGEN (design "Supreme Intranet")
@@ -19,11 +18,9 @@ import { AssistantVoiceProvider, useAssistantVoice } from '../../intranet-topbar
 //             Plein écran · Thème · (actions-slot) · Utilisateur ·
 //             (trailing-slot) · Date/Heure
 //  Niveau 2 : Navigation déroulante (accueil) ou fil d'Ariane contextuel
-//             (+ slot "top-nav-breadcrumb-slot") · Bouton Assistant IA
+//             (+ slots "top-nav-level2-start-slot", "top-nav-breadcrumb-slot" et
+//             "top-nav-level2-end-slot" — ce dernier accueille p.ex. le bouton Assistant IA)
 // =============================================================================
-
-/** Événement écouté par esm-ai-assistant-app pour ouvrir/fermer le panneau de l'assistant. */
-export const ASSISTANT_TOGGLE_EVENT = 'egen:assistant-toggle';
 
 /** Publie la hauteur réelle de la TopBar (2 niveaux) dans `--egen-topnav-height`. */
 function useTopNavHeightVariable(ref: React.RefObject<HTMLDivElement>) {
@@ -41,20 +38,11 @@ function useTopNavHeightVariable(ref: React.RefObject<HTMLDivElement>) {
 
 const TopBarContent: React.FC = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const { assistantMode, setAssistantMode } = useAssistantVoice();
   useTopNavHeightVariable(wrapperRef);
-
-  const toggleAssistant = useCallback(() => {
-    window.dispatchEvent(new CustomEvent(ASSISTANT_TOGGLE_EVENT));
-  }, []);
 
   return (
     <div ref={wrapperRef}>
-      <SupremeIntranetTopBar
-        assistantMode={assistantMode}
-        onSelectAssistantMode={setAssistantMode}
-        onToggleAssistant={toggleAssistant}
-      />
+      <SupremeIntranetTopBar />
     </div>
   );
 };
@@ -87,9 +75,7 @@ const TopBar: React.FC = () => {
     return (
       <WorkspaceProvider>
         <SiteProvider>
-          <AssistantVoiceProvider>
-            <TopBarContent />
-          </AssistantVoiceProvider>
+          <TopBarContent />
         </SiteProvider>
       </WorkspaceProvider>
     );

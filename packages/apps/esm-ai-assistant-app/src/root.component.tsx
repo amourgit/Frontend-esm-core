@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AssistantWidget from './components/assistant-widget/assistant-widget.component';
 import styles from './root.scss';
+
+// Expérience plein écran (Spline, WebGL) : chargée à la demande, hors du chemin critique.
+const AssistantExperience = lazy(() => import('./assistant-experience/AssistantExperience'));
 
 // =============================================================================
 //  ROOT — Composant racine de l'app assistant IA
@@ -56,6 +59,9 @@ const Root: React.FC = () => {
           element={
             <div className={styles.assistantAppContainer}>
               <AssistantWidget />
+              <Suspense fallback={null}>
+                <AssistantExperience />
+              </Suspense>
             </div>
           }
         />

@@ -1,4 +1,5 @@
-import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
+import '@egen-civitas/tailwind-preset/tailwind.tw.css';
+import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import {
   initAIFramework,
   defineAIModule,
@@ -76,3 +77,11 @@ export function startupApp() {
 
 // ─── Page : le widget assistant IA (garde sa propre logique de garde d'authentification) ──
 export const root = getSyncLifecycle(assistantRootComponent, options);
+
+// ─── Bouton Assistant IA (niveau 2 de la TopBar) ─────────────────────────────
+// Injecté dans le slot `top-nav-level2-end-slot` (voir routes.json) : la TopBar
+// n'embarque plus aucun élément assistant en dur.
+export const assistantRobotButton = getAsyncLifecycle(
+  () => import('./assistant-experience/components/AssistantRobotButtonExtension'),
+  { featureName: 'ai-assistant-robot-button', moduleName },
+);

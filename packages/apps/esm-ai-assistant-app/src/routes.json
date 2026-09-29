@@ -8,5 +8,15 @@
       "offline": false,
       "containerDomId": "egen-ai-assistant-app-container"
     }
+  ],
+  "extensions": [
+    {
+      "name": "assistant-robot-button",
+      "slot": "top-nav-level2-end-slot",
+      "component": "assistantRobotButton",
+      "online": true,
+      "offline": false,
+      "order": 0
+    }
   ]
 }
