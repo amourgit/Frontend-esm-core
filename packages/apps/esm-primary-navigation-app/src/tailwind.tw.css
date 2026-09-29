@@ -1,0 +1,22 @@
+/* ============================================================================
+ *  Feuille Tailwind de la TopBar (esm-primary-navigation-app)
+ * ============================================================================
+ *  Chaque micro-frontend génère SA PROPRE feuille Tailwind, injectée dans la
+ *  page de façon globale et NON layerée (voir @egen-civitas/tailwind-preset).
+ *  Quand deux feuilles coexistent, la dernière chargée gagne sur les règles de
+ *  même spécificité — et Tailwind ne génère que les classes qu'il voit dans
+ *  les sources de l'app. Si l'assistant IA (chargé après la TopBar) contient
+ *  `.hidden{display:none}` mais pas `.lg:flex`, il réécrit la règle
+ *  responsive de la TopBar : `hidden lg:flex` reste masqué à toutes les
+ *  largeurs (date/heure, séparateurs, options du niveau 1).
+ *
+ *  Remède : les apps qui coexistent à l'écran déclarent les sources l'une de
+ *  l'autre. Leurs feuilles contiennent alors exactement les mêmes utilitaires
+ *  dans le même ordre, donc l'ordre de chargement n'a plus aucun effet.
+ *
+ *  À GARDER SYMÉTRIQUE avec esm-ai-assistant-app/src/tailwind.tw.css.
+ *  Toute nouvelle app qui importe Tailwind et se charge avec la TopBar doit
+ *  être ajoutée dans les DEUX fichiers.
+ * ==========================================================================*/
+@import '@egen-civitas/tailwind-preset/tailwind.tw.css';
+@source "../../esm-ai-assistant-app/src";
