@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Check, Server } from 'lucide-react';
@@ -6,15 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { useSite } from '../../context/SiteContext';
 import { playXboxSound } from '../../utils/xboxAudio';
-import { SiteItem } from '../../data/sitesData';
+import { type SiteItem } from '../../data/sitesData';
 
 interface WorkspaceAndSiteSelectorsColumnProps {
   onShowNotification?: (msg: string, type?: 'success' | 'info' | 'warning' | 'error') => void;
 }
 
-export function WorkspaceAndSiteSelectorsColumn({
-  onShowNotification,
-}: WorkspaceAndSiteSelectorsColumnProps) {
+export function WorkspaceAndSiteSelectorsColumn({ onShowNotification }: WorkspaceAndSiteSelectorsColumnProps) {
   const navigate = useNavigate();
   const { currentWorkspace, setWorkspaceId, availableWorkspaces } = useWorkspace();
   const { selectedSite, setSelectedSiteUuid, availableSites, clearSite } = useSite();
@@ -96,9 +94,7 @@ export function WorkspaceAndSiteSelectorsColumn({
             <span className="hidden sm:inline text-slate-300 font-normal shrink-0 text-[9px] sm:text-[10px]">
               Espace:
             </span>
-            <span className="text-teal-300 font-bold truncate text-[10px] sm:text-[11px]">
-              {currentWorkspace.name}
-            </span>
+            <span className="text-teal-300 font-bold truncate text-[10px] sm:text-[11px]">{currentWorkspace.name}</span>
           </div>
           <ChevronDown
             className={`w-2.5 h-2.5 text-teal-300 shrink-0 transition-transform duration-200 ${
@@ -266,7 +262,9 @@ export function WorkspaceAndSiteSelectorsColumn({
                           {site.shortName}
                         </span>
                       </div>
-                      <span className="text-[10px] text-slate-400 truncate mt-0.5">{site.head} • {site.memberCount} membres</span>
+                      <span className="text-[10px] text-slate-400 truncate mt-0.5">
+                        {site.head} • {site.memberCount} membres
+                      </span>
                     </div>
 
                     {isActive ? (

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { SITES_LIST, SiteItem, getSiteByUuid } from '../data/sitesData';
+import { SITES_LIST, type SiteItem, getSiteByUuid } from '../data/sitesData';
 
 export interface SiteContextType {
   selectedSiteUuid: string | null;
@@ -18,7 +18,14 @@ export interface SiteContextType {
   setSelectedServiceUuid: (uuid: string | null) => void;
   availableServices: SiteItem[];
   clearService: () => void;
-  activeServiceSubTab: 'applications' | 'membres' | 'ressources' | 'taches' | 'activite' | 'parametres' | 'informations';
+  activeServiceSubTab:
+    | 'applications'
+    | 'membres'
+    | 'ressources'
+    | 'taches'
+    | 'activite'
+    | 'parametres'
+    | 'informations';
 }
 
 export const SiteContext = createContext<SiteContextType | null>(null);

@@ -1,5 +1,5 @@
-import { NavItem } from '../components/shell/DropdownNavigation';
-import { IntranetApp } from '../data/intranetAppsMock';
+import { type NavItem } from '../components/shell/DropdownNavigation';
+import { type IntranetApp } from '../data/intranetAppsMock';
 
 export type WorkspaceCategory = 'public' | 'organisationnel' | 'personnel';
 

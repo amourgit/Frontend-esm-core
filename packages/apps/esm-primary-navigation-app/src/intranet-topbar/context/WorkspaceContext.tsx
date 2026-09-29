@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
-import { Workspace, WorkspaceId } from '../types/workspace';
+import { type Workspace, type WorkspaceId } from '../types/workspace';
 import { WORKSPACES_MOCK_DATA } from '../data/workspaceMockData';
-import { IntranetApp } from '../data/intranetAppsMock';
-import { NavItem } from '../components/shell/DropdownNavigation';
+import { type IntranetApp } from '../data/intranetAppsMock';
+import { type NavItem } from '../components/shell/DropdownNavigation';
 
 interface WorkspaceContextType {
   currentWorkspace: Workspace;
@@ -19,14 +19,14 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [workspaceId, setWorkspaceIdState] = useState<WorkspaceId>('intranet');
 
   const setWorkspaceId = useCallback((id: WorkspaceId) => {
-    const exists = WORKSPACES_MOCK_DATA.some(w => w.id === id);
+    const exists = WORKSPACES_MOCK_DATA.some((w) => w.id === id);
     if (exists) {
       setWorkspaceIdState(id);
     }
   }, []);
 
   const currentWorkspace = useMemo(() => {
-    return WORKSPACES_MOCK_DATA.find(w => w.id === workspaceId) || WORKSPACES_MOCK_DATA[0];
+    return WORKSPACES_MOCK_DATA.find((w) => w.id === workspaceId) || WORKSPACES_MOCK_DATA[0];
   }, [workspaceId]);
 
   const currentApps = useMemo(() => {
@@ -45,7 +45,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         setWorkspaceId,
         availableWorkspaces: WORKSPACES_MOCK_DATA,
         currentApps,
-        currentNavItems
+        currentNavItems,
       }}
     >
       {children}
