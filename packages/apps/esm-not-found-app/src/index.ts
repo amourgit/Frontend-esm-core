@@ -9,9 +9,9 @@ import rootComponent from './root.component';
 //  exclut explicitement toutes les routes déjà déclarées ailleurs dans le
 //  monorepo — login, logout, change-password, home,
 //  offline-tools — et la racine vide, gérée par son propre redirect).
-//  Rendue dans le contenu de la SPA pendant que
-//  @egen-civitas/esm-primary-navigation-app affiche sa TopBar au-dessus, comme
-//  n'importe quelle autre page de contenu.
+//  Rendue en plein écran, SANS TopBar : la page pose html[data-public-route]
+//  à son montage (mécanisme du shell, comme esm-login-app) ce qui masque la
+//  TopBar, le left-nav et le footer.
 // =============================================================================
 
 const moduleName = '@egen-civitas/esm-not-found-app';
