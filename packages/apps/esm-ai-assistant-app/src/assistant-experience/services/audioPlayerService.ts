@@ -22,6 +22,9 @@ export class AudioPlayerService {
   private volumeTimer: number | null = null;
   private keepAliveTimer: number | null = null;
   private safetyTimeoutId: number | null = null;
+  private audioContext: AudioContext | null = null;
+  private pcmSource: AudioBufferSourceNode | null = null;
+  private pcmResolve: (() => void) | null = null;
 
   constructor(events: AudioPlaybackEvents = {}) {
     this.events = events;
@@ -89,6 +92,95 @@ export class AudioPlayerService {
         onEndCallback();
       };
     }
+  }
+
+  /**
+   * Joue un audio PCM 16 bits little-endian mono encodé en base64 (sortie TTS Gemini).
+   * La promesse se résout quand la lecture est terminée (ou interrompue par stop()).
+   */
+  public async playBase64Pcm(base64: string, sampleRate = 24000): Promise<void> {
+    this.stop();
+    if (typeof window === 'undefined') return;
+
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioCtx) {
+      throw new Error('Web Audio API indisponible');
+    }
+
+    const binary = atob(base64);
+    const sampleCount = Math.floor(binary.length / 2);
+    if (sampleCount === 0) return;
+
+    const view = new DataView(new ArrayBuffer(sampleCount * 2));
+    for (let i = 0; i < sampleCount * 2; i++) {
+      view.setUint8(i, binary.charCodeAt(i));
+    }
+
+    if (!this.audioContext || this.audioContext.state === 'closed') {
+      this.audioContext = new AudioCtx();
+    }
+    const ctx = this.audioContext;
+    if (ctx.state === 'suspended') {
+      await ctx.resume();
+    }
+
+    const buffer = ctx.createBuffer(1, sampleCount, sampleRate);
+    const channel = buffer.getChannelData(0);
+    for (let i = 0; i < sampleCount; i++) {
+      channel[i] = view.getInt16(i * 2, true) / 32768;
+    }
+
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+    const levels = new Uint8Array(analyser.frequencyBinCount);
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(analyser);
+    analyser.connect(ctx.destination);
+    this.pcmSource = source;
+
+    return new Promise<void>((resolve) => {
+      this.pcmResolve = resolve;
+      source.onended = () => {
+        if (this.pcmSource !== source) return;
+        this.pcmSource = null;
+        this.pcmResolve = null;
+        this.isCurrentlyPlaying = false;
+        this.stopSimulatedVolume();
+        if (this.events.onEnd) this.events.onEnd();
+        resolve();
+      };
+
+      this.isCurrentlyPlaying = true;
+      if (this.events.onStart) this.events.onStart();
+      this.stopSimulatedVolume();
+      this.volumeTimer = window.setInterval(() => {
+        if (!this.events.onVolumeChange) return;
+        analyser.getByteFrequencyData(levels);
+        let sum = 0;
+        for (let i = 0; i < levels.length; i++) sum += levels[i];
+        this.events.onVolumeChange(Math.min(100, Math.round((sum / levels.length / 255) * 200)));
+      }, 100);
+      source.start();
+    });
+  }
+
+  private stopPcmPlayback() {
+    const source = this.pcmSource;
+    const resolve = this.pcmResolve;
+    this.pcmSource = null;
+    this.pcmResolve = null;
+    if (source) {
+      source.onended = null;
+      try {
+        source.stop();
+      } catch {
+        // déjà arrêtée
+      }
+    }
+    if (resolve) resolve();
   }
 
   /**
@@ -215,6 +307,7 @@ export class AudioPlayerService {
    * Arrête immédiatement toute synthèse en cours et vide la file
    */
   public stop(): void {
+    this.stopPcmPlayback();
     this.queue = [];
     this.isStreamingOpen = false;
     this.isCurrentlyPlaying = false;

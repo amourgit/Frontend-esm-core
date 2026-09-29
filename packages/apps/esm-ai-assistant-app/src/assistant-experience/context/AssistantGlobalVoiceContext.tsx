@@ -328,7 +328,7 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
               sentenceBuffer += chunk;
 
               // Détecte les fins de phrases ou de clauses pour synthétiser immédiatement
-              const splitMatch = sentenceBuffer.match(/^(.*?[.!?:\n])\s*(.*)$/s);
+              const splitMatch = sentenceBuffer.match(/^(.*?[.!?:\n])\s*([\s\S]*)$/);
               if (splitMatch) {
                 const completeSentence = splitMatch[1].trim();
                 sentenceBuffer = splitMatch[2] || '';

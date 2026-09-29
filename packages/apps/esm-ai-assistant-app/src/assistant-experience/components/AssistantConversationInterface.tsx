@@ -9,7 +9,7 @@ import {
   Radio,
   Mic,
 } from 'lucide-react';
-import { useAssistantVoice } from '../../context/AssistantGlobalVoiceContext';
+import { useAssistantVoice } from '../context/AssistantGlobalVoiceContext';
 import { playXboxSound } from '@egen-civitas/esm-styleguide';
 import { PromptInput } from '@egen-civitas/esm-styleguide';
 

@@ -16,7 +16,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { RecursiveErosionBackground, RECURSIVE_EROSION_DEFAULTS } from '@egen-civitas/esm-styleguide';
-import { useAssistantVoice } from '../../context/AssistantGlobalVoiceContext';
+import { useAssistantVoice } from '../context/AssistantGlobalVoiceContext';
 import { ASSISTANT_MODES, type AssistantMode } from '@egen-civitas/esm-styleguide';
 import { playXboxSound } from '@egen-civitas/esm-styleguide';
 

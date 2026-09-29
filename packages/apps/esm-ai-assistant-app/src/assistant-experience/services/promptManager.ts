@@ -32,7 +32,7 @@ export const DEFAULT_BASE_SYSTEM_PROMPT =
  */
 export function getInitialEnvPrompt(): string {
   try {
-    const envPrompt = import.meta.env.VITE_AGENT_SYSTEM_PROMPT;
+    const envPrompt = import.meta.env?.VITE_AGENT_SYSTEM_PROMPT;
     if (envPrompt && typeof envPrompt === 'string' && envPrompt.trim().length > 0) {
       return envPrompt.trim();
     }

@@ -10,7 +10,7 @@
     "@types/react": "18.3.25",
     "csstype": "3.2.3",
     "@egen-civitas/esm-framework": "^1.1.0",
-    "@egen-civitas/esm-styleguide": "^1.3.0",
+    "@egen-civitas/esm-styleguide": "^1.4.0",
     "@egen-civitas/esm-app-shell": "^2.1.0",
     "@egen-civitas/rspack-config": "^1.1.0"
   },

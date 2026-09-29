@@ -272,7 +272,6 @@ export function AssistantRobotButton({
               </div>
             </div>
           }
-          onClose={() => setIsOpen(false)}
         >
           <div className="space-y-3">
             {/* CANAL VOCAL PERMANENT (DUAL-DUPLEX) */}

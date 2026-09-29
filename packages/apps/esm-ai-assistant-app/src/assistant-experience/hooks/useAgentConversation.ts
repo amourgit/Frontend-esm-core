@@ -292,7 +292,7 @@ export function useAgentConversation(
 
               if (shouldPlayVoice && playerRef.current) {
                 sentenceBuffer += chunk;
-                const splitMatch = sentenceBuffer.match(/^(.*?[.!?:\n])\s*(.*)$/s);
+                const splitMatch = sentenceBuffer.match(/^(.*?[.!?:\n])\s*([\s\S]*)$/);
                 if (splitMatch) {
                   const completeSentence = splitMatch[1].trim();
                   sentenceBuffer = splitMatch[2] || '';

@@ -14,7 +14,7 @@ import {
   PhoneCall,
   X,
 } from 'lucide-react';
-import { useAgentConversationContext } from '../../context/AgentConversationContext';
+import { useAgentConversationContext } from '../context/AgentConversationContext';
 import { playXboxSound } from '@egen-civitas/esm-styleguide';
 
 interface FloatingVoiceWidgetProps {
