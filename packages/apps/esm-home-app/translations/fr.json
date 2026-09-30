@@ -16,5 +16,15 @@
   "showcaseTestimonialCardDescription": "Pile de témoignages glissable (verre translucide) — glisse la carte de devant vers la gauche pour la faire tourner en fin de pile.",
   "showcaseInteractiveSelectorDescription": "Sélecteur à panneaux extensibles — clique un panneau pour l'étirer en plein cadre, les autres se replient en bandeau. Entrée en cascade au chargement.",
   "showcaseLayoutGridDescription": "Grille de cartes — clique une carte pour l'étirer en plein cadre (transition de layout partagée), un voile sombre apparaît derrière. Reclique le voile pour refermer.",
-  "showcaseVerticalSliderDescription": "Carrousel vertical à défilement automatique (2s), navigation par rail de miniatures synchronisé."
+  "showcaseVerticalSliderDescription": "Carrousel vertical à défilement automatique (2s), navigation par rail de miniatures synchronisé.",
+  "showcaseAssistantModesDescription": "Les 4 modes de l'assistant (données du styleguide : nom, accroche, principe, exemple, classes de couleur).",
+  "showcaseAutocompleteDescription": "Capsule Material 3 — sélection simple ou multiple (chips), création à la volée, chargement, rendu et textes personnalisables.",
+  "showcaseComboboxDescription": "Déclencheur + recherche dans un popover (design shadcn sans Radix/cmdk) — groupes, icônes, filtre personnalisable, placement configurable.",
+  "showcaseLiveOrbDescription": "Sphère 3D dont les yeux suivent le pointeur (WebGL, repli CSS sans GPU) — variantes de matière, couleurs libres, suivi et clignement désactivables.",
+  "showcaseMorphSelectDescription": "Select dont le déclencheur se morphe en panneau (layout partagé) — composable : MorphSelectTrigger / Value / Content / Item.",
+  "showcasePromptInputDescription": "Zone de saisie de l'assistant — choix du modèle et de l'effort, pièces jointes, envoi avec Entrée. Le callback onSubmit reçoit le texte et les métadonnées.",
+  "showcaseRecursiveErosionDescription": "Fond animé « sphère de particules » (iframe sandboxée) — mode clair/sombre, teinte, saturation et luminosité réglables.",
+  "showcaseSplineSceneDescription": "Scène 3D Spline plein cadre (prop scene = URL .splinecode) — chargée à la demande car la scène pèse ~1,3 Mo.",
+  "showcaseWaterGlassDescription": "Panneau « verre d'eau » pour menus et popovers — alignement, largeur, slots header/footer. Se positionne par rapport au parent relatif.",
+  "showcaseXboxSoundsDescription": "Effets sonores de l'interface (Web Audio, aucun fichier) — clique un bouton pour jouer le son ; le mode muet est mémorisé."
 }

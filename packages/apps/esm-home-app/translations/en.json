@@ -1,7 +1,10 @@
 {
+  "showcaseAssistantModesDescription": "The assistant's 4 modes (styleguide data: name, tagline, principle, example, color classes).",
+  "showcaseAutocompleteDescription": "Material 3 capsule — single or multiple selection (chips), on-the-fly creation, loading state, customizable rendering and texts.",
   "showcaseCardModalDescription": "Generic modal whose container is any of the card variants above — freely combine variant, animation, and draggable.",
   "showcaseCascadingNavDescription": "Cascading navigation dropdown, opens downward or upward based on the direction prop.",
   "showcaseCircularGalleryDescription": "Circular-pill gallery (GSAP + MotionPathPlugin) — click a thumbnail to expand it full-frame, with a bounce on close. Autoplays every 4.5s.",
+  "showcaseComboboxDescription": "Trigger + search in a popover (shadcn design without Radix/cmdk) — groups, icons, custom filter, configurable placement.",
   "showcaseDecoratedCardDescription": "8 ready-to-use decorative variants — no imposed size, content dictates size.",
   "showcaseEntityDetailBrowserDescription": "Entity + list of browsable sub-items, detail panel and related-entity panel, all via props. Click the first lesson or the + button to see the trainer.",
   "showcaseFieldsDescription": "Single, multi-variant input field (outlined / filled / standard / kinetic).",
@@ -10,11 +13,18 @@
   "showcaseImageSwiperDescription": "Swipeable card stack (stacked 3D effect, Tinder-style) — swipe a card left or right to send it to the back of the stack.",
   "showcaseInteractiveSelectorDescription": "Expanding-panel selector — click a panel to stretch it full-frame, the others collapse to a strip. Cascading entrance on load.",
   "showcaseLayoutGridDescription": "Card grid — click a card to stretch it full-frame (shared layout transition), a dark scrim appears behind it. Click the scrim again to close.",
+  "showcaseLiveOrbDescription": "3D sphere whose eyes follow the pointer (WebGL, CSS fallback without GPU) — material variants, free colors, pointer tracking and blinking can be turned off.",
   "showcaseMenuDescription": "Animated (GSAP) side navigation panel — configurable side: left or right.",
+  "showcaseMorphSelectDescription": "Select whose trigger morphs into the panel (shared layout) — composable: MorphSelectTrigger / Value / Content / Item.",
+  "showcasePromptInputDescription": "Assistant input area — model and effort choice, attachments, send with Enter. The onSubmit callback receives the text and metadata.",
+  "showcaseRecursiveErosionDescription": "Animated particle-sphere background (sandboxed iframe) — light/dark mode, adjustable hue, saturation and brightness.",
   "showcaseSelectDescription": "Generic selection popover (compound component) — trigger + panel with search, avatar/initial fallback, fully customizable rendering.",
   "showcaseSheetDescription": "Draggable modal sheet, anchored top or bottom based on the side prop.",
+  "showcaseSplineSceneDescription": "Full-frame Spline 3D scene (scene prop = .splinecode URL) — loaded on demand because the scene weighs ~1.3 MB.",
   "showcaseSubtitle": "@egen/esm-styleguide components under visual validation.",
   "showcaseTestimonialCardDescription": "Swipeable testimonial stack (translucent glass) — swipe the front card left to send it to the back of the stack.",
   "showcaseToastDescription": "'Liquid glass' notification, 3 variants: default (countdown), transfer (real progress), actions (customizable commands).",
-  "showcaseVerticalSliderDescription": "Vertical auto-playing carousel (2s), navigation via a synced thumbnail rail."
+  "showcaseVerticalSliderDescription": "Vertical auto-playing carousel (2s), navigation via a synced thumbnail rail.",
+  "showcaseWaterGlassDescription": "\"Water glass\" panel for menus and popovers — alignment, width, header/footer slots. Positioned relative to its relative parent.",
+  "showcaseXboxSoundsDescription": "Interface sound effects (Web Audio, no files) — click a button to play the sound; mute state is remembered."
 }

@@ -231,3 +231,88 @@
   width: 5rem;
   height: 400px;
 }
+
+// ── Vitrine des variantes (sélections + assistant) ─────────────────────────────
+.variantsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.variantsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.variantCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 0.875rem;
+  border-radius: var(--border-radius-md, 0.5rem);
+  border: 1px dashed var(--colors-border-default, rgba(128, 128, 128, 0.3));
+  min-width: 0;
+}
+
+// Réserve la hauteur du panneau ouvert (MorphSelect / Autocomplete s'étendent en place).
+.variantCardTall {
+  min-height: 15rem;
+}
+
+.variantLabel {
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  font-weight: var(--typography-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--colors-surface-muted-foreground);
+}
+
+.variantOutput {
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  color: var(--colors-surface-muted-foreground);
+}
+
+.stageCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stageDark {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-md, 0.5rem);
+  background: #0a0908;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.controlButton {
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--border-radius-md, 0.5rem);
+  border: 1px solid var(--colors-border-default, rgba(128, 128, 128, 0.4));
+  background: transparent;
+  color: var(--colors-surface-foreground);
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--colors-surface-muted, rgba(128, 128, 128, 0.12));
+  }
+}
+
+.controlLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  color: var(--colors-surface-muted-foreground);
+}

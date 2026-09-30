@@ -59,7 +59,7 @@
     "@egen-civitas/esm-theme": "1.x",
     "@egen-civitas/esm-translations": "1.x",
     "@egen-civitas/esm-utils": "1.x",
-    "@egen-civitas/tailwind-preset": "^1.3.0",
+    "@egen-civitas/tailwind-preset": "^1.4.0",
     "dayjs": "^1.11.10",
     "react-is": "^17.0.2",
     "rxjs": "^7.8.1",

@@ -45,6 +45,7 @@ import {
 } from '@egen-civitas/esm-framework';
 import Autoplay from 'embla-carousel-autoplay';
 import type { ConfigSchema } from '../../config-schema';
+import { AssistantShowcase, SelectionsShowcase } from './new-components-showcase.component';
 import styles from './component-showcase.scss';
 
 // =============================================================================
@@ -61,7 +62,16 @@ import styles from './component-showcase.scss';
 // =============================================================================
 
 const DemoTentIcon = () => (
-  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M12 3 L21 19 H3 Z" />
     <path d="M12 3 L12 19" />
     <path d="M8.5 19 L12 12 L15.5 19" />
@@ -69,19 +79,46 @@ const DemoTentIcon = () => (
 );
 
 const DemoFireIcon = () => (
-  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M12 2c1 3-3 4-3 7a3 3 0 0 0 6 0c0-1-1-2-1-2 2 1 3 3 3 5a5 5 0 0 1-10 0c0-4 3-6 3-8 0-1 0-2 2-2Z" />
   </svg>
 );
 
 const DemoWaterIcon = () => (
-  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M12 2c4 5 7 8.5 7 12a7 7 0 0 1-14 0c0-3.5 3-7 7-12Z" />
   </svg>
 );
 
 const DemoHotTubIcon = () => (
-  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M3 17c1.5 1.5 3 1.5 4.5 0s3-1.5 4.5 0 3 1.5 4.5 0 3-1.5 4.5 0" />
     <rect x="4" y="10" width="16" height="7" rx="1.5" />
     <path d="M7 10V7a2 2 0 0 1 4 0M13 10V6a2 2 0 0 1 4 0v4" />
@@ -89,7 +126,16 @@ const DemoHotTubIcon = () => (
 );
 
 const DemoHikingIcon = () => (
-  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="12" cy="4" r="2" />
     <path d="M9 21l2.5-6.5L9 11l1-3 3 2 2 6-2 5" />
     <path d="M13 8l4 1.5-1 4" />
@@ -205,8 +251,8 @@ const ComponentShowcasePage: React.FC = () => {
       detail: (
         <p>
           Première leçon de la démo — ce panneau de détail ne s'ouvre QUE si
-          <code> item.detail</code> est fourni. Il peut contenir n'importe
-          quel texte ou composant React (vidéo, PDF, quiz...).
+          <code> item.detail</code> est fourni. Il peut contenir n'importe quel texte ou composant React (vidéo, PDF,
+          quiz...).
         </p>
       ),
     },
@@ -237,11 +283,26 @@ const ComponentShowcasePage: React.FC = () => {
   // ── Démo : Carousel/ThumbsSlider (@egen-civitas/esm-styleguide/carousel/slider) ─────
   const verticalSliderOptions: EmblaOptionsType = { loop: false, axis: 'y' };
   const demoVerticalSliderImages = [
-    { src: 'https://images.unsplash.com/photo-1759395073808-17782f3d8d66?q=80&w=1471&auto=format&fit=crop', alt: 'Slide 1' },
-    { src: 'https://images.unsplash.com/photo-1759434192768-fe3facebd5f6?q=80&w=1471&auto=format&fit=crop', alt: 'Slide 2' },
-    { src: 'https://images.unsplash.com/photo-1758641008040-28cdd59ca8fb?q=80&w=687&auto=format&fit=crop', alt: 'Slide 3' },
-    { src: 'https://images.unsplash.com/photo-1618220649687-ba860f3176e7?q=80&w=1474&auto=format&fit=crop', alt: 'Slide 4' },
-    { src: 'https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?q=80&w=765&auto=format&fit=crop', alt: 'Slide 5' },
+    {
+      src: 'https://images.unsplash.com/photo-1759395073808-17782f3d8d66?q=80&w=1471&auto=format&fit=crop',
+      alt: 'Slide 1',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1759434192768-fe3facebd5f6?q=80&w=1471&auto=format&fit=crop',
+      alt: 'Slide 2',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1758641008040-28cdd59ca8fb?q=80&w=687&auto=format&fit=crop',
+      alt: 'Slide 3',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1618220649687-ba860f3176e7?q=80&w=1474&auto=format&fit=crop',
+      alt: 'Slide 4',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?q=80&w=765&auto=format&fit=crop',
+      alt: 'Slide 5',
+    },
   ];
 
   // ── Démo : InteractiveSelector (@egen-civitas/esm-styleguide/selections) ───────────
@@ -351,7 +412,12 @@ const ComponentShowcasePage: React.FC = () => {
 
   // ── Démo : Select (@egen-civitas/esm-styleguide/selections/select-popover) ─────────
   const demoTenants: SelectOption[] = [
-    { id: 'eigen-national', name: 'EIGEN — Gabon (national)', plan: 'Établissement', logo: 'https://picsum.photos/seed/tenant-eigen/64' },
+    {
+      id: 'eigen-national',
+      name: 'EIGEN — Gabon (national)',
+      plan: 'Établissement',
+      logo: 'https://picsum.photos/seed/tenant-eigen/64',
+    },
     { id: 'iam-central', name: 'IAM Central', plan: 'Plateforme', logo: 'https://picsum.photos/seed/tenant-iam/64' },
     { id: 'civitas', name: 'CIVITAS', plan: 'Entreprise', logo: 'https://picsum.photos/seed/tenant-civitas/64' },
     { id: 'edugabon', name: 'EDUGABON', plan: 'Établissement' },
@@ -359,7 +425,18 @@ const ComponentShowcasePage: React.FC = () => {
   const [selectedTenantId, setSelectedTenantId] = useState('eigen-national');
 
   // ── Démo : DecoratedCard (@egen-civitas/esm-styleguide/cards/decorated-card) ────────
-  const cardVariants: CardVariant[] = ['default', 'dots', 'gradient', 'plus', 'neubrutalism', 'inner', 'lifted', 'corners', 'glass', 'mirror'];
+  const cardVariants: CardVariant[] = [
+    'default',
+    'dots',
+    'gradient',
+    'plus',
+    'neubrutalism',
+    'inner',
+    'lifted',
+    'corners',
+    'glass',
+    'mirror',
+  ];
   const [selectedCardVariant, setSelectedCardVariant] = useState<CardVariant>('default');
 
   // ── Démo : CardModal (@egen-civitas/esm-styleguide/dialogs/card-modal) ──────────────
@@ -380,7 +457,6 @@ const ComponentShowcasePage: React.FC = () => {
   const [modalDraggable, setModalDraggable] = useState(false);
   const [modalDockable, setModalDockable] = useState(false);
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
-
 
   // ── Démo : FolderGallery (@egen-civitas/esm-styleguide/containers/folder-gallery) ──
   // Dossier n°1 : des photos (nature "image")
@@ -426,33 +502,16 @@ const ComponentShowcasePage: React.FC = () => {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>DynamicField</h2>
           <p className={styles.sectionDescription}>
-            {t('showcaseFieldsDescription', 'Champ de saisie unique, multi-variante (outlined / filled / standard / kinetic).')}
+            {t(
+              'showcaseFieldsDescription',
+              'Champ de saisie unique, multi-variante (outlined / filled / standard / kinetic).',
+            )}
           </p>
           <div className={styles.fieldsGrid}>
-            <DynamicField
-              variant="outlined"
-              label="Outlined"
-              value={outlinedValue}
-              onChange={setOutlinedValue}
-            />
-            <DynamicField
-              variant="filled"
-              label="Filled"
-              value={filledValue}
-              onChange={setFilledValue}
-            />
-            <DynamicField
-              variant="standard"
-              label="Standard"
-              value={standardValue}
-              onChange={setStandardValue}
-            />
-            <DynamicField
-              variant="kinetic"
-              label="Kinetic"
-              value={kineticValue}
-              onChange={setKineticValue}
-            />
+            <DynamicField variant="outlined" label="Outlined" value={outlinedValue} onChange={setOutlinedValue} />
+            <DynamicField variant="filled" label="Filled" value={filledValue} onChange={setFilledValue} />
+            <DynamicField variant="standard" label="Standard" value={standardValue} onChange={setStandardValue} />
+            <DynamicField variant="kinetic" label="Kinetic" value={kineticValue} onChange={setKineticValue} />
           </div>
         </section>
 
@@ -537,7 +596,9 @@ const ComponentShowcasePage: React.FC = () => {
               <SheetContent>
                 <SheetHeader>
                   <SheetTitle>Sheet — side=&quot;top&quot;</SheetTitle>
-                  <SheetDescription>Glisse depuis le haut de l'écran. Fermeture en glissant vers le haut.</SheetDescription>
+                  <SheetDescription>
+                    Glisse depuis le haut de l'écran. Fermeture en glissant vers le haut.
+                  </SheetDescription>
                 </SheetHeader>
                 <p>Contenu de démonstration.</p>
                 <SheetFooter>
@@ -551,7 +612,9 @@ const ComponentShowcasePage: React.FC = () => {
               <SheetContent>
                 <SheetHeader>
                   <SheetTitle>Sheet — side=&quot;bottom&quot;</SheetTitle>
-                  <SheetDescription>Glisse depuis le bas de l'écran. Fermeture en glissant vers le bas.</SheetDescription>
+                  <SheetDescription>
+                    Glisse depuis le bas de l'écran. Fermeture en glissant vers le bas.
+                  </SheetDescription>
                 </SheetHeader>
                 <p>Contenu de démonstration.</p>
                 <SheetFooter>
@@ -599,8 +662,16 @@ const ComponentShowcasePage: React.FC = () => {
                   title: 'Nouvelle demande de rôle',
                   description: 'Amour Ngoua demande le rôle « Administrateur tenant ».',
                   actions: [
-                    { label: 'Refuser', kind: 'danger', onClick: () => showToast({ kind: 'error', description: 'Demande refusée.' }) },
-                    { label: 'Approuver', kind: 'primary', onClick: () => showToast({ kind: 'success', description: 'Demande approuvée.' }) },
+                    {
+                      label: 'Refuser',
+                      kind: 'danger',
+                      onClick: () => showToast({ kind: 'error', description: 'Demande refusée.' }),
+                    },
+                    {
+                      label: 'Approuver',
+                      kind: 'primary',
+                      onClick: () => showToast({ kind: 'success', description: 'Demande approuvée.' }),
+                    },
                   ],
                 })
               }
@@ -654,7 +725,11 @@ const ComponentShowcasePage: React.FC = () => {
             )}
           </p>
           <div className={styles.folderGalleryRow}>
-            <FolderGallery title="Photography.gallery" hint="Glisser une photo vers le bas pour fermer" items={demoPhotoItems} />
+            <FolderGallery
+              title="Photography.gallery"
+              hint="Glisser une photo vers le bas pour fermer"
+              items={demoPhotoItems}
+            />
             <FolderGallery
               title="Équipe.dossier"
               hint="Glisser une carte vers le bas pour fermer"
@@ -707,7 +782,10 @@ const ComponentShowcasePage: React.FC = () => {
               <span className={styles.decoratedCardBody}>Small</span>
             </DecoratedCard>
             <DecoratedCard variant="mirror" size="default">
-              <span className={styles.decoratedCardBody} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span
+                className={styles.decoratedCardBody}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+              >
                 Generate <AddIcon size={18} />
               </span>
             </DecoratedCard>
@@ -765,7 +843,10 @@ const ComponentShowcasePage: React.FC = () => {
           </div>
 
           <div className={styles.demoRow} style={{ marginTop: '1rem', alignItems: 'center' }}>
-            <label className={styles.decoratedCardBody} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+            <label
+              className={styles.decoratedCardBody}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+            >
               <input type="checkbox" checked={modalDraggable} onChange={(e) => setModalDraggable(e.target.checked)} />
               Déplaçable à la souris
             </label>
@@ -799,8 +880,8 @@ const ComponentShowcasePage: React.FC = () => {
             dockable={modalDraggable && modalDockable}
           >
             <p className={styles.decoratedCardBody}>
-              Contenu du modal — entièrement libre, passé via <code>children</code>. Ferme-le avec la croix,
-              Échap, un clic en dehors{modalDraggable ? ', ou déplace-le avant de le fermer' : ''}
+              Contenu du modal — entièrement libre, passé via <code>children</code>. Ferme-le avec la croix, Échap, un
+              clic en dehors{modalDraggable ? ', ou déplace-le avant de le fermer' : ''}
               {modalDockable ? '. Glisse-le près du bord gauche ou droit pour l’ancrer en bulle' : ''}.
             </p>
           </CardModal>
@@ -843,7 +924,11 @@ const ComponentShowcasePage: React.FC = () => {
               "Popover de sélection générique (compound component) — déclencheur + panneau avec recherche, avatar/repli sur l'initiale, rendu entièrement personnalisable.",
             )}
           </p>
-          <Select options={demoTenants} selectedOptionId={selectedTenantId} onOptionChange={(o) => setSelectedTenantId(o.id)}>
+          <Select
+            options={demoTenants}
+            selectedOptionId={selectedTenantId}
+            onOptionChange={(o) => setSelectedTenantId(o.id)}
+          >
             <SelectTrigger />
             <SelectContent title="Tenants" searchable searchPlaceholder="Rechercher un tenant…" />
           </Select>
@@ -855,7 +940,7 @@ const ComponentShowcasePage: React.FC = () => {
           <p className={styles.sectionDescription}>
             {t(
               'showcaseImageSwiperDescription',
-              "Pile de cartes swipable (effet 3D empilé, façon Tinder) — glisse une carte à gauche ou à droite pour la faire tourner en fin de pile.",
+              'Pile de cartes swipable (effet 3D empilé, façon Tinder) — glisse une carte à gauche ou à droite pour la faire tourner en fin de pile.',
             )}
           </p>
           <ImageSwiper images={demoSwiperImages} />
@@ -867,7 +952,7 @@ const ComponentShowcasePage: React.FC = () => {
           <p className={styles.sectionDescription}>
             {t(
               'showcaseCircularGalleryDescription',
-              "Galerie à pastilles circulaires (GSAP + MotionPathPlugin) — clique une miniature pour la déployer en plein cadre, avec rebond à la fermeture. Défilement automatique toutes les 4,5s.",
+              'Galerie à pastilles circulaires (GSAP + MotionPathPlugin) — clique une miniature pour la déployer en plein cadre, avec rebond à la fermeture. Défilement automatique toutes les 4,5s.',
             )}
           </p>
           <CircularGallery images={demoCircularGalleryImages} />
@@ -940,6 +1025,12 @@ const ComponentShowcasePage: React.FC = () => {
             </Carousel>
           </div>
         </section>
+
+        {/* ── Nouveaux composants : sélections (MorphSelect, Autocomplete, Combobox) ── */}
+        <SelectionsShowcase />
+
+        {/* ── Nouveaux composants : assistant IA (LiveOrb, SplineScene, PromptInput…) ── */}
+        <AssistantShowcase />
       </main>
 
       <StaggeredMenuPanel
