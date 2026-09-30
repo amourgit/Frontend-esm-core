@@ -1,4 +1,3 @@
-import '@egen-civitas/tailwind-preset/tailwind.tw.css';
 import React, { useEffect } from 'react';
 import NotFoundPage from './not-found/not-found-page.component';
 

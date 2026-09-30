@@ -1,4 +1,3 @@
-import './tailwind.tw.css';
 import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import {
   initAIFramework,

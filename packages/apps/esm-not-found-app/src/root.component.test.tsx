@@ -8,8 +8,6 @@ vi.mock('./not-found/not-found-page.component', () => ({
   default: () => <div data-testid="not-found-page" />,
 }));
 
-vi.mock('@egen-civitas/tailwind-preset/tailwind.tw.css', () => ({}));
-
 describe('esm-not-found-app Root', () => {
   afterEach(() => {
     document.documentElement.removeAttribute('data-public-route');

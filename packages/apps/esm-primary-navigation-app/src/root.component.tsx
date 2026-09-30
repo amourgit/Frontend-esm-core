@@ -1,4 +1,3 @@
-import './tailwind.tw.css';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import TopBar from './components/topbar/topbar.component';

@@ -1,22 +1,46 @@
 /* ============================================================================
- *  Feuille Tailwind de la TopBar (esm-primary-navigation-app)
+ *  FEUILLE TAILWIND UNIQUE DU CORE — propriétaire : esm-primary-navigation-app
  * ============================================================================
- *  Chaque micro-frontend génère SA PROPRE feuille Tailwind, injectée dans la
- *  page de façon globale et NON layerée (voir @egen-civitas/tailwind-preset).
- *  Quand deux feuilles coexistent, la dernière chargée gagne sur les règles de
- *  même spécificité — et Tailwind ne génère que les classes qu'il voit dans
- *  les sources de l'app. Si l'assistant IA (chargé après la TopBar) contient
- *  `.hidden{display:none}` mais pas `.lg:flex`, il réécrit la règle
- *  responsive de la TopBar : `hidden lg:flex` reste masqué à toutes les
- *  largeurs (date/heure, séparateurs, options du niveau 1).
+ *  Une seule feuille Tailwind pour tout le monorepo, générée ici et injectée
+ *  une seule fois par la TopBar (module chargé sur toutes les routes sauf
+ *  login / logout / change-password, donc partout où une app Tailwind est
+ *  active, 404 et assistant IA compris).
  *
- *  Remède : les apps qui coexistent à l'écran déclarent les sources l'une de
- *  l'autre. Leurs feuilles contiennent alors exactement les mêmes utilitaires
- *  dans le même ordre, donc l'ordre de chargement n'a plus aucun effet.
+ *  Pourquoi pas une feuille par app : les feuilles Tailwind sont globales et
+ *  non layerées, et chacune ne contient que les classes de SON app. Quand deux
+ *  feuilles coexistent, la dernière chargée réécrit les règles de même
+ *  spécificité de l'autre (ex. `.hidden{display:none}` de l'assistant écrasait
+ *  le `hidden lg:flex` de la TopBar : date/heure et options du niveau 1
+ *  disparaissaient).
  *
- *  À GARDER SYMÉTRIQUE avec esm-ai-assistant-app/src/tailwind.tw.css.
- *  Toute nouvelle app qui importe Tailwind et se charge avec la TopBar doit
- *  être ajoutée dans les DEUX fichiers.
+ *  Règles :
+ *   - les autres apps N'IMPORTENT PAS Tailwind : elles utilisent simplement les
+ *     classes, elles sont scannées ici (`@source` ci-dessous) ;
+ *   - une nouvelle app qui utilise des classes Tailwind n'a rien à déclarer :
+ *     tout `packages/apps/<app>/src` est déjà scanné ;
+ *   - turbo : le `build` de cette app dépend des sources de toutes les apps
+ *     (voir ./turbo.json à la racine de l'app), sinon le cache servirait une
+ *     feuille périmée.
  * ==========================================================================*/
 @import '@egen-civitas/tailwind-preset/tailwind.tw.css';
-@source "../../esm-ai-assistant-app/src";
+
+/* Sources de toutes les apps du monorepo : fichiers .ts/.tsx de chaque
+   packages/apps/<app>/src (tests exclus). node_modules/dist sont ignorés
+   d'office (.gitignore). Les composants Tailwind de esm-styleguide sont déjà
+   déclarés par le preset.
+   NB : Tailwind ne développe pas un joker dans un NOM DE DOSSIER (un chemin
+   qui se termine par le dossier src ne scanne rien) : le glob doit porter sur
+   les fichiers, d'où l'extension à la fin. */
+@source "../../*/src/**/*.{ts,tsx}";
+@source not "../../*/src/**/*.test.{ts,tsx}";
+@source not "../../*/src/**/setup-tests.{ts,tsx}";
+
+/* ----------------------------------------------------------------------------
+ *  Breakpoint `xs` (480px) — absent du thème Tailwind par défaut (sm = 640px).
+ *  Utilisé par la TopBar, le fil d'Ariane niveau 2 et le sélecteur d'espace
+ *  (`hidden xs:flex`, `hidden xs:inline`, `xs:max-w-[165px]`…), hérités de GED
+ *  où il n'était pas défini non plus : ces classes étaient inertes.
+ * --------------------------------------------------------------------------*/
+@theme {
+  --breakpoint-xs: 30rem;
+}

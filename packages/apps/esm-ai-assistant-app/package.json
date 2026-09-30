@@ -106,7 +106,6 @@
     "@egen-civitas/esm-tenant": "^1.0.2",
     "@egen-civitas/esm-translations": "^1.0.0",
     "@egen-civitas/esm-utils": "^1.0.1",
-    "@egen-civitas/tailwind-preset": "^1.4.0",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.10",
     "framer-motion": "^12.42.2",

@@ -1,3 +1,4 @@
+import './tailwind.tw.css';
 import {
   defineConfigSchema,
   defineExtensionConfigSchema,
