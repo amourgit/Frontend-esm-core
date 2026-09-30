@@ -82,7 +82,7 @@
     "@egen-civitas/esm-error-handling": "1.x",
     "@egen-civitas/esm-extensions": "1.x",
     "@egen-civitas/esm-feature-flags": "1.x",
-    "@egen-civitas/esm-framework": "^1.1.0",
+    "@egen-civitas/esm-framework": "^1.1.1",
     "@egen-civitas/esm-globals": "1.x",
     "@egen-civitas/esm-navigation": "1.x",
     "@egen-civitas/esm-react-utils": "1.x",
