@@ -10,8 +10,7 @@ import {
   Mic,
 } from 'lucide-react';
 import { useAssistantVoice } from '../context/AssistantGlobalVoiceContext';
-import { playXboxSound } from '@egen-civitas/esm-styleguide';
-import { PromptInput } from '@egen-civitas/esm-styleguide';
+import { playXboxSound , PromptInput } from '@egen-civitas/esm-styleguide';
 
 interface AssistantConversationInterfaceProps {
   onClose?: () => void;

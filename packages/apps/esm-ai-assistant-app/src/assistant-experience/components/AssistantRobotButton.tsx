@@ -16,10 +16,8 @@ import {
   Minimize2,
 } from 'lucide-react';
 import { type AssistantMode, ASSISTANT_MODES, type AssistantModeConfig } from '@egen-civitas/esm-styleguide';
-import { playXboxSound } from '@egen-civitas/esm-styleguide';
-import { WaterGlassModal } from '@egen-civitas/esm-styleguide';
+import { playXboxSound , WaterGlassModal , LiveOrb } from '@egen-civitas/esm-styleguide';
 import { useAssistantBridge } from '../assistant-bridge';
-import { LiveOrb } from '@egen-civitas/esm-styleguide';
 
 interface AssistantRobotButtonProps {
   currentMode?: AssistantMode;

@@ -2,9 +2,9 @@
 
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import {
-  AgentInput,
-  AgentResponse,
-  ConversationHistoryMessage,
+  type AgentInput,
+  type AgentResponse,
+  type ConversationHistoryMessage,
   sendAgentMessage,
   streamAgentMessage,
   generateSpeechAudio,
@@ -23,7 +23,7 @@ import {
   appendContextMemory,
   resetSystemPrompt as resetSystemPromptStorage,
   getPromptMetadata,
-  PromptMetadata,
+  type PromptMetadata,
 } from '../services/promptManager';
 import {
   type AssistantMode,
@@ -537,7 +537,9 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
             if (speechRecognitionRef.current) {
               try {
                 speechRecognitionRef.current.stop();
-              } catch {}
+              } catch {
+        // arrêt de la reconnaissance : erreur sans importance
+      }
               speechRecognitionRef.current = null;
             }
 
@@ -601,7 +603,9 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
     if (speechRecognitionRef.current) {
       try {
         speechRecognitionRef.current.stop();
-      } catch {}
+      } catch {
+        // arrêt de la reconnaissance : erreur sans importance
+      }
       speechRecognitionRef.current = null;
     }
     speechTranscriptRef.current = '';

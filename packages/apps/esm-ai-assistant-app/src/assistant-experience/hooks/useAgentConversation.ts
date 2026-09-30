@@ -9,16 +9,16 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
-  AgentInput,
-  AgentResponse,
-  ConversationHistoryMessage,
+  type AgentInput,
+  type AgentResponse,
+  type ConversationHistoryMessage,
   sendAgentMessage,
   streamAgentMessage,
   generateSpeechAudio,
 } from '../services/agentConversationService';
 import {
   VoiceActivityDetector,
-  VadConfig,
+  type VadConfig,
   DEFAULT_VAD_CONFIG,
 } from '../services/vadService';
 import {
@@ -30,7 +30,7 @@ import {
   appendContextMemory,
   resetSystemPrompt as resetSystemPromptStorage,
   getPromptMetadata,
-  PromptMetadata,
+  type PromptMetadata,
 } from '../services/promptManager';
 import { type AssistantMode } from '@egen-civitas/esm-styleguide';
 

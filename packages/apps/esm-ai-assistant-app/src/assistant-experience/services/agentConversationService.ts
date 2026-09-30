@@ -120,7 +120,7 @@ export async function streamAgentMessage(
     const decoder = new TextDecoder('utf-8');
     let buffer = '';
 
-    while (true) {
+    for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
 

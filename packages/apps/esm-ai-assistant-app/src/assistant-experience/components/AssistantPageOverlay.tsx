@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { SplineScene } from '@egen-civitas/esm-styleguide';
 import { AssistantConversationInterface } from './AssistantConversationInterface';
 import { type AssistantMode } from '@egen-civitas/esm-styleguide';
+import { ASSISTANT_SPLINE_SCENE_URL } from '../constants';
 
 interface AssistantPageOverlayProps {
   isActive: boolean;
@@ -19,7 +20,7 @@ export function AssistantPageOverlay({
   isActive, 
   onClose,
   onOpenDedicatedVoice,
-  sceneUrl = "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+  sceneUrl = ASSISTANT_SPLINE_SCENE_URL
 }: AssistantPageOverlayProps) {
   return (
     <motion.div
