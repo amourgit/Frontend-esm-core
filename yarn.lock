@@ -463,9 +463,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-app-shell@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "@egen-civitas/esm-app-shell@npm:2.2.0"
+"@egen-civitas/esm-app-shell@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@egen-civitas/esm-app-shell@npm:2.2.1"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@egen-civitas/esm-api": "npm:^1.1.0"
@@ -475,7 +475,7 @@ __metadata:
     "@egen-civitas/esm-offline": "npm:^1.0.0"
     "@egen-civitas/esm-react-utils": "npm:^1.0.2"
     "@egen-civitas/esm-state": "npm:^1.0.0"
-    "@egen-civitas/esm-styleguide": "npm:^1.6.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
     "@egen-civitas/esm-tenant": "npm:^1.0.0"
     "@egen-civitas/esm-theme": "npm:^1.0.0"
     "@egen-civitas/esm-utils": "npm:^1.0.0"
@@ -499,7 +499,7 @@ __metadata:
     swc-loader: "npm:0.2.7"
     swr: "npm:2.2.5"
     webpack-pwa-manifest: "npm:4.3.0"
-  checksum: 10/5b7d9f3529a5b6d8d3b0577111f71f54da78ebba3d4edf71006b3446f98e909b18ec60f42f569eaaca469d1a6b31785442ed0fd9469f35b41c8da213063ebdb6
+  checksum: 10/832eefae65f187e3eea7ed0cb4680ef7f6bbcb09d626aeb13e2e6cf55bf1b89651cb528346a59097b3340abe7c656c9e54e2a7c62d593fccf6f1bc1e45613e26
   languageName: node
   linkType: hard
 
@@ -741,9 +741,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-styleguide@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "@egen-civitas/esm-styleguide@npm:1.6.0"
+"@egen-civitas/esm-styleguide@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "@egen-civitas/esm-styleguide@npm:1.6.1"
   dependencies:
     "@carbon/charts": "npm:^1.27.0"
     "@carbon/react": "npm:^1.92.1"
@@ -782,7 +782,7 @@ __metadata:
     rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
-  checksum: 10/ebec7d86f30abc76b5113f2672d6422d54d217eac1e8568e81da99049230577ab41496ba33e9a1e220d3944acf1e204fd39c6a28a41bb5ff9addeef59d9ba7f2
+  checksum: 10/80490b1114814c6f99cddc01249a3c00b27b2b7b4f65685e2db8e6d6be1a217b5a81c0e521d500e2be538f7e8f073ee447496926e2f59b36beba9e0bfbba6a76
   languageName: node
   linkType: hard
 
@@ -918,7 +918,7 @@ __metadata:
     "@egen-civitas/esm-react-utils": "npm:^1.0.3"
     "@egen-civitas/esm-routes": "npm:^1.0.2"
     "@egen-civitas/esm-state": "npm:^1.0.1"
-    "@egen-civitas/esm-styleguide": "npm:^1.6.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
     "@egen-civitas/esm-tenant": "npm:^1.0.2"
     "@egen-civitas/esm-translations": "npm:^1.0.0"
     "@egen-civitas/esm-utils": "npm:^1.0.1"
@@ -976,7 +976,7 @@ __metadata:
   resolution: "@egen/esm-core@workspace:."
   dependencies:
     "@egen-civitas/egen": "npm:^2.0.2"
-    "@egen-civitas/esm-app-shell": "npm:^2.2.0"
+    "@egen-civitas/esm-app-shell": "npm:^2.2.1"
     "@egen-civitas/rspack-config": "npm:^1.1.0"
     "@playwright/test": "npm:^1.55.1"
     "@rspack/cli": "npm:1.7.9"
@@ -1040,7 +1040,7 @@ __metadata:
     "@egen-civitas/esm-react-utils": "npm:^1.0.3"
     "@egen-civitas/esm-routes": "npm:^1.0.2"
     "@egen-civitas/esm-state": "npm:^1.0.1"
-    "@egen-civitas/esm-styleguide": "npm:^1.6.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
     "@egen-civitas/esm-tenant": "npm:^1.0.2"
     "@egen-civitas/esm-translations": "npm:^1.0.0"
     "@egen-civitas/esm-utils": "npm:^1.0.1"
@@ -1176,7 +1176,7 @@ __metadata:
     "@egen-civitas/esm-react-utils": "npm:^1.0.3"
     "@egen-civitas/esm-routes": "npm:^1.0.2"
     "@egen-civitas/esm-state": "npm:^1.0.1"
-    "@egen-civitas/esm-styleguide": "npm:^1.6.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
     "@egen-civitas/esm-tenant": "npm:^1.0.2"
     "@egen-civitas/esm-translations": "npm:^1.0.0"
     "@egen-civitas/esm-utils": "npm:^1.0.1"
@@ -1243,7 +1243,7 @@ __metadata:
     "@egen-civitas/esm-react-utils": "npm:^1.0.3"
     "@egen-civitas/esm-routes": "npm:^1.0.2"
     "@egen-civitas/esm-state": "npm:^1.0.1"
-    "@egen-civitas/esm-styleguide": "npm:^1.6.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
     "@egen-civitas/esm-tenant": "npm:^1.0.2"
     "@egen-civitas/esm-theme": "npm:^1.0.1"
     "@egen-civitas/esm-translations": "npm:^1.0.0"
@@ -1320,7 +1320,7 @@ __metadata:
     "@egen-civitas/esm-react-utils": "npm:^1.0.3"
     "@egen-civitas/esm-routes": "npm:^1.0.2"
     "@egen-civitas/esm-state": "npm:^1.0.1"
-    "@egen-civitas/esm-styleguide": "npm:^1.6.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
     "@egen-civitas/esm-tenant": "npm:^1.0.2"
     "@egen-civitas/esm-translations": "npm:^1.0.0"
     "@egen-civitas/esm-utils": "npm:^1.0.1"
@@ -1392,7 +1392,7 @@ __metadata:
     "@egen-civitas/esm-react-utils": "npm:^1.0.3"
     "@egen-civitas/esm-routes": "npm:^1.0.2"
     "@egen-civitas/esm-state": "npm:^1.0.1"
-    "@egen-civitas/esm-styleguide": "npm:^1.6.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
     "@egen-civitas/esm-tenant": "npm:^1.0.2"
     "@egen-civitas/esm-theme": "npm:^1.0.1"
     "@egen-civitas/esm-translations": "npm:^1.0.0"
@@ -1538,7 +1538,7 @@ __metadata:
     "@egen-civitas/esm-react-utils": "npm:^1.0.3"
     "@egen-civitas/esm-routes": "npm:^1.0.2"
     "@egen-civitas/esm-state": "npm:^1.0.1"
-    "@egen-civitas/esm-styleguide": "npm:^1.6.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
     "@egen-civitas/esm-tenant": "npm:^1.0.2"
     "@egen-civitas/esm-translations": "npm:^1.0.0"
     "@egen-civitas/esm-utils": "npm:^1.0.1"
@@ -1610,7 +1610,7 @@ __metadata:
     "@egen-civitas/esm-react-utils": "npm:^1.0.3"
     "@egen-civitas/esm-routes": "npm:^1.0.2"
     "@egen-civitas/esm-state": "npm:^1.0.1"
-    "@egen-civitas/esm-styleguide": "npm:^1.6.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
     "@egen-civitas/esm-tenant": "npm:^1.0.2"
     "@egen-civitas/esm-theme": "npm:^1.0.1"
     "@egen-civitas/esm-translations": "npm:^1.0.0"
