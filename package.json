@@ -11,7 +11,7 @@
     "csstype": "3.2.3",
     "@egen-civitas/esm-framework": "^1.1.0",
     "@egen-civitas/esm-styleguide": "^1.5.1",
-    "@egen-civitas/esm-app-shell": "^2.1.0",
+    "@egen-civitas/esm-app-shell": "^2.1.1",
     "@egen-civitas/rspack-config": "^1.1.0"
   },
   "scripts": {
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@egen-civitas/egen": "^2.0.1",
-    "@egen-civitas/esm-app-shell": "^2.1.0",
+    "@egen-civitas/esm-app-shell": "^2.1.1",
     "@egen-civitas/rspack-config": "^1.1.0",
     "@playwright/test": "^1.55.1",
     "@rspack/cli": "1.7.9",

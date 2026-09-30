@@ -107,6 +107,34 @@ const XBOX_SOUNDS: XboxSoundType[] = [
 
 const SPLINE_SCENE = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode';
 
+/**
+ * Isole chaque bloc de la vitrine : si un composant plante (ex. export absent du shell
+ * chargé, donc `undefined`), seule sa section affiche l'erreur — le reste de la page
+ * (et ses autres composants) continue de s'afficher.
+ */
+class ShowcaseBoundary extends React.Component<{ name: string; children: React.ReactNode }, { error: Error | null }> {
+  state: { error: Error | null } = { error: null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>{this.props.name}</h2>
+          <p className={styles.sectionDescription}>
+            Ce bloc n&apos;a pas pu s&apos;afficher : {this.state.error.message}. Vérifie que le shell (esm-app-shell)
+            et esm-styleguide sont à jour.
+          </p>
+        </section>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 type Modal = 'right' | 'left' | 'center' | 'rich';
 
 const Variant: React.FC<{ label: string; children: React.ReactNode; tall?: boolean }> = ({ label, children, tall }) => (
@@ -119,7 +147,7 @@ const Variant: React.FC<{ label: string; children: React.ReactNode; tall?: boole
 // ─────────────────────────────────────────────────────────────────────────────
 //  Sélections
 // ─────────────────────────────────────────────────────────────────────────────
-export const SelectionsShowcase: React.FC = () => {
+const SelectionsShowcaseContent: React.FC = () => {
   const { t } = useTranslation();
 
   // MorphSelect
@@ -457,7 +485,7 @@ export const SelectionsShowcase: React.FC = () => {
 // ─────────────────────────────────────────────────────────────────────────────
 //  Assistant IA
 // ─────────────────────────────────────────────────────────────────────────────
-export const AssistantShowcase: React.FC = () => {
+const AssistantShowcaseContent: React.FC = () => {
   const { t } = useTranslation();
 
   const [splineOn, setSplineOn] = useState(false);
@@ -722,3 +750,15 @@ export const AssistantShowcase: React.FC = () => {
     </>
   );
 };
+
+export const SelectionsShowcase: React.FC = () => (
+  <ShowcaseBoundary name="Sélections (MorphSelect · Autocomplete · Combobox)">
+    <SelectionsShowcaseContent />
+  </ShowcaseBoundary>
+);
+
+export const AssistantShowcase: React.FC = () => (
+  <ShowcaseBoundary name="Assistant IA (LiveOrb · PromptInput · …)">
+    <AssistantShowcaseContent />
+  </ShowcaseBoundary>
+);
