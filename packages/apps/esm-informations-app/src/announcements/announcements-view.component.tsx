@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BellRing, ChevronDown, Search, X } from 'lucide-react';
 import { playXboxSound } from '@egen-civitas/esm-framework';
-import { cn } from '../lib/cn';
+import { cn } from '../utils/cn';
 import { type AudienceFilter, matchesAudience } from '../audience/audience';
 import { AudienceBadge } from '../audience/audience-badge.component';
 import { ALL_ANNOUNCEMENTS, type AnnouncementLevel } from './announcements-data';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/animated-tabs.component';
-import { cn } from '../../lib/cn';
+import { cn } from '../../utils/cn';
 
 export interface TabOption<T extends string = string> {
   id: T;

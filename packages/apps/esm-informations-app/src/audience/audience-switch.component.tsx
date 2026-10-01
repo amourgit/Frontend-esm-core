@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Layers } from 'lucide-react';
 import { playXboxSound } from '@egen-civitas/esm-framework';
-import { cn } from '../lib/cn';
+import { cn } from '../utils/cn';
 import { AUDIENCE_ORDER, type AudienceFilter } from './audience';
 import { AUDIENCE_LABELS } from './audience-badge.component';
 

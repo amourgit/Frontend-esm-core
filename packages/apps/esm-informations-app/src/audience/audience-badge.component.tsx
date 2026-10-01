@@ -1,6 +1,6 @@
 import React from 'react';
 import { Globe, Handshake, Lock } from 'lucide-react';
-import { cn } from '../lib/cn';
+import { cn } from '../utils/cn';
 import { type Audience, resolveAudience } from './audience';
 
 const META: Record<Audience, { label: string; icon: React.ReactNode; className: string }> = {
