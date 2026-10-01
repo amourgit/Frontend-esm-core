@@ -24,3 +24,7 @@ export function startupApp() {
 }
 
 export const root = getSyncLifecycle(rootComponent, options);
+
+// Extension de navigation (slot `topbar-level2-nav`) : ne rend rien. Seule sa
+// `meta` (déclarée dans routes.json) est lue par la TopBar du niveau 2.
+export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'informations-nav-entry' });

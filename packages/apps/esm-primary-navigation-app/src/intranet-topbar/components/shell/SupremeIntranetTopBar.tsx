@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Search,
   ChevronDown,
@@ -71,8 +71,6 @@ import {
   LanguageOption,
   NotificationsOption,
   QuickAccessOption,
-  SideMenuButton,
-  SideMenuPanel,
   ThemeToggleOption,
   UserMenuOption,
 } from '../options';
@@ -242,7 +240,6 @@ export function SupremeIntranetTopBar({
   // Adaptateurs de panneaux (contrat des slots d'extension top-nav-*)
   const isActivePanel = (panelName: string) => activeMenu === panelName;
   const hidePanel = (panelName: string) => () => setActiveMenu((prev) => (prev === panelName ? null : prev));
-  const hideSideMenu = useCallback(() => setActiveMenu((prev) => (prev === 'sideMenu' ? null : prev)), []);
   const slotState = { isActivePanel, togglePanel: handleMenuClick, hidePanel };
   const hideOnSearch = isSearchOpen ? 'hidden lg:flex' : '';
 
@@ -404,8 +401,6 @@ export function SupremeIntranetTopBar({
               isSearchOpen ? 'hidden lg:flex' : 'flex'
             }`}
           >
-            <SideMenuButton active={activeMenu === 'sideMenu'} onToggle={() => handleMenuClick('sideMenu')} />
-
             {/* EGEN Official Logo & Brand */}
             <div
               onClick={() => {
@@ -667,8 +662,6 @@ export function SupremeIntranetTopBar({
             </div>
           </div>
         </div>
-
-        <SideMenuPanel expanded={activeMenu === 'sideMenu'} hidePanel={hideSideMenu} />
 
         {/* ROW 2: NIVEAU 2 DE LA TOPBAR PRINCIPALE (Pleine largeur sans max-w comme le niveau 1) */}
         {!isGedRoute && (

@@ -8,5 +8,222 @@
       "offline": false
     }
   ],
-  "extensions": []
+  "extensions": [
+    {
+      "name": "informations-nav-news-1",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 10,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "news",
+        "groupLabel": "News et Publications",
+        "label": "À la Une",
+        "description": "Les grands titres, reportages et actualités phares",
+        "icon": "Star",
+        "route": "informations/news"
+      }
+    },
+    {
+      "name": "informations-nav-news-2",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 20,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "news",
+        "groupLabel": "News et Publications",
+        "label": "Articles & Dossiers",
+        "description": "Analyses de fond, retours d'expérience et tribunes",
+        "icon": "BookOpen",
+        "route": "informations/news"
+      }
+    },
+    {
+      "name": "informations-nav-news-3",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 30,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "news",
+        "groupLabel": "News et Publications",
+        "label": "Toutes les Publications",
+        "description": "Flux complet des publications internes",
+        "icon": "Newspaper",
+        "route": "informations/news"
+      }
+    },
+    {
+      "name": "informations-nav-news-4",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 40,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "news",
+        "groupLabel": "News et Publications",
+        "label": "Revue de Presse",
+        "description": "Veille médiatique, secteur public et écosystème",
+        "icon": "Globe",
+        "route": "informations/news"
+      }
+    },
+    {
+      "name": "informations-nav-annonces-1",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 50,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "annonces",
+        "groupLabel": "Annonces",
+        "label": "Salle des Annonces",
+        "description": "Tableau officiel d'affichage et communiqués",
+        "icon": "Megaphone",
+        "route": "informations/annonces"
+      }
+    },
+    {
+      "name": "informations-nav-annonces-2",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 60,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "annonces",
+        "groupLabel": "Annonces",
+        "label": "Communiqués Officiels",
+        "description": "Notes de la Direction et décrets institutionnels",
+        "icon": "FileCheck",
+        "route": "informations/annonces"
+      }
+    },
+    {
+      "name": "informations-nav-annonces-3",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 70,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "annonces",
+        "groupLabel": "Annonces",
+        "label": "Flash Info Entreprise",
+        "description": "Alertes prioritaires et alertes météo / sécurité",
+        "icon": "Radio",
+        "route": "informations/annonces"
+      }
+    },
+    {
+      "name": "informations-nav-annonces-4",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 80,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "annonces",
+        "groupLabel": "Annonces",
+        "label": "Directives & Circulaires",
+        "description": "Instructions de service et règlements internes",
+        "icon": "FileText",
+        "route": "informations/annonces"
+      }
+    },
+    {
+      "name": "informations-nav-agenda-1",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 90,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "agenda",
+        "groupLabel": "Agenda",
+        "label": "Calendrier d'Équipe",
+        "description": "Planning partagé et réunions de travail",
+        "icon": "CalendarCheck",
+        "route": "informations/agenda"
+      }
+    },
+    {
+      "name": "informations-nav-agenda-2",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 100,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "agenda",
+        "groupLabel": "Agenda",
+        "label": "Événements & Séminaires",
+        "description": "Conférences, salons, webinaires et ateliers",
+        "icon": "Calendar",
+        "route": "informations/agenda"
+      }
+    },
+    {
+      "name": "informations-nav-agenda-3",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 110,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "agenda",
+        "groupLabel": "Agenda",
+        "label": "Réservation de Salles",
+        "description": "Salles de conférence, visioconférences et véhicules",
+        "icon": "Compass",
+        "route": "informations/agenda"
+      }
+    },
+    {
+      "name": "informations-nav-agenda-4",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 120,
+      "meta": {
+        "section": "informations",
+        "sectionLabel": "Informations",
+        "group": "agenda",
+        "groupLabel": "Agenda",
+        "label": "Jalons & Comités",
+        "description": "Comités de pilotage et échéances réglementaires",
+        "icon": "Zap",
+        "route": "informations/agenda"
+      }
+    }
+  ]
 }
