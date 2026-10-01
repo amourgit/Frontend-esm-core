@@ -60,7 +60,11 @@ export function HomePage() {
       <div className={styles.layout}>
         <div className={styles.mainColumn}>
           <HomeSection title="À la une">
-            <HeroMosaic mainTile={heroMainTile} secondaryTiles={heroSecondaryTiles} onSelectTile={handleSelectHeroTile} />
+            <HeroMosaic
+              mainTile={heroMainTile}
+              secondaryTiles={heroSecondaryTiles}
+              onSelectTile={handleSelectHeroTile}
+            />
           </HomeSection>
 
           <HomeSection title="Actualités" description="Les dernières publications de l'organisation.">
@@ -80,14 +84,16 @@ export function HomePage() {
           <HomeSection as="div" variant="panel" title="Raccourcis" bare>
             <QuickLinks
               items={quickLinks}
-              onSelectItem={(item) => (item.target ? navigate(item.target) : handleShowToast(`Ouverture de ${item.title}`, 'info'))}
+              onSelectItem={(item) =>
+                item.target ? navigate(item.target) : handleShowToast(`Ouverture de ${item.title}`, 'info')
+              }
             />
           </HomeSection>
 
           <HomeSection as="div" variant="panel" bare>
             <TeamCalendar
               upcomingEvents={upcomingCalendarEvents}
-              onSelectEvent={(ev) => navigate(`/calendrier?event=${ev.id}`)}
+              onSelectEvent={(ev) => navigate(`/informations/agenda?event=${ev.id}`)}
               onRefresh={() => handleShowToast('Calendrier synchronisé.', 'info')}
             />
           </HomeSection>
@@ -95,7 +101,9 @@ export function HomePage() {
           <HomeSection as="div" variant="panel" bare>
             <Documents
               items={recentDocuments}
-              onOpenDocument={(doc) => (doc.type === 'folder' ? navigate('/ged') : handleShowToast(`Ouverture de ${doc.name}`, 'info'))}
+              onOpenDocument={(doc) =>
+                doc.type === 'folder' ? navigate('/ged') : handleShowToast(`Ouverture de ${doc.name}`, 'info')
+              }
               onSeeAll={() => navigate('/ged')}
               onCreateFolder={() => navigate('/ged/ingestion')}
               onUploadFile={() => navigate('/ged/ingestion')}

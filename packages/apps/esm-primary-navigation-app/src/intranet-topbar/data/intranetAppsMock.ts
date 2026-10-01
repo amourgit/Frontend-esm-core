@@ -17,7 +17,7 @@ export const INTRANET_APPS_MOCK: IntranetApp[] = [
     icon: 'FolderOpen',
     category: 'ged',
     status: 'Actif',
-    url: '/ged'
+    url: '/ged',
   },
   {
     id: 'actualites',
@@ -26,7 +26,7 @@ export const INTRANET_APPS_MOCK: IntranetApp[] = [
     icon: 'Newspaper',
     category: 'collaboration',
     status: 'En direct',
-    url: '/actualites'
+    url: '/informations/news',
   },
   {
     id: 'annonces',
@@ -35,7 +35,7 @@ export const INTRANET_APPS_MOCK: IntranetApp[] = [
     icon: 'Megaphone',
     category: 'collaboration',
     status: 'Direct',
-    url: '/annonces'
+    url: '/informations/annonces',
   },
   {
     id: 'calendrier',
@@ -44,15 +44,15 @@ export const INTRANET_APPS_MOCK: IntranetApp[] = [
     icon: 'Calendar',
     category: 'collaboration',
     status: 'En ligne',
-    url: '/informations/agenda'
+    url: '/informations/agenda',
   },
   {
     id: 'iam',
-    name: 'IAM & Droits d\'Accès',
+    name: "IAM & Droits d'Accès",
     description: 'Gestion des identités, rôles, permissions et sécurité globale',
     icon: 'ShieldCheck',
     category: 'securite',
     status: 'Sécurisé',
-    url: '/iam'
-  }
+    url: '/iam',
+  },
 ];

@@ -63,7 +63,8 @@ export const blogArticles: BlogArticle[] = [
     readTime: '4 min',
     category: 'GED',
     title: 'La modernisation de la GED entre dans sa phase pilote',
-    description: 'Retour sur les premières salles migrées vers le nouvel archivage électronique et les prochaines étapes.',
+    description:
+      'Retour sur les premières salles migrées vers le nouvel archivage électronique et les prochaines étapes.',
     content: [
       'La direction des systèmes d’information a lancé la phase pilote de modernisation de la gestion électronique des documents.',
       'Les premières salles concernées bénéficient déjà d’un archivage plus rapide et d’une recherche par métadonnées.',
@@ -83,9 +84,9 @@ export const blogArticles: BlogArticle[] = [
 ];
 
 export const quickLinks: QuickLinkItem[] = [
-  { id: 'ql-1', title: 'News & Publications', icon: Megaphone, target: '/actualites' },
-  { id: 'ql-2', title: 'Salle des Annonces', icon: Files, target: '/annonces' },
-  { id: 'ql-3', title: 'Agenda & Réunions', icon: CalendarIcon, target: '/calendrier' },
+  { id: 'ql-1', title: 'News & Publications', icon: Megaphone, target: '/informations/news' },
+  { id: 'ql-2', title: 'Salle des Annonces', icon: Files, target: '/informations/annonces' },
+  { id: 'ql-3', title: 'Agenda & Réunions', icon: CalendarIcon, target: '/informations/agenda' },
   { id: 'ql-4', title: 'Catalogue Applications', icon: Presentation, target: '/applications' },
   { id: 'ql-5', title: 'Recherche Globale', icon: Briefcase, target: '/ged/recherche' },
   { id: 'ql-6', title: 'Droits & Permissions', icon: User, target: '/iam' },
