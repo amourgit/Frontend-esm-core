@@ -971,6 +971,82 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@egen/esm-annuaire-app@workspace:packages/apps/esm-annuaire-app":
+  version: 0.0.0-use.local
+  resolution: "@egen/esm-annuaire-app@workspace:packages/apps/esm-annuaire-app"
+  dependencies:
+    "@carbon/react": "npm:^1.92.1"
+    "@egen-civitas/esm-api": "npm:^1.1.1"
+    "@egen-civitas/esm-config": "npm:^1.0.1"
+    "@egen-civitas/esm-context": "npm:^1.0.1"
+    "@egen-civitas/esm-data-api": "npm:^1.0.2"
+    "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
+    "@egen-civitas/esm-error-handling": "npm:^1.0.1"
+    "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
+    "@egen-civitas/esm-extensions": "npm:^1.0.2"
+    "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
+    "@egen-civitas/esm-framework": "npm:^1.1.2"
+    "@egen-civitas/esm-globals": "npm:^1.0.2"
+    "@egen-civitas/esm-navigation": "npm:^1.0.2"
+    "@egen-civitas/esm-offline": "npm:^1.0.1"
+    "@egen-civitas/esm-react-utils": "npm:^1.0.3"
+    "@egen-civitas/esm-routes": "npm:^1.0.2"
+    "@egen-civitas/esm-state": "npm:^1.0.1"
+    "@egen-civitas/esm-styleguide": "npm:^1.6.1"
+    "@egen-civitas/esm-tenant": "npm:^1.0.2"
+    "@egen-civitas/esm-theme": "npm:^1.0.1"
+    "@egen-civitas/esm-translations": "npm:^1.0.0"
+    "@egen-civitas/esm-utils": "npm:^1.0.1"
+    "@egen-civitas/tailwind-preset": "npm:^1.4.0"
+    "@radix-ui/react-tabs": "npm:^1.1.13"
+    "@vitest/coverage-v8": "npm:^4.1.2"
+    cross-env: "npm:^10.1.0"
+    dayjs: "npm:^1.11.10"
+    framer-motion: "npm:^11.18.2"
+    happy-dom: "npm:^20.6.0"
+    i18next: "npm:^25.5.3"
+    lucide-react: "npm:^0.469.0"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    react-i18next: "npm:^16.0.0"
+    react-is: "npm:^17.0.2"
+    react-router-dom: "npm:^6.3.0"
+    rxjs: "npm:^7.8.1"
+    sass: "npm:^1.98.0"
+    single-spa: "npm:^6.0.0"
+    swr: "npm:2.2.5"
+    vitest: "npm:^4.1.2"
+  peerDependencies:
+    "@carbon/react": 1.x
+    "@egen-civitas/esm-api": 1.x
+    "@egen-civitas/esm-config": 1.x
+    "@egen-civitas/esm-context": 1.x
+    "@egen-civitas/esm-data-api": 1.x
+    "@egen-civitas/esm-dynamic-loading": 2.x
+    "@egen-civitas/esm-error-handling": 1.x
+    "@egen-civitas/esm-extensions": 1.x
+    "@egen-civitas/esm-feature-flags": 1.x
+    "@egen-civitas/esm-framework": 1.x
+    "@egen-civitas/esm-globals": 1.x
+    "@egen-civitas/esm-navigation": 1.x
+    "@egen-civitas/esm-react-utils": 1.x
+    "@egen-civitas/esm-routes": 1.x
+    "@egen-civitas/esm-state": 1.x
+    "@egen-civitas/esm-styleguide": 1.x
+    "@egen-civitas/esm-tenant": 1.x
+    "@egen-civitas/esm-theme": 1.x
+    "@egen-civitas/esm-utils": 1.x
+    dayjs: 1.x
+    react: 18.x
+    react-dom: 18.x
+    react-i18next: 16.x
+    react-router-dom: 6.x
+    rxjs: 7.x
+    single-spa: 6.x
+    swr: 2.x
+  languageName: unknown
+  linkType: soft
+
 "@egen/esm-core@workspace:.":
   version: 0.0.0-use.local
   resolution: "@egen/esm-core@workspace:."
