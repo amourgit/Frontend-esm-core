@@ -5,7 +5,8 @@
 .popup {
   position: fixed;
   flex: auto;
-  bottom: layout.$spacing-07;
+  // Suit le bouton d'aide : décalé de la hauteur du footer fixe (voir help.styles.scss).
+  bottom: calc(var(--egen-footer-height, 0px) + #{layout.$spacing-07});
   right: layout.$spacing-09;
   width: 11rem;
   z-index: 8000;

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConfigurableLink, useConfig, useSession } from '@egen-civitas/esm-framework';
 import { type ConfigSchema, type FooterLink } from '../../config-schema';
+import { DEFAULT_FOOTER_TEXT_COLOR } from '../../constants';
 import styles from './footer.scss';
 
 // =============================================================================
@@ -36,11 +37,18 @@ const FooterContent: React.FC = () => {
   const currentYear = useMemo(() => new Date().getFullYear(), []);
 
   const { company, copyright, links } = config;
+  // Couleur des textes : pilotée par la config, noire par défaut. Passée au SCSS via une variable CSS.
+  const textColor = config.appearance?.textColor || DEFAULT_FOOTER_TEXT_COLOR;
+  const wrapperStyle = { '--footer-text-color': textColor } as React.CSSProperties;
   const hasCompanyUrl = Boolean(company.url);
   const hasLinks = links.length > 0;
 
   return (
-    <footer className={styles.footerWrapper} aria-label={t('appFooter', 'Pied de page de l’application')}>
+    <footer
+      className={styles.footerWrapper}
+      style={wrapperStyle}
+      aria-label={t('appFooter', 'Pied de page de l’application')}
+    >
       <div className={styles.footerInner}>
         {/* ── GAUCHE — Identité de l'entreprise ── */}
         <div className={styles.companySection}>

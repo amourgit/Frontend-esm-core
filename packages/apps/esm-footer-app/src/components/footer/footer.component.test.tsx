@@ -17,6 +17,7 @@ const mockUseSession = vi.mocked(useSession);
 
 const baseConfig = {
   company: { name: 'CIVITAS', tagline: "Solutions d'intégration IA", url: '' },
+  appearance: { textColor: '#000000' },
   copyright: { showYear: true, text: '' },
   links: [],
 };
@@ -62,5 +63,41 @@ describe('Footer', () => {
     render(<Footer />);
 
     expect(screen.getByRole('link', { name: 'Contact' })).toHaveAttribute('href', 'https://civitas.example/contact');
+  });
+
+  describe('couleur des textes', () => {
+    const footerEl = () => screen.getByRole('contentinfo');
+
+    it('est noire par défaut', () => {
+      mockUseSession.mockReturnValue(mockSession as unknown as Session);
+      mockUseConfig.mockReturnValue(baseConfig);
+
+      render(<Footer />);
+
+      expect(footerEl().style.getPropertyValue('--footer-text-color')).toBe('#000000');
+    });
+
+    it('suit la couleur configurée', () => {
+      mockUseSession.mockReturnValue(mockSession as unknown as Session);
+      mockUseConfig.mockReturnValue({ ...baseConfig, appearance: { textColor: 'rgb(10, 20, 30)' } });
+
+      render(<Footer />);
+
+      expect(footerEl().style.getPropertyValue('--footer-text-color')).toBe('rgb(10, 20, 30)');
+    });
+
+    it('retombe sur le noir si la config ne fournit pas la couleur (vide ou absente)', () => {
+      mockUseSession.mockReturnValue(mockSession as unknown as Session);
+
+      mockUseConfig.mockReturnValue({ ...baseConfig, appearance: { textColor: '' } });
+      const { unmount } = render(<Footer />);
+      expect(footerEl().style.getPropertyValue('--footer-text-color')).toBe('#000000');
+      unmount();
+
+      const { appearance: _omitted, ...withoutAppearance } = baseConfig;
+      mockUseConfig.mockReturnValue(withoutAppearance as typeof baseConfig);
+      render(<Footer />);
+      expect(footerEl().style.getPropertyValue('--footer-text-color')).toBe('#000000');
+    });
   });
 });

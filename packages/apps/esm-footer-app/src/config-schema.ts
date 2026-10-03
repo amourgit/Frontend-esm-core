@@ -1,4 +1,13 @@
-import { Type, validators } from '@egen-civitas/esm-framework';
+import { Type, validator, validators } from '@egen-civitas/esm-framework';
+import { DEFAULT_FOOTER_TEXT_COLOR } from './constants';
+
+// Couleur CSS valide (hex, rgb()/hsl(), nom de couleur…). On s'appuie sur le navigateur
+// quand il l'expose ; repli sur un contrôle hexadécimal sinon (tests, SSR).
+const isCssColor = (value: unknown): boolean => {
+  if (typeof value !== 'string' || value.trim() === '') return false;
+  if (typeof CSS !== 'undefined' && typeof CSS.supports === 'function') return CSS.supports('color', value);
+  return /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(value.trim());
+};
 
 // =============================================================================
 //  CONFIG SCHEMA — App Footer
@@ -26,6 +35,15 @@ export const configSchema = {
       _description:
         "Lien externe vers le site de l'entreprise. Si renseigné, le nom de l'entreprise devient cliquable.",
       _validators: [validators.isUrl],
+    },
+  },
+  appearance: {
+    textColor: {
+      _type: Type.String,
+      _default: DEFAULT_FOOTER_TEXT_COLOR,
+      _description:
+        "Couleur des textes du footer (nom, accroche, liens, copyright). Toute couleur CSS valide (ex. « #000000 », « rgb(0, 0, 0) », « navy »). Le fond du footer est toujours blanc.",
+      _validators: [validator(isCssColor, 'Doit être une couleur CSS valide (ex. #000000).')],
     },
   },
   copyright: {
@@ -69,6 +87,9 @@ export type ConfigSchema = {
     name: string;
     tagline: string;
     url: string;
+  };
+  appearance: {
+    textColor: string;
   };
   copyright: {
     showYear: boolean;
