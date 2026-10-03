@@ -22,6 +22,12 @@ export default defineConfig({
     mockReset: true,
     globals: true,
     setupFiles: ['./setup-tests.ts'],
+    server: {
+      deps: {
+        // Traité par Vite (et non par Node) : sinon les dépendances CommonJS (ex. workbox-window) et les .scss de esm-styleguide cassent.
+        inline: [/@egen-civitas\//],
+      },
+    },
     alias: {
       '@egen-civitas/esm-framework/src/internal': '@egen-civitas/esm-framework/mock',
       '@egen-civitas/esm-framework': '@egen-civitas/esm-framework/mock',
