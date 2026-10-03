@@ -40,6 +40,7 @@ class MiniGl {
     this.gl = gl;
 
     const context = this.gl;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- les classes internes (Uniform/Material…) ont besoin du `this` externe
     const _miniGl = this;
 
     this.Uniform = class {
@@ -164,6 +165,7 @@ class MiniGl {
         fragments: string,
         uniforms: any = {}
       ) {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias -- les classes internes (Uniform/Material…) ont besoin du `this` externe
         const material = this;
 
         function getShader(type: number, source: string): WebGLShader {
