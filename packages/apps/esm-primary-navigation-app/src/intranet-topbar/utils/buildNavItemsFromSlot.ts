@@ -26,7 +26,7 @@ export function buildNavItemsFromSlot(baseItems: NavItem[], entries: NavEntryMet
     let section = sections.get(e.section);
     if (!section) {
       section = {
-        label: e.sectionLabelKey ? t(e.sectionLabelKey, e.sectionLabel ?? e.section) : (e.sectionLabel ?? e.section),
+        label: e.sectionLabelKey ? t(e.sectionLabelKey, e.sectionLabel ?? e.section) : e.sectionLabel ?? e.section,
         groups: new Map(),
       };
       sections.set(e.section, section);
@@ -34,7 +34,7 @@ export function buildNavItemsFromSlot(baseItems: NavItem[], entries: NavEntryMet
     let group = section.groups.get(e.group);
     if (!group) {
       group = {
-        title: e.groupLabelKey ? t(e.groupLabelKey, e.groupLabel ?? e.group) : (e.groupLabel ?? e.group),
+        title: e.groupLabelKey ? t(e.groupLabelKey, e.groupLabel ?? e.group) : e.groupLabel ?? e.group,
         items: [],
       };
       section.groups.set(e.group, group);
