@@ -8,5 +8,60 @@
       "offline": false
     }
   ],
-  "extensions": []
+  "extensions": [
+    {
+      "name": "annuaire-nav-contacts",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 510,
+      "meta": {
+        "section": "annuaire",
+        "sectionLabel": "Annuaire",
+        "group": "collaborateurs",
+        "groupLabel": "Collaborateurs",
+        "label": "Tous les Contacts",
+        "description": "Recherche par nom, poste, email et téléphone",
+        "icon": "Contact",
+        "route": "annuaire/contacts"
+      }
+    },
+    {
+      "name": "annuaire-nav-organigramme",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 520,
+      "meta": {
+        "section": "annuaire",
+        "sectionLabel": "Annuaire",
+        "group": "collaborateurs",
+        "groupLabel": "Collaborateurs",
+        "label": "Organigramme",
+        "description": "Structure hiérarchique et directions",
+        "icon": "Layers",
+        "route": "annuaire/organigramme"
+      }
+    },
+    {
+      "name": "annuaire-nav-structures",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 530,
+      "meta": {
+        "section": "annuaire",
+        "sectionLabel": "Annuaire",
+        "group": "structures",
+        "groupLabel": "Structures & Sites",
+        "label": "Pôles & Directions",
+        "description": "Départements administratifs et opérationnels",
+        "icon": "Building2",
+        "route": "annuaire/structures"
+      }
+    }
+  ]
 }

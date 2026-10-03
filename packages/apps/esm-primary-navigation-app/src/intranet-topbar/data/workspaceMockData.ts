@@ -420,60 +420,7 @@ export const WORKSPACES_MOCK_DATA: Workspace[] = [
         id: 5,
         label: 'Annuaire',
         link: '/annuaire',
-        subMenus: [
-          {
-            title: 'Collaborateurs',
-            items: [
-              {
-                label: 'Tous les Contacts',
-                description: 'Recherche par nom, poste, email et téléphone',
-                icon: Contact,
-                link: '/annuaire',
-              },
-              {
-                label: 'Organigramme',
-                description: 'Structure hiérarchique et directions',
-                icon: Layers,
-                link: '/annuaire',
-              },
-              {
-                label: 'Trombinoscope',
-                description: 'Photos et profils des équipes',
-                icon: Users,
-                link: '/annuaire',
-              },
-              {
-                label: 'Nouveaux Arrivants',
-                description: "Dernières intégrations dans l'organisation",
-                icon: UserPlus,
-                link: '/annuaire',
-              },
-            ],
-          },
-          {
-            title: 'Structures & Sites',
-            items: [
-              {
-                label: 'Pôles & Directions',
-                description: 'Départements administratifs et opérationnels',
-                icon: Building2,
-                link: '/annuaire',
-              },
-              {
-                label: 'Sites & Immeubles',
-                description: 'Adresses des bureaux et salles de réunion',
-                icon: Globe,
-                link: '/annuaire',
-              },
-              {
-                label: 'Permanences & Astreintes',
-                description: "Contacts de garde et numéros d'urgence",
-                icon: ShieldAlert,
-                link: '/annuaire',
-              },
-            ],
-          },
-        ],
+        // Sous-menus déclarés par l'app (esm-annuaire-app/routes.json, slot topbar-level2-nav).
       },
       {
         id: 6,
