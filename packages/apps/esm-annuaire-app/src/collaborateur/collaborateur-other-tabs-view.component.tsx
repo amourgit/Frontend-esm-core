@@ -11,8 +11,8 @@ import {
   ArrowUpRight,
   ShieldCheck
 } from 'lucide-react';
-import { CollaborateurTabKey } from './collaborateur-detail-header.component';
-import { DirectoryEmployee } from '../data/directory-data';
+import { type CollaborateurTabKey } from './collaborateur-detail-header.component';
+import { type DirectoryEmployee } from '../data/directory-data';
 
 interface CollaborateurOtherTabsViewProps {
   activeTab: CollaborateurTabKey;

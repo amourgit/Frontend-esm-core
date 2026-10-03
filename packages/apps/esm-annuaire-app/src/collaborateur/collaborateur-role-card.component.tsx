@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pencil, Briefcase, Award } from 'lucide-react';
-import { DirectoryEmployee } from '../data/directory-data';
+import { type DirectoryEmployee } from '../data/directory-data';
 import { playXboxSound } from '@egen-civitas/esm-framework';
 
 interface CollaborateurRoleCardProps {

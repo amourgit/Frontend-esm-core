@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { CollaborateurReviewCard, CollaborateurReviewItem } from './collaborateur-review-card.component';
+import { CollaborateurReviewCard, type CollaborateurReviewItem } from './collaborateur-review-card.component';
 import { CollaborateurReviewFilterBar } from './collaborateur-review-filter-bar.component';
 import { CollaborateurRatingOverview } from './collaborateur-rating-overview.component';
 import { CollaborateurAiReviewBanner } from './collaborateur-ai-review-banner.component';

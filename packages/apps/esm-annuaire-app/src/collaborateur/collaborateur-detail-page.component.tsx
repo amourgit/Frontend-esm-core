@@ -1,16 +1,16 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { PageBackground } from '@egen-civitas/esm-framework';
+import { PageBackground, playXboxSound } from '@egen-civitas/esm-framework';
 import { 
   DIRECTORY_EMPLOYEES, 
-  DirectoryEmployee, 
+  type DirectoryEmployee, 
   findEmployeeByParam, 
   getEmployeeCover, 
   getEmployeeUuid 
 } from '../data/directory-data';
 import { 
   CollaborateurDetailHeader, 
-  CollaborateurTabKey 
+  type CollaborateurTabKey 
 } from '../collaborateur/collaborateur-detail-header.component';
 import { CollaborateurReviewList } from '../collaborateur/collaborateur-review-list.component';
 import { CollaborateurOtherTabsView } from '../collaborateur/collaborateur-other-tabs-view.component';
@@ -19,7 +19,6 @@ import { CollaborateurShippingAddressCard } from '../collaborateur/collaborateur
 import { CollaborateurContactInfoCard } from '../collaborateur/collaborateur-contact-info-card.component';
 import { CollaborateurRoleCard } from '../collaborateur/collaborateur-role-card.component';
 import { CollaborateurTagsCard } from '../collaborateur/collaborateur-tags-card.component';
-import { playXboxSound } from '@egen-civitas/esm-framework';
 
 interface CollaborateurDetailPageProps {
   onShowToast?: (msg: string, type?: 'info' | 'success' | 'warning') => void;

@@ -36,7 +36,7 @@ import { ClickExpandGallery, type ClickExpandItem, type ClickExpandTone } from '
 import {
   DIRECTORY_EMPLOYEES,
   DIRECTORY_SITES,
-  DirectoryEmployee,
+  type DirectoryEmployee,
   getEmployeeUuid,
 } from '../data/directory-data';
 import { EmployeeCard } from '../directory/employee-card.component';

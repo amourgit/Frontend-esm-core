@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pencil, MapPin, ExternalLink, Navigation } from 'lucide-react';
-import { DirectoryEmployee } from '../data/directory-data';
+import { type DirectoryEmployee } from '../data/directory-data';
 import { playXboxSound } from '@egen-civitas/esm-framework';
 
 interface CollaborateurShippingAddressCardProps {

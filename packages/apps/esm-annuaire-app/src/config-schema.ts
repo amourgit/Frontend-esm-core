@@ -6,4 +6,4 @@
 
 export const configSchema = {};
 
-export interface ConfigSchema {}
+export type ConfigSchema = Record<string, never>;

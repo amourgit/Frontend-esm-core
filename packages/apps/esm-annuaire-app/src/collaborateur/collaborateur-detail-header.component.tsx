@@ -11,7 +11,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { DirectoryEmployee, getEmployeeUuid } from '../data/directory-data';
+import { type DirectoryEmployee, getEmployeeUuid } from '../data/directory-data';
 import { playXboxSound } from '@egen-civitas/esm-framework';
 
 export type CollaborateurTabKey = 

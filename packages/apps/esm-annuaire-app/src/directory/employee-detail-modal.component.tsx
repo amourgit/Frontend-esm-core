@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { DirectoryEmployee, getEmployeeUuid } from '../data/directory-data';
+import { type DirectoryEmployee, getEmployeeUuid } from '../data/directory-data';
 import { playXboxSound } from '@egen-civitas/esm-framework';
 
 interface EmployeeDetailModalProps {

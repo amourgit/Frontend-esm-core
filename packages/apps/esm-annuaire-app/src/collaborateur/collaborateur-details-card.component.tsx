@@ -1,6 +1,6 @@
 import React from 'react';
 import { Store, Globe, Clock, Laptop } from 'lucide-react';
-import { DirectoryEmployee } from '../data/directory-data';
+import { type DirectoryEmployee } from '../data/directory-data';
 
 interface CollaborateurDetailsCardProps {
   employee: DirectoryEmployee;
