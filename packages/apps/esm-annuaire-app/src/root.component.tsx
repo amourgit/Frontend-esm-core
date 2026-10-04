@@ -1,7 +1,6 @@
 import '@egen-civitas/tailwind-preset/tailwind.tw.css';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { GlobalPageBackground, PageBackgroundProvider } from '@egen-civitas/esm-framework';
 import { AnnuairePage } from './annuaire/annuaire.component';
 import { CollaborateurDetailPage } from './collaborateur/collaborateur-detail-page.component';
 import { notify } from './utils/notify';
@@ -17,34 +16,28 @@ import { notify } from './utils/notify';
 //  Toute autre sous-route retombe sur l'annuaire.
 //
 //  Fond de page : les pages (annuaire, fiche collaborateur) déclarent leur image
-//  via <PageBackground>, qui n'a d'effet que sous un <PageBackgroundProvider>
-//  accompagné d'un <GlobalPageBackground> (ni le shell ni le core n'en montent
-//  un). Ils sont donc montés ici, localement, comme esm-home-app le fait pour
-//  son propre fond.
+//  avec <PageBackground> ; le rendu est assuré par l'unique arrière-plan global
+//  que monte le shell (#egen-page-background-container, esm-app-shell >= 2.4.0,
+//  esm-styleguide >= 1.9.0). Rien à monter ici : un <GlobalPageBackground> local
+//  afficherait le fond en double.
 // =============================================================================
 
 const Root: React.FC = () => (
-  <PageBackgroundProvider>
-    <GlobalPageBackground />
-    <BrowserRouter basename={window.getEgenSpaBase()}>
-      <Routes>
-        <Route path="annuaire" element={<AnnuairePage onShowNotification={notify} />} />
-        <Route path="annuaire/contacts" element={<AnnuairePage onShowNotification={notify} />} />
-        <Route path="annuaire/organigramme" element={<AnnuairePage onShowNotification={notify} />} />
-        <Route path="annuaire/structures" element={<AnnuairePage onShowNotification={notify} />} />
-        <Route
-          path="annuaire/:collaborateurId/details/:tab"
-          element={<CollaborateurDetailPage onShowToast={notify} />}
-        />
-        <Route path="annuaire/:collaborateurId/details" element={<CollaborateurDetailPage onShowToast={notify} />} />
-        <Route path="annuaire/:collaborateurId/details/*" element={<CollaborateurDetailPage onShowToast={notify} />} />
-        <Route path="annuaire/:collaborateurId/:tab" element={<CollaborateurDetailPage onShowToast={notify} />} />
-        <Route path="annuaire/:collaborateurId" element={<CollaborateurDetailPage onShowToast={notify} />} />
-        <Route path="annuaire/:collaborateurId/*" element={<CollaborateurDetailPage onShowToast={notify} />} />
-        <Route path="annuaire/*" element={<AnnuairePage onShowNotification={notify} />} />
-      </Routes>
-    </BrowserRouter>
-  </PageBackgroundProvider>
+  <BrowserRouter basename={window.getEgenSpaBase()}>
+    <Routes>
+      <Route path="annuaire" element={<AnnuairePage onShowNotification={notify} />} />
+      <Route path="annuaire/contacts" element={<AnnuairePage onShowNotification={notify} />} />
+      <Route path="annuaire/organigramme" element={<AnnuairePage onShowNotification={notify} />} />
+      <Route path="annuaire/structures" element={<AnnuairePage onShowNotification={notify} />} />
+      <Route path="annuaire/:collaborateurId/details/:tab" element={<CollaborateurDetailPage onShowToast={notify} />} />
+      <Route path="annuaire/:collaborateurId/details" element={<CollaborateurDetailPage onShowToast={notify} />} />
+      <Route path="annuaire/:collaborateurId/details/*" element={<CollaborateurDetailPage onShowToast={notify} />} />
+      <Route path="annuaire/:collaborateurId/:tab" element={<CollaborateurDetailPage onShowToast={notify} />} />
+      <Route path="annuaire/:collaborateurId" element={<CollaborateurDetailPage onShowToast={notify} />} />
+      <Route path="annuaire/:collaborateurId/*" element={<CollaborateurDetailPage onShowToast={notify} />} />
+      <Route path="annuaire/*" element={<AnnuairePage onShowNotification={notify} />} />
+    </Routes>
+  </BrowserRouter>
 );
 
 export default Root;

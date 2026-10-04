@@ -6,6 +6,7 @@ import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
 import { render, screen, cleanup, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { installBrowserStubs } from '../test-utils/setup';
+import { mountShellBackground } from '../test-utils/shell-background';
 
 vi.mock('@egen-civitas/esm-framework', async () => (await import('../test-utils/framework-mock')).frameworkMock());
 vi.mock('@egen-civitas/tailwind-preset/tailwind.tw.css', () => ({}));
@@ -20,8 +21,11 @@ const open = (i: number, tab = 'review') => {
   render(<Root />);
 };
 beforeAll(installBrowserStubs);
-beforeEach(() => {
+let shellBg: HTMLElement;
+beforeEach(async () => {
   cleanup();
+  shellBg?.remove();
+  shellBg = await mountShellBackground();
   vi.mocked(showToast).mockClear();
 });
 
@@ -84,7 +88,7 @@ describe('fiche collaborateur', () => {
     open(2);
     fireEvent.click(screen.getByTitle('Collaborateur suivant'));
     await waitFor(() =>
-      expect(document.querySelector(`img[alt="Photo de couverture de ${DIRECTORY_EMPLOYEES[3].fullName}"]`)).not.toBeNull(),
+      expect(shellBg.querySelector(`img[alt="Photo de couverture de ${DIRECTORY_EMPLOYEES[3].fullName}"]`)).not.toBeNull(),
     );
   });
 });
