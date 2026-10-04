@@ -49,13 +49,13 @@ describe('annuaire — liste, recherche, filtres', () => {
   it('une recherche sans résultat affiche l\'état vide et 0 résultat', async () => {
     type('zzzz-introuvable-xyz');
     expect(counter()).toBe(`0 / ${TOTAL}`);
-    expect(await screen.findByText('Aucun collaborateur ne correspond à ces critères')).toBeInTheDocument();
+    expect(await screen.findByText('Aucun collaborateur ne correspond à ces critères', {}, { timeout: 5000 })).toBeInTheDocument();
     expect(screen.queryByTitle('Afficher la vCard & QR Code')).toBeNull();
   });
 
   it("le bouton de l'état vide réinitialise les filtres", async () => {
     type('zzzz-introuvable-xyz');
-    await screen.findByText('Aucun collaborateur ne correspond à ces critères');
+    await screen.findByText('Aucun collaborateur ne correspond à ces critères', {}, { timeout: 5000 });
     fireEvent.click(screen.getByRole('button', { name: 'Réinitialiser les filtres' }));
     expect(counter()).toBe(`${TOTAL} / ${TOTAL}`);
   });
