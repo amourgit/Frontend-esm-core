@@ -447,23 +447,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-api@npm:^1.0.0, @egen-civitas/esm-api@npm:^1.1.0, @egen-civitas/esm-api@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@egen-civitas/esm-api@npm:1.1.1"
-  dependencies:
-    lodash-es: "npm:^4.17.21"
-  peerDependencies:
-    "@egen-civitas/esm-config": ^1.0.0
-    "@egen-civitas/esm-error-handling": ^1.0.0
-    "@egen-civitas/esm-globals": ^1.0.2
-    "@egen-civitas/esm-navigation": ^1.0.2
-    "@egen-civitas/esm-state": ^1.0.0
-    rxjs: 7.x
-  checksum: 10/076bf6d76c54b1a70e4711a204fa7a7aeef180c166a2534fc1bc451fa8bfb880d7ed21cde6b6113b5b902170b634317ef9a76f6cfafbd43a3edc0bdb886d6a36
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-api@npm:^1.1.2":
+"@egen-civitas/esm-api@npm:^1.0.0, @egen-civitas/esm-api@npm:^1.1.0, @egen-civitas/esm-api@npm:^1.1.1, @egen-civitas/esm-api@npm:^1.1.2":
   version: 1.1.2
   resolution: "@egen-civitas/esm-api@npm:1.1.2"
   dependencies:
@@ -519,21 +503,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-config@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@egen-civitas/esm-config@npm:1.0.1"
-  dependencies:
-    lodash-es: "npm:^4.17.21"
-  peerDependencies:
-    "@egen-civitas/esm-globals": ^1.0.0
-    "@egen-civitas/esm-state": ^1.0.0
-    "@egen-civitas/esm-utils": ^1.0.0
-    single-spa: 6.x
-  checksum: 10/a68736018d006d1c051198bc7f9deed44e44068f5a640e8af3adb5d445fbf354046c16cd5a9a86624fd8abc67a00cfa57c4ffcd186d17a5b5e554cdb1261165d
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-config@npm:^1.0.2":
+"@egen-civitas/esm-config@npm:^1.0.0, @egen-civitas/esm-config@npm:^1.0.2":
   version: 1.0.2
   resolution: "@egen-civitas/esm-config@npm:1.0.2"
   dependencies:
@@ -759,19 +729,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-state@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@egen-civitas/esm-state@npm:1.0.1"
-  dependencies:
-    zustand: "npm:^4.5.5"
-  peerDependencies:
-    "@egen-civitas/esm-globals": ^1.0.0
-    "@egen-civitas/esm-utils": ^1.0.0
-  checksum: 10/05bdc9ecc92463f045cb1266736212873b394020053f3ebf54852a6aaa98886787162e44fbe3dbbc23804fad639b4769548a17621461cac4ee891307b9d84cc9
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-state@npm:^1.0.2":
+"@egen-civitas/esm-state@npm:^1.0.0, @egen-civitas/esm-state@npm:^1.0.2":
   version: 1.0.2
   resolution: "@egen-civitas/esm-state@npm:1.0.2"
   dependencies:
@@ -852,18 +810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-translations@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@egen-civitas/esm-translations@npm:1.0.0"
-  dependencies:
-    i18next: "npm:^25.5.3"
-  peerDependencies:
-    i18next: 25.x
-  checksum: 10/6afe7343450c05a7847728dc40b557ceea3c700835e3a4027b71f8cd0ed33929383a97f5d42519a934671df019fced43d5631cb00586d1a4170b067aa86510f7
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-translations@npm:^1.0.1":
+"@egen-civitas/esm-translations@npm:^1.0.0, @egen-civitas/esm-translations@npm:^1.0.1":
   version: 1.0.1
   resolution: "@egen-civitas/esm-translations@npm:1.0.1"
   dependencies:
@@ -874,25 +821,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-utils@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@egen-civitas/esm-utils@npm:1.0.1"
-  dependencies:
-    "@formatjs/intl-durationformat": "npm:^0.7.3"
-    "@internationalized/date": "npm:^3.8.0"
-    any-date-parser: "npm:^2.0.3"
-    lodash-es: "npm:^4.17.21"
-    semver: "npm:^7.7.3"
-  peerDependencies:
-    "@egen-civitas/esm-globals": ^1.0.0
-    dayjs: 1.x
-    i18next: 25.x
-    rxjs: 7.x
-  checksum: 10/bec42bc90809e3323ef60c0a277bb84a90e1979448d7a526564a87619bf8a42a24d6fae1b91fb5eddfa1da8ef58905c2791e0db0fa74928f338ea22d20a67830
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-utils@npm:^1.0.2":
+"@egen-civitas/esm-utils@npm:^1.0.0, @egen-civitas/esm-utils@npm:^1.0.2":
   version: 1.0.2
   resolution: "@egen-civitas/esm-utils@npm:1.0.2"
   dependencies:

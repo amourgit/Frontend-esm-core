@@ -26,7 +26,7 @@
     "start": "egen develop --sources \"packages/apps/*\"",
     "verify": "node tools/check-nav-routes.mjs && turbo run lint test typescript",
     "verify:nav": "node tools/check-nav-routes.mjs",
-    "deps:egen": "node tools/sync-egen-deps.mjs",
+    "deps:egen": "node tools/sync-egen-deps.mjs && yarn up -R '@egen-civitas/*'",
     "deps:egen:check": "node tools/sync-egen-deps.mjs --check",
     "postinstall": "husky install",
     "test": "turbo run test",
