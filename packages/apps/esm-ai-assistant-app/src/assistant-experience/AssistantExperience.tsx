@@ -108,7 +108,7 @@ const Experience: React.FC = () => {
 
 const AssistantExperience: React.FC = () => {
   const config = useConfig<{ assistant: { agentApiBaseUrl?: string } }>();
-  setAgentApiBase(config?.assistant?.agentApiBaseUrl ?? '/api/agent');
+  setAgentApiBase(config?.assistant?.agentApiBaseUrl);
   return (
     <AssistantGlobalVoiceProvider>
       <Experience />

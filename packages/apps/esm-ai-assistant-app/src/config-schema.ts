@@ -20,7 +20,7 @@ export const configSchema = {
       _type: Type.String,
       _default: '/api/agent',
       _description:
-        "URL de base du backend agent vocal/texte de l'expérience plein écran (SSE `/stream`, `/message`, `/transcribe`, `/tts`).",
+        "URL de base du service agent vocal/texte de l'expérience plein écran (SSE `/stream`, `/message`, `/transcribe`, `/tts`). Si ce service est injoignable, la conversation passe par le backend IA (EGEN_AI_BACKEND_URL) ou Gemini direct (EGEN_AI_DIRECT_MODE / EGEN_AI_API_KEY). Laisser vide pour désactiver le service agent.",
     },
     name: {
       _type: Type.String,

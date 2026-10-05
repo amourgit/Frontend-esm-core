@@ -28,24 +28,8 @@ import {
   AI_EVENTS,
 } from '@egen-civitas/esm-ai-framework';
 import { loadPersistedMessages, persistMessages, clearPersistedMessages } from '../services/conversation-memory';
-import * as backendTransport from '../services/ai-backend-client';
-import * as directTransport from '../services/gemini-direct-client';
+import { resolveTransport } from '../services/transport';
 import type { ChatMessageDTO, StreamEvent, ToolCallRequest } from '../services/ai-backend-client';
-
-/**
- * Sélectionne le transport à utiliser pour parler au LLM :
- *   - EGEN_AI_DIRECT_MODE=true (ou EGEN_AI_API_KEY renseignée) → appel direct
- *     du provider depuis le navigateur (voir gemini-direct-client.ts et son
- *     avertissement de sécurité).
- *   - Sinon → backend proxy (EGEN_AI_BACKEND_URL), le chemin recommandé en
- *     production.
- * Résolu à CHAQUE appel (pas une fois au chargement du module) pour rester
- * cohérent avec un changement de config à chaud (ex. tests, multi-tenant).
- */
-function resolveTransport() {
-  const { provider } = getAIConfig();
-  return provider.directMode || provider.apiKey ? directTransport : backendTransport;
-}
 
 export interface AssistantToolCall {
   id: string;
