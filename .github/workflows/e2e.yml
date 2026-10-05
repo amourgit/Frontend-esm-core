@@ -68,6 +68,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: 🧶 Enable Corepack (yarn 4 via packageManager)
+        run: corepack enable
+
       - name: 💾 Cache dependencies
         id: cache-dependencies
         uses: actions/cache@v5
@@ -132,6 +135,9 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
+
+      - name: 🧶 Enable Corepack (yarn 4 via packageManager)
+        run: corepack enable
 
       - name: 💾 Cache dependencies
         id: cache-dependencies

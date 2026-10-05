@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Enable Corepack (yarn 4 via packageManager)
+        run: corepack enable
+
       - name: Cache dependencies
         id: cache
         uses: actions/cache@v5
