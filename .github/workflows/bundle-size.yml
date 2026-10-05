@@ -20,6 +20,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      # `packageManager: yarn@4.x` : Corepack doit être actif avant tout appel à `yarn`.
+      - name: 🧶 Enable Corepack (Yarn 4)
+        run: corepack enable
+
+      - name: 🛠️ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: yarn
+
       - name: 🚀 Setup a local cache server for Turborepo
         uses: felixmosh/turborepo-gh-artifacts@v4
         with:
@@ -32,3 +42,5 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           minimum-change-threshold: 10000 # 10 KB
           build-script: "turbo run build --color"
+          # Yarn 4 : `--frozen-lockfile` (valeur par défaut de l'action) n'existe plus.
+          install-script: "yarn install --immutable"
