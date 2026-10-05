@@ -119,7 +119,7 @@ Additional PR checks:
 - **Bundle size report**: Reports compressed size changes on PRs.
 - **E2E tests** (`.github/workflows/e2e.yml`): Run against Docker containers when source files change.
 
-All workflows are self-contained: no reusable workflow from another repository. Shared steps live in local composite actions (`.github/actions/setup-yarn`, `.github/actions/install-transifex`). Yarn 4 is provided by Corepack (`corepack enable`), so any job that installs dependencies must enable it first. npm publication (`ci.yml`, job `release`) only runs on a GitHub release or a manual `workflow_dispatch` with `publish_next`, never on a plain push.
+All workflows are self-contained: no reusable workflow from another repository. Shared steps live in local composite actions (`.github/actions/setup-yarn`, `.github/actions/install-transifex`). Yarn 4 is provided by Corepack (`corepack enable`), so any job that installs dependencies must enable it first. npm publication (`ci.yml`, job `release`, secret `NPM_AUTH_TOKEN`): a pre-release (`<version>-pre.<run number>`, npm tag `next`) is published on every push to `main` and on demand via `workflow_dispatch` with `publish_next`; the final version (npm tag `latest`) is published when a GitHub release is created. On a push, a missing secret only emits a warning and nothing is published.
 
 ## Pre-commit Hooks (Husky + lint-staged)
 

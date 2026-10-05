@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       publish_next:
-        description: 'Publier une pré-version sur npm (tag « next »). Nécessite le secret NPM_AUTH_TOKEN.'
+        description: 'Publier une pré-version sur npm (tag « next ») à la demande. Nécessite le secret NPM_AUTH_TOKEN.'
         type: boolean
         default: false
   push:
@@ -73,43 +73,55 @@ jobs:
             echo "::warning title=Dépendances @egen-civitas en retard::Lancer « yarn deps:egen » puis committer package.json et yarn.lock."
           fi
 
-  # Publication npm : uniquement sur création d'une release GitHub, ou à la demande (workflow_dispatch).
-  # Jamais automatique sur un simple push.
+  # Publication npm :
+  #  - pré-version (tag « next ») à chaque push sur main, et à la demande (workflow_dispatch + publish_next) ;
+  #  - version finale (tag « latest ») à la création d'une release GitHub.
+  # Nécessite le secret NPM_AUTH_TOKEN. Sur un push, son absence ne produit qu'un avertissement (job vert,
+  # rien publié) ; sur une release ou un lancement manuel, elle est une erreur.
   release:
     name: Publication npm
     needs: verify
-    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.publish_next)
+    if: github.event_name == 'release' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish_next)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
       YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
       - name: Vérifier le secret npm
+        id: secret
         run: |
-          if [ -z "$YARN_NPM_AUTH_TOKEN" ]; then
+          if [ -n "$YARN_NPM_AUTH_TOKEN" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          elif [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            echo "::warning title=NPM_AUTH_TOKEN absent::Publication de la pré-version ignorée (Settings > Secrets and variables > Actions)."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
             echo "::error title=Secret manquant::NPM_AUTH_TOKEN n'est pas défini (Settings > Secrets and variables > Actions)."
             exit 1
           fi
 
+      - name: Checkout
+        if: steps.secret.outputs.skip != 'true'
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
       - name: Node, Corepack et dépendances
+        if: steps.secret.outputs.skip != 'true'
         uses: ./.github/actions/setup-yarn
 
       - name: Build
+        if: steps.secret.outputs.skip != 'true'
         run: yarn turbo run build --concurrency=5
 
       - name: Version de pré-release
-        if: github.event_name == 'workflow_dispatch'
+        if: steps.secret.outputs.skip != 'true' && github.event_name != 'release'
         run: |
           PRERELEASE_VERSION="$(node -p "require('./package.json').version")-pre.${GITHUB_RUN_NUMBER}"
           yarn workspaces foreach --worktree --topological --exclude @egen/esm-core version "$PRERELEASE_VERSION"
 
       - name: Publier (tag next)
-        if: github.event_name == 'workflow_dispatch'
+        if: steps.secret.outputs.skip != 'true' && github.event_name != 'release'
         run: yarn run ci:publish-next
 
       - name: Publier (tag latest)
-        if: github.event_name == 'release'
+        if: steps.secret.outputs.skip != 'true' && github.event_name == 'release'
         run: yarn run ci:publish
