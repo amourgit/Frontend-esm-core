@@ -1,0 +1,22 @@
+name: Installer le client Transifex
+description: >-
+  Télécharge le client Transifex (tx) en version épinglée et vérifie son empreinte SHA-256
+  (checksums.txt de la release officielle) avant de l'ajouter au PATH.
+
+runs:
+  using: composite
+  steps:
+    - name: Télécharger et vérifier tx
+      shell: bash
+      env:
+        TX_VERSION: '1.6.17'
+        TX_SHA256: '002dec5b9e71248a7e6a0808118e9da940205828d5a33ce88e04bb57a967164d'
+      run: |
+        set -euo pipefail
+        archive="${RUNNER_TEMP}/tx.tar.gz"
+        curl -fsSL "https://github.com/transifex/cli/releases/download/v${TX_VERSION}/tx-linux-amd64.tar.gz" -o "$archive"
+        echo "${TX_SHA256}  ${archive}" | sha256sum --check --strict
+        mkdir -p "${RUNNER_TEMP}/tx-bin"
+        tar -xzf "$archive" -C "${RUNNER_TEMP}/tx-bin" tx
+        echo "${RUNNER_TEMP}/tx-bin" >> "$GITHUB_PATH"
+        "${RUNNER_TEMP}/tx-bin/tx" --version

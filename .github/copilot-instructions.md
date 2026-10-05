@@ -114,10 +114,12 @@ The `Egen CI` workflow (`.github/workflows/ci.yml`) runs on every PR to `main`:
 3. `yarn run verify --concurrency=5` (runs `lint`, `test`, `typescript` in parallel via turbo)
 
 Additional PR checks:
-- **PR title check** (`.github/workflows/pr-title-check.yml`): Title must match `(type) Summary` where type is `feat`, `fix`, `chore`, `docs`, or `test`. Use `(BREAKING)` for breaking changes. Never use `(refactor)`.
-- **PR description check**: Body must fill out the PR template.
+- **PR title check** (`.github/workflows/pr-title-check.yml`): Title must match `(type) Summary` where type is `feat`, `fix`, `chore`, `docs`, or `test`. Use `(BREAKING)` for breaking changes. Never use `(refactor)`. The conventional form `type(scope): Summary` is also accepted. Bot-authored PRs are exempt.
+- **PR description check** (`.github/workflows/pr-description-check.yml`): Body must contain a filled-in `## Summary` section (HTML comments from the template do not count). Bot-authored PRs are exempt.
 - **Bundle size report**: Reports compressed size changes on PRs.
 - **E2E tests** (`.github/workflows/e2e.yml`): Run against Docker containers when source files change.
+
+All workflows are self-contained: no reusable workflow from another repository. Shared steps live in local composite actions (`.github/actions/setup-yarn`, `.github/actions/install-transifex`). Yarn 4 is provided by Corepack (`corepack enable`), so any job that installs dependencies must enable it first. npm publication (`ci.yml`, job `release`) only runs on a GitHub release or a manual `workflow_dispatch` with `publish_next`, never on a plain push.
 
 ## Pre-commit Hooks (Husky + lint-staged)
 

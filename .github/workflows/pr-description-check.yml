@@ -1,5 +1,12 @@
 name: PR description check
 
+# Contrôle isolé (aucun workflow réutilisable externe). pull_request_target : le code de la PR n'est
+# jamais récupéré ni exécuté ; le corps passe par une variable d'environnement (pas d'interpolation shell).
+#
+# Règle (cf. .github/copilot-instructions.md) : le corps doit contenir une section « ## Summary »
+# réellement renseignée (les commentaires HTML du modèle ne comptent pas).
+# Les PR ouvertes par un bot (Dependabot, etc.) sont exemptées.
+
 on:
   pull_request_target:
     types:
@@ -12,8 +19,27 @@ permissions: {}
 
 jobs:
   pr-description:
-    uses: egen/egen-contrib-gha-workflows/.github/workflows/frontend-pr-description-check.yml@main
-    with:
-      pr-body: ${{ github.event.pull_request.body }}
-      pr-author-login: ${{ github.event.pull_request.user.login }}
-      pr-author-type: ${{ github.event.pull_request.user.type }}
+    name: PR description
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Vérifier la section Summary
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
+        run: |
+          if [ "$PR_AUTHOR_TYPE" = "Bot" ]; then
+            echo "PR ouverte par un bot : contrôle ignoré."
+            exit 0
+          fi
+          python3 - <<'PY'
+          import os, re, sys
+
+          body = (os.environ.get("PR_BODY") or "").replace("\r\n", "\n")
+          body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
+          match = re.search(r"^##[ \t]*Summary[ \t]*$(.*?)(?=^##[ \t]|\Z)", body, flags=re.S | re.M)
+          if not match or not match.group(1).strip():
+              print("::error title=Description de PR incomplète::Renseigner la section « ## Summary » du modèle de PR (décrire les problèmes traités).")
+              sys.exit(1)
+          print("Description valide.")
+          PY

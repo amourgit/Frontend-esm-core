@@ -1,14 +1,77 @@
 name: "🔄 Scheduled Transifex Update"
 
+# Workflow isolé : client Transifex épinglé et vérifié (.github/actions/install-transifex),
+# aucun workflow réutilisable externe. Nécessite le secret TRANSIFEX_TOKEN (sinon : avertissement et sortie propre).
+
 on:
   schedule:
     # every day at 8:30 PM UTC
     - cron: "30 20 * * *"
   workflow_dispatch:
 
+concurrency:
+  group: tx-pull
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   pull-translations:
-    uses: egen/egen-contrib-gha-workflows/.github/workflows/tx-pull.yml@main
-    secrets:
-      TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
-      BOT_GH_TOKEN: ${{ secrets.EGEN_BOT_GH_TOKEN }}
+    name: Pull translations
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
+      TX_BRANCH: chore/transifex-translations
+    steps:
+      - name: Vérifier le secret Transifex
+        id: secret
+        run: |
+          if [ -z "$TX_TOKEN" ]; then
+            echo "::warning title=TRANSIFEX_TOKEN absent::Mise à jour des traductions ignorée (Settings > Secrets and variables > Actions)."
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.secret.outputs.present == 'true'
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Installer le client Transifex
+        if: steps.secret.outputs.present == 'true'
+        uses: ./.github/actions/install-transifex
+
+      - name: Récupérer les traductions
+        if: steps.secret.outputs.present == 'true'
+        run: tx pull --all --force
+
+      - name: Proposer les changements
+        if: steps.secret.outputs.present == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain -- 'packages/apps/*/translations/*.json')" ]; then
+            echo "Aucune traduction à mettre à jour."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$TX_BRANCH"
+          git add -- 'packages/apps/*/translations/*.json'
+          git commit -m "chore: update translations from Transifex"
+          git push --force origin "$TX_BRANCH"
+
+          open_prs="$(gh pr list --head "$TX_BRANCH" --state open --json number --jq 'length')"
+          if [ "$open_prs" != "0" ]; then
+            echo "Une pull request est déjà ouverte pour $TX_BRANCH : elle est mise à jour par le push."
+            exit 0
+          fi
+          if ! gh pr create --base main --head "$TX_BRANCH" \
+            --title "(chore) Update translations from Transifex" \
+            --body $'## Summary\nMise à jour automatique des traductions depuis Transifex (`tx pull --all --force`).'; then
+            echo "::warning title=Pull request non créée::La branche $TX_BRANCH est poussée. Ouvrir la PR depuis https://github.com/${GITHUB_REPOSITORY}/compare/${TX_BRANCH}?expand=1 ou activer « Allow GitHub Actions to create and approve pull requests » (Settings > Actions > General)."
+          fi

@@ -1,5 +1,14 @@
 name: PR title check
 
+# Contrôle isolé (aucun workflow réutilisable externe). pull_request_target : le code de la PR n'est
+# jamais récupéré ni exécuté ; le titre passe par une variable d'environnement (pas d'interpolation shell).
+#
+# Formats acceptés (types : feat, fix, chore, docs, test) :
+#   (feat) Résumé            — format documenté dans .github/copilot-instructions.md
+#   (BREAKING) Résumé        — changement cassant
+#   feat(scope): Résumé      — conventional commit, cité dans le modèle de PR
+# « refactor » est refusé. Les PR ouvertes par un bot (Dependabot, etc.) sont exemptées.
+
 on:
   pull_request_target:
     types:
@@ -12,8 +21,32 @@ permissions: {}
 
 jobs:
   pr-title:
-    uses: egen/egen-contrib-gha-workflows/.github/workflows/frontend-pr-title-check.yml@main
-    with:
-      pr-title: ${{ github.event.pull_request.title }}
-      pr-author-login: ${{ github.event.pull_request.user.login }}
-      pr-author-type: ${{ github.event.pull_request.user.type }}
+    name: PR title
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Vérifier le format du titre
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
+        run: |
+          set -euo pipefail
+          if [ "$PR_AUTHOR_TYPE" = "Bot" ]; then
+            echo "PR ouverte par un bot : contrôle ignoré."
+            exit 0
+          fi
+
+          refactor_re='^(\(refactor\)|refactor(\([^)]*\))?!?:)'
+          paren_re='^\((feat|fix|chore|docs|test|BREAKING)\)[[:space:]]+[^[:space:]]'
+          conv_re='^(feat|fix|chore|docs|test)(\([^)]+\))?!?:[[:space:]]+[^[:space:]]'
+
+          if [[ "$PR_TITLE" =~ $refactor_re ]]; then
+            echo "::error title=Type de titre interdit::Ne pas utiliser « refactor » : choisir feat, fix, chore, docs ou test."
+            exit 1
+          fi
+          if [[ "$PR_TITLE" =~ $paren_re || "$PR_TITLE" =~ $conv_re ]]; then
+            echo "Titre valide."
+            exit 0
+          fi
+          echo "::error title=Titre de PR invalide::Format attendu : « (type) Résumé » avec type = feat, fix, chore, docs, test ou BREAKING (ex. « (feat) Ajouter la recherche »). Le format « feat(scope): Résumé » est aussi accepté."
+          exit 1

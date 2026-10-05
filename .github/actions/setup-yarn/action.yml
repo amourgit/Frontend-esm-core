@@ -1,0 +1,40 @@
+name: Setup Node + Yarn
+description: >-
+  Active Corepack (yarn 4 selon le champ packageManager), installe Node.js puis les dépendances
+  (yarn install --immutable). Sans Corepack, le yarn 1.22 préinstallé sur les runners refuse le projet.
+
+inputs:
+  node-version:
+    description: Version de Node.js
+    default: '22'
+  install:
+    description: Lancer « yarn install --immutable » (true/false)
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    # Avant setup-node : son option « cache: yarn » interroge déjà yarn.
+    - name: Activer Corepack
+      shell: bash
+      run: corepack enable
+
+    - name: Installer Node.js
+      uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: yarn
+
+    # Après setup-node : garantit les shims yarn/corepack dans le Node réellement actif.
+    - name: Réactiver Corepack pour ce Node
+      shell: bash
+      run: |
+        corepack enable
+        yarn --version
+
+    - name: Installer les dépendances
+      if: inputs.install == 'true'
+      shell: bash
+      env:
+        HUSKY: '0'
+      run: yarn install --immutable
