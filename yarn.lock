@@ -301,9 +301,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/egen@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@egen-civitas/egen@npm:2.0.2"
+"@egen-civitas/egen@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@egen-civitas/egen@npm:2.0.3"
   dependencies:
     "@egen-civitas/esm-app-shell": "npm:^2.0.1"
     "@egen-civitas/rspack-config": "npm:^1.1.0"
@@ -347,7 +347,7 @@ __metadata:
     egen: dist/cli.js
     rspack: bin/rspack.cjs
     webpack: bin/webpack.cjs
-  checksum: 10/467bea14063a7d43b3a4aad1a0664e3f40389691cc24e54511d5e67b546efbdae364c8351d14b3ee7c6bf38f54185ac89d566018cfcfb7da3b907d5f226cf5ce
+  checksum: 10/8fecaefa925244d81be3b07079bb42f1a145c611ac5cf28007e42d5105ceb309aa8d1d1170cf5e1248e5b2cfbe6a9f09d976b316b013a419f431f47344b0cee1
   languageName: node
   linkType: hard
 
@@ -1051,7 +1051,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@egen/esm-core@workspace:."
   dependencies:
-    "@egen-civitas/egen": "npm:^2.0.2"
+    "@egen-civitas/egen": "npm:^2.0.3"
     "@egen-civitas/esm-app-shell": "npm:^2.4.0"
     "@egen-civitas/rspack-config": "npm:^1.1.0"
     "@playwright/test": "npm:^1.55.1"
