@@ -18,7 +18,7 @@ jobs:
       TURBO_TEAM: ${{ github.repository_owner }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       # `packageManager: yarn@4.x` : Corepack doit être actif avant tout appel à `yarn`.
       - name: 🧶 Enable Corepack (Yarn 4)
