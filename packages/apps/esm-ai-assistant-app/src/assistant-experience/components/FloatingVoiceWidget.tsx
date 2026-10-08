@@ -96,7 +96,7 @@ export function FloatingVoiceWidget({
                       : isListening
                       ? '🎙️ En écoute (VAD actif)'
                       : isProcessing
-                      ? 'Génération Gemini...'
+                      ? 'Génération de la voix...'
                       : 'En veille'}
                   </div>
                 </div>

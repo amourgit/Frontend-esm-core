@@ -15,14 +15,6 @@ import {
   DEFAULT_VAD_CONFIG,
 } from '../services/vadService';
 import { AudioPlayerService } from '../services/audioPlayerService';
-import {
-  loadSystemPrompt,
-  saveSystemPrompt,
-  appendContextMemory,
-  resetSystemPrompt as resetSystemPromptStorage,
-  getPromptMetadata,
-  type PromptMetadata,
-} from '../services/promptManager';
 import { type AssistantMode } from '@egen-civitas/esm-styleguide';
 
 export interface AgentConversationContextValue {
@@ -50,11 +42,6 @@ export interface AgentConversationContextValue {
   setMode: (mode: AssistantMode) => void;
 
   // Prompt Système & Métadonnées
-  systemPrompt: string;
-  promptMetadata: PromptMetadata | null;
-  updateSystemPrompt: (newPrompt: string) => void;
-  appendMemory: (fact: string) => void;
-  resetPrompt: () => void;
 
   // Actions
   sendTextMessage: (text: string) => Promise<AgentResponse | null>;
@@ -159,8 +146,6 @@ export function AgentConversationProvider({
   };
 
   // État du prompt système actif
-  const [systemPrompt, setSystemPrompt] = useState<string>(() => loadSystemPrompt());
-  const [promptMetadata, setPromptMetadata] = useState<PromptMetadata | null>(() => getPromptMetadata());
 
   // Références d'instances VAD et Audio Player
   const vadRef = useRef<VoiceActivityDetector | null>(null);
@@ -194,19 +179,6 @@ export function AgentConversationProvider({
       }
     }
   }, [messages]);
-
-  // Synchronisation du prompt système si modifié par un autre onglet
-  useEffect(() => {
-    const handlePromptUpdate = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail?.prompt) {
-        setSystemPrompt(detail.prompt);
-        setPromptMetadata(detail.meta);
-      }
-    };
-    window.addEventListener('egen_system_prompt_updated', handlePromptUpdate);
-    return () => window.removeEventListener('egen_system_prompt_updated', handlePromptUpdate);
-  }, []);
 
   // Déclaration du startVoiceListening pour le cycle duplex
   const startVoiceListeningRef = useRef<() => Promise<void>>(async () => {});
@@ -244,7 +216,7 @@ export function AgentConversationProvider({
     };
   }, []);
 
-  // Joue la réponse en audio (TTS Gemini ou Synthèse Vocale locale)
+  // Joue la réponse en audio (TTS backend ou Synthèse Vocale locale)
   const playAgentResponse = useCallback(async (responseText: string) => {
     if (!audioOutputRef.current || !playerRef.current) return;
 
@@ -375,8 +347,6 @@ export function AgentConversationProvider({
         setMessages((prev) => [...prev, assistantMsg]);
         messagesRef.current = [...messagesRef.current, assistantMsg];
         setStreamingText('');
-        setSystemPrompt(loadSystemPrompt());
-        setPromptMetadata(getPromptMetadata());
 
         // Lecture vocale automatique de la réponse
         if (response.text) {
@@ -522,25 +492,6 @@ export function AgentConversationProvider({
     setOutputVolume(0);
   }, []);
 
-  // Gestion du prompt système
-  const updateSystemPromptHandler = useCallback((newPrompt: string) => {
-    saveSystemPrompt(newPrompt, 'user_custom');
-    setSystemPrompt(newPrompt);
-    setPromptMetadata(getPromptMetadata());
-  }, []);
-
-  const appendMemoryHandler = useCallback((fact: string) => {
-    const updated = appendContextMemory(fact);
-    setSystemPrompt(updated);
-    setPromptMetadata(getPromptMetadata());
-  }, []);
-
-  const resetPromptHandler = useCallback(() => {
-    const initial = resetSystemPromptStorage();
-    setSystemPrompt(initial);
-    setPromptMetadata(getPromptMetadata());
-  }, []);
-
   const clearHistory = useCallback(() => {
     setMessages([]);
     if (typeof window !== 'undefined') {
@@ -585,11 +536,6 @@ export function AgentConversationProvider({
     stopAgentSpeech,
     mode,
     setMode,
-    systemPrompt,
-    promptMetadata,
-    updateSystemPrompt: updateSystemPromptHandler,
-    appendMemory: appendMemoryHandler,
-    resetPrompt: resetPromptHandler,
     sendTextMessage,
     sendAudioMessage,
     startVoiceListening,

@@ -1,23 +1,17 @@
 /**
- * Service de Conversation Agent IA
- * - Gestion du contexte et de l'historique COMPLET des conversations dans le temps.
- * - Support multimodal : Entrée Texte et Entrée Vocale (WAV 16kHz).
+ * Service de conversation avec l'agent IA — client du backend, rien de plus.
  *
- * Deux chemins, dans cet ordre :
- *  1. le service agent (`assistant.agentApiBaseUrl`, SSE `/stream`, `/message`, `/transcribe`, `/tts`) ;
- *  2. si ce service est injoignable, le transport IA de l'app (backend EGEN ou Gemini direct, voir
- *     services/transport.ts) — le même que le chat historique. Texte uniquement : sans service
- *     agent, une entrée vocale n'est utilisable que si le navigateur a fourni la transcription.
+ * Tout le moteur (prompt système, mode, mémoire, LLM, STT, TTS) vit côté backend.
+ * Ce service se contente de relayer au backend le message (texte ou audio), le mode
+ * choisi par l'utilisateur et l'historique affiché, puis de restituer le flux de
+ * réponse (SSE `/stream`, `/message`, `/transcribe`, `/tts` sous `assistant.agentApiBaseUrl`).
  *
- * Aucune réponse n'est JAMAIS inventée : quand aucun chemin ne répond, une `AgentServiceError`
- * explicite est levée (affichée par l'UI) au lieu d'un faux message d'accueil qui masquait la panne.
+ * Aucune réponse n'est JAMAIS inventée : si le backend ne répond pas, une
+ * `AgentServiceError` explicite est levée (affichée par l'UI).
  */
 
 import { agentApiUrl, isAgentProxyUsable, markAgentProxyUnavailable } from './agentApiConfig';
-import { resolveTransport } from '../../services/transport';
-import type { ChatMessageDTO } from '../../services/ai-backend-client';
-import { type AssistantMode, ASSISTANT_MODES } from '@egen-civitas/esm-styleguide';
-import { loadSystemPrompt, appendContextMemory } from './promptManager';
+import { type AssistantMode } from '@egen-civitas/esm-styleguide';
 
 export interface AgentInput {
   type: 'text' | 'audio';
@@ -45,23 +39,6 @@ export interface ConversationHistoryMessage {
   transcript?: string;
 }
 
-/**
- * Construit les instructions système complètes en fusionnant le prompt actif et le mode sélectionné
- */
-function buildFullSystemInstruction(mode: AssistantMode): string {
-  const basePrompt = loadSystemPrompt();
-  const modeConfig = ASSISTANT_MODES[mode] || ASSISTANT_MODES.conversation;
-
-  return `${basePrompt}
-
----
-CONTEXTE OPÉRATIONNEL ACTIF : Mode « ${modeConfig.name} » (${modeConfig.tagline})
-Directives pour ce mode :
-- Rôle : ${modeConfig.principle}
-- Exigences : ${modeConfig.bullets.join(' ; ')}
-- ÉLOCUTION & STYLE VOCAL : Réponds toujours en français de manière directe, posée, fluide et intelligible (1 à 3 phrases claires pour un échange oral agréable). Conserve la mémoire et la continuité logique avec tous les échanges précédents sans exception.`;
-}
-
 /** Erreur explicite du service de conversation — son `message` est affiché tel quel à l'utilisateur. */
 export class AgentServiceError extends Error {
   readonly status?: number;
@@ -75,28 +52,15 @@ export class AgentServiceError extends Error {
   }
 }
 
-/** Le service agent n'existe pas / ne répond pas (≠ il a répondu par une erreur). Déclenche le repli. */
-class AgentProxyUnavailableError extends Error {
-  constructor(
-    reason: string,
-    readonly cause?: unknown,
-  ) {
-    super(reason);
-    this.name = 'AgentProxyUnavailableError';
-  }
-}
-
 const PROXY_UNAVAILABLE_STATUSES = new Set([404, 405, 501, 502, 503, 504]);
 
-const FALLBACK_HINT =
-  'Vérifiez le backend IA (EGEN_AI_BACKEND_URL), le mode direct Gemini (EGEN_AI_DIRECT_MODE / EGEN_AI_API_KEY) ' +
-  'ou le service agent (assistant.agentApiBaseUrl).';
+const UNAVAILABLE_HINT = 'Vérifiez que le backend IA est démarré et que assistant.agentApiBaseUrl est correct.';
 
 function errorMessage(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
 }
 
-/** Contenu d'un message d'historique envoyé au LLM : la transcription prime, les marqueurs d'attente sont remplacés. */
+/** Contenu d'un message d'historique : la transcription prime, les marqueurs d'attente sont remplacés. */
 function historyContent(msg: ConversationHistoryMessage): string {
   let content = (msg.transcript || msg.content || '').trim();
   if (content.startsWith('🎤 Transcription en cours') || content === '🎤 [Message vocal]') {
@@ -105,7 +69,7 @@ function historyContent(msg: ConversationHistoryMessage): string {
   return content;
 }
 
-function buildProxyPayload(input: AgentInput, systemInstruction: string, history: ConversationHistoryMessage[]) {
+function buildPayload(input: AgentInput, mode: AssistantMode, history: ConversationHistoryMessage[]) {
   return {
     input: {
       type: input.type,
@@ -114,8 +78,8 @@ function buildProxyPayload(input: AgentInput, systemInstruction: string, history
       mimeType: input.mimeType || input.audioBlob?.type || 'audio/wav',
       transcriptHint: input.transcriptHint,
     },
-    systemInstruction,
-    // Envoie TOUT l'historique complet sans coupure, en s'assurant que la transcription textuelle est prioritaire
+    // Le prompt est construit par le backend à partir du mode.
+    mode,
     history: history.map((msg) => ({
       id: msg.id,
       role: msg.role,
@@ -127,26 +91,36 @@ function buildProxyPayload(input: AgentInput, systemInstruction: string, history
 }
 
 /**
- * Appel du service agent. Lève AgentProxyUnavailableError s'il est injoignable (réseau, 404/502/503…,
- * ou page HTML renvoyée par le serveur de la SPA à la place d'une API) et marque alors le service
- * indisponible pour un moment. Toute autre réponse d'erreur est une vraie erreur (AgentServiceError).
+ * Appel du backend. Lève AgentServiceError dans tous les cas d'échec (service désactivé,
+ * injoignable, 404/502/503…, page HTML renvoyée par le serveur de la SPA à la place d'une API).
+ * Un service constaté injoignable est marqué indisponible un moment pour ne pas retarder chaque envoi.
  */
-async function proxyFetch(path: string, payload: unknown, accept?: string): Promise<Response> {
+async function backendFetch(path: string, payload: unknown, accept?: string): Promise<Response> {
+  if (!isAgentProxyUsable()) {
+    throw new AgentServiceError(`Le backend de l'assistant est indisponible. ${UNAVAILABLE_HINT}`);
+  }
+
   let response: Response;
   try {
     response = await fetch(agentApiUrl(path), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(accept ? { Accept: accept } : {}) },
+      credentials: 'include',
       body: JSON.stringify(payload),
     });
   } catch (err) {
     markAgentProxyUnavailable();
-    throw new AgentProxyUnavailableError(`Service agent injoignable (${errorMessage(err)})`, err);
+    throw new AgentServiceError(`Backend de l'assistant injoignable (${errorMessage(err)}). ${UNAVAILABLE_HINT}`, {
+      cause: err,
+    });
   }
 
   if (PROXY_UNAVAILABLE_STATUSES.has(response.status)) {
     markAgentProxyUnavailable();
-    throw new AgentProxyUnavailableError(`Service agent indisponible (HTTP ${response.status})`);
+    throw new AgentServiceError(
+      `Backend de l'assistant indisponible (HTTP ${response.status}). ${UNAVAILABLE_HINT}`,
+      { status: response.status },
+    );
   }
 
   if (!response.ok) {
@@ -159,22 +133,22 @@ async function proxyFetch(path: string, payload: unknown, accept?: string): Prom
     );
   }
 
-  // 200 mais HTML : le serveur de la SPA a répondu à la place d'une API absente.
   if ((response.headers.get('content-type') || '').toLowerCase().includes('text/html')) {
     markAgentProxyUnavailable();
-    throw new AgentProxyUnavailableError('Service agent absent (le serveur a renvoyé une page HTML)');
+    throw new AgentServiceError(
+      `Backend de l'assistant absent (le serveur a renvoyé une page HTML). ${UNAVAILABLE_HINT}`,
+    );
   }
 
   return response;
 }
 
-async function streamViaProxy(
-  payload: ReturnType<typeof buildProxyPayload>,
+async function readStream(
+  response: Response,
   onChunk: (chunkText: string) => void,
   onTranscript: ((transcript: string) => void) | undefined,
   initialTranscript: string,
 ): Promise<{ text: string; transcript: string }> {
-  const response = await proxyFetch('stream', payload);
   if (!response.body) {
     throw new AgentServiceError("Le service d'assistant n'a renvoyé aucun flux de réponse.");
   }
@@ -227,64 +201,7 @@ async function streamViaProxy(
   return { text: fullResponseText, transcript };
 }
 
-/** Texte à envoyer au transport IA historique (texte uniquement). */
-function userTextForTransport(input: AgentInput): string {
-  const text = (input.text || input.transcriptHint || '').trim();
-  if (!text) {
-    throw new AgentServiceError(
-      "Le service d'assistant (transcription vocale) est injoignable : impossible de comprendre ce message vocal. " +
-        'Utilisez la saisie au clavier, ou configurez assistant.agentApiBaseUrl.',
-    );
-  }
-  return text;
-}
-
-function historyForTransport(history: ConversationHistoryMessage[]): ChatMessageDTO[] {
-  return history
-    .map((msg) => ({ role: msg.role, content: historyContent(msg) }) as ChatMessageDTO)
-    .filter((m) => m.content !== '');
-}
-
-async function streamViaTransport(
-  input: AgentInput,
-  systemInstruction: string,
-  history: ConversationHistoryMessage[],
-  onChunk: (chunkText: string) => void,
-): Promise<string> {
-  const message = userTextForTransport(input);
-  let text = '';
-  let streamError = '';
-  try {
-    await resolveTransport().streamChatMessage(
-      { message, history: historyForTransport(history), context: systemInstruction, tools: [] },
-      (event) => {
-        if (event.type === 'token') {
-          text += event.text;
-          onChunk(event.text);
-        } else if (event.type === 'error') {
-          streamError = event.error;
-        }
-      },
-    );
-  } catch (err) {
-    throw new AgentServiceError(`L'assistant n'a pas pu répondre : ${errorMessage(err)}. ${FALLBACK_HINT}`, {
-      cause: err,
-    });
-  }
-  if (!text.trim()) {
-    throw new AgentServiceError(
-      streamError
-        ? `L'assistant a signalé une erreur : ${streamError}. ${FALLBACK_HINT}`
-        : `L'assistant a renvoyé une réponse vide. ${FALLBACK_HINT}`,
-    );
-  }
-  return text;
-}
-
-/**
- * Envoie un message texte ou audio en streaming : service agent `/stream` si disponible, sinon
- * transport IA de l'app. Lève une AgentServiceError explicite si aucun chemin ne répond.
- */
+/** Envoie un message texte ou audio en streaming. Lève une AgentServiceError explicite en cas d'échec. */
 export async function streamAgentMessage(
   input: AgentInput,
   mode: AssistantMode = 'conversation',
@@ -292,45 +209,19 @@ export async function streamAgentMessage(
   onChunk: (chunkText: string) => void,
   onTranscript?: (transcript: string) => void,
 ): Promise<AgentResponse> {
-  const systemInstruction = buildFullSystemInstruction(mode);
-  let transcript = input.transcriptHint || '';
-  let text: string | null = null;
-
-  if (isAgentProxyUsable()) {
-    try {
-      const result = await streamViaProxy(
-        buildProxyPayload(input, systemInstruction, history),
-        onChunk,
-        onTranscript,
-        transcript,
-      );
-      text = result.text;
-      transcript = result.transcript;
-    } catch (err) {
-      if (!(err instanceof AgentProxyUnavailableError)) {
-        console.error('[AgentConversationService] Erreur stream:', err);
-        throw err;
-      }
-      console.warn(`[AgentConversationService] ${err.message} — repli sur le transport IA de l'app.`);
-    }
-  }
-
-  if (text === null) {
-    text = await streamViaTransport(input, systemInstruction, history, onChunk);
-  }
-
-  autoExtractAndSaveContext({ ...input, transcriptHint: transcript }, text);
+  const response = await backendFetch('stream', buildPayload(input, mode, history));
+  const { text, transcript } = await readStream(response, onChunk, onTranscript, input.transcriptHint || '');
   return { text, transcript: transcript || input.transcriptHint, mode };
 }
 
 /**
- * Transcrit directement un fichier audio vocal via l'endpoint dédié /api/agent/transcribe.
- * Renvoie '' si le service agent n'est pas disponible (l'appelant retombe sur la transcription du navigateur).
+ * Transcrit un fichier audio via le backend (/transcribe).
+ * Renvoie '' si le backend n'est pas disponible (l'appelant retombe sur la transcription du navigateur).
  */
 export async function transcribeAudioFile(base64Audio: string, mimeType?: string): Promise<string> {
   if (!isAgentProxyUsable()) return '';
   try {
-    const res = await proxyFetch('transcribe', { base64Audio, mimeType });
+    const res = await backendFetch('transcribe', { base64Audio, mimeType });
     const data = await res.json();
     return data.transcript || '';
   } catch {
@@ -338,61 +229,23 @@ export async function transcribeAudioFile(base64Audio: string, mimeType?: string
   }
 }
 
-/**
- * Envoie un message texte ou audio à l'agent IA (appel non streamé) : service agent `/message` si
- * disponible, sinon transport IA de l'app. Lève une AgentServiceError explicite en cas d'échec.
- */
+/** Envoie un message texte ou audio (appel non streamé, /message). */
 export async function sendAgentMessage(
   input: AgentInput,
   mode: AssistantMode = 'conversation',
   history: ConversationHistoryMessage[] = [],
 ): Promise<AgentResponse> {
-  const systemInstruction = buildFullSystemInstruction(mode);
-
-  if (isAgentProxyUsable()) {
-    try {
-      const response = await proxyFetch('message', buildProxyPayload(input, systemInstruction, history));
-      const data = await response.json();
-      const responseText = typeof data.text === 'string' ? data.text.trim() : '';
-      if (!responseText) {
-        throw new AgentServiceError("Le service d'assistant a renvoyé une réponse vide.");
-      }
-      const transcript = data.transcript || input.transcriptHint;
-      autoExtractAndSaveContext({ ...input, transcriptHint: transcript }, responseText);
-      return { text: responseText, transcript, mode };
-    } catch (err) {
-      if (!(err instanceof AgentProxyUnavailableError)) {
-        console.error('[AgentConversationService] Erreur appel:', err);
-        throw err;
-      }
-      console.warn(`[AgentConversationService] ${err.message} — repli sur le transport IA de l'app.`);
-    }
-  }
-
-  const message = userTextForTransport(input);
-  let responseText = '';
-  try {
-    const dto = await resolveTransport().sendChatMessage({
-      message,
-      history: historyForTransport(history),
-      context: systemInstruction,
-      tools: [],
-    });
-    responseText = (dto.message || '').trim();
-  } catch (err) {
-    throw new AgentServiceError(`L'assistant n'a pas pu répondre : ${errorMessage(err)}. ${FALLBACK_HINT}`, {
-      cause: err,
-    });
-  }
+  const response = await backendFetch('message', buildPayload(input, mode, history));
+  const data = await response.json();
+  const responseText = typeof data.text === 'string' ? data.text.trim() : '';
   if (!responseText) {
-    throw new AgentServiceError(`L'assistant a renvoyé une réponse vide. ${FALLBACK_HINT}`);
+    throw new AgentServiceError("Le service d'assistant a renvoyé une réponse vide.");
   }
-  autoExtractAndSaveContext({ ...input, transcriptHint: input.transcriptHint }, responseText);
-  return { text: responseText, transcript: input.transcriptHint, mode };
+  return { text: responseText, transcript: data.transcript || input.transcriptHint, mode };
 }
 
 /**
- * Génère un flux audio parlé via le service agent (Gemini TTS).
+ * Demande au backend un flux audio parlé (TTS, /tts).
  * Renvoie null si indisponible : l'appelant retombe sur la synthèse vocale du navigateur.
  */
 export async function generateSpeechAudio(
@@ -401,34 +254,10 @@ export async function generateSpeechAudio(
 ): Promise<string | null> {
   if (!isAgentProxyUsable()) return null;
   try {
-    const response = await proxyFetch('tts', { text, voiceName });
+    const response = await backendFetch('tts', { text, voiceName });
     const data = await response.json();
     return data.audioBase64 || null;
   } catch {
     return null;
-  }
-}
-
-/**
- * Analyse automatique des échanges pour enrichir la mémoire locale
- */
-function autoExtractAndSaveContext(input: AgentInput, responseText: string) {
-  try {
-    const userText = input.text || input.transcriptHint || '';
-    if (!userText) return;
-
-    const lower = userText.toLowerCase();
-
-    if (
-      lower.includes('je préfère') ||
-      lower.includes('mon rôle est') ||
-      lower.includes("je m'appelle") ||
-      lower.includes('souviens-toi que')
-    ) {
-      const fact = `Préférence notée : "${userText}"`;
-      appendContextMemory(fact);
-    }
-  } catch {
-    // ignore
   }
 }

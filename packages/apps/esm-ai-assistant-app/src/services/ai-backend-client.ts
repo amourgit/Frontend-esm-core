@@ -29,7 +29,7 @@ export interface ChatMessageDTO {
    * Arguments exacts avec lesquels le tool a été appelé — nécessaire pour
    * reconstruire, côté provider, le tour "functionCall" qui doit précéder un
    * tour "functionResponse" (voir @egen-civitas/esm-ai-assistant-app/services/
-   * gemini-direct-client.ts). Absent pour les rôles user/assistant.
+   * backend). Absent pour les rôles user/assistant.
    */
   toolArguments?: Record<string, unknown>;
   /** Voir ToolCallRequest.thoughtSignature — transite avec le résultat pour être réinjecté dans le tour modèle reconstruit. */
@@ -142,7 +142,7 @@ export async function streamChatMessage(
     const remainder = frames.pop() ?? '';
 
     for (const frame of frames) {
-      // Voir gemini-direct-client.ts : un bloc SSE peut étaler le JSON
+      // Un bloc SSE peut étaler le JSON
       // d'un même évènement sur plusieurs lignes physiques sans répéter
       // le préfixe "data:". On traite donc le bloc entier comme un seul
       // JSON plutôt que de ne lire que sa première ligne.

@@ -8,12 +8,6 @@ vi.mock('../services/ai-backend-client', () => ({
   streamChatMessage: vi.fn(),
 }));
 
-vi.mock('../services/conversation-memory', () => ({
-  loadPersistedMessages: () => [],
-  persistMessages: vi.fn(),
-  clearPersistedMessages: vi.fn(),
-}));
-
 const mockExecute = vi.fn();
 
 vi.mock('@egen-civitas/esm-ai-framework', () => ({
@@ -21,7 +15,7 @@ vi.mock('@egen-civitas/esm-ai-framework', () => ({
   useAvailableToolsSchema: () => [{ name: 'navigate', description: 'Navigue', parameters: {} }],
   useExecuteTool: () => ({ execute: mockExecute, executing: false, lastResult: null, lastError: null }),
   getAIConfig: () => ({
-    provider: { stream: false },
+    backend: { stream: false },
   }),
   dispatchAIEvent: vi.fn(),
   AI_EVENTS: {

@@ -18,14 +18,6 @@ import {
   AudioPlayerService,
 } from '../services/audioPlayerService';
 import {
-  loadSystemPrompt,
-  saveSystemPrompt,
-  appendContextMemory,
-  resetSystemPrompt as resetSystemPromptStorage,
-  getPromptMetadata,
-  type PromptMetadata,
-} from '../services/promptManager';
-import {
   type AssistantMode,
   getSavedAssistantMode,
   saveAssistantMode,
@@ -58,8 +50,6 @@ export interface AssistantGlobalVoiceContextType {
 
   // Messages & Prompt
   messages: ConversationHistoryMessage[];
-  systemPrompt: string;
-  promptMetadata: PromptMetadata | null;
 
   // Actions
   startVoiceSession: () => Promise<void>;
@@ -68,9 +58,6 @@ export interface AssistantGlobalVoiceContextType {
   stopAgentSpeech: () => void;
   sendTextMessage: (text: string) => Promise<AgentResponse | null>;
   sendAudioMessage: (blob: Blob, base64: string, transcriptHint?: string) => Promise<AgentResponse | null>;
-  updateSystemPrompt: (newPrompt: string) => void;
-  appendMemory: (fact: string) => void;
-  resetPrompt: () => void;
   clearHistory: () => void;
 }
 
@@ -164,8 +151,6 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
   }, [messages]);
 
   // Prompt Système dynamique
-  const [systemPrompt, setSystemPrompt] = useState<string>(() => loadSystemPrompt());
-  const [promptMetadata, setPromptMetadata] = useState<PromptMetadata | null>(() => getPromptMetadata());
 
   // Références d'instances persistantes (VAD & Audio Player & Reconnaissance vocale client)
   const vadRef = useRef<VoiceActivityDetector | null>(null);
@@ -209,19 +194,6 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
       }
     }
   }, [messages]);
-
-  // Synchronisation du prompt système si modifié
-  useEffect(() => {
-    const handlePromptUpdate = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail?.prompt) {
-        setSystemPrompt(detail.prompt);
-        setPromptMetadata(detail.meta);
-      }
-    };
-    window.addEventListener('egen_system_prompt_updated', handlePromptUpdate);
-    return () => window.removeEventListener('egen_system_prompt_updated', handlePromptUpdate);
-  }, []);
 
   // Initialisation du player audio
   useEffect(() => {
@@ -432,8 +404,6 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
         setMessages((prev) => [...prev, assistantMsg]);
         messagesRef.current = [...messagesRef.current, assistantMsg];
         setStreamingText('');
-        setSystemPrompt(loadSystemPrompt());
-        setPromptMetadata(getPromptMetadata());
 
         return response;
       } catch (err) {
@@ -654,24 +624,6 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
     }
   }, [isVoiceActive, isListening, isAgentSpeaking, isProcessing, startVoiceListening]);
 
-  const updateSystemPromptHandler = useCallback((newPrompt: string) => {
-    saveSystemPrompt(newPrompt, 'user_custom');
-    setSystemPrompt(newPrompt);
-    setPromptMetadata(getPromptMetadata());
-  }, []);
-
-  const appendMemoryHandler = useCallback((fact: string) => {
-    const updated = appendContextMemory(fact);
-    setSystemPrompt(updated);
-    setPromptMetadata(getPromptMetadata());
-  }, []);
-
-  const resetPromptHandler = useCallback(() => {
-    const initial = resetSystemPromptStorage();
-    setSystemPrompt(initial);
-    setPromptMetadata(getPromptMetadata());
-  }, []);
-
   const clearHistory = useCallback(() => {
     setMessages([]);
     if (typeof window !== 'undefined') {
@@ -704,17 +656,12 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
         setSilenceToleranceMs,
         error,
         messages,
-        systemPrompt,
-        promptMetadata,
         startVoiceSession,
         stopVoiceSession,
         toggleVoiceSession,
         stopAgentSpeech,
         sendTextMessage,
         sendAudioMessage,
-        updateSystemPrompt: updateSystemPromptHandler,
-        appendMemory: appendMemoryHandler,
-        resetPrompt: resetPromptHandler,
         clearHistory,
       }}
     >

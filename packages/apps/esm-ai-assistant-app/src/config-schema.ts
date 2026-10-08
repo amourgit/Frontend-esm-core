@@ -4,10 +4,10 @@ import { Type, validators } from '@egen-civitas/esm-framework';
 //  CONFIG SCHEMA — App Assistant IA
 //
 //  Deux familles de configuration, volontairement séparées :
-//    • Le comportement du moteur IA lui-même (provider, backend, sécurité,
-//      mémoire, contexte) est piloté par @egen-civitas/esm-ai-config (variables
-//      d'environnement EGEN_AI_*) — voir docs/theme-system-status.md et
-//      .env.development. Cette app ne redéfinit RIEN de ce périmètre.
+//    • Le moteur IA (modèle, prompt, mémoire, STT/TTS) vit ENTIÈREMENT dans le
+//      backend. Côté frontend, @egen-civitas/esm-ai-config ne porte que
+//      l'adresse du backend et les réglages de transport/exécution des tools
+//      (variables EGEN_AI_*). Cette app ne redéfinit RIEN de ce périmètre.
 //    • Ce qui relève de la PRÉSENTATION du widget (identité affichée,
 //      message d'accueil, entreprise à l'origine du projet, suggestions
 //      rapides) est piloté ici, par tenant si besoin — même logique que
@@ -20,7 +20,7 @@ export const configSchema = {
       _type: Type.String,
       _default: '/api/agent',
       _description:
-        "URL de base du service agent vocal/texte de l'expérience plein écran (SSE `/stream`, `/message`, `/transcribe`, `/tts`). Si ce service est injoignable, la conversation passe par le backend IA (EGEN_AI_BACKEND_URL) ou Gemini direct (EGEN_AI_DIRECT_MODE / EGEN_AI_API_KEY). Laisser vide pour désactiver le service agent.",
+        "URL de base du backend agent vocal/texte de l'expérience plein écran (SSE `/stream`, `/message`, `/transcribe`, `/tts`). Laisser vide pour désactiver l'expérience plein écran.",
     },
     name: {
       _type: Type.String,

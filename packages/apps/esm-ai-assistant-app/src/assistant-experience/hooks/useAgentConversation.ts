@@ -24,14 +24,6 @@ import {
 import {
   AudioPlayerService,
 } from '../services/audioPlayerService';
-import {
-  loadSystemPrompt,
-  saveSystemPrompt,
-  appendContextMemory,
-  resetSystemPrompt as resetSystemPromptStorage,
-  getPromptMetadata,
-  type PromptMetadata,
-} from '../services/promptManager';
 import { type AssistantMode } from '@egen-civitas/esm-styleguide';
 
 export interface UseAgentConversationOptions {
@@ -63,11 +55,6 @@ export interface UseAgentConversationReturn {
   stopAgentSpeech: () => void;
 
   // Prompt Système & Métadonnées
-  systemPrompt: string;
-  promptMetadata: PromptMetadata | null;
-  updateSystemPrompt: (newPrompt: string) => void;
-  appendMemory: (fact: string) => void;
-  resetPrompt: () => void;
 
   // Actions de communication
   sendTextMessage: (text: string) => Promise<AgentResponse | null>;
@@ -137,8 +124,6 @@ export function useAgentConversation(
   const [isContinuousVoiceMode, setIsContinuousVoiceMode] = useState(enableContinuousVoice);
 
   // État du prompt système actif
-  const [systemPrompt, setSystemPrompt] = useState<string>(() => loadSystemPrompt());
-  const [promptMetadata, setPromptMetadata] = useState<PromptMetadata | null>(() => getPromptMetadata());
 
   // Références d'instances VAD, Audio Player et état
   const vadRef = useRef<VoiceActivityDetector | null>(null);
@@ -196,19 +181,6 @@ export function useAgentConversation(
     }
   }, [messages, autoSaveHistory]);
 
-  // Synchronisation du prompt système si modifié par un autre onglet/composant
-  useEffect(() => {
-    const handlePromptUpdate = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail?.prompt) {
-        setSystemPrompt(detail.prompt);
-        setPromptMetadata(detail.meta);
-      }
-    };
-    window.addEventListener('egen_system_prompt_updated', handlePromptUpdate);
-    return () => window.removeEventListener('egen_system_prompt_updated', handlePromptUpdate);
-  }, []);
-
   // Nettoyage complet au démontage (libération micro et VAD)
   useEffect(() => {
     return () => {
@@ -222,12 +194,12 @@ export function useAgentConversation(
     };
   }, []);
 
-  // Joue la réponse en audio (TTS Gemini ou Synthèse Vocale locale)
+  // Joue la réponse en audio (TTS backend ou Synthèse Vocale locale)
   const playAgentResponse = useCallback(async (responseText: string) => {
     if (!audioOutputRef.current || !playerRef.current) return;
 
     try {
-      // 1. Tente d'obtenir le flux TTS Gemini haute fidélité
+      // 1. Tente d'obtenir le flux TTS backend haute fidélité
       const ttsAudio = await generateSpeechAudio(responseText);
       if (ttsAudio && playerRef.current) {
         await playerRef.current.playBase64Pcm(ttsAudio, 24000);
@@ -395,8 +367,6 @@ export function useAgentConversation(
         setMessages((prev) => [...prev, assistantMsg]);
         messagesRef.current = [...messagesRef.current, assistantMsg];
         setStreamingText('');
-        setSystemPrompt(loadSystemPrompt());
-        setPromptMetadata(getPromptMetadata());
 
         return response;
       } catch (err) {
@@ -516,25 +486,6 @@ export function useAgentConversation(
     setOutputVolume(0);
   }, []);
 
-  // Gestion du prompt système
-  const updateSystemPromptHandler = useCallback((newPrompt: string) => {
-    saveSystemPrompt(newPrompt, 'user_custom');
-    setSystemPrompt(newPrompt);
-    setPromptMetadata(getPromptMetadata());
-  }, []);
-
-  const appendMemoryHandler = useCallback((fact: string) => {
-    const updated = appendContextMemory(fact);
-    setSystemPrompt(updated);
-    setPromptMetadata(getPromptMetadata());
-  }, []);
-
-  const resetPromptHandler = useCallback(() => {
-    const initial = resetSystemPromptStorage();
-    setSystemPrompt(initial);
-    setPromptMetadata(getPromptMetadata());
-  }, []);
-
   const clearHistory = useCallback(() => {
     setMessages([]);
     if (typeof window !== 'undefined') {
@@ -561,11 +512,6 @@ export function useAgentConversation(
     setIsAudioOutputEnabled,
     setIsContinuousVoiceMode,
     stopAgentSpeech,
-    systemPrompt,
-    promptMetadata,
-    updateSystemPrompt: updateSystemPromptHandler,
-    appendMemory: appendMemoryHandler,
-    resetPrompt: resetPromptHandler,
     sendTextMessage,
     sendAudioMessage,
     startVoiceListening,

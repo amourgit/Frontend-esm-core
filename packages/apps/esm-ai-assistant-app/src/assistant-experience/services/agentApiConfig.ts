@@ -1,11 +1,10 @@
 // URL de base du backend agent (SSE / transcription / TTS). Renseignée depuis la
 // config de l'app (`assistant.agentApiBaseUrl`) par <AssistantExperience/> avant tout appel.
 //
-//  - valeur vide → service agent DÉSACTIVÉ : la conversation passe directement par le
-//    transport IA de l'app (backend EGEN ou Gemini direct, voir services/transport.ts) ;
-//  - service injoignable (réseau, 404/502/503…, page HTML renvoyée par le serveur de la SPA) →
+//  - valeur vide → backend DÉSACTIVÉ : toute tentative d'appel lève une erreur explicite ;
+//  - backend injoignable (réseau, 404/502/503…, page HTML renvoyée par le serveur de la SPA) →
 //    marqué indisponible pendant AGENT_RETRY_AFTER_MS, pour ne pas retenter (et retarder chaque
-//    message) à chaque envoi ; la conversation bascule alors sur le transport IA de l'app.
+//    message) à chaque envoi.
 const DEFAULT_AGENT_API_BASE = '/api/agent';
 export const AGENT_RETRY_AFTER_MS = 60_000;
 
@@ -30,7 +29,7 @@ export function markAgentProxyUnavailable(now: number = Date.now()) {
 
 export function agentApiUrl(path: string): string {
   if (agentApiBase === null) {
-    throw new Error('Le service agent est désactivé (assistant.agentApiBaseUrl est vide).');
+    throw new Error("Le backend de l'assistant est désactivé (assistant.agentApiBaseUrl est vide).");
   }
   return `${agentApiBase}/${path.replace(/^\/+/, '')}`;
 }

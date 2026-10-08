@@ -18,7 +18,7 @@
 //  n'importe quel tool natif ou déclaré par un microfrontend.
 // =============================================================================
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import {
   useAIContextJson,
   useAvailableToolsSchema,
@@ -27,8 +27,7 @@ import {
   dispatchAIEvent,
   AI_EVENTS,
 } from '@egen-civitas/esm-ai-framework';
-import { loadPersistedMessages, persistMessages, clearPersistedMessages } from '../services/conversation-memory';
-import { resolveTransport } from '../services/transport';
+import * as transport from '../services/ai-backend-client';
 import type { ChatMessageDTO, StreamEvent, ToolCallRequest } from '../services/ai-backend-client';
 
 export interface AssistantToolCall {
@@ -102,7 +101,7 @@ export interface UseAIChatResult {
 }
 
 export function useAIChat(): UseAIChatResult {
-  const [messages, setMessages] = useState<AssistantMessage[]>(() => loadPersistedMessages());
+  const [messages, setMessages] = useState<AssistantMessage[]>([]);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -112,10 +111,6 @@ export function useAIChat(): UseAIChatResult {
 
   const abortRef = useRef<AbortController | null>(null);
   const sessionIdRef = useRef<string>(`egen-ai-assistant-${Date.now()}`);
-
-  useEffect(() => {
-    persistMessages(messages);
-  }, [messages]);
 
   const updateAssistantMessage = useCallback((id: string, updater: (m: AssistantMessage) => AssistantMessage) => {
     setMessages((prev) => prev.map((m) => (m.id === id ? updater(m) : m)));
@@ -187,7 +182,6 @@ export function useAIChat(): UseAIChatResult {
       }
 
       const config = getAIConfig();
-      const transport = resolveTransport();
       const controller = new AbortController();
       abortRef.current = controller;
 
@@ -198,7 +192,8 @@ export function useAIChat(): UseAIChatResult {
         tools: toolsSchema,
       };
 
-      if (config.provider.stream) {
+      // `backend.stream` (esm-ai-config ≥ 1.1) ; absent des versions antérieures → streaming par défaut.
+      if ((config.backend as { stream?: boolean }).stream !== false) {
         let accumulated = '';
         const pendingToolCalls: ToolCallRequest[] = [];
 
@@ -331,7 +326,6 @@ export function useAIChat(): UseAIChatResult {
 
   const clearConversation = useCallback(() => {
     setMessages([]);
-    clearPersistedMessages();
     dispatchAIEvent(AI_EVENTS.SESSION_CLEARED, {});
   }, []);
 
