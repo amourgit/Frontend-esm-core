@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useConfig } from '@egen-civitas/esm-framework';
 import { playXboxSound } from '@egen-civitas/esm-styleguide';
-import { setAgentApiBase } from './services/agentApiConfig';
 import { AssistantGlobalVoiceProvider, useAssistantVoice } from './context/AssistantGlobalVoiceContext';
 import { AssistantPageOverlay } from './components/AssistantPageOverlay';
 import { DedicatedAudioVisualSpace } from './components/DedicatedAudioVisualSpace';
@@ -107,8 +105,6 @@ const Experience: React.FC = () => {
 };
 
 const AssistantExperience: React.FC = () => {
-  const config = useConfig<{ assistant: { agentApiBaseUrl?: string } }>();
-  setAgentApiBase(config?.assistant?.agentApiBaseUrl);
   return (
     <AssistantGlobalVoiceProvider>
       <Experience />

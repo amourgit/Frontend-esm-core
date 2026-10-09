@@ -1,180 +1,129 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { _resetAgentApi, AGENT_RETRY_AFTER_MS, markAgentProxyUnavailable, setAgentApiBase } from './agentApiConfig';
+
+const mocks = vi.hoisted(() => {
+  class ChannelNotReadyError extends Error {}
+  class ChannelClosedError extends Error {}
+  class ChannelTimeoutError extends Error {}
+  class ChannelRemoteError extends Error {}
+  return {
+    ChannelNotReadyError,
+    ChannelClosedError,
+    ChannelTimeoutError,
+    ChannelRemoteError,
+    getConversationClient: vi.fn(),
+  };
+});
+
+vi.mock('@egen-civitas/esm-ai-framework', () => mocks);
+
 import {
   AgentServiceError,
   generateSpeechAudio,
-  sendAgentMessage,
+  resetRemoteConversation,
   streamAgentMessage,
-  transcribeAudioFile,
-  type ConversationHistoryMessage,
 } from './agentConversationService';
-
-const fetchMock = vi.fn();
-
-const sse = (frames: Array<Record<string, unknown>>, sep = '\n\n') =>
-  new Response(
-    new ReadableStream({
-      start(controller) {
-        const enc = new TextEncoder();
-        for (const f of frames) controller.enqueue(enc.encode(`data: ${JSON.stringify(f)}${sep}`));
-        controller.close();
-      },
-    }),
-    { status: 200, headers: { 'content-type': 'text/event-stream' } },
-  );
-
-const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 
 const textInput = { type: 'text' as const, text: 'Bonjour, que peux-tu faire ?' };
 
+function fakeClient(overrides: Record<string, unknown> = {}) {
+  const client = {
+    sendText: vi.fn(async (_text: string, o: any) => {
+      o.onStreamId?.('s1');
+      o.onTranscript?.('bonjour');
+      o.onDelta?.('Voici ');
+      o.onDelta?.('la réponse.');
+      return { streamId: 's1', text: 'Voici la réponse.', transcript: 'bonjour' };
+    }),
+    sendAudio: vi.fn(async () => ({ streamId: 's2', text: 'ok audio', transcript: 'salut' })),
+    requestSpeech: vi.fn(async () => 'UENN'),
+    reset: vi.fn(),
+    ...overrides,
+  };
+  mocks.getConversationClient.mockReturnValue(client);
+  return client;
+}
+
 beforeEach(() => {
-  _resetAgentApi();
-  fetchMock.mockReset();
-  vi.stubGlobal('fetch', fetchMock);
-  vi.spyOn(console, 'warn').mockImplementation(() => {});
-  vi.spyOn(console, 'error').mockImplementation(() => {});
+  mocks.getConversationClient.mockReset();
 });
 
-describe('streamAgentMessage — backend disponible', () => {
-  it('relaie les morceaux, renvoie le texte complet et la transcription', async () => {
-    fetchMock.mockResolvedValue(sse([{ transcript: 'bonjour' }, { text: 'Voici ' }, { text: 'la réponse.' }]));
+describe('streamAgentMessage — via le canal temps réel', () => {
+  it('relaie le texte, le mode et les fragments ; renvoie texte + transcription', async () => {
+    const client = fakeClient();
     const chunks: string[] = [];
-    const transcripts: string[] = [];
-    const res = await streamAgentMessage(
-      textInput,
-      'conversation',
-      [],
-      (c) => chunks.push(c),
-      (t) => transcripts.push(t),
-    );
+    const ids: string[] = [];
+    const res = await streamAgentMessage(textInput, 'conversation', (c) => chunks.push(c), undefined, {
+      onStreamId: (id) => ids.push(id),
+    });
     expect(res).toMatchObject({ text: 'Voici la réponse.', transcript: 'bonjour', mode: 'conversation' });
     expect(chunks).toEqual(['Voici ', 'la réponse.']);
-    expect(transcripts).toEqual(['bonjour']);
-    expect(fetchMock).toHaveBeenCalledWith('/api/agent/stream', expect.objectContaining({ credentials: 'include' }));
+    expect(ids).toEqual(['s1']);
+    expect(client.sendText).toHaveBeenCalledWith(textInput.text, expect.objectContaining({ mode: 'conversation' }));
   });
 
-  it('lit un flux dont les blocs sont séparés par CRLF', async () => {
-    fetchMock.mockResolvedValue(sse([{ text: 'ok' }], '\r\n\r\n'));
-    expect((await streamAgentMessage(textInput, 'conversation', [], () => {})).text).toBe('ok');
-  });
-
-  it("envoie le mode et l'historique, jamais de prompt système (construit par le backend)", async () => {
-    fetchMock.mockResolvedValue(sse([{ text: 'ok' }]));
-    const history: ConversationHistoryMessage[] = [
-      { id: '1', role: 'user', type: 'audio', content: '🎤 [Message vocal]', transcript: 'salut', timestamp: '10:00' },
-    ];
-    await streamAgentMessage(textInput, 'recherche' as never, history, () => {});
-    const payload = JSON.parse(fetchMock.mock.calls[0][1].body);
-    expect(payload.mode).toBe('recherche');
-    expect(payload.systemInstruction).toBeUndefined();
-    expect(payload.history[0]).toMatchObject({ id: '1', content: 'salut', transcript: 'salut' });
-  });
-});
-
-describe('streamAgentMessage — les pannes restent VISIBLES', () => {
-  it.each([404, 502, 503])('HTTP %i → AgentServiceError, plus aucun repli', async (status) => {
-    fetchMock.mockResolvedValue(new Response('x', { status }));
-    await expect(streamAgentMessage(textInput, 'conversation', [], () => {})).rejects.toBeInstanceOf(
-      AgentServiceError,
+  it("envoie l'audio encodé avec son type MIME", async () => {
+    const client = fakeClient();
+    const res = await streamAgentMessage(
+      { type: 'audio', base64Audio: 'AAAA', mimeType: 'audio/webm', transcriptHint: 'hint' },
+      'conversation',
+      () => {},
     );
+    expect(client.sendAudio).toHaveBeenCalledWith(
+      { base64Audio: 'AAAA', mimeType: 'audio/webm', transcriptHint: 'hint' },
+      expect.objectContaining({ mode: 'conversation' }),
+    );
+    expect(res.transcript).toBe('salut');
   });
 
-  it('erreur réseau → AgentServiceError', async () => {
-    fetchMock.mockRejectedValue(new Error('réseau coupé'));
-    await expect(streamAgentMessage(textInput, 'conversation', [], () => {})).rejects.toThrow(/réseau coupé/);
+  it('audio sans enregistrement → erreur explicite', async () => {
+    fakeClient();
+    await expect(streamAgentMessage({ type: 'audio' }, 'conversation', () => {})).rejects.toThrow(/enregistrement/);
   });
 
-  it('HTTP 200 mais page HTML → AgentServiceError', async () => {
-    fetchMock.mockResolvedValue(new Response('<html/>', { status: 200, headers: { 'content-type': 'text/html' } }));
-    await expect(streamAgentMessage(textInput, 'conversation', [], () => {})).rejects.toThrow(/HTML/);
+  it('canal non démarré (IA désactivée) → AgentServiceError explicite', async () => {
+    mocks.getConversationClient.mockReturnValue(null);
+    await expect(streamAgentMessage(textInput, 'conversation', () => {})).rejects.toThrow(/désactivé/);
   });
 
-  it('erreur serveur réelle (500) → AgentServiceError avec le code', async () => {
-    fetchMock.mockResolvedValue(new Response('boom', { status: 500 }));
-    const err = await streamAgentMessage(textInput, 'conversation', [], () => {}).catch((e) => e);
+  it.each([
+    ['hors ligne', new mocks.ChannelNotReadyError('x'), /hors ligne/],
+    ['coupure en cours de réponse', new mocks.ChannelClosedError('x'), /interrompue/],
+    ['délai dépassé', new mocks.ChannelTimeoutError('x'), /pas répondu/],
+    ['erreur du backend', new mocks.ChannelRemoteError('quota dépassé'), /quota dépassé/],
+  ])('%s → AgentServiceError lisible', async (_label, error, pattern) => {
+    fakeClient({ sendText: vi.fn().mockRejectedValue(error) });
+    const err = await streamAgentMessage(textInput, 'conversation', () => {}).catch((e) => e);
     expect(err).toBeInstanceOf(AgentServiceError);
-    expect(err.status).toBe(500);
-  });
-
-  it('flux contenant seulement un évènement error → AgentServiceError avec ce message', async () => {
-    fetchMock.mockResolvedValue(sse([{ error: 'quota dépassé' }]));
-    await expect(streamAgentMessage(textInput, 'conversation', [], () => {})).rejects.toThrow(/quota dépassé/);
-  });
-
-  it('flux vide → AgentServiceError « réponse vide »', async () => {
-    fetchMock.mockResolvedValue(sse([]));
-    await expect(streamAgentMessage(textInput, 'conversation', [], () => {})).rejects.toThrow(/réponse vide/);
-  });
-
-  it("n'insiste pas : après un échec, le backend n'est plus appelé pendant un moment", async () => {
-    fetchMock.mockResolvedValue(new Response('x', { status: 503 }));
-    await expect(streamAgentMessage(textInput, 'conversation', [], () => {})).rejects.toThrow();
-    await expect(streamAgentMessage(textInput, 'conversation', [], () => {})).rejects.toThrow(/indisponible/);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('réessaie le backend une fois le délai écoulé', async () => {
-    vi.useFakeTimers();
-    try {
-      fetchMock.mockResolvedValueOnce(new Response('x', { status: 503 }));
-      await expect(streamAgentMessage(textInput, 'conversation', [], () => {})).rejects.toThrow();
-      vi.advanceTimersByTime(AGENT_RETRY_AFTER_MS + 1);
-      fetchMock.mockResolvedValueOnce(sse([{ text: 'revenu' }]));
-      expect((await streamAgentMessage(textInput, 'conversation', [], () => {})).text).toBe('revenu');
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it('assistant.agentApiBaseUrl vide → backend désactivé : aucun appel réseau', async () => {
-    setAgentApiBase('');
-    await expect(streamAgentMessage(textInput, 'conversation', [], () => {})).rejects.toBeInstanceOf(
-      AgentServiceError,
-    );
-    expect(fetchMock).not.toHaveBeenCalled();
-  });
-});
-
-describe('sendAgentMessage (appel non streamé)', () => {
-  it('backend disponible → son texte', async () => {
-    fetchMock.mockResolvedValue(json({ text: 'Réponse /message', transcript: 'salut' }));
-    const res = await sendAgentMessage(textInput, 'conversation', []);
-    expect(res).toMatchObject({ text: 'Réponse /message', transcript: 'salut' });
-    expect(fetchMock).toHaveBeenCalledWith('/api/agent/message', expect.anything());
-  });
-
-  it('erreur réelle (500) → AgentServiceError', async () => {
-    fetchMock.mockResolvedValue(new Response('boom', { status: 500 }));
-    await expect(sendAgentMessage(textInput, 'conversation', [])).rejects.toThrow(/500/);
+    expect(err.message).toMatch(pattern);
   });
 
   it('réponse vide → AgentServiceError', async () => {
-    fetchMock.mockResolvedValue(json({ text: '' }));
-    await expect(sendAgentMessage(textInput, 'conversation', [])).rejects.toThrow(/réponse vide/);
+    fakeClient({ sendText: vi.fn(async () => ({ streamId: 's', text: '  ', transcript: '' })) });
+    await expect(streamAgentMessage(textInput, 'conversation', () => {})).rejects.toThrow(/réponse vide/);
+  });
+
+  it("l'annulation reste une AbortError (pas une erreur d'assistant)", async () => {
+    fakeClient({ sendText: vi.fn().mockRejectedValue(new DOMException('annulé', 'AbortError')) });
+    const err = await streamAgentMessage(textInput, 'conversation', () => {}).catch((e) => e);
+    expect(err).toBeInstanceOf(DOMException);
   });
 });
 
-describe('voix : transcription et synthèse (assurées par le backend)', () => {
-  it('backend inutilisable : aucun appel réseau, valeurs neutres (le navigateur prend le relais)', async () => {
-    markAgentProxyUnavailable();
-    expect(await transcribeAudioFile('AAAA', 'audio/wav')).toBe('');
-    expect(await generateSpeechAudio('Bonjour')).toBeNull();
-    expect(fetchMock).not.toHaveBeenCalled();
-  });
-
-  it('backend disponible : transcription et audio renvoyés', async () => {
-    fetchMock
-      .mockResolvedValueOnce(json({ transcript: 'texte transcrit' }))
-      .mockResolvedValueOnce(json({ audioBase64: 'UENN' }));
-    expect(await transcribeAudioFile('AAAA')).toBe('texte transcrit');
+describe('synthèse vocale et reset', () => {
+  it('renvoie le PCM du backend, null en cas de panne (le navigateur prend le relais)', async () => {
+    fakeClient();
     expect(await generateSpeechAudio('Bonjour')).toBe('UENN');
+    fakeClient({ requestSpeech: vi.fn().mockRejectedValue(new mocks.ChannelNotReadyError('x')) });
+    expect(await generateSpeechAudio('Bonjour')).toBeNull();
+    mocks.getConversationClient.mockReturnValue(null);
+    expect(await generateSpeechAudio('Bonjour')).toBeNull();
   });
 
-  it('backend absent (404) : valeurs neutres ET backend marqué indisponible', async () => {
-    fetchMock.mockResolvedValue(new Response('x', { status: 404 }));
-    expect(await generateSpeechAudio('Bonjour')).toBeNull();
-    expect(await generateSpeechAudio('Encore')).toBeNull();
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+  it('resetRemoteConversation transmet au backend et ignore un canal absent', () => {
+    const client = fakeClient();
+    resetRemoteConversation();
+    expect(client.reset).toHaveBeenCalledTimes(1);
+    mocks.getConversationClient.mockReturnValue(null);
+    expect(() => resetRemoteConversation()).not.toThrow();
   });
 });

@@ -1,27 +1,26 @@
 # `@egen/esm-ai-assistant-app`
 
 Interface de l'assistant IA EGEN (texte + voix). **Aucun moteur IA ici** : modèle,
-prompt système, mémoire, STT/TTS et function-calling vivent dans le backend.
+prompt système, mémoire/historique, STT/TTS et orchestration vivent dans le backend.
 
 ## Rôle du frontend
 
-1. Afficher la conversation (widget, panneau, expérience plein écran).
+1. Afficher la conversation (widget, panneau, expérience plein écran) et l'état de la connexion.
 2. Capturer le micro (VAD, dictée) et **lire l'audio** renvoyé par le backend.
-3. Envoyer au backend : message, mode choisi, historique affiché, contexte EGEN
-   sérialisé et schéma des tools frontend autorisés pour l'utilisateur.
-4. **Exécuter les tools frontend** demandés par le backend (navigation, description
-   d'écran, actions UI…) via `@egen-civitas/esm-ai-framework`, avec revalidation
-   des arguments et des permissions — jamais en confiance aveugle.
+3. Envoyer au backend, sur le **canal temps réel** (`@egen-civitas/esm-ai-channel`, WebSocket), ce que dit/écrit l'utilisateur.
+4. Provisionner au backend le **catalogue des tools frontend** autorisés pour l'utilisateur et exécuter les `tool.call` du backend
+   (navigation, description d'écran, actions UI…) via le pipeline `esm-ai-tools` (validation, permissions, timeout) — géré par le framework, pas par cette app.
 
-## Backend attendu
+Cette app ne garde **rien** : ni prompt, ni mémoire, ni historique (ni `localStorage`), ni appel HTTP vers un LLM.
+L'historique est réhydraté depuis le backend à chaque connexion.
 
-- Chat/tools : `EGEN_AI_BACKEND_URL` + `/chat` et `/chat/stream` (SSE : `token`, `tool_call`, `done`, `error`).
-- Expérience plein écran : `assistant.agentApiBaseUrl` (défaut `/api/agent`) → `/stream`, `/message`, `/transcribe`, `/tts`.
-  Le backend construit le prompt à partir du `mode` reçu.
+## Canal
 
-Si le backend ne répond pas, une erreur explicite est affichée (aucun repli, aucune réponse inventée).
+Configuré par `EGEN_AI_CHANNEL_URL` (voir `@egen-civitas/esm-ai-config`) ; protocole et contrat backend :
+`packages/framework/esm-ai-channel/README.md` du dépôt framework. Hors ligne, le panneau affiche « Assistant hors ligne —
+reconnexion en cours… » et les envois échouent avec une erreur explicite (aucune réponse n'est jamais inventée).
 
 ## Configuration
 
-- Transport / exécution des tools : variables `EGEN_AI_*` (voir `@egen-civitas/esm-ai-config`).
+- Canal, heartbeat, reconnexion, sécurité des tools : variables `EGEN_AI_*`.
 - Présentation (nom, accueil, suggestions, micro, entreprise) : `src/config-schema.ts`.

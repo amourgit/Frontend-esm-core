@@ -5,10 +5,11 @@ import {
   type AgentInput,
   type AgentResponse,
   type ConversationHistoryMessage,
-  sendAgentMessage,
   streamAgentMessage,
   generateSpeechAudio,
+  resetRemoteConversation,
 } from '../services/agentConversationService';
+import { useConversationHydration } from '../hooks/useConversationHydration';
 import {
   VoiceActivityDetector,
   type VadConfig,
@@ -53,7 +54,6 @@ export interface AgentConversationContextValue {
   clearHistory: () => void;
 }
 
-const STORAGE_KEY_HISTORY = 'egen_agent_conversation_history';
 const STORAGE_KEY_VOICE_ACTIVE = 'egen_agent_voice_active';
 const STORAGE_KEY_VOICE_OUTPUT = 'egen_agent_voice_output';
 const STORAGE_KEY_CONTINUOUS = 'egen_agent_continuous_voice';
@@ -77,30 +77,8 @@ export function AgentConversationProvider({
   activeModeRef.current = mode;
 
   // Messages persistants (historique complet sans coupure)
-  const [messages, setMessages] = useState<ConversationHistoryMessage[]>(() => {
-    if (typeof window === 'undefined') return [];
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_HISTORY);
-      if (!saved) return [];
-      const parsed: ConversationHistoryMessage[] = JSON.parse(saved);
-      return parsed.map((m) => {
-        let content = m.content || '';
-        const transcript = m.transcript || '';
-        if (transcript) {
-          content = transcript;
-        } else if (content.startsWith('🎤 Transcription en cours')) {
-          content = '🎤 [Message vocal]';
-        }
-        return {
-          ...m,
-          content,
-          transcript: transcript || (content !== '🎤 [Message vocal]' && m.type === 'audio' ? content : undefined),
-        };
-      });
-    } catch {
-      return [];
-    }
-  });
+  const [messages, setMessages] = useState<ConversationHistoryMessage[]>([]);
+  useConversationHydration(messages.length === 0, setMessages);
 
   const messagesRef = useRef<ConversationHistoryMessage[]>(messages);
   useEffect(() => {
@@ -159,26 +137,6 @@ export function AgentConversationProvider({
 
   const isListeningRef = useRef(isListening);
   isListeningRef.current = isListening;
-
-  // Sauvegarde automatique de l'INTÉGRALITÉ de l'historique sans coupure
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const textOnlyHistory = messages.map(({ id, role, content, type, timestamp, mode, transcript }) => ({
-          id,
-          role,
-          content: transcript || content,
-          type,
-          timestamp,
-          mode,
-          transcript: transcript || (type === 'audio' ? content : undefined),
-        }));
-        localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(textOnlyHistory));
-      } catch {
-        // ignore quota
-      }
-    }
-  }, [messages]);
 
   // Déclaration du startVoiceListening pour le cycle duplex
   const startVoiceListeningRef = useRef<() => Promise<void>>(async () => {});
@@ -259,7 +217,6 @@ export function AgentConversationProvider({
         mode: activeModeRef.current,
       };
 
-      const priorHistory = [...messagesRef.current];
       setMessages((prev) => [...prev, userMsg]);
       messagesRef.current = [...messagesRef.current, userMsg];
 
@@ -267,7 +224,6 @@ export function AgentConversationProvider({
         const response: AgentResponse = await streamAgentMessage(
           input,
           activeModeRef.current,
-          priorHistory,
           (chunk) => {
             setStreamingText((prev) => prev + chunk);
           },
@@ -494,13 +450,7 @@ export function AgentConversationProvider({
 
   const clearHistory = useCallback(() => {
     setMessages([]);
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.removeItem(STORAGE_KEY_HISTORY);
-      } catch {
-        // ignore
-      }
-    }
+    resetRemoteConversation();
   }, []);
 
   // Restauration de session après refresh : si la session vocale était active

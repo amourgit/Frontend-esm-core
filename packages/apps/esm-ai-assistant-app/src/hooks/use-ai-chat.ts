@@ -1,34 +1,23 @@
 // =============================================================================
 //  @egen-civitas/esm-ai-assistant-app — useAIChat
 //
-//  Orchestre un tour de conversation complet :
-//    1. Envoie le message utilisateur + historique + contexte EGEN + schéma
-//       des tools disponibles (déjà filtré par privilèges, voir
-//       useAvailableToolsSchema()) au backend IA.
-//    2. Si le backend (le LLM, via function-calling) demande l'exécution
-//       d'un ou plusieurs tools, les exécute ICI via useExecuteTool() —
-//       qui passe par le pipeline complet de @egen-civitas/esm-ai-tools
-//       (validation d'arguments + vérification de permissions + timeout),
-//       jamais en confiance aveugle du LLM.
-//    3. Renvoie le(s) résultat(s) de tool au backend pour que le LLM
-//       poursuive son raisonnement, jusqu'à une réponse finale (done: true).
+//  Interface de chat texte. Le moteur IA est ENTIÈREMENT côté backend : ce hook
+//  se contente d'envoyer le message de l'utilisateur sur le canal temps réel et
+//  d'afficher le flux de réponse.
 //
-//  Le tool "navigate" suit exactement ce chemin — aucun traitement spécial :
-//  c'est la preuve que le pipeline générique de la Couche 1 fonctionne pour
-//  n'importe quel tool natif ou déclaré par un microfrontend.
+//  Quand le backend décide d'une action frontend (navigation, lecture d'écran,
+//  clic…), il envoie un `tool.call` sur le canal ; l'exécution (validation
+//  d'arguments, permissions, timeout) est assurée par le framework
+//  (`@egen-civitas/esm-ai-channel` → pipeline `esm-ai-tools`). Ce hook ne fait
+//  qu'AFFICHER l'activité de ces tools via `onToolActivity`.
+//
+//  L'historique de référence et le contexte sont tenus/poussés par le canal :
+//  rien n'est conservé ni renvoyé ici.
 // =============================================================================
 
-import { useCallback, useRef, useState } from 'react';
-import {
-  useAIContextJson,
-  useAvailableToolsSchema,
-  useExecuteTool,
-  getAIConfig,
-  dispatchAIEvent,
-  AI_EVENTS,
-} from '@egen-civitas/esm-ai-framework';
-import * as transport from '../services/ai-backend-client';
-import type { ChatMessageDTO, StreamEvent, ToolCallRequest } from '../services/ai-backend-client';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { onToolActivity, useAIChannelState, dispatchAIEvent, AI_EVENTS, type ToolActivity } from '@egen-civitas/esm-ai-framework';
+import { resetRemoteConversation, streamAgentMessage } from '../assistant-experience/services/agentConversationService';
 
 export interface AssistantToolCall {
   id: string;
@@ -95,6 +84,8 @@ export interface UseAIChatResult {
   messages: AssistantMessage[];
   sending: boolean;
   error: string | null;
+  /** `true` quand le canal temps réel est établi avec le backend */
+  online: boolean;
   sendMessage: (text: string) => Promise<void>;
   clearConversation: () => void;
   stop: () => void;
@@ -104,153 +95,48 @@ export function useAIChat(): UseAIChatResult {
   const [messages, setMessages] = useState<AssistantMessage[]>([]);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const contextJson = useAIContextJson();
-  const toolsSchema = useAvailableToolsSchema();
-  const { execute: executeTool } = useExecuteTool();
+  const { status } = useAIChannelState();
 
   const abortRef = useRef<AbortController | null>(null);
   const sessionIdRef = useRef<string>(`egen-ai-assistant-${Date.now()}`);
+  const activeRef = useRef<{ assistantMessageId: string; streamId: string | null } | null>(null);
 
   const updateAssistantMessage = useCallback((id: string, updater: (m: AssistantMessage) => AssistantMessage) => {
     setMessages((prev) => prev.map((m) => (m.id === id ? updater(m) : m)));
   }, []);
 
-  const runToolCalls = useCallback(
-    async (assistantMessageId: string, toolCalls: ToolCallRequest[]): Promise<ChatMessageDTO[]> => {
-      const results: ChatMessageDTO[] = [];
+  // Affichage de l'activité des tools frontend appelés par le backend pour le tour en cours.
+  useEffect(
+    () =>
+      onToolActivity((activity: ToolActivity) => {
+        const active = activeRef.current;
+        if (!active) return;
+        if (activity.streamId && active.streamId && activity.streamId !== active.streamId) return;
 
-      // Marquer tous les appels comme "pending" d'un coup pour un feedback immédiat.
-      updateAssistantMessage(assistantMessageId, (m) => ({
-        ...m,
-        toolCalls: [
-          ...(m.toolCalls ?? []),
-          ...toolCalls.map((tc) => ({
-            id: tc.id,
-            tool: tc.tool,
-            arguments: tc.arguments,
-            status: 'pending' as const,
-          })),
-        ],
-      }));
-
-      for (const call of toolCalls) {
-        const result = await executeTool({ tool: call.tool, arguments: call.arguments, messageId: call.id });
-
-        updateAssistantMessage(assistantMessageId, (m) => ({
-          ...m,
-          toolCalls: (m.toolCalls ?? []).map((tc) =>
-            tc.id === call.id
-              ? {
-                  ...tc,
-                  status: result.success ? 'success' : 'error',
-                  resultSummary: result.success
-                    ? describeToolCall(call.tool, call.arguments)
-                    : (result.error ?? 'Échec inconnu'),
-                }
-              : tc,
-          ),
-        }));
-
-        results.push({
-          role: 'tool',
-          content: JSON.stringify(result.success ? (result.data ?? { success: true }) : { error: result.error }),
-          toolCallId: call.id,
-          toolName: call.tool,
-          toolArguments: call.arguments,
-          toolThoughtSignature: call.thoughtSignature,
+        updateAssistantMessage(active.assistantMessageId, (m) => {
+          const others = (m.toolCalls ?? []).filter((tc) => tc.id !== activity.callId);
+          if (activity.status === 'cancelled') return { ...m, toolCalls: others };
+          const call: AssistantToolCall = {
+            id: activity.callId,
+            tool: activity.tool,
+            arguments: activity.arguments,
+            status: activity.status === 'running' ? 'pending' : activity.status,
+            resultSummary:
+              activity.status === 'success'
+                ? describeToolCall(activity.tool, activity.arguments)
+                : activity.status === 'error'
+                  ? (activity.error ?? 'Échec inconnu')
+                  : undefined,
+          };
+          const existing = (m.toolCalls ?? []).findIndex((tc) => tc.id === activity.callId);
+          const toolCalls =
+            existing >= 0
+              ? (m.toolCalls ?? []).map((tc, i) => (i === existing ? call : tc))
+              : [...(m.toolCalls ?? []), call];
+          return { ...m, toolCalls };
         });
-      }
-
-      return results;
-    },
-    [executeTool, updateAssistantMessage],
-  );
-
-  const runTurn = useCallback(
-    async (history: ChatMessageDTO[], assistantMessageId: string, depth = 0): Promise<void> => {
-      // Garde-fou : un LLM mal calibré pourrait boucler tool_call → tool_call
-      // indéfiniment. 6 aller-retours est largement suffisant pour un usage
-      // réel (navigation + lecture de données + confirmation, par exemple).
-      if (depth > 6) {
-        updateAssistantMessage(assistantMessageId, (m) => ({
-          ...m,
-          status: 'error',
-          content: m.content || "Trop d'étapes enchaînées, j'ai arrêté ici. Pouvez-vous reformuler votre demande ?",
-        }));
-        return;
-      }
-
-      const config = getAIConfig();
-      const controller = new AbortController();
-      abortRef.current = controller;
-
-      const requestBody = {
-        message: '',
-        history,
-        context: contextJson,
-        tools: toolsSchema,
-      };
-
-      // `backend.stream` (esm-ai-config ≥ 1.1) ; absent des versions antérieures → streaming par défaut.
-      if ((config.backend as { stream?: boolean }).stream !== false) {
-        let accumulated = '';
-        const pendingToolCalls: ToolCallRequest[] = [];
-
-        await transport.streamChatMessage(
-          requestBody,
-          (event: StreamEvent) => {
-            if (event.type === 'token') {
-              accumulated += event.text;
-              updateAssistantMessage(assistantMessageId, (m) => ({ ...m, content: accumulated, status: 'streaming' }));
-            } else if (event.type === 'tool_call') {
-              pendingToolCalls.push({
-                id: event.id,
-                tool: event.tool,
-                arguments: event.arguments,
-                thoughtSignature: event.thoughtSignature,
-              });
-            } else if (event.type === 'error') {
-              throw new Error(event.error);
-            }
-          },
-          controller.signal,
-        );
-
-        if (pendingToolCalls.length > 0) {
-          const toolResults = await runToolCalls(assistantMessageId, pendingToolCalls);
-          const nextHistory: ChatMessageDTO[] = [
-            ...history,
-            ...(accumulated ? [{ role: 'assistant' as const, content: accumulated }] : []),
-            ...toolResults,
-          ];
-          await runTurn(nextHistory, assistantMessageId, depth + 1);
-          return;
-        }
-
-        updateAssistantMessage(assistantMessageId, (m) => ({ ...m, status: 'done' }));
-        return;
-      }
-
-      // ── Mode non-streaming (EGEN_AI_STREAM=false) ──────────────────────────
-      const response = await transport.sendChatMessage(requestBody, controller.signal);
-      updateAssistantMessage(assistantMessageId, (m) => ({
-        ...m,
-        content: m.content + response.message,
-        status: response.done ? 'done' : 'streaming',
-      }));
-
-      if (response.toolCalls.length > 0) {
-        const toolResults = await runToolCalls(assistantMessageId, response.toolCalls);
-        const nextHistory: ChatMessageDTO[] = [
-          ...history,
-          ...(response.message ? [{ role: 'assistant' as const, content: response.message }] : []),
-          ...toolResults,
-        ];
-        await runTurn(nextHistory, assistantMessageId, depth + 1);
-      }
-    },
-    [contextJson, toolsSchema, runToolCalls, updateAssistantMessage],
+      }),
+    [updateAssistantMessage],
   );
 
   const sendMessage = useCallback(
@@ -275,12 +161,10 @@ export function useAIChat(): UseAIChatResult {
         status: 'streaming',
       };
 
-      const historyForBackend: ChatMessageDTO[] = [
-        ...messages.map((m): ChatMessageDTO => ({ role: m.role, content: m.content })),
-        { role: 'user', content: trimmed },
-      ];
-
       setMessages((prev) => [...prev, userMessage, assistantMessage]);
+      const controller = new AbortController();
+      abortRef.current = controller;
+      activeRef.current = { assistantMessageId: assistantMessage.id, streamId: null };
 
       dispatchAIEvent(AI_EVENTS.MESSAGE_SENT, {
         sessionId: sessionIdRef.current,
@@ -290,44 +174,64 @@ export function useAIChat(): UseAIChatResult {
       });
 
       try {
-        await runTurn(historyForBackend, assistantMessage.id);
+        let accumulated = '';
+        await streamAgentMessage(
+          { type: 'text', text: trimmed },
+          'conversation',
+          (chunk) => {
+            accumulated += chunk;
+            updateAssistantMessage(assistantMessage.id, (m) => ({ ...m, content: accumulated, status: 'streaming' }));
+          },
+          undefined,
+          {
+            signal: controller.signal,
+            onStreamId: (streamId) => {
+              if (activeRef.current) activeRef.current.streamId = streamId;
+            },
+          },
+        );
+        updateAssistantMessage(assistantMessage.id, (m) => ({ ...m, status: 'done' }));
         dispatchAIEvent(AI_EVENTS.MESSAGE_RECEIVED, {
           sessionId: sessionIdRef.current,
           messageId: assistantMessage.id,
           role: 'assistant',
         });
       } catch (err) {
-        const message = err instanceof Error ? err.message : String(err);
-        setError(message);
-        updateAssistantMessage(assistantMessage.id, (m) => ({
-          ...m,
-          status: 'error',
-          content: m.content || "Désolé, une erreur est survenue en contactant l'assistant.",
-        }));
-        dispatchAIEvent(AI_EVENTS.MESSAGE_ERROR, {
-          sessionId: sessionIdRef.current,
-          messageId: assistantMessage.id,
-          role: 'assistant',
-          error: message,
-        });
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          updateAssistantMessage(assistantMessage.id, (m) => ({ ...m, status: 'done' }));
+        } else {
+          const message = err instanceof Error ? err.message : String(err);
+          setError(message);
+          updateAssistantMessage(assistantMessage.id, (m) => ({
+            ...m,
+            status: 'error',
+            content: m.content || message,
+          }));
+          dispatchAIEvent(AI_EVENTS.MESSAGE_ERROR, {
+            sessionId: sessionIdRef.current,
+            messageId: assistantMessage.id,
+            role: 'assistant',
+            error: message,
+          });
+        }
       } finally {
         setSending(false);
         abortRef.current = null;
+        activeRef.current = null;
       }
     },
-    [messages, sending, runTurn, updateAssistantMessage],
+    [sending, updateAssistantMessage],
   );
 
   const stop = useCallback(() => {
     abortRef.current?.abort();
-    abortRef.current = null;
-    setSending(false);
   }, []);
 
   const clearConversation = useCallback(() => {
     setMessages([]);
+    resetRemoteConversation();
     dispatchAIEvent(AI_EVENTS.SESSION_CLEARED, {});
   }, []);
 
-  return { messages, sending, error, sendMessage, clearConversation, stop };
+  return { messages, sending, error, online: status === 'ready', sendMessage, clearConversation, stop };
 }

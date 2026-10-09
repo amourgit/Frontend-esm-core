@@ -2,14 +2,17 @@
   "assistantActions": "Actions performed by the assistant",
   "assistantClose": "Close assistant",
   "assistantError": "Something went wrong.",
+  "assistantIncompatible": "Assistant version incompatible with the server.",
   "assistantListening": "Listening…",
   "assistantMessageInput": "Message to send to the assistant",
   "assistantNewConversation": "New conversation",
+  "assistantOffline": "Assistant offline — reconnecting…",
   "assistantOpen": "Open assistant — {{name}}",
   "assistantPoweredBy": "Powered by {{company}}",
   "assistantSend": "Send",
   "assistantStartListening": "Dictate a message",
   "assistantStopListening": "Stop listening",
   "assistantThinking": "The assistant is thinking…",
+  "assistantUnauthorized": "Access to the assistant was refused.",
   "conversation": "Conversation"
 }

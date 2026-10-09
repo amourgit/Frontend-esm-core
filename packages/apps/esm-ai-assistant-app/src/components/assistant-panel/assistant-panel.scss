@@ -127,3 +127,13 @@
     height: calc(100vh - 6rem);
   }
 }
+
+.statusBanner {
+  flex-shrink: 0;
+  margin: 0 0.75rem 0.5rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--border-radius-md, 0.5rem);
+  background: var(--colors-warning-50, #fcf4d6);
+  color: var(--colors-warning-800, #5e4b00);
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+}

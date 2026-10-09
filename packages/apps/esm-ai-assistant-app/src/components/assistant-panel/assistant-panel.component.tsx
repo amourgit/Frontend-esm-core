@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfig, CloseIcon } from '@egen-civitas/esm-framework';
 import type { ConfigSchema } from '../../config-schema';
 import { useAIChat } from '../../hooks/use-ai-chat';
+import { useAIChannelState } from '@egen-civitas/esm-ai-framework';
 import MessageList from '../message-list/message-list.component';
 import ChatInput from '../chat-input/chat-input.component';
 import styles from './assistant-panel.scss';
@@ -26,7 +27,8 @@ interface AssistantPanelProps {
 const AssistantPanel: React.FC<AssistantPanelProps> = ({ onClose }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigSchema>();
-  const { messages, sending, error, sendMessage, clearConversation } = useAIChat();
+  const { messages, sending, error, online, sendMessage, clearConversation } = useAIChat();
+  const channel = useAIChannelState();
 
   return (
     <div className={styles.panel} role="dialog" aria-label={config.assistant.name}>
@@ -60,6 +62,16 @@ const AssistantPanel: React.FC<AssistantPanelProps> = ({ onClose }) => {
       </header>
 
       <MessageList messages={messages} onSuggestionClick={sendMessage} />
+
+      {!online && channel.status !== 'disabled' && (
+        <div className={styles.statusBanner} role="status">
+          {channel.status === 'unauthorized'
+            ? t('assistantUnauthorized', "Accès à l'assistant refusé.")
+            : channel.status === 'incompatible'
+              ? t('assistantIncompatible', "Version de l'assistant incompatible avec le serveur.")
+              : t('assistantOffline', 'Assistant hors ligne — reconnexion en cours…')}
+        </div>
+      )}
 
       {error && (
         <div className={styles.errorBanner} role="alert">

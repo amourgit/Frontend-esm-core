@@ -5,10 +5,11 @@ import {
   type AgentInput,
   type AgentResponse,
   type ConversationHistoryMessage,
-  sendAgentMessage,
   streamAgentMessage,
   generateSpeechAudio,
+  resetRemoteConversation,
 } from '../services/agentConversationService';
+import { useConversationHydration } from '../hooks/useConversationHydration';
 import {
   VoiceActivityDetector,
   VadConfig,
@@ -63,7 +64,6 @@ export interface AssistantGlobalVoiceContextType {
 
 const STORAGE_KEY_VOICE_ACTIVE = 'egen_assistant_voice_active';
 const STORAGE_KEY_CHANNEL = 'egen_assistant_channel';
-const STORAGE_KEY_HISTORY = 'egen_agent_conversation_history';
 const STORAGE_KEY_SILENCE_TOLERANCE = 'egen_assistant_silence_tolerance_ms';
 
 const AssistantGlobalVoiceContext = createContext<AssistantGlobalVoiceContextType | null>(null);
@@ -119,31 +119,8 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
   const [error, setError] = useState<Error | null>(null);
 
   // Historique complet (chargé depuis le début sans troncature ni altération)
-  const [messages, setMessages] = useState<ConversationHistoryMessage[]>(() => {
-    if (typeof window === 'undefined') return [];
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_HISTORY);
-      if (!saved) return [];
-      const parsed: ConversationHistoryMessage[] = JSON.parse(saved);
-      // Rétablit et assainit les transcriptions sur les anciens messages
-      return parsed.map((m) => {
-        let content = m.content || '';
-        const transcript = m.transcript || '';
-        if (transcript) {
-          content = transcript;
-        } else if (content.startsWith('🎤 Transcription en cours')) {
-          content = '🎤 [Message vocal]';
-        }
-        return {
-          ...m,
-          content,
-          transcript: transcript || (content !== '🎤 [Message vocal]' && m.type === 'audio' ? content : undefined),
-        };
-      });
-    } catch {
-      return [];
-    }
-  });
+  const [messages, setMessages] = useState<ConversationHistoryMessage[]>([]);
+  useConversationHydration(messages.length === 0, setMessages);
 
   const messagesRef = useRef<ConversationHistoryMessage[]>(messages);
   useEffect(() => {
@@ -174,26 +151,6 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
       localStorage.setItem(STORAGE_KEY_CHANNEL, newChannel);
     }
   }, []);
-
-  // Sauvegarde de l'INTÉGRALITÉ de l'historique sans coupure ni limitation arbitraire
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const textOnlyHistory = messages.map(({ id, role, content, type, timestamp, mode, transcript }) => ({
-          id,
-          role,
-          content: transcript || content,
-          type,
-          timestamp,
-          mode,
-          transcript: transcript || (type === 'audio' ? content : undefined),
-        }));
-        localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(textOnlyHistory));
-      } catch {
-        // ignore
-      }
-    }
-  }, [messages]);
 
   // Initialisation du player audio
   useEffect(() => {
@@ -274,7 +231,6 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
       };
 
       // Historique complet garanti depuis le tout premier jour
-      const priorHistory = [...messagesRef.current];
 
       // Mise à jour synchrone de la référence et du state
       setMessages((prev) => [...prev, userMsg]);
@@ -292,7 +248,6 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
         const response = await streamAgentMessage(
           input,
           modeRef.current,
-          priorHistory,
           (chunk) => {
             setStreamingText((prev) => prev + chunk);
 
@@ -626,13 +581,7 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
 
   const clearHistory = useCallback(() => {
     setMessages([]);
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.removeItem(STORAGE_KEY_HISTORY);
-      } catch {
-        // ignore
-      }
-    }
+    resetRemoteConversation();
   }, []);
 
   return (

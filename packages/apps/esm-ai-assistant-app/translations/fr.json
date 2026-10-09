@@ -1,16 +1,19 @@
 {
-  "conversation": "Conversation",
-  "assistantThinking": "L'assistant réfléchit…",
   "assistantActions": "Actions exécutées par l'assistant",
+  "assistantClose": "Fermer l'assistant",
+  "assistantConnectionError": "Connexion à l'assistant impossible pour le moment.",
   "assistantError": "Une erreur est survenue.",
+  "assistantIncompatible": "Version de l'assistant incompatible avec le serveur.",
   "assistantListening": "Je vous écoute…",
   "assistantMessageInput": "Message à envoyer à l’assistant",
-  "assistantStopListening": "Arrêter l'écoute",
-  "assistantStartListening": "Dicter un message",
-  "assistantSend": "Envoyer",
   "assistantNewConversation": "Nouvelle conversation",
-  "assistantClose": "Fermer l'assistant",
+  "assistantOffline": "Assistant hors ligne — reconnexion en cours…",
   "assistantOpen": "Ouvrir l'assistant — {{name}}",
-  "assistantConnectionError": "Connexion à l'assistant impossible pour le moment.",
-  "assistantPoweredBy": "Propulsé par {{company}}"
+  "assistantPoweredBy": "Propulsé par {{company}}",
+  "assistantSend": "Envoyer",
+  "assistantStartListening": "Dicter un message",
+  "assistantStopListening": "Arrêter l'écoute",
+  "assistantThinking": "L'assistant réfléchit…",
+  "assistantUnauthorized": "Accès à l'assistant refusé.",
+  "conversation": "Conversation"
 }

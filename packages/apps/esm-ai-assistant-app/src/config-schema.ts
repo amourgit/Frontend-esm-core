@@ -16,12 +16,6 @@ import { Type, validators } from '@egen-civitas/esm-framework';
 
 export const configSchema = {
   assistant: {
-    agentApiBaseUrl: {
-      _type: Type.String,
-      _default: '/api/agent',
-      _description:
-        "URL de base du backend agent vocal/texte de l'expérience plein écran (SSE `/stream`, `/message`, `/transcribe`, `/tts`). Laisser vide pour désactiver l'expérience plein écran.",
-    },
     name: {
       _type: Type.String,
       _default: 'Assistant EGEN',
