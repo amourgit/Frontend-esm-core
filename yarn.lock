@@ -301,9 +301,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/egen@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "@egen-civitas/egen@npm:2.0.3"
+"@egen-civitas/egen@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "@egen-civitas/egen@npm:2.0.4"
   dependencies:
     "@egen-civitas/esm-app-shell": "npm:^2.0.1"
     "@egen-civitas/rspack-config": "npm:^1.1.0"
@@ -347,19 +347,19 @@ __metadata:
     egen: dist/cli.js
     rspack: bin/rspack.cjs
     webpack: bin/webpack.cjs
-  checksum: 10/8fecaefa925244d81be3b07079bb42f1a145c611ac5cf28007e42d5105ceb309aa8d1d1170cf5e1248e5b2cfbe6a9f09d976b316b013a419f431f47344b0cee1
+  checksum: 10/c485ea64b878e003c1ff8e018fdbfcfedbf0268638d83d963adbcc1f81ab1768f9388abc4d9f4a426d46996065acbb04bbb73f30e501ee9d2d1e83de23a74a65
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-config@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@egen-civitas/esm-ai-config@npm:1.0.1"
+"@egen-civitas/esm-ai-config@npm:^1.0.0, @egen-civitas/esm-ai-config@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@egen-civitas/esm-ai-config@npm:1.1.0"
   dependencies:
     "@egen-civitas/esm-state": "npm:^1.0.0"
   peerDependencies:
     "@egen-civitas/esm-state": ^1.0.0
     rxjs: 7.x
-  checksum: 10/bedbe9072ae5cfb939858649599659c9421b4d1fa5adf95723df31e80b741fb34c4d6b6091c56c3df604cb44ba9985d2e5b806aff13097bf1e988616e5f528b8
+  checksum: 10/a5c2ecb6727ddf1910906985e60d7309d781b304774cf03bd230415bdc0481429bba5e2daffb772c04151d6d4c7ea9e48cc49cadafdea8eed876ba762c14bea7
   languageName: node
   linkType: hard
 
@@ -380,16 +380,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-events@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@egen-civitas/esm-ai-events@npm:1.0.1"
+"@egen-civitas/esm-ai-events@npm:^1.0.0, @egen-civitas/esm-ai-events@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@egen-civitas/esm-ai-events@npm:1.1.0"
   dependencies:
-    "@egen-civitas/esm-ai-config": "npm:^1.0.0"
+    "@egen-civitas/esm-ai-config": "npm:^1.1.0"
     rxjs: "npm:^7.8.0"
   peerDependencies:
-    "@egen-civitas/esm-ai-config": ^1.0.0
+    "@egen-civitas/esm-ai-config": ^1.1.0
     rxjs: 7.x
-  checksum: 10/ad3ac41915853b1665bd9681160ae703627aa441e09dc501893c09cd83815c4b6eb43cc0b2907c2141fa7af0bb4580dc371c2d5ea658dd2f0d65d87364b1bf94
+  checksum: 10/801b77d8d1a094fa64226be7e2c7d9bbac10e6a65413d708652ab74c6dce1baa6d2dbe9b95e46198d967bca5726a54221105d36fbf08bfe6bd3ae45710c0a3ef
   languageName: node
   linkType: hard
 
@@ -405,13 +405,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-framework@npm:^1.0.0, @egen-civitas/esm-ai-framework@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@egen-civitas/esm-ai-framework@npm:1.0.2"
+"@egen-civitas/esm-ai-framework@npm:^1.0.0, @egen-civitas/esm-ai-framework@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@egen-civitas/esm-ai-framework@npm:1.1.0"
   dependencies:
-    "@egen-civitas/esm-ai-config": "npm:^1.0.0"
+    "@egen-civitas/esm-ai-config": "npm:^1.1.0"
     "@egen-civitas/esm-ai-context": "npm:^1.0.0"
-    "@egen-civitas/esm-ai-events": "npm:^1.0.0"
+    "@egen-civitas/esm-ai-events": "npm:^1.1.0"
     "@egen-civitas/esm-ai-extensions": "npm:^1.0.0"
     "@egen-civitas/esm-ai-tools": "npm:^1.0.2"
     "@egen-civitas/esm-api": "npm:^1.1.1"
@@ -422,7 +422,7 @@ __metadata:
     "@egen-civitas/esm-state": ^1.0.0
     react: 18.x
     rxjs: 7.x
-  checksum: 10/867f71fdc9a1d52e8a87b051710b629990657a8728fb1f4d02f37ccba6bca5784c0609c912f994d69a91be99cc55966ff789f7edec86c4a70262d533eae7f287
+  checksum: 10/2c10969ef7cb3982c24a3ab7d3985be9af9618f3f48ea582a5d8b8c0b66147d0b338d143ffc3eb36195857b94ad8bcd3e69e58a64eb21683d66ab5541884aa66
   languageName: node
   linkType: hard
 
@@ -901,7 +901,7 @@ __metadata:
   resolution: "@egen/esm-ai-assistant-app@workspace:packages/apps/esm-ai-assistant-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-ai-framework": "npm:^1.0.2"
+    "@egen-civitas/esm-ai-framework": "npm:^1.1.0"
     "@egen-civitas/esm-api": "npm:^1.1.2"
     "@egen-civitas/esm-config": "npm:^1.0.2"
     "@egen-civitas/esm-context": "npm:^1.0.1"
@@ -1051,7 +1051,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@egen/esm-core@workspace:."
   dependencies:
-    "@egen-civitas/egen": "npm:^2.0.3"
+    "@egen-civitas/egen": "npm:^2.0.4"
     "@egen-civitas/esm-app-shell": "npm:^2.4.0"
     "@egen-civitas/rspack-config": "npm:^1.1.0"
     "@playwright/test": "npm:^1.55.1"
@@ -1527,7 +1527,7 @@ __metadata:
   resolution: "@egen/esm-login-app@workspace:packages/apps/esm-login-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-ai-framework": "npm:^1.0.2"
+    "@egen-civitas/esm-ai-framework": "npm:^1.1.0"
     "@egen-civitas/esm-api": "npm:^1.1.2"
     "@egen-civitas/esm-config": "npm:^1.0.2"
     "@egen-civitas/esm-context": "npm:^1.0.1"
