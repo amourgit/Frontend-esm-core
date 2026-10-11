@@ -13,6 +13,24 @@ export interface AudioPlaybackEvents {
   onVolumeChange?: (volumePercent: number) => void;
 }
 
+/** Lead initial (s) avant le premier fragment : absorbe la gigue réseau sans retarder la voix. */
+const PCM_STREAM_INITIAL_LEAD_S = 0.08;
+/** Lead minimal (s) après une sous-alimentation (le réseau a pris du retard sur la lecture). */
+const PCM_STREAM_RESYNC_LEAD_S = 0.02;
+
+interface PcmStreamState {
+  sampleRate: number;
+  /** Instant (horloge AudioContext) où doit démarrer le prochain fragment */
+  nextTime: number;
+  started: boolean;
+  /** Plus aucun fragment à venir */
+  finished: boolean;
+  /** Octet orphelin d'un échantillon 16 bits coupé entre deux fragments */
+  leftover: number | null;
+  sources: Set<AudioBufferSourceNode>;
+  analyser: AnalyserNode;
+}
+
 export class AudioPlayerService {
   private isCurrentlyPlaying: boolean = false;
   private queue: string[] = [];
@@ -25,6 +43,7 @@ export class AudioPlayerService {
   private audioContext: AudioContext | null = null;
   private pcmSource: AudioBufferSourceNode | null = null;
   private pcmResolve: (() => void) | null = null;
+  private pcmStream: PcmStreamState | null = null;
 
   constructor(events: AudioPlaybackEvents = {}) {
     this.events = events;
@@ -167,6 +186,130 @@ export class AudioPlayerService {
     });
   }
 
+  /**
+   * LECTURE EN DIRECT — ouvre un flux audio PCM 16 bits LE mono : les fragments poussés par
+   * `pushPcmChunk` sont planifiés bout à bout sur l'horloge audio (sans trou, sans attendre la
+   * fin de la réponse). Appelé à la réception du premier fragment.
+   */
+  public startPcmStream(sampleRate = 24000): void {
+    this.stop();
+    const ctx = this.ensureAudioContext();
+    if (!ctx) throw new Error('Web Audio API indisponible');
+    if (ctx.state === 'suspended') void ctx.resume();
+
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.connect(ctx.destination);
+    this.pcmStream = {
+      sampleRate,
+      nextTime: 0,
+      started: false,
+      finished: false,
+      leftover: null,
+      sources: new Set(),
+      analyser,
+    };
+  }
+
+  public isPcmStreaming(): boolean {
+    return this.pcmStream !== null;
+  }
+
+  /** Planifie un fragment PCM (base64). `final` clôt le flux après la fin de la lecture. */
+  public pushPcmChunk(base64: string, final = false): void {
+    const stream = this.pcmStream;
+    const ctx = this.audioContext;
+    if (!stream || !ctx || stream.finished) return;
+
+    if (base64) {
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length + (stream.leftover !== null ? 1 : 0));
+      let offset = 0;
+      if (stream.leftover !== null) bytes[offset++] = stream.leftover;
+      for (let i = 0; i < binary.length; i++) bytes[offset + i] = binary.charCodeAt(i);
+
+      const sampleCount = Math.floor(bytes.length / 2);
+      stream.leftover = bytes.length % 2 === 1 ? bytes[bytes.length - 1] : null;
+
+      if (sampleCount > 0) {
+        const view = new DataView(bytes.buffer, 0, sampleCount * 2);
+        const buffer = ctx.createBuffer(1, sampleCount, stream.sampleRate);
+        const channel = buffer.getChannelData(0);
+        for (let i = 0; i < sampleCount; i++) channel[i] = view.getInt16(i * 2, true) / 32768;
+
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(stream.analyser);
+
+        const now = ctx.currentTime;
+        if (!stream.started) {
+          stream.nextTime = now + PCM_STREAM_INITIAL_LEAD_S;
+        } else if (stream.nextTime < now + PCM_STREAM_RESYNC_LEAD_S) {
+          stream.nextTime = now + PCM_STREAM_RESYNC_LEAD_S; // sous-alimentation : on recale sans accumuler de retard
+        }
+        const startAt = stream.nextTime;
+        stream.nextTime += buffer.duration;
+
+        stream.sources.add(source);
+        source.onended = () => {
+          stream.sources.delete(source);
+          this.completePcmStreamIfDone(stream);
+        };
+        source.start(startAt);
+
+        if (!stream.started) {
+          stream.started = true;
+          this.isCurrentlyPlaying = true;
+          this.events.onStart?.();
+          this.startAnalyserVolume(stream.analyser);
+        }
+      }
+    }
+
+    if (final) this.finishPcmStream();
+  }
+
+  /** Plus aucun fragment ne viendra : la fin de lecture est signalée quand tout a été joué. */
+  public finishPcmStream(): void {
+    const stream = this.pcmStream;
+    if (!stream) return;
+    stream.finished = true;
+    this.completePcmStreamIfDone(stream);
+  }
+
+  private completePcmStreamIfDone(stream: PcmStreamState): void {
+    if (this.pcmStream !== stream || !stream.finished || stream.sources.size > 0) return;
+    this.pcmStream = null;
+    stream.analyser.disconnect();
+    this.isCurrentlyPlaying = false;
+    this.stopSimulatedVolume();
+    this.events.onEnd?.();
+  }
+
+  private ensureAudioContext(): AudioContext | null {
+    if (typeof window === 'undefined') return null;
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioCtx) return null;
+    if (!this.audioContext || this.audioContext.state === 'closed') {
+      this.audioContext = new AudioCtx();
+    }
+    return this.audioContext;
+  }
+
+  private startAnalyserVolume(analyser: AnalyserNode): void {
+    const levels = new Uint8Array(analyser.frequencyBinCount);
+    this.stopSimulatedVolume();
+    this.volumeTimer = window.setInterval(() => {
+      if (!this.events.onVolumeChange) return;
+      analyser.getByteFrequencyData(levels);
+      let sum = 0;
+      for (let i = 0; i < levels.length; i++) sum += levels[i];
+      this.events.onVolumeChange(Math.min(100, Math.round((sum / levels.length / 255) * 200)));
+    }, 100);
+  }
+
   private stopPcmPlayback() {
     const source = this.pcmSource;
     const resolve = this.pcmResolve;
@@ -181,6 +324,21 @@ export class AudioPlayerService {
       }
     }
     if (resolve) resolve();
+
+    const stream = this.pcmStream;
+    this.pcmStream = null;
+    if (stream) {
+      for (const src of stream.sources) {
+        src.onended = null;
+        try {
+          src.stop();
+        } catch {
+          // déjà arrêtée
+        }
+      }
+      stream.sources.clear();
+      stream.analyser.disconnect();
+    }
   }
 
   /**

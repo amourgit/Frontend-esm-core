@@ -220,6 +220,9 @@ export function AgentConversationProvider({
       setMessages((prev) => [...prev, userMsg]);
       messagesRef.current = [...messagesRef.current, userMsg];
 
+      // Audio reçu en direct du backend (fragments PCM) : joué au fil de l'eau, sans attendre la fin.
+      let liveAudio = false;
+
       try {
         const response: AgentResponse = await streamAgentMessage(
           input,
@@ -251,6 +254,17 @@ export function AgentConversationProvider({
                   : m
               );
             }
+          },
+          {
+            onAudioChunk: (chunk) => {
+              const player = playerRef.current;
+              if (!player || !audioOutputRef.current) return;
+              if (!liveAudio) {
+                liveAudio = true;
+                player.startPcmStream(chunk.sampleRate ?? 24000);
+              }
+              player.pushPcmChunk(chunk.base64, chunk.final);
+            },
           }
         );
 
@@ -304,13 +318,16 @@ export function AgentConversationProvider({
         messagesRef.current = [...messagesRef.current, assistantMsg];
         setStreamingText('');
 
-        // Lecture vocale automatique de la réponse
-        if (response.text) {
+        // Lecture vocale : déjà en cours en direct si le backend a envoyé de l'audio, sinon synthèse complète
+        if (liveAudio) {
+          playerRef.current?.finishPcmStream();
+        } else if (response.text) {
           playAgentResponse(response.text);
         }
 
         return response;
       } catch (err) {
+        if (liveAudio) playerRef.current?.finishPcmStream(); // joue ce qui a déjà été reçu
         const errorObj = err instanceof Error ? err : new Error(String(err));
         setError(errorObj);
         return null;

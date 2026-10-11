@@ -243,6 +243,8 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
       }
 
       let sentenceBuffer = '';
+      // Audio reçu en direct du backend (fragments PCM) : il remplace la voix du navigateur
+      let liveAudio = false;
 
       try {
         const response = await streamAgentMessage(
@@ -251,7 +253,7 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
           (chunk) => {
             setStreamingText((prev) => prev + chunk);
 
-            if (shouldPlayVoice && playerRef.current) {
+            if (shouldPlayVoice && playerRef.current && !liveAudio) {
               sentenceBuffer += chunk;
 
               // Détecte les fins de phrases ou de clauses pour synthétiser immédiatement
@@ -297,6 +299,17 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
                   : m
               );
             }
+          },
+          {
+            onAudioChunk: (chunk) => {
+              const player = playerRef.current;
+              if (!player || !shouldPlayVoice) return;
+              if (!liveAudio) {
+                liveAudio = true;
+                player.startPcmStream(chunk.sampleRate ?? 24000);
+              }
+              player.pushPcmChunk(chunk.base64, chunk.final);
+            },
           }
         );
 
@@ -340,7 +353,9 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
         }
 
         // Vide le reste du buffer s'il reste du texte
-        if (shouldPlayVoice && playerRef.current) {
+        if (liveAudio) {
+          playerRef.current?.finishPcmStream();
+        } else if (shouldPlayVoice && playerRef.current) {
           if (sentenceBuffer.trim()) {
             playerRef.current.enqueueSentence(sentenceBuffer.trim());
           }
@@ -362,6 +377,7 @@ export function AssistantGlobalVoiceProvider({ children }: { children: React.Rea
 
         return response;
       } catch (err) {
+        if (liveAudio) playerRef.current?.finishPcmStream(); // joue ce qui a déjà été reçu
         const errorObj = err instanceof Error ? err : new Error(String(err));
         setError(errorObj);
         return null;
