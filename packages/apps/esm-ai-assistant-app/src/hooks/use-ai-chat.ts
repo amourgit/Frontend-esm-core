@@ -75,6 +75,32 @@ function describeToolCall(tool: string, args: Record<string, unknown>): string {
       return `Consultation du contenu affiché à l'écran`;
     case 'describe_screen':
       return `Analyse de l'écran courant`;
+    case 'get_page_state':
+      return `Vérification de l'état de la page`;
+    case 'read_page':
+      return args.ref || args.selector || args.actionId
+        ? `Lecture d'une zone de la page`
+        : `Lecture du contenu de la page`;
+    case 'read_component':
+      return `Lecture d'un composant de la page`;
+    case 'read_table':
+      return `Lecture d'un tableau`;
+    case 'find_in_page':
+      return `Recherche de « ${String(args.query ?? '')} » dans la page`;
+    case 'discover_components':
+      return `Inventaire des composants de la page`;
+    case 'get_dom_tree':
+      return `Analyse de la structure de la page`;
+    case 'scroll_to':
+      return `Défilement de la page`;
+    case 'inspect_element':
+      return `Inspection d'un élément de la page`;
+    case 'inspect_interface':
+      return `Inspection de l'interface`;
+    case 'navigate_and_inspect':
+      return `Inspection de ${String(args.route ?? 'la page')}`;
+    case 'navigate_and_read':
+      return `Lecture de ${String(args.route ?? 'la page')}`;
     default:
       return `Exécution de « ${tool} »`;
   }

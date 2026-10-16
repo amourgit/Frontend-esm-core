@@ -57,7 +57,8 @@ const Root: React.FC = () => {
         <Route
           path="*"
           element={
-            <div className={styles.assistantAppContainer}>
+            // `data-ai-ignore` : l'agent ne lit/n'inspecte pas son propre panneau (read_page, describe_screen…).
+            <div className={styles.assistantAppContainer} data-ai-ignore>
               <AssistantWidget />
               <Suspense fallback={null}>
                 <AssistantExperience />
