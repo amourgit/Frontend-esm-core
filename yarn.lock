@@ -351,59 +351,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-channel@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@egen-civitas/esm-ai-channel@npm:2.1.0"
+"@egen-civitas/esm-ai-channel@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@egen-civitas/esm-ai-channel@npm:2.2.0"
   dependencies:
-    "@egen-civitas/esm-ai-config": "npm:^1.3.0"
+    "@egen-civitas/esm-ai-config": "npm:^1.4.0"
     "@egen-civitas/esm-ai-context": "npm:^1.0.0"
     "@egen-civitas/esm-ai-events": "npm:^1.2.0"
     "@egen-civitas/esm-ai-tools": "npm:^1.2.0"
     "@egen-civitas/esm-api": "npm:^1.1.1"
+    jose: "npm:^6.2.0"
   peerDependencies:
-    "@egen-civitas/esm-ai-config": ^1.3.0
+    "@egen-civitas/esm-ai-config": ^1.4.0
     "@egen-civitas/esm-ai-context": ^1.0.0
     "@egen-civitas/esm-ai-events": ^1.2.0
     "@egen-civitas/esm-ai-tools": ^1.2.0
     "@egen-civitas/esm-api": ^1.1.1
     react: 18.x
-  checksum: 10/c61696694d38d2b088de8565d22306c4ae511a4f86d103d4aa5a29847d0c47d702a06ef5ba07bb2d10f3643644382b8eb48cb161d18f2efda431eb4a85fc165e
+  checksum: 10/b45663b87bcb46ea6e4ab22aa6785693a0f789a874a78ede4a454e329049e51201751147a2f6785554f2c9bed78b0e13afd3ecfd27ecacffc38758a13a4b4ad5
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-config@npm:^1.0.0, @egen-civitas/esm-ai-config@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@egen-civitas/esm-ai-config@npm:1.1.0"
+"@egen-civitas/esm-ai-config@npm:^1.0.0, @egen-civitas/esm-ai-config@npm:^1.1.0, @egen-civitas/esm-ai-config@npm:^1.3.0, @egen-civitas/esm-ai-config@npm:^1.3.1, @egen-civitas/esm-ai-config@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@egen-civitas/esm-ai-config@npm:1.4.0"
   dependencies:
     "@egen-civitas/esm-state": "npm:^1.0.0"
   peerDependencies:
     "@egen-civitas/esm-state": ^1.0.0
     rxjs: 7.x
-  checksum: 10/a5c2ecb6727ddf1910906985e60d7309d781b304774cf03bd230415bdc0481429bba5e2daffb772c04151d6d4c7ea9e48cc49cadafdea8eed876ba762c14bea7
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-ai-config@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@egen-civitas/esm-ai-config@npm:1.3.0"
-  dependencies:
-    "@egen-civitas/esm-state": "npm:^1.0.0"
-  peerDependencies:
-    "@egen-civitas/esm-state": ^1.0.0
-    rxjs: 7.x
-  checksum: 10/2132ce35c7bc5f3a0016a4e768b7204cf8f296c8ea28b6187d91514f17cb446a809307543b331842e2ad4424c406bc91cb0d0de8e60a6bdee6873515f007c398
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-ai-config@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@egen-civitas/esm-ai-config@npm:1.3.1"
-  dependencies:
-    "@egen-civitas/esm-state": "npm:^1.0.0"
-  peerDependencies:
-    "@egen-civitas/esm-state": ^1.0.0
-    rxjs: 7.x
-  checksum: 10/f725971453aea35282194d4382ed25619a52dc0a4951497af7eafc00fe484f972474c154beb7bea5863494a9289dd87e930d3dab004354e2924fe16318514e5c
+  checksum: 10/c805ed170c0f5dcbd952cc2b89c49266de44f87857e1e1cd51bd75fc239096844e6339458bfb165422657f901a95f3f32230e4e9699ba8b7746daf4d0f22e609
   languageName: node
   linkType: hard
 
@@ -424,7 +401,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-events@npm:^1.0.0, @egen-civitas/esm-ai-events@npm:^1.1.0":
+"@egen-civitas/esm-ai-events@npm:^1.0.0":
   version: 1.1.0
   resolution: "@egen-civitas/esm-ai-events@npm:1.1.0"
   dependencies:
@@ -450,18 +427,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-extensions@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@egen-civitas/esm-ai-extensions@npm:1.0.1"
-  dependencies:
-    "@egen-civitas/esm-ai-config": "npm:^1.0.0"
-    "@egen-civitas/esm-ai-context": "npm:^1.0.0"
-    "@egen-civitas/esm-ai-events": "npm:^1.0.0"
-    "@egen-civitas/esm-ai-tools": "npm:^1.0.0"
-  checksum: 10/ff2cb790dcacd4dc1eee8147c9212074bca2202f2affbfca24e63c9ca0a5f8cb92e048f73743b283417150e5050745c5a7cb3df3348558dc3886a415b08849fb
-  languageName: node
-  linkType: hard
-
 "@egen-civitas/esm-ai-extensions@npm:^1.0.2":
   version: 1.0.2
   resolution: "@egen-civitas/esm-ai-extensions@npm:1.0.2"
@@ -474,33 +439,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-framework@npm:^1.0.0, @egen-civitas/esm-ai-framework@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@egen-civitas/esm-ai-framework@npm:1.1.0"
+"@egen-civitas/esm-ai-framework@npm:^1.0.0, @egen-civitas/esm-ai-framework@npm:^1.1.0, @egen-civitas/esm-ai-framework@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "@egen-civitas/esm-ai-framework@npm:1.3.2"
   dependencies:
-    "@egen-civitas/esm-ai-config": "npm:^1.1.0"
-    "@egen-civitas/esm-ai-context": "npm:^1.0.0"
-    "@egen-civitas/esm-ai-events": "npm:^1.1.0"
-    "@egen-civitas/esm-ai-extensions": "npm:^1.0.0"
-    "@egen-civitas/esm-ai-tools": "npm:^1.0.2"
-    "@egen-civitas/esm-api": "npm:^1.1.1"
-    "@egen-civitas/esm-state": "npm:^1.0.0"
-    rxjs: "npm:^7.8.0"
-  peerDependencies:
-    "@egen-civitas/esm-api": ^1.1.1
-    "@egen-civitas/esm-state": ^1.0.0
-    react: 18.x
-    rxjs: 7.x
-  checksum: 10/2c10969ef7cb3982c24a3ab7d3985be9af9618f3f48ea582a5d8b8c0b66147d0b338d143ffc3eb36195857b94ad8bcd3e69e58a64eb21683d66ab5541884aa66
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-ai-framework@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@egen-civitas/esm-ai-framework@npm:1.3.1"
-  dependencies:
-    "@egen-civitas/esm-ai-channel": "npm:^2.1.0"
-    "@egen-civitas/esm-ai-config": "npm:^1.3.1"
+    "@egen-civitas/esm-ai-channel": "npm:^2.2.0"
+    "@egen-civitas/esm-ai-config": "npm:^1.4.0"
     "@egen-civitas/esm-ai-context": "npm:^1.0.0"
     "@egen-civitas/esm-ai-events": "npm:^1.2.0"
     "@egen-civitas/esm-ai-extensions": "npm:^1.0.2"
@@ -513,11 +457,11 @@ __metadata:
     "@egen-civitas/esm-state": ^1.0.0
     react: 18.x
     rxjs: 7.x
-  checksum: 10/06f739d5fcdd4e8b1ef92d2befa503d5792f9b4b1e4c2862157e6507f3ed802df8254000ef1c2510b438c12f109a5bc3464767275d8df342ef1ddd1223849b62
+  checksum: 10/f61d08da9e74070748d0df8e4eb6981ab4a5b51b8c5de13e7cf0466b9284f916f6080de00b2acff03e47ec4a6f9bff233174422c7e67a1fbdc6967ed68a0dabb
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-tools@npm:^1.0.0, @egen-civitas/esm-ai-tools@npm:^1.0.2, @egen-civitas/esm-ai-tools@npm:^1.2.0, @egen-civitas/esm-ai-tools@npm:^1.3.0":
+"@egen-civitas/esm-ai-tools@npm:^1.2.0, @egen-civitas/esm-ai-tools@npm:^1.3.0":
   version: 1.4.0
   resolution: "@egen-civitas/esm-ai-tools@npm:1.4.0"
   dependencies:
@@ -992,7 +936,7 @@ __metadata:
   resolution: "@egen/esm-ai-assistant-app@workspace:packages/apps/esm-ai-assistant-app"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
-    "@egen-civitas/esm-ai-framework": "npm:^1.3.1"
+    "@egen-civitas/esm-ai-framework": "npm:^1.3.2"
     "@egen-civitas/esm-api": "npm:^1.1.2"
     "@egen-civitas/esm-config": "npm:^1.0.2"
     "@egen-civitas/esm-context": "npm:^1.0.1"
@@ -1033,7 +977,7 @@ __metadata:
     vitest: "npm:^4.1.2"
   peerDependencies:
     "@carbon/react": 1.x
-    "@egen-civitas/esm-ai-framework": ^1.3.1
+    "@egen-civitas/esm-ai-framework": ^1.3.2
     "@egen-civitas/esm-api": 1.x
     "@egen-civitas/esm-config": 1.x
     "@egen-civitas/esm-context": 1.x
@@ -13178,6 +13122,13 @@ __metadata:
   bin:
     jiti: lib/jiti-cli.mjs
   checksum: 10/6d75a8dbd61dbee031aa0937fabb748ff8ddf370b971958cc704f5cf26b4c5bdc9dcd0563059b2627a2bd41d946fa0bc64f912fdc8981ca7945a9d63c74ad0f9
+  languageName: node
+  linkType: hard
+
+"jose@npm:^6.2.0":
+  version: 6.2.12
+  resolution: "jose@npm:6.2.12"
+  checksum: 10/42ef7b598d22fe4ed0a4d0407f9dd9ae9f56dabd31cbad6cb4f67e296953a46b5d63603f8a599a3ee4c5659bf29bb14e846237f0381ea679116520b53e71e4ea
   languageName: node
   linkType: hard
 
