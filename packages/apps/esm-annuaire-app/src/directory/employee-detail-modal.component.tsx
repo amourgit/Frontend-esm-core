@@ -1,25 +1,23 @@
-import React, { useState } from 'react';
-import { 
-  X, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Building2, 
-  Briefcase, 
-  User, 
-  QrCode, 
-  Download, 
-  Copy, 
-  Check, 
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Building2,
+  Briefcase,
+  User,
+  QrCode,
+  Download,
+  Copy,
+  Check,
   Share2,
   Calendar,
   ShieldCheck,
-  Sparkles
+  Sparkles,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { type DirectoryEmployee, getEmployeeUuid } from '../data/directory-data';
-import { playXboxSound } from '@egen-civitas/esm-framework';
+import { CardModal, playXboxSound } from '@egen-civitas/esm-framework';
 
 interface EmployeeDetailModalProps {
   employee: DirectoryEmployee | null;
@@ -29,16 +27,36 @@ interface EmployeeDetailModalProps {
 }
 
 export const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({
-  employee,
+  employee: employeeProp,
   initialShowQr = false,
   onClose,
-  onShowNotification
+  onShowNotification,
 }) => {
   const navigate = useNavigate();
   const [showQrCode, setShowQrCode] = useState(initialShowQr);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
+  // Conserve la dernière fiche affichée : le contenu reste monté pendant l'animation de sortie du CardModal.
+  const lastEmployeeRef = useRef<DirectoryEmployee | null>(employeeProp);
+  if (employeeProp) lastEmployeeRef.current = employeeProp;
+  const employee = employeeProp ?? lastEmployeeRef.current;
+
+  // Le modal reste monté entre deux ouvertures : on réinitialise l'état éphémère à chaque ouverture.
+  useEffect(() => {
+    if (employeeProp) {
+      setShowQrCode(initialShowQr);
+      setCopiedField(null);
+    }
+  }, [employeeProp, initialShowQr]);
+
   if (!employee) return null;
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      playXboxSound('back');
+      onClose();
+    }
+  };
 
   const copyToClipboard = (text: string, fieldName: string) => {
     playXboxSound('select');
@@ -80,13 +98,15 @@ END:VCARD`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="relative w-full max-w-xl bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden text-slate-100"
-      >
+    <CardModal
+      open={employeeProp !== null}
+      onOpenChange={handleOpenChange}
+      cardVariant="glass"
+      animation="scale"
+      className="w-full max-w-xl"
+      cardProps={{ contentClassName: '!p-0 overflow-hidden' }}
+    >
+      <div className="relative w-full overflow-hidden text-slate-100">
         {/* En-tête bandeau */}
         <div className="relative h-28 bg-gradient-to-r from-teal-900 via-slate-800 to-indigo-900 px-6 py-4 flex items-start justify-between">
           <div className="flex items-center gap-2">
@@ -99,16 +119,6 @@ END:VCARD`;
               </span>
             )}
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              playXboxSound('back');
-              onClose();
-            }}
-            className="p-1.5 rounded-lg bg-black/30 hover:bg-black/50 text-slate-300 hover:text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
         </div>
 
         {/* Avatar chevauchant */}
@@ -125,8 +135,8 @@ END:VCARD`;
                 employee.status === 'available'
                   ? 'bg-emerald-500'
                   : employee.status === 'busy'
-                  ? 'bg-rose-500'
-                  : 'bg-amber-500'
+                    ? 'bg-rose-500'
+                    : 'bg-amber-500'
               }`}
             />
           </div>
@@ -173,9 +183,7 @@ END:VCARD`;
         {/* Corps principal */}
         <div className="p-6 space-y-5 max-h-[calc(85vh-160px)] overflow-y-auto scrollbar-thin scrollbar-thumb-teal-500/20">
           <div>
-            <h2 className="text-xl font-bold text-white tracking-tight">
-              {employee.fullName}
-            </h2>
+            <h2 className="text-xl font-bold text-white tracking-tight">{employee.fullName}</h2>
             <p className="text-sm text-teal-400 font-medium">{employee.role}</p>
             <div className="flex items-center gap-2 mt-1 text-xs text-slate-400">
               <span>{employee.group}</span>
@@ -215,7 +223,10 @@ END:VCARD`;
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] text-slate-400 uppercase font-semibold">Email Professionnel</p>
-                      <a href={`mailto:${employee.email}`} className="text-xs font-medium text-teal-300 hover:underline truncate block">
+                      <a
+                        href={`mailto:${employee.email}`}
+                        className="text-xs font-medium text-teal-300 hover:underline truncate block"
+                      >
                         {employee.email}
                       </a>
                     </div>
@@ -225,7 +236,11 @@ END:VCARD`;
                     className="p-1 text-slate-400 hover:text-white"
                     title="Copier l'email"
                   >
-                    {copiedField === 'Email' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedField === 'Email' ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                   </button>
                 </div>
 
@@ -236,7 +251,10 @@ END:VCARD`;
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] text-slate-400 uppercase font-semibold">Téléphone Mobile</p>
-                      <a href={`tel:${employee.phone}`} className="text-xs font-medium text-slate-200 hover:underline truncate block">
+                      <a
+                        href={`tel:${employee.phone}`}
+                        className="text-xs font-medium text-slate-200 hover:underline truncate block"
+                      >
                         {employee.phone}
                       </a>
                     </div>
@@ -246,7 +264,11 @@ END:VCARD`;
                     className="p-1 text-slate-400 hover:text-white"
                     title="Copier le numéro"
                   >
-                    {copiedField === 'Téléphone' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedField === 'Téléphone' ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                   </button>
                 </div>
 
@@ -257,9 +279,7 @@ END:VCARD`;
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] text-slate-400 uppercase font-semibold">Poste Interne Fixe</p>
-                      <p className="text-xs font-mono font-medium text-slate-200 truncate">
-                        {employee.extension}
-                      </p>
+                      <p className="text-xs font-mono font-medium text-slate-200 truncate">{employee.extension}</p>
                     </div>
                   </div>
                   <button
@@ -267,7 +287,11 @@ END:VCARD`;
                     className="p-1 text-slate-400 hover:text-white"
                     title="Copier le poste"
                   >
-                    {copiedField === 'Poste' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedField === 'Poste' ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                   </button>
                 </div>
 
@@ -278,9 +302,7 @@ END:VCARD`;
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] text-slate-400 uppercase font-semibold">Site de Rattachement</p>
-                      <p className="text-xs font-medium text-slate-200 truncate">
-                        {employee.site}
-                      </p>
+                      <p className="text-xs font-medium text-slate-200 truncate">{employee.site}</p>
                     </div>
                   </div>
                   <button
@@ -288,7 +310,11 @@ END:VCARD`;
                     className="p-1 text-slate-400 hover:text-white"
                     title="Copier le site"
                   >
-                    {copiedField === 'Site' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedField === 'Site' ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -296,9 +322,7 @@ END:VCARD`;
               {/* Bio & Description */}
               {employee.bio && (
                 <div className="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/40">
-                  <p className="text-xs text-slate-300 leading-relaxed italic">
-                    « {employee.bio} »
-                  </p>
+                  <p className="text-xs text-slate-300 leading-relaxed italic">« {employee.bio} »</p>
                 </div>
               )}
 
@@ -360,7 +384,7 @@ END:VCARD`;
             </button>
           </div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </CardModal>
   );
 };

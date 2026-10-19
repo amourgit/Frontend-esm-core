@@ -32,13 +32,12 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { TabbedViewLayout } from '../components/layout/tabbed-view-layout.component';
 import { TabsContent } from '../components/ui/animated-tabs.component';
-import { ClickExpandGallery, type ClickExpandItem, type ClickExpandTone } from '../components/ui/click-expand-gallery.component';
 import {
-  DIRECTORY_EMPLOYEES,
-  DIRECTORY_SITES,
-  type DirectoryEmployee,
-  getEmployeeUuid,
-} from '../data/directory-data';
+  ClickExpandGallery,
+  type ClickExpandItem,
+  type ClickExpandTone,
+} from '../components/ui/click-expand-gallery.component';
+import { DIRECTORY_EMPLOYEES, DIRECTORY_SITES, type DirectoryEmployee, getEmployeeUuid } from '../data/directory-data';
 import { EmployeeCard } from '../directory/employee-card.component';
 import { EmployeeListView } from '../directory/employee-list-view.component';
 import { EmployeeDetailModal } from '../directory/employee-detail-modal.component';
@@ -530,7 +529,7 @@ function useFillHeight<T extends HTMLElement>() {
       window.setTimeout(measure, 150);
       window.setTimeout(measure, 500);
     },
-    [measure, schedule]
+    [measure, schedule],
   );
 
   useEffect(() => {
@@ -657,7 +656,7 @@ function PrintSheet({ employees, criteria, t }: PrintSheetProps) {
         </tbody>
       </table>
     </div>,
-    document.body
+    document.body,
   );
 }
 
@@ -665,11 +664,7 @@ function PrintSheet({ employees, criteria, t }: PrintSheetProps) {
 // Page
 // ─────────────────────────────────────────────────────────────
 
-export function AnnuairePage({
-  onShowNotification,
-  employees: employeesProp,
-  onRefresh,
-}: AnnuairePageProps) {
+export function AnnuairePage({ onShowNotification, employees: employeesProp, onRefresh }: AnnuairePageProps) {
   const reduceMotion = useReducedMotion() ?? false;
   const employees = employeesProp ?? DIRECTORY_EMPLOYEES;
 
@@ -706,7 +701,8 @@ export function AnnuairePage({
   const handleTabChange = (val: 'directory' | 'org' | 'about') => {
     playXboxSound('select');
     setActiveTab(val);
-    const targetRoute = val === 'org' ? '/annuaire/organigramme' : val === 'about' ? '/annuaire/structures' : '/annuaire/contacts';
+    const targetRoute =
+      val === 'org' ? '/annuaire/organigramme' : val === 'about' ? '/annuaire/structures' : '/annuaire/contacts';
     navigate(targetRoute);
   };
 
@@ -769,7 +765,7 @@ export function AnnuairePage({
         headerObserver.current = observer;
       }
     },
-    [remeasureDirectory]
+    [remeasureDirectory],
   );
 
   // Index de recherche (recalculé uniquement si les données changent)
@@ -780,18 +776,15 @@ export function AnnuairePage({
         haystack: normalizeText(
           [emp.fullName, emp.role, emp.site, emp.extension, emp.phone, emp.email, ...(emp.skills ?? [])]
             .filter(Boolean)
-            .join(' ')
+            .join(' '),
         ),
         initials: new Set([initialOf(emp.lastName), initialOf(emp.firstName)]),
       })),
-    [employees]
+    [employees],
   );
 
   // Lettres pour lesquelles il existe au moins un collaborateur
-  const availableLetters = useMemo(
-    () => new Set<string>(index.flatMap((item) => Array.from(item.initials))),
-    [index]
-  );
+  const availableLetters = useMemo(() => new Set<string>(index.flatMap((item) => Array.from(item.initials))), [index]);
 
   // Nombre de collaborateurs par site
   const siteCounts = useMemo(() => {
@@ -848,25 +841,41 @@ export function AnnuairePage({
             (emp.status === 'available'
               ? t.stAvailable
               : emp.status === 'busy'
-              ? t.stBusy
-              : emp.status === 'meeting'
-              ? t.stMeeting
-              : emp.status === 'away'
-              ? t.stAway
-              : 'En ligne'),
+                ? t.stBusy
+                : emp.status === 'meeting'
+                  ? t.stMeeting
+                  : emp.status === 'away'
+                    ? t.stAway
+                    : 'En ligne'),
           tone,
         },
         chips: [
           ...(emp.badge ? [{ label: emp.badge, tone: 'accent' as const, icon: <Award className="w-3 h-3" /> }] : []),
-          ...(emp.department ? [{ label: emp.department, tone: 'neutral' as const, icon: <Briefcase className="w-3 h-3" /> }] : []),
+          ...(emp.department
+            ? [{ label: emp.department, tone: 'neutral' as const, icon: <Briefcase className="w-3 h-3" /> }]
+            : []),
           ...(emp.extension ? [{ label: `${t.colExt} : ${emp.extension}`, tone: 'neutral' as const }] : []),
         ],
         details: [
           { id: 'site', label: t.fSite, value: emp.site, icon: <MapPin className="w-3.5 h-3.5" /> },
-          { id: 'phone', label: t.colPhone, value: emp.phone, href: `tel:${emp.phone}`, icon: <Phone className="w-3.5 h-3.5" /> },
-          { id: 'email', label: t.colEmail, value: emp.email, href: `mailto:${emp.email}`, icon: <Mail className="w-3.5 h-3.5" /> },
+          {
+            id: 'phone',
+            label: t.colPhone,
+            value: emp.phone,
+            href: `tel:${emp.phone}`,
+            icon: <Phone className="w-3.5 h-3.5" />,
+          },
+          {
+            id: 'email',
+            label: t.colEmail,
+            value: emp.email,
+            href: `mailto:${emp.email}`,
+            icon: <Mail className="w-3.5 h-3.5" />,
+          },
           { id: 'uuid', label: 'Matricule / UUID', value: `#${empUuid}`, icon: <UserCheck className="w-3.5 h-3.5" /> },
-          ...(emp.manager ? [{ id: 'manager', label: 'Responsable', value: emp.manager, icon: <Users className="w-3.5 h-3.5" /> }] : []),
+          ...(emp.manager
+            ? [{ id: 'manager', label: 'Responsable', value: emp.manager, icon: <Users className="w-3.5 h-3.5" /> }]
+            : []),
         ],
         tags: emp.skills,
         actions: [
@@ -1089,7 +1098,6 @@ export function AnnuairePage({
       >
         {/* ── TAB 1 : ANNUAIRE DES COLLABORATEURS ── */}
         <TabsContent value="directory" className="flex-1 min-h-0 h-full flex flex-col overflow-hidden text-slate-100">
-
           {/* ── PARTIE HAUTE FIXE (TITRE, RECHERCHE, FILTERBAR, PILULES SITES) ── */}
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: -8 }}
@@ -1098,7 +1106,6 @@ export function AnnuairePage({
             ref={setHeaderRef}
             className="relative z-20 shrink-0 flex flex-col gap-2 sm:gap-2.5 pb-2.5 border-b border-white/10 select-none"
           >
-
             {/* Ligne 1 : Recherche (déplacée à la place du titre) avec largeur réduite + Outils d'action rapides */}
             <div className="w-full flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               {/* Côté Gauche : Champ de recherche compact + bouton Filtres (mobile) */}
@@ -1240,7 +1247,11 @@ export function AnnuairePage({
                       setViewMode('grid');
                     }}
                     aria-pressed={viewMode === 'grid'}
-                    className={`rounded p-1.5 sm:p-1 transition-colors ${viewMode === 'grid' ? 'bg-teal-500 text-slate-950 font-bold shadow-sm' : 'text-slate-400 hover:text-white'}`}
+                    className={`rounded p-1.5 sm:p-1 transition-colors ${
+                      viewMode === 'grid'
+                        ? 'bg-teal-500 text-slate-950 font-bold shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
                     title={t.viewGrid}
                     aria-label={t.viewGrid}
                   >
@@ -1253,7 +1264,11 @@ export function AnnuairePage({
                       setViewMode('list');
                     }}
                     aria-pressed={viewMode === 'list'}
-                    className={`rounded p-1.5 sm:p-1 transition-colors ${viewMode === 'list' ? 'bg-teal-500 text-slate-950 font-bold shadow-sm' : 'text-slate-400 hover:text-white'}`}
+                    className={`rounded p-1.5 sm:p-1 transition-colors ${
+                      viewMode === 'list'
+                        ? 'bg-teal-500 text-slate-950 font-bold shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
                     title={t.viewList}
                     aria-label={t.viewList}
                   >
@@ -1266,7 +1281,11 @@ export function AnnuairePage({
                       setViewMode('expand');
                     }}
                     aria-pressed={viewMode === 'expand'}
-                    className={`rounded p-1.5 sm:p-1 transition-colors ${viewMode === 'expand' ? 'bg-teal-500 text-slate-950 font-bold shadow-sm' : 'text-slate-400 hover:text-white'}`}
+                    className={`rounded p-1.5 sm:p-1 transition-colors ${
+                      viewMode === 'expand'
+                        ? 'bg-teal-500 text-slate-950 font-bold shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
                     title={t.viewExpand}
                     aria-label={t.viewExpand}
                   >
@@ -1356,7 +1375,6 @@ export function AnnuairePage({
             ref={dirFill.ref}
             className="flex-1 min-h-0 flex items-stretch gap-2 sm:gap-3 pt-2.5 overflow-hidden relative"
           >
-
             {/* Zone principale : scroll indépendant (grille de cartes ou liste) */}
             <div
               ref={scrollRef}
@@ -1488,9 +1506,7 @@ export function AnnuairePage({
                 })}
               </div>
             </motion.aside>
-
           </div>
-
         </TabsContent>
 
         {/* ── TAB 2 : ORGANIGRAMME INSTITUTIONNEL ── */}
@@ -1499,98 +1515,98 @@ export function AnnuairePage({
             ref={orgFill.ref}
             className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 scrollbar-thin scrollbar-thumb-teal-500/20"
           >
-          <div className="w-full space-y-6 pt-2 pb-8">
-            <motion.div
-              initial={reduceMotion ? false : { opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.25 }}
-              className="flex items-center justify-between pb-3 border-b border-white/10"
-            >
-              <div className="min-w-0">
-                <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                  <Network className="w-5 h-5 shrink-0 text-indigo-400" />
-                  <span className="truncate">{t.orgTitle}</span>
-                </h2>
-                <p className="text-xs text-slate-400 mt-0.5">{t.orgSubtitle}</p>
-              </div>
-            </motion.div>
+            <div className="w-full space-y-6 pt-2 pb-8">
+              <motion.div
+                initial={reduceMotion ? false : { opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25 }}
+                className="flex items-center justify-between pb-3 border-b border-white/10"
+              >
+                <div className="min-w-0">
+                  <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <Network className="w-5 h-5 shrink-0 text-indigo-400" />
+                    <span className="truncate">{t.orgTitle}</span>
+                  </h2>
+                  <p className="text-xs text-slate-400 mt-0.5">{t.orgSubtitle}</p>
+                </div>
+              </motion.div>
 
-            <div className="space-y-6">
-              {/* Sommet Hiérarchique */}
-              <div className="flex flex-col items-center">
-                <motion.div
-                  initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: 0.05 }}
-                  className="p-4 rounded-2xl bg-slate-900/80 border border-white/15 text-white shadow-xl text-center max-w-sm w-full backdrop-blur-md"
-                >
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-teal-400">{t.orgTop}</span>
-                  <h4 className="font-bold text-sm mt-0.5">{t.orgDG}</h4>
-                  <p className="text-xs text-slate-400">{t.orgDGSub}</p>
-                </motion.div>
-                <motion.div
-                  initial={reduceMotion ? false : { scaleY: 0 }}
-                  animate={{ scaleY: 1 }}
-                  transition={{ duration: 0.25, delay: 0.2 }}
-                  style={{ originY: 0 }}
-                  className="w-0.5 h-6 bg-white/20 my-1"
-                />
-              </div>
+              <div className="space-y-6">
+                {/* Sommet Hiérarchique */}
+                <div className="flex flex-col items-center">
+                  <motion.div
+                    initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: 0.05 }}
+                    className="p-4 rounded-2xl bg-slate-900/80 border border-white/15 text-white shadow-xl text-center max-w-sm w-full backdrop-blur-md"
+                  >
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-teal-400">{t.orgTop}</span>
+                    <h4 className="font-bold text-sm mt-0.5">{t.orgDG}</h4>
+                    <p className="text-xs text-slate-400">{t.orgDGSub}</p>
+                  </motion.div>
+                  <motion.div
+                    initial={reduceMotion ? false : { scaleY: 0 }}
+                    animate={{ scaleY: 1 }}
+                    transition={{ duration: 0.25, delay: 0.2 }}
+                    style={{ originY: 0 }}
+                    className="w-0.5 h-6 bg-white/20 my-1"
+                  />
+                </div>
 
-              {/* Directions & Sites Opérationnels */}
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-4">
-                {DIRECTORY_SITES.map((site, i) => {
-                  const members = employees.filter((e) => employeeInSite(e, site));
-                  return (
-                    <motion.div
-                      key={site.id}
-                      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.25 + Math.min(i, 8) * 0.06 }}
-                      className="min-w-0 p-4 rounded-2xl bg-slate-900/60 border border-white/10 shadow-lg flex flex-col justify-between backdrop-blur-md"
-                    >
-                      <div>
-                        <div className="flex items-center gap-1.5 text-teal-400 mb-1">
-                          <MapPin className="w-3.5 h-3.5 shrink-0" />
-                          <span className="text-[11px] font-bold uppercase truncate">{site.name}</span>
+                {/* Directions & Sites Opérationnels */}
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-4">
+                  {DIRECTORY_SITES.map((site, i) => {
+                    const members = employees.filter((e) => employeeInSite(e, site));
+                    return (
+                      <motion.div
+                        key={site.id}
+                        initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.25 + Math.min(i, 8) * 0.06 }}
+                        className="min-w-0 p-4 rounded-2xl bg-slate-900/60 border border-white/10 shadow-lg flex flex-col justify-between backdrop-blur-md"
+                      >
+                        <div>
+                          <div className="flex items-center gap-1.5 text-teal-400 mb-1">
+                            <MapPin className="w-3.5 h-3.5 shrink-0" />
+                            <span className="text-[11px] font-bold uppercase truncate">{site.name}</span>
+                          </div>
+                          <p className="text-xs text-slate-400">{t.orgMembers(members.length)}</p>
                         </div>
-                        <p className="text-xs text-slate-400">{t.orgMembers(members.length)}</p>
-                      </div>
-                      <div className="mt-3 pt-2 border-t border-white/10 space-y-1">
-                        {members.slice(0, 3).map((m) => (
-                          <button
-                            type="button"
-                            key={m.id}
-                            onClick={() => openEmployee(m, false)}
-                            className="flex w-full items-center gap-2 rounded-lg px-1 py-1 text-left text-xs text-slate-300 transition-colors hover:text-teal-300 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60"
-                          >
-                            <img
-                              src={m.avatar}
-                              alt={m.fullName}
-                              referrerPolicy="no-referrer"
-                              loading="lazy"
-                              className="w-5 h-5 shrink-0 rounded-full object-cover"
-                            />
-                            <span className="truncate font-medium">{m.fullName}</span>
-                          </button>
-                        ))}
-                        {members.length > 3 && (
-                          <button
-                            type="button"
-                            onClick={() => goToSite(site)}
-                            className="mt-1 flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1 text-left text-xs font-semibold text-teal-400 transition-colors hover:text-teal-300 hover:bg-teal-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60"
-                          >
-                            <span className="truncate">{t.orgViewAll(members.length)}</span>
-                            <ArrowRight className="w-3.5 h-3.5 shrink-0" />
-                          </button>
-                        )}
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                        <div className="mt-3 pt-2 border-t border-white/10 space-y-1">
+                          {members.slice(0, 3).map((m) => (
+                            <button
+                              type="button"
+                              key={m.id}
+                              onClick={() => openEmployee(m, false)}
+                              className="flex w-full items-center gap-2 rounded-lg px-1 py-1 text-left text-xs text-slate-300 transition-colors hover:text-teal-300 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60"
+                            >
+                              <img
+                                src={m.avatar}
+                                alt={m.fullName}
+                                referrerPolicy="no-referrer"
+                                loading="lazy"
+                                className="w-5 h-5 shrink-0 rounded-full object-cover"
+                              />
+                              <span className="truncate font-medium">{m.fullName}</span>
+                            </button>
+                          ))}
+                          {members.length > 3 && (
+                            <button
+                              type="button"
+                              onClick={() => goToSite(site)}
+                              className="mt-1 flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1 text-left text-xs font-semibold text-teal-400 transition-colors hover:text-teal-300 hover:bg-teal-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60"
+                            >
+                              <span className="truncate">{t.orgViewAll(members.length)}</span>
+                              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                            </button>
+                          )}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
           </div>
         </TabsContent>
 
@@ -1600,49 +1616,42 @@ export function AnnuairePage({
             ref={aboutFill.ref}
             className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 scrollbar-thin scrollbar-thumb-teal-500/20"
           >
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="w-full max-w-3xl pt-2 pb-8 space-y-4"
-          >
-            <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <Info className="w-5 h-5 shrink-0 text-teal-400" />
-              <span>{t.aboutTitle}</span>
-            </h2>
-            <div className="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
-              <p>{t.aboutP1}</p>
-              <div className="p-4 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-teal-200">
-                <h4 className="font-bold text-sm mb-1 text-white">{t.aboutSyncTitle}</h4>
-                <p>{t.aboutSyncText}</p>
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full max-w-3xl pt-2 pb-8 space-y-4"
+            >
+              <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <Info className="w-5 h-5 shrink-0 text-teal-400" />
+                <span>{t.aboutTitle}</span>
+              </h2>
+              <div className="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <p>{t.aboutP1}</p>
+                <div className="p-4 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-teal-200">
+                  <h4 className="font-bold text-sm mb-1 text-white">{t.aboutSyncTitle}</h4>
+                  <p>{t.aboutSyncText}</p>
+                </div>
+                <p>{t.aboutP3}</p>
               </div>
-              <p>{t.aboutP3}</p>
-            </div>
-          </motion.div>
+            </motion.div>
           </div>
         </TabsContent>
-
       </TabbedViewLayout>
 
       {/* ── MODALE DÉTAILLÉE DU COLLABORATEUR / VCARD & QR CODE ── */}
-      <AnimatePresence>
-        {selectedEmployee && (
-          <EmployeeDetailModal
-            employee={selectedEmployee}
-            initialShowQr={showQrModal}
-            onClose={() => {
-              setSelectedEmployee(null);
-              setShowQrModal(false);
-            }}
-            onShowNotification={onShowNotification}
-          />
-        )}
-      </AnimatePresence>
+      <EmployeeDetailModal
+        employee={selectedEmployee}
+        initialShowQr={showQrModal}
+        onClose={() => {
+          setSelectedEmployee(null);
+          setShowQrModal(false);
+        }}
+        onShowNotification={onShowNotification}
+      />
 
       {/* ── FEUILLE D'IMPRESSION (montée uniquement pendant l'impression) ── */}
-      {showPrintSheet && (
-        <PrintSheet employees={filteredEmployees} criteria={printCriteria} t={t} />
-      )}
+      {showPrintSheet && <PrintSheet employees={filteredEmployees} criteria={printCriteria} t={t} />}
     </div>
   );
 }

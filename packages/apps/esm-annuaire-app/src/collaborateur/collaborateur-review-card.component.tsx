@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
-import { 
-  Star, 
-  ExternalLink, 
-  Archive, 
-  Share2, 
-  MoreHorizontal, 
-  Check, 
+import React, { useRef, useState } from 'react';
+import {
+  Star,
+  ExternalLink,
+  Archive,
+  Share2,
+  MoreHorizontal,
+  Check,
   Copy,
   ChevronDown,
   Eye,
-  Maximize2
+  Maximize2,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { playXboxSound } from '@egen-civitas/esm-framework';
+import { CardModal, playXboxSound } from '@egen-civitas/esm-framework';
 
 export interface CollaborateurReviewItem {
   id: string;
@@ -35,14 +34,12 @@ export interface CollaborateurReviewCardProps {
   onShowToast?: (msg: string, type?: 'info' | 'success' | 'warning') => void;
 }
 
-export function CollaborateurReviewCard({
-  review,
-  onArchive,
-  onShare,
-  onShowToast,
-}: CollaborateurReviewCardProps) {
+export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToast }: CollaborateurReviewCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  // Garde la dernière image affichée pour que l'animation de sortie du CardModal conserve son contenu.
+  const lastImageRef = useRef<string | null>(null);
+  if (selectedImage) lastImageRef.current = selectedImage;
 
   const isPublished = review.status === 'Published';
 
@@ -54,10 +51,8 @@ export function CollaborateurReviewCard({
 
   return (
     <div className="w-full flex flex-col gap-3 p-4 sm:p-5 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-md transition-all shadow-sm">
-      
       {/* ── Line 1: Order/Item ID + Stars + Status Pill ── */}
       <div className="w-full flex flex-wrap items-center justify-between gap-3">
-        
         {/* Order ID & Star Rating */}
         <div className="flex items-center gap-3">
           <button
@@ -76,9 +71,7 @@ export function CollaborateurReviewCard({
               <Star
                 key={idx}
                 className={`w-3.5 h-3.5 ${
-                  idx <= review.rating
-                    ? 'fill-amber-400 text-amber-400'
-                    : 'fill-white/10 text-white/20'
+                  idx <= review.rating ? 'fill-amber-400 text-amber-400' : 'fill-white/10 text-white/20'
                 }`}
               />
             ))}
@@ -94,15 +87,10 @@ export function CollaborateurReviewCard({
                 : 'bg-slate-500/20 text-slate-300 border border-white/15'
             }`}
           >
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${
-                isPublished ? 'bg-emerald-400' : 'bg-slate-400'
-              }`}
-            />
+            <span className={`w-1.5 h-1.5 rounded-full ${isPublished ? 'bg-emerald-400' : 'bg-slate-400'}`} />
             <span>{review.status}</span>
           </span>
         </div>
-
       </div>
 
       {/* ── Line 2: Item Name ── */}
@@ -116,9 +104,7 @@ export function CollaborateurReviewCard({
       {/* ── Line 3: Review Comment Text ── */}
       <div className="text-xs sm:text-sm text-slate-200/90 leading-relaxed">
         <p className="inline">
-          {isExpanded || review.content.length <= 150
-            ? review.content
-            : `${review.content.slice(0, 150)}... `}
+          {isExpanded || review.content.length <= 150 ? review.content : `${review.content.slice(0, 150)}... `}
         </p>
         {review.content.length > 150 && (
           <button
@@ -158,7 +144,6 @@ export function CollaborateurReviewCard({
 
       {/* ── Line 5: Footer (Posted date, Archive, Share, Options) ── */}
       <div className="w-full flex items-center justify-between pt-2 border-t border-white/10 text-xs text-slate-400">
-        
         {/* Date */}
         <span>Posted on {review.postedDate}</span>
 
@@ -198,40 +183,25 @@ export function CollaborateurReviewCard({
             <MoreHorizontal className="w-4 h-4" />
           </button>
         </div>
-
       </div>
 
-      {/* Full-view Image Modal */}
-      <AnimatePresence>
-        {selectedImage && (
-          <div
-            onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-2xl max-h-[80vh] rounded-2xl overflow-hidden border border-white/20 shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={selectedImage}
-                alt="Aperçu agrandi"
-                className="w-full h-full object-contain"
-              />
-              <button
-                type="button"
-                onClick={() => setSelectedImage(null)}
-                className="absolute top-3 right-3 px-3 py-1.5 rounded-xl bg-black/60 text-white text-xs font-semibold backdrop-blur-md border border-white/20 hover:bg-black/90"
-              >
-                Fermer
-              </button>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
+      {/* Aperçu image agrandi */}
+      <CardModal
+        open={selectedImage !== null}
+        onOpenChange={(open) => {
+          if (!open) setSelectedImage(null);
+        }}
+        cardVariant="glass"
+        animation="zoom"
+        className="w-full max-w-2xl"
+        cardProps={{ contentClassName: '!p-0 overflow-hidden' }}
+      >
+        <img
+          src={selectedImage ?? lastImageRef.current ?? ''}
+          alt="Aperçu agrandi"
+          className="w-full max-h-[80vh] object-contain"
+        />
+      </CardModal>
     </div>
   );
 }
