@@ -24,13 +24,26 @@ for (const file of routesFiles) {
 const errors = [];
 for (const { file, e } of entries) {
   const m = e.meta ?? {};
-  for (const k of ['section', 'group', 'label', 'route']) {
+  for (const k of ['section', 'label', 'route']) {
     if (typeof m[k] !== 'string' || !m[k]) errors.push(`${file}: "${e.name}" — meta.${k} manquant`);
   }
-  if (typeof m.route === 'string') {
-    const r = norm(m.route);
+  // `group` est facultatif (entrée sans groupe = lien simple), mais s'il est présent il doit être valide.
+  if (m.group !== undefined && (typeof m.group !== 'string' || !m.group)) {
+    errors.push(`${file}: "${e.name}" — meta.group doit être une chaîne non vide (ou absent)`);
+  }
+  if (m.workspaces !== undefined && !(Array.isArray(m.workspaces) && m.workspaces.every((w) => typeof w === 'string' && w))) {
+    errors.push(`${file}: "${e.name}" — meta.workspaces doit être un tableau d'identifiants d'espace`);
+  }
+  // `route` et `sectionRoute` doivent exister dans un pages[].route.
+  for (const k of ['route', 'sectionRoute']) {
+    if (m[k] === undefined) continue;
+    if (typeof m[k] !== 'string' || !m[k]) {
+      errors.push(`${file}: "${e.name}" — meta.${k} doit être une chaîne non vide`);
+      continue;
+    }
+    const r = norm(m[k]);
     if (!pageRoutes.some((p) => r === p || r.startsWith(p + '/'))) {
-      errors.push(`${file}: "${e.name}" — route "${m.route}" ne correspond à aucun pages[].route`);
+      errors.push(`${file}: "${e.name}" — ${k} "${m[k]}" ne correspond à aucun pages[].route`);
     }
   }
 }

@@ -8,5 +8,20 @@
       "offline": false
     }
   ],
-  "extensions": []
+  "extensions": [
+    {
+      "name": "home-nav-accueil",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 0,
+      "meta": {
+        "section": "home",
+        "sectionLabel": "Accueil",
+        "label": "Accueil",
+        "route": "home"
+      }
+    }
+  ]
 }

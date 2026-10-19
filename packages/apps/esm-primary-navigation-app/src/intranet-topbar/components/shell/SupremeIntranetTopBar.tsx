@@ -55,10 +55,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { DropdownNavigation, type NavItem } from './DropdownNavigation';
 import { BreadcrumbLevel2Nav } from '../navigation/BreadcrumbLevel2Nav';
+import { bindNavSelection } from '../../utils/navSelection';
 import { playXboxSound } from '../../utils/xboxAudio';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { useSite } from '../../context/SiteContext';
-import { type WorkspaceId } from '../../types/workspace';
 import { EgenLogo } from '../ui/EgenLogo';
 import { WorkspaceAndSiteSelectorsColumn } from './WorkspaceAndSiteSelectorsColumn';
 import { GooeyInput } from '../ui/GooeyInput';
@@ -128,7 +128,7 @@ export function SupremeIntranetTopBar({
   const config = useConfig<ConfigSchema>();
   const currentPath = location.pathname.replace(/\/+$/, '') || '/';
   const isHome = HOME_PATHS.includes(currentPath);
-  const { currentWorkspace, setWorkspaceId, availableWorkspaces, currentApps } = useWorkspace();
+  const { currentWorkspace, availableWorkspaces, currentApps } = useWorkspace();
   const { selectedSite, selectedService } = useSite();
   const currentSite = selectedSite || selectedService;
 
@@ -256,42 +256,16 @@ export function SupremeIntranetTopBar({
   };
 
   const desktopNavItems = React.useMemo<NavItem[]>(() => {
-    const baseNavItems = (currentWorkspace.navItems || []).map((navItem) => ({
-      ...navItem,
-      onClick: () => {
+    // Niveau 2 : arborescence déclarée par les apps (slot), reliée à la logique de clic — la logique
+    // globale (son, fermeture du menu, navigation) sauf si l'app a déclaré son propre comportement.
+    const baseNavItems = bindNavSelection(currentWorkspace.navItems || [], {
+      workspaceId: currentWorkspace.id,
+      runDefault: (route) => {
         playXboxSound('select');
         setShowFullNav(false);
-        if (navItem.link) {
-          navigate(navItem.link);
-        } else if (onShowNotification) {
-          onShowNotification(`${navItem.label} (${currentWorkspace.name})`, 'info');
-        }
+        if (route) navigate(`/${route}`);
       },
-      subMenus: navItem.subMenus?.map((subMenu) => ({
-        ...subMenu,
-        items: subMenu.items.map((item) => ({
-          ...item,
-          onClick: () => {
-            playXboxSound('select');
-            setShowFullNav(false);
-            if (item.link) {
-              if (['intranet', 'extranet', 'public', 'personnel', 'rh'].includes(item.link)) {
-                setWorkspaceId(item.link as WorkspaceId);
-                if (onShowNotification) {
-                  onShowNotification(`Espace activé : ${item.label}`, 'success');
-                }
-              } else if (item.link.startsWith('/')) {
-                navigate(item.link);
-              }
-            } else {
-              if (onShowNotification) {
-                onShowNotification(`${item.label} (${currentWorkspace.name})`, 'info');
-              }
-            }
-          },
-        })),
-      })),
-    }));
+    });
 
     if (!currentSite) {
       return baseNavItems;
@@ -362,7 +336,7 @@ export function SupremeIntranetTopBar({
     ];
 
     return [...baseNavItems, ...siteSubNavItems];
-  }, [currentWorkspace, currentSite, setWorkspaceId, navigate, onShowNotification, setShowFullNav]);
+  }, [currentWorkspace, currentSite, navigate, setShowFullNav]);
 
   // Group workspaces by category
   const workspaceGroups = React.useMemo(() => {

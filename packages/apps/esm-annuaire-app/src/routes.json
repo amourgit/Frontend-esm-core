@@ -24,7 +24,10 @@
         "label": "Tous les Contacts",
         "description": "Recherche par nom, poste, email et téléphone",
         "icon": "Contact",
-        "route": "annuaire/contacts"
+        "route": "annuaire/contacts",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -42,7 +45,10 @@
         "label": "Organigramme",
         "description": "Structure hiérarchique et directions",
         "icon": "Layers",
-        "route": "annuaire/organigramme"
+        "route": "annuaire/organigramme",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -60,7 +66,10 @@
         "label": "Pôles & Directions",
         "description": "Départements administratifs et opérationnels",
         "icon": "Building2",
-        "route": "annuaire/structures"
+        "route": "annuaire/structures",
+        "workspaces": [
+          "intranet"
+        ]
       }
     }
   ]
