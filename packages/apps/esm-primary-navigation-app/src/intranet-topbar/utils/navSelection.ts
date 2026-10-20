@@ -15,7 +15,8 @@ export interface NavSelectionDeps {
  */
 export function selectNavTarget(target: NavBehaviorTarget, route: string | undefined, deps: NavSelectionDeps): void {
   const runDefault = () => deps.runDefault(route);
-  const behavior = getNavBehavior(target);
+  // Absent d'un shell antérieur à esm-framework 1.2 : on applique alors la logique globale.
+  const behavior = typeof getNavBehavior === 'function' ? getNavBehavior(target) : undefined;
   if (behavior) {
     behavior.onSelect({ target, route, workspaceId: deps.workspaceId, runDefault });
   } else {
