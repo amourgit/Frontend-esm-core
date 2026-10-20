@@ -99,19 +99,7 @@ export function BreadcrumbLevel2Nav({ onToggleFullMenu, showFullMenuToggle = tru
   // Repli sur les cas propres à certaines pages (pages d'un site, onglets d'une fiche collaborateur).
   let subOptionTitle: string | null = activeNav?.entryLabel ?? null;
   if (!subOptionTitle) {
-    if (path.includes("/membres")) {
-      subOptionTitle = "Membres & Équipes";
-    } else if (path.includes("/applications")) {
-      subOptionTitle = "Applications & Outils";
-    } else if (path.includes("/ressources") || path.startsWith("/ged")) {
-      subOptionTitle = "Ressources (GED)";
-    } else if (path.includes("/taches")) {
-      subOptionTitle = "Mes tâches";
-    } else if (path.includes("/activite")) {
-      subOptionTitle = "Activité";
-    } else if (path.includes("/parametres")) {
-      subOptionTitle = "Paramètres";
-    } else if (collaboratorUuid) {
+    if (collaboratorUuid) {
       if (path.includes("/purchase-history")) subOptionTitle = "Purchase History";
       else if (path.includes("/wishlist")) subOptionTitle = "Wishlist";
       else if (path.includes("/review")) subOptionTitle = "Review";

@@ -58,7 +58,6 @@ import { BreadcrumbLevel2Nav } from '../navigation/BreadcrumbLevel2Nav';
 import { bindNavSelection } from '../../utils/navSelection';
 import { playXboxSound } from '../../utils/xboxAudio';
 import { useWorkspace } from '../../context/WorkspaceContext';
-import { useSite } from '../../context/SiteContext';
 import { EgenLogo } from '../ui/EgenLogo';
 import { WorkspaceAndSiteSelectorsColumn } from './WorkspaceAndSiteSelectorsColumn';
 import { GooeyInput } from '../ui/GooeyInput';
@@ -129,8 +128,6 @@ export function SupremeIntranetTopBar({
   const currentPath = location.pathname.replace(/\/+$/, '') || '/';
   const isHome = HOME_PATHS.includes(currentPath);
   const { currentWorkspace, availableWorkspaces, currentApps } = useWorkspace();
-  const { selectedSite, selectedService } = useSite();
-  const currentSite = selectedSite || selectedService;
 
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -267,76 +264,8 @@ export function SupremeIntranetTopBar({
       },
     });
 
-    if (!currentSite) {
-      return baseNavItems;
-    }
-
-    // Add site sub-options to the right of the Level 2 nav list when a site is selected
-    const siteSubNavItems: NavItem[] = [
-      {
-        id: 8802,
-        label: 'Applications',
-        link: `/sites/${currentSite.uuid}/applications`,
-        onClick: () => {
-          playXboxSound('select');
-          setShowFullNav(false);
-          navigate(`/sites/${currentSite.uuid}/applications`);
-        },
-      },
-      {
-        id: 8803,
-        label: 'Membres & Équipes',
-        link: `/sites/${currentSite.uuid}/membres`,
-        onClick: () => {
-          playXboxSound('select');
-          setShowFullNav(false);
-          navigate(`/sites/${currentSite.uuid}/membres`);
-        },
-      },
-      {
-        id: 8804,
-        label: 'Ressources',
-        link: `/sites/${currentSite.uuid}/ressources`,
-        onClick: () => {
-          playXboxSound('select');
-          setShowFullNav(false);
-          navigate(`/sites/${currentSite.uuid}/ressources`);
-        },
-      },
-      {
-        id: 8805,
-        label: 'Mes tâches',
-        link: `/sites/${currentSite.uuid}/taches`,
-        onClick: () => {
-          playXboxSound('select');
-          setShowFullNav(false);
-          navigate(`/sites/${currentSite.uuid}/taches`);
-        },
-      },
-      {
-        id: 8806,
-        label: 'Activité',
-        link: `/sites/${currentSite.uuid}/activite`,
-        onClick: () => {
-          playXboxSound('select');
-          setShowFullNav(false);
-          navigate(`/sites/${currentSite.uuid}/activite`);
-        },
-      },
-      {
-        id: 8807,
-        label: 'Paramètres',
-        link: `/sites/${currentSite.uuid}/parametres`,
-        onClick: () => {
-          playXboxSound('select');
-          setShowFullNav(false);
-          navigate(`/sites/${currentSite.uuid}/parametres`);
-        },
-      },
-    ];
-
-    return [...baseNavItems, ...siteSubNavItems];
-  }, [currentWorkspace, currentSite, navigate, setShowFullNav]);
+    return baseNavItems;
+  }, [currentWorkspace, navigate, setShowFullNav]);
 
   // Group workspaces by category
   const workspaceGroups = React.useMemo(() => {

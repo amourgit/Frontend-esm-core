@@ -610,9 +610,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-extensions@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@egen-civitas/esm-extensions@npm:1.1.1"
+"@egen-civitas/esm-extensions@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@egen-civitas/esm-extensions@npm:1.2.1"
   dependencies:
     lodash-es: "npm:^4.17.21"
   peerDependencies:
@@ -626,7 +626,7 @@ __metadata:
     "@egen-civitas/esm-utils": ^1.0.0
     react: 18.x
     single-spa: 6.x
-  checksum: 10/be50dcde9da7f455e6e44e146cf1643010268855eb08486607df6090e7838e17c0d515b22ac4d5f8e8e66a2ec5900bd4d3ccca40280d076b10074c37ffcacfad
+  checksum: 10/c8ad4d4b11b71c4860ae02e3e2f412799815302a4744755faf576e1142d4e47408295b3c573c799a5d7486c6b1c87c6f965eb53f5668dd9ec2a89c333befc065
   languageName: node
   linkType: hard
 
@@ -641,9 +641,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-framework@npm:^1.1.4":
-  version: 1.1.4
-  resolution: "@egen-civitas/esm-framework@npm:1.1.4"
+"@egen-civitas/esm-framework@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@egen-civitas/esm-framework@npm:1.2.1"
   dependencies:
     "@egen-civitas/esm-ai-framework": "npm:^1.0.0"
     "@egen-civitas/esm-api": "npm:^1.1.0"
@@ -653,7 +653,7 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.0"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.0"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.0"
     "@egen-civitas/esm-globals": "npm:^1.0.0"
     "@egen-civitas/esm-navigation": "npm:^1.0.0"
@@ -674,7 +674,7 @@ __metadata:
     rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
-  checksum: 10/8698bbbb2b14b025321f0d95d3f67155a49ea0cefe899544c5f40fc74cc963b73bc9225144dc5d1faedb931a91b382b1eea07f57b0d25b66cc5604950aeeb0ba
+  checksum: 10/661a6d1804110dbd298c3760609e5b06a89a07efc373bc4bdeecf14db08280c34069bb400be0b25db828b5b56e409b5cf095482d3f47843dadf07b7a632eaa33
   languageName: node
   linkType: hard
 
@@ -944,9 +944,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1018,9 +1018,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1142,9 +1142,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1210,9 +1210,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1278,9 +1278,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1345,9 +1345,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1422,9 +1422,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1493,9 +1493,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1570,9 +1570,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1646,9 +1646,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1716,9 +1716,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1788,9 +1788,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
@@ -1831,7 +1831,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": 1.x
     "@egen-civitas/esm-extensions": 1.x
     "@egen-civitas/esm-feature-flags": 1.x
-    "@egen-civitas/esm-framework": ^1.1.2
+    "@egen-civitas/esm-framework": ^1.2.1
     "@egen-civitas/esm-globals": 1.x
     "@egen-civitas/esm-navigation": 1.x
     "@egen-civitas/esm-react-utils": 1.x
@@ -1864,9 +1864,9 @@ __metadata:
     "@egen-civitas/esm-dynamic-loading": "npm:^2.0.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.1"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
-    "@egen-civitas/esm-extensions": "npm:^1.1.1"
+    "@egen-civitas/esm-extensions": "npm:^1.2.1"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.1"
-    "@egen-civitas/esm-framework": "npm:^1.1.4"
+    "@egen-civitas/esm-framework": "npm:^1.2.1"
     "@egen-civitas/esm-globals": "npm:^1.0.2"
     "@egen-civitas/esm-navigation": "npm:^1.0.2"
     "@egen-civitas/esm-offline": "npm:^1.0.1"
