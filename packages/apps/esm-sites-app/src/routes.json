@@ -1,0 +1,123 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "pages": [
+    {
+      "component": "root",
+      "route": "sites",
+      "online": true,
+      "offline": false
+    }
+  ],
+  "extensions": [
+    {
+      "name": "sites-nav-all",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 540,
+      "meta": {
+        "workspaces": [
+          "intranet"
+        ],
+        "section": "sites",
+        "sectionLabel": "Sites",
+        "sectionRoute": "sites",
+        "group": "sites",
+        "groupLabel": "Sites",
+        "label": "Tous les sites",
+        "description": "Choisir un site ou une direction et accéder à son espace de travail",
+        "icon": "Building2",
+        "route": "sites"
+      }
+    },
+    {
+      "name": "sites-nav-dsi",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 541,
+      "meta": {
+        "workspaces": [
+          "intranet"
+        ],
+        "section": "sites",
+        "sectionLabel": "Sites",
+        "sectionRoute": "sites",
+        "group": "directions",
+        "groupLabel": "Directions",
+        "label": "DSI — Direction des Systèmes d'Information",
+        "description": "Responsable : M. Jean-Luc BIKANGA",
+        "icon": "Building2",
+        "route": "sites/srv-8f92a10b/applications"
+      }
+    },
+    {
+      "name": "sites-nav-drh",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 542,
+      "meta": {
+        "workspaces": [
+          "intranet"
+        ],
+        "section": "sites",
+        "sectionLabel": "Sites",
+        "sectionRoute": "sites",
+        "group": "directions",
+        "groupLabel": "Directions",
+        "label": "DRH — Direction des Ressources Humaines",
+        "description": "Responsable : Mme Marie-Claire MBUYI",
+        "icon": "Building2",
+        "route": "sites/srv-3c71e92d/applications"
+      }
+    },
+    {
+      "name": "sites-nav-dlb",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 543,
+      "meta": {
+        "workspaces": [
+          "intranet"
+        ],
+        "section": "sites",
+        "sectionLabel": "Sites",
+        "sectionRoute": "sites",
+        "group": "directions",
+        "groupLabel": "Directions",
+        "label": "DLB — Direction de la Logistique & Bâtiments",
+        "description": "Responsable : M. Serge KABEYA",
+        "icon": "Building2",
+        "route": "sites/srv-6a10f44e/applications"
+      }
+    },
+    {
+      "name": "sites-nav-dfc",
+      "slot": "topbar-level2-nav",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 544,
+      "meta": {
+        "workspaces": [
+          "intranet"
+        ],
+        "section": "sites",
+        "sectionLabel": "Sites",
+        "sectionRoute": "sites",
+        "group": "directions",
+        "groupLabel": "Directions",
+        "label": "DFC — Direction Financière & Comptabilité",
+        "description": "Responsable : Mme Patricia TSHILOMBA",
+        "icon": "Building2",
+        "route": "sites/srv-9d82b51c/applications"
+      }
+    }
+  ]
+}
