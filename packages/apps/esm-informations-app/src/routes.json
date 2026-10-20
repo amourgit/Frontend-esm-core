@@ -24,7 +24,10 @@
         "label": "À la Une",
         "description": "Les grands titres, reportages et actualités phares",
         "icon": "Star",
-        "route": "informations/news"
+        "route": "informations/news",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -42,7 +45,10 @@
         "label": "Articles & Dossiers",
         "description": "Analyses de fond, retours d'expérience et tribunes",
         "icon": "BookOpen",
-        "route": "informations/news"
+        "route": "informations/news",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -60,7 +66,10 @@
         "label": "Toutes les Publications",
         "description": "Flux complet des publications internes",
         "icon": "Newspaper",
-        "route": "informations/news"
+        "route": "informations/news",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -78,7 +87,10 @@
         "label": "Revue de Presse",
         "description": "Veille médiatique, secteur public et écosystème",
         "icon": "Globe",
-        "route": "informations/news"
+        "route": "informations/news",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -96,7 +108,10 @@
         "label": "Salle des Annonces",
         "description": "Tableau officiel d'affichage et communiqués",
         "icon": "Megaphone",
-        "route": "informations/annonces"
+        "route": "informations/annonces",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -114,7 +129,10 @@
         "label": "Communiqués Officiels",
         "description": "Notes de la Direction et décrets institutionnels",
         "icon": "FileCheck",
-        "route": "informations/annonces"
+        "route": "informations/annonces",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -132,7 +150,10 @@
         "label": "Flash Info Entreprise",
         "description": "Alertes prioritaires et alertes météo / sécurité",
         "icon": "Radio",
-        "route": "informations/annonces"
+        "route": "informations/annonces",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -150,7 +171,10 @@
         "label": "Directives & Circulaires",
         "description": "Instructions de service et règlements internes",
         "icon": "FileText",
-        "route": "informations/annonces"
+        "route": "informations/annonces",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -168,7 +192,10 @@
         "label": "Calendrier d'Équipe",
         "description": "Planning partagé et réunions de travail",
         "icon": "CalendarCheck",
-        "route": "informations/agenda"
+        "route": "informations/agenda",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -186,7 +213,10 @@
         "label": "Événements & Séminaires",
         "description": "Conférences, salons, webinaires et ateliers",
         "icon": "Calendar",
-        "route": "informations/agenda"
+        "route": "informations/agenda",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -204,7 +234,10 @@
         "label": "Réservation de Salles",
         "description": "Salles de conférence, visioconférences et véhicules",
         "icon": "Compass",
-        "route": "informations/agenda"
+        "route": "informations/agenda",
+        "workspaces": [
+          "intranet"
+        ]
       }
     },
     {
@@ -222,7 +255,10 @@
         "label": "Jalons & Comités",
         "description": "Comités de pilotage et échéances réglementaires",
         "icon": "Zap",
-        "route": "informations/agenda"
+        "route": "informations/agenda",
+        "workspaces": [
+          "intranet"
+        ]
       }
     }
   ]

@@ -12,7 +12,8 @@ import {
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
 import { useWorkspace } from "../../context/WorkspaceContext";
-import { WORKSPACES_MOCK_DATA } from "../../data/workspaceMockData";
+import { HOME_ROUTE, resolveActiveNav } from "../../utils/resolveActiveNav";
+import { bindNavSelection } from "../../utils/navSelection";
 import { SITES_LIST } from "../../data/sitesData";
 import { findEmployeeByParam, getEmployeeUuid } from "../../data/directoryData";
 import { playXboxSound } from "../../utils/xboxAudio";
@@ -48,67 +49,31 @@ export function BreadcrumbLevel2Nav({ onToggleFullMenu, showFullMenuToggle = tru
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  // Get current workspace navItems
-  const navItems = currentWorkspace?.navItems || WORKSPACES_MOCK_DATA[0].navItems;
-
-  // Sibling options (all workspace options EXCEPT "Accueil")
-  const siblingOptions = navItems.filter(
-    (item) => item.label.toLowerCase() !== "accueil" && item.id !== 1
+  // Navigation de l'espace courant : celle que les apps ont déclarée sur le slot (aucune donnée codée en dur).
+  const navItems = React.useMemo(
+    () =>
+      bindNavSelection(currentWorkspace?.navItems ?? [], {
+        workspaceId,
+        runDefault: (route) => {
+          playXboxSound("select");
+          if (route) navigate(`/${route}`);
+        },
+      }),
+    [currentWorkspace, workspaceId, navigate],
   );
 
-  // Determine current main option and sub-option from path
+  // Options frères : toutes celles de l'espace, sauf l'accueil (déjà le premier élément du fil d'Ariane).
+  const siblingOptions = navItems.filter((item) => item.route !== HOME_ROUTE);
+
+  // Option et sous-option courantes, déduites de la route (la plus longue qui correspond au chemin).
   const path = location.pathname.toLowerCase();
+  const activeNav = resolveActiveNav(siblingOptions, location.pathname);
+  const activeOption = activeNav?.section;
 
-  // Mapping paths to Option & SubOption
-  let activeOption = siblingOptions.find((opt) => {
-    const labelLower = opt.label.toLowerCase();
-    if (labelLower === "informations" && (path.startsWith("/informations") || path.startsWith("/actualites") || path.startsWith("/annonces"))) {
-      return true;
-    }
-    if ((labelLower === "sites" || labelLower === "site" || labelLower === "services") && (path.startsWith("/sites") || path.startsWith("/services") || path.startsWith("/applications") || (path.startsWith("/ged") && !path.startsWith("/ged/recherche")))) {
-      return true;
-    }
-    if (labelLower === "recherche" && (path.startsWith("/recherche") || path.startsWith("/ged/recherche"))) {
-      return true;
-    }
-    if (labelLower === "annuaire" && path.startsWith("/annuaire")) {
-      return true;
-    }
-    if (labelLower === "administration" && (path.startsWith("/administration") || path.startsWith("/iam"))) {
-      return true;
-    }
-    return false;
-  });
-
-  // Fallback if no exact option matched
-  if (!activeOption) {
-    if (path.includes("actualites") || path.includes("annonces")) {
-      activeOption = siblingOptions.find((o) => o.label.toLowerCase() === "informations");
-    } else if (path.includes("applications") || path.includes("ged") || path.includes("/sites") || path.includes("/services")) {
-      activeOption = siblingOptions.find((o) => {
-        const l = o.label.toLowerCase();
-        return l === "sites" || l === "site" || l === "services";
-      });
-    } else if (path.includes("recherche")) {
-      activeOption = siblingOptions.find((o) => o.label.toLowerCase() === "recherche");
-    } else if (path.includes("annuaire")) {
-      activeOption = siblingOptions.find((o) => o.label.toLowerCase() === "annuaire");
-    } else if (path.includes("iam") || path.includes("administration")) {
-      activeOption = siblingOptions.find((o) => o.label.toLowerCase() === "administration");
-    } else {
-      activeOption = siblingOptions[0];
-    }
-  }
-
-  // Get route target for main option
-  const getOptionRoute = (optionLabel: string) => {
-    const l = optionLabel.toLowerCase();
-    if (l === "informations") return "/informations";
-    if (l === "sites" || l === "site" || l === "services") return "/sites";
-    if (l === "recherche") return "/recherche";
-    if (l === "annuaire") return "/annuaire";
-    if (l === "administration") return "/administration";
-    return "/";
+  // Route du bouton d'une option (undefined si l'option n'est qu'un menu, sans page propre).
+  const getOptionRoute = (option: { route?: string; subMenus?: { items: { route?: string }[] }[] }) => {
+    const route = option.route ?? option.subMenus?.[0]?.items?.[0]?.route;
+    return route ? `/${route}` : "/";
   };
 
   const [copiedUuid, setCopiedUuid] = useState(false);
@@ -130,54 +95,23 @@ export function BreadcrumbLevel2Nav({ onToggleFullMenu, showFullMenuToggle = tru
     ? (currentCollaborator.uuid || getEmployeeUuid(currentCollaborator))
     : (rawCollaboratorParam && !isAnnuaireSubTab ? rawCollaboratorParam : null);
 
-  // Determine Sub-Option Title based on current route
-  let subOptionTitle: string | null = null;
-  if (path === "/informations/news" || path === "/actualites") {
-    subOptionTitle = "News et Publications";
-  } else if (path === "/informations/annonces" || path === "/annonces") {
-    subOptionTitle = "Annonces";
-  } else if (path === "/informations/agenda") {
-    subOptionTitle = "Agenda";
-  } else if (path.includes("/membres")) {
-    subOptionTitle = "Membres & Équipes";
-  } else if (path.includes("/applications")) {
-    subOptionTitle = "Applications & Outils";
-  } else if (path.includes("/ressources") || path.startsWith("/ged")) {
-    subOptionTitle = "Ressources (GED)";
-  } else if (path.includes("/taches")) {
-    subOptionTitle = "Mes tâches";
-  } else if (path.includes("/activite")) {
-    subOptionTitle = "Activité";
-  } else if (path.includes("/parametres")) {
-    subOptionTitle = "Paramètres";
-  } else if (path.startsWith("/collaboration")) {
-    subOptionTitle = "Collaboration";
-  } else if (path === "/annuaire/contacts") {
-    subOptionTitle = "Collaborateurs";
-  } else if (path === "/annuaire/organigramme") {
-    subOptionTitle = "Organigramme";
-  } else if (path === "/annuaire/structures") {
-    subOptionTitle = "Structures & Sites";
-  } else if (path === "/administration/utilisateurs" || path === "/iam") {
-    subOptionTitle = "Accès & Identités (IAM)";
-  } else if (collaboratorUuid) {
-    if (path.includes("/purchase-history")) subOptionTitle = "Purchase History";
-    else if (path.includes("/wishlist")) subOptionTitle = "Wishlist";
-    else if (path.includes("/review")) subOptionTitle = "Review";
-    else if (path.includes("/loyalty")) subOptionTitle = "Loyalty Program";
-    else if (path.includes("/support")) subOptionTitle = "Support Ticket";
-    else if (path.includes("/insight")) subOptionTitle = "Insight";
-    else if (path.includes("/activity")) subOptionTitle = "Activity";
-    else if (path.includes("/details")) subOptionTitle = "Détails";
+  // Titre de la sous-option : déduit de l'arborescence déclarée par les apps (route la plus précise).
+  // Repli sur les cas propres à certaines pages (pages d'un site, onglets d'une fiche collaborateur).
+  let subOptionTitle: string | null = activeNav?.entryLabel ?? null;
+  if (!subOptionTitle) {
+    if (collaboratorUuid) {
+      if (path.includes("/purchase-history")) subOptionTitle = "Purchase History";
+      else if (path.includes("/wishlist")) subOptionTitle = "Wishlist";
+      else if (path.includes("/review")) subOptionTitle = "Review";
+      else if (path.includes("/loyalty")) subOptionTitle = "Loyalty Program";
+      else if (path.includes("/support")) subOptionTitle = "Support Ticket";
+      else if (path.includes("/insight")) subOptionTitle = "Insight";
+      else if (path.includes("/activity")) subOptionTitle = "Activity";
+      else if (path.includes("/details")) subOptionTitle = "Détails";
+    }
   }
 
-  const isAtOptionRoot = 
-    (path === "/informations" || 
-    path === "/sites" || 
-    path === "/services" || 
-    path === "/recherche" || 
-    path === "/annuaire" || 
-    path === "/administration") && !collaboratorUuid;
+  const isAtOptionRoot = !!activeNav?.atSectionRoot && !collaboratorUuid;
 
   const handleCopyUuidBreadcrumb = (uuid: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -259,7 +193,7 @@ export function BreadcrumbLevel2Nav({ onToggleFullMenu, showFullMenuToggle = tru
                           onClick={() => {
                             playXboxSound('select');
                             setIsEllipsisOpen(false);
-                            navigate(getOptionRoute(opt.label));
+                            navigate(getOptionRoute(opt));
                           }}
                           className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left transition-all cursor-pointer text-xs border-none ${
                             isCurrent
@@ -285,11 +219,11 @@ export function BreadcrumbLevel2Nav({ onToggleFullMenu, showFullMenuToggle = tru
             <BreadcrumbItem className="relative min-w-0 max-w-[80px] sm:max-w-[130px] md:max-w-none" ref={optionMenuRef}>
               {(subOptionTitle || currentServiceMatch || collaboratorUuid) && !isAtOptionRoot ? (
                 <BreadcrumbLink
-                  href={getOptionRoute(activeOption.label)}
+                  href={getOptionRoute(activeOption)}
                   onClick={(e) => {
                     e.preventDefault();
                     playXboxSound('select');
-                    navigate(getOptionRoute(activeOption.label));
+                    navigate(getOptionRoute(activeOption));
                   }}
                   className="text-slate-300 hover:text-white transition-colors cursor-pointer font-medium truncate block text-[11px] sm:text-xs md:text-sm"
                   title={activeOption.label}
@@ -325,19 +259,20 @@ export function BreadcrumbLevel2Nav({ onToggleFullMenu, showFullMenuToggle = tru
                   }
                   optionsComponent={
                     <div className="space-y-1.5">
-                      {activeOption.subMenus.map((subMenu) => (
-                        <div key={subMenu.title} className="space-y-1">
-                          <div className="px-2 text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1">
-                            {subMenu.title}
-                          </div>
-                          {subMenu.items.map((subItem) => (
+                      {activeOption.subMenus.map((subMenu, subIdx) => (
+                        <div key={`${subIdx}-${subMenu.title}`} className="space-y-1">
+                          {subMenu.title ? (
+                            <div className="px-2 text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1">
+                              {subMenu.title}
+                            </div>
+                          ) : null}
+                          {subMenu.items.map((subItem, itemIdx) => (
                             <button
-                              key={subItem.label}
+                              key={`${subItem.entryName ?? subItem.label}-${itemIdx}`}
                               onClick={() => {
-                                playXboxSound('select');
                                 setIsOptionSubmenuOpen(false);
-                                if (subItem.onClick) subItem.onClick();
-                                if (subItem.link) navigate(subItem.link);
+                                // Comportement déclaré par l'app, ou logique globale (son + navigation).
+                                subItem.onClick?.();
                               }}
                               className="w-full text-left px-3 py-1.5 rounded-xl hover:bg-white/[0.06] text-slate-200/90 hover:text-white transition-all cursor-pointer text-xs border-none"
                             >

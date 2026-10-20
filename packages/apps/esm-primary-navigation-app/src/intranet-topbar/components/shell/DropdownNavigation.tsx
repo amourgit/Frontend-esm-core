@@ -12,10 +12,16 @@ export type NavSubMenuItem = {
   description?: string;
   icon: React.ElementType;
   onClick?: () => void;
+  /** Lien affiché (href) ; la navigation réelle passe par `onClick`. */
   link?: string;
+  /** Route SPA ciblée, sans base ni slash initial (ex. `annuaire/contacts`). */
+  route?: string;
+  /** Nom de l'extension (routes.json) qui a déclaré cette entrée : cible d'un `registerNavBehavior({ entry })`. */
+  entryName?: string;
 };
 
 export type NavSubMenu = {
+  /** Titre de la colonne ; vide pour une colonne sans titre (entrées déclarées sans `group`). */
   title: string;
   items: NavSubMenuItem[];
 };
@@ -26,6 +32,12 @@ export type NavItem = {
   subMenus?: NavSubMenu[];
   link?: string;
   onClick?: () => void;
+  /** Identifiant de la section (`NavEntryMeta.section`) : cible d'un `registerNavBehavior({ section })`. */
+  sectionKey?: string;
+  /** Route SPA du bouton lui-même (`sectionRoute`, ou route de l'entrée unique), sans base ni slash initial. */
+  route?: string;
+  /** Nom de l'extension qui a déclaré l'entrée, pour un bouton direct (section à entrée unique). */
+  entryName?: string;
 };
 
 type Props = {
@@ -326,16 +338,18 @@ export function DropdownNavigation({ navItems }: Props) {
                   {activeNavItem.subMenus.map((sub, idx) => (
                     <div 
                       className={`w-auto min-w-[130px] max-w-[185px] ${idx > 0 ? 'pl-2.5 sm:pl-3.5' : ''}`} 
-                      key={sub.title}
+                      key={`${idx}-${sub.title}`}
                     >
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-teal-300 pb-1 mb-1 border-b border-white/10 flex items-center justify-between">
-                        <span className="truncate">{sub.title}</span>
-                      </div>
+                      {sub.title ? (
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-teal-300 pb-1 mb-1 border-b border-white/10 flex items-center justify-between">
+                          <span className="truncate">{sub.title}</span>
+                        </div>
+                      ) : null}
                       <ul className="space-y-0.5">
-                        {sub.items.map((item) => {
+                        {sub.items.map((item, itemIdx) => {
                           const Icon = item.icon;
                           return (
-                            <li key={item.label}>
+                            <li key={`${item.entryName ?? item.label}-${itemIdx}`}>
                               <a
                                 href={item.link || "#"}
                                 onClick={(e) => {

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
-import { type Workspace, type WorkspaceId } from '../types/workspace';
+import { type Workspace, type WorkspaceDefinition, type WorkspaceId } from '../types/workspace';
 import { WORKSPACES_MOCK_DATA } from '../data/workspaceMockData';
 import { type IntranetApp } from '../data/intranetAppsMock';
 import { type NavItem } from '../components/shell/DropdownNavigation';
@@ -11,7 +11,7 @@ interface WorkspaceContextType {
   currentWorkspace: Workspace;
   workspaceId: WorkspaceId;
   setWorkspaceId: (id: WorkspaceId) => void;
-  availableWorkspaces: Workspace[];
+  availableWorkspaces: WorkspaceDefinition[];
   currentApps: IntranetApp[];
   currentNavItems: NavItem[];
 }
@@ -31,11 +31,11 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const slotEntries = useSlotNavEntries();
 
-  // Navigation du niveau 2 : fournie par les apps (slot `topbar-level2-nav`),
-  // avec repli sur les données actuelles tant qu'une app n'a pas migré.
-  const currentWorkspace = useMemo(() => {
+  // Navigation du niveau 2 : construite UNIQUEMENT à partir des entrées que les apps déclarent sur
+  // le slot `topbar-level2-nav`, filtrées pour l'espace actif. Aucune donnée codée en dur.
+  const currentWorkspace = useMemo<Workspace>(() => {
     const base = WORKSPACES_MOCK_DATA.find((w) => w.id === workspaceId) || WORKSPACES_MOCK_DATA[0];
-    return { ...base, navItems: buildNavItemsFromSlot(base.navItems, slotEntries, t) };
+    return { ...base, navItems: buildNavItemsFromSlot(slotEntries, base.id, t) };
   }, [workspaceId, slotEntries, t]);
 
   const currentApps = useMemo(() => {
