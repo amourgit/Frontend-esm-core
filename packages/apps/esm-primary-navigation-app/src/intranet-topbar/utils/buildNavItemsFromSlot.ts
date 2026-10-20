@@ -1,9 +1,20 @@
-import { isNavEntryInWorkspace } from '@egen-civitas/esm-framework';
+import { isNavEntryInWorkspace, type NavEntryMeta } from '@egen-civitas/esm-framework';
 import { type NavItem, type NavSubMenu, type NavSubMenuItem } from '../components/shell/DropdownNavigation';
 import { resolveNavIcon } from '../data/navIcons';
 import { type SlotNavEntry } from '../hooks/useSlotNavEntries';
 
 type Translate = (key: string, defaultValue: string) => string;
+
+/**
+ * Visibilité d'une entrée dans un espace. Le shell est livré pré-compilé avec SA version du framework :
+ * un shell antérieur à esm-framework 1.2 n'expose pas `isNavEntryInWorkspace`. On l'utilise quand il est là,
+ * sinon on applique la même règle (absent, vide ou '*' = tous les espaces) plutôt que de faire planter la TopBar.
+ */
+function visibleInWorkspace(meta: NavEntryMeta, workspaceId: string): boolean {
+  if (typeof isNavEntryInWorkspace === 'function') return isNavEntryInWorkspace(meta, workspaceId);
+  const list = meta.workspaces;
+  return !list || list.length === 0 || list.includes('*') || list.includes(workspaceId);
+}
 
 const stripSlashes = (route: string) => route.replace(/^\/+|\/+$/g, '');
 const toLink = (route: string) => `/${stripSlashes(route)}`;
@@ -37,7 +48,7 @@ export function buildNavItemsFromSlot(entries: SlotNavEntry[], workspaceId: stri
 
   for (const entry of entries) {
     const e = entry.meta;
-    if (!isNavEntryInWorkspace(e, workspaceId)) continue;
+    if (!visibleInWorkspace(e, workspaceId)) continue;
 
     let section = sections.get(e.section);
     if (!section) {
