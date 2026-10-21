@@ -1,0 +1,419 @@
+/* ============================================================================
+ *  FEUILLE TAILWIND DE LA PAGE DE CONNEXION — esm-login-app
+ * ============================================================================
+ *  La feuille Tailwind commune du Core est injectée par la TopBar
+ *  (esm-primary-navigation-app), qui N'EST PAS chargée sur /login : la page de
+ *  connexion doit donc embarquer la sienne.
+ *
+ *  Cette feuille est volontairement IDENTIQUE à celle de la TopBar côté
+ *  Tailwind (même preset, mêmes @source, même breakpoint) : si les deux
+ *  coexistent (login → home sans rechargement), leurs règles sont les mêmes,
+ *  dans le même ordre — aucune réécriture mutuelle possible. Elle n'est
+ *  importée que par login.component (chargé en lazy, uniquement sur /login).
+ *
+ *  Le bloc « glass » en fin de fichier (boutons/champs verre liquide) est du
+ *  CSS propre au login, préfixé .glass-* / .login-root : aucune collision.
+ * ==========================================================================*/
+@import '@egen-civitas/tailwind-preset/tailwind.tw.css';
+
+@source "../../*/src/**/*.{ts,tsx}";
+@source not "../../*/src/**/*.test.{ts,tsx}";
+@source not "../../*/src/**/setup-tests.{ts,tsx}";
+
+@theme {
+  --breakpoint-xs: 30rem;
+}
+
+/* ----------------------------------------------------------------------------
+ *  Variables locales — ponts vers les tokens du thème EGEN (avec fallbacks)
+ * --------------------------------------------------------------------------*/
+@property --angle-1 {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: -75deg;
+}
+@property --angle-2 {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: -45deg;
+}
+
+.login-root {
+  --login-fg: var(--colors-surface-foreground, #0f172a);
+  --login-bg: var(--colors-surface-background, #f8fafc);
+
+  --fg-5: color-mix(in srgb, var(--login-fg) 5%, transparent);
+  --fg-10: color-mix(in srgb, var(--login-fg) 10%, transparent);
+  --fg-12: color-mix(in srgb, var(--login-fg) 12%, transparent);
+  --fg-15: color-mix(in srgb, var(--login-fg) 15%, transparent);
+  --fg-20: color-mix(in srgb, var(--login-fg) 20%, transparent);
+  --fg-25: color-mix(in srgb, var(--login-fg) 25%, transparent);
+  --fg-50: color-mix(in srgb, var(--login-fg) 50%, transparent);
+  --fg-90: color-mix(in srgb, var(--login-fg) 90%, transparent);
+  --bg-5: color-mix(in srgb, var(--login-bg) 5%, transparent);
+  --bg-20: color-mix(in srgb, var(--login-bg) 20%, transparent);
+  --bg-50: color-mix(in srgb, var(--login-bg) 50%, transparent);
+  --bg-75: color-mix(in srgb, var(--login-bg) 75%, transparent);
+
+  /* Palette du fond dégradé animé */
+  --login-grad-1a: var(--colors-primary-500, #6366f1);
+  --login-grad-1b: var(--colors-info-500, #0ea5e9);
+  --login-grad-2a: var(--colors-secondary-400, #a78bfa);
+  --login-grad-2b: var(--colors-primary-400, #818cf8);
+  --login-grad-2c: var(--colors-info-400, #38bdf8);
+  --login-grad-3a: var(--colors-error-500, #ef4444);
+  --login-grad-3b: var(--colors-warning-500, #f59e0b);
+  --login-grad-accent: var(--colors-surface-accent, #eef2ff);
+}
+
+@keyframes login-float-1 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10px, 10px);
+  }
+}
+@keyframes login-float-2 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10px, -10px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-float-1,
+  .login-float-2 {
+    animation: none !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+ *  Autofill / révélation de mot de passe natifs : rendu transparent
+ * --------------------------------------------------------------------------*/
+.login-root input[type='password']::-ms-reveal,
+.login-root input[type='password']::-ms-clear {
+  display: none !important;
+}
+.login-root input[type='password']::-webkit-credentials-auto-fill-button {
+  display: none !important;
+}
+.login-root input[type='password']::-webkit-strong-password-auto-fill-button {
+  display: none !important;
+}
+.login-root input:-webkit-autofill,
+.login-root input:-webkit-autofill:hover,
+.login-root input:-webkit-autofill:focus,
+.login-root input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px transparent inset !important;
+  -webkit-text-fill-color: var(--login-fg) !important;
+  background-color: transparent !important;
+  background-clip: content-box !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  color: var(--login-fg) !important;
+  caret-color: var(--login-fg) !important;
+}
+.login-root input:autofill {
+  background-color: transparent !important;
+  background-clip: content-box !important;
+  -webkit-text-fill-color: var(--login-fg) !important;
+  color: var(--login-fg) !important;
+}
+.login-root input:-webkit-autofill::first-line {
+  color: var(--login-fg) !important;
+  -webkit-text-fill-color: var(--login-fg) !important;
+}
+
+/* ----------------------------------------------------------------------------
+ *  GlassButton
+ * --------------------------------------------------------------------------*/
+.glass-button-wrap {
+  --anim-time: 400ms;
+  --anim-ease: cubic-bezier(0.25, 1, 0.5, 1);
+  --border-width: clamp(1px, 0.0625em, 4px);
+  position: relative;
+  z-index: 2;
+  transform-style: preserve-3d;
+  transition: transform var(--anim-time) var(--anim-ease);
+}
+.glass-button-wrap:has(.glass-button:active) {
+  transform: rotateX(25deg);
+}
+
+.glass-button-shadow {
+  --shadow-cutoff-fix: 2em;
+  position: absolute;
+  width: calc(100% + var(--shadow-cutoff-fix));
+  height: calc(100% + var(--shadow-cutoff-fix));
+  top: calc(0% - var(--shadow-cutoff-fix) / 2);
+  left: calc(0% - var(--shadow-cutoff-fix) / 2);
+  filter: blur(clamp(2px, 0.125em, 12px));
+  transition: filter var(--anim-time) var(--anim-ease);
+  pointer-events: none;
+  z-index: 0;
+}
+.glass-button-shadow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, var(--fg-20), var(--fg-10));
+  width: calc(100% - var(--shadow-cutoff-fix) - 0.25em);
+  height: calc(100% - var(--shadow-cutoff-fix) - 0.25em);
+  top: calc(var(--shadow-cutoff-fix) - 0.5em);
+  left: calc(var(--shadow-cutoff-fix) - 0.875em);
+  padding: 0.125em;
+  box-sizing: border-box;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  transition: all var(--anim-time) var(--anim-ease);
+  opacity: 1;
+}
+
+.glass-button {
+  -webkit-tap-highlight-color: transparent;
+  backdrop-filter: blur(clamp(1px, 0.125em, 4px));
+  transition: all var(--anim-time) var(--anim-ease);
+  background: linear-gradient(-75deg, var(--bg-5), var(--bg-20), var(--bg-5));
+  box-shadow:
+    inset 0 0.125em 0.125em var(--fg-5),
+    inset 0 -0.125em 0.125em var(--bg-50),
+    0 0.25em 0.125em -0.125em var(--fg-20),
+    0 0 0.1em 0.25em inset var(--bg-20),
+    0 0 0 0 var(--login-bg);
+}
+.glass-button:hover {
+  transform: scale(0.975);
+  backdrop-filter: blur(0.01em);
+  box-shadow:
+    inset 0 0.125em 0.125em var(--fg-5),
+    inset 0 -0.125em 0.125em var(--bg-50),
+    0 0.15em 0.05em -0.1em var(--fg-25),
+    0 0 0.05em 0.1em inset var(--bg-50),
+    0 0 0 0 var(--login-bg);
+}
+.glass-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.glass-button-text {
+  color: var(--fg-90);
+  text-shadow: 0em 0.25em 0.05em var(--fg-10);
+  transition: all var(--anim-time) var(--anim-ease);
+}
+.glass-button:hover .glass-button-text {
+  text-shadow: 0.025em 0.025em 0.025em var(--fg-12);
+}
+.glass-button-text::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: calc(100% - var(--border-width));
+  height: calc(100% - var(--border-width));
+  top: calc(0% + var(--border-width) / 2);
+  left: calc(0% + var(--border-width) / 2);
+  box-sizing: border-box;
+  border-radius: 9999px;
+  overflow: clip;
+  background: linear-gradient(var(--angle-2), transparent 0%, var(--bg-50) 40% 50%, transparent 55%);
+  z-index: 3;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  transition:
+    background-position calc(var(--anim-time) * 1.25) var(--anim-ease),
+    --angle-2 calc(var(--anim-time) * 1.25) var(--anim-ease);
+}
+.glass-button:hover .glass-button-text::after {
+  background-position: 25% 50%;
+}
+.glass-button:active .glass-button-text::after {
+  background-position: 50% 15%;
+  --angle-2: -15deg;
+}
+
+.glass-button::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: 9999px;
+  width: calc(100% + var(--border-width));
+  height: calc(100% + var(--border-width));
+  top: calc(0% - var(--border-width) / 2);
+  left: calc(0% - var(--border-width) / 2);
+  padding: var(--border-width);
+  box-sizing: border-box;
+  background: conic-gradient(
+      from var(--angle-1) at 50% 50%,
+      var(--fg-50) 0%,
+      transparent 5% 40%,
+      var(--fg-50) 50%,
+      transparent 60% 95%,
+      var(--fg-50) 100%
+    ),
+    linear-gradient(180deg, var(--bg-50), var(--bg-50));
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  transition:
+    all var(--anim-time) var(--anim-ease),
+    --angle-1 500ms ease;
+  box-shadow: inset 0 0 0 calc(var(--border-width) / 2) var(--bg-50);
+  pointer-events: none;
+}
+.glass-button:hover::after {
+  --angle-1: -125deg;
+}
+.glass-button:active::after {
+  --angle-1: -75deg;
+}
+
+.glass-button-wrap:has(.glass-button:hover) .glass-button-shadow {
+  filter: blur(clamp(2px, 0.0625em, 6px));
+}
+.glass-button-wrap:has(.glass-button:hover) .glass-button-shadow::after {
+  top: calc(var(--shadow-cutoff-fix) - 0.875em);
+  opacity: 1;
+}
+.glass-button-wrap:has(.glass-button:active) .glass-button-shadow {
+  filter: blur(clamp(2px, 0.125em, 12px));
+}
+.glass-button-wrap:has(.glass-button:active) .glass-button-shadow::after {
+  top: calc(var(--shadow-cutoff-fix) - 0.5em);
+  opacity: 0.75;
+}
+.glass-button-wrap:has(.glass-button:active) .glass-button-text {
+  text-shadow: 0.025em 0.25em 0.05em var(--fg-12);
+}
+.glass-button-wrap:has(.glass-button:active) .glass-button {
+  box-shadow:
+    inset 0 0.125em 0.125em var(--fg-5),
+    inset 0 -0.125em 0.125em var(--bg-50),
+    0 0.125em 0.125em -0.125em var(--fg-20),
+    0 0 0.1em 0.25em inset var(--bg-20),
+    0 0.225em 0.05em 0 var(--fg-5),
+    0 0.25em 0 0 var(--bg-75),
+    inset 0 0.25em 0.05em 0 var(--fg-15);
+}
+@media (hover: none) and (pointer: coarse) {
+  .glass-button::after,
+  .glass-button:hover::after,
+  .glass-button:active::after {
+    --angle-1: -75deg;
+  }
+  .glass-button .glass-button-text::after,
+  .glass-button:active .glass-button-text::after {
+    --angle-2: -45deg;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+ *  GlassInput
+ * --------------------------------------------------------------------------*/
+.glass-input-wrap {
+  position: relative;
+  z-index: 2;
+  transform-style: preserve-3d;
+  border-radius: 9999px;
+}
+.glass-input {
+  display: flex;
+  position: relative;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.25rem;
+  -webkit-tap-highlight-color: transparent;
+  backdrop-filter: blur(clamp(1px, 0.125em, 4px));
+  transition: all 400ms cubic-bezier(0.25, 1, 0.5, 1);
+  background: linear-gradient(-75deg, var(--bg-5), var(--bg-20), var(--bg-5));
+  box-shadow:
+    inset 0 0.125em 0.125em var(--fg-5),
+    inset 0 -0.125em 0.125em var(--bg-50),
+    0 0.25em 0.125em -0.125em var(--fg-20),
+    0 0 0.1em 0.25em inset var(--bg-20),
+    0 0 0 0 var(--login-bg);
+}
+.glass-input-wrap:focus-within .glass-input {
+  backdrop-filter: blur(0.01em);
+  box-shadow:
+    inset 0 0.125em 0.125em var(--fg-5),
+    inset 0 -0.125em 0.125em var(--bg-50),
+    0 0.15em 0.05em -0.1em var(--fg-25),
+    0 0 0.05em 0.1em inset var(--bg-50),
+    0 0 0 0 var(--login-bg);
+}
+.glass-input::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: 9999px;
+  width: calc(100% + clamp(1px, 0.0625em, 4px));
+  height: calc(100% + clamp(1px, 0.0625em, 4px));
+  top: calc(0% - clamp(1px, 0.0625em, 4px) / 2);
+  left: calc(0% - clamp(1px, 0.0625em, 4px) / 2);
+  padding: clamp(1px, 0.0625em, 4px);
+  box-sizing: border-box;
+  background: conic-gradient(
+      from var(--angle-1) at 50% 50%,
+      var(--fg-50) 0%,
+      transparent 5% 40%,
+      var(--fg-50) 50%,
+      transparent 60% 95%,
+      var(--fg-50) 100%
+    ),
+    linear-gradient(180deg, var(--bg-50), var(--bg-50));
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  transition:
+    all 400ms cubic-bezier(0.25, 1, 0.5, 1),
+    --angle-1 500ms ease;
+  box-shadow: inset 0 0 0 calc(clamp(1px, 0.0625em, 4px) / 2) var(--bg-50);
+  pointer-events: none;
+}
+.glass-input-wrap:focus-within .glass-input::after {
+  --angle-1: -125deg;
+}
+.glass-input-text-area {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+.glass-input-text-area::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: calc(100% - clamp(1px, 0.0625em, 4px));
+  height: calc(100% - clamp(1px, 0.0625em, 4px));
+  top: calc(0% + clamp(1px, 0.0625em, 4px) / 2);
+  left: calc(0% + clamp(1px, 0.0625em, 4px) / 2);
+  box-sizing: border-box;
+  border-radius: 9999px;
+  overflow: clip;
+  background: linear-gradient(var(--angle-2), transparent 0%, var(--bg-50) 40% 50%, transparent 55%);
+  z-index: 3;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  transition:
+    background-position calc(400ms * 1.25) cubic-bezier(0.25, 1, 0.5, 1),
+    --angle-2 calc(400ms * 1.25) cubic-bezier(0.25, 1, 0.5, 1);
+}
+.glass-input-wrap:focus-within .glass-input-text-area::after {
+  background-position: 25% 50%;
+}

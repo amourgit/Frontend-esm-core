@@ -2,7 +2,7 @@ import React from 'react';
 import { interpolateUrl, useConfig } from '@egen-civitas/esm-framework';
 import { type TFunction } from 'i18next';
 import { type ConfigSchema } from './config-schema';
-import styles from './login/login.scss';
+import styles from './logo.scss';
 
 const Logo: React.FC<{ t: TFunction }> = ({ t }) => {
   const { logo } = useConfig<ConfigSchema>();

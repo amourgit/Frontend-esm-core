@@ -1,0 +1,44 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "inputs": [
+        "src/**",
+        "!src/**/*.test.*",
+        "!src/**/setup-tests.*",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "webpack.config.js",
+        "rspack.config.js",
+        "rspack.config.cjs",
+        ".swcrc",
+        "postcss.config.js",
+        "translations/**",
+        "dependencies.json",
+        "$TURBO_ROOT$/packages/apps/*/src/**/*.{ts,tsx}",
+        "!$TURBO_ROOT$/packages/apps/*/src/**/*.test.{ts,tsx}",
+        "!$TURBO_ROOT$/packages/apps/*/src/**/setup-tests.{ts,tsx}"
+      ]
+    },
+    "build:development": {
+      "inputs": [
+        "src/**",
+        "!src/**/*.test.*",
+        "!src/**/setup-tests.*",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "webpack.config.js",
+        "rspack.config.js",
+        "rspack.config.cjs",
+        ".swcrc",
+        "postcss.config.js",
+        "translations/**",
+        "dependencies.json",
+        "$TURBO_ROOT$/packages/apps/*/src/**/*.{ts,tsx}",
+        "!$TURBO_ROOT$/packages/apps/*/src/**/*.test.{ts,tsx}",
+        "!$TURBO_ROOT$/packages/apps/*/src/**/setup-tests.{ts,tsx}"
+      ]
+    }
+  }
+}

@@ -12,7 +12,7 @@ const ChangePasswordLink: React.FC = () => {
       closeModal: () => dispose(),
       size: 'sm',
     });
-  }, []);  
+  }, []);
 
   return (
     <SwitcherItem aria-label={t('changePassword', 'ChangePassword')} className={styles.panelItemContainer}>
