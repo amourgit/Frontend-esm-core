@@ -8,6 +8,7 @@ import { TabsContent } from '../components/ui/animated-tabs.component';
 import { TabbedViewLayout } from '../components/layout/tabbed-view-layout.component';
 import { AudienceSwitch } from '../audience/audience-switch.component';
 import { type AudienceFilter, isAudienceFilter, matchesAudience } from '../audience/audience';
+import { InformationsBackground } from './informations-background.component';
 import { AnnouncementsView } from '../announcements/announcements-view.component';
 import { ALL_ANNOUNCEMENTS } from '../announcements/announcements-data';
 import { EventsSection } from '../events/events-section.component';
@@ -88,23 +89,26 @@ export function InformationsPage({ initialTab = 'news', onShowNotification }: In
   };
 
   return (
-    <TabbedViewLayout
-      activeTab={activeTab}
-      onTabChange={(value, option) => handleTabChange(value, option?.path ?? `${BASE_PATH}/${value}`)}
-      tabs={tabs}
-      mainHeader={<AudienceSwitch value={audience} onChange={setAudience} counts={counts} className="pb-4" />}
-    >
-      <TabsContent value="news" className="flex-1 min-h-0 flex flex-col">
-        <NewsFeedView onShowNotification={onShowNotification} audience={audience} />
-      </TabsContent>
+    <>
+      <InformationsBackground />
+      <TabbedViewLayout
+        activeTab={activeTab}
+        onTabChange={(value, option) => handleTabChange(value, option?.path ?? `${BASE_PATH}/${value}`)}
+        tabs={tabs}
+        mainHeader={<AudienceSwitch value={audience} onChange={setAudience} counts={counts} className="pb-4" />}
+      >
+        <TabsContent value="news" className="flex-1 min-h-0 flex flex-col">
+          <NewsFeedView onShowNotification={onShowNotification} audience={audience} />
+        </TabsContent>
 
-      <TabsContent value="annonces" className="flex-1 min-h-0 flex flex-col">
-        <AnnouncementsView audience={audience} />
-      </TabsContent>
+        <TabsContent value="annonces" className="flex-1 min-h-0 flex flex-col">
+          <AnnouncementsView audience={audience} />
+        </TabsContent>
 
-      <TabsContent value="agenda" className="flex-1 min-h-0 flex flex-col">
-        <EventsSection onShowNotification={onShowNotification} audience={audience} />
-      </TabsContent>
-    </TabbedViewLayout>
+        <TabsContent value="agenda" className="flex-1 min-h-0 flex flex-col">
+          <EventsSection onShowNotification={onShowNotification} audience={audience} />
+        </TabsContent>
+      </TabbedViewLayout>
+    </>
   );
 }
