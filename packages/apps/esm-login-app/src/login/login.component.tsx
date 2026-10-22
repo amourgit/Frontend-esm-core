@@ -16,7 +16,7 @@ import {
 import { getTenantStoreState, storeHeaderTenantId, useTenant, useTenantMode } from '@egen-civitas/esm-tenant';
 import { getThemeState } from '@egen-civitas/esm-theme';
 import { type ConfigSchema } from '../config-schema';
-import { cn } from '../lib/utils';
+import { cn } from '../utils/cn';
 import { BlurFade } from './ui/blur-fade.component';
 import { Confetti, type ConfettiRef } from './ui/confetti.component';
 import { GlassButton } from './ui/glass-button.component';

@@ -1,6 +1,6 @@
 import React, { Children, useEffect, useState } from 'react';
 import { AnimatePresence, motion, type Transition, type Variants } from 'motion/react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/cn';
 
 interface TextLoopProps {
   children: React.ReactNode[];

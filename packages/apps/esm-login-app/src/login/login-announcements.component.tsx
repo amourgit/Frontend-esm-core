@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle, CheckCircle2, Info, XCircle } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { cn } from '../utils/cn';
 import { type ConfigSchema } from '../config-schema';
 
 type Announcement = ConfigSchema['announcements'][number];

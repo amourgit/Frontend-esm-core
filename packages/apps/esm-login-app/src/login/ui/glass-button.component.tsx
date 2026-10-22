@@ -1,6 +1,6 @@
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/cn';
 
 const glassButtonVariants = cva('relative isolate all-unset cursor-pointer rounded-full transition-all', {
   variants: {
