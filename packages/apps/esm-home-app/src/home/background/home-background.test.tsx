@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
 
 const declared: Array<{ customComponent?: React.ReactElement }> = [];
 
@@ -23,7 +24,7 @@ describe('HomeBackground', () => {
     expect(declared).toHaveLength(1);
     expect(declared[0].customComponent?.type).toBe(AnimatedHomeBackground);
     // Le rendu est assuré par l'hôte global du shell : rien dans le DOM de l'app.
-    expect(container.innerHTML).toBe('');
+    expect(container).toBeEmptyDOMElement();
   });
 
   it('garde une référence stable entre les rendus (pas de ré-enregistrement inutile)', () => {
