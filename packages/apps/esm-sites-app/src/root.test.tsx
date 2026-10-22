@@ -44,7 +44,7 @@ describe("routes de l'app Sites", () => {
     fireEvent.change(input, { target: { value: 'zzz-introuvable' } });
     expect(screen.getByText(/Aucun site ne correspond/i)).toBeInTheDocument();
     fireEvent.change(input, { target: { value: 'DRH' } });
-    expect(screen.queryByText(/Aucun site ne correspond/i)).toBeNull();
+    expect(screen.queryByText(/Aucun site ne correspond/i)).not.toBeInTheDocument();
   });
 
   it("/sites/:id → redirige vers l'onglet applications", async () => {
