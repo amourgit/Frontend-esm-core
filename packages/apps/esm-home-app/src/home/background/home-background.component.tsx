@@ -1,44 +1,28 @@
 import React from 'react';
-import { GradientWave } from './gradient-wave.component';
-import styles from './home-background.scss';
+import { AnimatedHomeBackground, PageBackground } from '@egen-civitas/esm-framework';
 
 // =============================================================================
 //  HOME BACKGROUND — Arrière-plan de la page d'accueil
 //
-//  Copié/adapté depuis Civitas-GED (IntranetPortalPage.tsx, bloc
-//  "backgroundComponent") : fond WebGL animé (GradientWave) + voile de
-//  contraste en dégradé, pour garder le texte et les cartes lisibles
-//  au-dessus. Contrairement à GED (qui a un système PageBackground global
-//  monté une fois pour toute l'appli), esm-home-app ne rend qu'une seule
-//  route : le fond est donc posé directement ici, localement.
+//  Le fond n'est plus rendu ici : le shell monte UN SEUL hôte d'arrière-plan
+//  (#egen-page-background-container) et la page ne fait que DÉCLARER ce
+//  qu'elle veut y afficher, avec <PageBackground>. Ici : le fond animé par
+//  défaut du framework (GradientWave WebGL + voile de contraste), identique à
+//  celui de GED (IntranetPortalPage, `backgroundComponent`).
 //
-//  Entièrement piloté par props — aucune couleur en dur imposée à l'appelant.
+//  Le shell monte l'hôte en `fallback="none"` : une page sans <PageBackground>
+//  n'a AUCUN fond. Pour obtenir le fond animé, il faut donc le déclarer
+//  explicitement, comme ci-dessous.
+//
+//  Référence de module (et non JSX inline dans le rendu) : <PageBackground>
+//  ré-enregistre son fond à chaque changement de `customComponent` ; une
+//  référence stable évite de le redéclarer à chaque rendu de la page.
 // =============================================================================
 
-export interface HomeBackgroundProps {
-  /** Dégradé de couleurs du fond animé. */
-  colors?: string[];
-  /** Coupe l'animation (rendu figé sur la première frame). */
-  isPlaying?: boolean;
-}
+const HOME_BACKGROUND = <AnimatedHomeBackground />;
 
-const DEFAULT_COLORS = ['#008080', '#0b192c', '#0ea5e9', '#042f2e', '#0284c7', '#064e3b'];
-
-export function HomeBackground({ colors = DEFAULT_COLORS, isPlaying = true }: HomeBackgroundProps) {
-  return (
-    <div className={styles.root} aria-hidden>
-      <GradientWave
-        colors={colors}
-        isPlaying={isPlaying}
-        shadowPower={8}
-        darkenTop={false}
-        noiseSpeed={0.00001}
-        noiseFrequency={[0.0001, 0.0009]}
-        deform={{ incline: 0.5, noiseAmp: 250, noiseFlow: 5 }}
-      />
-      <div className={styles.contrastVeil} />
-    </div>
-  );
+export function HomeBackground() {
+  return <PageBackground customComponent={HOME_BACKGROUND} />;
 }
 
 export default HomeBackground;

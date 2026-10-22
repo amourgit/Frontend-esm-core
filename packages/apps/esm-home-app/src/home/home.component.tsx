@@ -28,7 +28,7 @@ import styles from './home.scss';
 //
 //  Assemble les sections portées depuis Civitas-GED (voir les sous-dossiers
 //  de home/), chacune extraite en composants séparés, props-driven,
-//  au-dessus du fond animé HomeBackground. Remplace l'ancienne vitrine de
+//  au-dessus du fond animé déclaré par HomeBackground (rendu par l'hôte global du shell). Remplace l'ancienne vitrine de
 //  test des composants, mise de côté sous 'home/showcase'.
 //
 //  Les données affichées viennent de home-sample-data.ts — SEUL fichier à
