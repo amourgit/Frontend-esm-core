@@ -127,14 +127,14 @@ export const configSchema = {
     intervalMs: {
       _type: Type.Number,
       _default: 5500,
-      _description: 'Durée en ms entre deux slides du carrousel de connexion.',
+      _description: '[Déprécié] Sans effet : le carrousel a été retiré du nouveau design de connexion.',
     },
     slides: {
       _type: Type.Array,
       _default: [],
       _description:
-        'Slides du carrousel côté gauche de la page de connexion. ' +
-        'Si vide, les slides par défaut intégrés dans le code sont utilisés.',
+        '[Déprécié] Sans effet : le carrousel a été retiré du nouveau design de connexion. ' +
+        'Clé conservée pour ne pas invalider les configurations existantes.',
       _elements: {
         _type: Type.Object,
         accent: {

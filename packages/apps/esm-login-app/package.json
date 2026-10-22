@@ -63,8 +63,13 @@
     "@egen-civitas/esm-theme": "^1.0.1",
     "@egen-civitas/esm-translations": "^1.0.1",
     "@egen-civitas/esm-utils": "^1.0.2",
+    "@egen-civitas/tailwind-preset": "^1.4.0",
     "@hookform/resolvers": "^3.6.0",
+    "canvas-confetti": "^1.9.3",
+    "class-variance-authority": "^0.7.1",
     "dayjs": "^1.11.10",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
     "react-hook-form": "^7.52.2",
     "rxjs": "^7.8.1",
     "single-spa": "^6.0.0",
@@ -102,6 +107,7 @@
     "swr": "2.x"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@vitest/coverage-v8": "^4.1.2",
     "cross-env": "^10.1.0",
     "happy-dom": "^20.6.0",

@@ -4,6 +4,7 @@ import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   getSessionStore,
+  navigate,
   refetchCurrentUser,
   type SessionStore,
   useConfig,
@@ -14,11 +15,18 @@ import { mockConfig } from '../../__mocks__/config.mock';
 import renderWithRouter from '../test-helpers/render-with-router';
 import Login from './login.component';
 
+// happy-dom n'a pas de contexte canvas 2D : les confettis (décoratifs) sont mockés.
+vi.mock('canvas-confetti', () => {
+  const instance = Object.assign(vi.fn(), { reset: vi.fn() });
+  return { default: { create: vi.fn(() => instance) } };
+});
+
 const mockGetSessionStore = vi.mocked(getSessionStore);
 const mockLogin = vi.mocked(refetchCurrentUser);
 const mockUseConfig = vi.mocked(useConfig);
 const mockUseConnectivity = vi.mocked(useConnectivity);
 const mockUseSession = vi.mocked(useSession);
+const mockNavigate = vi.mocked(navigate);
 
 const loginLocations = [
   { uuid: '111', display: 'Earth' },
@@ -330,7 +338,7 @@ describe('Login', () => {
     const bgImage = root.style.getPropertyValue('--login-bg-image');
     expect(bgImage).toContain('/egen/spa/assets/bg.jpg');
     expect(bgImage).not.toContain('${egenSpaBase}');
-    expect(root.className).toMatch(/containerWithImage/);
+    expect(root).toHaveAttribute('data-background', 'image');
   });
 
   it('applies a background color when only background.color is configured', () => {
@@ -344,7 +352,38 @@ describe('Login', () => {
 
     expect(root.style.getPropertyValue('--login-bg-color')).toBe('#0066cc');
     expect(root.style.getPropertyValue('--login-bg-image')).toBe('');
-    expect(root.className).toMatch(/containerWithColor/);
-    expect(root.className).not.toMatch(/containerWithImage/);
+    expect(root).toHaveAttribute('data-background', 'color');
+  });
+  it('shows the error modal, resets the form and lets the user try again', async () => {
+    mockLogin.mockResolvedValue({ session: { authenticated: false } } as unknown as SessionStore);
+    renderWithRouter(Login, {}, { route: '/login' });
+    const user = userEvent.setup();
+
+    await user.type(screen.getByRole('textbox', { name: /Username/i }), 'yoshi');
+    await user.click(screen.getByRole('button', { name: /Continue/i }));
+    await user.type(await screen.findByLabelText(/^password$/i), 'wrong');
+    await user.click(screen.getByRole('button', { name: /log in/i }));
+
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toHaveTextContent(/Invalid username or password/i);
+    expect(mockNavigate).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole('button', { name: /Try again/i }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(screen.getByRole('textbox', { name: /username/i })).toHaveValue('');
+  });
+
+  it('shows the success state then navigates to the success link', async () => {
+    mockLogin.mockResolvedValue({ session: { authenticated: true } } as unknown as SessionStore);
+    renderWithRouter(Login, {}, { route: '/login' });
+    const user = userEvent.setup();
+
+    await user.type(screen.getByRole('textbox', { name: /Username/i }), 'yoshi');
+    await user.click(screen.getByRole('button', { name: /Continue/i }));
+    await user.type(await screen.findByLabelText(/^password$/i), 'no-tax-fraud');
+    await user.click(screen.getByRole('button', { name: /log in/i }));
+
+    expect(await screen.findByText(/Welcome aboard/i)).toBeInTheDocument();
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 });
   });
 });
