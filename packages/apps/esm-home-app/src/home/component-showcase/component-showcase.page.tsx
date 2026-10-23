@@ -45,6 +45,14 @@ import {
 } from '@egen-civitas/esm-framework';
 import Autoplay from 'embla-carousel-autoplay';
 import type { ConfigSchema } from '../../config-schema';
+import {
+  BackgroundsShowcase,
+  ContentShowcase,
+  FormsShowcase,
+  IconsShowcase,
+  NotificationsShowcase,
+  SitesShowcase,
+} from './framework-components-showcase.component';
 import { AssistantShowcase, SelectionsShowcase } from './new-components-showcase.component';
 import styles from './component-showcase.scss';
 
@@ -450,10 +458,19 @@ const ComponentShowcasePage: React.FC = () => {
     'slide-down',
     'slide-left',
     'slide-right',
+    'warp',
     'none',
   ];
   const [selectedModalCardVariant, setSelectedModalCardVariant] = useState<CardVariant>('glass');
   const [selectedModalAnimation, setSelectedModalAnimation] = useState<CardModalAnimationPreset>('scale');
+  const warpColors: Array<{ label: string; value: string }> = [
+    { label: 'error', value: 'var(--colors-error-500)' },
+    { label: 'primary', value: 'var(--colors-primary-500)' },
+    { label: 'success', value: 'var(--colors-success-500)' },
+    { label: 'warning', value: 'var(--colors-warning-500)' },
+  ];
+  const [modalWarpColor, setModalWarpColor] = useState(warpColors[0].value);
+  const [modalWarpGlow, setModalWarpGlow] = useState(true);
   const [modalDraggable, setModalDraggable] = useState(false);
   const [modalDockable, setModalDockable] = useState(false);
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
@@ -842,6 +859,34 @@ const ComponentShowcasePage: React.FC = () => {
             ))}
           </div>
 
+          {selectedModalAnimation === 'warp' && (
+            <>
+              <p className={styles.decoratedCardBody} style={{ margin: '1rem 0 0.5rem' }}>
+                Effet d'overlay « warp » — couleur des halos (<code>warpColor</code>) :
+              </p>
+              <div className={styles.demoRow} style={{ alignItems: 'center' }}>
+                {warpColors.map((color) => (
+                  <button
+                    key={color.label}
+                    type="button"
+                    className={styles.sideToggleButton}
+                    data-active={modalWarpColor === color.value || undefined}
+                    onClick={() => setModalWarpColor(color.value)}
+                  >
+                    {color.label}
+                  </button>
+                ))}
+                <label
+                  className={styles.decoratedCardBody}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                >
+                  <input type="checkbox" checked={modalWarpGlow} onChange={(e) => setModalWarpGlow(e.target.checked)} />
+                  Halos lumineux (<code>overlayEffect</code>)
+                </label>
+              </div>
+            </>
+          )}
+
           <div className={styles.demoRow} style={{ marginTop: '1rem', alignItems: 'center' }}>
             <label
               className={styles.decoratedCardBody}
@@ -876,6 +921,8 @@ const ComponentShowcasePage: React.FC = () => {
               description: `Carte : ${selectedModalCardVariant} — Animation : ${selectedModalAnimation}`,
             }}
             animation={selectedModalAnimation}
+            overlayEffect={selectedModalAnimation === 'warp' && !modalWarpGlow ? 'none' : undefined}
+            warpColor={modalWarpColor}
             draggable={modalDraggable}
             dockable={modalDraggable && modalDockable}
           >
@@ -1031,6 +1078,14 @@ const ComponentShowcasePage: React.FC = () => {
 
         {/* ── Nouveaux composants : assistant IA (LiveOrb, SplineScene, PromptInput…) ── */}
         <AssistantShowcase />
+
+        {/* ── Composants du styleguide jusque-là absents de la vitrine ── */}
+        <ContentShowcase />
+        <FormsShowcase />
+        <BackgroundsShowcase />
+        <NotificationsShowcase />
+        <SitesShowcase />
+        <IconsShowcase />
       </main>
 
       <StaggeredMenuPanel
