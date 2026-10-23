@@ -313,12 +313,8 @@ export function SupremeIntranetTopBar({
               className="flex items-center cursor-pointer shrink-0 py-0.5 group overflow-visible hover:opacity-95 transition-opacity"
               title="EGEN — Écosystème Gouvernemental de l’Économie Numérique"
             >
-              <div className="block sm:hidden">
-                <EgenLogo size="sm" variant="full" />
-              </div>
-              <div className="hidden sm:block">
-                <EgenLogo size="md" variant="full" />
-              </div>
+              {/* Un seul logo : la taille responsive est portée par EgenLogo (size="nav"). */}
+              <EgenLogo size="nav" variant="full" />
             </div>
 
             {/* PARENT COMPONENT: WORKSPACE & SITE SELECTORS IN COLUMN */}

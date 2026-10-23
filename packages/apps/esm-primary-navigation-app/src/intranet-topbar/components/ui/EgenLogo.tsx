@@ -4,7 +4,7 @@ import egenLogoUrl from '../../assets/egen_logo_official.png';
 interface EgenLogoProps {
   className?: string;
   variant?: 'full' | 'compact' | 'horizontal' | 'icon';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'nav' | 'lg' | 'xl';
   showSubtitle?: boolean;
 }
 
@@ -16,6 +16,7 @@ export const EgenLogo: React.FC<EgenLogoProps> = ({
   const sizeMap = {
     sm: 'h-8 sm:h-9',
     md: 'h-9 sm:h-11',
+    nav: 'h-8 sm:h-11',
     lg: 'h-12 sm:h-14',
     xl: 'h-16 sm:h-20',
   };
