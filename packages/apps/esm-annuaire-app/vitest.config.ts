@@ -27,6 +27,7 @@ export default defineConfig({
     environment: 'happy-dom',
     mockReset: true,
     globals: true,
+    setupFiles: ['./src/test-utils/no-waapi.ts'],
     alias: {
       '@egen-test/styleguide-dist': styleguideDist,
       '@egen-civitas/esm-framework/src/internal': '@egen-civitas/esm-framework/mock',
