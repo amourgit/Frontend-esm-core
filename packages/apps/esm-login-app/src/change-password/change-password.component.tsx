@@ -15,15 +15,16 @@ const ChangePassword: React.FC = () => {
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   const oldPasswordValidation = z.string({
-    required_error: t('oldPasswordRequired', 'Old password is required'),
+    error: (issue) => (issue.input === undefined ? t('oldPasswordRequired', 'Old password is required') : undefined),
   });
 
   const newPasswordValidation = z.string({
-    required_error: t('newPasswordRequired', 'New password is required'),
+    error: (issue) => (issue.input === undefined ? t('newPasswordRequired', 'New password is required') : undefined),
   });
 
   const passwordConfirmationValidation = z.string({
-    required_error: t('passwordConfirmationRequired', 'Password confirmation is required'),
+    error: (issue) =>
+      issue.input === undefined ? t('passwordConfirmationRequired', 'Password confirmation is required') : undefined,
   });
 
   const changePasswordFormSchema = z

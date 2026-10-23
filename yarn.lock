@@ -485,9 +485,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-app-shell@npm:^2.4.3":
-  version: 2.4.3
-  resolution: "@egen-civitas/esm-app-shell@npm:2.4.3"
+"@egen-civitas/esm-app-shell@npm:^2.4.4":
+  version: 2.4.4
+  resolution: "@egen-civitas/esm-app-shell@npm:2.4.4"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@egen-civitas/esm-api": "npm:^1.1.0"
@@ -497,7 +497,7 @@ __metadata:
     "@egen-civitas/esm-offline": "npm:^1.0.0"
     "@egen-civitas/esm-react-utils": "npm:^1.0.5"
     "@egen-civitas/esm-state": "npm:^1.0.0"
-    "@egen-civitas/esm-styleguide": "npm:^1.9.0"
+    "@egen-civitas/esm-styleguide": "npm:^1.11.0"
     "@egen-civitas/esm-tenant": "npm:^1.0.0"
     "@egen-civitas/esm-theme": "npm:^1.0.0"
     "@egen-civitas/esm-utils": "npm:^1.0.0"
@@ -521,7 +521,7 @@ __metadata:
     swc-loader: "npm:0.2.7"
     swr: "npm:2.2.5"
     webpack-pwa-manifest: "npm:4.3.0"
-  checksum: 10/87a53a2aa975a1ae2ea0c5b6d182811021bd565e7d6831106e86e2c1c39b398ad427b1fd79bc795d42c087008f845775a2c524dbfd823d8335f5e4a4448999f4
+  checksum: 10/da21d0cb1bee741daf335ddba3005ce60fdbe04166a23a99d8d5e015604784bc98bc42955ee8da4a63ee192db6e7eeedacbc7bdc7aa8691132741a7674d6020f
   languageName: node
   linkType: hard
 
@@ -1074,7 +1074,7 @@ __metadata:
   resolution: "@egen/esm-core@workspace:."
   dependencies:
     "@egen-civitas/egen": "npm:^2.0.4"
-    "@egen-civitas/esm-app-shell": "npm:^2.4.3"
+    "@egen-civitas/esm-app-shell": "npm:^2.4.4"
     "@egen-civitas/rspack-config": "npm:^1.1.0"
     "@playwright/test": "npm:^1.55.1"
     "@rspack/cli": "npm:1.7.9"
