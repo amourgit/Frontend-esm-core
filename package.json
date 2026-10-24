@@ -10,8 +10,8 @@
     "@types/react": "18.3.25",
     "csstype": "3.2.3",
     "@egen-civitas/esm-framework": "^1.2.1",
-    "@egen-civitas/esm-styleguide": "^1.11.0",
-    "@egen-civitas/esm-app-shell": "^2.4.4",
+    "@egen-civitas/esm-styleguide": "^1.12.0",
+    "@egen-civitas/esm-app-shell": "^2.5.0",
     "@egen-civitas/rspack-config": "^1.1.0"
   },
   "scripts": {
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@egen-civitas/egen": "^2.0.4",
-    "@egen-civitas/esm-app-shell": "^2.4.4",
+    "@egen-civitas/esm-app-shell": "^2.5.0",
     "@egen-civitas/rspack-config": "^1.1.0",
     "@playwright/test": "^1.64.1",
     "@rspack/cli": "2.2.9",
