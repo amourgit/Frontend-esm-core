@@ -108,7 +108,7 @@
     "@egen-civitas/esm-utils": "^1.0.2",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.10",
-    "framer-motion": "^12.42.2",
+    "framer-motion": "^14.5.0",
     "lucide-react": "^0.546.0",
     "rxjs": "^7.8.1",
     "single-spa": "^6.0.0",

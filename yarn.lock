@@ -948,7 +948,7 @@ __metadata:
     classnames: "npm:^2.3.2"
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
-    framer-motion: "npm:^12.42.2"
+    framer-motion: "npm:^14.5.0"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
     lucide-react: "npm:^0.546.0"
@@ -1024,7 +1024,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.11"
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
-    framer-motion: "npm:^11.18.2"
+    framer-motion: "npm:^14.5.0"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
     lucide-react: "npm:^0.469.0"
@@ -1351,7 +1351,7 @@ __metadata:
     dayjs: "npm:^1.11.10"
     embla-carousel: "npm:^8.0.0"
     embla-carousel-autoplay: "npm:^8.6.0"
-    framer-motion: "npm:^11.18.2"
+    framer-motion: "npm:^14.5.0"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
     lucide-react: "npm:^0.469.0"
@@ -1499,7 +1499,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.11"
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
-    framer-motion: "npm:^11.18.2"
+    framer-motion: "npm:^14.5.0"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
     lucide-react: "npm:^0.469.0"
@@ -11916,28 +11916,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^11.18.2":
-  version: 11.18.2
-  resolution: "framer-motion@npm:11.18.2"
-  dependencies:
-    motion-dom: "npm:^11.18.1"
-    motion-utils: "npm:^11.18.1"
-    tslib: "npm:^2.4.0"
-  peerDependencies:
-    "@emotion/is-prop-valid": "*"
-    react: ^18.0.0 || ^19.0.0
-    react-dom: ^18.0.0 || ^19.0.0
-  peerDependenciesMeta:
-    "@emotion/is-prop-valid":
-      optional: true
-    react:
-      optional: true
-    react-dom:
-      optional: true
-  checksum: 10/f8805f9f5664b86aad6b9ed280a79b10e7ed4e31048728d4c3767d95a5c9feeb0279844bbe613dcb3741bb784cdf6ad761e726249fa4feeec9bec4a29f78a397
-  languageName: node
-  linkType: hard
-
 "framer-motion@npm:^12.42.2":
   version: 12.42.2
   resolution: "framer-motion@npm:12.42.2"
@@ -11979,6 +11957,25 @@ __metadata:
     react-dom:
       optional: true
   checksum: 10/c8013cae9f1eec14af4fa769c6589a3af08ad7b4e7e0e9b67010d4a75ca12c347b8c735750ba798f6c5df09251e4c1f60c7650d24fb6fddc6328d022cdd7f11d
+  languageName: node
+  linkType: hard
+
+"framer-motion@npm:^14.5.0":
+  version: 14.5.0
+  resolution: "framer-motion@npm:14.5.0"
+  dependencies:
+    motion-dom: "npm:14.5.0"
+    motion-utils: "npm:14.1.1"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10/d10489ca5e23cd02a5bdd7355ed9b2a4eb9f8b734268318d69ce7a04451ce80c838cbd6126b7a849b47a51d324b2e9c1505cb36e1698b2ef6350891aa0d79422
   languageName: node
   linkType: hard
 
@@ -14720,12 +14717,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-dom@npm:^11.18.1":
-  version: 11.18.1
-  resolution: "motion-dom@npm:11.18.1"
+"motion-dom@npm:14.5.0":
+  version: 14.5.0
+  resolution: "motion-dom@npm:14.5.0"
   dependencies:
-    motion-utils: "npm:^11.18.1"
-  checksum: 10/d9172638e05998486800b1045fd2060dce13c748bdef2071b8d6f94adf87da9f5e11d44367a6ea2b4d2a8701d150a21427c1676b023dfe0e48f36c0383b2ceec
+    motion-utils: "npm:14.1.1"
+  checksum: 10/c2797977f6824e371fa038c26590a181f686b3c9c2e0ae43d5d499f72f6203af1f39fe6b45d5e70b74b655edaf5f10624363fb6523ad102993365e11d6415d78
   languageName: node
   linkType: hard
 
@@ -14747,10 +14744,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-utils@npm:^11.18.1":
-  version: 11.18.1
-  resolution: "motion-utils@npm:11.18.1"
-  checksum: 10/8af61c8260ed6abe9c0d4e1037bd80de95a461a62c89daaf26bfdcdccc96799eed5c45adbdff90ea78614336bf2e3b91f4eb6ecb4e4028a3bce53977b54822a2
+"motion-utils@npm:14.1.1":
+  version: 14.1.1
+  resolution: "motion-utils@npm:14.1.1"
+  checksum: 10/44fecf446fbcf4f295c698e6110a869e4040ece964c4fb5cd785043eb5849bb3f2f82f71cefe96cb6bb5804efb1667a64e24d535fa13b15b77a60660cb61b7a5
   languageName: node
   linkType: hard
 
