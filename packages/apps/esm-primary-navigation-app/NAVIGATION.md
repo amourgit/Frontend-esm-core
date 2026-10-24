@@ -129,3 +129,9 @@ registerNavBehavior({ entry: 'annuaire-nav-contacts' }, {
 Cette fonctionnalité s'appuie sur `NavEntryMeta.workspaces` / `group` facultatif / `sectionRoute`,
 `isNavEntryInWorkspace` et `registerNavBehavior`/`getNavBehavior`, fournis par
 `@egen-civitas/esm-extensions` et `@egen-civitas/esm-framework` (version minor suivant 1.1.x).
+
+## À gauche de la navigation : le contenu de l'app active
+
+Le niveau 2 reçoit, juste à gauche des options de navigation, le contenu de barre d'outils de
+l'**app active** (slot `top-nav-app-slot`) : identité (logo + nom), actions propres. Voir le
+README pour le contrat du slot. Les options de navigation décrites ci-dessus restent inchangées.

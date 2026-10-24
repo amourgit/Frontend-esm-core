@@ -1,4 +1,5 @@
 {
+  "homeAppName": "Accueil",
   "showcaseSubtitle": "Composants @egen/esm-styleguide en cours de validation visuelle.",
   "showcaseFieldsDescription": "Champ de saisie unique, multi-variante (outlined / filled / standard / kinetic).",
   "showcaseMenuDescription": "Panneau de navigation latéral animé (GSAP) — côté configurable : gauche ou droite.",

@@ -10,8 +10,8 @@ persistante affichée en haut de tous les espaces tenant authentifiés.
 │ NIVEAU 1 (Header, ~48px)                                                 │
 │ [Hamburger·Logo·Recherche·Contexte] [slot info] [Actions·User·slot fin] │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ NIVEAU 2 (Fil d'Ariane, ~32px — invisible si vide)                       │
-│ [top-nav-breadcrumb-slot]                                                │
+│ NIVEAU 2 (barre d'outils de l'app, ~40px)                                │
+│ [top-nav-app-slot] │ [navigation / fil d'Ariane] ........ [slot fin]     │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -36,7 +36,42 @@ package.
 `top-nav-trailing-slot` (bouton en toute fin de topbar) : ce sont deux
 slots indépendants malgré la proximité de leurs noms d'origine.
 
-## Points d'extension — Niveau 2 (fil d'Ariane)
+## Points d'extension — Niveau 2 (barre d'outils de l'application)
+
+Le niveau 2 est une rangée compacte de widgets (design « barre d'outils d'IDE ») en trois zones :
+
+```
+┌──────────────┬──────────────────────────────────────────┬─────────────┐
+│ ZONE APP     │ ZONE NAVIGATION                           │ ZONE FIN    │
+│ top-nav-app- │ menu déroulant (accueil) ou fil d'Ariane  │ top-nav-    │
+│ slot         │ + top-nav-level2-start-slot               │ level2-end- │
+│ (app active) │ + top-nav-breadcrumb-slot                 │ slot        │
+└──────────────┴──────────────────────────────────────────┴─────────────┘
+```
+
+| Slot                        | Zone       | Contenu |
+|-----------------------------|------------|---------|
+| `top-nav-app-slot`          | App        | Contenu de barre d'outils **propre à l'app active** (logo, nom, actions). N'affiche que les extensions de l'app dont une page est montée ; le code des apps inactives n'est pas chargé. Alimenté aujourd'hui par `esm-home-app`. |
+| `top-nav-level2-start-slot` | Navigation | Historique, avant les options de navigation. |
+| `top-nav-breadcrumb-slot`   | Navigation | Fil d'Ariane par extensions (voir ci-dessous). |
+| `top-nav-level2-end-slot`   | Fin        | Contributions **globales** (assistant IA — `esm-ai-assistant-app`). |
+
+### Déclarer le contenu de barre d'outils d'une app
+
+```json
+{
+  "extensions": [
+    { "name": "mon-app-toolbar", "slot": "top-nav-app-slot", "component": "appToolbar", "order": 0 }
+  ]
+}
+```
+
+L'extension reçoit l'état de slot (`isActivePanel`, `togglePanel`, `hidePanel`). Elle doit être un
+widget compact (hauteur 32 px, `rounded-lg`, survol `hover:bg-white/10`) ; voir
+`esm-home-app/src/topbar/home-app-toolbar.extension.tsx` comme référence. Une app dont aucune
+extension n'est déclarée n'affiche rien dans la zone app (le séparateur disparaît aussi).
+
+### Fil d'Ariane par extensions
 
 `top-nav-breadcrumb-slot` : entièrement invisible (hauteur 0) tant qu'aucune
 extension n'y est assignée. Utiliser le composant générique `breadcrumb-item`
