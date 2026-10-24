@@ -21,7 +21,7 @@ jobs:
       contents: read
       actions: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
@@ -32,7 +32,7 @@ jobs:
 
       - name: Cache dependencies
         id: cache
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
