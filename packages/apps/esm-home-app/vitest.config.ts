@@ -19,6 +19,7 @@ export default defineConfig({
   ],
   test: {
     environment: 'happy-dom',
+    setupFiles: ['./src/test-utils/no-waapi.ts'],
     mockReset: true,
     globals: true,
     alias: {

@@ -64,17 +64,17 @@
     "@egen-civitas/esm-translations": "^1.0.1",
     "@egen-civitas/esm-utils": "^1.0.2",
     "@egen-civitas/tailwind-preset": "^1.4.0",
-    "@hookform/resolvers": "^3.6.0",
+    "@hookform/resolvers": "^5.9.1",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",
     "dayjs": "^1.11.10",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
-    "react-hook-form": "^7.52.2",
+    "react-hook-form": "^7.86.0",
     "rxjs": "^7.8.1",
     "single-spa": "^6.0.0",
     "swr": "^2.2.0",
-    "zod": "^3.23.8"
+    "zod": "^4.4.3"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
@@ -108,9 +108,9 @@
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
-    "@vitest/coverage-v8": "^4.1.2",
+    "@vitest/coverage-v8": "^4.1.11",
     "cross-env": "^10.1.0",
-    "happy-dom": "^20.6.0",
+    "happy-dom": "^20.11.6",
     "i18next": "^25.5.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -119,7 +119,7 @@
     "react-router-dom": "^6.3.0",
     "rxjs": "^7.8.1",
     "sass": "^1.98.0",
-    "swr": "2.2.5",
-    "vitest": "^4.1.2"
+    "swr": "2.5.1",
+    "vitest": "^4.1.11"
   }
 }

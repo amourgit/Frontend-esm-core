@@ -18,3 +18,8 @@ window.egenBase = '/egen';
 window.spaBase = '/spa';
 window.getEgenSpaBase = () => '/egen/spa/';
 window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
+// happy-dom ≥ 20.8 implémente l'API Web Animations : framer-motion l'utilise alors et, à chaque démontage,
+// `Animation.cancel()` rejette `finished` avec une AbortError non interceptée qui fait échouer vitest.
+// Les versions précédentes n'avaient pas `Element.prototype.animate` (moteur JS de framer-motion).
+Reflect.deleteProperty(Element.prototype, 'animate');
