@@ -108,9 +108,9 @@
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^5.0.5",
     "cross-env": "^10.1.0",
-    "happy-dom": "^20.11.6",
+    "happy-dom": "^21.0.4",
     "i18next": "^25.5.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -120,6 +120,6 @@
     "rxjs": "^7.8.1",
     "sass": "^1.98.0",
     "swr": "2.5.1",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.5"
   }
 }
