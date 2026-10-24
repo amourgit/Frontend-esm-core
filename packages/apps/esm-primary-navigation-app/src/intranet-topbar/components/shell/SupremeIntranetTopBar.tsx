@@ -266,7 +266,7 @@ export function SupremeIntranetTopBar({
   return (
     <div
       ref={menuRef}
-      className="w-full shrink-0 z-50 select-none relative font-sans text-slate-100 overflow-visible border-b border-white/10 bg-transparent"
+      className="w-full shrink-0 z-50 select-none relative font-sans text-slate-100 overflow-visible bg-transparent"
     >
       {/* 1. SUPREME TOPBAR: EXACT POWELL SOFTWARE LIGHT INTRANET TOPBAR */}
       <header className="w-full bg-transparent transition-colors overflow-visible flex flex-col">
@@ -546,7 +546,6 @@ export function SupremeIntranetTopBar({
           slotState={slotState}
         />
       </header>
-
     </div>
   );
 }
