@@ -65,7 +65,7 @@
     "embla-carousel": "^8.0.0",
     "embla-carousel-autoplay": "^8.6.0",
     "framer-motion": "^11.18.2",
-    "lucide-react": "^0.469.0",
+    "lucide-react": "^1.61.0",
     "react-is": "^17.0.2",
     "rxjs": "^7.8.1",
     "single-spa": "^6.0.0",

@@ -951,7 +951,7 @@ __metadata:
     framer-motion: "npm:^12.42.2"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
-    lucide-react: "npm:^0.546.0"
+    lucide-react: "npm:^1.61.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1027,7 +1027,7 @@ __metadata:
     framer-motion: "npm:^11.18.2"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
-    lucide-react: "npm:^0.469.0"
+    lucide-react: "npm:^1.61.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1354,7 +1354,7 @@ __metadata:
     framer-motion: "npm:^11.18.2"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
-    lucide-react: "npm:^0.469.0"
+    lucide-react: "npm:^1.61.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1502,7 +1502,7 @@ __metadata:
     framer-motion: "npm:^11.18.2"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
-    lucide-react: "npm:^0.469.0"
+    lucide-react: "npm:^1.61.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1581,7 +1581,7 @@ __metadata:
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
-    lucide-react: "npm:^0.546.0"
+    lucide-react: "npm:^1.61.0"
     motion: "npm:^12.23.24"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1802,7 +1802,7 @@ __metadata:
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
     lodash-es: "npm:^4.17.21"
-    lucide-react: "npm:^0.546.0"
+    lucide-react: "npm:^1.61.0"
     motion: "npm:^12.23.24"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1877,7 +1877,7 @@ __metadata:
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
     i18next: "npm:^25.5.3"
-    lucide-react: "npm:^0.469.0"
+    lucide-react: "npm:^1.61.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -14230,12 +14230,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.546.0":
-  version: 0.546.0
-  resolution: "lucide-react@npm:0.546.0"
+"lucide-react@npm:^1.61.0":
+  version: 1.61.0
+  resolution: "lucide-react@npm:1.61.0"
   peerDependencies:
+    "@types/react": "*"
     react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/9eccf3b9f7b8d82054bcbcec973bf9d867a6e4ca0c244caa334eab27c9dd747bc9009e9ca30c2a5d49386c9cf6664fc1d8e51df1c71baf294c8a71acb81f7296
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10/94967ade6a5ed65e12606558411caa7de6c8318a024a52d311c90dd7c93cfc7fd8d5eabcba546485ff2f1692218e9a725702418a7307e54604cf699f1bd7d630
   languageName: node
   linkType: hard
 
