@@ -8,8 +8,9 @@ import optionStyles from '../options/topbar-options.scss';
 // =============================================================================
 //  TOPBAR — NIVEAU 2 (barre d'outils de l'application active)
 //
-//  Design « barre d'outils d'IDE » : une rangée compacte de widgets (fond de verre,
-//  survol arrondi), découpée en trois zones aux rôles distincts :
+//  Design « barre d'outils d'IDE » : une rangée compacte de widgets (survol arrondi), découpée en
+//  trois zones aux rôles distincts. La barre est TOUJOURS transparente et sans bordure : elle se
+//  fond avec le niveau 1 et avec les rails du plan de travail (aucune ligne, aucune rupture) :
 //
 //   ┌──────────────┬─────────────────────────────────────────┬─────────────┐
 //   │ ZONE APP     │ ZONE NAVIGATION                          │ ZONE FIN    │
@@ -66,7 +67,7 @@ export function TopBarLevel2({
       role="toolbar"
       aria-label="Barre d'outils de l'application"
       data-slot="topbar-level2"
-      className="relative z-30 flex h-10 w-full items-center gap-1 border-t border-white/5 bg-black/20 px-2 backdrop-blur-md sm:h-11 sm:px-4 md:px-6 lg:px-7"
+      className="relative z-30 flex h-10 w-full items-center gap-1 bg-transparent px-2 sm:h-11 sm:px-4 md:px-6 lg:px-7"
     >
       {/* ZONE APP — contenu déclaré par l'app active */}
       <ExtensionSlot
