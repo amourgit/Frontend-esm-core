@@ -69,6 +69,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.29.2":
+  version: 7.29.10
+  resolution: "@babel/runtime@npm:7.29.10"
+  checksum: 10/883bb39a09f4773cf46cdd7ba0080ef6b30ff996a4ed21f8d34511ec0836122e697716533da5efc9b5016f763110b19aa07e81cec6e2036fe72cb26aad556af2
+  languageName: node
+  linkType: hard
+
 "@babel/types@npm:^7.29.0":
   version: 7.29.0
   resolution: "@babel/types@npm:7.29.0"
@@ -950,7 +957,7 @@ __metadata:
     dayjs: "npm:^1.11.10"
     framer-motion: "npm:^12.42.2"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     lucide-react: "npm:^0.546.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1026,7 +1033,7 @@ __metadata:
     dayjs: "npm:^1.11.10"
     framer-motion: "npm:^11.18.2"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     lucide-react: "npm:^0.469.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1146,7 +1153,7 @@ __metadata:
     dayjs: "npm:^1.11.10"
     fuzzy: "npm:^0.1.3"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1213,7 +1220,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1281,7 +1288,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1353,7 +1360,7 @@ __metadata:
     embla-carousel-autoplay: "npm:^8.6.0"
     framer-motion: "npm:^11.18.2"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     lucide-react: "npm:^0.469.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1427,7 +1434,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-ace: "npm:^15.0.0"
@@ -1501,7 +1508,7 @@ __metadata:
     dayjs: "npm:^1.11.10"
     framer-motion: "npm:^11.18.2"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     lucide-react: "npm:^0.469.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1580,7 +1587,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     lucide-react: "npm:^0.546.0"
     motion: "npm:^12.23.24"
     react: "npm:^18.3.1"
@@ -1656,7 +1663,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -1727,7 +1734,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     lodash-es: "npm:^4.17.21"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1800,7 +1807,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.11"
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     lodash-es: "npm:^4.17.21"
     lucide-react: "npm:^0.546.0"
     motion: "npm:^12.23.24"
@@ -1876,7 +1883,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     lucide-react: "npm:^0.469.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -1948,7 +1955,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^20.11.6"
-    i18next: "npm:^25.5.3"
+    i18next: "npm:^25.10.10"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.0.0"
@@ -12926,6 +12933,20 @@ __metadata:
     typescript:
       optional: true
   checksum: 10/6c73d964f2a98b1aa2c2717fe6da66fc265bcbbc5fcd52b2bfff51ff013d30d4f7d7449c4eb7f464d27af43e2e73f2e7f1d46a144d731bd3bdb1385d4c199e4c
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^25.10.10":
+  version: 25.10.10
+  resolution: "i18next@npm:25.10.10"
+  dependencies:
+    "@babel/runtime": "npm:^7.29.2"
+  peerDependencies:
+    typescript: ^5 || ^6
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/ee4f6ba360902a2f0550cfeef234c9e68a67487b575d204e89bdf2f2db647934aa3900a39c64174b9201a8979e455d0bf8f56b57934c34fc8f9aa3b430cb152d
   languageName: node
   linkType: hard
 
