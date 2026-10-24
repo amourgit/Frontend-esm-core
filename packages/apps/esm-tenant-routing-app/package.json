@@ -59,7 +59,7 @@
     "@egen-civitas/esm-translations": "^1.0.1",
     "@egen-civitas/esm-utils": "^1.0.2",
     "dayjs": "^1.11.10",
-    "i18next": "^25.5.3",
+    "i18next": "^25.10.10",
     "react-is": "^17.0.2",
     "rxjs": "^7.8.1",
     "single-spa": "^6.0.0",
