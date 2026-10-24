@@ -1,6 +1,7 @@
 import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import rootComponent from './root.component';
+import HomeAppToolbar from './topbar/home-app-toolbar.extension';
 
 // =============================================================================
 //  ESM HOME APP — Point d'entrée
@@ -29,3 +30,6 @@ export const root = getSyncLifecycle(rootComponent, options);
 // Extension de navigation (slot `topbar-level2-nav`) : ne rend rien. Seule sa `meta` (déclarée dans
 // routes.json) est lue par la TopBar du niveau 2 — c'est le bouton « Accueil » de la navigation.
 export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'home-nav-entry' });
+
+// Contenu de la TopBar de niveau 2 propre à l'app (slot `top-nav-app-slot`) : identité + actions de l'app Accueil.
+export const appToolbar = getSyncLifecycle(HomeAppToolbar, { ...options, featureName: 'home-app-toolbar' });

@@ -1,4 +1,5 @@
 {
+  "homeAppName": "Home",
   "showcaseAssistantModesDescription": "The assistant's 4 modes (styleguide data: name, tagline, principle, example, color classes).",
   "showcaseAutocompleteDescription": "Material 3 capsule — single or multiple selection (chips), on-the-fly creation, loading state, customizable rendering and texts.",
   "showcaseCardModalDescription": "Generic modal whose container is any of the card variants above — freely combine variant, animation, and draggable.",

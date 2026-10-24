@@ -22,6 +22,14 @@
         "label": "Accueil",
         "route": "home"
       }
+    },
+    {
+      "name": "home-app-toolbar",
+      "slot": "top-nav-app-slot",
+      "component": "appToolbar",
+      "online": true,
+      "offline": false,
+      "order": 0
     }
   ]
 }
