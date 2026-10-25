@@ -434,7 +434,7 @@ export function SupremeIntranetTopBar({
               </>
             )}
 
-            {/* Notifications et Paramètres : fenêtres d'outils du rail droit (esm-global-tools-app). */}
+            {/* Notifications et Paramètres : fenêtres d'outils du rail droit (esm-notifications-app, esm-settings-app). */}
 
             {/* 6. Plein écran & 7. Thème — services réels */}
             <FullscreenOption className={hideOnSearch} />

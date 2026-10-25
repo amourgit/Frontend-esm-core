@@ -1,9 +1,9 @@
 {
-  "name": "@egen/esm-global-tools-app",
+  "name": "@egen/esm-notifications-app",
   "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "Outils globaux du shell : fenêtres d’outils du rail droit (Notifications, Paramètres), visibles dans toutes les apps",
-  "browser": "dist/egen-esm-global-tools-app.js",
+  "description": "Notifications : fenêtre d’outils du rail droit (panneau, pastille) et slot notifications-nav-menu-slot où les apps injectent leurs entrées",
+  "browser": "dist/egen-esm-notifications-app.js",
   "main": "src/index.ts",
   "source": true,
   "scripts": {
@@ -30,12 +30,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amourgit/Frontend-esm-core.git",
-    "directory": "packages/apps/esm-global-tools-app"
+    "directory": "packages/apps/esm-notifications-app"
   },
   "bugs": {
     "url": "https://github.com/amourgit/Frontend-esm-core/issues"
   },
-  "homepage": "https://github.com/amourgit/Frontend-esm-core/tree/main/packages/apps/esm-global-tools-app#readme",
+  "homepage": "https://github.com/amourgit/Frontend-esm-core/tree/main/packages/apps/esm-notifications-app#readme",
   "publishConfig": {
     "access": "public"
   },
@@ -57,7 +57,6 @@
     "@egen-civitas/esm-state": "1.x",
     "@egen-civitas/esm-styleguide": "1.x",
     "@egen-civitas/esm-tenant": "1.x",
-    "@egen-civitas/esm-theme": "1.x",
     "@egen-civitas/esm-utils": "1.x",
     "dayjs": "1.x",
     "lucide-react": "1.x",
@@ -100,7 +99,6 @@
     "@egen-civitas/esm-state": "^1.0.2",
     "@egen-civitas/esm-styleguide": "^1.13.0",
     "@egen-civitas/esm-tenant": "^1.0.2",
-    "@egen-civitas/esm-theme": "^1.0.1",
     "@egen-civitas/esm-translations": "^1.0.1",
     "@egen-civitas/esm-utils": "^1.0.2",
     "dayjs": "^1.11.10",
