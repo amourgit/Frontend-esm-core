@@ -1,26 +1,8 @@
 {
   "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
-  "pages": [
-    {
-      "component": "root",
-      "routeRegex": "^(?!(?:login|logout|change-password)/?)",
-      "online": true,
-      "offline": true,
-      "containerDomId": "egen-ai-assistant-app-container"
-    }
-  ],
   "extensions": [
     {
-      "name": "global-notifications",
-      "slot": "shell-rail-right-slot",
-      "component": "notificationsPanel",
-      "online": true,
-      "offline": true,
-      "order": 10,
-      "meta": { "title": "Notifications", "titleKey": "notifications", "icon": "Bell", "order": 10 }
-    },
-    {
-      "name": "global-settings",
+      "name": "settings",
       "slot": "shell-rail-right-slot",
       "component": "settingsPanel",
       "online": true,
@@ -29,7 +11,7 @@
       "meta": { "title": "Paramètres", "titleKey": "settings", "icon": "Settings", "order": 90 }
     },
     {
-      "name": "global-settings-appearance",
+      "name": "settings-appearance",
       "slot": "global-settings-slot",
       "component": "appearanceSection",
       "online": true,
@@ -37,7 +19,7 @@
       "order": 0
     },
     {
-      "name": "global-settings-language",
+      "name": "settings-language",
       "slot": "global-settings-slot",
       "component": "languageSection",
       "online": true,

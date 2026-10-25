@@ -28,7 +28,7 @@ package.
 | `top-nav-trailing-slot`  | Zone droite, tout à la fin          | — (ouvert, libre)                                  |
 | `app-menu-slot`          | Grille du panneau "Applications"    | `esm-offline-tools-app`                            |
 | `quick-access-slot`      | Liste du panneau "Raccourcis"       | — (ouvert, libre)                                  |
-| `notifications-nav-menu-slot` | Zone droite « Notifications » (rail droit, rendu par `esm-global-tools-app`) | — (ouvert, libre) |
+| `notifications-nav-menu-slot` | Zone droite « Notifications » (rail droit, rendu par `esm-notifications-app`) | — (ouvert, libre) |
 | `user-panel-slot`        | Panneau utilisateur (haut)          | Cette app (profil, langue), `esm-login-app`, `esm-offline-tools-app` |
 | `user-panel-bottom-slot` | Panneau utilisateur (bas)           | `esm-login-app`                                    |
 
