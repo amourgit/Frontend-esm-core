@@ -5,20 +5,19 @@
 //  injectées par esm-theme depuis theme.default.json (voir
 //  docs/guide-composants-et-theme.md §5 — RÈGLE D'OR).
 //
-//  Contrairement à la topbar, le footer n'est PAS une surface flottante avec
-//  flou (`--panel-*`) : c'est une bande pleine.
-//
-//  EXCEPTION VOULUE à la règle « zéro valeur en dur » : le fond du footer est
-//  toujours blanc (#fff), quel que soit le thème, et les textes prennent la
-//  couleur `--footer-text-color` (posée par le composant depuis la config
-//  `appearance.textColor`, noire par défaut).
+//  Le footer est désormais TRANSPARENT : il s'intègre directement dans
+//  le fond de la page (image, dégradé, couleur sombre…) sans imposer
+//  de surface blanche. Les textes sont en blanc avec des niveaux
+//  d'opacité différenciés selon leur importance hiérarchique :
+//    • 100 % → companyName (identité, élément principal)
+//    •  80 % → tagline, liens secondaires
+//    •  60 % → séparateur (·), copyright (informations accessoires)
 // =============================================================================
 
 .footerWrapper {
   width: 100%;
-  background: #ffffff;
-  color: var(--footer-text-color, #000000);
-  border-top: 1px solid var(--colors-border-divider, #e0e0e0);
+  background: transparent;
+  color: var(--footer-text-color, rgba(255, 255, 255, 1));
   padding: 0.75rem 1.5rem;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -36,7 +35,7 @@
   font-family: var(--typography-font-family-sans, inherit);
   font-size: var(--typography-font-size-xs-size, 0.75rem);
   line-height: var(--typography-font-size-xs-line-height, 1.2);
-  color: var(--footer-text-color, #000000);
+  color: var(--footer-text-color, rgba(255, 255, 255, 1));
 }
 
 // ─── Section gauche — identité de l'entreprise ───────────────────────────────
@@ -50,7 +49,8 @@
 
 .companyName {
   font-weight: var(--typography-font-weight-semibold, 600);
-  color: var(--footer-text-color, #000000);
+  // 100 % — élément principal, identité de l'entreprise
+  color: var(--footer-text-color, rgba(255, 255, 255, 1));
   text-decoration: none;
   white-space: nowrap;
 
@@ -59,10 +59,11 @@
 
     &:hover {
       text-decoration: underline;
+      opacity: 0.85;
     }
 
     &:focus-visible {
-      outline: 2px solid var(--colors-border-ring, #0f62fe);
+      outline: 2px solid rgba(255, 255, 255, 0.7);
       outline-offset: 2px;
       border-radius: var(--border-radius-xs, 2px);
     }
@@ -70,12 +71,13 @@
 }
 
 .dot {
-  color: var(--footer-text-color, #000000);
-  opacity: 0.6;
+  // 60 % — séparateur visuel, rôle purement décoratif
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .tagline {
-  color: var(--footer-text-color, #000000);
+  // 80 % — accroche secondaire, moins prioritaire que le nom
+  color: rgba(255, 255, 255, 0.8);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -96,17 +98,19 @@
 }
 
 .footerLink {
-  color: var(--footer-text-color, #000000);
+  // 80 % — liens secondaires, importance intermédiaire
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   white-space: nowrap;
-  transition: var(--transitions-colors, color 200ms);
+  transition: var(--transitions-colors, color 200ms, opacity 200ms);
 
   &:hover {
+    color: rgba(255, 255, 255, 1);
     text-decoration: underline;
   }
 
   &:focus-visible {
-    outline: 2px solid var(--colors-border-ring, #0f62fe);
+    outline: 2px solid rgba(255, 255, 255, 0.7);
     outline-offset: 2px;
     border-radius: var(--border-radius-xs, 2px);
   }
@@ -114,7 +118,8 @@
 
 .copyright {
   white-space: nowrap;
-  color: var(--footer-text-color, #000000);
+  // 60 % — information légale accessoire, la moins saillante
+  color: rgba(255, 255, 255, 0.6);
 }
 
 // ─── Responsive — empilement vertical centré sur mobile ──────────────────────

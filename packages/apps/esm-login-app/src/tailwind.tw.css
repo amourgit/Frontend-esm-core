@@ -251,7 +251,8 @@
   left: calc(0% - var(--border-width) / 2);
   padding: var(--border-width);
   box-sizing: border-box;
-  background: conic-gradient(
+  background:
+    conic-gradient(
       from var(--angle-1) at 50% 50%,
       var(--fg-50) 0%,
       transparent 5% 40%,
@@ -329,6 +330,7 @@
   display: flex;
   position: relative;
   width: 100%;
+  height: 2.75rem; /* hauteur fixe — empêche toute variation selon les enfants (Lock vs Eye button) */
   align-items: center;
   gap: 0.5rem;
   border-radius: 9999px;
@@ -365,7 +367,8 @@
   left: calc(0% - clamp(1px, 0.0625em, 4px) / 2);
   padding: clamp(1px, 0.0625em, 4px);
   box-sizing: border-box;
-  background: conic-gradient(
+  background:
+    conic-gradient(
       from var(--angle-1) at 50% 50%,
       var(--fg-50) 0%,
       transparent 5% 40%,
