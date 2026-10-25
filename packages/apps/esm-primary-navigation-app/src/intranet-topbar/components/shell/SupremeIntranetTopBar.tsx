@@ -5,7 +5,6 @@ import {
   ChevronRight,
   Home,
   CirclePlus,
-  Settings,
   LayoutGrid,
   Globe,
   Check,
@@ -35,7 +34,6 @@ import {
   Compass,
   PanelLeft,
   PanelLeftClose,
-  Bell,
   Scan,
   CheckSquare,
   GitFork,
@@ -68,7 +66,6 @@ import {
   AppsMenuOption,
   FullscreenOption,
   LanguageOption,
-  NotificationsOption,
   QuickAccessOption,
   ThemeToggleOption,
   UserMenuOption,
@@ -91,9 +88,8 @@ export interface SupremeIntranetTopBarProps {
   onNotificationClick?: () => void;
   onQuickAction?: (actionName: string) => void;
 
-  // Menus GED (maquettes, sans service réel dans le core) — masqués par défaut
+  // Menu GED (maquette, sans service réel dans le core) — masqué par défaut
   showCreateMenu?: boolean;
-  showSettingsMenu?: boolean;
 }
 
 export function SupremeIntranetTopBar({
@@ -107,7 +103,6 @@ export function SupremeIntranetTopBar({
   onNotificationClick,
   onQuickAction,
   showCreateMenu = false,
-  showSettingsMenu = false,
 }: SupremeIntranetTopBarProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -375,13 +370,6 @@ export function SupremeIntranetTopBar({
               className={hideOnSearch}
             />
 
-            {/* 5. Notifications — service réel (notifications-nav-menu-slot) */}
-            <NotificationsOption
-              open={activeMenu === 'notificationsMenu'}
-              onToggle={() => handleMenuClick('notificationsMenu')}
-              className={hideOnSearch}
-            />
-
             {showCreateMenu && (
               <>
                 {/* 5. Plus / Create Icon */}
@@ -446,66 +434,7 @@ export function SupremeIntranetTopBar({
               </>
             )}
 
-            {showSettingsMenu && (
-              <>
-                {/* 6. Settings Gear Icon */}
-                <div className={`relative overflow-visible ${isSearchOpen ? 'hidden lg:flex' : 'hidden sm:flex'}`}>
-                  <button
-                    type="button"
-                    onClick={() => handleMenuClick('settings')}
-                    className="p-1 text-slate-300 hover:text-teal-400 transition-colors cursor-pointer bg-transparent border-none flex items-center justify-center overflow-visible"
-                    title="Paramètres de l'intranet"
-                    aria-label="Paramètres"
-                  >
-                    <Settings className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[1.8]" />
-                  </button>
-
-                  {/* Settings Dropdown via WaterGlassModal */}
-                  {activeMenu === 'settings' && (
-                    <WaterGlassModal
-                      align="right"
-                      width="w-[calc(100vw-24px)] sm:w-52 max-w-xs"
-                      header={
-                        <span className="text-[10px] font-bold text-teal-300 uppercase tracking-wider">
-                          Configuration
-                        </span>
-                      }
-                      optionsComponent={
-                        <div className="space-y-1">
-                          <button
-                            onClick={() => {
-                              setActiveMenu(null);
-                              notify("Préférences d'affichage");
-                            }}
-                            className="w-full text-left px-3 py-2 rounded-xl text-slate-200/90 hover:bg-white/[0.06] hover:text-white cursor-pointer border-none text-[11px] transition-all"
-                          >
-                            Préférences d'affichage
-                          </button>
-                          <button
-                            onClick={() => {
-                              setActiveMenu(null);
-                              notify('Paramètres de sécurité & accès');
-                            }}
-                            className="w-full text-left px-3 py-2 rounded-xl text-slate-200/90 hover:bg-white/[0.06] hover:text-white cursor-pointer border-none text-[11px] transition-all"
-                          >
-                            Permissions & Sécurité
-                          </button>
-                          <button
-                            onClick={() => {
-                              setActiveMenu(null);
-                              notify("À propos d'EGEN v4.2 — Écosystème Gouvernemental");
-                            }}
-                            className="w-full text-left px-3 py-2 rounded-xl text-slate-200/90 hover:bg-white/[0.06] hover:text-white cursor-pointer border-none text-[11px] transition-all"
-                          >
-                            À propos d'EGEN
-                          </button>
-                        </div>
-                      }
-                    />
-                  )}
-                </div>
-              </>
-            )}
+            {/* Notifications et Paramètres : fenêtres d'outils du rail droit (esm-global-tools-app). */}
 
             {/* 6. Plein écran & 7. Thème — services réels */}
             <FullscreenOption className={hideOnSearch} />
