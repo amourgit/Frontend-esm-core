@@ -15,6 +15,7 @@ This repository contains the application-specific frontend modules for ESM Core.
 A set of frontend modules provides the core technical functionality of the application.
 
 - [@egen/esm-devtools-app](packages/apps/esm-devtools-app)
+- [@egen/esm-global-tools-app](packages/apps/esm-global-tools-app)
 - [@egen/esm-help-menu-app](packages/apps/esm-help-menu-app)
 - [@egen/esm-implementer-tools-app](packages/apps/esm-implementer-tools-app)
 - [@egen/esm-login-app](packages/apps/esm-login-app)
