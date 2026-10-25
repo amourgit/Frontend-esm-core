@@ -2,7 +2,7 @@ import React from 'react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
-import { type LoggedInUser, type Session, useSession } from '@egen-civitas/esm-framework';
+import { type LoggedInUser, type Session, showSnackbar, useSession } from '@egen-civitas/esm-framework';
 import ChangeLanguageModal from './change-language.modal';
 
 const mockUser = {
@@ -21,6 +21,7 @@ vi.mock('@egen-civitas/esm-framework', async (importOriginal) => {
   return {
     ...actual,
     useSession: vi.fn(),
+    showSnackbar: vi.fn(),
   };
 });
 
@@ -30,6 +31,7 @@ vi.mock('./change-language.resource', () => ({
 }));
 
 const mockUseSession = vi.mocked(useSession);
+const mockShowSnackbar = vi.mocked(showSnackbar);
 
 describe(`Change Language Modal`, () => {
   beforeEach(() => {
@@ -114,5 +116,37 @@ describe(`Change Language Modal`, () => {
 
     const submitButton = screen.getByRole('button', { name: /change/i });
     expect(submitButton).toBeDisabled();
+  });
+
+  it('should use the session-only endpoint when the default-language checkbox is unchecked', async () => {
+    const user = userEvent.setup();
+    mockUpdateUserProperties.mockClear();
+    mockUpdateSessionLocale.mockClear();
+
+    render(<ChangeLanguageModal close={vi.fn()} />);
+
+    await user.click(screen.getByRole('checkbox'));
+    await user.click(screen.getByRole('radio', { name: /english/i }));
+    await user.click(screen.getByRole('button', { name: /change/i }));
+
+    expect(mockUpdateSessionLocale).toHaveBeenCalledWith('en', expect.anything());
+    expect(mockUpdateUserProperties).not.toHaveBeenCalled();
+  });
+
+  it('should stop loading and report the error when the language change fails', async () => {
+    const user = userEvent.setup();
+    mockShowSnackbar.mockClear();
+    mockUpdateUserProperties.mockReset();
+    mockUpdateUserProperties.mockRejectedValueOnce(new Error('Network down'));
+
+    render(<ChangeLanguageModal close={vi.fn()} />);
+
+    await user.click(screen.getByRole('radio', { name: /english/i }));
+    await user.click(screen.getByRole('button', { name: /change/i }));
+
+    // Avant le correctif, le bouton restait indéfiniment sur « Changing language... » sans aucun message.
+    expect(await screen.findByRole('button', { name: /^change$/i })).toBeEnabled();
+    expect(screen.queryByText(/changing language.../i)).not.toBeInTheDocument();
+    expect(mockShowSnackbar).toHaveBeenCalledWith(expect.objectContaining({ kind: 'error', subtitle: 'Network down' }));
   });
 });

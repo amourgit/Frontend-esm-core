@@ -7,6 +7,7 @@
   "changeDefaultLocale": "Update your default locale",
   "changeDefaultLocaleExplanation": "Leave this unchecked to change language for this session only",
   "changeLanguage": "Change language",
+  "changeLanguageError": "Could not change the language",
   "changingLanguage": "Changing language",
   "clearSearch": "Effacer la recherche",
   "enterFullscreen": "Plein écran",
@@ -30,6 +31,7 @@
   "switchContext": "Changer de contexte : {{name}}",
   "switchToDarkMode": "Passer en mode sombre",
   "switchToLightMode": "Passer en mode clair",
+  "tryAgain": "Please try again",
   "userMenu": "User menu",
   "userMenuOptions": "User menu options",
   "userMenuTooltip": "My Account"

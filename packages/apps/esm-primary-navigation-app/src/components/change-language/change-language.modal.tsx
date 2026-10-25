@@ -12,7 +12,7 @@ import {
   RadioButton,
   RadioButtonGroup,
 } from '@carbon/react';
-import { useAbortController, useSession } from '@egen-civitas/esm-framework';
+import { showSnackbar, useAbortController, useSession } from '@egen-civitas/esm-framework';
 import { updateSessionLocale, updateUserProperties } from './change-language.resource';
 import styles from './change-language.scss';
 
@@ -53,31 +53,45 @@ export default function ChangeLanguageModal({ close }: ChangeLanguageModalProps)
   const [isChangingLanguage, setIsChangingLanguage] = useState(false);
   const ac = useAbortController();
 
-  const handleSubmit = useCallback(() => {
-    setIsChangingLanguage(true);
+  const handleSubmit = useCallback(async () => {
+    if (!selectedLocale || selectedLocale === session?.locale) {
+      return;
+    }
 
-    if (selectedLocale && selectedLocale !== session?.locale) {
-      const formattedLocale = selectedLocale.replace(/-/gi, '_');
+    setIsChangingLanguage(true);
+    const formattedLocale = selectedLocale.replace(/-/gi, '_');
+
+    try {
       if (shouldChangeDefaultLocale) {
-        updateUserProperties(
-          user.uuid,
+        await updateUserProperties(
+          user?.uuid,
           {
-            ...(user.userProperties ?? {}),
+            ...(user?.userProperties ?? {}),
             defaultLocale: formattedLocale,
           },
           ac,
         );
       } else {
-        updateSessionLocale(formattedLocale, ac);
+        await updateSessionLocale(formattedLocale, ac);
       }
+      // Succès : la ressource recharge la page pour que toutes les données reviennent dans la nouvelle langue.
+    } catch (error) {
+      if (ac.signal.aborted) {
+        return;
+      }
+      // Échec : sans ceci le bouton restait indéfiniment en chargement et l'utilisateur n'avait aucun retour.
+      setIsChangingLanguage(false);
+      showSnackbar({
+        kind: 'error',
+        isLowContrast: false,
+        title: t('changeLanguageError', 'Could not change the language'),
+        subtitle: error instanceof Error && error.message ? error.message : t('tryAgain', 'Please try again'),
+      });
     }
-  }, [user.userProperties, user.uuid, selectedLocale, shouldChangeDefaultLocale]);
+  }, [ac, selectedLocale, session?.locale, shouldChangeDefaultLocale, t, user?.userProperties, user?.uuid]);
 
   const languageNames = useMemo(
-    () =>
-      Object.fromEntries(
-        allowedLocales.map((locale) => [locale, capitalize(getDisplayName(locale))]),
-      ),
+    () => Object.fromEntries(allowedLocales.map((locale) => [locale, capitalize(getDisplayName(locale))])),
     [allowedLocales],
   );
 
