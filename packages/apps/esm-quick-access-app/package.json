@@ -1,0 +1,110 @@
+{
+  "name": "@egen/esm-quick-access-app",
+  "version": "1.0.0",
+  "license": "MPL-2.0",
+  "description": "Accès rapide : fenêtre d’outils du rail droit (raccourcis, informations rapides) et slot quick-access-section-slot où les apps injectent leurs sections",
+  "browser": "dist/egen-esm-quick-access-app.js",
+  "main": "src/index.ts",
+  "source": true,
+  "scripts": {
+    "start": "egen develop",
+    "serve": "rspack serve --mode=development",
+    "debug": "npm run serve",
+    "test": "cross-env TZ=UTC vitest run --passWithNoTests",
+    "test:watch": "cross-env TZ=UTC vitest watch",
+    "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests",
+    "build": "rspack --mode=production",
+    "build:development": "rspack --mode=development",
+    "analyze": "rspack --mode=production --env analyze=true",
+    "typescript": "tsc",
+    "lint": "eslint src --ext ts,tsx",
+    "extract-translations": "i18next 'src/**/*.component.tsx' --config='../../../tools/i18next-parser.config.js'"
+  },
+  "keywords": [
+    "egen",
+    "microfrontends"
+  ],
+  "browserslist": [
+    "extends browserslist-config-egen"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amourgit/Frontend-esm-core.git",
+    "directory": "packages/apps/esm-quick-access-app"
+  },
+  "bugs": {
+    "url": "https://github.com/amourgit/Frontend-esm-core/issues"
+  },
+  "homepage": "https://github.com/amourgit/Frontend-esm-core/tree/main/packages/apps/esm-quick-access-app#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@carbon/react": "1.x",
+    "@egen-civitas/esm-api": "1.x",
+    "@egen-civitas/esm-config": "1.x",
+    "@egen-civitas/esm-context": "1.x",
+    "@egen-civitas/esm-data-api": "1.x",
+    "@egen-civitas/esm-dynamic-loading": "2.x",
+    "@egen-civitas/esm-error-handling": "1.x",
+    "@egen-civitas/esm-extensions": "1.x",
+    "@egen-civitas/esm-feature-flags": "1.x",
+    "@egen-civitas/esm-framework": "1.x",
+    "@egen-civitas/esm-globals": "1.x",
+    "@egen-civitas/esm-navigation": "1.x",
+    "@egen-civitas/esm-react-utils": "1.x",
+    "@egen-civitas/esm-routes": "1.x",
+    "@egen-civitas/esm-state": "1.x",
+    "@egen-civitas/esm-styleguide": "1.x",
+    "@egen-civitas/esm-tenant": "1.x",
+    "@egen-civitas/esm-utils": "1.x",
+    "dayjs": "1.x",
+    "lucide-react": "1.x",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "react-i18next": "16.x",
+    "rxjs": "7.x",
+    "single-spa": "6.x",
+    "swr": "2.x"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "happy-dom": "^21.0.4",
+    "i18next": "^25.10.10",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^16.6.6",
+    "react-is": "^17.0.2",
+    "sass": "^1.106.0",
+    "vite": "^7.3.7",
+    "vitest": "^5.0.5"
+  },
+  "dependencies": {
+    "@carbon/react": "^1.92.1",
+    "@egen-civitas/esm-api": "^1.1.3",
+    "@egen-civitas/esm-config": "^1.0.2",
+    "@egen-civitas/esm-context": "^1.0.1",
+    "@egen-civitas/esm-data-api": "^1.0.2",
+    "@egen-civitas/esm-dynamic-loading": "^2.0.0",
+    "@egen-civitas/esm-error-handling": "^1.0.1",
+    "@egen-civitas/esm-expression-evaluator": "^1.0.1",
+    "@egen-civitas/esm-extensions": "^1.4.0",
+    "@egen-civitas/esm-feature-flags": "^1.0.1",
+    "@egen-civitas/esm-framework": "^1.3.0",
+    "@egen-civitas/esm-globals": "^1.0.2",
+    "@egen-civitas/esm-navigation": "^1.0.2",
+    "@egen-civitas/esm-offline": "^1.0.2",
+    "@egen-civitas/esm-react-utils": "^1.0.5",
+    "@egen-civitas/esm-routes": "^1.0.2",
+    "@egen-civitas/esm-state": "^1.0.2",
+    "@egen-civitas/esm-styleguide": "^1.16.0",
+    "@egen-civitas/esm-tenant": "^1.0.2",
+    "@egen-civitas/esm-translations": "^1.0.1",
+    "@egen-civitas/esm-utils": "^1.0.2",
+    "dayjs": "^1.11.10",
+    "lucide-react": "^1.61.0",
+    "rxjs": "^7.8.1",
+    "single-spa": "^6.0.0",
+    "swr": "^2.2.0"
+  }
+}

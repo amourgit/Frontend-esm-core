@@ -1,0 +1,30 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "quick-access",
+      "slot": "shell-rail-right-slot",
+      "component": "quickAccessPanel",
+      "online": true,
+      "offline": true,
+      "order": 20,
+      "meta": { "title": "Accès rapide", "titleKey": "quickAccess", "icon": "Zap", "order": 20 }
+    },
+    {
+      "name": "quick-access-shortcuts",
+      "slot": "quick-access-section-slot",
+      "component": "shortcutsSection",
+      "online": true,
+      "offline": true,
+      "order": 0
+    },
+    {
+      "name": "quick-access-glance",
+      "slot": "quick-access-section-slot",
+      "component": "glanceSection",
+      "online": true,
+      "offline": true,
+      "order": 1
+    }
+  ]
+}
