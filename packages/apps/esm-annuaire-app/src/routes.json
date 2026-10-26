@@ -10,6 +10,20 @@
   ],
   "extensions": [
     {
+      "name": "annuaire-rail",
+      "slot": "shell-rail-left-slot",
+      "component": "railPanel",
+      "online": true,
+      "offline": false,
+      "order": 10,
+      "meta": {
+        "title": "Annuaire",
+        "icon": "Users",
+        "order": 10,
+        "global": true
+      }
+    },
+    {
       "name": "annuaire-nav-contacts",
       "slot": "topbar-level2-nav",
       "component": "navEntry",

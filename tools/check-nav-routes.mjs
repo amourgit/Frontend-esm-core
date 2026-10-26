@@ -6,6 +6,7 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const SLOT = 'topbar-level2-nav';
+const RAIL_SLOTS = ['shell-rail-left-slot', 'shell-rail-bottom-slot', 'shell-rail-right-slot'];
 const appsDir = 'packages/apps';
 const norm = (r) => String(r).replace(/^\/+|\/+$/g, '');
 
@@ -15,10 +16,14 @@ const routesFiles = readdirSync(appsDir)
 
 const pageRoutes = [];
 const entries = [];
+const railEntries = [];
 for (const file of routesFiles) {
   const json = JSON.parse(readFileSync(file, 'utf8'));
   for (const p of json.pages ?? []) if (typeof p.route === 'string') pageRoutes.push(norm(p.route));
-  for (const e of json.extensions ?? []) if (e.slot === SLOT) entries.push({ file, e });
+  for (const e of json.extensions ?? []) {
+    if (e.slot === SLOT) entries.push({ file, e });
+    if (RAIL_SLOTS.includes(e.slot)) railEntries.push({ file, e });
+  }
 }
 
 const errors = [];
@@ -48,8 +53,19 @@ for (const { file, e } of entries) {
   }
 }
 
+// Options des rails (fenêtres d'outils) : `meta` exploitable par le shell (ToolWindowMeta).
+for (const { file, e } of railEntries) {
+  const m = e.meta ?? {};
+  if (typeof m.title !== 'string' || !m.title) errors.push(`${file}: \"${e.name}\" (${e.slot}) — meta.title manquant`);
+  if (m.icon !== undefined && typeof m.icon !== 'string') errors.push(`${file}: \"${e.name}\" — meta.icon doit être une chaîne`);
+  if (m.order !== undefined && !Number.isFinite(m.order)) errors.push(`${file}: \"${e.name}\" — meta.order doit être un nombre`);
+  if (m.global !== undefined && typeof m.global !== 'boolean') errors.push(`${file}: \"${e.name}\" — meta.global doit être un booléen`);
+}
+
 if (errors.length) {
   console.error(`Navigation incohérente (${errors.length}) :\n- ${errors.join('\n- ')}`);
   process.exit(1);
 }
-console.log(`Navigation OK : ${entries.length} entrée(s) sur ${routesFiles.length} routes.json.`);
+console.log(
+  `Navigation OK : ${entries.length} entrée(s) de TopBar et ${railEntries.length} option(s) de rail sur ${routesFiles.length} routes.json.`,
+);

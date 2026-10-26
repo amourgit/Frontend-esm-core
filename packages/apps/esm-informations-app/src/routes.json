@@ -10,6 +10,20 @@
   ],
   "extensions": [
     {
+      "name": "informations-rail",
+      "slot": "shell-rail-left-slot",
+      "component": "railPanel",
+      "online": true,
+      "offline": false,
+      "order": 20,
+      "meta": {
+        "title": "News",
+        "icon": "Newspaper",
+        "order": 20,
+        "global": true
+      }
+    },
+    {
       "name": "informations-nav-news-1",
       "slot": "topbar-level2-nav",
       "component": "navEntry",

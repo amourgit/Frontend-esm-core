@@ -1,6 +1,7 @@
 import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import rootComponent from './root.component';
+import RailPanel from './rail-panel.component';
 
 // =============================================================================
 //  ESM INFORMATIONS APP — Point d'entrée
@@ -28,3 +29,7 @@ export const root = getSyncLifecycle(rootComponent, options);
 // Extension de navigation (slot `topbar-level2-nav`) : ne rend rien. Seule sa
 // `meta` (déclarée dans routes.json) est lue par la TopBar du niveau 2.
 export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'informations-nav-entry' });
+
+// Option globale du rail gauche (slot `shell-rail-left-slot`, `meta.global`) : toujours visible,
+// quelle que soit l'app active ; ses sous-options se chargent dans la zone gauche.
+export const railPanel = getSyncLifecycle(RailPanel, { ...options, featureName: 'informations-rail' });
