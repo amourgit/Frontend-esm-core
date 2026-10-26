@@ -1,5 +1,0 @@
-@use '@egen-civitas/esm-styleguide/src/vars' as *;
-
-:global(.egen-breakpoint-gt-tablet) .mainContentContainer {
-  margin-left: var(--egen-sidenav-width);
-}

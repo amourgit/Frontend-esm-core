@@ -6,7 +6,6 @@ import { setupOffline } from './offline';
 import { setupSynchronizingOfflineActionsNotifications } from './offline-actions/synchronizing-notification';
 import offlineToolsComponent from './root.component';
 import offlineToolsLinkComponent from './offline-tools-app-menu-link.component';
-import offlineToolsNavItemsComponent from './nav/offline-tools-nav-menu.component';
 import offlineToolsConfirmationModalComponent from './components/confirmation.modal';
 import offlineToolsEntitiesCardComponent from './offline-entities/entities-overview-card.component';
 import offlineToolsActionsCardComponent from './offline-actions/offline-actions-overview-card.component';
@@ -15,7 +14,7 @@ import offlineToolsEntitiesComponent from './offline-entities/offline-entities.c
 import offlineToolsPageActionsComponent from './offline-actions/offline-actions-page.component';
 import offlineToolsEntityWidgetComponent from './offline-actions/offline-actions-entity-widget.component';
 import offlineToolsOptInButtonComponent from './offline-actions/offline-actions-mode-button.extension';
-import OfflineToolsNavLink from './nav/offline-tools-nav-link.component';
+import RailPanel from './rail-panel.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -29,10 +28,12 @@ export const offlineTools = getSyncLifecycle(offlineToolsComponent, options);
 
 export const offlineToolsLink = getSyncLifecycle(offlineToolsLinkComponent, options);
 
-export const offlineToolsNavItems = getSyncLifecycle(offlineToolsNavItemsComponent, {
-  featureName: 'nav-items',
-  moduleName,
-});
+// Option du rail gauche (slot `shell-rail-left-slot`) : ses sous-options se chargent dans la zone gauche.
+export const offlineToolsRail = getSyncLifecycle(RailPanel, { ...options, featureName: 'offline-tools-rail' });
+
+// Entrées de navigation (slot `topbar-level2-nav`) et enregistrement des pages (slot `offline-tools-page-slot`) :
+// ne rendent rien, seule leur `meta` (routes.json) est lue (sous-options du rail, TopBar niveau 2, page).
+export const offlineToolsNavEntry = getSyncLifecycle(() => null, { ...options, featureName: 'offline-tools-nav-entry' });
 
 export const offlineToolsConfirmationModal = getSyncLifecycle(offlineToolsConfirmationModalComponent, options);
 
@@ -40,24 +41,6 @@ export const offlineToolsConfirmationModal = getSyncLifecycle(offlineToolsConfir
 export const offlineToolsEntitiesCard = getSyncLifecycle(offlineToolsEntitiesCardComponent, options);
 
 export const offlineToolsActionsCard = getSyncLifecycle(offlineToolsActionsCardComponent, options);
-
-export const offlineToolsEntitiesLink = getSyncLifecycle(
-  () =>
-    OfflineToolsNavLink({
-      page: 'entities',
-      title: 'offlineEntities',
-    }),
-  options,
-);
-
-export const offlineToolsActionsLink = getSyncLifecycle(
-  () =>
-    OfflineToolsNavLink({
-      page: 'actions',
-      title: 'offlineActions',
-    }),
-  options,
-);
 
 export const offlineToolsActions = getSyncLifecycle(offlineToolsActionsComponent, options);
 

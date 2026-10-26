@@ -13,6 +13,83 @@
   ],
   "extensions": [
     {
+      "name": "offline-tools-rail",
+      "slot": "shell-rail-left-slot",
+      "component": "offlineToolsRail",
+      "online": true,
+      "offline": true,
+      "order": 30,
+      "meta": {
+        "title": "Outils hors ligne",
+        "titleKey": "offlineToolsAppMenuLink",
+        "icon": "Radio",
+        "order": 30
+      }
+    },
+    {
+      "name": "offline-tools-nav-home",
+      "slot": "topbar-level2-nav",
+      "component": "offlineToolsNavEntry",
+      "online": true,
+      "offline": true,
+      "order": 600,
+      "meta": {
+        "section": "offline-tools",
+        "sectionLabel": "Outils hors ligne",
+        "sectionLabelKey": "offlineToolsAppMenuLink",
+        "label": "Accueil",
+        "labelKey": "home",
+        "description": "Vue d'ensemble des données et actions hors ligne",
+        "icon": "House",
+        "route": "offline-tools",
+        "workspaces": [
+          "intranet"
+        ]
+      }
+    },
+    {
+      "name": "offline-tools-nav-entities",
+      "slot": "topbar-level2-nav",
+      "component": "offlineToolsNavEntry",
+      "online": true,
+      "offline": true,
+      "order": 610,
+      "meta": {
+        "section": "offline-tools",
+        "sectionLabel": "Outils hors ligne",
+        "sectionLabelKey": "offlineToolsAppMenuLink",
+        "label": "Entités hors ligne",
+        "labelKey": "offlineEntities",
+        "description": "Données disponibles hors ligne par type d'entité",
+        "icon": "Folder",
+        "route": "offline-tools/entities",
+        "workspaces": [
+          "intranet"
+        ]
+      }
+    },
+    {
+      "name": "offline-tools-nav-actions",
+      "slot": "topbar-level2-nav",
+      "component": "offlineToolsNavEntry",
+      "online": true,
+      "offline": true,
+      "order": 620,
+      "meta": {
+        "section": "offline-tools",
+        "sectionLabel": "Outils hors ligne",
+        "sectionLabelKey": "offlineToolsAppMenuLink",
+        "label": "Actions hors ligne",
+        "labelKey": "offlineActions",
+        "description": "Actions en attente de synchronisation",
+        "icon": "ListTree",
+        "route": "offline-tools/actions",
+        "workspaces": [
+          "intranet"
+        ]
+      }
+    },
+    {
       "name": "offline-tools-link",
       "slot": "app-menu-slot",
       "component": "offlineToolsLink",
@@ -20,15 +97,9 @@
       "offline": true
     },
     {
-      "name": "offline-tools-nav-items",
-      "component": "offlineToolsNavItems",
-      "online": true,
-      "offline": true
-    },
-    {
       "name": "offline-tools-dashboard-patients-card",
       "slot": "offline-tools-dashboard-cards",
-      "component": "offlineToolsPatientsCard",
+      "component": "offlineToolsEntitiesCard",
       "online": true,
       "offline": true,
       "order": 0
@@ -42,12 +113,12 @@
       "order": 2
     },
     {
-      "name": "offline-tools-page-offline-patients-link",
+      "name": "offline-tools-page-entities",
       "slot": "offline-tools-page-slot",
-      "component": "offlineToolsPatientsLink",
+      "component": "offlineToolsNavEntry",
       "meta": {
-        "name": "patients",
-        "slot": "offline-tools-page-offline-patients-slot"
+        "name": "entities",
+        "slot": "offline-tools-page-offline-entities-slot"
       },
       "online": true,
       "offline": true
@@ -55,7 +126,7 @@
     {
       "name": "offline-tools-page-offline-actions-link",
       "slot": "offline-tools-page-slot",
-      "component": "offlineToolsActionsLink",
+      "component": "offlineToolsNavEntry",
       "meta": {
         "name": "actions",
         "slot": "offline-tools-page-offline-actions-slot"
@@ -71,27 +142,9 @@
       "offline": true
     },
     {
-      "name": "offline-tools-page-offline-patients",
-      "slot": "offline-tools-page-offline-patients-slot",
-      "component": "offlineToolsPatients",
-      "online": true,
-      "offline": true
-    },
-    {
-      "name": "offline-tools-page-actions-link",
-      "slot": "offline-tools-page-actions-slot",
-      "component": "offlineToolsPatientsLink",
-      "meta": {
-        "name": "actions",
-        "slot": "offline-tools-page-actions-slot"
-      },
-      "online": true,
-      "offline": true
-    },
-    {
-      "name": "offline-tools-page-actions",
-      "slot": "offline-tools-page-actions-slot",
-      "component": "offlineToolsPageActions",
+      "name": "offline-tools-page-offline-entities",
+      "slot": "offline-tools-page-offline-entities-slot",
+      "component": "offlineToolsEntities",
       "online": true,
       "offline": true
     },
