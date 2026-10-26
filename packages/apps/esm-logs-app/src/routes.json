@@ -1,0 +1,23 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "pages": [
+    {
+      "component": "root",
+      "routeRegex": "^(?!(?:login|logout|change-password)/?)",
+      "online": true,
+      "offline": true,
+      "containerDomId": "egen-logs-app-container"
+    }
+  ],
+  "extensions": [
+    {
+      "name": "logs",
+      "slot": "shell-rail-bottom-slot",
+      "component": "logsPanel",
+      "online": true,
+      "offline": true,
+      "order": 10,
+      "meta": { "title": "Logs système", "titleKey": "logs", "icon": "Terminal", "order": 10, "global": true, "rail": "left" }
+    }
+  ]
+}
