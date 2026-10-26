@@ -42,18 +42,6 @@
       "offline": true
     },
     {
-      "name": "nav-group",
-      "component": "navGroup",
-      "online": true,
-      "offline": true
-    },
-    {
-      "name": "dashboard",
-      "component": "dashboard",
-      "online": true,
-      "offline": true
-    },
-    {
       "name": "breadcrumb-item",
       "component": "breadcrumbItem",
       "online": true,

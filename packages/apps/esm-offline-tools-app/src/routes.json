@@ -149,37 +149,6 @@
       "offline": true
     },
     {
-      "name": "offline-tools-patient-chart-actions-widget",
-      "slot": "patient-chart-summary-dashboard-slot",
-      "component": "offlineToolsPatientChartActions",
-      "meta": {
-        "columnSpan": 4
-      },
-      "online": false,
-      "offline": true,
-      "order": 0
-    },
-    {
-      "name": "offline-tools-patient-chart-actions-dashboard",
-      "slot": "patient-chart-offline-actions-dashboard-slot",
-      "component": "offlineToolsPatientChartActions",
-      "online": true,
-      "offline": true,
-      "order": 0
-    },
-    {
-      "name": "offline-tools-patient-chart-actions-dashboard-link",
-      "slot": "patient-chart-dashboard-slot",
-      "component": "offlineToolsPatientChartActionsDashboardLink",
-      "meta": {
-        "columns": 1,
-        "title": "Offline Actions"
-      },
-      "order": 12,
-      "online": true,
-      "offline": true
-    },
-    {
       "name": "offline-tools-opt-in-offline-mode-button",
       "slot": "user-panel-slot",
       "component": "offlineToolsOptInButton",

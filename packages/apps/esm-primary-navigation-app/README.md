@@ -108,9 +108,6 @@ autre app les utilise depuis son propre `routes.json` en les pointant vers le
 slot de son choix :
 
 - **`link`** (`GenericLink`) — un lien simple, config `{ title, target }`.
-- **`nav-group`** (`NavGroup`) — un groupe accordéon qui crée son propre
-  sous-slot pour des liens enfants.
-- **`dashboard`** (`Dashboard`) — une extension "dashboard" standard EGEN.
 - **`breadcrumb-item`** (`BreadcrumbItem`) — voir ci-dessus.
 
 ## Configuration de l'app

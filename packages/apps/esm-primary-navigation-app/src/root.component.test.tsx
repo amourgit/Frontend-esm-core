@@ -9,7 +9,6 @@ import {
   useSession,
   type AssignedExtension,
   type Session,
-  useLeftNavStore,
 } from '@egen-civitas/esm-framework';
 import { isDesktop } from './utils';
 import { mockUser } from '../__mocks__/mock-user';
@@ -23,7 +22,6 @@ vi.mock('@egen-civitas/esm-framework', () => ({
   useConfig: vi.fn(),
   useAssignedExtensions: vi.fn(),
   useSession: vi.fn(),
-  useLeftNavStore: vi.fn(),
   interpolateUrl: vi.fn(),
 }));
 
@@ -54,7 +52,6 @@ vi.mock('./components/topbar/topbar.component', () => ({
 const mockUseConfig = vi.mocked(useConfig);
 const mockUseAssignedExtensions = vi.mocked(useAssignedExtensions);
 const mockUseSession = vi.mocked(useSession);
-const mockUseLeftNavStore = vi.mocked(useLeftNavStore);
 const mockIsDesktop = vi.mocked(isDesktop);
 
 mockUseConfig.mockReturnValue({
@@ -62,7 +59,6 @@ mockUseConfig.mockReturnValue({
 });
 mockUseAssignedExtensions.mockReturnValue(['mock-extension'] as unknown as AssignedExtension[]);
 mockUseSession.mockReturnValue(mockSession as unknown as Session);
-mockUseLeftNavStore.mockReturnValue({ slotName: '', basePath: '', mode: 'normal' });
 
 describe('Root', () => {
   it('should display navbar with title', async () => {

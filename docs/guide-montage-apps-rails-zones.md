@@ -1,6 +1,6 @@
 # Montage d'une app : zones et rails
 
-Une app ne monte du contenu que dans les emplacements du shell. Elle ne crée ni sidebar ni navbar propre, ne réserve pas de marge (`--egen-sidenav-width`) et n'attache rien à un slot de navigation d'une autre app.
+Une app ne monte du contenu que dans les emplacements du shell. L'ancienne sidebar n'existe plus (supprimée du framework, interdite dans les apps par `tools/check-nav-routes.mjs`) : une app ne crée ni sidebar ni navbar propre et ne réserve pas de marge latérale.
 
 | Emplacement | Comment l'app y monte du contenu |
 | --- | --- |

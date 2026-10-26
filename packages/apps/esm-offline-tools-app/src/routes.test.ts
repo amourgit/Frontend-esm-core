@@ -8,17 +8,18 @@ import routes from './routes.json';
 const indexSource = readFileSync(join(__dirname, 'index.ts'), 'utf8');
 const exported = new Set([...indexSource.matchAll(/export const (\w+)/g)].map((m) => m[1]));
 
-// Extensions héritées de l'ancien dossier patient, dont les slots n'existent pas dans ce dépôt.
-const LEGACY_PATIENT_CHART = new Set(['offlineToolsPatientChartActions', 'offlineToolsPatientChartActionsDashboardLink']);
-
 describe('esm-offline-tools-app — routes.json', () => {
-  it('exporte tous les composants déclarés (hors héritage patient-chart)', () => {
+  it('exporte tous les composants déclarés', () => {
     const declared = [
       ...routes.pages.map((p) => p.component),
       ...routes.extensions.map((e) => e.component),
       ...routes.modals.map((m) => m.component),
-    ].filter((c) => !LEGACY_PATIENT_CHART.has(c));
+    ];
     expect(declared.filter((c) => !exported.has(c))).toEqual([]);
+  });
+
+  it("ne déclare plus d'extension du dossier patient (slots patient-chart-*)", () => {
+    expect(routes.extensions.filter((e) => e.slot.startsWith('patient-chart'))).toEqual([]);
   });
 
   it("ne monte plus de sidebar : aucun slot `nav-menu-slot` ni extension rattachée dynamiquement", () => {

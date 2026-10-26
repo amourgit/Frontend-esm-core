@@ -15,7 +15,7 @@ import NotFoundPage from './not-found/not-found-page.component';
 // =============================================================================
 
 const Root: React.FC = () => {
-  // Route publique : pas de TopBar, de left-nav ni de footer sur la 404.
+  // Route publique : pas de TopBar, de rails ni de footer sur la 404.
   // On utilise le mécanisme du shell (html[data-public-route='true'], cf.
   // _general.scss du styleguide, déjà utilisé par esm-login-app) : la hauteur
   // du conteneur de la TopBar tombe à 0, donc --egen-navbar-height aussi, et le

@@ -79,7 +79,7 @@ import { ShowcaseBoundary, Variant } from './new-components-showcase.component';
 //    • Sites : bannière, recherche, carrousel, onglets et panneaux
 //  Aucune image distante : les visuels de démo sont des SVG générés en data-URI.
 //  Non présentés ici (dépendent du contexte applicatif — backend, shell, ateliers) :
-//  EntityPhoto, EntityBanner*, LocationPicker, LeftNavMenu, DashboardExtension,
+//  EntityPhoto, EntityBanner*, LocationPicker,
 //  Workspace*/ActionMenuButton*, TableBatchActions.
 // =============================================================================
 

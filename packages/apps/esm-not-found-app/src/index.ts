@@ -11,7 +11,7 @@ import rootComponent from './root.component';
 //  offline-tools — et la racine vide, gérée par son propre redirect).
 //  Rendue en plein écran, SANS TopBar : la page pose html[data-public-route]
 //  à son montage (mécanisme du shell, comme esm-login-app) ce qui masque la
-//  TopBar, le left-nav et le footer.
+//  TopBar, les rails et le footer.
 // =============================================================================
 
 const moduleName = '@egen-civitas/esm-not-found-app';

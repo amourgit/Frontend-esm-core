@@ -7,7 +7,6 @@
   "changeLanguage": "Changer de langue",
   "changeLanguageError": "Impossible de changer la langue",
   "changingLanguage": "Changement de langue",
-  "noPathInDashboardExtension": "Impossible d'afficher l'extension de tableau de bord sans que la propriété \"path\" ne soit configurée dans le schéma de configuration",
   "notifications": "Notifications",
   "tryAgain": "Veuillez réessayer",
   "userMenu": "Menu utilisateur",

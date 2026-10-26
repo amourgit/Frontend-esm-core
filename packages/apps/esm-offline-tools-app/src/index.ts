@@ -1,7 +1,5 @@
 import { defineConfigSchema, getSyncLifecycle, registerBreadcrumbs } from '@egen-civitas/esm-framework';
 import { routes } from './constants';
-import { createDashboardLink } from './createDashboardLink';
-import { dashboardMeta } from './dashboard.meta';
 import { setupOffline } from './offline';
 import { setupSynchronizingOfflineActionsNotifications } from './offline-actions/synchronizing-notification';
 import offlineToolsComponent from './root.component';
@@ -12,7 +10,6 @@ import offlineToolsActionsCardComponent from './offline-actions/offline-actions-
 import offlineToolsActionsComponent from './offline-actions/offline-actions.component';
 import offlineToolsEntitiesComponent from './offline-entities/offline-entities.component';
 import offlineToolsPageActionsComponent from './offline-actions/offline-actions-page.component';
-import offlineToolsEntityWidgetComponent from './offline-actions/offline-actions-entity-widget.component';
 import offlineToolsOptInButtonComponent from './offline-actions/offline-actions-mode-button.extension';
 import RailPanel from './rail-panel.component';
 
@@ -48,23 +45,6 @@ export const offlineToolsActions = getSyncLifecycle(offlineToolsActionsComponent
 export const offlineToolsEntities = getSyncLifecycle(offlineToolsEntitiesComponent, options);
 
 export const offlineToolsPageActions = getSyncLifecycle(offlineToolsPageActionsComponent, options);
-
-export const offlineToolsEntityWidget = getSyncLifecycle(offlineToolsEntityWidgetComponent, options);
-
-export const offlineToolsEntityWidgetDashboardLink = getSyncLifecycle(
-  createDashboardLink({
-    ...dashboardMeta,
-    // t('offline_actions_link', 'Offline Actions')
-    title: () =>
-      Promise.resolve(
-        window.i18next?.t('offline_actions_link', {
-          defaultValue: 'Offline Actions',
-          ns: moduleName,
-        }) ?? 'Offline Actions',
-      ),
-  }),
-  options,
-);
 
 export const offlineToolsOptInButton = getSyncLifecycle(offlineToolsOptInButtonComponent, options);
 

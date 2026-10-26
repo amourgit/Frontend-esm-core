@@ -6,6 +6,5 @@
   "changeLanguage": "Change language",
   "changeLanguageError": "Could not change the language",
   "changingLanguage": "Changing language",
-  "noPathInDashboardExtension": "Cannot render the dashboard extension without the property \"path\" being set in the configuration schema",
   "tryAgain": "Please try again"
 }
