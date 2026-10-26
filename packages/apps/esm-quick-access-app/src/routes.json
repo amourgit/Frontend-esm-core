@@ -8,12 +8,17 @@
       "online": true,
       "offline": true,
       "order": 20,
-      "meta": { "title": "Accès rapide", "titleKey": "quickAccess", "icon": "Zap", "order": 20 }
+      "meta": {
+        "title": "Accès rapide",
+        "titleKey": "quickAccess",
+        "icon": "Zap",
+        "order": 20
+      }
     },
     {
-      "name": "quick-access-shortcuts",
+      "name": "quick-access-profile",
       "slot": "quick-access-section-slot",
-      "component": "shortcutsSection",
+      "component": "profileSection",
       "online": true,
       "offline": true,
       "order": 0
@@ -25,6 +30,30 @@
       "online": true,
       "offline": true,
       "order": 1
+    },
+    {
+      "name": "quick-access-shortcuts",
+      "slot": "quick-access-section-slot",
+      "component": "shortcutsSection",
+      "online": true,
+      "offline": true,
+      "order": 2
+    },
+    {
+      "name": "quick-access-calendar",
+      "slot": "quick-access-section-slot",
+      "component": "calendarSection",
+      "online": true,
+      "offline": true,
+      "order": 3
+    },
+    {
+      "name": "quick-access-documents",
+      "slot": "quick-access-section-slot",
+      "component": "documentsSection",
+      "online": true,
+      "offline": true,
+      "order": 4
     }
   ]
 }

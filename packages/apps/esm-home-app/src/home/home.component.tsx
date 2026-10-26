@@ -1,24 +1,15 @@
 import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { showToast } from '@egen-civitas/esm-styleguide';
 import { HomeBackground } from './background/home-background.component';
 import { HomeSection } from './section/home-section.component';
 import { HeroMosaic } from './hero-mosaic/hero-mosaic.component';
 import { BlogSection } from './blog-section/blog-section.component';
 import { SocialLinks } from './social-links/social-links.component';
-import { ProfileCard } from './profile-card/profile-card.component';
-import { QuickLinks } from './quick-links/quick-links.component';
-import { TeamCalendar } from './team-calendar/team-calendar.component';
-import { Documents } from './documents/documents.component';
 import type { HeroTile } from './hero-mosaic/hero-tile-card.component';
 import {
   heroMainTile,
   heroSecondaryTiles,
   blogArticles,
-  quickLinks,
-  upcomingCalendarEvents,
-  recentDocuments,
-  defaultProfile,
   socialLinkRows,
 } from './home-sample-data';
 import styles from './home.scss';
@@ -46,8 +37,6 @@ function handleShowToast(description: string, kind: 'info' | 'success' | 'warnin
 }
 
 export function HomePage() {
-  const navigate = useNavigate();
-
   const handleSelectHeroTile = useCallback(
     (tile: HeroTile) => handleShowToast(`Ouverture de « ${tile.title} »`, 'info'),
     [],
@@ -77,39 +66,6 @@ export function HomePage() {
             </HomeSection>
           )}
         </div>
-
-        <aside className={styles.sideColumn}>
-          <ProfileCard profile={defaultProfile} onShowToast={handleShowToast} />
-
-          <HomeSection as="div" variant="panel" title="Raccourcis" bare>
-            <QuickLinks
-              items={quickLinks}
-              onSelectItem={(item) =>
-                item.target ? navigate(item.target) : handleShowToast(`Ouverture de ${item.title}`, 'info')
-              }
-            />
-          </HomeSection>
-
-          <HomeSection as="div" variant="panel" bare>
-            <TeamCalendar
-              upcomingEvents={upcomingCalendarEvents}
-              onSelectEvent={(ev) => navigate(`/informations/agenda?event=${ev.id}`)}
-              onRefresh={() => handleShowToast('Calendrier synchronisé.', 'info')}
-            />
-          </HomeSection>
-
-          <HomeSection as="div" variant="panel" bare>
-            <Documents
-              items={recentDocuments}
-              onOpenDocument={(doc) =>
-                doc.type === 'folder' ? navigate('/ged') : handleShowToast(`Ouverture de ${doc.name}`, 'info')
-              }
-              onSeeAll={() => navigate('/ged')}
-              onCreateFolder={() => navigate('/ged/ingestion')}
-              onUploadFile={() => navigate('/ged/ingestion')}
-            />
-          </HomeSection>
-        </aside>
       </div>
     </div>
   );
