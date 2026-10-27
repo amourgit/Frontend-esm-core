@@ -7,7 +7,9 @@ import { pushLog, resetLogStoreForTests } from './log-store';
 
 // Le vrai ToolWindowHeader (framework) déplace ses enfants dans l'en-tête de la zone ; ici, un repère suffit.
 vi.mock('@egen-civitas/esm-framework', () => ({
-  ToolWindowHeader: ({ children }: { children: React.ReactNode }) => <div data-testid="zone-header-slot">{children}</div>,
+  ToolWindowHeader: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="zone-header-slot">{children}</div>
+  ),
 }));
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -111,20 +113,29 @@ describe('LogsPanel', () => {
   it("place la barre d'outils dans l'en-tête de la zone, pas dans le contenu", () => {
     render(<LogsPanel />);
     const header = within(screen.getByTestId('zone-header-slot'));
-    for (const name of ['Pause', 'Suivre les nouveaux logs', 'Retour à la ligne', 'Copier', 'Télécharger (.log)', 'Effacer']) {
+    for (const name of [
+      'Pause',
+      'Suivre les nouveaux logs',
+      'Retour à la ligne',
+      'Copier',
+      'Télécharger (.log)',
+      'Effacer',
+    ]) {
       expect(header.getByRole('button', { name })).toBeInTheDocument();
     }
     expect(header.getByLabelText('Rechercher dans les logs')).toBeInTheDocument();
     expect(header.getByLabelText('Source')).toBeInTheDocument();
-    expect(within(screen.getByRole('region', { name: 'Logs système' })).queryByRole('button', { name: 'Pause' })).not.toBeInTheDocument();
+    expect(header.queryByTestId('logs-list')).not.toBeInTheDocument();
   });
 
-  it('désactive copier, télécharger et effacer tant qu\'il n\'y a rien', async () => {
+  it("désactive copier, télécharger et effacer tant qu'il n'y a rien", async () => {
     render(<LogsPanel />);
-    for (const name of ['Copier', 'Télécharger (.log)', 'Effacer']) expect(screen.getByRole('button', { name })).toBeDisabled();
+    for (const name of ['Copier', 'Télécharger (.log)', 'Effacer'])
+      expect(screen.getByRole('button', { name })).toBeDisabled();
     act(() => pushLog('info', 'x'));
     await settle();
-    for (const name of ['Copier', 'Télécharger (.log)', 'Effacer']) expect(screen.getByRole('button', { name })).toBeEnabled();
+    for (const name of ['Copier', 'Télécharger (.log)', 'Effacer'])
+      expect(screen.getByRole('button', { name })).toBeEnabled();
   });
 
   it('copie les lignes filtrées sans couleurs et confirme', async () => {
@@ -183,5 +194,16 @@ describe('LogsPanel', () => {
     expect(follow).toHaveAttribute('aria-pressed', 'false');
     fireEvent.click(follow);
     expect(follow).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it("ne plante pas si le shell fournit un framework sans ToolWindowHeader (barre d'outils en tête du panneau)", async () => {
+    vi.resetModules();
+    vi.doMock('@egen-civitas/esm-framework', () => ({ ToolWindowHeader: undefined }));
+    const { default: Panel } = await import('./logs-panel.component');
+    render(<Panel />);
+    const region = screen.getByRole('region', { name: 'Logs système' });
+    expect(within(region).getByRole('button', { name: 'Pause' })).toBeInTheDocument();
+    expect(within(region).getByTestId('logs-list')).toBeInTheDocument();
+    vi.doUnmock('@egen-civitas/esm-framework');
   });
 });

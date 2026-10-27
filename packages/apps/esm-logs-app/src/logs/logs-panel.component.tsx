@@ -1,9 +1,17 @@
 import React, { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowDownToLine, Check, Copy, Download, Pause, Play, Search, Trash2, WrapText } from 'lucide-react';
-import { ToolWindowHeader } from '@egen-civitas/esm-framework';
+import * as framework from '@egen-civitas/esm-framework';
 import { parseAnsi, stripAnsi } from './ansi';
-import { clearLogs, LOG_LEVELS, setLogsPaused, useLogs, type LogConnection, type LogLevel, type LogLine } from './log-store';
+import {
+  clearLogs,
+  LOG_LEVELS,
+  setLogsPaused,
+  useLogs,
+  type LogConnection,
+  type LogLevel,
+  type LogLine,
+} from './log-store';
 import styles from './logs-panel.scss';
 
 // =============================================================================
@@ -16,6 +24,17 @@ import styles from './logs-panel.scss';
 //  Les contrôles (recherche, niveaux, source, actions) vivent dans l'EN-TÊTE de la zone, entre le
 //  titre et le bouton de fermeture (ToolWindowHeader) ; la zone ne garde que la liste et la barre d'état.
 // =============================================================================
+
+/**
+ * Emplacement d'en-tête de la zone (framework ≥ 2.1). Le shell fournit sa propre copie du framework :
+ * s'il est plus ancien, `ToolWindowHeader` est absent et la barre d'outils reste en tête du panneau
+ * plutôt que de faire planter le montage (React #130).
+ */
+const InlineToolbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className={styles.inlineToolbar}>{children}</div>
+);
+const ToolWindowHeader: React.FC<{ children: React.ReactNode }> =
+  (framework as { ToolWindowHeader?: React.FC<{ children: React.ReactNode }> }).ToolWindowHeader ?? InlineToolbar;
 
 const PAGE = 1500;
 const ALL = '*';
@@ -108,7 +127,13 @@ const LogsPanel: React.FC = () => {
   const { lines, counts, connection, paused, pending } = useLogs();
 
   const [query, setQuery] = useState('');
-  const [enabled, setEnabled] = useState<Record<LogLevel, boolean>>({ error: true, warn: true, success: true, info: true, debug: true });
+  const [enabled, setEnabled] = useState<Record<LogLevel, boolean>>({
+    error: true,
+    warn: true,
+    success: true,
+    info: true,
+    debug: true,
+  });
   const [source, setSource] = useState(ALL);
   const [wrap, setWrap] = useState(true);
   const [follow, setFollow] = useState(true);
@@ -135,7 +160,9 @@ const LogsPanel: React.FC = () => {
       (line) =>
         enabled[line.level] &&
         (source === ALL || line.source === source) &&
-        (needle === '' || stripAnsi(line.message).toLowerCase().includes(needle) || line.source.toLowerCase().includes(needle)),
+        (needle === '' ||
+          stripAnsi(line.message).toLowerCase().includes(needle) ||
+          line.source.toLowerCase().includes(needle)),
     );
   }, [lines, enabled, source, deferredQuery]);
 
@@ -164,7 +191,12 @@ const LogsPanel: React.FC = () => {
   const toggleLevel = (level: LogLevel) => setEnabled((current) => ({ ...current, [level]: !current[level] }));
 
   const asText = () =>
-    filtered.map((line) => `${new Date(line.ts).toISOString()} [${line.source}] ${line.level.toUpperCase()} ${stripAnsi(line.message)}`).join('\n');
+    filtered
+      .map(
+        (line) =>
+          `${new Date(line.ts).toISOString()} [${line.source}] ${line.level.toUpperCase()} ${stripAnsi(line.message)}`,
+      )
+      .join('\n');
 
   const copy = async () => {
     if (filtered.length === 0 || !(await copyText(asText()))) return;
@@ -189,7 +221,12 @@ const LogsPanel: React.FC = () => {
   const noLines = filtered.length === 0;
 
   return (
-    <>
+    <section
+      ref={panelRef}
+      className={styles.panel}
+      style={zoneHeight ? { height: zoneHeight } : undefined}
+      aria-label={t('logs', 'Logs système')}
+    >
       <ToolWindowHeader>
         <div className={styles.tools}>
           <label className={styles.search}>
@@ -205,14 +242,26 @@ const LogsPanel: React.FC = () => {
 
           <div className={styles.levels} role="group" aria-label={t('levels', 'Niveaux')}>
             {LOG_LEVELS.map((level) => (
-              <button key={level} type="button" className={styles.chip} data-level={level} aria-pressed={enabled[level]} onClick={() => toggleLevel(level)}>
+              <button
+                key={level}
+                type="button"
+                className={styles.chip}
+                data-level={level}
+                aria-pressed={enabled[level]}
+                onClick={() => toggleLevel(level)}
+              >
                 {levelLabel(level, label)}
                 <b>{counts[level]}</b>
               </button>
             ))}
           </div>
 
-          <select className={styles.select} value={source} onChange={(event) => setSource(event.target.value)} aria-label={t('source', 'Source')}>
+          <select
+            className={styles.select}
+            value={source}
+            onChange={(event) => setSource(event.target.value)}
+            aria-label={t('source', 'Source')}
+          >
             <option value={ALL}>{t('allSources', 'Toutes les sources')}</option>
             {sources.map((name) => (
               <option key={name} value={name}>
@@ -289,30 +338,41 @@ const LogsPanel: React.FC = () => {
         </div>
       </ToolWindowHeader>
 
-      <section ref={panelRef} className={styles.panel} style={zoneHeight ? { height: zoneHeight } : undefined} aria-label={t('logs', 'Logs système')}>
-        <div ref={listRef} className={styles.list} data-wrap={wrap} role="list" onScroll={onScroll} data-testid="logs-list">
-          {filtered.length > visible.length && (
-            <button type="button" className={styles.more} onClick={() => setLimit(limit + PAGE)}>
-              {t('older', '{{n}} lignes plus anciennes — afficher', { n: filtered.length - visible.length })}
-            </button>
-          )}
-          {visible.map((line) => (
-            <LogRow key={line.uid} line={line} />
-          ))}
-          {visible.length === 0 && (
-            <p className={styles.empty}>{lines.length === 0 ? t('empty', 'En attente de logs…') : t('noMatch', 'Aucun log ne correspond aux filtres')}</p>
-          )}
-        </div>
+      <div
+        ref={listRef}
+        className={styles.list}
+        data-wrap={wrap}
+        role="list"
+        onScroll={onScroll}
+        data-testid="logs-list"
+      >
+        {filtered.length > visible.length && (
+          <button type="button" className={styles.more} onClick={() => setLimit(limit + PAGE)}>
+            {t('older', '{{n}} lignes plus anciennes — afficher', { n: filtered.length - visible.length })}
+          </button>
+        )}
+        {visible.map((line) => (
+          <LogRow key={line.uid} line={line} />
+        ))}
+        {visible.length === 0 && (
+          <p className={styles.empty}>
+            {lines.length === 0
+              ? t('empty', 'En attente de logs…')
+              : t('noMatch', 'Aucun log ne correspond aux filtres')}
+          </p>
+        )}
+      </div>
 
-        <footer className={styles.status}>
-          <span className={styles.connection} data-state={connection}>
-            {connectionLabel(connection, label)}
-          </span>
-          <span>{t('lineCount', '{{shown}} / {{total}} lignes', { shown: filtered.length, total: lines.length })}</span>
-          {paused && <span className={styles.paused}>{t('pausedPending', 'En pause — {{n}} en attente', { n: pending })}</span>}
-        </footer>
-      </section>
-    </>
+      <footer className={styles.status}>
+        <span className={styles.connection} data-state={connection}>
+          {connectionLabel(connection, label)}
+        </span>
+        <span>{t('lineCount', '{{shown}} / {{total}} lignes', { shown: filtered.length, total: lines.length })}</span>
+        {paused && (
+          <span className={styles.paused}>{t('pausedPending', 'En pause — {{n}} en attente', { n: pending })}</span>
+        )}
+      </footer>
+    </section>
   );
 };
 

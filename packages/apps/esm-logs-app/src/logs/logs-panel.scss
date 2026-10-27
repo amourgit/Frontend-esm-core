@@ -22,6 +22,13 @@
   overflow: hidden;
 }
 
+.inlineToolbar {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.5rem;
+  overflow-x: auto;
+  border-bottom: 1px solid rgb(148 163 184 / 18%);
+}
+
 .tools {
   display: flex;
   align-items: center;
