@@ -1,5 +1,6 @@
 // Palette des niveaux : teintes lisibles sur fond sombre comme clair (fonds en transparence).
-.panel {
+.panel,
+.tools {
   --logs-error: #f87171;
   --logs-warn: #fbbf24;
   --logs-success: #4ade80;
@@ -9,29 +10,40 @@
   --logs-muted: var(--colors-surface-muted-foreground, rgb(226 232 240 / 55%));
   --logs-line: rgb(148 163 184 / 18%);
 
+  color: var(--logs-fg);
+  font-size: 0.75rem;
+}
+
+.panel {
   display: flex;
   flex-direction: column;
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  color: var(--logs-fg);
-  font-size: 0.75rem;
 }
 
-.toolbar {
+.tools {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
+  flex: 0 0 auto;
   gap: 0.5rem;
-  padding: 0.375rem 0.5rem;
-  border-bottom: 1px solid var(--logs-line);
+  min-width: 0;
+}
+
+.separator {
+  flex: 0 0 auto;
+  width: 1px;
+  height: 1rem;
+  background: var(--logs-line);
 }
 
 .search {
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  min-width: 12rem;
+  flex: 0 0 auto;
+  width: clamp(8rem, 16vw, 14rem);
+  height: 1.5rem;
   padding: 0 0.5rem;
   border: 1px solid var(--logs-line);
   border-radius: 0.375rem;
@@ -40,7 +52,7 @@
   input {
     flex: 1;
     min-width: 0;
-    height: 1.75rem;
+    height: 100%;
     border: 0;
     outline: 0;
     background: transparent;
@@ -55,17 +67,20 @@
 
 .levels {
   display: flex;
+  flex: 0 0 auto;
   gap: 0.25rem;
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
+  flex: 0 0 auto;
   gap: 0.375rem;
-  height: 1.75rem;
+  height: 1.5rem;
   padding: 0 0.5rem;
   border: 1px solid var(--logs-line);
   border-radius: 999px;
+  white-space: nowrap;
   background: transparent;
   color: var(--logs-muted);
   font: inherit;
@@ -94,8 +109,9 @@
 }
 
 .select {
-  height: 1.75rem;
-  max-width: 14rem;
+  flex: 0 0 auto;
+  height: 1.5rem;
+  max-width: 12rem;
   padding: 0 0.5rem;
   border: 1px solid var(--logs-line);
   border-radius: 0.375rem;
@@ -110,16 +126,17 @@
 
 .actions {
   display: flex;
-  gap: 0.25rem;
-  margin-left: auto;
+  flex: 0 0 auto;
+  gap: 0.125rem;
 }
 
 .iconButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
   border: 1px solid transparent;
   border-radius: 0.375rem;
   background: transparent;
@@ -137,6 +154,21 @@
   &[aria-pressed='true'] {
     color: var(--logs-info);
     border-color: var(--logs-line);
+  }
+
+  &[data-done] {
+    color: var(--logs-success);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--logs-info);
+    outline-offset: 1px;
   }
 }
 
@@ -192,10 +224,15 @@
   [data-underline] { text-decoration: underline; }
 }
 
-.row[data-wrap='false'] .message {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: pre;
+.list[data-wrap='false'] {
+  .row {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .message {
+    white-space: pre;
+  }
 }
 
 .more {

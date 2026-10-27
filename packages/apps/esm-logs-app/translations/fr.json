@@ -1,10 +1,12 @@
 {
+  "actions": "Actions",
   "allSources": "Toutes les sources",
   "clear": "Effacer",
   "connConnecting": "Connexion au terminal…",
   "connDisabled": "Console du navigateur uniquement (lancer avec egen develop pour le terminal)",
   "connLive": "Terminal connecté — temps réel",
   "connUnavailable": "Terminal indisponible (reconnexion impossible)",
+  "copied": "Copié",
   "copy": "Copier",
   "download": "Télécharger (.log)",
   "empty": "En attente de logs…",
