@@ -1,4 +1,4 @@
-import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowDownToLine, Copy, Download, Pause, Play, Search, Trash2, WrapText } from 'lucide-react';
 import { parseAnsi, stripAnsi } from './ansi';
@@ -49,6 +49,29 @@ const LogRow = React.memo(function LogRow({ line, wrap }: { line: LogLine; wrap:
   );
 });
 
+/**
+ * Hauteur utile de la zone du workbench qui porte le panneau (zone moins son en-tête), ou `undefined`
+ * hors zone. Le contenu d'une zone n'a qu'un `min-height` : un `height: 100%` ne s'y résout pas et
+ * c'est tout le panneau qui défilerait. En fixant la hauteur, seule la liste défile.
+ */
+function useZoneHeight(ref: React.RefObject<HTMLElement>): number | undefined {
+  const [height, setHeight] = useState<number>();
+
+  useLayoutEffect(() => {
+    const zone = ref.current?.closest<HTMLElement>('aside[data-anchor]');
+    if (!zone) return;
+    const header = zone.querySelector<HTMLElement>(':scope > header');
+    const update = () => setHeight(Math.max(0, Math.floor(zone.clientHeight - (header?.offsetHeight ?? 0))));
+    update();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(update);
+    observer.observe(zone);
+    return () => observer.disconnect();
+  }, [ref]);
+
+  return height;
+}
+
 const LogsPanel: React.FC = () => {
   const { t } = useTranslation();
   const { lines, counts, connection, paused, pending } = useLogs();
@@ -60,6 +83,8 @@ const LogsPanel: React.FC = () => {
   const [follow, setFollow] = useState(true);
   const [limit, setLimit] = useState(PAGE);
   const listRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const zoneHeight = useZoneHeight(panelRef);
   const deferredQuery = useDeferredValue(query);
 
   const sources = useMemo(() => Array.from(new Set(lines.map((line) => line.source))).sort(), [lines]);
@@ -105,7 +130,7 @@ const LogsPanel: React.FC = () => {
   };
 
   return (
-    <section className={styles.panel} aria-label={t('logs', 'Logs système')}>
+    <section ref={panelRef} className={styles.panel} style={zoneHeight ? { height: zoneHeight } : undefined} aria-label={t('logs', 'Logs système')}>
       <div className={styles.toolbar}>
         <label className={styles.search}>
           <Search size={14} aria-hidden="true" />

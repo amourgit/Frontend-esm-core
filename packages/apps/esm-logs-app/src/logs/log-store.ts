@@ -36,14 +36,17 @@ export interface LogState {
   counts: Readonly<Record<LogLevel, number>>;
   /** Flux terminal : `disabled` hors `egen develop` (aucune URL de logs). */
   connection: LogConnection;
-  /** Lignes reçues depuis la mise en pause, non encore affichées. */
   paused: boolean;
+  /** Lignes reçues depuis la mise en pause, non encore affichées. */
   pending: number;
 }
 
 const emptyCounts = (): Record<LogLevel, number> => ({ error: 0, warn: 0, success: 0, info: 0, debug: 0 });
 
 let lines: LogLine[] = [];
+/** Lignes reçues, pas encore intégrées : une rafale (build, HMR) coûte une seule copie du tampon par frame. */
+let incoming: LogLine[] = [];
+/** Lignes reçues pendant la pause. */
 let held: LogLine[] = [];
 let counts = emptyCounts();
 let connection: LogConnection = 'disabled';
@@ -58,42 +61,43 @@ function build(): LogState {
   return { lines, counts, connection, paused, pending: held.length };
 }
 
+function flush() {
+  scheduled = false;
+  if (incoming.length > 0) {
+    const batch = incoming;
+    incoming = [];
+    const next = lines.concat(batch);
+    const dropped = next.length > MAX_LINES ? next.splice(0, next.length - MAX_LINES) : [];
+    const updated = { ...counts };
+    for (const line of batch) updated[line.level]++;
+    for (const line of dropped) updated[line.level]--;
+    lines = next;
+    counts = updated;
+  }
+  snapshot = build();
+  listeners.forEach((listener) => listener());
+}
+
 function emit() {
   if (scheduled) return;
   scheduled = true;
-  // Regroupe les rafales (build, HMR) en un seul rendu par frame.
-  const run = () => {
-    scheduled = false;
-    snapshot = build();
-    listeners.forEach((listener) => listener());
-  };
-  if (typeof requestAnimationFrame === 'function') requestAnimationFrame(run);
-  else setTimeout(run, 16);
-}
-
-function append(batch: LogLine[]) {
-  if (batch.length === 0) return;
-  const next = lines.concat(batch);
-  const dropped = next.length > MAX_LINES ? next.splice(0, next.length - MAX_LINES) : [];
-  lines = next;
-  for (const line of batch) counts[line.level]++;
-  if (dropped.length > 0) for (const line of dropped) counts[line.level]--;
-  counts = { ...counts };
+  if (typeof requestAnimationFrame === 'function') requestAnimationFrame(flush);
+  else setTimeout(flush, 16);
 }
 
 function ingest(line: Omit<LogLine, 'uid'>) {
   const entry = { ...line, uid: uid++ };
   if (paused) held.push(entry);
-  else append([entry]);
+  else incoming.push(entry);
   emit();
 }
 
 /** Niveau déduit du texte (même logique que le hub du terminal). */
 export function detectLevel(message: string): LogLevel {
   const text = stripAnsi(message);
-  if (/\b(error|erreur|fatal|failed|exception)\b|✖|✘/i.test(text)) return 'error';
-  if (/\b(warn|warning|avertissement|deprecated)\b|⚠/i.test(text)) return 'warn';
-  if (/\b(success|succeeded|compiled|ready|done|listening|built)\b|✔|✓/i.test(text)) return 'success';
+  if (/\b(errors?|erreurs?|fatal|failed|failure|exception)\b|✖|✘/i.test(text)) return 'error';
+  if (/\b(warn(ing)?s?|avertissements?|deprecated)\b|⚠/i.test(text)) return 'warn';
+  if (/\b(success(ful(ly)?)?|succeeded|ready|done)\b|✔|✓/i.test(text)) return 'success';
   if (/\b(debug|trace|verbose)\b/i.test(text)) return 'debug';
   return 'info';
 }
@@ -110,6 +114,7 @@ export const logStore = {
 
 export function clearLogs() {
   lines = [];
+  incoming = [];
   held = [];
   counts = emptyCounts();
   emit();
@@ -119,9 +124,8 @@ export function setLogsPaused(value: boolean) {
   if (paused === value) return;
   paused = value;
   if (!value && held.length > 0) {
-    const batch = held;
+    incoming = incoming.concat(held);
     held = [];
-    append(batch);
   }
   emit();
 }
@@ -195,10 +199,13 @@ function setConnection(value: LogConnection) {
   }
 }
 
+let terminal: EventSource | undefined;
+
 function connectTerminal(baseUrl: string) {
   if (typeof EventSource === 'undefined') return setConnection('disabled');
   setConnection('connecting');
   const source = new EventSource(`${baseUrl}/stream`);
+  terminal = source;
 
   source.onopen = () => setConnection('live');
   // EventSource se reconnecte seul avec Last-Event-ID : le serveur ne renvoie que les lignes manquantes.
@@ -239,10 +246,14 @@ export function useLogStats() {
 /** Remet le store à zéro (tests uniquement). */
 export function resetLogStoreForTests() {
   lines = [];
+  incoming = [];
   held = [];
   counts = emptyCounts();
   paused = false;
   connection = 'disabled';
   lastTerminalId = 0;
+  started = false;
+  terminal?.close();
+  terminal = undefined;
   snapshot = build();
 }
