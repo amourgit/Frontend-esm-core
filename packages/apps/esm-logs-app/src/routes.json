@@ -5,8 +5,7 @@
       "component": "root",
       "routeRegex": "^(?!(?:login|logout|change-password)/?)",
       "online": true,
-      "offline": true,
-      "containerDomId": "egen-logs-app-container"
+      "offline": true
     }
   ],
   "extensions": [
