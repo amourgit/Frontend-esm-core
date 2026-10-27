@@ -1,4 +1,5 @@
 import React from 'react';
+import '@testing-library/jest-dom/vitest';
 import { act, render } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { setToolWindowBadge } from '@egen-civitas/esm-framework';
