@@ -32,7 +32,13 @@ vi.mock('@egen-civitas/esm-framework', async () => {
   }) =>
     h(
       'button',
-      { type: 'button', 'aria-label': children ? undefined : label, 'aria-pressed': active || undefined, disabled, onClick },
+      {
+        type: 'button',
+        'aria-label': children ? undefined : label,
+        'aria-pressed': active || undefined,
+        disabled,
+        onClick,
+      },
       children,
     );
   const SectionGrid = ({ children }: { children?: Node }) => h('div', null, children);
@@ -49,7 +55,7 @@ vi.mock('@egen-civitas/esm-framework', async () => {
 
 const navigate = vi.hoisted(() => vi.fn());
 vi.mock('react-router-dom', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('react-router-dom')>()),
+  ...(await importOriginal<Record<string, unknown>>()),
   useNavigate: () => navigate,
 }));
 
@@ -73,14 +79,7 @@ describe('HomePage', () => {
 
   it('rend toutes les sections de l’accueil', () => {
     renderHome();
-    for (const title of [
-      'À la une',
-      'Actualités',
-      'Annonces',
-      'Événements à venir',
-      'Annuaire',
-      'Nos sites',
-    ]) {
+    for (const title of ['À la une', 'Actualités', 'Annonces', 'Événements à venir', 'Annuaire', 'Nos sites']) {
       expect(screen.getByRole('heading', { level: 2, name: title })).toBeInTheDocument();
     }
   });
@@ -150,7 +149,7 @@ describe('HomePage', () => {
     renderHome();
     const first = cards('Annuaire')[0];
     const mail = within(first).getByRole('link', { name: /^Écrire à / });
-    expect(mail.getAttribute('href')).toMatch(/^mailto:/);
+    expect(mail).toHaveAttribute('href', expect.stringMatching(/^mailto:/));
 
     mail.addEventListener('click', (e) => e.preventDefault());
     fireEvent.click(mail);
