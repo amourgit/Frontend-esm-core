@@ -1,6 +1,5 @@
 {
   "emptyStateText": "There are no {{displayText}} to display",
-  "home": "Home",
   "homeHeader": "Offline home",
   "homeOverviewCardEntitiesDownloaded": "Downloaded",
   "homeOverviewCardEntitiesHeader": "Entities",
@@ -9,7 +8,6 @@
   "homeOverviewCardOfflineActionsHeader": "Offline Actions",
   "homeOverviewCardOfflineActionsPendingUpload": "Pending upload",
   "homeOverviewCardView": "View",
-  "offlineActions": "Offline Actions",
   "offlineActionsDeleteConfirmationModalCancel": "Cancel",
   "offlineActionsDeleteConfirmationModalConfirm": "Delete forever",
   "offlineActionsDeleteConfirmationModalContent": "Are you sure that you want to delete all selected offline actions? This cannot be undone!",
