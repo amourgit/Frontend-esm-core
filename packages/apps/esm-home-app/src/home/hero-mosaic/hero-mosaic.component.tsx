@@ -34,13 +34,13 @@ export default HeroMosaic;
 /* ============================================================================
  *  GUIDE D'UTILISATION — HeroMosaic
  * ============================================================================
- *    <HomeSection title="À la une">
+ *    <Section title="À la une">
  *      <HeroMosaic
  *        mainTile={{ id: '1', title: '...', imageUrl: '...', linkText: 'Lire →' }}
  *        secondaryTiles={[{ id: '2', title: '...', imageUrl: '...' }, ...]}
  *        onSelectTile={(tile) => navigate(`/actualites/${tile.id}`)}
  *      />
- *    </HomeSection>
+ *    </Section>
  *
  *  `secondaryTiles` : les 4 premières sont affichées, le reste est ignoré
  *  (mosaïque à 5 emplacements fixes, comme dans le design d'origine).

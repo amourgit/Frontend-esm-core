@@ -1,6 +1,7 @@
 import type { HeroTile } from './hero-mosaic/hero-tile-card.component';
 import type { BlogArticle } from './blog-section/blog-post-card.component';
 import type { SocialLinkItem } from './social-links/social-links.component';
+import { informationsNews } from './data/news.data';
 
 // =============================================================================
 //  DONNÉES D'EXEMPLE — Page d'accueil
@@ -50,6 +51,7 @@ export const heroSecondaryTiles: HeroTile[] = [
 // source d'actualités) — délibérément différent du contenu générique hors
 // sujet trouvé dans la version d'origine (voir blog-section.component.tsx).
 export const blogArticles: BlogArticle[] = [
+  ...informationsNews,
   {
     id: 'article-ged',
     image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop&q=80',
@@ -83,3 +85,10 @@ export const blogArticles: BlogArticle[] = [
 // les comptes personnels d'un tiers, sans rapport avec CIVITAS (voir
 // social-links.component.tsx). À renseigner avec les vrais liens CIVITAS.
 export const socialLinkRows: SocialLinkItem[][] = [];
+
+// ── Jeux de données des apps de contenu (voir ./data) : adaptés de esm-informations-app
+//    et esm-annuaire-app. Les données de la colonne latérale (profil, agenda, documents)
+//    vivent désormais dans esm-quick-access-app (panels/sample-data.ts).
+export { announcements } from './data/announcements.data';
+export { upcomingEvents } from './data/events.data';
+export { directoryMembers, directoryFilters, directoryTotalCount, directorySites } from './data/directory.data';
