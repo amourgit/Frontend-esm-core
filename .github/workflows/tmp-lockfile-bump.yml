@@ -30,6 +30,19 @@ jobs:
             exit 1
           fi
 
+      - name: Rafraîchir la résolution du styleguide (dans sa plage ^2.1.1, sans toucher aux package.json)
+        env:
+          HUSKY: '0'
+          YARN_ENABLE_SCRIPTS: 'false'
+        run: |
+          if ! yarn up -R @egen-civitas/esm-styleguide > /tmp/up.log 2>&1; then
+            msg=$(grep -E 'YN0|Error|error' /tmp/up.log | head -25 | cut -c1-220 | sed ':a;N;$!ba;s/\n/%0A/g')
+            echo "::error title=yarn-up::${msg}"
+            exit 1
+          fi
+          git diff --stat -- package.json packages | tail -3
+          grep -n -A2 'esm-styleguide@npm' yarn.lock | head -8
+
       - name: Diff du lockfile
         run: git diff --stat -- yarn.lock && git diff -- yarn.lock | grep '^[+-]' | grep -v '^+++\|^---' | cut -c1-160
 
@@ -44,5 +57,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add yarn.lock
           git diff --cached --quiet && echo "yarn.lock inchangé" && exit 0
-          git commit -m "chore: yarn.lock pour esm-app-shell 2.6.6"
+          git commit -m "chore: yarn.lock pour esm-app-shell 2.6.6 et esm-styleguide 2.3.0"
           git push origin HEAD:tmp/lockfile-bump
