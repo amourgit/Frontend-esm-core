@@ -16,10 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Node 22 + Corepack (même socle que la CI)
+        uses: ./.github/actions/setup-yarn
+        with:
+          install: 'false'
+
       - name: Régénérer yarn.lock
         run: |
-          node -v
-          if ! node .yarn/releases/yarn-4.10.3.cjs install --mode=update-lockfile > /tmp/y.log 2>&1; then
+          node -v && yarn --version
+          if ! yarn install --mode=update-lockfile > /tmp/y.log 2>&1; then
             msg=$(grep -E 'YN0|Error|error' /tmp/y.log | head -25 | cut -c1-220 | sed ':a;N;$!ba;s/\n/%0A/g')
             echo "::error title=yarn::${msg}"
             exit 1
@@ -29,7 +34,9 @@ jobs:
         run: git diff --stat -- yarn.lock && git diff -- yarn.lock | grep '^[+-]' | grep -v '^+++\|^---' | cut -c1-160
 
       - name: Vérifier que le lockfile est cohérent (immutable, sans scripts)
-        run: node .yarn/releases/yarn-4.10.3.cjs install --immutable --mode=skip-build
+        env:
+          HUSKY: '0'
+        run: yarn install --immutable --mode=skip-build
 
       - name: Commiter yarn.lock
         run: |
