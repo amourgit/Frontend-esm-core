@@ -1,4 +1,4 @@
-import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
+import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import rootComponent from './root.component';
 import RailPanel from './rail-panel.component';
@@ -33,3 +33,22 @@ export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 
 // Option globale du rail gauche (slot `shell-rail-left-slot`, `meta.global`) : toujours visible,
 // quelle que soit l'app active ; ses sous-options se chargent dans la zone gauche.
 export const railPanel = getSyncLifecycle(RailPanel, { ...options, featureName: 'informations-rail' });
+
+// Sections du slot `home-sections` (page d'accueil) : chaque extension rend sa propre `Section`.
+// Le composant est chargé à la demande, donc seulement quand la page qui expose le slot est affichée.
+export const homeHeroSection = getAsyncLifecycle(() => import('./home-sections/hero/hero-section.extension'), {
+  ...options,
+  featureName: 'informations-home-hero',
+});
+export const homeNewsSection = getAsyncLifecycle(() => import('./home-sections/news/news-section.extension'), {
+  ...options,
+  featureName: 'informations-home-news',
+});
+export const homeAnnouncementsSection = getAsyncLifecycle(
+  () => import('./home-sections/announcements/announcements-section.extension'),
+  { ...options, featureName: 'informations-home-announcements' },
+);
+export const homeEventsSection = getAsyncLifecycle(() => import('./home-sections/events/events-section.extension'), {
+  ...options,
+  featureName: 'informations-home-events',
+});

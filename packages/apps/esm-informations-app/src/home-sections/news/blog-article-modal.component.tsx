@@ -97,7 +97,9 @@ export function BlogArticleModal({
           <p className={styles.modalLead}>« {article.description} »</p>
 
           <div className={styles.modalContent}>
-            {article.content?.map((paragraph, idx) => <p key={idx}>{paragraph}</p>)}
+            {article.content?.map((paragraph, idx) => (
+              <p key={idx}>{paragraph}</p>
+            ))}
           </div>
         </div>
 

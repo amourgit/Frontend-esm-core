@@ -1,4 +1,4 @@
-import type { AnnouncementItem } from '../announcements/announcements-section.component';
+import type { AnnouncementItem } from './announcements-section.component';
 
 // Source : esm-informations-app (announcements-data.ts).
 export const announcements: AnnouncementItem[] = [

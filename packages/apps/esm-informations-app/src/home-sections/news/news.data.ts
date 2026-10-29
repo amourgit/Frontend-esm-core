@@ -1,4 +1,4 @@
-import type { BlogArticle } from '../blog-section/blog-post-card.component';
+import type { BlogArticle } from './blog-post-card.component';
 
 // Source : esm-informations-app (NewsFeedView). Adapté à la forme `BlogArticle` de l'accueil.
 export const informationsNews: BlogArticle[] = [
@@ -97,5 +97,36 @@ export const informationsNews: BlogArticle[] = [
       "Toutes les sections de l'Intranet intègrent désormais des balises sémantiques strictes, des zones d'annonce dynamiques pour lecteurs d'écran et un mode de focalisation visuelle à fort contraste.",
       "Des tests réguliers avec des usagers en situation de handicap permettent d'ajuster en continu l'ergonomie applicative.",
     ],
+  },
+];
+
+// Contenu d'exemple sur le thème de l'écosystème (à remplacer par une vraie source d'actualités).
+export const blogArticles: BlogArticle[] = [
+  ...informationsNews,
+  {
+    id: 'article-ged',
+    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop&q=80',
+    author: 'Direction des Systèmes d’Information',
+    date: '3 sept. 2026',
+    readTime: '4 min',
+    category: 'GED',
+    title: 'La modernisation de la GED entre dans sa phase pilote',
+    description:
+      'Retour sur les premières salles migrées vers le nouvel archivage électronique et les prochaines étapes.',
+    content: [
+      'La direction des systèmes d’information a lancé la phase pilote de modernisation de la gestion électronique des documents.',
+      'Les premières salles concernées bénéficient déjà d’un archivage plus rapide et d’une recherche par métadonnées.',
+    ],
+  },
+  {
+    id: 'article-iam',
+    image: 'https://images.unsplash.com/photo-1614064548237-096d5ec9a9a5?w=800&auto=format&fit=crop&q=80',
+    author: 'Pôle Sécurité & IAM',
+    date: '1 sept. 2026',
+    readTime: '3 min',
+    category: 'Sécurité',
+    title: 'Nouveau protocole de double authentification',
+    description: 'Le protocole 2FA est désormais actif pour l’ensemble des comptes administrateurs.',
+    content: ['Le pôle Sécurité & IAM déploie progressivement la double authentification sur les comptes sensibles.'],
   },
 ];

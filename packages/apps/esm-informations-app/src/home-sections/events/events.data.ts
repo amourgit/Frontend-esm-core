@@ -1,4 +1,4 @@
-import type { HomeEvent } from '../events/events-section.component';
+import type { HomeEvent } from './events-section.component';
 import { inDays } from './dates';
 
 // Source : esm-informations-app (events-mock-data.ts). Les dates sont calculées

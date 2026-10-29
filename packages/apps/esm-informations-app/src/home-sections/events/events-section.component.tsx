@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Clock, MapPin, Users, Video } from 'lucide-react';
-import { Section, SectionAction, SectionGrid } from '@egen-civitas/esm-framework';
-import { cx } from '../cards/card-utils';
-import { CardTitleButton } from '../cards/card-title-button.component';
+import { Section, SectionAction, SectionCardTitleButton, SectionGrid } from '@egen-civitas/esm-framework';
+import { cx } from '../shared/cx';
 
 // =============================================================================
 //  ÉVÉNEMENTS — Agenda de l'organisation (cartes à visuel)
@@ -106,9 +105,9 @@ function EventCard({ event, onSelect }: { event: HomeEvent; onSelect?: (event: H
           {event.category}
         </span>
         <h3 className="m-0 mt-1 text-base font-bold leading-snug text-white transition-colors group-hover:text-emerald-300">
-          <CardTitleButton onClick={() => onSelect?.(event)} className="line-clamp-2">
+          <SectionCardTitleButton onClick={() => onSelect?.(event)} className="line-clamp-2">
             {event.title}
-          </CardTitleButton>
+          </SectionCardTitleButton>
         </h3>
         <p className="m-0 mt-1.5 line-clamp-2 text-xs leading-relaxed text-slate-300/80">{event.summary}</p>
 

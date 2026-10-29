@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ExternalLink, Mail, MapPin, Phone } from 'lucide-react';
-import { Section, SectionAction, SectionGrid } from '@egen-civitas/esm-framework';
-import { GLASS_CARD, cx } from '../cards/card-utils';
-import { CardTitleButton } from '../cards/card-title-button.component';
+import { Section, SectionAction, SectionCard, SectionCardTitleButton, SectionGrid } from '@egen-civitas/esm-framework';
+import { cx } from '../shared/cx';
 
 // =============================================================================
 //  ANNUAIRE — Collaborateurs (cartes de contact) + types partagés avec « Sites »
@@ -33,14 +32,6 @@ export interface DirectoryMember {
 export interface DirectoryFilter {
   id: string;
   label: string;
-}
-
-export interface DirectorySite {
-  id: string;
-  name: string;
-  city: string;
-  address: string;
-  employeeCount: number;
 }
 
 export interface DirectorySectionProps {
@@ -116,7 +107,7 @@ function MemberCard({
   onOpenProfile?: (member: DirectoryMember) => void;
 }) {
   return (
-    <article className={cx(GLASS_CARD, 'items-center gap-3 text-center')}>
+    <SectionCard as="article" className="items-center gap-3 text-center">
       {member.badge ? (
         <span
           className={cx(
@@ -142,9 +133,9 @@ function MemberCard({
 
       <div className="min-w-0 max-w-full">
         <h3 className="m-0 text-sm font-bold tracking-tight text-white transition-colors group-hover:text-teal-300">
-          <CardTitleButton onClick={() => onSelect?.(member)} className="truncate">
+          <SectionCardTitleButton onClick={() => onSelect?.(member)} className="truncate">
             {member.fullName}
-          </CardTitleButton>
+          </SectionCardTitleButton>
         </h3>
         <p className="m-0 mt-0.5 line-clamp-2 min-h-8 text-[11px] font-medium leading-snug text-slate-400">
           {member.role}
@@ -184,7 +175,7 @@ function MemberCard({
           </button>
         ) : null}
       </div>
-    </article>
+    </SectionCard>
   );
 }
 

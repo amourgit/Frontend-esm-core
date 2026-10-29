@@ -1,113 +1,37 @@
-import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Section, showToast } from '@egen-civitas/esm-framework';
+import React from 'react';
+import { SectionSlot } from '@egen-civitas/esm-framework';
 import { HomeBackground } from './background/home-background.component';
-import { HeroMosaic } from './hero-mosaic/hero-mosaic.component';
-import { BlogSection } from './blog-section/blog-section.component';
-import { AnnouncementsSection } from './announcements/announcements-section.component';
-import { EventsSection } from './events/events-section.component';
-import { DirectorySection } from './directory/directory-section.component';
-import { SitesSection } from './directory/sites-section.component';
-import { SocialLinks } from './social-links/social-links.component';
-import type { HeroTile } from './hero-mosaic/hero-tile-card.component';
-import {
-  heroMainTile,
-  heroSecondaryTiles,
-  blogArticles,
-  announcements,
-  upcomingEvents,
-  directoryMembers,
-  directoryFilters,
-  directoryTotalCount,
-  directorySites,
-  socialLinkRows,
-} from './home-sample-data';
 import styles from './home.scss';
 
 // =============================================================================
 //  HOME PAGE — Page d'accueil de l'espace authentifié (colonne unique)
 //
-//  Assemble les sections de l'accueil au-dessus du fond animé déclaré par
-//  HomeBackground (rendu par l'hôte global du shell). Le contenu latéral
-//  (profil, raccourcis, agenda, documents) vit dans le rail droit
-//  (esm-quick-access-app) : l'accueil ne garde que le contenu principal.
+//  La page ne connaît AUCUNE section : elle déclare le fond animé (HomeBackground) et
+//  expose le slot d'extensions `home-sections`. Chaque app contributrice y branche sa
+//  propre section via son routes.json (`"slot": "home-sections"`, `"order": n`) :
 //
-//  TOUTES les sections reposent sur le même squelette `Section` du framework
-//  (en-tête : titre + options · trait fin · corps : grille responsive · pied) :
+//    10-40  esm-informations-app   À la une · Actualités · Annonces · Événements à venir
+//    50     esm-annuaire-app       Annuaire
+//    60     esm-sites-app          Nos sites
+//    90     esm-home-app           Nous suivre
 //
-//    À la une · Actualités · Annonces · Événements à venir · Annuaire ·
-//    Nos sites · Nous suivre
+//  Toutes reposent sur le squelette `Section` du framework. `SectionSlot` active les
+//  en-têtes collants : l'en-tête d'une section reste en haut de la zone de défilement
+//  tant que son corps est visible, puis passe le relais à la section suivante.
 //
-//  Les données viennent de home-sample-data.ts (qui ré-exporte ./data/ : mocks
-//  adaptés de esm-informations-app et esm-annuaire-app) — SEUL fichier à
-//  modifier pour brancher une vraie source (API, config) sans toucher aux
-//  composants de section eux-mêmes.
+//  Le contenu latéral (profil, raccourcis, agenda, documents) vit dans le rail droit
+//  (esm-quick-access-app).
 // =============================================================================
 
-function handleShowToast(description: string, kind: 'info' | 'success' | 'warning') {
-  showToast({ kind, description });
-}
+export const HOME_SECTIONS_SLOT = 'home-sections';
 
 export function HomePage() {
-  const navigate = useNavigate();
-  const handleSelectHeroTile = useCallback(
-    (tile: HeroTile) => handleShowToast(`Ouverture de « ${tile.title} »`, 'info'),
-    [],
-  );
-
   return (
     <div className={styles.root}>
       <HomeBackground />
 
       <div className={styles.layout}>
-        <div className={styles.mainColumn}>
-          <Section title="À la une">
-            <HeroMosaic
-              mainTile={heroMainTile}
-              secondaryTiles={heroSecondaryTiles}
-              onSelectTile={handleSelectHeroTile}
-            />
-          </Section>
-
-          <BlogSection
-            articles={blogArticles}
-            onShowToast={handleShowToast}
-            onSeeAll={() => navigate('/informations/news')}
-          />
-
-          <AnnouncementsSection
-            items={announcements}
-            onSelect={(item) => navigate(`/informations/annonces?announcement=${item.id}`)}
-            onSeeAll={() => navigate('/informations/annonces')}
-          />
-
-          <EventsSection
-            events={upcomingEvents}
-            onSelect={(event) => navigate(`/informations/agenda?event=${event.id}`)}
-            onSeeAll={() => navigate('/informations/agenda')}
-          />
-
-          <DirectorySection
-            members={directoryMembers}
-            filters={directoryFilters}
-            totalCount={directoryTotalCount}
-            onSelectMember={() => navigate('/annuaire')}
-            onOpenProfile={() => navigate('/annuaire')}
-            onSeeAll={() => navigate('/annuaire')}
-          />
-
-          <SitesSection
-            sites={directorySites}
-            onSelectSite={() => navigate('/sites')}
-            onSeeAll={() => navigate('/sites')}
-          />
-
-          {socialLinkRows.length > 0 && (
-            <Section title="Nous suivre">
-              <SocialLinks rows={socialLinkRows} />
-            </Section>
-          )}
-        </div>
+        <SectionSlot name={HOME_SECTIONS_SLOT} gap="lg" />
       </div>
     </div>
   );

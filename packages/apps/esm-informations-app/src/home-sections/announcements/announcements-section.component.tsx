@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { BadgeCheck, Info, TriangleAlert } from 'lucide-react';
-import { Section, SectionAction, SectionGrid } from '@egen-civitas/esm-framework';
-import { GLASS_CARD, cx } from '../cards/card-utils';
-import { CardTitleButton } from '../cards/card-title-button.component';
+import { Section, SectionAction, SectionCard, SectionCardTitleButton, SectionGrid } from '@egen-civitas/esm-framework';
+import { cx } from '../shared/cx';
 
 // =============================================================================
 //  ANNONCES — Salle des annonces (flash info, circulaires, communiqués)
@@ -53,7 +52,7 @@ const FILTERS: Array<{ id: LevelFilter; label: string }> = [
 function AnnouncementCard({ item, onSelect }: { item: AnnouncementItem; onSelect?: (item: AnnouncementItem) => void }) {
   const { Icon, badge, bar } = LEVEL_STYLE[item.level];
   return (
-    <article className={cx(GLASS_CARD, 'gap-2.5 pl-5')}>
+    <SectionCard as="article" className="gap-2.5 pl-5">
       <span aria-hidden="true" className={cx('absolute bottom-4 left-0 top-4 w-0.5 rounded-full', bar)} />
 
       <div className="flex items-center justify-between gap-2">
@@ -70,9 +69,9 @@ function AnnouncementCard({ item, onSelect }: { item: AnnouncementItem; onSelect
       </div>
 
       <h3 className="m-0 text-[15px] font-semibold leading-snug text-white transition-colors group-hover:text-teal-300">
-        <CardTitleButton onClick={() => onSelect?.(item)} className="line-clamp-2">
+        <SectionCardTitleButton onClick={() => onSelect?.(item)} className="line-clamp-2">
           {item.title}
-        </CardTitleButton>
+        </SectionCardTitleButton>
       </h3>
       <p className="m-0 line-clamp-2 text-xs leading-relaxed text-slate-300/80">{item.body}</p>
 
@@ -80,7 +79,7 @@ function AnnouncementCard({ item, onSelect }: { item: AnnouncementItem; onSelect
         <span className="truncate font-medium text-slate-300">{item.author}</span>
         <span className="truncate">{item.date}</span>
       </div>
-    </article>
+    </SectionCard>
   );
 }
 

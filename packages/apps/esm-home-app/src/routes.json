@@ -30,6 +30,17 @@
       "online": true,
       "offline": false,
       "order": 0
+    },
+    {
+      "name": "home-social-links-section",
+      "slot": "home-sections",
+      "component": "homeSocialLinksSection",
+      "online": true,
+      "offline": false,
+      "order": 90,
+      "meta": {
+        "title": "Nous suivre"
+      }
     }
   ]
 }

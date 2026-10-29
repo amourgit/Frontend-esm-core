@@ -274,6 +274,50 @@
           "intranet"
         ]
       }
+    },
+    {
+      "name": "informations-home-hero-section",
+      "slot": "home-sections",
+      "component": "homeHeroSection",
+      "online": true,
+      "offline": false,
+      "order": 10,
+      "meta": {
+        "title": "À la une"
+      }
+    },
+    {
+      "name": "informations-home-news-section",
+      "slot": "home-sections",
+      "component": "homeNewsSection",
+      "online": true,
+      "offline": false,
+      "order": 20,
+      "meta": {
+        "title": "Actualités"
+      }
+    },
+    {
+      "name": "informations-home-announcements-section",
+      "slot": "home-sections",
+      "component": "homeAnnouncementsSection",
+      "online": true,
+      "offline": false,
+      "order": 30,
+      "meta": {
+        "title": "Annonces"
+      }
+    },
+    {
+      "name": "informations-home-events-section",
+      "slot": "home-sections",
+      "component": "homeEventsSection",
+      "online": true,
+      "offline": false,
+      "order": 40,
+      "meta": {
+        "title": "Événements à venir"
+      }
     }
   ]
 }

@@ -26,7 +26,13 @@ export function BlogPostCard({ article, isBookmarked, onOpen, onToggleBookmark }
   return (
     <article onClick={() => onOpen(article)} className={styles.card}>
       <div className={styles.cardImageWrap}>
-        <img src={article.image} alt={article.title} loading="lazy" referrerPolicy="no-referrer" className={styles.cardImage} />
+        <img
+          src={article.image}
+          alt={article.title}
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          className={styles.cardImage}
+        />
         <button
           type="button"
           onClick={(e) => onToggleBookmark(article, e)}

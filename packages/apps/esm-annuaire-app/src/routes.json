@@ -85,6 +85,17 @@
           "intranet"
         ]
       }
+    },
+    {
+      "name": "annuaire-home-directory-section",
+      "slot": "home-sections",
+      "component": "homeDirectorySection",
+      "online": true,
+      "offline": false,
+      "order": 50,
+      "meta": {
+        "title": "Annuaire"
+      }
     }
   ]
 }
