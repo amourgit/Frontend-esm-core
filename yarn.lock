@@ -778,8 +778,8 @@ __metadata:
   linkType: hard
 
 "@egen-civitas/esm-styleguide@npm:^2.1.1":
-  version: 2.2.0
-  resolution: "@egen-civitas/esm-styleguide@npm:2.2.0"
+  version: 2.3.0
+  resolution: "@egen-civitas/esm-styleguide@npm:2.3.0"
   dependencies:
     "@carbon/charts": "npm:^1.27.0"
     "@carbon/react": "npm:^1.92.1"
@@ -819,7 +819,7 @@ __metadata:
     rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
-  checksum: 10/e66385448f2de47012169f8b0f431237f264911460e4e4dd91145da7dee22e5b05acdaa297558e553ca6566973622ed73c76292f08388eb4582f3ffbe9cdb02c
+  checksum: 10/a70b9d348a62aa2ad355aa664cf6f340cf1f2a1b171f7097c5f5b4cfc3838f5057898e008845b3faa335f5de7b482cd29b2da342242a74546335d294c2ea6c4e
   languageName: node
   linkType: hard
 
