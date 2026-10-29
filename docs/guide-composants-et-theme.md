@@ -255,8 +255,8 @@ var(--transitions-overlay)  // opacity+visibility (voiles de modale)
 
 ### 3.7 Brand historique (compat) — `--brand-01/02/03`
 
-Trois variables de compatibilité avec l'ancien système de marque OpenMRS, **déjà
-branchées sur l'échelle `--colors-primary-*`** (voir `_vars.scss`). À utiliser
+Trois variables de compatibilité avec l'ancien système de marque du framework,
+**déjà branchées sur l'échelle `--colors-primary-*`** (voir `_vars.scss`). À utiliser
 uniquement si un composant hérité y fait déjà référence — pour du code neuf,
 préférer directement `var(--colors-primary-600)` etc.
 
@@ -407,11 +407,10 @@ si une opacité est nécessaire.
 ### 5.4 Couleurs de marque figée — l'exception légitime
 
 Certains éléments ont une couleur d'**identité de marque fixe**, indépendante
-du thème par nature (ex. le sprite du logo dans
-`esm-styleguide/src/logo/_logo.scss` : `--logo-red`, `--logo-purple`...). Un
-logo ne doit pas changer de couleur parce qu'un tenant personnalise sa palette
-primaire. Cette exception est **documentée explicitement** dans le fichier
-concerné — si un doute existe sur si une couleur relève de la marque ou du
+du thème par nature (ex. les logos EGEN, qui sont des images en couleurs dans
+`branding/` — voir `branding/README.md`). Un logo ne doit pas changer de couleur
+parce qu'un tenant personnalise sa palette primaire, et on ne lui applique aucun
+filtre CSS. Si un doute existe sur si une couleur relève de la marque ou du
 thème, elle relève du thème par défaut (c'est le cas par défaut, l'exception
 doit être justifiée).
 
