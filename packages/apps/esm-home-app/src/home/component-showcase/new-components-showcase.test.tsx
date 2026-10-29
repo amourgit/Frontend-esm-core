@@ -49,7 +49,7 @@ describe('vitrine des nouveaux composants', () => {
 
   it('rend la section assistant et charge la scène Spline à la demande', () => {
     render(<AssistantShowcase />);
-    expect(screen.getAllByTestId('live-orb')).toHaveLength(6);
+    expect(screen.getAllByTestId('live-orb')).toHaveLength(8);
     expect(screen.queryByTestId('spline-scene')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Charger la scène 3D' }));
     expect(screen.getByTestId('spline-scene')).toBeInTheDocument();

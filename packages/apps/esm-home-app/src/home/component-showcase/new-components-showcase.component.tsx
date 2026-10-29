@@ -82,7 +82,15 @@ const MORPH_STATUSES = [
 
 const ORB_VARIANTS: Array<{
   label: string;
-  props: { variant: LiveOrbVariant; color?: string; eyeColor?: string; interactive?: boolean; blink?: boolean };
+  props: {
+    variant: LiveOrbVariant;
+    color?: string;
+    eyeColor?: string;
+    interactive?: boolean;
+    blink?: boolean;
+    ears?: boolean;
+    earColors?: string[];
+  };
 }> = [
   { label: 'white (défaut)', props: { variant: 'white' } },
   { label: 'black', props: { variant: 'black' } },
@@ -90,6 +98,8 @@ const ORB_VARIANTS: Array<{
   { label: 'custom (couleurs libres)', props: { variant: 'custom', color: '#0f766e', eyeColor: '#ecfeff' } },
   { label: 'sans suivi du pointeur', props: { variant: 'white', interactive: false } },
   { label: 'sans clignement', props: { variant: 'black', blink: false } },
+  { label: 'sans oreilles', props: { variant: 'white', ears: false } },
+  { label: 'oreilles personnalisées', props: { variant: 'white', earColors: ['#22d3ee', '#a78bfa'] } },
 ];
 
 const XBOX_SOUNDS: XboxSoundType[] = [
@@ -535,7 +545,7 @@ const AssistantShowcaseContent: React.FC = () => {
         <p className={styles.sectionDescription}>
           {t(
             'showcaseLiveOrbDescription',
-            'Sphère 3D dont les yeux suivent le pointeur (WebGL, repli CSS sans GPU) — variantes de matière, couleurs libres, suivi et clignement désactivables.',
+            'Tête 3D (type Baymax) aux oreilles lumineuses, dont le visage pivote pour suivre le pointeur (WebGL, repli CSS sans GPU) — variantes de matière, couleurs libres, oreilles optionnelles et colorables, suivi et clignement désactivables.',
           )}
         </p>
         <div className={styles.variantsGrid}>

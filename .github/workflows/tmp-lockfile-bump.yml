@@ -1,0 +1,35 @@
+name: tmp-lockfile-bump
+
+# Workflow jetable : régénère yarn.lock après le bump de @egen-civitas/esm-app-shell,
+# puis vérifie qu'un `install --immutable` passe. Supprimé juste après usage.
+on:
+  push:
+    branches: ['tmp/lockfile-bump']
+
+permissions:
+  contents: write
+
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Régénérer yarn.lock
+        run: node .yarn/releases/yarn-4.10.3.cjs install --mode=update-lockfile
+
+      - name: Diff du lockfile
+        run: git diff --stat -- yarn.lock && git diff -- yarn.lock | grep '^[+-]' | grep -v '^+++\|^---' | cut -c1-160
+
+      - name: Vérifier que le lockfile est cohérent (immutable, sans scripts)
+        run: node .yarn/releases/yarn-4.10.3.cjs install --immutable --mode=skip-build
+
+      - name: Commiter yarn.lock
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add yarn.lock
+          git diff --cached --quiet && echo "yarn.lock inchangé" && exit 0
+          git commit -m "chore: yarn.lock pour esm-app-shell 2.6.6"
+          git push origin HEAD:tmp/lockfile-bump

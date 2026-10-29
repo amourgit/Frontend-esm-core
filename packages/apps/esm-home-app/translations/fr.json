@@ -21,7 +21,7 @@
   "showcaseAssistantModesDescription": "Les 4 modes de l'assistant (données du styleguide : nom, accroche, principe, exemple, classes de couleur).",
   "showcaseAutocompleteDescription": "Capsule Material 3 — sélection simple ou multiple (chips), création à la volée, chargement, rendu et textes personnalisables.",
   "showcaseComboboxDescription": "Déclencheur + recherche dans un popover (design shadcn sans Radix/cmdk) — groupes, icônes, filtre personnalisable, placement configurable.",
-  "showcaseLiveOrbDescription": "Sphère 3D dont les yeux suivent le pointeur (WebGL, repli CSS sans GPU) — variantes de matière, couleurs libres, suivi et clignement désactivables.",
+  "showcaseLiveOrbDescription": "Tête 3D (type Baymax) aux oreilles lumineuses, dont le visage pivote pour suivre le pointeur (WebGL, repli CSS sans GPU) — variantes de matière, couleurs libres, oreilles optionnelles et colorables, suivi et clignement désactivables.",
   "showcaseMorphSelectDescription": "Select dont le déclencheur se morphe en panneau (layout partagé) — composable : MorphSelectTrigger / Value / Content / Item.",
   "showcasePromptInputDescription": "Zone de saisie de l'assistant — choix du modèle et de l'effort, pièces jointes, envoi avec Entrée. Le callback onSubmit reçoit le texte et les métadonnées.",
   "showcaseRecursiveErosionDescription": "Fond animé « sphère de particules » (iframe sandboxée) — mode clair/sombre, teinte, saturation et luminosité réglables.",

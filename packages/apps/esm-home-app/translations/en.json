@@ -13,7 +13,7 @@
   "showcaseHeroMosaicDescription": "Mosaïque « À la une » : une tuile principale et jusqu'à quatre tuiles secondaires (HeroTileCard).",
   "showcaseIconsDescription": "",
   "showcaseIconsSearch": "Filtrer les icônes et pictogrammes…",
-  "showcaseLiveOrbDescription": "3D sphere whose eyes follow the pointer (WebGL, CSS fallback without GPU) — material variants, free colors, pointer tracking and blinking can be turned off.",
+  "showcaseLiveOrbDescription": "3D Baymax-style head with glowing ear-cups whose face turns to follow the pointer (WebGL, CSS fallback without GPU) — material variants, free colors, optional and customizable ears, pointer tracking and blinking can be turned off.",
   "showcaseMorphSelectDescription": "Select whose trigger morphs into the panel (shared layout) — composable: MorphSelectTrigger / Value / Content / Item.",
   "showcaseNotificationsDescription": "API impérative d'alertes : notifications inline (auto-fermantes ou avec action), notifications actionnables et snackbars. Un bouton par type.",
   "showcaseOverflowMenuDescription": "Menu de débordement (⋮) personnalisable : éléments, séparateur, élément désactivé ou dangereux.",
