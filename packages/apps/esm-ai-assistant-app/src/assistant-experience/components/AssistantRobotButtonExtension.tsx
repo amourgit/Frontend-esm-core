@@ -1,13 +1,12 @@
 import React, { useRef } from 'react';
-import { preloadSplineScene } from '@egen-civitas/esm-styleguide';
+import { preloadAssistantRobot } from '@egen-civitas/esm-styleguide';
 import { AssistantRobotButton } from './AssistantRobotButton';
 import { useAssistantBridge } from '../assistant-bridge';
-import { ASSISTANT_SPLINE_SCENE_URL } from '../constants';
 
 /**
  * Extension injectée dans le slot `top-nav-level2-end-slot` de la TopBar.
  * Pur adaptateur : l'état vient du pont global, les actions repartent en commandes.
- * La scène 3D (~1,3 Mo) n'est préchargée qu'à la première intention d'ouverture (survol/focus).
+ * Le module 3D du robot n'est préchargé qu'à la première intention d'ouverture (survol/focus).
  */
 const AssistantRobotButtonExtension: React.FC = () => {
   const { isOverlayActive, toggleOverlay, openAudioSpace } = useAssistantBridge();
@@ -15,7 +14,7 @@ const AssistantRobotButtonExtension: React.FC = () => {
   const preloadOnce = () => {
     if (preloadedRef.current) return;
     preloadedRef.current = true;
-    preloadSplineScene(ASSISTANT_SPLINE_SCENE_URL);
+    preloadAssistantRobot();
   };
 
   return (

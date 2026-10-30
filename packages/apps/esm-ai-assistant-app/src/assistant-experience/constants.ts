@@ -1,2 +1,2 @@
-/** Scène Spline du robot 3D (overlay plein écran). */
-export const ASSISTANT_SPLINE_SCENE_URL = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode';
+/** Cadrage du robot 3D dans l'overlay plein écran : corps entier. */
+export const ASSISTANT_ROBOT_FRAMING = 'full' as const;
