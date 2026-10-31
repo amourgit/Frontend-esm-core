@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
 import { useConfig } from '@egen-civitas/esm-framework';
+import { egenLogoFull } from '../brand';
 import { type ConfigSchema } from '../config-schema';
 
 /** Pied de page de la connexion : « Built with EGEN », lien d'info et logos additionnels (`footer.additionalLogos`). */
@@ -18,9 +19,7 @@ export const LoginFooter: React.FC = () => {
     <footer className="relative z-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-border/40 bg-card/60 px-4 py-3 text-xs text-muted-foreground backdrop-blur-md">
       <div className="flex flex-wrap items-center justify-center gap-2">
         <span>{t('builtWith', 'Built with')}</span>
-        <svg aria-label={t('egenLogo', 'EGEN Logo')} className="h-5 w-24 brightness-0 invert" role="img">
-          <use href="#egen-logo-full-color"></use>
-        </svg>
+        <img alt={t('egenLogo', 'Egen logo')} className="h-7 w-auto object-contain" src={egenLogoFull} />
         <span className="hidden sm:inline">{t('poweredBySubtext', 'La plateforme éducative nationale du Gabon')}</span>
         <a
           className="inline-flex items-center gap-1 font-semibold text-foreground/80 transition-colors hover:text-foreground"
