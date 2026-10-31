@@ -1,4 +1,4 @@
-import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
+import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import rootComponent from './root.component';
 import HomeAppToolbar from './topbar/home-app-toolbar.extension';
@@ -33,3 +33,9 @@ export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 
 
 // Contenu de la TopBar de niveau 2 propre à l'app (slot `top-nav-app-slot`) : identité + actions de l'app Accueil.
 export const appToolbar = getSyncLifecycle(HomeAppToolbar, { ...options, featureName: 'home-app-toolbar' });
+
+// Section « Nous suivre » du slot `home-sections` (page d'accueil).
+export const homeSocialLinksSection = getAsyncLifecycle(() => import('./home/social-links/social-links.extension'), {
+  ...options,
+  featureName: 'home-social-links',
+});

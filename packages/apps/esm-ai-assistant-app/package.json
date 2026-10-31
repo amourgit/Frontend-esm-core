@@ -70,6 +70,7 @@
     "swr": "2.x"
   },
   "devDependencies": {
+    "@types/three": "0.170.0",
     "@vitest/coverage-v8": "^5.0.5",
     "cross-env": "^10.1.0",
     "happy-dom": "^21.0.4",
@@ -103,16 +104,18 @@
     "@egen-civitas/esm-react-utils": "^2.0.0",
     "@egen-civitas/esm-routes": "^1.0.3",
     "@egen-civitas/esm-state": "^1.0.2",
-    "@egen-civitas/esm-styleguide": "^2.1.1",
+    "@egen-civitas/esm-styleguide": "^2.3.1",
     "@egen-civitas/esm-tenant": "^1.0.2",
     "@egen-civitas/esm-translations": "^1.0.2",
     "@egen-civitas/esm-utils": "^1.0.2",
+    "@react-three/fiber": "8.17.10",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.10",
     "framer-motion": "^14.5.0",
     "lucide-react": "^1.61.0",
     "rxjs": "^7.8.1",
     "single-spa": "^6.0.0",
-    "swr": "^2.2.0"
+    "swr": "^2.2.0",
+    "three": "0.170.0"
   }
 }
