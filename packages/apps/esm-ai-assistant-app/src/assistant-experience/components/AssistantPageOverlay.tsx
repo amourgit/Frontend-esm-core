@@ -2,7 +2,8 @@
 
 import React, { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { AssistantRobotScene, RobotController, type AssistantState } from '@egen-civitas/esm-styleguide';
+import { AssistantRobotScene } from '../robot/lazy';
+import { RobotController, type AssistantState } from '../robot/controller';
 import { AssistantConversationInterface } from './AssistantConversationInterface';
 import { type AssistantMode } from '@egen-civitas/esm-styleguide';
 import { useAssistantVoice } from '../context/AssistantGlobalVoiceContext';
@@ -55,7 +56,10 @@ export function AssistantPageOverlay({ isActive, onClose, onOpenDedicatedVoice }
       aria-hidden={!isActive}
     >
       {/* 1. Robot 3D : prend TOUTE LA PAGE ; le rendu est suspendu quand l'overlay est fermé. */}
-      <div className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden flex items-center justify-center bg-transparent pointer-events-auto">
+      <div
+        className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden bg-transparent pointer-events-auto md:pr-[480px] lg:pr-[540px]"
+        style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 62%, rgba(45,212,191,0.12), rgba(3,7,8,0) 70%)' }}
+      >
         <AssistantRobotScene
           controller={controller}
           state={toRobotState(voice)}

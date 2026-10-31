@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { preloadAssistantRobot } from '@egen-civitas/esm-styleguide';
+import { preloadAssistantRobot } from '../robot/lazy';
 import { AssistantRobotButton } from './AssistantRobotButton';
 import { useAssistantBridge } from '../assistant-bridge';
 
