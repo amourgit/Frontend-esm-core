@@ -68,8 +68,7 @@ export const configSchema = {
     src: {
       _type: Type.String,
       _default: '',
-      _description:
-        'The path or URL to the logo image. If set to an empty string, the default Egen SVG sprite will be used.',
+      _description: 'The path or URL to the logo image. If set to an empty string, the default EGEN logo will be used.',
       _validators: [validators.isUrl],
     },
     alt: {
