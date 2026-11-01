@@ -965,20 +965,20 @@ __metadata:
     classnames: "npm:^2.3.2"
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
-    framer-motion: "npm:^14.5.0"
+    framer-motion: "npm:^14.7.1"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
+    lucide-react: "npm:^1.64.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:^2.2.0"
-    three: "npm:0.170.0"
+    three: "npm:0.186.1"
     vite: "npm:^8.3.5"
     vitest: "npm:^5.0.5"
   peerDependencies:
@@ -1043,17 +1043,17 @@ __metadata:
     "@vitest/coverage-v8": "npm:^5.0.5"
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
-    framer-motion: "npm:^14.5.0"
+    framer-motion: "npm:^14.7.1"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
+    lucide-react: "npm:^1.64.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:2.5.1"
     vite: "npm:^8.3.5"
@@ -1172,7 +1172,7 @@ __metadata:
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:^2.2.0"
     vite: "npm:^8.3.5"
@@ -1241,7 +1241,7 @@ __metadata:
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:^2.2.0"
     vite: "npm:^8.3.5"
@@ -1309,7 +1309,7 @@ __metadata:
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:^2.2.0"
     vite: "npm:^8.3.5"
@@ -1374,17 +1374,17 @@ __metadata:
     dayjs: "npm:^1.11.10"
     embla-carousel: "npm:^8.0.0"
     embla-carousel-autoplay: "npm:^8.6.0"
-    framer-motion: "npm:^14.5.0"
+    framer-motion: "npm:^14.7.1"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
+    lucide-react: "npm:^1.64.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:2.5.1"
     vite: "npm:^8.3.5"
@@ -1459,7 +1459,7 @@ __metadata:
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:2.5.1"
     vite: "npm:^8.3.5"
@@ -1524,17 +1524,17 @@ __metadata:
     "@vitest/coverage-v8": "npm:^5.0.5"
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
-    framer-motion: "npm:^14.5.0"
+    framer-motion: "npm:^14.7.1"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
+    lucide-react: "npm:^1.64.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:2.5.1"
     vite: "npm:^8.3.5"
@@ -1607,8 +1607,8 @@ __metadata:
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
-    motion: "npm:^14.5.0"
+    lucide-react: "npm:^1.64.0"
+    motion: "npm:^14.7.1"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.86.0"
@@ -1616,7 +1616,7 @@ __metadata:
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:2.5.1"
     vite: "npm:^8.3.5"
@@ -1683,13 +1683,13 @@ __metadata:
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
+    lucide-react: "npm:^1.64.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:^2.2.0"
     vite: "npm:^8.3.5"
@@ -1760,7 +1760,7 @@ __metadata:
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:2.5.1"
     vite: "npm:^8.3.5"
@@ -1824,13 +1824,13 @@ __metadata:
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
+    lucide-react: "npm:^1.64.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:^2.2.0"
     vite: "npm:^8.3.5"
@@ -1903,7 +1903,7 @@ __metadata:
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:2.5.1"
     vite: "npm:^8.3.5"
@@ -1971,15 +1971,15 @@ __metadata:
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
     lodash-es: "npm:^4.18.1"
-    lucide-react: "npm:^1.61.0"
-    motion: "npm:^14.5.0"
+    lucide-react: "npm:^1.64.0"
+    motion: "npm:^14.7.1"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:^2.2.0"
     vite: "npm:^8.3.5"
@@ -2044,13 +2044,13 @@ __metadata:
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
+    lucide-react: "npm:^1.64.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:^2.2.0"
     vite: "npm:^8.3.5"
@@ -2115,13 +2115,13 @@ __metadata:
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
+    lucide-react: "npm:^1.64.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:^2.2.0"
     vite: "npm:^8.3.5"
@@ -2189,14 +2189,14 @@ __metadata:
     dayjs: "npm:^1.11.10"
     happy-dom: "npm:^21.0.4"
     i18next: "npm:^25.10.10"
-    lucide-react: "npm:^1.61.0"
+    lucide-react: "npm:^1.64.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^16.6.6"
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:2.5.1"
     vite: "npm:^8.3.5"
@@ -2268,7 +2268,7 @@ __metadata:
     react-is: "npm:^17.0.2"
     react-router-dom: "npm:^6.30.6"
     rxjs: "npm:^7.8.1"
-    sass: "npm:^1.106.0"
+    sass: "npm:^1.107.0"
     single-spa: "npm:^6.0.0"
     swr: "npm:2.5.1"
     vite: "npm:^8.3.5"
@@ -12543,12 +12543,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:14.6.0, framer-motion@npm:^14.5.0":
-  version: 14.6.0
-  resolution: "framer-motion@npm:14.6.0"
+"framer-motion@npm:14.7.1, framer-motion@npm:^14.7.1":
+  version: 14.7.1
+  resolution: "framer-motion@npm:14.7.1"
   dependencies:
-    motion-dom: "npm:14.6.0"
-    motion-utils: "npm:14.6.0"
+    motion-dom: "npm:14.7.1"
+    motion-utils: "npm:14.7.0"
     tslib: "npm:^2.4.0"
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
@@ -12558,7 +12558,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10/f67f1ffaae845eb7e66d916e0a61175cb65e539bc981c04484bea80eb317fd292c70b4f36ae77aab8887d2e56984562a46fc4e5da133cb182fec64eb57d47d7a
+  checksum: 10/0a924c99e4dbaca70a23312102ec94baa084bb3f62309172ded8ddb25830319c8d5c267d6524258268b85fcfed6317c7acfb77824b58167f32a0ecdb4c3d226d
   languageName: node
   linkType: hard
 
@@ -14944,16 +14944,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^1.61.0":
-  version: 1.61.0
-  resolution: "lucide-react@npm:1.61.0"
+"lucide-react@npm:^1.64.0":
+  version: 1.64.0
+  resolution: "lucide-react@npm:1.64.0"
   peerDependencies:
     "@types/react": "*"
     react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10/94967ade6a5ed65e12606558411caa7de6c8318a024a52d311c90dd7c93cfc7fd8d5eabcba546485ff2f1692218e9a725702418a7307e54604cf699f1bd7d630
+  checksum: 10/f73ba5930b962d5656c05b800b5a9370e65c16ac7f226651fc53ab4432276a6b901aadd1cf44f93f8fb383989b2583e7c7ae469c5c494ea2ab1ea5c0ed3a041b
   languageName: node
   linkType: hard
 
@@ -15492,12 +15492,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-dom@npm:14.6.0":
-  version: 14.6.0
-  resolution: "motion-dom@npm:14.6.0"
+"motion-dom@npm:14.7.1":
+  version: 14.7.1
+  resolution: "motion-dom@npm:14.7.1"
   dependencies:
-    motion-utils: "npm:14.6.0"
-  checksum: 10/471043ee0f71a38cf0c234f59c4ddfd3c5e31573f36d3e4d2e056ceb4d0b7b36503b3640859318201923def9c67863f7ef9ff1c2948d1230e9b04c809c58517b
+    motion-utils: "npm:14.7.0"
+  checksum: 10/8d9c3353e6db3e0dbd908ebaaffacd400b37054c3b409063a6400bd7e9dc37366ed02ee6a8c9f4d96ed827358aee63700fd50638fb88d234edcafb6df3940f0e
   languageName: node
   linkType: hard
 
@@ -15510,10 +15510,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-utils@npm:14.6.0":
-  version: 14.6.0
-  resolution: "motion-utils@npm:14.6.0"
-  checksum: 10/00906611928721441d05324230ce2a9d40bfa0c4dc70c50f222795d4418fc0865e810fea2d494e4e191bd10574894159cd1534d7c015e7f7b1fdf6d7c171c654
+"motion-utils@npm:14.7.0":
+  version: 14.7.0
+  resolution: "motion-utils@npm:14.7.0"
+  checksum: 10/411e24ba7f1bd736180a9bcf2dec92f41fc6300fa92c89e3cc6dc384e20fd2961314da2daf147750b3fc80739190f2693c7cbb696d0176905c1a9d54ad22bef6
   languageName: node
   linkType: hard
 
@@ -15524,11 +15524,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion@npm:^14.5.0":
-  version: 14.6.0
-  resolution: "motion@npm:14.6.0"
+"motion@npm:^14.7.1":
+  version: 14.7.1
+  resolution: "motion@npm:14.7.1"
   dependencies:
-    framer-motion: "npm:14.6.0"
+    framer-motion: "npm:14.7.1"
     tslib: "npm:^2.4.0"
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
@@ -15538,7 +15538,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10/c45d9e5220726509e483e25a0ee5ec2a9ceb8d35f11c0e8a0a2696677ecd45cd6441c335c494082d663cf5a056efe7a80741707b614bdc906293a57eb44f0b64
+  checksum: 10/d66d453d182977d41735ef4d30611eee321b40b5cd516bebc058ce6f0a1e52b557d00e845bfc15233b95fbf506efd9c5965445c456e3386ae5047a3134467263
   languageName: node
   linkType: hard
 
@@ -17838,9 +17838,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.106.0":
-  version: 1.106.1
-  resolution: "sass@npm:1.106.1"
+"sass@npm:^1.107.0":
+  version: 1.107.0
+  resolution: "sass@npm:1.107.0"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^5.0.0"
@@ -17851,7 +17851,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/8138ca5abfd6713130a1e28814eb695578d9916a77a9d585651b2bb9f5f6219ce513b7fde58acb49a0634f29b1ffb0a7a4a4988865acb4d508d4e329b1ffd452
+  checksum: 10/29df4f6e4c4fdf971fafe3d76d0a8d958b85847d6f63ff62caecf5a2babaf25ca5fe6729a5068882fc9bb9ed83d17048a38a4076d7885f8bd94179947affb0f9
   languageName: node
   linkType: hard
 
@@ -18862,10 +18862,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"three@npm:0.170.0":
-  version: 0.170.0
-  resolution: "three@npm:0.170.0"
-  checksum: 10/ce523a35b17b47526df7d21323afeac3482ef69a67d9304ed2d71877c079debfb1e77249af8a55ab376b48ee8265488da1bb0912200c170a6874f574f19f63c9
+"three@npm:0.186.1":
+  version: 0.186.1
+  resolution: "three@npm:0.186.1"
+  checksum: 10/8ae3da0f64cb9244a6790378a5dc99a6c809d4fd832d99dfe749977671f8ac612784c0ee9b62fb9d9131f62e81dcc897772d6acfacf02438ce23c97ea5171d16
   languageName: node
   linkType: hard
 
