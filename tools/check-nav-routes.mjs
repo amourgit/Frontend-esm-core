@@ -2,10 +2,11 @@
 // Test de cohérence : chaque entrée de navigation déclarée sur le slot
 // `topbar-level2-nav` doit pointer vers une route réellement déclarée dans un
 // `pages[].route` d'une app (route exacte ou sous-route d'une page).
-import { readdirSync, readFileSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const SLOT = 'topbar-level2-nav';
+const RAIL_SLOTS = ['shell-rail-left-slot', 'shell-rail-bottom-slot', 'shell-rail-right-slot'];
 const appsDir = 'packages/apps';
 const norm = (r) => String(r).replace(/^\/+|\/+$/g, '');
 
@@ -15,10 +16,14 @@ const routesFiles = readdirSync(appsDir)
 
 const pageRoutes = [];
 const entries = [];
+const railEntries = [];
 for (const file of routesFiles) {
   const json = JSON.parse(readFileSync(file, 'utf8'));
   for (const p of json.pages ?? []) if (typeof p.route === 'string') pageRoutes.push(norm(p.route));
-  for (const e of json.extensions ?? []) if (e.slot === SLOT) entries.push({ file, e });
+  for (const e of json.extensions ?? []) {
+    if (e.slot === SLOT) entries.push({ file, e });
+    if (RAIL_SLOTS.includes(e.slot)) railEntries.push({ file, e });
+  }
 }
 
 const errors = [];
@@ -48,8 +53,47 @@ for (const { file, e } of entries) {
   }
 }
 
+// Options des rails (fenêtres d'outils) : `meta` exploitable par le shell (ToolWindowMeta).
+for (const { file, e } of railEntries) {
+  const m = e.meta ?? {};
+  if (typeof m.title !== 'string' || !m.title) errors.push(`${file}: \"${e.name}\" (${e.slot}) — meta.title manquant`);
+  if (m.icon !== undefined && typeof m.icon !== 'string') errors.push(`${file}: \"${e.name}\" — meta.icon doit être une chaîne`);
+  if (m.order !== undefined && !Number.isFinite(m.order)) errors.push(`${file}: \"${e.name}\" — meta.order doit être un nombre`);
+  if (m.global !== undefined && typeof m.global !== 'boolean') errors.push(`${file}: \"${e.name}\" — meta.global doit être un booléen`);
+}
+
+// Garde-fou : l'ancienne sidebar est supprimée du framework ; aucune app ne doit en monter une
+// (la navigation passe par les rails/zones et la TopBar niveau 2).
+const FORBIDDEN_SIDEBAR = [
+  /\bSideNav\b/,
+  /\b(setLeftNav|unsetLeftNav|useLeftNav|useLeftNavStore|LeftNavMenu|DashboardExtension|createDashboard)\b/,
+  /(?<![\w-])nav-menu-slot\b/,
+  /cds--side-nav/,
+  /--egen-sidenav-width/,
+  /active-left-nav-link/,
+];
+const walk = (dir) =>
+  readdirSync(dir).flatMap((n) => {
+    const f = join(dir, n);
+    if (n === 'node_modules' || n === 'dist') return [];
+    return statSync(f).isDirectory() ? walk(f) : [f];
+  });
+for (const app of readdirSync(appsDir)) {
+  const src = join(appsDir, app, 'src');
+  if (!existsSync(src)) continue;
+  for (const f of walk(src)) {
+    if (!/\.(tsx?|scss|css|json)$/.test(f) || /\.test\.tsx?$/.test(f)) continue;
+    const text = readFileSync(f, 'utf8');
+    for (const re of FORBIDDEN_SIDEBAR) {
+      if (re.test(text)) errors.push(`${f}: sidebar interdite (${re}) — utiliser un rail (shell-rail-*-slot) et topbar-level2-nav`);
+    }
+  }
+}
+
 if (errors.length) {
   console.error(`Navigation incohérente (${errors.length}) :\n- ${errors.join('\n- ')}`);
   process.exit(1);
 }
-console.log(`Navigation OK : ${entries.length} entrée(s) sur ${routesFiles.length} routes.json.`);
+console.log(
+  `Navigation OK : ${entries.length} entrée(s) de TopBar et ${railEntries.length} option(s) de rail sur ${routesFiles.length} routes.json.`,
+);

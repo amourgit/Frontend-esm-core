@@ -1,4 +1,4 @@
-import { defineConfigSchema, getSyncLifecycle } from '@egen-civitas/esm-framework';
+import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import rootComponent from './root.component';
 
@@ -29,3 +29,10 @@ export const root = getSyncLifecycle(rootComponent, options);
 // Extension de navigation (slot `topbar-level2-nav`) : ne rend rien. Seule sa
 // `meta` (déclarée dans routes.json) est lue par la TopBar du niveau 2.
 export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'sites-nav-entry' });
+
+// Sections du slot `home-sections` (page d'accueil) : chaque extension rend sa propre `Section`.
+// Le composant est chargé à la demande, donc seulement quand la page qui expose le slot est affichée.
+export const homeSitesSection = getAsyncLifecycle(() => import('./home-sections/sites/sites-section.extension'), {
+  ...options,
+  featureName: 'sites-home-sites',
+});

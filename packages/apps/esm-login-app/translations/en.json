@@ -7,7 +7,6 @@
   "close": "Close",
   "confirmPassword": "Confirm new password",
   "continue": "Continue",
-  "continueToPassword": "Continue to password",
   "currentLocation": "Actuel",
   "egenLogo": "Egen logo",
   "errorChangingPassword": "Error changing password",
@@ -21,9 +20,7 @@
   "locationSaveMessage": "Your preferred location has been saved for future logins",
   "locationUpdated": "Location updated",
   "locationUpdateMessage": "Your preferred login location has been updated",
-  "loggingIn": "Logging in",
   "login": "Log in",
-  "loginButtonIconDescription": "Log in button",
   "loginPasswordPrompt": "Signing in as {{username}}",
   "loginPasswordTitle": "Enter your password",
   "loginPreparing": "Preparing your workspace...",
@@ -50,6 +47,5 @@
   "submitting": "Submitting",
   "tryAgain": "Try again",
   "username": "Username",
-  "validValueRequired": "A valid value is required",
   "welcome": "Welcome"
 }

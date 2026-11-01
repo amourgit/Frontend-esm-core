@@ -70,7 +70,7 @@ const Login: React.FC = () => {
   }, [location.search]);
 
   // Tenant effectif : activeTenant (résolu par sous-domaine) > query param
-  const effectiveTenantSlug = isMultiTenant ? activeTenant ?? tenantFromQuery ?? null : null;
+  const effectiveTenantSlug = isMultiTenant ? (activeTenant ?? tenantFromQuery ?? null) : null;
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -373,7 +373,7 @@ const Login: React.FC = () => {
           </AnimatePresence>
 
           {/* ── Formulaire ── */}
-          <form onSubmit={handleSubmit} className="w-full max-w-[300px] space-y-6">
+          <form onSubmit={handleSubmit} className="w-full max-w-[300px] space-y-6 min-h-48">
             {/* Identifiant */}
             <BlurFade delay={0.5} className="w-full">
               <div className="relative w-full">
@@ -435,7 +435,9 @@ const Login: React.FC = () => {
             <div
               className={cn(
                 'w-full transition-all duration-300 ease-in-out',
-                passwordRevealed ? 'max-h-24 opacity-100' : 'pointer-events-none max-h-0 overflow-hidden opacity-0',
+                passwordRevealed
+                  ? 'max-h-20 pt-6 opacity-100'
+                  : 'pointer-events-none max-h-0 overflow-hidden opacity-0',
               )}
             >
               <div className="relative w-full">
@@ -453,7 +455,7 @@ const Login: React.FC = () => {
                           type="button"
                           aria-label={t('showPassword', 'Show password')}
                           onClick={() => setShowPasswordText((v) => !v)}
-                          className="rounded-full p-2 text-foreground/80 transition-colors hover:text-foreground"
+                          className="rounded-full p-1 text-foreground/80 transition-colors hover:text-foreground"
                         >
                           {showPasswordText ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                         </button>
@@ -504,7 +506,7 @@ const Login: React.FC = () => {
             </div>
 
             {twoStep && showPasswordField && (
-              <BlurFade inView delay={0.2}>
+              <BlurFade inView delay={0.2} className="relative z-10 !mt-10">
                 <button
                   type="button"
                   onClick={handleGoBack}

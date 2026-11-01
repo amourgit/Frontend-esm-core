@@ -316,3 +316,73 @@
   font-size: var(--typography-font-size-xs-size, 0.75rem);
   color: var(--colors-surface-muted-foreground);
 }
+
+// ── Vitrine : composants du styleguide ajoutés (icônes, fonds bornés, sites…) ──
+
+.searchInput {
+  min-width: 16rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--border-radius-md, 0.5rem);
+  border: 1px solid var(--colors-border-default, rgba(128, 128, 128, 0.4));
+  background: transparent;
+  color: var(--colors-surface-foreground);
+  font-size: var(--typography-font-size-xs-size, 0.75rem);
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.iconCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.75rem 0.375rem;
+  border-radius: var(--border-radius-md, 0.5rem);
+  border: 1px solid var(--colors-border-default, rgba(128, 128, 128, 0.25));
+  color: var(--colors-surface-foreground);
+  text-align: center;
+
+  span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.6875rem;
+    color: var(--colors-surface-muted-foreground);
+  }
+}
+
+// Cadre borné : `transform` fait des éléments `position: fixed` (fonds de page)
+// des enfants positionnés par rapport à CE cadre et non au viewport.
+.stageBounded {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-md, 0.5rem);
+  background: #0a0908;
+  transform: translateZ(0);
+}
+
+.stageImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.stageBlurBottom {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+}
+
+.siteStage {
+  min-height: 28rem;
+  border-radius: var(--border-radius-md, 0.5rem);
+  overflow: hidden;
+}

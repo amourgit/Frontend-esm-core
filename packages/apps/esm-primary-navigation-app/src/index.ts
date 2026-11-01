@@ -14,8 +14,6 @@ import { moduleName } from './constants';
 import primaryNavRootComponent from './root.component';
 import userPanelComponent from './components/user-panel-switcher/user-panel-switcher.component';
 import changeLanguageLinkComponent from './components/change-language/change-language-link.extension';
-import { NavGroup, navGroupConfigSchema } from './components/nav-group/nav-group.component';
-import { dashboardConfigSchema } from './components/dashboard/dashboard.component';
 import genericLinkComponent, { genericLinkConfigSchema } from './components/generic-link/generic-link.component';
 import breadcrumbItemComponent, {
   breadcrumbItemConfigSchema,
@@ -31,8 +29,6 @@ const options = {
 export function startupApp() {
   defineConfigSchema(moduleName, configSchema);
   defineExtensionConfigSchema('link', genericLinkConfigSchema);
-  defineExtensionConfigSchema('nav-group', navGroupConfigSchema);
-  defineExtensionConfigSchema('dashboard', dashboardConfigSchema);
   defineExtensionConfigSchema('breadcrumb-item', breadcrumbItemConfigSchema);
 }
 
@@ -109,11 +105,8 @@ export const linkComponent = getSyncLifecycle(genericLinkComponent, {
   moduleName,
 });
 
-export const navGroup = getSyncLifecycle(NavGroup, options);
 
 // ─── Item de fil d'Ariane (niveau 2 de la topbar) ────────────────────────────
 // Composant générique déclaratif pour peupler "top-nav-breadcrumb-slot" —
 // voir breadcrumb-item.component.tsx pour le contrat et un exemple d'usage.
 export const breadcrumbItem = getSyncLifecycle(breadcrumbItemComponent, options);
-
-export const dashboard = getAsyncLifecycle(() => import('./components/dashboard/dashboard.component'), options);

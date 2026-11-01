@@ -118,6 +118,17 @@
         "icon": "Building2",
         "route": "sites/srv-9d82b51c/applications"
       }
+    },
+    {
+      "name": "sites-home-sites-section",
+      "slot": "home-sections",
+      "component": "homeSitesSection",
+      "online": true,
+      "offline": false,
+      "order": 60,
+      "meta": {
+        "title": "Nos sites"
+      }
     }
   ]
 }

@@ -4,7 +4,11 @@ import {
   ASSISTANT_MODES,
   Autocomplete,
   Combobox,
+  getSavedAssistantMode,
   isXboxAudioMuted,
+  MORPH_SELECT_DEFAULT_TRANSITION,
+  preloadSplineScene,
+  saveAssistantMode,
   LiveOrb,
   MorphSelect,
   MorphSelectContent,
@@ -78,7 +82,15 @@ const MORPH_STATUSES = [
 
 const ORB_VARIANTS: Array<{
   label: string;
-  props: { variant: LiveOrbVariant; color?: string; eyeColor?: string; interactive?: boolean; blink?: boolean };
+  props: {
+    variant: LiveOrbVariant;
+    color?: string;
+    eyeColor?: string;
+    interactive?: boolean;
+    blink?: boolean;
+    ears?: boolean;
+    earColors?: string[];
+  };
 }> = [
   { label: 'white (défaut)', props: { variant: 'white' } },
   { label: 'black', props: { variant: 'black' } },
@@ -86,6 +98,8 @@ const ORB_VARIANTS: Array<{
   { label: 'custom (couleurs libres)', props: { variant: 'custom', color: '#0f766e', eyeColor: '#ecfeff' } },
   { label: 'sans suivi du pointeur', props: { variant: 'white', interactive: false } },
   { label: 'sans clignement', props: { variant: 'black', blink: false } },
+  { label: 'sans oreilles', props: { variant: 'white', ears: false } },
+  { label: 'oreilles personnalisées', props: { variant: 'white', earColors: ['#22d3ee', '#a78bfa'] } },
 ];
 
 const XBOX_SOUNDS: XboxSoundType[] = [
@@ -112,7 +126,10 @@ const SPLINE_SCENE = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splineco
  * chargé, donc `undefined`), seule sa section affiche l'erreur — le reste de la page
  * (et ses autres composants) continue de s'afficher.
  */
-class ShowcaseBoundary extends React.Component<{ name: string; children: React.ReactNode }, { error: Error | null }> {
+export class ShowcaseBoundary extends React.Component<
+  { name: string; children: React.ReactNode },
+  { error: Error | null }
+> {
   state: { error: Error | null } = { error: null };
 
   static getDerivedStateFromError(error: Error) {
@@ -137,7 +154,11 @@ class ShowcaseBoundary extends React.Component<{ name: string; children: React.R
 
 type Modal = 'right' | 'left' | 'center' | 'rich';
 
-const Variant: React.FC<{ label: string; children: React.ReactNode; tall?: boolean }> = ({ label, children, tall }) => (
+export const Variant: React.FC<{ label: string; children: React.ReactNode; tall?: boolean }> = ({
+  label,
+  children,
+  tall,
+}) => (
   <div className={`${styles.variantCard} ${tall ? styles.variantCardTall : ''}`}>
     <span className={styles.variantLabel}>{label}</span>
     {children}
@@ -203,6 +224,9 @@ const SelectionsShowcaseContent: React.FC = () => {
             'showcaseMorphSelectDescription',
             'Select dont le déclencheur se morphe en panneau (layout partagé) — composable : MorphSelectTrigger / Value / Content / Item.',
           )}
+        </p>
+        <p className={styles.variantOutput} style={{ marginBottom: '1rem' }}>
+          MORPH_SELECT_DEFAULT_TRANSITION = <code>{JSON.stringify(MORPH_SELECT_DEFAULT_TRANSITION)}</code>
         </p>
         <div className={styles.variantsGrid}>
           <Variant label="Défaut" tall>
@@ -502,6 +526,7 @@ const AssistantShowcaseContent: React.FC = () => {
     rich: false,
   });
   const [muted, setMuted] = useState(isXboxAudioMuted());
+  const [savedMode, setSavedMode] = useState(getSavedAssistantMode());
 
   const toggleModal = (key: Modal) => setModals((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -520,7 +545,7 @@ const AssistantShowcaseContent: React.FC = () => {
         <p className={styles.sectionDescription}>
           {t(
             'showcaseLiveOrbDescription',
-            'Sphère 3D dont les yeux suivent le pointeur (WebGL, repli CSS sans GPU) — variantes de matière, couleurs libres, suivi et clignement désactivables.',
+            'Tête 3D (type Baymax) aux oreilles lumineuses, dont le visage pivote pour suivre le pointeur (WebGL, repli CSS sans GPU) — variantes de matière, couleurs libres, oreilles optionnelles et colorables, suivi et clignement désactivables.',
           )}
         </p>
         <div className={styles.variantsGrid}>
@@ -722,6 +747,37 @@ const AssistantShowcaseContent: React.FC = () => {
               <em className={styles.variantOutput}>Ex. : {mode.example}</em>
             </Variant>
           ))}
+        </div>
+      </section>
+
+      {/* ── Persistance du mode + préchargement Spline ── */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>saveAssistantMode · getSavedAssistantMode · preloadSplineScene</h2>
+        <p className={styles.sectionDescription}>
+          {t(
+            'showcaseAssistantPersistenceDescription',
+            "Le mode de l'assistant est mémorisé (localStorage) et relu au prochain chargement ; preloadSplineScene précharge une scène 3D avant son affichage.",
+          )}
+        </p>
+        <div className={styles.controls}>
+          {Object.values(ASSISTANT_MODES).map((mode) => (
+            <button
+              key={mode.id}
+              type="button"
+              className={styles.controlButton}
+              data-active={savedMode === mode.id || undefined}
+              onClick={() => {
+                saveAssistantMode(mode.id);
+                setSavedMode(getSavedAssistantMode());
+              }}
+            >
+              {mode.emoji} {mode.name}
+            </button>
+          ))}
+          <span className={styles.variantOutput}>Mode mémorisé : {savedMode}</span>
+          <button type="button" className={styles.controlButton} onClick={() => preloadSplineScene(SPLINE_SCENE)}>
+            Précharger la scène Spline
+          </button>
         </div>
       </section>
 

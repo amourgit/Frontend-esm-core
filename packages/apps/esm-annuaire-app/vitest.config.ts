@@ -27,6 +27,10 @@ export default defineConfig({
     environment: 'happy-dom',
     mockReset: true,
     globals: true,
+    setupFiles: ['./src/test-utils/no-waapi.ts'],
+    // Rendus lourds (annuaire complet + animations) : 5 s ne suffisent pas quand turbo lance toutes les suites en parallèle.
+    testTimeout: 20000,
+    hookTimeout: 20000,
     alias: {
       '@egen-test/styleguide-dist': styleguideDist,
       '@egen-civitas/esm-framework/src/internal': '@egen-civitas/esm-framework/mock',

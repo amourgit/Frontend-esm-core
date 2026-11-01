@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AssistantWidget from './components/assistant-widget/assistant-widget.component';
 import styles from './root.scss';
 
-// Expérience plein écran (Spline, WebGL) : chargée à la demande, hors du chemin critique.
+// Expérience plein écran (robot 3D, WebGL) : chargée à la demande, hors du chemin critique.
 const AssistantExperience = lazy(() => import('./assistant-experience/AssistantExperience'));
 
 // =============================================================================

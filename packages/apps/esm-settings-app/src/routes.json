@@ -1,0 +1,30 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "settings",
+      "slot": "shell-rail-right-slot",
+      "component": "settingsPanel",
+      "online": true,
+      "offline": true,
+      "order": 90,
+      "meta": { "title": "Paramètres", "titleKey": "settings", "icon": "Settings", "order": 90 }
+    },
+    {
+      "name": "settings-appearance",
+      "slot": "global-settings-slot",
+      "component": "appearanceSection",
+      "online": true,
+      "offline": true,
+      "order": 0
+    },
+    {
+      "name": "settings-language",
+      "slot": "global-settings-slot",
+      "component": "languageSection",
+      "online": true,
+      "offline": true,
+      "order": 1
+    }
+  ]
+}

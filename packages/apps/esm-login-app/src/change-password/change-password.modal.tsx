@@ -29,21 +29,22 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ close }) => {
 
   const oldPasswordValidation = z
     .string({
-      required_error: t('oldPasswordRequired', 'Old password is required'),
+      error: (issue) => (issue.input === undefined ? t('oldPasswordRequired', 'Old password is required') : undefined),
     })
     .trim()
     .min(1, t('oldPasswordRequired', 'Old password is required'));
 
   const newPasswordValidation = z
     .string({
-      required_error: t('newPasswordRequired', 'New password is required'),
+      error: (issue) => (issue.input === undefined ? t('newPasswordRequired', 'New password is required') : undefined),
     })
     .trim()
     .min(1, t('newPasswordRequired', 'New password is required'));
 
   const passwordConfirmationValidation = z
     .string({
-      required_error: t('passwordConfirmationRequired', 'Password confirmation is required'),
+      error: (issue) =>
+        issue.input === undefined ? t('passwordConfirmationRequired', 'Password confirmation is required') : undefined,
     })
     .trim()
     .min(1, t('passwordConfirmationRequired', 'Password confirmation is required'));

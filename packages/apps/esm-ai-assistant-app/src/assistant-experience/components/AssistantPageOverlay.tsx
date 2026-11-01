@@ -1,11 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { SplineScene } from '@egen-civitas/esm-styleguide';
+import { AssistantRobotScene } from '../robot/lazy';
+import { RobotController, type AssistantState } from '../robot/controller';
 import { AssistantConversationInterface } from './AssistantConversationInterface';
 import { type AssistantMode } from '@egen-civitas/esm-styleguide';
-import { ASSISTANT_SPLINE_SCENE_URL } from '../constants';
+import { useAssistantVoice } from '../context/AssistantGlobalVoiceContext';
+import { ASSISTANT_ROBOT_FRAMING } from '../constants';
 
 interface AssistantPageOverlayProps {
   isActive: boolean;
@@ -13,15 +15,30 @@ interface AssistantPageOverlayProps {
   onSelectMode?: (mode: AssistantMode) => void;
   onClose?: () => void;
   onOpenDedicatedVoice?: () => void;
-  sceneUrl?: string;
 }
 
-export function AssistantPageOverlay({ 
-  isActive, 
-  onClose,
-  onOpenDedicatedVoice,
-  sceneUrl = ASSISTANT_SPLINE_SCENE_URL
-}: AssistantPageOverlayProps) {
+/**
+ * Traduit ce que fait l'assistant (voix) en comportement du robot :
+ * il parle → gestes d'accompagnement ; il réfléchit → main au menton ; l'utilisateur parle → il écoute.
+ */
+function toRobotState(s: { isAgentSpeaking: boolean; isProcessing: boolean; isListening: boolean; isSpeaking: boolean }): AssistantState {
+  if (s.isAgentSpeaking) return 'speaking';
+  if (s.isProcessing) return 'thinking';
+  if (s.isListening || s.isSpeaking) return 'listening';
+  return 'idle';
+}
+
+export function AssistantPageOverlay({ isActive, onClose, onOpenDedicatedVoice }: AssistantPageOverlayProps) {
+  const voice = useAssistantVoice();
+  // Un seul contrôleur pour toute la vie de l'overlay : il garde position, regard et geste en cours.
+  const controller = useMemo(() => new RobotController(), []);
+
+  // À l'ouverture, le robot salue.
+  useEffect(() => {
+    if (isActive) void controller.play('greet');
+    else controller.stopGesture();
+  }, [isActive, controller]);
+
   return (
     <motion.div
       initial={false}
@@ -38,11 +55,17 @@ export function AssistantPageOverlay({
       }`}
       aria-hidden={!isActive}
     >
-      {/* 1. Canvas 3D Spline Scene : Prend TOUTE LA PAGE (absolute inset-0 w-full h-full) */}
-      <div className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden flex items-center justify-center bg-transparent pointer-events-auto">
-        <SplineScene
-          scene={sceneUrl}
-          className="w-full h-full"
+      {/* 1. Robot 3D : prend TOUTE LA PAGE ; le rendu est suspendu quand l'overlay est fermé. */}
+      <div
+        className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden bg-transparent pointer-events-auto md:pr-[480px] lg:pr-[540px]"
+        style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 62%, rgba(45,212,191,0.12), rgba(3,7,8,0) 70%)' }}
+      >
+        <AssistantRobotScene
+          controller={controller}
+          state={toRobotState(voice)}
+          speechLevel={Math.min(1, Math.max(0, voice.outputVolume))}
+          framing={ASSISTANT_ROBOT_FRAMING}
+          paused={!isActive}
         />
       </div>
 

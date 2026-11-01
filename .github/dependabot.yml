@@ -31,6 +31,17 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "@types/react-dom"
         update-types: ["version-update:semver-major"]
+      # react-router-dom v6 est fourni par le shell (peer des apps) ; v7 suit la migration React 19
+      - dependency-name: "react-router-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-is"
+        update-types: ["version-update:semver-major"]
+      # i18next / react-i18next : contrat de pairs d'esm-framework, esm-react-utils et esm-styleguide
+      # (i18next 25.x, react-i18next 16.x) — à migrer d'abord côté framework et app-shell
+      - dependency-name: "i18next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-i18next"
+        update-types: ["version-update:semver-major"]
       # single-spa is the core microfrontend framework
       - dependency-name: "single-spa"
         update-types: ["version-update:semver-major"]
