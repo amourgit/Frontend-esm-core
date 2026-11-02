@@ -9,8 +9,15 @@ function resolveProductionReconciler() {
   try {
     const fromR3F = { paths: [require.resolve('@react-three/fiber')] };
     return require.resolve('react-reconciler/cjs/react-reconciler.production.min.js', fromR3F);
-  } catch {
-    return null;
+  } catch (cause) {
+    // Échec volontairement BRUYANT : sans l'alias, le build « marche » mais le robot plante à l'exécution
+    // (« Cannot read properties of undefined (reading 'current') ») avec un message trompeur.
+    throw new Error(
+      "esm-ai-assistant-app : build de production de `react-reconciler` introuvable depuis `@react-three/fiber`. " +
+        'Lance `yarn install` ; si l\'erreur persiste, la version de @react-three/fiber a peut-être changé ' +
+        "l'emplacement du fichier (voir rspack.config.js).",
+      { cause },
+    );
   }
 }
 
@@ -30,10 +37,7 @@ function resolveProductionReconciler() {
  */
 module.exports = (env, argv) => {
   const config = createConfig(env, argv);
-  const reconciler = resolveProductionReconciler();
-  if (reconciler) {
-    config.resolve = config.resolve ?? {};
-    config.resolve.alias = { ...config.resolve.alias, 'react-reconciler$': reconciler };
-  }
+  config.resolve = config.resolve ?? {};
+  config.resolve.alias = { ...config.resolve.alias, 'react-reconciler$': resolveProductionReconciler() };
   return config;
 };
