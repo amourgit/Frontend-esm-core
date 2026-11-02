@@ -1,6 +1,7 @@
 import uniq from 'lodash-es/uniq';
 import useSWR from 'swr';
-import { fetchCurrentEntity, getFullSynchronizationItems, type SyncItem } from '@egen-civitas/esm-framework/src/internal';
+import { getFullSynchronizationItems, type SyncItem } from '@egen-civitas/esm-framework/src/internal';
+import { fetchEntity } from '../entity-resource';
 
 export function usePendingSyncItems() {
   return useSWR('offlineActions/pending', () => getFullSynchronizationItems());
@@ -13,6 +14,6 @@ export function useSyncItemEntities(syncItems?: Array<SyncItem>) {
 
   return useSWR(
     () => (entityUuids ? ['entities', ...entityUuids] : null),
-    () => Promise.all(entityUuids.map((id) => fetchCurrentEntity(id))),
+    () => Promise.all(entityUuids.map((id) => fetchEntity(id))),
   );
 }

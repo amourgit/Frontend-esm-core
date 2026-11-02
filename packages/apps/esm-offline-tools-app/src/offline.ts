@@ -1,10 +1,6 @@
-import {
-  fetchCurrentEntity,
-  makeUrl,
-  messageEgenServiceWorker,
-  setupDynamicOfflineDataHandler,
-} from '@egen-civitas/esm-framework';
+import { makeUrl, messageEgenServiceWorker, setupDynamicOfflineDataHandler } from '@egen-civitas/esm-framework';
 import { cacheForOfflineHeaders } from './constants';
+import { entityResourcePath, fetchEntity } from './entity-resource';
 
 export function setupOffline() {
   setupDynamicOfflineDataHandler({
@@ -12,7 +8,7 @@ export function setupOffline() {
     displayName: 'Offline tools',
     type: 'entity',
     async isSynced(identifier) {
-      const expectedUrls = [`/ws/fhir2/R4/Entity/${identifier}`];
+      const expectedUrls = [`${entityResourcePath}/${identifier}`];
       const absoluteExpectedUrls = expectedUrls.map((url) => window.origin + makeUrl(url));
       const cache = await caches.open('egen-spa-cache-v1');
       const keys = (await cache.keys()).map((key) => key.url);
@@ -21,10 +17,10 @@ export function setupOffline() {
     async sync(identifier) {
       await messageEgenServiceWorker({
         type: 'registerDynamicRoute',
-        pattern: `/ws/fhir2/R4/Entity/${identifier}`,
+        pattern: `${entityResourcePath}/${identifier}`,
       });
 
-      await fetchCurrentEntity(identifier, {
+      await fetchEntity(identifier, {
         headers: cacheForOfflineHeaders,
       });
     },

@@ -25,7 +25,6 @@ import {
   HomePictogram,
   Icon,
   iconIds,
-  NumericDataPoint,
   PageHeader,
   PageHeaderContent,
   Pagination,
@@ -68,7 +67,7 @@ import { ShowcaseBoundary, Variant } from './new-components-showcase.component';
 //  Vitrine — composants du styleguide jusque-là absents de la page
 //    • Icônes & pictogrammes (registre complet)
 //    • Cartes & états : CardHeader, EmptyCard, ErrorState/ErrorCard, ContentSection,
-//      ClassificationTags, NumericDataPoint, PageHeader, Pagination, HeroMosaic,
+//      ClassificationTags, PageHeader, Pagination, HeroMosaic,
 //      CustomOverflowMenu, ResponsiveWrapper
 //    • Formulaires & filtres : EgenDatePicker, EgenDateRangePicker, AsyncSelect,
 //      FilterBar (démo), DocumentToolbar
@@ -79,7 +78,6 @@ import { ShowcaseBoundary, Variant } from './new-components-showcase.component';
 //    • Sites : bannière, recherche, carrousel, onglets et panneaux
 //  Aucune image distante : les visuels de démo sont des SVG générés en data-URI.
 //  Non présentés ici (dépendent du contexte applicatif — backend, shell, ateliers) :
-//  EntityPhoto, EntityBanner*, LocationPicker,
 //  Workspace*/ActionMenuButton*, TableBatchActions.
 // =============================================================================
 
@@ -267,11 +265,8 @@ const ContentShowcaseContent: React.FC = () => {
       </Section>
 
       <Section
-        title="ClassificationTags · NumericDataPoint"
-        description={t(
-          'showcaseTagsDatapointDescription',
-          'Étiquettes de classification (couleurs configurables) et valeur chiffrée avec interprétation (variantes card et cell).',
-        )}
+        title="ClassificationTags"
+        description={t('showcaseTagsDatapointDescription', 'Étiquettes de classification (couleurs configurables).')}
       >
         <div className={styles.variantsGrid}>
           <Variant label="ClassificationTags">
@@ -281,40 +276,6 @@ const ContentShowcaseContent: React.FC = () => {
                 { display: 'À vérifier', rank: 'secondary' },
                 { display: 'Archivé' },
               ]}
-            />
-          </Variant>
-          <Variant label="NumericDataPoint · card (normal)">
-            <NumericDataPoint
-              entityUuid="demo"
-              value={14.5}
-              unit="/20"
-              label="Moyenne générale"
-              interpretation="normal"
-            />
-          </Variant>
-          <Variant label="NumericDataPoint · card (critique)">
-            <NumericDataPoint
-              entityUuid="demo"
-              value={4}
-              unit="/20"
-              label="Mathématiques"
-              interpretation="critically_low"
-            />
-          </Variant>
-          <Variant label="NumericDataPoint · cell (calculé)">
-            <NumericDataPoint
-              entityUuid="demo"
-              variant="cell"
-              value={19}
-              unit="/20"
-              referenceRange={{
-                hiAbsolute: 20,
-                hiCritical: 18,
-                hiNormal: 16,
-                lowNormal: 8,
-                lowCritical: 4,
-                lowAbsolute: 0,
-              }}
             />
           </Variant>
         </div>

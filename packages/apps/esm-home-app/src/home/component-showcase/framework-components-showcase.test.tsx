@@ -55,7 +55,6 @@ vi.mock('@egen-civitas/esm-framework', () => {
     HeroMosaic: stub('HeroMosaic'),
     HomePictogram: stub('HomePictogram'),
     Icon: stub('Icon'),
-    NumericDataPoint: stub('NumericDataPoint'),
     PageHeader: stub('PageHeader'),
     PageHeaderContent: stub('PageHeaderContent'),
     Pagination: stub('Pagination'),

@@ -6,24 +6,6 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { implementerToolsConfigStore, temporaryConfigStore, Type } from '@egen-civitas/esm-framework/src/internal';
 import { Configuration } from './configuration.component';
-import { useConceptLookup, useGetConceptByUuid } from './interactive-editor/value-editors/concept-search.resource';
-
-const mockUseConceptLookup = vi.mocked(useConceptLookup);
-const mockUseGetConceptByUuid = vi.mocked(useGetConceptByUuid);
-
-vi.mock('./interactive-editor/value-editors/concept-search.resource', () => ({
-  useConceptLookup: vi.fn().mockImplementation(() => ({
-    concepts: [],
-    error: null,
-    isSearchingConcepts: false,
-  })),
-  useGetConceptByUuid: vi.fn().mockImplementation(() => ({
-    concept: null,
-    error: null,
-    isLoadingConcept: false,
-  })),
-}));
-
 const mockImplToolsConfig = {
   '@egen/mario': {
     hasHat: {
@@ -33,7 +15,7 @@ const mockImplToolsConfig = {
       _source: 'provided',
     },
     hatUuid: {
-      _type: Type.ConceptUuid,
+      _type: Type.UUID,
       _default: 'c64b8446-145e-49a3-98eb-ae37333bedf1',
       _value: '38c650cf-85d5-41b4-b0b1-46709248acca',
       _source: 'provided',
@@ -138,64 +120,6 @@ describe('Configuration', () => {
       expect(temporaryConfigStore.setState).toHaveBeenCalledWith({
         config: { '@egen/mario': { hasHat: false } },
       });
-    }
-  });
-
-  it('displays correct concept UUID value and editor', async () => {
-    const user = userEvent.setup();
-
-    mockUseConceptLookup.mockImplementation(() => ({
-      concepts: [{ uuid: '61523693-72e2-456d-8c64-8c5293febeb6', display: 'Fedora', answers: [], mappings: [] }],
-      error: undefined,
-      isSearchingConcepts: false,
-    }));
-
-    mockUseGetConceptByUuid.mockImplementation(() => ({
-      concept: {
-        name: { display: 'Fedora' },
-        display: 'Fedora',
-        answers: [],
-        mappings: [],
-        uuid: '61523693-72e2-456d-8c64-8c5293febeb6',
-      },
-      error: undefined,
-      isLoadingConcept: false,
-    }));
-
-    implementerToolsConfigStore.setState({
-      config: {
-        '@egen/mario': mockImplToolsConfig['@egen/mario'],
-      },
-    });
-
-    renderConfiguration();
-
-    screen.findByText('hatUuid');
-    const rowElement = (await screen.findByText('hatUuid')).closest('.cds--structured-list-row');
-    expect(rowElement).toBeInTheDocument();
-
-    if (rowElement) {
-      const row = within(rowElement as HTMLElement);
-      const editButton = row.getByRole('button', { name: /edit/i });
-
-      await user.click(editButton);
-
-      const searchbox = await row.findByPlaceholderText(/search concepts/i);
-
-      await user.type(searchbox, 'fedora');
-
-      expect(mockUseConceptLookup).toHaveBeenCalledWith('fed');
-
-      const targetConcept = await row.findByText('Fedora');
-
-      await user.click(targetConcept);
-      await user.click(row.getByText('Save'));
-
-      // expect(temporaryConfigStore.setState).toHaveBeenCalledWith({
-      //   config: {
-      //     "@egen/mario": { hatUuid: "61523693-72e2-456d-8c64-8c5293febeb6" },
-      //   },
-      // });
     }
   });
 

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import useSWR, { type SWRResponse } from 'swr';
-import { fetchCurrentEntity, getSynchronizationItems, getDynamicOfflineDataEntries } from '@egen-civitas/esm-framework';
+import { getSynchronizationItems, getDynamicOfflineDataEntries } from '@egen-civitas/esm-framework';
+import { fetchEntity } from '../entity-resource';
 import merge from 'lodash-es/merge';
 
 function useDynamicOfflineDataEntries(type: string) {
@@ -14,7 +15,7 @@ function useSynchronizationItems<T>(type: string) {
 function useFhirEntities(ids: Array<string>) {
   const stableIds = useMemo(() => [...ids].sort(), [ids]);
   return useSWR(stableIds.length ? ['fhirEntities', stableIds] : null, () =>
-    Promise.all(stableIds.map((entityId) => fetchCurrentEntity(entityId, undefined, false))),
+    Promise.all(stableIds.map((entityId) => fetchEntity(entityId))),
   );
 }
 
