@@ -23,7 +23,12 @@
         "title": "Outils hors ligne",
         "titleKey": "offlineToolsAppMenuLink",
         "icon": "Radio",
-        "order": 30
+        "order": 30,
+        "compartment": {
+          "height": 40,
+          "minHeight": 20,
+          "maxHeight": 70
+        }
       }
     },
     {
