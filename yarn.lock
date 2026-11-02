@@ -611,27 +611,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-extensions@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@egen-civitas/esm-extensions@npm:2.1.0"
-  dependencies:
-    lodash-es: "npm:^4.17.21"
-  peerDependencies:
-    "@egen-civitas/esm-api": ^2.0.0
-    "@egen-civitas/esm-config": ^2.0.0
-    "@egen-civitas/esm-expression-evaluator": ^1.0.0
-    "@egen-civitas/esm-feature-flags": ^1.0.2
-    "@egen-civitas/esm-globals": ^2.0.0
-    "@egen-civitas/esm-state": ^1.0.3
-    "@egen-civitas/esm-translations": ^1.0.3
-    "@egen-civitas/esm-utils": ^2.0.0
-    react: 18.x
-    single-spa: 6.x
-  checksum: 10/a480a3e2e359fdb212b4ab33ebb3dfc09b73fa9741b4995bef263756b5bee53fc04ca80091e01082c9e278b1c6081883d7867e5dcb380cca765e2746ed9d76be
-  languageName: node
-  linkType: hard
-
-"@egen-civitas/esm-extensions@npm:^2.2.0":
+"@egen-civitas/esm-extensions@npm:^2.1.0, @egen-civitas/esm-extensions@npm:^2.2.0":
   version: 2.2.0
   resolution: "@egen-civitas/esm-extensions@npm:2.2.0"
   dependencies:
