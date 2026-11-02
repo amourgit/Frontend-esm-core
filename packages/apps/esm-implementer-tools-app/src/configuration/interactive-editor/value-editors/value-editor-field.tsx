@@ -5,13 +5,10 @@ import { Type } from '@egen-civitas/esm-framework';
 import type { ConfigValueDescriptor } from '../editable-value.component';
 import type { ValueType } from '../value-editor';
 import { ArrayEditor } from './array-editor';
-import { ConceptSearchBox } from './concept-search';
 import { ExtensionSlotAdd } from './extension-slot-add';
 import { ExtensionSlotRemove } from './extension-slot-remove';
 import { ObjectEditor } from './object-editor';
 import { ExtensionSlotOrder } from './extension-slot-order';
-import { PersonAttributeTypeSearchBox } from './person-attribute-search';
-import { PatientIdentifierTypeSearchBox } from './patient-identifier-type-search';
 
 export interface ValueEditorFieldProps {
   element: ConfigValueDescriptor;
@@ -41,15 +38,6 @@ export function ValueEditorField({ element, path, valueType, value, onChange, er
       invalid={Boolean(error)}
       invalidText={error}
     />
-  ) : valueType === Type.ConceptUuid ? (
-    <ConceptSearchBox value={value} setConcept={(concept) => onChange(concept.uuid)} />
-  ) : valueType === Type.PersonAttributeTypeUuid ? (
-    <PersonAttributeTypeSearchBox
-      value={value}
-      setPersonAttributeUuid={(personAttributeTypeUuid) => onChange(personAttributeTypeUuid)}
-    />
-  ) : valueType === Type.EntityIdentifierTypeUuid ? (
-    <PatientIdentifierTypeSearchBox value={value} setPatientIdentifierTypeUuid={(uuid) => onChange(uuid)} />
   ) : valueType === Type.Number ? (
     <NumberInput
       id={id}
