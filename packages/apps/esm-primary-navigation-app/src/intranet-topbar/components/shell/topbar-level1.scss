@@ -84,44 +84,172 @@
   }
 }
 
-// ── Sélecteurs Espace + Site : ligne en desktop, colonne en tablette / mobile ──────────
+// ── Sélecteurs Espace + Site : GRILLE, deux cellules de même hauteur ────────────────────
+//   desktop (≥ 1024px)      : une ligne, deux colonnes  [ Espace ][ Site ]
+//   tablette / mobile       : une colonne, deux lignes  [ Espace ] / [ Site ]
+//  Les deux champs ont exactement la même hauteur (`--sel-h`) et la même largeur de colonne
+//  de leur cellule ; le design interne des composants du framework n'est pas modifié, seules
+//  la surface (fond transparent) et les panneaux (verre dépoli) sont surchargés ici.
 .selectors {
-  display: flex;
-  flex-direction: column; // tablette + mobile : l'un sous l'autre
-  align-items: stretch;
-  justify-content: center;
-  gap: 0.25rem;
+  --sel-h: 30px;
+  --glass-bg: rgba(15, 23, 42, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-hover: rgba(255, 255, 255, 0.12);
+  --glass-text: #f1f5f9;
+  --glass-muted: rgba(226, 232, 240, 0.62);
+
+  position: relative;
+  z-index: 60; // les panneaux déroulants passent au-dessus du niveau 2
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: var(--sel-h);
+  align-items: center;
+  row-gap: 0.375rem;
   min-width: 0;
   flex: 0 1 auto;
   width: 9.5rem;
-  padding-block: 0.125rem;
 
   @media (min-width: 640px) {
     width: 12.5rem;
   }
   @media (min-width: 1024px) {
-    flex-direction: row; // desktop : côte à côte
-    align-items: flex-start;
-    gap: 0.75rem;
+    --sel-h: 36px;
+    grid-template-columns: 11rem 14rem;
+    column-gap: 0.75rem;
+    row-gap: 0;
     width: auto;
   }
 }
 
-.selector {
-  min-width: 0;
-  width: 100%;
-
-  @media (min-width: 1024px) {
-    width: 11rem; // MorphSelect (Espace)
-  }
-}
-
+.selector,
 .selectorSite {
   min-width: 0;
   width: 100%;
+  max-width: none;
+  height: var(--sel-h);
+  color: var(--glass-text);
 
-  @media (min-width: 1024px) {
-    width: 14rem; // Combobox (Site)
+  // Textes secondaires (descriptions, titres de groupe, placeholders) lisibles sur le verre.
+  :global(.text-muted-foreground) {
+    color: var(--glass-muted);
+  }
+}
+
+// ── MorphSelect (Espace) ────────────────────────────────────────────────────────────────
+// Réserve de hauteur invisible (le morph est en position absolue) : même hauteur que le Combobox.
+.selector > div[aria-hidden] {
+  height: var(--sel-h);
+  padding-block: 0;
+}
+
+// Déclencheur : fond transparent, mêmes dimensions que le Combobox.
+.selector > button {
+  height: var(--sel-h);
+  padding-block: 0;
+  background: transparent;
+  border-color: var(--glass-border);
+  color: var(--glass-text);
+  box-shadow: none;
+
+  span {
+    color: var(--glass-text);
+  }
+  span:last-child {
+    color: var(--glass-muted);
+  }
+  &:hover {
+    background: var(--glass-hover);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+// Panneau déroulé (le déclencheur se morphe en panneau) : verre dépoli.
+.selector > [role='listbox'] {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  border-color: var(--glass-border);
+  color: var(--glass-text);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+  > button {
+    height: var(--sel-h);
+    padding-block: 0;
+    color: var(--glass-text);
+    span {
+      color: var(--glass-text);
+    }
+    span:last-child {
+      color: var(--glass-muted);
+    }
+  }
+  > div {
+    background: rgba(255, 255, 255, 0.15); // séparateur
+  }
+
+  [role='option'] {
+    color: var(--glass-text);
+    background: transparent;
+    &:hover,
+    &:focus-visible {
+      background: var(--glass-hover);
+      color: #fff;
+    }
+    &[aria-selected='true'] {
+      background: rgba(45, 212, 191, 0.2);
+      color: #fff;
+    }
+  }
+}
+
+// ── Combobox (Site) ─────────────────────────────────────────────────────────────────────
+.selectorSite > button[role='combobox'] {
+  height: var(--sel-h);
+  padding-block: 0;
+  background: transparent;
+  border-color: var(--glass-border);
+  color: var(--glass-text);
+  box-shadow: none;
+
+  &:hover {
+    background: var(--glass-hover);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+// Panneau : verre dépoli (le panneau et son conteneur interne perdent leur fond opaque).
+.selectorSite :global(.egen-combobox-content) {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  border-color: var(--glass-border);
+  color: var(--glass-text);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+  > div {
+    background: transparent;
+    color: var(--glass-text);
+  }
+  input {
+    color: var(--glass-text);
+    &::placeholder {
+      color: var(--glass-muted);
+    }
+  }
+  [role='group'] {
+    color: var(--glass-text);
+  }
+  [role='option'] {
+    color: var(--glass-text);
+    &[data-selected='true'] {
+      background: var(--glass-hover);
+      color: #fff;
+    }
+  }
+  // Séparateur du champ de recherche
+  > div > div:first-child {
+    border-color: rgba(255, 255, 255, 0.15);
   }
 }
 
