@@ -62,6 +62,8 @@ import { GooeyInput } from '../ui/GooeyInput';
 import { WaterGlassModal } from '../ui/WaterGlassModal';
 import { ExtensionSlot, interpolateUrl, navigate as frameworkNavigate, useConfig } from '@egen-civitas/esm-framework';
 import { type ConfigSchema } from '../../../config-schema';
+import { useIsDesktop, useIsMobile } from '../../hooks/useMediaQuery';
+import styles from './topbar-level1.scss';
 import {
   AppsMenuOption,
   FullscreenOption,
@@ -92,6 +94,15 @@ export interface SupremeIntranetTopBarProps {
   showCreateMenu?: boolean;
 }
 
+function formatClock() {
+  const now = new Date();
+  const hours = now.getHours();
+  const mins = String(now.getMinutes()).padStart(2, '0');
+  const timeStr = `${hours % 12 || 12}:${mins} ${hours >= 12 ? 'PM' : 'AM'}`;
+  const date = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  return { timeStr, dateLongStr: date.charAt(0).toUpperCase() + date.slice(1) };
+}
+
 export function SupremeIntranetTopBar({
   onOpenGlobalSearch,
   onOpenGED,
@@ -117,31 +128,16 @@ export function SupremeIntranetTopBar({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showFullNav, setShowFullNav] = useState(false);
-  const [timeStr, setTimeStr] = useState('10:50');
-  const [dateLongStr, setDateLongStr] = useState('');
+  const [{ timeStr, dateLongStr }, setClock] = useState(formatClock);
+  const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Live time ticker & long date for App Tier
+  // Horloge : mise à jour à chaque minute, indépendamment de la route ou de l'app active.
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      let hours = now.getHours();
-      const mins = String(now.getMinutes()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      const displayHours = hours % 12 || 12;
-      setTimeStr(`${displayHours}:${mins} ${ampm}`);
-
-      const formattedDate = now.toLocaleDateString('fr-FR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      });
-      setDateLongStr(formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1));
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 30000);
+    const tick = () => setClock(formatClock());
+    tick();
+    const interval = setInterval(tick, 15000);
     return () => clearInterval(interval);
   }, []);
 
@@ -207,7 +203,10 @@ export function SupremeIntranetTopBar({
   const isActivePanel = (panelName: string) => activeMenu === panelName;
   const hidePanel = (panelName: string) => () => setActiveMenu((prev) => (prev === panelName ? null : prev));
   const slotState = { isActivePanel, togglePanel: handleMenuClick, hidePanel };
-  const hideOnSearch = isSearchOpen ? 'hidden lg:flex' : '';
+  // Recherche ouverte : la zone gauche (logo + sélecteurs) n'est masquée QU'EN MOBILE ;
+  // en tablette et desktop, la recherche s'ouvre sur place sans rien recouvrir.
+  const hideLeftOnSearch = isSearchOpen && isMobile;
+  const hideOnSearch = isSearchOpen && !isDesktop ? 'hidden' : '';
 
   const toggleMobileCategory = (cat: string) => {
     playXboxSound('toggle');
@@ -266,23 +265,18 @@ export function SupremeIntranetTopBar({
       {/* 1. SUPREME TOPBAR: EXACT POWELL SOFTWARE LIGHT INTRANET TOPBAR */}
       <header className="w-full bg-transparent transition-colors overflow-visible flex flex-col">
         {/* ROW 1: BRAND & ACTIONS TOP ROW */}
-        <div className="w-full px-2 sm:px-4 md:px-6 lg:px-7 h-11 sm:h-12 flex items-center justify-between gap-1.5 sm:gap-2">
-          {/* LEFT SECTION: Logo & Brand + Workspace & Service Selectors Parent Column */}
-          <div
-            className={`items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4 h-full min-w-0 flex-1 sm:flex-initial overflow-visible ${
-              isSearchOpen ? 'hidden lg:flex' : 'flex'
-            }`}
-          >
-            {/* EGEN Official Logo & Brand */}
+        <div className={styles.row}>
+          {/* LEFT SECTION: Logo + sélecteurs Espace / Site */}
+          <div className={styles.left} style={hideLeftOnSearch ? { display: 'none' } : undefined}>
+            {/* Logo EGEN : taille fixe (voir `.logoNav`), identique sur toutes les apps */}
             <div
               onClick={() => {
                 playXboxSound('select');
                 navigate('/home');
               }}
-              className="flex items-center cursor-pointer shrink-0 py-0.5 group overflow-visible hover:opacity-95 transition-opacity"
+              className={`${styles.logoLink} group hover:opacity-95 transition-opacity`}
               title="EGEN — Écosystème Gouvernemental de l’Économie Numérique"
             >
-              {/* Un seul logo : la taille responsive est portée par EgenLogo (size="nav"). */}
               <EgenLogo size="nav" variant="full" />
             </div>
 
@@ -295,19 +289,20 @@ export function SupremeIntranetTopBar({
             <ExtensionSlot name="top-nav-info-slot" className="flex items-center gap-2 truncate text-xs opacity-70" />
           </div>
 
-          {/* RIGHT SECTION: Minimal Dimension Buttons without background (Free text/icons) */}
+          {/* RIGHT SECTION: options sans fond (icônes libres) */}
           <div
-            className={`items-center gap-1 sm:gap-2 lg:gap-3.5 overflow-visible ${
-              isSearchOpen
-                ? 'w-full flex justify-between items-center lg:w-auto lg:shrink-0 lg:justify-end'
-                : 'flex shrink-0'
-            }`}
+            className="items-center gap-1 sm:gap-2 lg:gap-3.5 overflow-visible"
+            style={{
+              display: 'flex',
+              flex: hideLeftOnSearch ? '1 1 auto' : '0 0 auto',
+              justifyContent: hideLeftOnSearch ? 'space-between' : 'flex-end',
+              minWidth: 0,
+            }}
           >
             {/* 1. Search Gooey Input with fluid liquid spring physics */}
             <div
-              className={`relative overflow-visible flex items-center justify-start ${
-                isSearchOpen ? 'flex-1 lg:flex-initial' : ''
-              }`}
+              className="relative overflow-visible flex items-center justify-start"
+              style={hideLeftOnSearch ? { flex: '1 1 auto' } : undefined}
             >
               <GooeyInput
                 placeholder="Rechercher..."
@@ -333,7 +328,7 @@ export function SupremeIntranetTopBar({
             </div>
 
             {/* Mobile/Tablet Cancel Button when Search is expanded */}
-            {isSearchOpen && (
+            {isSearchOpen && !isDesktop && (
               <button
                 type="button"
                 onClick={() => {
@@ -341,7 +336,7 @@ export function SupremeIntranetTopBar({
                   setSearchQuery('');
                   setIsSearchOpen(false);
                 }}
-                className="lg:hidden text-xs text-teal-300 hover:text-white font-semibold px-3.5 py-1.5 rounded-full backdrop-blur-md bg-white/[0.08] hover:bg-white/[0.16] border border-white/20 hover:border-teal-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.08)] transition-all cursor-pointer shrink-0 whitespace-nowrap active:scale-95"
+                className="text-xs text-teal-300 hover:text-white font-semibold px-3.5 py-1.5 rounded-full backdrop-blur-md bg-white/[0.08] hover:bg-white/[0.16] border border-white/20 hover:border-teal-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.08)] transition-all cursor-pointer shrink-0 whitespace-nowrap active:scale-95"
                 title="Annuler la recherche"
               >
                 Annuler
@@ -352,9 +347,7 @@ export function SupremeIntranetTopBar({
             <LanguageOption className={hideOnSearch} />
 
             {/* 3. Separator Line */}
-            <div
-              className={`${isSearchOpen ? 'hidden lg:block' : 'hidden sm:block'} h-4 sm:h-4.5 w-px bg-white/20 mx-0.5`}
-            />
+            {!isMobile && !hideOnSearch && <div className="h-4 w-px bg-white/20 mx-0.5" />}
 
             {/* 3. Lanceur d'applications — service réel (app-menu-slot + liens externes) */}
             <AppsMenuOption
@@ -447,20 +440,17 @@ export function SupremeIntranetTopBar({
             <UserMenuOption
               open={activeMenu === 'userMenu'}
               onToggle={() => handleMenuClick('userMenu')}
-              className={isSearchOpen ? 'hidden lg:flex' : 'flex'}
+              className={hideOnSearch}
             />
 
             {/* 10. Extensions de fin de barre (après le menu utilisateur) */}
             <ExtensionSlot name="top-nav-trailing-slot" state={slotState} className="flex items-center" />
 
-            {/* 8. Date & Heure - Retiré depuis la version tablette (uniquement visible sur desktop lg+) */}
-            <div className="hidden lg:flex flex-col items-end justify-center text-right select-none pl-2 sm:pl-3 ml-0.5 sm:ml-1 border-l border-white/15 shrink-0">
-              <span className="text-white font-bold text-xs sm:text-[13px] tracking-tight leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                {timeStr}
-              </span>
-              <span className="text-[10px] sm:text-[11px] text-white/50 font-normal tracking-tight leading-tight mt-0.5 capitalize whitespace-nowrap">
-                {dateLongStr}
-              </span>
+            {/* Date & heure : toujours présentes en desktop (≥ 1024px) — seule la taille d'écran
+                (tablette / mobile) la masque, via le module SCSS ; aucune autre condition. */}
+            <div className={styles.clock} aria-live="off">
+              <span className={styles.clockTime}>{timeStr}</span>
+              <span className={styles.clockDate}>{dateLongStr}</span>
             </div>
           </div>
         </div>

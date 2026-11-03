@@ -1,0 +1,163 @@
+// =============================================================================
+//  TOPBAR — NIVEAU 1 : mise en page robuste (SCSS module)
+//
+//  Pourquoi un module SCSS plutôt que des classes utilitaires Tailwind : la feuille
+//  Tailwind du core est globale et partagée ; une autre feuille chargée après elle
+//  (login, apps…) peut réécrire `.hidden`, `.h-8`, `.flex-1`… et faire disparaître la date/
+//  l'heure ou rétrécir le logo « quand elle veut ». Les classes ci-dessous sont
+//  générées et préfixées par le build : aucune autre feuille ne peut les écraser.
+//
+//  Points de rupture (identiques à Tailwind) :
+//    mobile  < 640px      tablette  640px → 1023px      desktop ≥ 1024px
+// =============================================================================
+
+// ── Rangée du niveau 1 ──────────────────────────────────────────────────────
+.row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.375rem;
+  box-sizing: border-box;
+  padding-inline: 0.5rem;
+  // Hauteur mini (et non fixe) : en tablette, les sélecteurs passent en colonne et la rangée
+  // peut grandir ; la hauteur réelle de la TopBar est de toute façon mesurée par le shell.
+  min-height: 2.75rem;
+
+  @media (min-width: 640px) {
+    gap: 0.5rem;
+    padding-inline: 1rem;
+    min-height: 3rem;
+  }
+  @media (min-width: 768px) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 1.75rem;
+  }
+}
+
+// ── Zone gauche : logo + sélecteurs ─────────────────────────────────────────
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: visible;
+
+  @media (min-width: 640px) {
+    gap: 0.5rem;
+  }
+  @media (min-width: 768px) {
+    gap: 0.75rem;
+  }
+  @media (min-width: 1024px) {
+    gap: 1rem;
+  }
+}
+
+// ── Logo : taille FIXE, jamais compressé par le flex, quelle que soit l'app active ───────
+.logoLink {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto; // ne grandit pas, NE RÉTRÉCIT JAMAIS
+  cursor: pointer;
+  overflow: visible;
+}
+
+.logoNav {
+  height: 36px;
+  min-height: 36px;
+  flex: 0 0 auto;
+
+  img {
+    height: 100%;
+    width: auto;
+    max-width: none; // le reset Tailwind (`img { max-width: 100% }`) ne doit jamais comprimer le logo
+    flex: 0 0 auto;
+  }
+
+  @media (min-width: 640px) {
+    height: 44px;
+    min-height: 44px;
+  }
+}
+
+// ── Sélecteurs Espace + Site : ligne en desktop, colonne en tablette / mobile ──────────
+.selectors {
+  display: flex;
+  flex-direction: column; // tablette + mobile : l'un sous l'autre
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 0 1 auto;
+  width: 9.5rem;
+  padding-block: 0.125rem;
+
+  @media (min-width: 640px) {
+    width: 12.5rem;
+  }
+  @media (min-width: 1024px) {
+    flex-direction: row; // desktop : côte à côte
+    align-items: flex-start;
+    gap: 0.75rem;
+    width: auto;
+  }
+}
+
+.selector {
+  min-width: 0;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    width: 11rem; // MorphSelect (Espace)
+  }
+}
+
+.selectorSite {
+  min-width: 0;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    width: 14rem; // Combobox (Site)
+  }
+}
+
+// ── Date & heure : TOUJOURS visibles en desktop, sans condition ─────────────────────────
+.clock {
+  display: none; // tablette + mobile : masquée (seule règle de visibilité : la taille d'écran)
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: right;
+  user-select: none;
+  white-space: nowrap;
+  margin-left: 0.25rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+
+  @media (min-width: 1024px) {
+    display: flex;
+  }
+}
+
+.clockTime {
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-variant-numeric: tabular-nums;
+}
+
+.clockDate {
+  margin-top: 0.125rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}

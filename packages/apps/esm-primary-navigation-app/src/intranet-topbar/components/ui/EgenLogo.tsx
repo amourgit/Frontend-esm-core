@@ -1,5 +1,6 @@
 import React from 'react';
 import { egenLogoFull, egenLogoIcon } from '../../../brand';
+import styles from '../shell/topbar-level1.scss';
 
 interface EgenLogoProps {
   className?: string;
@@ -17,7 +18,8 @@ const logoByVariant = {
 const sizeMap = {
   sm: 'h-8 sm:h-9',
   md: 'h-9 sm:h-11',
-  nav: 'h-8 sm:h-11',
+  // `nav` : taille portée par le module SCSS (hauteur fixe, jamais compressée par le flex).
+  nav: styles.logoNav,
   lg: 'h-12 sm:h-14',
   xl: 'h-16 sm:h-20',
 } as const;
