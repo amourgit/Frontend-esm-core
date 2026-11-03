@@ -430,11 +430,17 @@ export function SupremeIntranetTopBar({
             {/* Notifications et Paramètres : fenêtres d'outils du rail droit (esm-notifications-app, esm-settings-app). */}
 
             {/* 6. Plein écran & 7. Thème — services réels */}
-            <FullscreenOption className={hideOnSearch} />
-            <ThemeToggleOption className={hideOnSearch} />
+            {/* Plein écran, thème clair/sombre et extensions d'actions (dont « Implementer tools ») :
+                affichés en desktop (≥ 1024px) uniquement ; masqués de la tablette vers le mobile. */}
+            {isDesktop && (
+              <>
+                <FullscreenOption />
+                <ThemeToggleOption />
 
-            {/* 8. Extensions d'actions (slot ouvert aux autres apps) */}
-            <ExtensionSlot name="top-nav-actions-slot" state={slotState} className="flex items-center" />
+                {/* 8. Extensions d'actions (slot ouvert aux autres apps) */}
+                <ExtensionSlot name="top-nav-actions-slot" state={slotState} className="flex items-center" />
+              </>
+            )}
 
             {/* 9. Profil utilisateur — session réelle + user-panel-slot */}
             <UserMenuOption
