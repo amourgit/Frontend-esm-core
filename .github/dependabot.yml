@@ -47,6 +47,12 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "single-spa-react"
         update-types: ["version-update:semver-major"]
+      # three / @types/three / @react-three/fiber : versions EXACTES imposées par esm-styleguide (robot 3D).
+      # Une seule copie de three doit exister dans le bundle, et esm-ai-assistant-app aliase le
+      # react-reconciler de @react-three/fiber : à migrer d'abord côté framework, puis ici.
+      - dependency-name: "three"
+      - dependency-name: "@types/three"
+      - dependency-name: "@react-three/fiber"
       # RxJS v7 migration deliberately deferred
       - dependency-name: "rxjs"
         update-types: ["version-update:semver-major"]
