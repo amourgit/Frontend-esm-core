@@ -98,7 +98,7 @@ export function TopBarLevel2({
             )}
           </>
         ) : (
-          <div className="flex min-w-0 items-center gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
             <ExtensionSlot name="top-nav-level2-start-slot" state={slotState} className="flex shrink-0 items-center" />
             <BreadcrumbLevel2Nav onToggleFullMenu={onShowFullNav} />
             {/* Fil d'Ariane par extensions (invisible si aucune extension) */}
