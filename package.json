@@ -21,7 +21,7 @@
     "release": "yarn workspaces foreach --all --topological version",
     "build": "turbo run build",
     "build:apps": "turbo run build --filter='@egen/*-app'",
-    "build:prod": "turbo run build --filter=\"@egen/*-app\" && node tools/precompress.mjs",
+    "build:prod": "turbo run build --filter=\"@egen/*-app\" --concurrency=2 && node tools/precompress.mjs",
     "start:prod": "node --max-old-space-size=256 tools/serve-prod.mjs",
     "document": "turbo run document",
     "setup": "yarn install && turbo run build",
