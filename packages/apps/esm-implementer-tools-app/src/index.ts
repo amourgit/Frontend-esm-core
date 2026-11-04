@@ -1,7 +1,6 @@
 import { getSyncLifecycle } from '@egen-civitas/esm-framework';
 import implementerToolsComponent from './implementer-tools.component';
-import globalImplementerToolsComponent from './global-implementer-tools.component';
-import implementerToolsButtonComponent from './implementer-tools.button';
+import implementerToolsPanelComponent from './implementer-tools-panel.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -13,8 +12,7 @@ const options = {
 
 export const implementerTools = getSyncLifecycle(implementerToolsComponent, options);
 
-export const globalImplementerTools = getSyncLifecycle(globalImplementerToolsComponent, options);
-
-export const implementerToolsButton = getSyncLifecycle(implementerToolsButtonComponent, options);
+// Fenêtre d'outils du rail droit (groupe bas) : contenu de la zone basse « Implementer Tools »
+export const implementerToolsPanel = getSyncLifecycle(implementerToolsPanelComponent, options);
 
 export { default as ConfigEditButton } from './config-edit-button/config-edit-button.component';

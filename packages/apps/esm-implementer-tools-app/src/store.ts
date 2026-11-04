@@ -1,9 +1,8 @@
-import { createGlobalStore } from '@egen-civitas/esm-framework';
+import { createGlobalStore, openToolWindow } from '@egen-civitas/esm-framework';
 
 export interface ImplementerToolsStore {
   activeItemDescription: null | ActiveItemDescription;
   configPathBeingEdited: null | Array<string>;
-  isOpen: boolean;
   hasAlert: boolean;
   openTabIndex: number;
   isConfigToolbarOpen: boolean;
@@ -22,7 +21,6 @@ export interface ActiveItemDescription {
 export const implementerToolsStore = createGlobalStore<ImplementerToolsStore>('implementer-tools', {
   activeItemDescription: null,
   configPathBeingEdited: null,
-  isOpen: getIsImplementerToolsOpen(),
   hasAlert: false,
   openTabIndex: 0,
   isConfigToolbarOpen: getIsConfigToolbarOpen(),
@@ -37,32 +35,21 @@ export const setHasAlert = (value: boolean) =>
     hasAlert: value,
   }));
 
-export const togglePopup = () =>
-  implementerToolsStore.setState((state) => ({
-    ...state,
-    isOpen: !state.isOpen,
-    openTabIndex: 0,
-  }));
+/** Nom de la fenêtre d'outils (routes.json) : sert à l'ouvrir par le code dans la zone basse. */
+export const IMPLEMENTER_TOOLS_WINDOW = 'implementer-tools';
 
-export const showModuleDiagnostics = () =>
-  implementerToolsStore.setState((state) => ({
-    ...state,
-    isOpen: true,
-    openTabIndex: 2,
-  }));
+export const showModuleDiagnostics = () => {
+  implementerToolsStore.setState((state) => ({ ...state, openTabIndex: 2 }));
+  openToolWindow('bottom', IMPLEMENTER_TOOLS_WINDOW);
+};
 
 /* Set up localStorage-serialized state elements */
 
-let lastValueOfIsOpen = getIsImplementerToolsOpen();
 let lastValueOfConfigToolbarOpen = getIsConfigToolbarOpen();
 let lastValueOfIsUiEditorEnabled = getIsUIEditorEnabled();
 let lastValueOfIsJsonModeEnabled = getIsJsonModeEnabled();
 
 implementerToolsStore.subscribe((state) => {
-  if (state.isOpen != lastValueOfIsOpen) {
-    setIsImplementerToolsOpen(state.isOpen);
-    lastValueOfIsOpen = state.isOpen;
-  }
   if (state.isUIEditorEnabled != lastValueOfIsUiEditorEnabled) {
     setIsUIEditorEnabled(state.isUIEditorEnabled);
     lastValueOfIsUiEditorEnabled = state.isUIEditorEnabled;
@@ -76,14 +63,6 @@ implementerToolsStore.subscribe((state) => {
     lastValueOfIsJsonModeEnabled = state.isJsonModeEnabled;
   }
 });
-
-function getIsImplementerToolsOpen(): boolean {
-  return JSON.parse(localStorage.getItem('egen:egenImplementerToolsAreOpen') || 'false') ?? false;
-}
-
-function setIsImplementerToolsOpen(value: boolean): void {
-  localStorage.setItem('egen:egenImplementerToolsAreOpen', JSON.stringify(value));
-}
 
 function getIsConfigToolbarOpen(): boolean {
   return JSON.parse(localStorage.getItem('egen:egenImplementerToolsConfigOpen') || 'true') ?? true;

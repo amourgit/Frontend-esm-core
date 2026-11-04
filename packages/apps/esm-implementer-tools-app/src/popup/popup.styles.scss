@@ -4,12 +4,12 @@
 @use '@egen-civitas/esm-styleguide/src/vars' as *;
 
 .popup {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  // Contenu de la zone basse : le shell fournit cadre, redimensionnement et fermeture.
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  z-index: 100000;
-  border-top: 2px solid $ui-05;
+  height: 100%;
+  min-height: 0;
   box-sizing: border-box;
 
   tr {
@@ -22,7 +22,9 @@
 
 .content {
   width: 100%;
-  height: 50vh;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .tabs {

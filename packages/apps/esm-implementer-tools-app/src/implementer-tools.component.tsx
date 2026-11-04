@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { showToast, UserHasAccess, useStore } from '@egen-civitas/esm-framework';
-import { implementerToolsStore, showModuleDiagnostics, togglePopup } from './store';
+import { implementerToolsStore, showModuleDiagnostics } from './store';
 import { hasInvalidDependencies } from './backend-dependencies/egen-backend-dependencies';
 import { useBackendDependencies } from './backend-dependencies/useBackendDependencies';
-import { useFrontendModules } from './hooks';
 import styles from './implementer-tools.styles.scss';
 
-const Popup = React.lazy(() => import('./popup/popup.component'));
 const UiEditor = React.lazy(() => import('./ui-editor/ui-editor'));
 
 function PopupHandler() {
-  const frontendModules = useFrontendModules();
   const backendDependencies = useBackendDependencies();
   const [shouldShowNotification, setShouldShowNotification] = useState(false);
   const { t } = useTranslation();
@@ -38,18 +35,10 @@ function PopupHandler() {
     }
   }, [t, shouldShowNotification]);
 
-  const { isOpen, isUIEditorEnabled, openTabIndex } = useStore(implementerToolsStore);
+  const { isUIEditorEnabled } = useStore(implementerToolsStore);
 
   return (
     <div className={styles.darkTheme}>
-      {isOpen ? (
-        <Popup
-          close={togglePopup}
-          frontendModules={frontendModules}
-          backendDependencies={backendDependencies}
-          visibleTabIndex={openTabIndex}
-        />
-      ) : null}
       {isUIEditorEnabled ? <UiEditor /> : null}
     </div>
   );

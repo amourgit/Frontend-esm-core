@@ -24,7 +24,7 @@ package.
 | Slot                     | Rendu par                          | Alimenté aujourd'hui par                          |
 |--------------------------|-------------------------------------|----------------------------------------------------|
 | `top-nav-info-slot`      | Centre de la barre, texte discret   | —  (ouvert, libre)                                 |
-| `top-nav-actions-slot`   | Zone droite, avant le séparateur    | `esm-implementer-tools-app`                        |
+| `top-nav-actions-slot`   | Zone droite (niveau 1)              | extensions d'apps (voir « TopBar modulaire »)      |
 | `top-nav-trailing-slot`  | Zone droite, tout à la fin          | — (ouvert, libre)                                  |
 | `app-menu-slot`          | Grille du panneau "Applications"    | `esm-offline-tools-app`                            |
 | `quick-access-slot`      | Liste du panneau "Raccourcis"       | — (ouvert, libre)                                  |
@@ -121,3 +121,42 @@ slot de son choix :
 La barre de recherche navigue réellement vers `search.path` à la soumission
 (Entrée ou icône) — pointez cette config vers votre propre app de résultats
 de recherche si vous en développez une.
+
+## TopBar modulaire (niveaux 1 et 2)
+
+La TopBar est une grille de **régions** neutres (`l1-left | l1-center | l1-right`, `l2-left | l2-center | l2-right`). Elle ne
+connaît aucune app : tout ce qui s'y affiche vient d'**éléments globaux** (`src/intranet-topbar/global/items.tsx` : logo,
+recherche, langue, thème, utilisateur, horloge, navigation…) ou d'**extensions** d'apps.
+
+| Région      | Slot d'extension (`routes.json`) | Slots historiques honorés                       |
+| ----------- | -------------------------------- | ----------------------------------------------- |
+| `l1-left`   | `topbar-l1-left-slot`            | —                                               |
+| `l1-center` | `topbar-l1-center-slot`          | `top-nav-info-slot`                             |
+| `l1-right`  | `topbar-l1-right-slot`           | `top-nav-actions-slot`, `top-nav-trailing-slot` |
+| `l2-left`   | `topbar-l2-left-slot`            | `top-nav-app-slot`                              |
+| `l2-center` | `topbar-l2-center-slot`          | —                                               |
+| `l2-right`  | `topbar-l2-right-slot`           | `top-nav-level2-end-slot`                       |
+
+Une extension s'affiche quand son app est active, ou toujours avec `meta.global: true`.
+
+### Personnaliser la TopBar depuis une app montée
+
+Store global `egen-topbar-layout` (aucune dépendance de code). Règles par région : `hidden`, `only`, `hide`, `hideGlobal`
+(`id` d'élément ou `name` d'extension). Elles ne s'appliquent que tant que l'app propriétaire est active.
+
+```ts
+import { getGlobalStore } from '@egen-civitas/esm-framework';
+
+const store = getGlobalStore('egen-topbar-layout', { claims: {} });
+// Page « détail d'un collaborateur » : niveau 1 réduit à ses propres boutons (retour) + recherche
+store.setState((s) => ({
+  claims: {
+    ...s.claims,
+    '@egen-civitas/esm-annuaire-app': { 'l1-left': { hideGlobal: true }, 'l1-right': { only: ['search'] } },
+  },
+}));
+// Au démontage de la page : retirer la clé de l'app dans `claims`.
+```
+
+Éléments globaux : `brand`, `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `user`, `clock`,
+`menu-panel` (niveau 1), `nav` (niveau 2). « Implementer tools » n'est plus dans la TopBar : c'est une option du rail droit (bas).

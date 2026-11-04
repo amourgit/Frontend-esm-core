@@ -1,36 +1,7 @@
 @use '@carbon/layout';
 @use '@egen-civitas/esm-styleguide/src/vars' as *;
 
-.toolStyles {
-  background-color: transparent;
-}
 
-.chevronImplementerToolsButton {
-  position: fixed;
-  bottom: 0;
-  left: calc(50vw - layout.$spacing-07 / 2);
-
-  .implementerToolsButton {
-    border: none;
-    padding: 0;
-    font: inherit;
-    color: inherit;
-
-    background-color: $ui-02;
-    width: layout.$spacing-07;
-    height: layout.$spacing-06;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    border-radius: layout.$spacing-01;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .implementerToolsButton:hover {
-    transform: translateY(-3px);
-  }
-}
 
 // =============================================================================
 //  .darkTheme — conteneur racine du panneau implementer-tools

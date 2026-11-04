@@ -398,3 +398,54 @@
     font-size: 10px;
   }
 }
+
+// ── Régions du niveau 1 (kit neutre : gauche / centre / droite) ─────────────────────────
+.regionLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: visible;
+  &:empty {
+    display: none;
+  }
+}
+
+.regionCenter {
+  display: none;
+  flex: 1 1 0;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.5rem;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  @media (min-width: 1024px) {
+    display: flex;
+  }
+}
+
+.regionRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+  min-width: 0;
+  overflow: visible;
+  margin-left: auto;
+
+  @media (min-width: 640px) {
+    gap: 0.5rem;
+  }
+  @media (min-width: 1024px) {
+    gap: 0.875rem;
+  }
+}
+
+// Recherche ouverte en mobile : la région droite occupe toute la largeur
+.regionRightFull {
+  flex: 1 1 auto;
+  justify-content: space-between;
+}

@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { ContentSwitcher, IconButton, Switch } from '@carbon/react';
+import { ContentSwitcher, Switch } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
-import { CloseIcon } from '@egen-civitas/esm-framework';
 import { Configuration } from '../configuration/configuration.component';
 import { FrontendModules } from '../frontend-modules/frontend-modules.component';
 import { BackendDependencies } from '../backend-dependencies/backend-dependencies.component';
@@ -11,7 +10,6 @@ import type { ResolvedDependenciesModule } from '../backend-dependencies/egen-ba
 import styles from './popup.styles.scss';
 
 interface DevToolsPopupProps {
-  close(): void;
   frontendModules: Array<FrontendModule>;
   backendDependencies: Array<ResolvedDependenciesModule>;
   visibleTabIndex?: number;
@@ -24,7 +22,6 @@ interface SwitcherItem {
 }
 
 export default function Popup({
-  close,
   frontendModules,
   backendDependencies,
   visibleTabIndex = 0,
@@ -68,17 +65,6 @@ export default function Popup({
             />
             <Switch name="feature-flags-tab" text={t('featureFlags', 'Feature flags')} className="darkThemeSwitch" />
           </ContentSwitcher>
-        </div>
-        <div>
-          <IconButton
-            align="left"
-            className={styles.closeButton}
-            kind="secondary"
-            label={t('close', 'Close')}
-            onClick={close}
-          >
-            <CloseIcon />
-          </IconButton>
         </div>
       </div>
       <div className={styles.content}>{tabContent}</div>
