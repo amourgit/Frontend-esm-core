@@ -177,14 +177,126 @@ git diff && git commit -am "chore(sync): reprendre l'infra de tv" && git push
 
 ### D. Nouveau projet métier jumeau
 
-1. Cloner le core.
-2. `bash tools/sync-shared.sh setup core <url-core>` côté nouveau projet.
-3. Ajouter les scripts `build:prod`, `start:prod`, `sync:shared` (§2) dans son `package.json`.
-4. Configurer Render (§3).
+Procédure complète, pas à pas : **§7**.
 
 ---
 
-## 7. Mises à jour système (rspack, Carbon, app-shell…)
+## 7. Créer un NOUVEAU projet à partir du core (procédure complète)
+
+Objectif : un nouveau dépôt métier (ex. `civitas-xxx-frontend`) qui démarre avec la prod légère déjà prête **et** reste synchronisable avec le core.
+
+### 7.1 Méthode recommandée : cloner le core (historique conservé, remote `core` automatique)
+
+**Étape 1 — Créer le dépôt vide sur GitHub**
+`github.com/amourgit/civitas-xxx-frontend` — sans README, sans .gitignore, sans licence (dépôt totalement vide).
+
+**Étape 2 — Cloner le core sous le nouveau nom et re-pointer les remotes**
+
+```bash
+git clone https://github.com/amourgit/Frontend-esm-core.git civitas-xxx-frontend
+cd civitas-xxx-frontend
+git remote rename origin core                                        # le core devient le remote "core"
+git remote add origin https://github.com/amourgit/civitas-xxx-frontend.git
+git push -u origin main
+git remote -v                                                        # core = Frontend-esm-core, origin = nouveau dépôt
+```
+
+Résultat : `bash tools/sync-shared.sh list core` fonctionne immédiatement (aucun `setup` nécessaire).
+
+**Étape 3 — Vérifier que les outils de prod sont bien là (hérités du core)**
+
+```bash
+ls tools/serve-prod.mjs tools/precompress.mjs tools/sync-shared.sh tools/shared-paths.txt
+grep -n "build:prod\|start:prod\|sync:shared" package.json    # 3 scripts attendus
+```
+
+Si un script manque, le rajouter (§2).
+
+**Étape 4 — Personnaliser le projet (ce qui NE se synchronise PAS, cf. §4)**
+
+| À faire | Où |
+|---|---|
+| Renommer le package racine (`"name"`) | `package.json` (garder les apps en `@egen/*-app`, le filtre de `build:prod` en dépend) |
+| Remplacer logos et identité | `branding/` (+ `EGEN_BRAND_DIR` si besoin) |
+| Adapter les valeurs de dev | `.env.development`, `example.env` |
+| Réécrire README et docs du projet | `README.md`, `docs/` |
+| Repartir d'un historique de versions propre | supprimer les `.changeset/*.md` (garder `.changeset/config.json`) |
+| Retirer les apps du core inutiles, ajouter les apps métier | `packages/apps/<app>` |
+| Ajouter des libs métier (optionnel) | créer `packages/libs/*` **et** ajouter `"packages/libs/*"` à `workspaces` dans `package.json` |
+
+Règle d'une app (sinon `serve-prod` l'ignore) : son `package.json` doit avoir un `name` (`@egen/esm-xxx-app`) et un champ `browser` (ou `module`/`main`) vers le bundle compilé (ex. `dist/egen-esm-xxx-app.js`) ; ses routes sont dans `src/routes.json`.
+
+**Étape 5 — Tester en local AVANT de déployer**
+
+```bash
+corepack yarn install
+corepack yarn build:prod                       # compile les apps + .br
+PORT=8080 corepack yarn start:prod &           # lancer le serveur
+B=http://localhost:8080/egen-civitas/spa
+curl -s http://localhost:8080/healthz          # -> ok
+curl -s $B/importmap.json                      # toutes les apps listées
+curl -s $B/routes.registry.json                # routes de chaque app
+curl -sI -H "Accept-Encoding: br" $B/apps/<dossier-app>/<bundle>.js | grep -i content-encoding   # -> br
+```
+
+Au démarrage, la console doit afficher `N applications : …` et la RAM (`RSS`) : quelques dizaines de Mo.
+
+**Étape 6 — Créer le service Render**
+
+1. New → **Web Service** → connecter `civitas-xxx-frontend`, branche `main`.
+2. Runtime **Node**.
+3. Build Command : `corepack yarn install --immutable --inline-builds && corepack yarn build:prod`
+4. Start Command : `corepack yarn start:prod`
+5. Advanced → **Health Check Path** : `/healthz`
+6. Variables d'environnement : voir le tableau du §3 (au minimum `EGEN_DEV_NO_AUTH=false`, `EGEN_BACKEND`, `EGEN_BRAND_DIR`, `EGEN_TENANT_*` selon le projet).
+7. Déployer. Si le build s'arrête sans erreur : §9 (mémoire du build).
+
+**Étape 7 — Déclarer le nouveau projet côté core (pour la synchro inverse)**
+
+Dans le clone du **core** :
+
+```bash
+bash tools/sync-shared.sh setup civitas-xxx https://github.com/amourgit/civitas-xxx-frontend.git
+```
+
+**Étape 8 — Documenter**
+
+Ajouter le nouveau dépôt au tableau de l'en-tête de ce guide (dans le core, puis `docs/SYNC-CORE-TV.md` des projets) et rappeler la règle : *infra corrigée dans le core d'abord, puis redescendue*.
+
+### 7.2 Méthode alternative : projet vierge (sans cloner le core)
+
+À utiliser seulement si le projet n'a **aucun** lien d'historique avec le core.
+
+```bash
+# dans le nouveau dépôt, depuis un clone du core à côté (../Frontend-esm-core)
+mkdir -p tools
+cp ../Frontend-esm-core/tools/{serve-prod.mjs,precompress.mjs,sync-shared.sh,shared-paths.txt,sync-egen-deps.mjs} tools/
+cp ../Frontend-esm-core/{turbo.json,.yarnrc.yml,.npmrc,.editorconfig,prettier.config.js,.eslintrc,.eslintignore} .
+cp -r ../Frontend-esm-core/.github .
+```
+
+Puis :
+1. Ajouter les 3 scripts du §2 dans `package.json` (+ `deps:egen` et `start` si le projet utilise le CLI egen).
+2. S'assurer que les workspaces contiennent `packages/apps/*` et que les apps suivent la règle de l'étape 4.
+3. `bash tools/sync-shared.sh setup core https://github.com/amourgit/Frontend-esm-core.git`.
+4. Reprendre les étapes 5 à 8 de la méthode 7.1.
+
+> Les `list` et `pick` (cherry-pick) fonctionnent mal sans historique commun : avec cette méthode, utiliser **`paths`** et **`diff`** uniquement.
+
+### 7.3 Checklist de validation d'un nouveau projet
+
+- [ ] `git remote -v` : `origin` = nouveau dépôt, `core` = Frontend-esm-core
+- [ ] 3 scripts présents : `build:prod`, `start:prod`, `sync:shared`
+- [ ] `yarn build:prod` OK en local (aucune app en `SKIP`)
+- [ ] `/healthz`, `importmap.json`, `routes.registry.json` répondent
+- [ ] Service Render créé avec les commandes du §3 et le health check `/healthz`
+- [ ] `EGEN_DEV_NO_AUTH=false` en production
+- [ ] Nouveau dépôt déclaré côté core (étape 7)
+- [ ] Guide mis à jour (étape 8)
+
+---
+
+## 8. Mises à jour système (rspack, Carbon, app-shell…)
 
 Elles viennent du framework **`@egen-civitas/*`**. Elles se font **dans chaque dépôt**, pas par la synchro :
 
@@ -198,7 +310,7 @@ Ensuite : `yarn verify`, `yarn build:prod`, commit du `package.json` et `yarn.lo
 
 ---
 
-## 8. Dépannage
+## 9. Dépannage
 
 | Symptôme | Cause / solution |
 |---|---|
@@ -213,7 +325,7 @@ Ensuite : `yarn verify`, `yarn build:prod`, commit du `package.json` et `yarn.lo
 
 ---
 
-## 9. Sécurité
+## 10. Sécurité
 
 - Ne **jamais** coller un token GitHub (`github_pat_…`) dans un chat ou un fichier versionné. En cas d'exposition : **révoquer et régénérer** dans GitHub → Settings → Developer settings.
 - Utiliser un token **fine-grained**, limité aux dépôts concernés, avec le seul droit *Contents: Read and write*.
@@ -221,7 +333,7 @@ Ensuite : `yarn verify`, `yarn build:prod`, commit du `package.json` et `yarn.lo
 
 ---
 
-## 10. Aide-mémoire (une page)
+## 11. Aide-mémoire (une page)
 
 ```bash
 # --- Prod ---
@@ -234,6 +346,8 @@ yarn sync:shared list  core       # nouveautés d'infra du core ?
 yarn sync:shared diff  core       # écart ?
 yarn sync:shared paths core       # aligner (puis git diff, commit, push)
 yarn sync:shared pick  core <sha> # un commit précis (100 % infra uniquement)
+# --- Nouveau projet (cf. §7) ---
+git clone <core> <nom> && cd <nom> && git remote rename origin core && git remote add origin <url-nouveau> && git push -u origin main
 # --- Dépendances framework (dans chaque dépôt) ---
 corepack yarn deps:egen
 ```
