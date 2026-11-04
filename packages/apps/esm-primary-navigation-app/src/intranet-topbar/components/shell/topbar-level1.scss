@@ -177,6 +177,14 @@
   }
 }
 
+// Mobile (< 640px) : le choix de l'Espace est masqué de la topbar (il sera réintégré dans un autre
+// composant). Seul le sélecteur de Site reste visible. Tablette et desktop inchangés.
+.selector {
+  @media (max-width: 639.98px) {
+    display: none;
+  }
+}
+
 .selector,
 .selectorSite {
   min-width: 0;
