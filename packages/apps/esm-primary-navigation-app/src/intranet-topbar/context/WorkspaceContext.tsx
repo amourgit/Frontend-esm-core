@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { type Workspace, type WorkspaceDefinition, type WorkspaceId } from '../types/workspace';
 import { WORKSPACES_MOCK_DATA } from '../data/workspaceMockData';
 import { type IntranetApp } from '../data/intranetAppsMock';
@@ -6,6 +6,7 @@ import { type NavItem } from '../components/shell/DropdownNavigation';
 import { useTranslation } from 'react-i18next';
 import { useSlotNavEntries } from '../hooks/useSlotNavEntries';
 import { buildNavItemsFromSlot } from '../utils/buildNavItemsFromSlot';
+import { setWorkspaceIdInStore, useWorkspaceId } from './workspaceStore';
 
 interface WorkspaceContextType {
   currentWorkspace: Workspace;
@@ -19,14 +20,9 @@ interface WorkspaceContextType {
 const WorkspaceContext = createContext<WorkspaceContextType | null>(null);
 
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
-  const [workspaceId, setWorkspaceIdState] = useState<WorkspaceId>('intranet');
-
-  const setWorkspaceId = useCallback((id: WorkspaceId) => {
-    const exists = WORKSPACES_MOCK_DATA.some((w) => w.id === id);
-    if (exists) {
-      setWorkspaceIdState(id);
-    }
-  }, []);
+  // L'Espace actif vit dans un store partagé (voir workspaceStore.ts) : le panneau latéral peut le changer.
+  const workspaceId = useWorkspaceId();
+  const setWorkspaceId = setWorkspaceIdInStore;
 
   const { t } = useTranslation();
   const slotEntries = useSlotNavEntries();

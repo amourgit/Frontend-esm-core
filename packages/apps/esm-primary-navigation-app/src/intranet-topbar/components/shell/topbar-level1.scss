@@ -243,7 +243,9 @@
   backdrop-filter: blur(20px) saturate(160%);
   border-color: var(--glass-border);
   color: var(--glass-text);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 
   > button {
     height: var(--trg-h);
@@ -309,7 +311,9 @@
   backdrop-filter: blur(20px) saturate(160%);
   border-color: var(--glass-border);
   color: var(--glass-text);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 
   width: 16rem;
   font-size: var(--sel-fs);
@@ -380,4 +384,17 @@
   font-size: 11px;
   letter-spacing: -0.025em;
   line-height: 1.25;
+}
+
+// Bouton d'ouverture du panneau latéral (StaggeredMenuPanel), à l'extrême droite : petit, discret.
+.menuToggle {
+  flex: 0 0 auto;
+  margin-left: 0.25rem;
+  padding: 0.25rem 0.125rem;
+  font-size: 11px;
+
+  @media (max-width: 639.98px) {
+    margin-left: 0.125rem;
+    font-size: 10px;
+  }
 }

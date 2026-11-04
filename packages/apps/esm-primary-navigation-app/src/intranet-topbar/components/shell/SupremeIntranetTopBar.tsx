@@ -53,6 +53,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { DropdownNavigation, type NavItem } from './DropdownNavigation';
 import { TopBarLevel2 } from './TopBarLevel2';
+import { TopBarMenuPanel } from './TopBarMenuPanel';
 import { bindNavSelection } from '../../utils/navSelection';
 import { playXboxSound } from '../../utils/xboxAudio';
 import { useWorkspace } from '../../context/WorkspaceContext';
@@ -458,6 +459,10 @@ export function SupremeIntranetTopBar({
               <span className={styles.clockTime}>{timeStr}</span>
               <span className={styles.clockDate}>{dateLongStr}</span>
             </div>
+
+            {/* 11. Panneau latéral (StaggeredMenuPanel) : bouton déclencheur à l'extrême droite, petit.
+                Masqué avec les autres options quand la recherche occupe la barre en mobile/tablette. */}
+            <TopBarMenuPanel className={hideOnSearch} />
           </div>
         </div>
 

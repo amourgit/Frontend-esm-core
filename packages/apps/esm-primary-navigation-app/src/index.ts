@@ -14,10 +14,9 @@ import { moduleName } from './constants';
 import primaryNavRootComponent from './root.component';
 import userPanelComponent from './components/user-panel-switcher/user-panel-switcher.component';
 import changeLanguageLinkComponent from './components/change-language/change-language-link.extension';
+import workspaceSelectorMenuComponent from './components/workspace-selector-menu/workspace-selector-menu.extension';
 import genericLinkComponent, { genericLinkConfigSchema } from './components/generic-link/generic-link.component';
-import breadcrumbItemComponent, {
-  breadcrumbItemConfigSchema,
-} from './components/breadcrumb/breadcrumb-item.component';
+import breadcrumbItemComponent, { breadcrumbItemConfigSchema } from './components/breadcrumb/breadcrumb-item.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -95,6 +94,9 @@ export const userPanel = getSyncLifecycle(userPanelComponent, options);
 
 export const changeLanguageLink = getSyncLifecycle(changeLanguageLinkComponent, options);
 
+// Choix de l'Espace dans le StaggeredMenuPanel (slot `staggered-menu-slot`, permanent : `meta.global`).
+export const workspaceSelectorMenu = getSyncLifecycle(workspaceSelectorMenuComponent, options);
+
 export const changeLanguageModal = getAsyncLifecycle(
   () => import('./components/change-language/change-language.modal'),
   options,
@@ -104,7 +106,6 @@ export const linkComponent = getSyncLifecycle(genericLinkComponent, {
   featureName: 'Link',
   moduleName,
 });
-
 
 // ─── Item de fil d'Ariane (niveau 2 de la topbar) ────────────────────────────
 // Composant générique déclaratif pour peupler "top-nav-breadcrumb-slot" —
