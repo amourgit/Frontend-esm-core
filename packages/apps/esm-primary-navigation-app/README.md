@@ -171,3 +171,16 @@ store.setState((s) => ({
 
 Éléments globaux : `brand`, `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `user`, `clock`,
 `menu-panel` (niveau 1), `nav` (niveau 2). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
+
+### Hauteur de la TopBar et contenu des apps
+
+Le shell mesure en direct le conteneur de la TopBar (`#egen-top-nav-app-container`, hauteur automatique) et publie
+`--egen-navbar-height` (idem `--egen-footer-height` pour le footer). Le nombre de niveaux n'y change rien : la hauteur est
+celle de ce qui est réellement rendu, quel que soit N. Le contenu des apps doit s'appuyer sur ces variables, jamais sur une
+hauteur codée en dur :
+
+```css
+height: calc(100dvh - var(--egen-navbar-height, 0px) - var(--egen-footer-height, 0px));
+```
+
+`--egen-topbar-levels` indique en plus le nombre de rangées rendues.

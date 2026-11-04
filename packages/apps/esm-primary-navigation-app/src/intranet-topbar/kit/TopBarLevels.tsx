@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTopBarUi } from './context';
 import { computeLevels, type TopBarLevelsConfig } from './levels';
 import { useDeclaredLevels } from './declared-levels';
@@ -75,6 +75,15 @@ export const TopBarLevels: React.FC<{ config?: Partial<TopBarLevelsConfig>; prim
   const declared = useDeclaredLevels();
   const layout = useTopBarLayout();
   const resolution = useMemo(() => computeLevels(config, declared, layout.levels), [config, declared, layout.levels]);
+
+  // Publie le nombre de rangées rendues (`--egen-topbar-levels`) : information pour les apps (décalages, styles).
+  // La HAUTEUR totale, elle, est mesurée par le shell sur le conteneur de la TopBar (`--egen-navbar-height`).
+  const count = resolution.levels.length;
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--egen-topbar-levels', String(count));
+    return () => root.style.removeProperty('--egen-topbar-levels');
+  }, [count]);
 
   return (
     <>
