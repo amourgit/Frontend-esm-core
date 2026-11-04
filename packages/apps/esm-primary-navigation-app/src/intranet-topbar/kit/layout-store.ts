@@ -1,24 +1,24 @@
 import { getGlobalStore, useStore } from '@egen-civitas/esm-framework';
 import { useMemo } from 'react';
 import { useActiveAppModules } from '../hooks/useActiveAppModules';
-import { TOPBAR_REGION_IDS, type TopBarRegionId } from './regions';
+import type { TopBarRegionId } from './regions';
 
 // =============================================================================
-//  LAYOUT DE LA TOPBAR — personnalisation d'une région par l'app montée
+//  LAYOUT DE LA TOPBAR — personnalisation par l'app montée
 //
 //  Une app (ou une page) décide de ce que la TopBar affiche pendant qu'elle est montée :
 //
 //    import { getGlobalStore } from '@egen-civitas/esm-framework';
 //    const store = getGlobalStore('egen-topbar-layout', { claims: {} });
-//    // page « détail d'un collaborateur » : niveau 1 réduit au retour + recherche
 //    store.setState((s) => ({ claims: { ...s.claims, '@mon-org/esm-annuaire-app': {
-//      'l1-left': { hideGlobal: true }, 'l1-right': { only: ['search'] } } } }));
-//    // …et la retirer au démontage de la page (supprimer la clé).
+//      regions: { 'l1-left': { hideGlobal: true }, 'l1-right': { only: ['search'] } },   // page « détail »
+//      levels: { min: 3, hide: [2] },                                                    // 3 rangées, sans le niveau 2
+//    } } }));
+//    // …et retirer la clé de l'app au démontage de la page.
 //
-//  Le store est un store global du framework (nom `egen-topbar-layout`), donc utilisable depuis toute app
-//  sans dépendance de code. Les règles d'une app ne s'appliquent QUE tant que cette app est active : quitter
-//  l'app rend la TopBar à son état normal, sans nettoyage obligatoire. `applyTopBarLayout` (ci-dessous) est le
-//  raccourci pour le code de cette app.
+//  Store global du framework (nom `egen-topbar-layout`) : utilisable depuis toute app, sans dépendance de code.
+//  Les règles d'une app ne valent QUE tant qu'elle est active. Une règle de région vise la région où le contenu est
+//  DÉCLARÉ (`l3-right`), même si ce contenu est affiché plus bas parce que le niveau 3 n'est pas rendu.
 // =============================================================================
 
 export const TOPBAR_LAYOUT_STORE = 'egen-topbar-layout';
@@ -34,10 +34,20 @@ export interface TopBarRegionRule {
   hideGlobal?: boolean;
 }
 
-export type TopBarLayout = Partial<Record<TopBarRegionId, TopBarRegionRule>>;
+export interface TopBarLevelsRule {
+  /** Nombre minimal de niveaux rendus pendant que l'app est active. */
+  min?: number;
+  /** Niveaux (≥ 2) à ne pas rendre pendant que l'app est active. */
+  hide?: number[];
+}
+
+export interface TopBarLayout {
+  regions?: Partial<Record<TopBarRegionId, TopBarRegionRule>>;
+  levels?: TopBarLevelsRule;
+}
 
 export interface TopBarLayoutState {
-  /** Règles par nom de module (app) propriétaire. */
+  /** Layout par nom de module (app) propriétaire. */
   claims: Record<string, TopBarLayout>;
 }
 
@@ -53,8 +63,6 @@ export function applyTopBarLayout(owner: string, layout: TopBarLayout): () => vo
       return { claims: rest };
     });
 }
-
-const EMPTY: TopBarRegionRule = {};
 
 /** Vrai si un élément / une extension (`id`) peut s'afficher sous la règle d'une région. */
 export function isAllowedByRule(id: string, isGlobal: boolean, rule: TopBarRegionRule): boolean {
@@ -75,23 +83,29 @@ export function mergeRules(rules: TopBarRegionRule[]): TopBarRegionRule {
       hide: [...(acc.hide ?? []), ...(r.hide ?? [])],
       only,
     };
-  }, EMPTY);
+  }, {});
 }
 
-/** Règle effective d'une région : fusion des règles des apps actuellement actives. */
-export function useRegionRule(region: TopBarRegionId): TopBarRegionRule {
+export interface ResolvedTopBarLayout {
+  /** Règle effective d'une région (fusion des apps actives). */
+  ruleFor: (id: TopBarRegionId) => TopBarRegionRule;
+  levels: { min?: number; hide: number[] };
+}
+
+/** Layout effectif : fusion des layouts des apps actuellement actives. */
+export function useTopBarLayout(): ResolvedTopBarLayout {
   const { claims } = useStore(getTopBarLayoutStore());
   const active = useActiveAppModules();
-  return useMemo(
-    () =>
-      mergeRules(
-        Object.entries(claims)
-          .filter(([owner]) => active.has(owner))
-          .map(([, layout]) => layout[region])
-          .filter((r): r is TopBarRegionRule => Boolean(r)),
-      ),
-    [claims, active, region],
-  );
+  return useMemo(() => {
+    const layouts = Object.entries(claims)
+      .filter(([owner]) => active.has(owner))
+      .map(([, layout]) => layout);
+    return {
+      ruleFor: (id) => mergeRules(layouts.map((l) => l.regions?.[id]).filter((r): r is TopBarRegionRule => Boolean(r))),
+      levels: {
+        min: layouts.reduce<number | undefined>((m, l) => (l.levels?.min ? Math.max(m ?? 0, l.levels.min) : m), undefined),
+        hide: layouts.flatMap((l) => l.levels?.hide ?? []),
+      },
+    };
+  }, [claims, active]);
 }
-
-export { TOPBAR_REGION_IDS };

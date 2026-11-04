@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { type NavItem } from './DropdownNavigation';
-import { TopBarLevel2 } from './TopBarLevel2';
 import { bindNavSelection } from '../../utils/navSelection';
 import { playXboxSound } from '../../utils/xboxAudio';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { useIsDesktop, useIsMobile } from '../../hooks/useMediaQuery';
-import { TopBarRegion, TopBarUiProvider, type TopBarUi } from '../../kit';
+import { TopBarLevels, TopBarUiProvider, type PrimaryLevelClasses, type TopBarUi } from '../../kit';
+import { useConfig } from '@egen-civitas/esm-framework';
+import { type ConfigSchema } from '../../../config-schema';
 import { GlobalCallbacksProvider } from '../../global/GlobalCallbacks';
 import { TopBarNavProvider } from '../../global/NavContext';
 import { registerGlobalTopBarItems } from '../../global/items';
@@ -17,6 +18,14 @@ registerGlobalTopBarItems();
 
 /** Chemins considérés comme "accueil" (le core sert l'accueil sur /home ; les autres sont des alias GED). */
 const HOME_PATHS = ['/', '/home', '/accueil'];
+
+const PRIMARY_CLASSES: PrimaryLevelClasses = {
+  row: styles.row,
+  left: styles.regionLeft,
+  center: styles.regionCenter,
+  right: styles.regionRight,
+  rightFull: styles.regionRightFull,
+};
 
 export interface SupremeIntranetTopBarProps {
   onOpenGlobalSearch?: () => void;
@@ -37,6 +46,7 @@ export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }
   const currentPath = location.pathname.replace(/\/+$/, '') || '/';
   const isHome = HOME_PATHS.includes(currentPath);
   const { currentWorkspace } = useWorkspace();
+  const config = useConfig<ConfigSchema>();
 
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -105,9 +115,6 @@ export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }
     [isHome, showFullNav, navItems],
   );
 
-  // Recherche ouverte en mobile : la zone gauche cède la place (voir `hideOnSearch` des éléments)
-  const hideLeft = searchOpen && isMobile;
-
   return (
     <div
       ref={menuRef}
@@ -117,18 +124,8 @@ export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }
         <GlobalCallbacksProvider value={{ onOpenGlobalSearch, onShowNotification }}>
           <TopBarNavProvider value={nav}>
             <header className="w-full bg-transparent transition-colors overflow-visible flex flex-col">
-              {/* NIVEAU 1 — trois régions extensibles */}
-              <div className={styles.row}>
-                <TopBarRegion id="l1-left" className={hideLeft ? 'hidden' : styles.regionLeft} />
-                <TopBarRegion id="l1-center" className={styles.regionCenter} />
-                <TopBarRegion
-                  id="l1-right"
-                  className={hideLeft ? `${styles.regionRight} ${styles.regionRightFull}` : styles.regionRight}
-                />
-              </div>
-
-              {/* NIVEAU 2 — trois régions extensibles */}
-              <TopBarLevel2 />
+              {/* Pile de niveaux (1…N) : nombre et contenu déduits des éléments, extensions et de `topbar.levels` */}
+              <TopBarLevels config={config.topbar?.levels} primaryClasses={PRIMARY_CLASSES} />
             </header>
           </TopBarNavProvider>
         </GlobalCallbacksProvider>

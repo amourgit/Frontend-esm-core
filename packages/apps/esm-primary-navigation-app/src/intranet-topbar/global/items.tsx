@@ -198,4 +198,5 @@ export function registerGlobalTopBarItems(): void {
   registerTopBarItem({ id: 'menu-panel', region: 'l1-right', order: 110, component: MenuPanelItem, hideOnSearch: 'touch' });
   // Niveau 2
   registerTopBarItem({ id: 'nav', region: 'l2-center', order: 0, component: NavItem2 });
+  // Si le niveau 2 n'est pas rendu (config `topbar.levels`), la navigation s'affiche au centre du niveau 1.
 }

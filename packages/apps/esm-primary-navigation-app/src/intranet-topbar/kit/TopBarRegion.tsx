@@ -1,17 +1,17 @@
-import React, { useCallback, useSyncExternalStore } from 'react';
+import React, { useCallback } from 'react';
 import { ExtensionSlot, type AssignedExtension } from '@egen-civitas/esm-framework';
 import { useActiveAppModules } from '../hooks/useActiveAppModules';
-import { getTopBarItems, subscribeTopBarItems, type TopBarItem } from './items';
-import { isAllowedByRule as allowed, useRegionRule } from './layout-store';
+import { useTopBarItems, type TopBarItem } from './items';
+import { isAllowedByRule, useTopBarLayout, type TopBarRegionRule } from './layout-store';
 import { useTopBarUi } from './context';
-import { LEGACY_SLOTS, topBarSlotName, type TopBarRegionId } from './regions';
+import { parseRegionId, regionId, slotNamesFor, type TopBarRegion as Region, type TopBarRegionId } from './regions';
 
 // =============================================================================
-//  <TopBarRegion> — une région de la TopBar (neutre)
+//  <TopBarRegion> — une région d'un niveau (neutre)
 //
-//  Rend, dans cet ordre : les éléments enregistrés pour la région, le slot `topbar-<région>-slot`, puis les
-//  slots historiques. Applique les règles de layout des apps actives (voir layout-store.ts). Ne sait RIEN
-//  du métier : tout ce qui s'y affiche vient d'éléments ou d'extensions.
+//  Rend les éléments puis les slots d'extension de la région. Quand des niveaux voisins ne sont pas rendus,
+//  `sources` liste les niveaux dont le contenu s'affiche ici (règle 3 de levels.ts). Chaque source applique SES
+//  règles de layout. Ne sait RIEN du métier.
 // =============================================================================
 
 const SCREEN_CLASS: Record<NonNullable<TopBarItem['visibleFrom']>, string> = {
@@ -19,37 +19,53 @@ const SCREEN_CLASS: Record<NonNullable<TopBarItem['visibleFrom']>, string> = {
   desktop: 'hidden lg:contents',
 };
 
-interface Props {
-  id: TopBarRegionId;
-  className?: string;
+const SLOT_CLASS = 'flex shrink-0 items-center gap-1 empty:hidden';
+
+interface SlotProps {
+  name: string;
+  source: TopBarRegionId;
+  rule: TopBarRegionRule;
+  state: Record<string, unknown>;
 }
 
-export const TopBarRegion: React.FC<Props> = ({ id, className = '' }) => {
-  const ui = useTopBarUi();
-  const rule = useRegionRule(id);
+/** Un slot d'extension filtré : app active (ou `meta.global`) puis règles de layout de la région d'origine. */
+const RegionSlot: React.FC<SlotProps> = ({ name, rule, state }) => {
   const activeModules = useActiveAppModules();
-  const all = useSyncExternalStore(subscribeTopBarItems, getTopBarItems, getTopBarItems);
-
-  const items = all
-    .filter((i) => i.region === id && allowed(i.id, i.global !== false, rule))
-    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-
-  // Extension : visible si son app est active ou si elle est globale, puis règles de layout.
   const select = useCallback(
     (extensions: AssignedExtension[]) =>
       extensions.filter((e) => {
         const isGlobal = (e.meta as { global?: boolean } | undefined)?.global === true;
-        return (isGlobal || activeModules.has(e.moduleName)) && allowed(e.name, isGlobal, rule);
+        return (isGlobal || activeModules.has(e.moduleName)) && isAllowedByRule(e.name, isGlobal, rule);
       }),
     [activeModules, rule],
   );
+  return <ExtensionSlot name={name} state={state} select={select} className={SLOT_CLASS} />;
+};
 
-  if (rule.hidden) return null;
+interface Props {
+  level: number;
+  region: Region;
+  /** Niveaux dont le contenu s'affiche dans cette région (au minimum `[level]`). */
+  sources?: number[];
+  className?: string;
+}
+
+export const TopBarRegion: React.FC<Props> = ({ level, region, sources = [level], className = '' }) => {
+  const ui = useTopBarUi();
+  const layout = useTopBarLayout();
+  const all = useTopBarItems();
+  const id = regionId(level, region);
+  const state = { ...ui, region: id, level };
+
+  const items = all
+    .filter((i) => {
+      const p = parseRegionId(i.region);
+      return p && p.region === region && sources.includes(p.level) && isAllowedByRule(i.id, i.global !== false, layout.ruleFor(i.region));
+    })
+    .sort((a, b) => (parseRegionId(a.region)!.level - parseRegionId(b.region)!.level) || (a.order ?? 0) - (b.order ?? 0));
 
   const hideOn = (i: TopBarItem) =>
     ui.searchOpen && ((i.hideOnSearch === 'mobile' && ui.isMobile) || (i.hideOnSearch === 'touch' && !ui.isDesktop));
-
-  const slots = [topBarSlotName(id), ...(LEGACY_SLOTS[id] ?? [])];
 
   return (
     <div data-slot={`topbar-${id}`} className={className}>
@@ -62,15 +78,14 @@ export const TopBarRegion: React.FC<Props> = ({ id, className = '' }) => {
           </div>
         );
       })}
-      {slots.map((name) => (
-        <ExtensionSlot
-          key={name}
-          name={name}
-          state={{ ...ui, region: id }}
-          select={select}
-          className="flex shrink-0 items-center gap-1 empty:hidden"
-        />
-      ))}
+      {sources.flatMap((src) => {
+        const source = regionId(src, region);
+        const rule = layout.ruleFor(source);
+        if (rule.hidden) return [];
+        return slotNamesFor(source).map((name) => (
+          <RegionSlot key={name} name={name} source={source} rule={rule} state={state} />
+        ));
+      })}
     </div>
   );
 };

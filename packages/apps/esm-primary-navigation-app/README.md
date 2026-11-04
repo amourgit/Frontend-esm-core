@@ -122,27 +122,35 @@ La barre de recherche navigue réellement vers `search.path` à la soumission
 (Entrée ou icône) — pointez cette config vers votre propre app de résultats
 de recherche si vous en développez une.
 
-## TopBar modulaire (niveaux 1 et 2)
+## TopBar modulaire (N niveaux)
 
-La TopBar est une grille de **régions** neutres (`l1-left | l1-center | l1-right`, `l2-left | l2-center | l2-right`). Elle ne
-connaît aucune app : tout ce qui s'y affiche vient d'**éléments globaux** (`src/intranet-topbar/global/items.tsx` : logo,
-recherche, langue, thème, utilisateur, horloge, navigation…) ou d'**extensions** d'apps.
+La TopBar est une pile de **niveaux** numérotés (`1` en haut, `2`, `3`…). Chaque niveau a la même structure : trois **régions**
+neutres `l<N>-left | l<N>-center | l<N>-right`. Elle ne connaît aucune app : tout ce qui s'y affiche vient d'**éléments
+globaux** (`src/intranet-topbar/global/items.tsx`) ou d'**extensions** d'apps.
 
-| Région      | Slot d'extension (`routes.json`) | Slots historiques honorés                       |
-| ----------- | -------------------------------- | ----------------------------------------------- |
-| `l1-left`   | `topbar-l1-left-slot`            | —                                               |
-| `l1-center` | `topbar-l1-center-slot`          | `top-nav-info-slot`                             |
-| `l1-right`  | `topbar-l1-right-slot`           | `top-nav-actions-slot`, `top-nav-trailing-slot` |
-| `l2-left`   | `topbar-l2-left-slot`            | `top-nav-app-slot`                              |
-| `l2-center` | `topbar-l2-center-slot`          | —                                               |
-| `l2-right`  | `topbar-l2-right-slot`           | `top-nav-level2-end-slot`                       |
+**Déclarer du contenu** : slot `topbar-l<N>-<région>-slot` dans le `routes.json` de n'importe quelle app
+(ex. `topbar-l3-right-slot` = niveau 3, région droite). Visible quand l'app est active, ou toujours avec `meta.global: true`.
+Slots historiques honorés : `top-nav-info-slot` (l1-center), `top-nav-actions-slot` / `top-nav-trailing-slot` (l1-right),
+`top-nav-app-slot` (l2-left), `top-nav-level2-end-slot` (l2-right).
 
-Une extension s'affiche quand son app est active, ou toujours avec `meta.global: true`.
+**Nombre de niveaux** (règles uniques) :
+1. = max(`topbar.levels.min`, plus haut niveau déclaré par du contenu visible, `levels.min` d'une app active), plafonné à
+   `topbar.levels.max`. Un contenu au niveau 5 crée 5 niveaux, intermédiaires vides compris.
+2. Un niveau ≥ 2 peut être désactivé (`topbar.levels.disabled`, ou `levels.hide` d'une app active). Le niveau 1 jamais.
+3. Le contenu d'un niveau non rendu (désactivé, ou au-dessus du max) s'affiche sur le niveau rendu **inférieur le plus
+   proche**, dans la **même région**. Rien n'est perdu en silence.
 
-### Personnaliser la TopBar depuis une app montée
+**Configuration du projet** (`config.json`, module `@egen-civitas/esm-primary-navigation-app`) :
 
-Store global `egen-topbar-layout` (aucune dépendance de code). Règles par région : `hidden`, `only`, `hide`, `hideGlobal`
-(`id` d'élément ou `name` d'extension). Elles ne s'appliquent que tant que l'app propriétaire est active.
+```json
+{ "topbar": { "levels": { "min": 1, "max": 1, "disabled": [] } } }
+```
+
+`min`/`max` = 1 → TopBar « à l'ancienne » à une seule rangée (la navigation passe au centre du niveau 1). Défaut : `min 2`, `max 8`.
+
+**Personnaliser depuis une app montée** — store global `egen-topbar-layout` (aucune dépendance de code), valable tant que
+l'app propriétaire est active. Règles de région : `hidden`, `only`, `hide`, `hideGlobal` (`id` d'élément ou `name`
+d'extension), visant la région où le contenu est *déclaré*. Règles de niveaux : `min`, `hide`.
 
 ```ts
 import { getGlobalStore } from '@egen-civitas/esm-framework';
@@ -152,11 +160,14 @@ const store = getGlobalStore('egen-topbar-layout', { claims: {} });
 store.setState((s) => ({
   claims: {
     ...s.claims,
-    '@egen-civitas/esm-annuaire-app': { 'l1-left': { hideGlobal: true }, 'l1-right': { only: ['search'] } },
+    '@egen-civitas/esm-annuaire-app': {
+      regions: { 'l1-left': { hideGlobal: true }, 'l1-right': { only: ['search'] } },
+      levels: { min: 3, hide: [2] },
+    },
   },
 }));
 // Au démontage de la page : retirer la clé de l'app dans `claims`.
 ```
 
 Éléments globaux : `brand`, `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `user`, `clock`,
-`menu-panel` (niveau 1), `nav` (niveau 2). « Implementer tools » n'est plus dans la TopBar : c'est une option du rail droit (bas).
+`menu-panel` (niveau 1), `nav` (niveau 2). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).

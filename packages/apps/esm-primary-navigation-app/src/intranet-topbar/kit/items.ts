@@ -1,4 +1,5 @@
 import type React from 'react';
+import { useSyncExternalStore } from 'react';
 import type { TopBarRegionId } from './regions';
 
 // Registre d'ÉLÉMENTS : composants ajoutés à une région depuis le module global de cette app.
@@ -44,3 +45,7 @@ export const subscribeTopBarItems = (l: () => void) => {
   return () => void listeners.delete(l);
 };
 export const getTopBarItems = () => snapshot;
+
+/** Éléments enregistrés (réactif). */
+export const useTopBarItems = (): readonly TopBarItem[] =>
+  useSyncExternalStore(subscribeTopBarItems, getTopBarItems, getTopBarItems);

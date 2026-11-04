@@ -33,6 +33,29 @@ export const configSchema = {
         "The route to navigate to when a query is submitted from the topbar's search bar (appended as a `?q=` parameter). Point this at whichever app renders your search results.",
     },
   },
+  topbar: {
+    levels: {
+      min: {
+        _type: Type.Number,
+        _default: 2,
+        _description:
+          'Minimum number of TopBar levels always rendered (rows), even when empty. Use 1 for a classic single-row TopBar.',
+      },
+      max: {
+        _type: Type.Number,
+        _default: 8,
+        _description:
+          'Maximum number of TopBar levels. Content declared on a level above this maximum is shown on the highest allowed level.',
+      },
+      disabled: {
+        _type: Type.Array,
+        _elements: { _type: Type.Number },
+        _default: [],
+        _description:
+          'Levels (2 and above) that are never rendered. Their content is shown on the nearest enabled lower level, same region. Level 1 cannot be disabled.',
+      },
+    },
+  },
   externalRefLinks: {
     _type: Type.Array,
     _elements: {
@@ -62,5 +85,6 @@ export type ConfigSchema = {
   search: {
     path: string;
   };
+  topbar: { levels: { min: number; max: number; disabled: number[] } };
   externalRefLinks: { title: string; redirect: string }[];
 };
