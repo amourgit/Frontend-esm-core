@@ -1,0 +1,73 @@
+// Bouton de fermeture du panneau latéral, fourni par la TopBar (et non par le StaggeredMenuPanel du shell) :
+// il existe donc quelle que soit la version du panneau exécutée par le shell.
+//
+// Le cadre a la largeur du panneau et est ancré au même bord (droite : le panneau s'ouvre à droite) : le bouton
+// est ainsi en haut à droite DU PANNEAU. En dessous de 1024px le panneau occupe tout l'écran, le cadre aussi.
+$panel-width: clamp(260px, 38vw, 420px);
+
+.closeFrame {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: $panel-width;
+  height: 0;
+  // Au-dessus du panneau (9999) et de ses couches de couleur (9998).
+  z-index: 10001;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    visibility 0s linear 0.2s;
+
+  &[data-open='true'] {
+    visibility: visible;
+    opacity: 1;
+    // Apparaît quand le panneau a fini de glisser.
+    transition:
+      opacity 0.3s ease 0.35s,
+      visibility 0s linear 0.35s;
+  }
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  border-radius: 999px;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0.8;
+  transition:
+    opacity 0.2s ease,
+    background 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    background: rgba(15, 23, 42, 0.12);
+  }
+
+  &:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--colors-primary-600, #2563eb);
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}

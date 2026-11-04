@@ -59,6 +59,31 @@ describe('TopBarMenuPanel', () => {
     expect(panelProps.last.accentColor).toBe('var(--colors-primary-600)');
   });
 
+  it('a son propre bouton de fermeture, accessible, qui ferme le panneau', () => {
+    render(<TopBarMenuPanel />);
+    fireEvent.click(screen.getByRole('button', { name: 'toggle' }));
+    expect(screen.getByTestId('panel')).toHaveAttribute('data-open', 'true');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Fermer le menu' }));
+    expect(screen.getByTestId('panel')).toHaveAttribute('data-open', 'false');
+  });
+
+  it("place ce bouton dans le portail, hors de la TopBar, et suit l'état ouvert/fermé", () => {
+    const { container } = render(<TopBarMenuPanel />);
+    const button = screen.getByRole('button', { name: 'Fermer le menu' });
+    expect(within(container).queryByRole('button', { name: 'Fermer le menu' })).not.toBeInTheDocument();
+    expect(within(document.body).getByRole('button', { name: 'Fermer le menu' })).toBe(button);
+    expect(screen.getByTestId('menu-panel-close-frame')).toHaveAttribute('data-open', 'false');
+
+    fireEvent.click(screen.getByRole('button', { name: 'toggle' }));
+    expect(screen.getByTestId('menu-panel-close-frame')).toHaveAttribute('data-open', 'true');
+  });
+
+  it('désactive le bouton du panneau du shell pour éviter un doublon', () => {
+    render(<TopBarMenuPanel />);
+    expect(panelProps.last.showCloseButton).toBe(false);
+  });
+
   it('active le clic à côté et transmet la classe au bouton', () => {
     render(<TopBarMenuPanel className="hidden" />);
     expect(panelProps.last.closeOnClickAway).toBe(true);
