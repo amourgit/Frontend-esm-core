@@ -19,6 +19,12 @@ import styles from './topbar-level1.scss';
 /** Couleur du bouton, calée sur le texte des options de la TopBar (slate-100). */
 const TOGGLE_COLOR = '#f1f5f9';
 
+/**
+ * Couches de couleur qui s'animent derrière le panneau à l'ouverture, avant que le panneau blanc n'apparaisse.
+ * Mêmes teintes que la vitrine des composants (esm-home-app) : sans `colors`, le panneau s'ouvre sans l'animation.
+ */
+const PANEL_LAYER_COLORS = ['var(--colors-secondary-300)', 'var(--colors-primary-600)'];
+
 interface TopBarMenuPanelProps {
   /** Classe du bouton (ex. masquage quand la recherche est ouverte en mobile). */
   className?: string;
@@ -53,7 +59,8 @@ export function TopBarMenuPanel({ className }: TopBarMenuPanelProps) {
           isOpen={isOpen}
           onClose={close}
           position="right"
-          accentColor="var(--colors-primary-500)"
+          colors={PANEL_LAYER_COLORS}
+          accentColor="var(--colors-primary-600)"
           closeOnClickAway
         />,
         document.body,

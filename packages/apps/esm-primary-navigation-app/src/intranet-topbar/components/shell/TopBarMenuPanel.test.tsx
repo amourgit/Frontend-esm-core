@@ -53,6 +53,12 @@ describe('TopBarMenuPanel', () => {
     expect(within(document.body).getByTestId('panel')).toBeInTheDocument();
   });
 
+  it("restaure l'animation de couleurs d'ouverture, comme la vitrine des composants", () => {
+    render(<TopBarMenuPanel />);
+    expect(panelProps.last.colors).toEqual(['var(--colors-secondary-300)', 'var(--colors-primary-600)']);
+    expect(panelProps.last.accentColor).toBe('var(--colors-primary-600)');
+  });
+
   it('active le clic à côté et transmet la classe au bouton', () => {
     render(<TopBarMenuPanel className="hidden" />);
     expect(panelProps.last.closeOnClickAway).toBe(true);
