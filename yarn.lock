@@ -499,9 +499,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-app-shell@npm:^2.8.0":
-  version: 2.8.0
-  resolution: "@egen-civitas/esm-app-shell@npm:2.8.0"
+"@egen-civitas/esm-app-shell@npm:^2.8.1":
+  version: 2.8.1
+  resolution: "@egen-civitas/esm-app-shell@npm:2.8.1"
   dependencies:
     "@carbon/react": "npm:^1.92.1"
     "@egen-civitas/esm-api": "npm:^2.0.0"
@@ -535,7 +535,7 @@ __metadata:
     swc-loader: "npm:0.2.7"
     swr: "npm:2.2.5"
     webpack-pwa-manifest: "npm:4.3.0"
-  checksum: 10/9c482805bb5b262910c02b2fd573ec9aa2a3bd4855bc712923cc7c9b4a32658a70299b81b148e2dd40b040ebff71a6566f31f47c6567ea2b350e3702ddb8ec88
+  checksum: 10/4e1617b77f9a6a80cef195aa9537499d5af7792ecbd99648b376290760d097d996bd0b2920fa8d6fb2914b1f64bced894348cdf254899a634503df0251b109dc
   languageName: node
   linkType: hard
 
@@ -1094,7 +1094,7 @@ __metadata:
   resolution: "@egen/esm-core@workspace:."
   dependencies:
     "@egen-civitas/egen": "npm:^2.2.0"
-    "@egen-civitas/esm-app-shell": "npm:^2.8.0"
+    "@egen-civitas/esm-app-shell": "npm:^2.8.1"
     "@egen-civitas/rspack-config": "npm:^1.1.0"
     "@playwright/test": "npm:^1.64.1"
     "@rspack/cli": "npm:2.3.0"
