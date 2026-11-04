@@ -1,0 +1,14 @@
+# Fichiers d infrastructure partagés entre Frontend-esm-core et les projets métier (civitas-tv-frontend…).
+# Synchronisés à l identique via : bash tools/sync-shared.sh paths <remote>
+tools/serve-prod.mjs
+tools/precompress.mjs
+tools/sync-egen-deps.mjs
+tools/sync-shared.sh
+turbo.json
+.yarnrc.yml
+.npmrc
+.editorconfig
+prettier.config.js
+.eslintrc
+.eslintignore
+.github
