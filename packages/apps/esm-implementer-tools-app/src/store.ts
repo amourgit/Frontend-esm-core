@@ -9,6 +9,7 @@ export interface ImplementerToolsStore {
   isUIEditorEnabled: boolean;
   isJsonModeEnabled: boolean;
   uiSelectedPath: null | Array<string>;
+  isOpen: boolean;
 }
 
 export interface ActiveItemDescription {
@@ -27,6 +28,7 @@ export const implementerToolsStore = createGlobalStore<ImplementerToolsStore>('i
   isUIEditorEnabled: getIsUIEditorEnabled(),
   isJsonModeEnabled: getIsJsonModeEnabled(),
   uiSelectedPath: null,
+  isOpen: false,
 });
 
 export const setHasAlert = (value: boolean) =>

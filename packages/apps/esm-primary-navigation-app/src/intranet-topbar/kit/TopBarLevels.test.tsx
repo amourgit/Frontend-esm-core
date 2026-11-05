@@ -12,7 +12,9 @@ const state = vi.hoisted(() => ({
   layoutStore: { __layout: true },
 }));
 
-vi.mock('@egen-civitas/esm-framework/src/internal', () => ({ getExtensionInternalStore: () => ({ __internal: true }) }));
+vi.mock('@egen-civitas/esm-framework/src/internal', () => ({
+  getExtensionInternalStore: () => ({ __internal: true }),
+}));
 vi.mock('@egen-civitas/esm-framework', () => ({
   getGlobalStore: () => state.layoutStore,
   useStore: (store: { __internal?: boolean }) => (store.__internal ? state.internal : { claims: state.claims }),
@@ -62,7 +64,7 @@ const renderBar = (config?: { min: number; max: number; disabled: number[] }) =>
   );
 
 const levelsRendered = (container: HTMLElement) =>
-  [...container.querySelectorAll('[data-level]')].map((n) => n.getAttribute('data-level'));
+  Array.from(container.querySelectorAll('[data-level]')).map((n) => n.getAttribute('data-level'));
 
 describe('TopBarLevels', () => {
   beforeEach(() => {
@@ -99,9 +101,9 @@ describe('TopBarLevels', () => {
     attach('top-nav-level2-end-slot', 'assistant', '@egen/esm-ai-app', { global: true });
     const { container } = renderBar({ min: 1, max: 8, disabled: [2] });
     expect(levelsRendered(container)).toEqual(['1']);
-    expect(container.querySelector('[data-slot="topbar-l1-right"] [data-testid="top-nav-level2-end-slot"]')).toHaveTextContent(
-      'assistant',
-    );
+    expect(
+      container.querySelector('[data-slot="topbar-l1-right"] [data-testid="top-nav-level2-end-slot"]'),
+    ).toHaveTextContent('assistant');
   });
 
   it('éléments : un élément du niveau 2 passe au niveau 1 quand le niveau 2 est absent', () => {

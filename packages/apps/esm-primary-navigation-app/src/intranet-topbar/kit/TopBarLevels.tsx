@@ -82,7 +82,9 @@ export const TopBarLevels: React.FC<{ config?: Partial<TopBarLevelsConfig>; prim
   useEffect(() => {
     const root = document.documentElement;
     root.style.setProperty('--egen-topbar-levels', String(count));
-    return () => root.style.removeProperty('--egen-topbar-levels');
+    return () => {
+      root.style.removeProperty('--egen-topbar-levels');
+    };
   }, [count]);
 
   return (
