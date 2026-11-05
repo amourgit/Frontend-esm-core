@@ -195,7 +195,8 @@ Transparent par défaut. Deux façons de le surcharger, depuis n'importe quelle 
 
 Une app ajoute un niveau **sans connaître le nombre de niveaux** : il se place après le dernier niveau numéroté (2 niveaux →
 il devient le 3e) ; plusieurs s'empilent dans l'ordre d'ouverture. Entrée et sortie animées (hauteur + fondu, la hauteur du
-contenu des apps suit car le shell mesure la TopBar en direct ; `prefers-reduced-motion` respecté).
+contenu des apps suit car le shell mesure la TopBar en direct ; `prefers-reduced-motion` respecté). N'importe quelle app peut
+en ouvrir un (annonces, notifications, alertes) : le contrat est le store global, sans dépendance de code.
 
 ```jsonc
 // routes.json de l'app : le composant du bandeau (reçoit ses props + levelId + close())
@@ -212,13 +213,36 @@ store.setState((s) => ({
     {
       id: 'flash-1', extension: 'flash-info', props: { text: '…' }, background: '#7f1d1d',
       openedAt: Date.now(),
-      expiresAt: Date.now() + 60_000, // durée de vie ; `null` = illimitée ; ou une date/heure précise
+      startsAt: '2026-11-06T09:00:00+01:00',  // début programmé (facultatif) : invisible jusque-là
+      expiresAt: '2026-11-06T17:00:00+01:00', // fin (facultatif) ; `null`/absent = illimitée
       closing: false,
     },
   ],
 }));
 // Fermer : closing: true sur l'entrée (ou close() depuis le composant) ; la sortie animée suit puis le niveau est retiré.
+// Annuler un niveau programmé avant son début : closing: true — il est retiré sans jamais s'afficher.
 ```
 
-Dans cette app : `openTopBarLevel({ extension, props, ttl, expiresAt, background })` / `closeTopBarLevel(id)` (`kit/transient-store.ts`).
-Durée de vie : illimitée par défaut ; `ttl` (ms) et/ou `expiresAt` (date/heure) — la plus proche gagne ; une échéance déjà passée n'ouvre rien.
+Dans cette app : `openTopBarLevel({ extension, props, startsAt, ttl, expiresAt, background })` / `closeTopBarLevel(id)`
+(`kit/transient-store.ts`).
+
+**Fenêtre d'affichage.**
+- Sans `startsAt` : affichage immédiat. Avec un `startsAt` futur : le niveau n'est pas rendu (aucune hauteur) et apparaît à
+  l'heure dite avec l'animation d'entrée (un seul minuteur, armé sur le prochain début, réévalué au retour d'onglet).
+- Fin : `expiresAt` (date/heure précise) et/ou `ttl` (ms, **compté à partir du début d'affichage**, pas de l'ouverture) ;
+  si les deux sont donnés, la plus proche gagne. Illimitée par défaut.
+- Un niveau dont la fin est déjà passée avant son affichage est retiré sans animation. Une fin ≤ au début programmé, ou une
+  date invalide, n'ouvre rien (`openTopBarLevel` retourne `null`) ; une entrée invalide écrite directement dans le store est
+  retirée avec un avertissement console.
+- Les niveaux ne sont pas persistés : ils vivent le temps de la session (une annonce programmée doit être rouverte à chaque
+  chargement par l'app qui la diffuse).
+
+**Dates : ISO 8601 avec heure ET décalage.** `startsAt` / `expiresAt` acceptent un nombre (epoch ms), une `Date`, ou une chaîne
+`AAAA-MM-JJTHH:MM[:SS[.mmm]]` suivie de `Z` ou `±HH:MM` (ex. `2026-11-06T09:00:00+01:00` pour Libreville). Une chaîne sans
+décalage est ambiguë (heure de quel fuseau ?) et est **refusée par défaut**. Une date seule (sans heure), un séparateur espace
+ou une date impossible (30 février, 24:00) sont toujours refusés. Configuration (`topbar.announcements`) :
+
+| Clé | Défaut | Rôle |
+| --- | --- | --- |
+| `requireOffset` | `true` | `false` : une chaîne sans décalage est acceptée et lue dans `defaultOffset` |
+| `defaultOffset` | `+01:00` | décalage appliqué aux chaînes sans décalage (`Z` ou `±HH:MM`), seulement si `requireOffset` est `false` |

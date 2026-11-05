@@ -5,6 +5,7 @@ import { useDeclaredLevels } from './declared-levels';
 import { useTopBarLayout } from './layout-store';
 import { TopBarRegion } from './TopBarRegion';
 import { TransientLevels } from './TransientLevels';
+import type { TransientDateRules } from './transient-time';
 
 // =============================================================================
 //  <TopBarLevels> — la pile de niveaux (neutre)
@@ -100,10 +101,12 @@ export function pickBackground(level: number, sources: number[], map: Record<num
   return undefined;
 }
 
-export const TopBarLevels: React.FC<{ config?: Partial<TopBarLevelsConfig>; primaryClasses: PrimaryLevelClasses }> = ({
-  config,
-  primaryClasses,
-}) => {
+export const TopBarLevels: React.FC<{
+  config?: Partial<TopBarLevelsConfig>;
+  primaryClasses: PrimaryLevelClasses;
+  /** Règles de lecture des dates des niveaux éphémères (`topbar.announcements`). */
+  dateRules?: Partial<TransientDateRules>;
+}> = ({ config, primaryClasses, dateRules }) => {
   const declared = useDeclaredLevels();
   const layout = useTopBarLayout();
   const resolution = useMemo(() => computeLevels(config, declared, layout.levels), [config, declared, layout.levels]);
@@ -131,7 +134,7 @@ export const TopBarLevels: React.FC<{ config?: Partial<TopBarLevelsConfig>; prim
         />
       ))}
       {/* Niveaux éphémères : toujours APRÈS le dernier niveau numéroté */}
-      <TransientLevels />
+      <TransientLevels dateRules={dateRules} />
     </>
   );
 };

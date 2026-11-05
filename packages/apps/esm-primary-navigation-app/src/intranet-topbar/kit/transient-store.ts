@@ -1,4 +1,11 @@
 import { getGlobalStore, useStore } from '@egen-civitas/esm-framework';
+import {
+  DEFAULT_TRANSIENT_DATE_RULES,
+  isWindowFailure,
+  resolveWindow,
+  type TransientDateRules,
+  type TransientWindowFailure,
+} from './transient-time';
 
 // =============================================================================
 //  NIVEAUX ÉPHÉMÈRES — bandeaux ajoutés à chaud, avec durée de vie
@@ -18,8 +25,14 @@ import { getGlobalStore, useStore } from '@egen-civitas/esm-framework';
 //     (ou `openTopBarLevel({ extension, ttl, expiresAt, props, background })` depuis cette app)
 //  3. La fermer : `closing: true` sur son entrée (ou `close()` depuis le composant) ; l'animation de sortie suit.
 //
-//  Durée de vie : illimitée par défaut. `ttl` (ms depuis l'ouverture) et/ou `expiresAt` (date/heure précise) ; si les
-//  deux sont donnés, la plus proche gagne. Une valeur invalide ou ≤ 0 est ignorée (durée illimitée).
+//  Fenêtre d'affichage : un niveau s'affiche tout de suite et dure indéfiniment par défaut.
+//    • `startsAt`  : début programmé (date/heure précise) — le niveau reste invisible (et ne prend aucune hauteur)
+//                    jusqu'à l'heure dite, puis entre avec l'animation ;
+//    • `expiresAt` : fin (date/heure précise) ;  `ttl` (ms) : durée comptée à partir du DÉBUT d'affichage ;
+//    • si `expiresAt` et `ttl` sont donnés, la plus proche gagne.
+//  Dates : nombre (epoch ms), Date, ou chaîne ISO 8601 AVEC heure et décalage (`2026-11-06T09:00:00+01:00`). Une chaîne sans
+//  décalage est refusée (réglage `topbar.announcements`, voir transient-time.ts). Une valeur invalide n'ouvre rien
+//  (et une entrée invalide écrite directement dans le store est retirée avec un avertissement console).
 // =============================================================================
 
 export const TOPBAR_TRANSIENT_STORE = 'egen-topbar-transient';
@@ -32,8 +45,12 @@ export interface TopBarTransientLevel {
   extension: string;
   props?: Record<string, unknown>;
   openedAt: number;
-  /** Échéance (ms epoch) ; `null` = illimitée. */
-  expiresAt: number | null;
+  /** Début d'affichage programmé (ms epoch, ou chaîne ISO 8601 avec décalage) ; absent/`null` = immédiat. */
+  startsAt?: number | string | null;
+  /** Fin d'affichage (ms epoch, ou chaîne ISO 8601 avec décalage) ; `null` = illimitée. */
+  expiresAt: number | string | null;
+  /** Durée de vie en ms comptée à partir du début d'affichage (pour les écrivains directs du store). */
+  ttl?: number;
   /** Arrière-plan CSS du niveau ; transparent par défaut. */
   background?: string;
   /** `true` : sortie animée en cours, puis retrait. */
@@ -49,9 +66,11 @@ export interface TopBarTransientOptions {
   id?: string;
   extension: string;
   props?: Record<string, unknown>;
-  /** Durée de vie en ms depuis l'ouverture. */
+  /** Début programmé (date/heure précise) : le niveau n'apparaît qu'à ce moment-là. Défaut : immédiat. */
+  startsAt?: number | string | Date;
+  /** Durée de vie en ms, comptée à partir du début d'affichage (`startsAt`, ou l'ouverture). */
   ttl?: number;
-  /** Échéance précise. */
+  /** Fin précise (date/heure). */
   expiresAt?: number | string | Date;
   background?: string;
 }
@@ -74,18 +93,49 @@ export function resolveExpiry(now: number, ttl?: number, expiresAt?: number | st
 
 let counter = 0;
 
-/** Ouvre (ou met à jour) un niveau éphémère. Retourne son id, ou `null` si l'échéance est déjà passée. */
+let dateRules: TransientDateRules = DEFAULT_TRANSIENT_DATE_RULES;
+/** Règles de lecture des dates (publiées depuis la config `topbar.announcements` par la TopBar). */
+export const setTransientDateRules = (rules: TransientDateRules): void => {
+  dateRules = rules;
+};
+export const getTransientDateRules = (): TransientDateRules => dateRules;
+
+/** Message d'avertissement lisible pour une fenêtre invalide. */
+export function describeWindowError(id: string, w: TransientWindowFailure): string {
+  const hint =
+    w.reason === 'offset-required'
+      ? 'décalage horaire manquant (ex. 2026-11-06T09:00:00+01:00)'
+      : w.reason === 'ends-before-start'
+        ? 'la fin est antérieure ou égale au début'
+        : w.reason === 'invalid-offset'
+          ? 'décalage horaire invalide'
+          : w.reason === 'invalid-date'
+            ? 'date ou heure inexistante'
+            : 'format attendu : ISO 8601 avec heure et décalage';
+  return `[topbar] niveau éphémère « ${id} » ignoré (${w.field}) : ${hint}.`;
+}
+
+/** Ouvre (ou met à jour) un niveau éphémère. Retourne son id, ou `null` si les dates sont invalides ou la fin déjà passée. */
 export function openTopBarLevel(options: TopBarTransientOptions): string | null {
   const now = Date.now();
-  const expiresAt = resolveExpiry(now, options.ttl, options.expiresAt);
-  if (expiresAt !== null && expiresAt <= now) return null;
   const id = options.id ?? `transient-${now}-${++counter}`;
+  const w = resolveWindow(
+    { openedAt: now, startsAt: options.startsAt, expiresAt: options.expiresAt, ttl: options.ttl },
+    dateRules,
+  );
+  if (isWindowFailure(w)) {
+    console.warn(describeWindowError(id, w));
+    return null;
+  }
+  if (w.end !== null && w.end <= now) return null;
+  // Dates normalisées en epoch : la TopBar n'a plus à les relire.
   const level: TopBarTransientLevel = {
     id,
     extension: options.extension,
     props: options.props,
     openedAt: now,
-    expiresAt,
+    startsAt: w.start > now ? w.start : null,
+    expiresAt: w.end,
     background: options.background,
     closing: false,
   };
