@@ -1,4 +1,5 @@
-import { Type, validators } from '@egen-civitas/esm-framework';
+import { Type, validator, validators } from '@egen-civitas/esm-framework';
+import { offsetMinutes } from './intranet-topbar/kit/transient-time';
 
 export const configSchema = {
   logo: {
@@ -55,6 +56,23 @@ export const configSchema = {
           'Levels (2 and above) that are never rendered. Their content is shown on the nearest enabled lower level, same region. Level 1 cannot be disabled.',
       },
     },
+    announcements: {
+      requireOffset: {
+        _type: Type.Boolean,
+        _default: true,
+        _description:
+          'Transient levels (banners): require an ISO 8601 date-time WITH a UTC offset for startsAt/expiresAt (e.g. 2026-11-06T09:00:00+01:00). When false, a date-time without offset is read in `defaultOffset`.',
+      },
+      defaultOffset: {
+        _type: Type.String,
+        _default: '+01:00',
+        _description:
+          'UTC offset applied to ISO date-times written without one, only when `requireOffset` is false (e.g. +01:00, -05:00, Z).',
+        _validators: [
+          validator((v) => typeof v === 'string' && offsetMinutes(v) !== null, 'must be Z or ±HH:MM (e.g. +01:00)'),
+        ],
+      },
+    },
   },
   externalRefLinks: {
     _type: Type.Array,
@@ -85,6 +103,9 @@ export type ConfigSchema = {
   search: {
     path: string;
   };
-  topbar: { levels: { min: number; max: number; disabled: number[] } };
+  topbar: {
+    levels: { min: number; max: number; disabled: number[] };
+    announcements: { requireOffset: boolean; defaultOffset: string };
+  };
   externalRefLinks: { title: string; redirect: string }[];
 };

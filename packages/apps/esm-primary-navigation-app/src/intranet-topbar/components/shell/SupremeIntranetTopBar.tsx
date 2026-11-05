@@ -125,7 +125,11 @@ export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }
           <TopBarNavProvider value={nav}>
             <header className="w-full bg-transparent transition-colors overflow-visible flex flex-col">
               {/* Pile de niveaux (1…N) : nombre et contenu déduits des éléments, extensions et de `topbar.levels` */}
-              <TopBarLevels config={config.topbar?.levels} primaryClasses={PRIMARY_CLASSES} />
+              <TopBarLevels
+                config={config.topbar?.levels}
+                dateRules={config.topbar?.announcements}
+                primaryClasses={PRIMARY_CLASSES}
+              />
             </header>
           </TopBarNavProvider>
         </GlobalCallbacksProvider>
