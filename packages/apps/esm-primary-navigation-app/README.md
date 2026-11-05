@@ -184,3 +184,41 @@ height: calc(100dvh - var(--egen-navbar-height, 0px) - var(--egen-footer-height,
 ```
 
 `--egen-topbar-levels` indique en plus le nombre de rangées rendues.
+
+### Fond des niveaux
+
+Transparent par défaut. Deux façons de le surcharger, depuis n'importe quelle app :
+- **valeur CSS** : `levels.background: { <niveau>: '<valeur de background>' }` dans le layout (store `egen-topbar-layout`) ;
+- **composant** : extension dans le slot `topbar-l<N>-background-slot` (calque derrière le contenu du niveau N, sans capter la souris).
+
+### Niveaux éphémères (bandeaux, défilants, notifications)
+
+Une app ajoute un niveau **sans connaître le nombre de niveaux** : il se place après le dernier niveau numéroté (2 niveaux →
+il devient le 3e) ; plusieurs s'empilent dans l'ordre d'ouverture. Entrée et sortie animées (hauteur + fondu, la hauteur du
+contenu des apps suit car le shell mesure la TopBar en direct ; `prefers-reduced-motion` respecté).
+
+```jsonc
+// routes.json de l'app : le composant du bandeau (reçoit ses props + levelId + close())
+{ "name": "flash-info", "slot": "topbar-transient-slot", "component": "flashInfo" }
+```
+
+```ts
+import { getGlobalStore } from '@egen-civitas/esm-framework';
+
+const store = getGlobalStore('egen-topbar-transient', { levels: [] });
+store.setState((s) => ({
+  levels: [
+    ...s.levels,
+    {
+      id: 'flash-1', extension: 'flash-info', props: { text: '…' }, background: '#7f1d1d',
+      openedAt: Date.now(),
+      expiresAt: Date.now() + 60_000, // durée de vie ; `null` = illimitée ; ou une date/heure précise
+      closing: false,
+    },
+  ],
+}));
+// Fermer : closing: true sur l'entrée (ou close() depuis le composant) ; la sortie animée suit puis le niveau est retiré.
+```
+
+Dans cette app : `openTopBarLevel({ extension, props, ttl, expiresAt, background })` / `closeTopBarLevel(id)` (`kit/transient-store.ts`).
+Durée de vie : illimitée par défaut ; `ttl` (ms) et/ou `expiresAt` (date/heure) — la plus proche gagne ; une échéance déjà passée n'ouvre rien.

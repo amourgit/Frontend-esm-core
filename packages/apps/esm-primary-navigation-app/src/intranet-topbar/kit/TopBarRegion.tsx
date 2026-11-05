@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ExtensionSlot, type AssignedExtension } from '@egen-civitas/esm-framework';
 import { useActiveAppModules } from '../hooks/useActiveAppModules';
 import { useTopBarItems, type TopBarItem } from './items';
@@ -20,16 +20,18 @@ const SCREEN_CLASS: Record<NonNullable<TopBarItem['visibleFrom']>, string> = {
 };
 
 const SLOT_CLASS = 'flex shrink-0 items-center gap-1 empty:hidden';
+const BACKGROUND_SLOT_CLASS = 'absolute inset-0 empty:hidden';
 
 interface SlotProps {
   name: string;
   source: TopBarRegionId;
   rule: TopBarRegionRule;
   state: Record<string, unknown>;
+  background?: boolean;
 }
 
 /** Un slot d'extension filtré : app active (ou `meta.global`) puis règles de layout de la région d'origine. */
-const RegionSlot: React.FC<SlotProps> = ({ name, rule, state }) => {
+const RegionSlot: React.FC<SlotProps> = ({ name, rule, state, background }) => {
   const activeModules = useActiveAppModules();
   const select = useCallback(
     (extensions: AssignedExtension[]) =>
@@ -39,7 +41,7 @@ const RegionSlot: React.FC<SlotProps> = ({ name, rule, state }) => {
       }),
     [activeModules, rule],
   );
-  return <ExtensionSlot name={name} state={state} select={select} className={SLOT_CLASS} />;
+  return <ExtensionSlot name={name} state={state} select={select} className={background ? BACKGROUND_SLOT_CLASS : SLOT_CLASS} />;
 };
 
 interface Props {
@@ -55,7 +57,8 @@ export const TopBarRegion: React.FC<Props> = ({ level, region, sources = [level]
   const layout = useTopBarLayout();
   const all = useTopBarItems();
   const id = regionId(level, region);
-  const state = { ...ui, region: id, level };
+  // `state` stable : un nouvel objet à chaque rendu relancerait `updateExtensionSlotState` du slot en boucle.
+  const state = useMemo(() => ({ ...ui, region: id, level }), [ui, id, level]);
 
   const items = all
     .filter((i) => {
@@ -83,7 +86,7 @@ export const TopBarRegion: React.FC<Props> = ({ level, region, sources = [level]
         const rule = layout.ruleFor(source);
         if (rule.hidden) return [];
         return slotNamesFor(source).map((name) => (
-          <RegionSlot key={name} name={name} source={source} rule={rule} state={state} />
+          <RegionSlot key={name} name={name} source={source} rule={rule} state={state} background={region === 'background'} />
         ));
       })}
     </div>

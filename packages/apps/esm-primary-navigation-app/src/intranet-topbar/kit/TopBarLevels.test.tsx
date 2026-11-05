@@ -9,15 +9,16 @@ const state = vi.hoisted(() => ({
   active: new Set<string>(),
   claims: {} as Record<string, unknown>,
   internal: { slots: {} as Record<string, { attachedIds: string[] }>, extensions: {} as Record<string, unknown> },
-  layoutStore: { __layout: true },
+  transient: [] as unknown[],
 }));
 
 vi.mock('@egen-civitas/esm-framework/src/internal', () => ({
-  getExtensionInternalStore: () => ({ __internal: true }),
+  getExtensionInternalStore: () => ({ getState: () => state.internal, subscribe: () => () => {} }),
 }));
 vi.mock('@egen-civitas/esm-framework', () => ({
-  getGlobalStore: () => state.layoutStore,
-  useStore: (store: { __internal?: boolean }) => (store.__internal ? state.internal : { claims: state.claims }),
+  getGlobalStore: (name: string) => ({ __name: name }),
+  useStore: (store: { __name?: string }) =>
+    store.__name === 'egen-topbar-transient' ? { levels: state.transient } : { claims: state.claims },
   ExtensionSlot: (props: { name: string; className?: string; select?: (e: unknown[]) => Array<{ id: string }> }) => {
     const all = (state.attached[props.name] ?? []).map((id) => ({ id, name: id, ...state.extensions[id] }));
     const kept = props.select ? props.select(all) : all;
@@ -73,6 +74,7 @@ describe('TopBarLevels', () => {
     state.internal = { slots: {}, extensions: {} };
     state.active = new Set(['@egen/esm-annuaire-app']);
     state.claims = {};
+    state.transient = [];
   });
 
   it('rend 2 niveaux par défaut, chacun avec trois régions', () => {
@@ -128,5 +130,32 @@ describe('TopBarLevels', () => {
     state.claims = { '@egen/esm-annuaire-app': { levels: { min: 4 } } };
     const { container } = renderBar({ min: 1, max: 8, disabled: [] });
     expect(levelsRendered(container)).toEqual(['1', '2', '3', '4']);
+  });
+
+  it('fond d’un niveau : transparent par défaut, surchargé par une app active', () => {
+    const first = renderBar();
+    expect(first.container.querySelector('[data-level="1"]')).not.toHaveAttribute('style');
+    first.unmount();
+
+    state.claims = { '@egen/esm-annuaire-app': { levels: { background: { 1: 'rgb(1, 2, 3)' } } } };
+    const { container } = renderBar();
+    expect(container.querySelector('[data-level="1"]')).toHaveStyle({ background: 'rgb(1, 2, 3)' });
+    expect(container.querySelector('[data-level="2"]')).not.toHaveAttribute('style');
+  });
+
+  it('un slot d’arrière-plan de niveau accueille les extensions d’une app active', () => {
+    attach('topbar-l2-background-slot', 'fond-anime', '@egen/esm-annuaire-app');
+    renderBar();
+    expect(screen.getByTestId('topbar-l2-background-slot')).toHaveTextContent('fond-anime');
+  });
+
+  it('un niveau éphémère se place après le dernier niveau numéroté', () => {
+    attach('topbar-transient-slot', 'flash', '@egen/esm-annuaire-app');
+    state.transient = [{ id: 't1', extension: 'flash', openedAt: 0, expiresAt: null, closing: false }];
+    const { container } = renderBar({ min: 3, max: 8, disabled: [] });
+    const last = container.querySelector('[data-level="3"]')!;
+    const transient = container.querySelector('[data-transient="t1"]')!;
+    expect(transient).toHaveTextContent('flash');
+    expect(last.compareDocumentPosition(transient) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 });

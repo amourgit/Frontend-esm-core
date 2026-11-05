@@ -4,5 +4,6 @@ export * from './context';
 export * from './layout-store';
 export * from './levels';
 export { useDeclaredLevels } from './declared-levels';
+export * from './transient-store';
 export { TopBarRegion } from './TopBarRegion';
-export { TopBarLevels, type PrimaryLevelClasses } from './TopBarLevels';
+export { TopBarLevels, pickBackground, type PrimaryLevelClasses } from './TopBarLevels';

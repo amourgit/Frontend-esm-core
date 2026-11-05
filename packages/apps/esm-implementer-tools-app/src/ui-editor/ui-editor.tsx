@@ -9,9 +9,10 @@ import {
   useStore,
   useStoreWithActions,
 } from '@egen-civitas/esm-framework/src/internal';
+import { openToolWindow } from '@egen-civitas/esm-framework';
 import { ExtensionOverlay } from './extension-overlay.component';
 import { Portal } from './portal';
-import { type ImplementerToolsStore, implementerToolsStore } from '../store';
+import { IMPLEMENTER_TOOLS_WINDOW, type ImplementerToolsStore, implementerToolsStore } from '../store';
 import styles from './styles.scss';
 
 interface ExitButtonProps {
@@ -29,7 +30,6 @@ interface SlotOverlayProps {
 export default function UiEditor() {
   const { t } = useTranslation();
   const { slots, extensions } = useStore(getExtensionInternalStore());
-  const { isOpen: areImplementerToolsOpen } = useStore(implementerToolsStore);
 
   const getExtensionCount = (slotName: string, moduleName: string) => {
     if (!extensions || !moduleName) return 0;
@@ -152,8 +152,9 @@ export function SlotOverlay({ slotName, moduleName, extensionCount = 0, colorSch
     if (!implementerToolsStore.getState().configPathBeingEdited) {
       implementerToolsStore.setState({
         uiSelectedPath: [moduleName, 'extensionSlots', slotName],
-        isOpen: true,
+        openTabIndex: 0,
       });
+      openToolWindow('bottom', IMPLEMENTER_TOOLS_WINDOW);
     }
   };
 

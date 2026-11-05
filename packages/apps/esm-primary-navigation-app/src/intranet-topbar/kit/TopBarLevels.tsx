@@ -4,6 +4,7 @@ import { computeLevels, type TopBarLevelsConfig } from './levels';
 import { useDeclaredLevels } from './declared-levels';
 import { useTopBarLayout } from './layout-store';
 import { TopBarRegion } from './TopBarRegion';
+import { TransientLevels } from './TransientLevels';
 
 // =============================================================================
 //  <TopBarLevels> — la pile de niveaux (neutre)
@@ -33,15 +34,33 @@ interface LevelProps {
   level: number;
   sources: number[];
   primary?: PrimaryLevelClasses;
+  /** Arrière-plan CSS (surcharge d'une app) ; transparent par défaut. */
+  background?: string;
 }
 
-const TopBarLevel: React.FC<LevelProps> = ({ level, sources, primary }) => {
+/** Calque d'arrière-plan du niveau : derrière le contenu (`isolate` + `-z-10`), sans capter la souris. */
+const BackgroundLayer: React.FC<{ level: number; sources: number[] }> = ({ level, sources }) => (
+  <TopBarRegion
+    level={level}
+    region="background"
+    sources={sources}
+    className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+  />
+);
+
+const TopBarLevel: React.FC<LevelProps> = ({ level, sources, primary, background }) => {
   const ui = useTopBarUi();
   const hideLeft = Boolean(primary) && ui.searchOpen && ui.isMobile;
 
   if (primary) {
     return (
-      <div className={primary.row} data-level={level} data-level-primary="">
+      <div
+        className={`${primary.row} relative isolate`}
+        data-level={level}
+        data-level-primary=""
+        style={background ? { background } : undefined}
+      >
+        <BackgroundLayer level={level} sources={sources} />
         <TopBarRegion level={level} region="left" sources={sources} className={hideLeft ? 'hidden' : primary.left} />
         <TopBarRegion level={level} region="center" sources={sources} className={primary.center} />
         <TopBarRegion
@@ -54,7 +73,14 @@ const TopBarLevel: React.FC<LevelProps> = ({ level, sources, primary }) => {
     );
   }
   return (
-    <div role="toolbar" aria-label={`Barre d'outils, niveau ${level}`} data-level={level} className={COMPACT.row}>
+    <div
+      role="toolbar"
+      aria-label={`Barre d'outils, niveau ${level}`}
+      data-level={level}
+      className={`${COMPACT.row} isolate`}
+      style={background ? { background } : undefined}
+    >
+      <BackgroundLayer level={level} sources={sources} />
       <TopBarRegion level={level} region="left" sources={sources} className={COMPACT.left} />
       {/* Séparateur : visible seulement si la région gauche affiche du contenu */}
       <span
@@ -67,6 +93,12 @@ const TopBarLevel: React.FC<LevelProps> = ({ level, sources, primary }) => {
     </div>
   );
 };
+
+/** Fond d'un niveau rendu : le sien d'abord, sinon celui d'un niveau dont il accueille le contenu (le plus haut d'abord). */
+export function pickBackground(level: number, sources: number[], map: Record<number, string>): string | undefined {
+  for (const n of [level, ...sources.filter((x) => x !== level).reverse()]) if (map[n]) return map[n];
+  return undefined;
+}
 
 export const TopBarLevels: React.FC<{ config?: Partial<TopBarLevelsConfig>; primaryClasses: PrimaryLevelClasses }> = ({
   config,
@@ -95,8 +127,11 @@ export const TopBarLevels: React.FC<{ config?: Partial<TopBarLevelsConfig>; prim
           level={level}
           sources={resolution.sourcesOf(level)}
           primary={level === 1 ? primaryClasses : undefined}
+          background={pickBackground(level, resolution.sourcesOf(level), layout.levels.background)}
         />
       ))}
+      {/* Niveaux éphémères : toujours APRÈS le dernier niveau numéroté */}
+      <TransientLevels />
     </>
   );
 };

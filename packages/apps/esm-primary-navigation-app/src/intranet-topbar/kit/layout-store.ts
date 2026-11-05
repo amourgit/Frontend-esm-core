@@ -12,7 +12,7 @@ import type { TopBarRegionId } from './regions';
 //    const store = getGlobalStore('egen-topbar-layout', { claims: {} });
 //    store.setState((s) => ({ claims: { ...s.claims, '@mon-org/esm-annuaire-app': {
 //      regions: { 'l1-left': { hideGlobal: true }, 'l1-right': { only: ['search'] } },   // page « détail »
-//      levels: { min: 3, hide: [2] },                                                    // 3 rangées, sans le niveau 2
+//      levels: { min: 3, hide: [2], background: { 1: 'linear-gradient(90deg,#0f172a,#134e4a)' } }, // rangées, fonds
 //    } } }));
 //    // …et retirer la clé de l'app au démontage de la page.
 //
@@ -39,6 +39,8 @@ export interface TopBarLevelsRule {
   min?: number;
   /** Niveaux (≥ 2) à ne pas rendre pendant que l'app est active. */
   hide?: number[];
+  /** Arrière-plan CSS par niveau (valeur de `background` : couleur, dégradé, `url(…)`…). Transparent par défaut. */
+  background?: Record<number, string>;
 }
 
 export interface TopBarLayout {
@@ -89,7 +91,7 @@ export function mergeRules(rules: TopBarRegionRule[]): TopBarRegionRule {
 export interface ResolvedTopBarLayout {
   /** Règle effective d'une région (fusion des apps actives). */
   ruleFor: (id: TopBarRegionId) => TopBarRegionRule;
-  levels: { min?: number; hide: number[] };
+  levels: { min?: number; hide: number[]; background: Record<number, string> };
 }
 
 /** Layout effectif : fusion des layouts des apps actuellement actives. */
@@ -100,11 +102,22 @@ export function useTopBarLayout(): ResolvedTopBarLayout {
     const layouts = Object.entries(claims)
       .filter(([owner]) => active.has(owner))
       .map(([, layout]) => layout);
+    // Règle mémorisée par région : même objet tant que les claims/apps actives ne changent pas (références stables
+    // pour les `select` / `useCallback` des slots, sinon chaque rendu relancerait leurs effets).
+    const cache = new Map<TopBarRegionId, TopBarRegionRule>();
     return {
-      ruleFor: (id) => mergeRules(layouts.map((l) => l.regions?.[id]).filter((r): r is TopBarRegionRule => Boolean(r))),
+      ruleFor: (id) => {
+        let rule = cache.get(id);
+        if (!rule) {
+          rule = mergeRules(layouts.map((l) => l.regions?.[id]).filter((r): r is TopBarRegionRule => Boolean(r)));
+          cache.set(id, rule);
+        }
+        return rule;
+      },
       levels: {
         min: layouts.reduce<number | undefined>((m, l) => (l.levels?.min ? Math.max(m ?? 0, l.levels.min) : m), undefined),
         hide: layouts.flatMap((l) => l.levels?.hide ?? []),
+        background: Object.assign({}, ...layouts.map((l) => l.levels?.background ?? {})),
       },
     };
   }, [claims, active]);

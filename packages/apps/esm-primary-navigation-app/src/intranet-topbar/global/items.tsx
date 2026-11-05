@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { interpolateUrl, navigate as frameworkNavigate, useConfig } from '@egen-civitas/esm-framework';
 import { EgenLogo } from '../components/ui/EgenLogo';
@@ -150,7 +150,8 @@ const NavItem2: React.FC = () => {
   const ui = useTopBarUi();
   const { isHome, showFullNav, onShowFullNav, onHideFullNav, navItems } = useTopBarNav();
   const dropdown = isHome || showFullNav;
-  const state = { ...ui };
+  // Objet stable : un nouvel `state` à chaque rendu relancerait `updateExtensionSlotState` des slots.
+  const state = useMemo(() => ({ ...ui }), [ui]);
   return (
     <div data-slot="topbar-nav" className="flex min-w-0 flex-1 items-center justify-between gap-2">
       {dropdown ? (
