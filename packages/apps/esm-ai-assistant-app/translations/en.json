@@ -2,6 +2,7 @@
   "assistant": "Assistant",
   "assistantActions": "Actions performed by the assistant",
   "assistantClose": "Close assistant",
+  "assistantDisabled": "The AI assistant is not enabled on this environment.",
   "assistantError": "Something went wrong.",
   "assistantIncompatible": "Assistant version incompatible with the server.",
   "assistantListening": "Listening…",

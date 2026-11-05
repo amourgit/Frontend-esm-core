@@ -17,6 +17,22 @@
       "online": true,
       "offline": false,
       "order": 0
+    },
+    {
+      "name": "assistant",
+      "slot": "shell-rail-bottom-slot",
+      "component": "assistantRailPanel",
+      "online": true,
+      "offline": false,
+      "order": 10,
+      "meta": {
+        "title": "Assistant IA",
+        "titleKey": "assistant",
+        "icon": "Bot",
+        "order": 10,
+        "global": true,
+        "rail": "right"
+      }
     }
   ]
 }
