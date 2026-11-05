@@ -96,6 +96,13 @@
       "meta": {
         "title": "Annuaire"
       }
+    },
+    {
+      "name": "annuaire-welcome-banner",
+      "slot": "topbar-transient-slot",
+      "component": "welcomeBanner",
+      "online": true,
+      "offline": false
     }
   ]
 }

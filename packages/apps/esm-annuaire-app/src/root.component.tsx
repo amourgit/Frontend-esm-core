@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AnnuairePage } from './annuaire/annuaire.component';
 import { CollaborateurDetailPage } from './collaborateur/collaborateur-detail-page.component';
 import { notify } from './utils/notify';
+import { WelcomeAnnouncement } from './topbar-announcement/welcome-announcement.component';
 
 // =============================================================================
 //  ROOT — Composant racine de l'app Annuaire
@@ -24,6 +25,7 @@ import { notify } from './utils/notify';
 
 const Root: React.FC = () => (
   <BrowserRouter basename={window.getEgenSpaBase()}>
+    <WelcomeAnnouncement />
     <Routes>
       <Route path="annuaire" element={<AnnuairePage onShowNotification={notify} />} />
       <Route path="annuaire/contacts" element={<AnnuairePage onShowNotification={notify} />} />

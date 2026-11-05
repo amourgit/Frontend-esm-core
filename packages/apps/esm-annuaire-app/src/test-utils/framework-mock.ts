@@ -27,5 +27,41 @@ export async function frameworkMock() {
   const dist = '@egen-test/styleguide-dist';
   const filters = await import(/* @vite-ignore */ `${dist}/filters/index.js`);
   const bg = await import(/* @vite-ignore */ `${dist}/page-background/index.js`);
-  return { ...filters, ...bg, CardModal: CardModalStub, playXboxSound: vi.fn(), showToast: vi.fn() };
+  // `useConfig` / `getGlobalStore` : fonctions simples (pas vi.fn, `mockReset` les viderait). Valeurs par défaut du
+  // schéma recopiées ici : importer `config-schema` créerait une boucle d'import (il importe le framework mocké).
+  const defaults = {
+    welcomeBanner: {
+      enabled: true,
+      durationSeconds: 10,
+      message: 'Bienvenue à {name}, {role} : un nouveau collaborateur rejoint l’entreprise !',
+      collaboratorName: '',
+      collaboratorRole: '',
+      background: '#dc2626',
+      textColor: '#ffffff',
+    },
+  };
+  const stores = new Map<string, { state: unknown; getState: () => unknown; setState: (u: unknown) => void }>();
+  const getGlobalStore = (name: string, initial: unknown) => {
+    if (!stores.has(name)) {
+      const store = {
+        state: initial,
+        getState: () => store.state,
+        setState: (u: unknown) => {
+          store.state = typeof u === 'function' ? (u as (s: unknown) => unknown)(store.state) : u;
+        },
+      };
+      stores.set(name, store);
+    }
+    return stores.get(name);
+  };
+  return {
+    ...filters,
+    ...bg,
+    CardModal: CardModalStub,
+    playXboxSound: vi.fn(),
+    showToast: vi.fn(),
+    useConfig: () => defaults,
+    getGlobalStore,
+    Type: { Boolean: 'Boolean', Number: 'Number', String: 'String' },
+  };
 }

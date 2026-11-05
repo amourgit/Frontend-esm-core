@@ -2,6 +2,7 @@ import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen-c
 import { configSchema } from './config-schema';
 import rootComponent from './root.component';
 import RailPanel from './rail-panel.component';
+import WelcomeBanner from './topbar-announcement/welcome-banner.component';
 
 // =============================================================================
 //  ESM ANNUAIRE APP — Point d'entrée
@@ -40,3 +41,7 @@ export const homeDirectorySection = getAsyncLifecycle(
   () => import('./home-sections/directory/directory-section.extension'),
   { ...options, featureName: 'annuaire-home-directory' },
 );
+
+// Bandeau « nouveau collaborateur » (slot `topbar-transient-slot`) : rendu dans un niveau éphémère de la TopBar,
+// ouvert à chaud par l'annuaire (voir src/topbar-announcement).
+export const welcomeBanner = getSyncLifecycle(WelcomeBanner, { ...options, featureName: 'annuaire-welcome-banner' });

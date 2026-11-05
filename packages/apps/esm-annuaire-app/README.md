@@ -40,3 +40,16 @@ passent par `showToast` du framework (`src/utils/notify.ts`) ; le volet « right
 Les collaborateurs sont des données d'exemple (`src/data/directory-data.ts`) : `AnnuairePage` accepte
 les props `employees` et `onRefresh` pour brancher l'API quand le backend sera prêt.
 Le dictionnaire FR/EN de la page est interne au composant (copie GED).
+
+## Bandeau « nouveau collaborateur » (niveau éphémère de la TopBar)
+
+À l'ouverture de l'annuaire, l'app ajoute **à chaud** un niveau à la TopBar — sans connaître le nombre de niveaux existants — qui
+annonce l'arrivée d'un nouveau collaborateur : fond rouge plein, texte blanc centré, fermeture animée après 10 s.
+C'est le test du système de niveaux éphémères de `esm-primary-navigation-app` (store global `egen-topbar-transient`, aucune
+dépendance de code). Code : `src/topbar-announcement/` ; composant rendu par l'extension `annuaire-welcome-banner`
+(slot `topbar-transient-slot`, `routes.json`).
+
+Configuration (clé `welcomeBanner`) : `enabled`, `durationSeconds` (10), `message` (`{name}`, `{role}`), `collaboratorName`,
+`collaboratorRole` (vides : dernier collaborateur de l'annuaire), `background` (`#dc2626`), `textColor` (`#ffffff`).
+
+Prévu ensuite : dates/heures de début et de fin précises (`expiresAt` est déjà géré ; le début différé reste à faire).
