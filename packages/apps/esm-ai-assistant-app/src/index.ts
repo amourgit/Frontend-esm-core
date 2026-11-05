@@ -1,5 +1,12 @@
-import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import {
+  defineConfigSchema,
+  getAsyncLifecycle,
+  getSyncLifecycle,
+  registerToolWindow,
+  toggleToolWindow,
+} from '@egen-civitas/esm-framework';
+import {
+  getAIConfig,
   initAIFramework,
   defineAIModule,
   getRoutesCatalogForLLM,
@@ -9,9 +16,10 @@ import {
   subscribeToObservables,
 } from '@egen-civitas/esm-ai-framework';
 import { configSchema } from './config-schema';
-import { moduleName } from './constants';
+import { ASSISTANT_TOOL_WINDOW, moduleName } from './constants';
 import { BASE_EGEN_ROUTES } from './base-routes';
 import assistantRootComponent from './root.component';
+import AssistantRailPanelComponent from './components/assistant-panel/assistant-rail-panel.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -72,10 +80,29 @@ export function startupApp() {
       },
     ],
   });
+
+  // Couche 1 IA désactivée (EGEN_AI_ENABLED=false) : aucune option dans le rail, absence silencieuse.
+  if (!getAIConfig().enabled) return;
+
+  registerToolWindow({
+    moduleName,
+    name: ASSISTANT_TOOL_WINDOW,
+    anchor: 'bottom',
+    meta: { title: 'Assistant IA', titleKey: 'assistant', icon: 'Bot', order: 10, global: true, rail: 'right' },
+    load: assistantRailPanel,
+  });
+
+  // Bascule demandée depuis la TopBar (bouton Assistant IA du niveau 2) — événement window :
+  // aucune dépendance de code entre les deux apps.
+  window.addEventListener('egen:assistant-toggle', () => toggleToolWindow('bottom', ASSISTANT_TOOL_WINDOW));
 }
 
-// ─── Page : le widget assistant IA (garde sa propre logique de garde d'authentification) ──
+// ─── Page : l'expérience plein écran de l'assistant (robot 3D, chargée à la demande) ──
 export const root = getSyncLifecycle(assistantRootComponent, options);
+
+// ─── Option du rail droit (bas) : le panneau de conversation s'ouvre dans la zone du bas ──
+// Remplace l'ancien widget flottant (lanceur + panneau en bas à droite).
+export const assistantRailPanel = getSyncLifecycle(AssistantRailPanelComponent, options);
 
 // ─── Bouton Assistant IA (niveau 2 de la TopBar) ─────────────────────────────
 // Injecté dans le slot `top-nav-level2-end-slot` (voir routes.json) : la TopBar

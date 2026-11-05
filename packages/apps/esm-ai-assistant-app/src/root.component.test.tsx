@@ -17,8 +17,8 @@ vi.mock('react-router-dom', () => ({
   Routes: ({ children }: any) => <>{children}</>,
 }));
 
-vi.mock('./components/assistant-widget/assistant-widget.component', () => ({
-  default: () => <div data-testid="assistant-widget">Mock Assistant Widget</div>,
+vi.mock('./assistant-experience/AssistantExperience', () => ({
+  default: () => <div data-testid="assistant-experience">Mock Assistant Experience</div>,
 }));
 
 afterEach(() => {
@@ -27,14 +27,14 @@ afterEach(() => {
 });
 
 describe('Root', () => {
-  it('renders the assistant widget unconditionally on authenticated routes (mode off)', () => {
+  it('renders the assistant experience unconditionally on authenticated routes (mode off)', async () => {
     render(<Root />);
-    expect(screen.getByTestId('assistant-widget')).toBeInTheDocument();
+    expect(await screen.findByTestId('assistant-experience')).toBeInTheDocument();
   });
 
-  it('renders the assistant widget unconditionally when a tenant is captured (mode single)', () => {
+  it('renders the assistant experience unconditionally when a tenant is captured (mode single)', async () => {
     setupTenantSystem({ mode: 'single', defaultTenantId: 'mef-gabon' });
     render(<Root />);
-    expect(screen.getByTestId('assistant-widget')).toBeInTheDocument();
+    expect(await screen.findByTestId('assistant-experience')).toBeInTheDocument();
   });
 });

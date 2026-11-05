@@ -1,13 +1,5 @@
 {
   "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
-  "pages": [
-    {
-      "component": "devtools",
-      "route": true,
-      "online": true,
-      "offline": true
-    }
-  ],
   "modals": [
     {
       "name": "importmap-override-modal",

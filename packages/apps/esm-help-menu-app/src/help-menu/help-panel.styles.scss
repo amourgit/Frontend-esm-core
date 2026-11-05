@@ -1,0 +1,17 @@
+@use '@carbon/layout';
+@use '@carbon/type';
+
+.panel {
+  @include type.type-style('body-01');
+  height: 100%;
+  overflow: auto;
+  padding: layout.$spacing-05;
+  box-sizing: border-box;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: layout.$spacing-05 layout.$spacing-07;
+}

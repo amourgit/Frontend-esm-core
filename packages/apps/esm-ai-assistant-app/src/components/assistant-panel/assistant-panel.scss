@@ -10,16 +10,12 @@
 .panel {
   display: flex;
   flex-direction: column;
-  width: min(23.5rem, calc(100vw - 2rem));
-  height: min(34rem, calc(100vh - 7rem));
-  border-radius: var(--border-radius-xl, 1.25rem);
+  // Remplit la zone du bas : cadre, redimensionnement et fermeture sont portés par le shell.
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   overflow: hidden;
-
   background: var(--panel-modal-background);
-  backdrop-filter: var(--panel-modal-backdrop-filter);
-  -webkit-backdrop-filter: var(--panel-modal-backdrop-filter);
-  border: var(--panel-modal-border);
-  box-shadow: var(--panel-modal-box-shadow);
 }
 
 .header {
@@ -117,14 +113,6 @@
   &:hover {
     color: var(--colors-primary-600, #0043a4);
     text-decoration: underline;
-  }
-}
-
-// ─── Responsive — plein écran sur mobile ──────────────────────────────────────
-@media (max-width: 480px) {
-  .panel {
-    width: calc(100vw - 1.25rem);
-    height: calc(100vh - 6rem);
   }
 }
 

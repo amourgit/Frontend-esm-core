@@ -1,12 +1,22 @@
 {
   "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
-  "pages": [
-    {
-      "component": "root",
-      "route": true
-    }
-  ],
   "extensions": [
+    {
+      "name": "help",
+      "slot": "shell-rail-bottom-slot",
+      "component": "helpPanel",
+      "online": true,
+      "offline": true,
+      "order": 90,
+      "meta": {
+        "title": "Aide",
+        "titleKey": "help",
+        "icon": "CircleHelp",
+        "order": 90,
+        "global": true,
+        "rail": "right"
+      }
+    },
     {
       "name": "release-notes",
       "slot": "help-menu-slot",

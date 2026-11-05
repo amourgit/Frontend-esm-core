@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import AssistantWidget from './components/assistant-widget/assistant-widget.component';
 import styles from './root.scss';
 
 // Expérience plein écran (robot 3D, WebGL) : chargée à la demande, hors du chemin critique.
@@ -59,7 +58,6 @@ const Root: React.FC = () => {
           element={
             // `data-ai-ignore` : l'agent ne lit/n'inspecte pas son propre panneau (read_page, describe_screen…).
             <div className={styles.assistantAppContainer} data-ai-ignore>
-              <AssistantWidget />
               <Suspense fallback={null}>
                 <AssistantExperience />
               </Suspense>
