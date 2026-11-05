@@ -4,7 +4,7 @@ import { AssistantRobotButton } from './AssistantRobotButton';
 import { useAssistantBridge } from '../assistant-bridge';
 
 /**
- * Extension injectée dans le slot `top-nav-level2-end-slot` de la TopBar.
+ * Extension injectée dans le slot `topbar-l2-right-slot` de la TopBar.
  * Pur adaptateur : l'état vient du pont global, les actions repartent en commandes.
  * Le module 3D du robot n'est préchargé qu'à la première intention d'ouverture (survol/focus).
  */

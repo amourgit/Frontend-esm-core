@@ -2,7 +2,7 @@ import React from 'react';
 import { ConfigurableLink, Type, useConfig, validators } from '@egen-civitas/esm-framework';
 
 // =============================================================================
-//  BREADCRUMB ITEM — Extension réutilisable et déclarative pour le niveau 2
+//  BREADCRUMB ITEM — Extension réutilisable et déclarative pour la navigation
 //  de la topbar (slot "top-nav-breadcrumb-slot", voir breadcrumb.component.tsx)
 //
 //  Avant ce composant, le slot existait mais AUCUNE app ne pouvait s'y

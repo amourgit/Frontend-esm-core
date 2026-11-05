@@ -56,6 +56,13 @@ export const configSchema = {
           'Levels (2 and above) that are never rendered. Their content is shown on the nearest enabled lower level, same region. Level 1 cannot be disabled.',
       },
     },
+    placement: {
+      _type: Type.Object,
+      _elements: { _type: Type.String },
+      _default: {},
+      _description:
+        'Moves a global TopBar element to another region of any level, e.g. {"clock": "l3-right", "nav": "l1-center"}. Keys: brand, search, language, divider, apps, quick-access, fullscreen, theme, user, clock, menu-panel, nav. Values: l<N>-left | l<N>-center | l<N>-right (N >= 1). Invalid entries are ignored with a console warning; if the target level is not rendered, the content shows on the nearest lower rendered level.',
+    },
     announcements: {
       requireOffset: {
         _type: Type.Boolean,
@@ -105,6 +112,7 @@ export type ConfigSchema = {
   };
   topbar: {
     levels: { min: number; max: number; disabled: number[] };
+    placement: Record<string, string>;
     announcements: { requireOffset: boolean; defaultOffset: string };
   };
   externalRefLinks: { title: string; redirect: string }[];

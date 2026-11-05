@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import type { NavItem } from '../components/shell/DropdownNavigation';
 
-/** Navigation du niveau 2 (déclarée par les apps via `topbar-level2-nav`), fournie par l'hôte. */
+/** Navigation (déclarée par les apps via le slot `topbar-level2-nav`, nom historique conservé), fournie par l'hôte. */
 export interface TopBarNavState {
   isHome: boolean;
   showFullNav: boolean;

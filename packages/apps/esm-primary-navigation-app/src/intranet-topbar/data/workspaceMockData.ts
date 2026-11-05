@@ -1,7 +1,7 @@
 import { type WorkspaceDefinition } from '../types/workspace';
 import { INTRANET_APPS_MOCK } from './intranetAppsMock';
 
-// Définition des ESPACES (niveau 1 de la TopBar). Ne contient PAS la navigation : le niveau 2 est
+// Définition des ESPACES (sélecteur d'espace de la TopBar). Ne contient PAS la navigation : elle est
 // fourni par les apps via le slot `topbar-level2-nav` (voir NAVIGATION.md).
 export const WORKSPACES_MOCK_DATA: WorkspaceDefinition[] = [
   // 1. ESPACE ORGANISATIONNEL / INTRANET (Espace par défaut)

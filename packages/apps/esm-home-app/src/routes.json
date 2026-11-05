@@ -25,7 +25,7 @@
     },
     {
       "name": "home-app-toolbar",
-      "slot": "top-nav-app-slot",
+      "slot": "topbar-l2-left-slot",
       "component": "appToolbar",
       "online": true,
       "offline": false,

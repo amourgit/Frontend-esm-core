@@ -27,7 +27,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const slotEntries = useSlotNavEntries();
 
-  // Navigation du niveau 2 : construite UNIQUEMENT à partir des entrées que les apps déclarent sur
+  // Navigation : construite UNIQUEMENT à partir des entrées que les apps déclarent sur
   // le slot `topbar-level2-nav`, filtrées pour l'espace actif. Aucune donnée codée en dur.
   const currentWorkspace = useMemo<Workspace>(() => {
     const base = WORKSPACES_MOCK_DATA.find((w) => w.id === workspaceId) || WORKSPACES_MOCK_DATA[0];

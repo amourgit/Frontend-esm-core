@@ -37,7 +37,7 @@
 
 /* ----------------------------------------------------------------------------
  *  Breakpoint `xs` (480px) — absent du thème Tailwind par défaut (sm = 640px).
- *  Utilisé par la TopBar, le fil d'Ariane niveau 2 et le sélecteur d'espace
+ *  Utilisé par la TopBar, le fil d'Ariane et le sélecteur d'espace
  *  (`hidden xs:flex`, `hidden xs:inline`, `xs:max-w-[165px]`…), hérités de GED
  *  où il n'était pas défini non plus : ces classes étaient inertes.
  * --------------------------------------------------------------------------*/

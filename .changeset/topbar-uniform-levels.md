@@ -1,0 +1,5 @@
+---
+"@egen/esm-primary-navigation-app": minor
+---
+
+TopBar : plus aucun niveau figé dans le code. Tous les niveaux partagent le même squelette (arrière-plan + régions gauche / centre / droite) ; l'habillage (`LevelSkin`) est choisi par l'hôte d'après la position de la rangée (`skinFor`), plus d'après un numéro de niveau (`TopBarLevels` : prop `primaryClasses` remplacée par `skinFor`, `PrimaryLevelClasses` par `LevelSkin`). Placement des éléments globaux centralisé dans `global/placement.ts` et configurable par `topbar.placement` (ex. `{ "clock": "l3-right" }`). Fichiers et composants sans numéro de niveau : `topbar-level1.scss` → `topbar-skeleton.scss` + `topbar-global-items.scss`, `BreadcrumbLevel2Nav` → `BreadcrumbNav`, `NavItem2` → `NavigationItem`. Slots historiques isolés dans `kit/legacy-slots.ts` (toujours honorés), nouveau slot `topbar-nav-start-slot`. Test de non-régression `no-hardcoded-levels.test.ts`. Documentation (README, NAVIGATION) mise à jour ; test `TopBarLevels` corrigé (calque d'arrière-plan).

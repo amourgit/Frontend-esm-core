@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { navigate } from '@egen-civitas/esm-framework';
 
 // =============================================================================
-//  CONTENU DE TOPBAR DE L'APP — extension du slot `top-nav-app-slot` (niveau 2)
+//  CONTENU DE TOPBAR DE L'APP — extension du slot `topbar-l2-left-slot` (région gauche du niveau 2 par défaut)
 //
 //  Rendue à gauche des options de navigation, UNIQUEMENT tant qu'une page de cette
 //  app est montée (le filtrage est assuré par la TopBar). Chaque app déclare ainsi son

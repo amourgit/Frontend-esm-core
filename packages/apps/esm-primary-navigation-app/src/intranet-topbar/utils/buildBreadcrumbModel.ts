@@ -3,7 +3,7 @@ import { type NavItem } from '../components/shell/DropdownNavigation';
 import { HOME_ROUTE, resolveActiveNav } from './resolveActiveNav';
 
 // =============================================================================
-//  MODÈLE DU FIL D'ARIANE (niveau 2 de la TopBar)
+//  MODÈLE DU FIL D'ARIANE (navigation de la TopBar)
 //
 //  La navigation des apps est un arbre à 3 niveaux :
 //

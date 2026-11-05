@@ -1,8 +1,10 @@
+import { LEGACY_SLOTS } from './legacy-slots';
 // =============================================================================
 //  TOPBAR KIT — contrat des niveaux et régions (neutre : aucune logique métier)
 //
 //  La TopBar est une pile de NIVEAUX numérotés 1, 2, 3… (1 = en haut). Le nombre de niveaux n'est pas figé :
-//  il se déduit de ce qui est déclaré (voir levels.ts). Chaque niveau reproduit la même structure, trois régions :
+//  il se déduit de ce qui est déclaré (voir levels.ts). TOUS les niveaux ont le même squelette, trois régions
+//  (aucun n'est un cas particulier) :
 //
 //      l<N>-left  |  l<N>-center  |  l<N>-right          ex. l3-right = niveau 3, région droite
 //
@@ -38,16 +40,10 @@ export function parseRegionId(id: string): { level: number; region: TopBarRegion
 /** Nom du slot d'extension d'une région (ex. `topbar-l1-right-slot`). */
 export const topBarSlotName = (id: TopBarRegionId) => `topbar-${id}-slot`;
 
-/** Slots historiques, toujours honorés (rattachés à la région équivalente). */
-export const LEGACY_SLOTS: Readonly<Record<string, readonly string[]>> = {
-  'l1-center': ['top-nav-info-slot'],
-  'l1-right': ['top-nav-actions-slot', 'top-nav-trailing-slot'],
-  'l2-left': ['top-nav-app-slot'],
-  'l2-right': ['top-nav-level2-end-slot'],
-};
-
 /** Tous les slots d'une région : le slot officiel puis les slots historiques. */
 export const slotNamesFor = (id: TopBarRegionId): string[] => [topBarSlotName(id), ...(LEGACY_SLOTS[id] ?? [])];
+
+export { LEGACY_SLOTS };
 
 const LEGACY_REVERSE: Record<string, TopBarRegionId> = Object.fromEntries(
   Object.entries(LEGACY_SLOTS).flatMap(([id, slots]) => slots.map((s) => [s, id as TopBarRegionId])),

@@ -5,7 +5,7 @@ import { EgenLogo } from '../components/ui/EgenLogo';
 import { GooeyInput } from '../components/ui/GooeyInput';
 import { WorkspaceAndSiteSelectorsColumn } from '../components/shell/WorkspaceAndSiteSelectorsColumn';
 import { DropdownNavigation } from '../components/shell/DropdownNavigation';
-import { BreadcrumbLevel2Nav } from '../components/navigation/BreadcrumbLevel2Nav';
+import { BreadcrumbNav } from '../components/navigation/BreadcrumbNav';
 import { TopBarMenuPanel } from '../components/shell/TopBarMenuPanel';
 import {
   AppsMenuOption,
@@ -18,18 +18,20 @@ import {
 import { ExtensionSlot } from '@egen-civitas/esm-framework';
 import { playXboxSound } from '../utils/xboxAudio';
 import { type ConfigSchema } from '../../config-schema';
-import { registerTopBarItem, useTopBarUi } from '../kit';
+import { registerTopBarItem, useTopBarUi, type TopBarItem } from '../kit';
+import { resolvePlacement, type GlobalItemId } from './placement';
 import { useGlobalCallbacks } from './GlobalCallbacks';
 import { useTopBarNav } from './NavContext';
 import optionStyles from '../components/options/topbar-options.scss';
-import styles from '../components/shell/topbar-level1.scss';
+import styles from '../components/shell/topbar-global-items.scss';
 
 // =============================================================================
 //  ÉLÉMENTS GLOBAUX DE LA TOPBAR — indépendants de toute app métier
 //
 //  Logo + sélecteurs, recherche, langue, lanceur, raccourcis, plein écran, thème, menu utilisateur,
-//  horloge, panneau latéral et navigation de niveau 2. Chacun s'enregistre dans une région du kit ;
-//  une app peut les masquer ou les remplacer (voir kit/layout-store.ts) sans toucher à ce fichier.
+//  horloge, panneau latéral et navigation. Chacun s'enregistre dans une région du kit, là où l'indique
+//  `placement.ts` (surchargeable par la config `topbar.placement`) : ce fichier ne connaît AUCUN niveau.
+//  Une app peut les masquer ou les remplacer (voir kit/layout-store.ts) sans toucher à ce fichier.
 //  « Implementer tools » n'est plus ici : c'est une option du rail droit (esm-implementer-tools-app).
 // =============================================================================
 
@@ -145,18 +147,24 @@ const ClockItem: React.FC = () => {
 
 const MenuPanelItem: React.FC = () => <TopBarMenuPanel />;
 
-/** Navigation du niveau 2 : menu déroulant (accueil) ou fil d'Ariane, plus leurs slots historiques. */
-const NavItem2: React.FC = () => {
+/** Slots qui précèdent la navigation : l'officiel puis l'historique (toujours honoré). */
+const NAV_START_SLOTS = ['topbar-nav-start-slot', 'top-nav-level2-start-slot'] as const;
+
+/** Navigation : menu déroulant (accueil) ou fil d'Ariane, plus leurs slots. Se place dans la région choisie par `placement.ts`. */
+const NavigationItem: React.FC = () => {
   const ui = useTopBarUi();
   const { isHome, showFullNav, onShowFullNav, onHideFullNav, navItems } = useTopBarNav();
   const dropdown = isHome || showFullNav;
   // Objet stable : un nouvel `state` à chaque rendu relancerait `updateExtensionSlotState` des slots.
   const state = useMemo(() => ({ ...ui }), [ui]);
+  const startSlots = NAV_START_SLOTS.map((name) => (
+    <ExtensionSlot key={name} name={name} state={state} className="flex shrink-0 items-center" />
+  ));
   return (
     <div data-slot="topbar-nav" className="flex min-w-0 flex-1 items-center justify-between gap-2">
       {dropdown ? (
         <>
-          <ExtensionSlot name="top-nav-level2-start-slot" state={state} className="flex shrink-0 items-center" />
+          {startSlots}
           <DropdownNavigation navItems={navItems} />
           {showFullNav && (
             <button
@@ -170,8 +178,8 @@ const NavItem2: React.FC = () => {
         </>
       ) : (
         <div className="flex min-w-0 flex-1 items-center gap-3">
-          <ExtensionSlot name="top-nav-level2-start-slot" state={state} className="flex shrink-0 items-center" />
-          <BreadcrumbLevel2Nav onToggleFullMenu={onShowFullNav} />
+          {startSlots}
+          <BreadcrumbNav onToggleFullMenu={onShowFullNav} />
           <ExtensionSlot name="top-nav-breadcrumb-slot" className={optionStyles.breadcrumbSlot} />
         </div>
       )}
@@ -179,25 +187,29 @@ const NavItem2: React.FC = () => {
   );
 };
 
-let registered = false;
+type ItemDefinition = Omit<TopBarItem, 'region' | 'order' | 'id'> & { id: GlobalItemId };
 
-/** Enregistre les éléments globaux (idempotent). */
-export function registerGlobalTopBarItems(): void {
-  if (registered) return;
-  registered = true;
-  // Niveau 1
-  registerTopBarItem({ id: 'brand', region: 'l1-left', order: 0, component: BrandItem, hideOnSearch: 'mobile' });
-  registerTopBarItem({ id: 'search', region: 'l1-right', order: 0, component: SearchItem });
-  registerTopBarItem({ id: 'language', region: 'l1-right', order: 10, component: LanguageOption as React.FC, hideOnSearch: 'touch' });
-  registerTopBarItem({ id: 'divider', region: 'l1-right', order: 20, component: DividerItem, hideOnSearch: 'touch' });
-  registerTopBarItem({ id: 'apps', region: 'l1-right', order: 30, component: AppsItem, hideOnSearch: 'touch' });
-  registerTopBarItem({ id: 'quick-access', region: 'l1-right', order: 40, component: QuickAccessItem, hideOnSearch: 'touch' });
-  registerTopBarItem({ id: 'fullscreen', region: 'l1-right', order: 60, component: FullscreenOption as React.FC, visibleFrom: 'desktop' });
-  registerTopBarItem({ id: 'theme', region: 'l1-right', order: 70, component: ThemeToggleOption as React.FC, visibleFrom: 'desktop' });
-  registerTopBarItem({ id: 'user', region: 'l1-right', order: 90, component: UserItem, hideOnSearch: 'touch' });
-  registerTopBarItem({ id: 'clock', region: 'l1-right', order: 100, component: ClockItem });
-  registerTopBarItem({ id: 'menu-panel', region: 'l1-right', order: 110, component: MenuPanelItem, hideOnSearch: 'touch' });
-  // Niveau 2
-  registerTopBarItem({ id: 'nav', region: 'l2-center', order: 0, component: NavItem2 });
-  // Si le niveau 2 n'est pas rendu (config `topbar.levels`), la navigation s'affiche au centre du niveau 1.
+/** Les éléments globaux, SANS placement : la région et l'ordre viennent de `placement.ts`. */
+const GLOBAL_ITEMS: readonly ItemDefinition[] = [
+  { id: 'brand', component: BrandItem, hideOnSearch: 'mobile' },
+  { id: 'search', component: SearchItem },
+  { id: 'language', component: LanguageOption as React.FC, hideOnSearch: 'touch' },
+  { id: 'divider', component: DividerItem, hideOnSearch: 'touch' },
+  { id: 'apps', component: AppsItem, hideOnSearch: 'touch' },
+  { id: 'quick-access', component: QuickAccessItem, hideOnSearch: 'touch' },
+  { id: 'fullscreen', component: FullscreenOption as React.FC, visibleFrom: 'desktop' },
+  { id: 'theme', component: ThemeToggleOption as React.FC, visibleFrom: 'desktop' },
+  { id: 'user', component: UserItem, hideOnSearch: 'touch' },
+  { id: 'clock', component: ClockItem },
+  { id: 'menu-panel', component: MenuPanelItem, hideOnSearch: 'touch' },
+  { id: 'nav', component: NavigationItem },
+];
+
+/**
+ * Enregistre (ou ré-enregistre) les éléments globaux selon le placement : usine + surcharges `topbar.placement`.
+ * Rappeler la fonction avec un autre placement déplace les éléments (un enregistrement remplace le précédent).
+ */
+export function registerGlobalTopBarItems(overrides?: Readonly<Record<string, unknown>>): void {
+  const placement = resolvePlacement(overrides);
+  for (const item of GLOBAL_ITEMS) registerTopBarItem({ ...item, ...placement[item.id] });
 }

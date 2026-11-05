@@ -107,7 +107,7 @@ export const linkComponent = getSyncLifecycle(genericLinkComponent, {
   moduleName,
 });
 
-// ─── Item de fil d'Ariane (niveau 2 de la topbar) ────────────────────────────
+// ─── Item de fil d'Ariane (navigation de la topbar) ────────────────────────────
 // Composant générique déclaratif pour peupler "top-nav-breadcrumb-slot" —
 // voir breadcrumb-item.component.tsx pour le contrat et un exemple d'usage.
 export const breadcrumbItem = getSyncLifecycle(breadcrumbItemComponent, options);

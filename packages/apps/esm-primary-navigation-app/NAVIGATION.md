@@ -1,14 +1,17 @@
-# Navigation de niveau 2 de la TopBar
+# Navigation de la TopBar
 
-La navigation de niveau 2 n'est **écrite nulle part dans la TopBar** : chaque app déclare ses
-propres entrées dans son `routes.json` (slot `topbar-level2-nav`), et la TopBar les assemble en
-arborescence. Sans déclaration, le niveau 2 est vide — il n'existe plus aucune maquette de repli.
+La navigation n'est **écrite nulle part dans la TopBar** : chaque app déclare ses
+propres entrées dans son `routes.json` (slot officiel `topbar-nav-slot` ; l'ancien nom `topbar-level2-nav` reste lu et valide), et la TopBar les assemble en
+arborescence. Sans déclaration, la navigation est vide — il n'existe plus aucune maquette de repli.
 
 Il n'y a plus de barre latérale globale : seuls la TopBar et le footer sont globaux. Une app qui
 veut une navigation interne affiche sa propre barre latérale dans son contenu.
 
-> Le **niveau 1** (choix de l'espace : Intranet, Extranet…) définit le contexte. Le niveau 2 en
-> dépend : il n'affiche que les entrées déclarées pour l'espace actif.
+> Le **sélecteur d'espace** (Intranet, Extranet…) définit le contexte. La navigation en
+> dépend : elle n'affiche que les entrées déclarées pour l'espace actif.
+>
+> La navigation est un **élément global** (`nav`) comme un autre : par défaut au centre du niveau 2, mais
+> elle peut être placée dans n'importe quelle région de n'importe quel niveau (config `topbar.placement`, voir le README).
 
 ## Déclarer ses entrées (dans l'app)
 
@@ -45,7 +48,7 @@ veut une navigation interne affiche sa propre barre latérale dans son contenu.
 | Champ | Rôle |
 |---|---|
 | `workspaces` | Espaces où l'entrée apparaît (`["intranet"]`, `["intranet","extranet"]`). Absent, vide ou `["*"]` : tous les espaces. Peut différer d'une entrée à l'autre d'une même section. |
-| `section` / `sectionLabel` | Bouton de niveau 2 (ex. *Annuaire*). Une app peut aussi contribuer à la section d'une autre app. |
+| `section` / `sectionLabel` | Bouton de navigation (ex. *Annuaire*). Une app peut aussi contribuer à la section d'une autre app. |
 | `group` / `groupLabel` | Colonne du méga-menu. **Facultatif** (voir « Formes d'un bouton »). |
 | `sectionRoute` | Route du bouton de section lui-même, cliquable **en plus** de son menu. |
 | `label`, `description` | Texte du lien. `labelKey` / `descriptionKey` : clés de traduction (le texte sert de repli). |
@@ -53,7 +56,7 @@ veut une navigation interne affiche sa propre barre latérale dans son contenu.
 | `route` | Route SPA sans base ; **doit exister dans un `pages[].route`** (ou en être une sous-route). |
 | `order` | Ordre d'affichage (surchargeable par configuration). `privileges` et `featureFlag` sont aussi acceptés. |
 
-## Formes d'un bouton de niveau 2
+## Formes d'un bouton de navigation
 
 La forme découle des entrées déclarées pour l'espace actif, sans rien à configurer :
 
@@ -115,7 +118,7 @@ registerNavBehavior({ entry: 'annuaire-nav-contacts' }, {
 | Option/sous-option active selon l'URL (route la plus précise) | `utils/resolveActiveNav.ts` |
 | Fourniture au reste de la TopBar | `context/WorkspaceContext.tsx` (`currentWorkspace.navItems`) |
 
-`data/workspaceMockData.ts` ne définit plus que les **espaces** (niveau 1) : aucune navigation.
+`data/workspaceMockData.ts` ne définit plus que les **espaces** : aucune navigation.
 
 ## Garde-fous
 
@@ -132,6 +135,6 @@ Cette fonctionnalité s'appuie sur `NavEntryMeta.workspaces` / `group` facultati
 
 ## À gauche de la navigation : le contenu de l'app active
 
-Le niveau 2 reçoit, juste à gauche des options de navigation, le contenu de barre d'outils de
-l'**app active** (slot `top-nav-app-slot`) : identité (logo + nom), actions propres. Voir le
+La TopBar peut recevoir, à gauche de la navigation, le contenu de barre d'outils de
+l'**app active** (région `l2-left`, slot `topbar-l2-left-slot` ; l'ancien nom `top-nav-app-slot` reste honoré) : identité (logo + nom), actions propres. Voir le
 README pour le contrat du slot. Les options de navigation décrites ci-dessus restent inchangées.

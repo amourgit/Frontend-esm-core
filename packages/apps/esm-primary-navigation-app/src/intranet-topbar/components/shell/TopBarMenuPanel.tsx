@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MenuToggleButton, StaggeredMenuPanel } from '@egen-civitas/esm-framework';
-import styles from './topbar-level1.scss';
+import styles from './topbar-global-items.scss';
 import closeStyles from './top-bar-menu-panel.scss';
 
 // =============================================================================
