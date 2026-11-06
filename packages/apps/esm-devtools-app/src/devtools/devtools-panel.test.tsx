@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 
 const setToolWindowBadge = vi.hoisted(() => vi.fn());
@@ -16,7 +16,7 @@ import DevToolsPanel from './devtools-panel.component';
 describe('DevToolsPanel', () => {
   it("affiche l'import map et publie la pastille quand une surcharge apparaît", () => {
     render(<DevToolsPanel />);
-    screen.getByText('Mock Import Map').click();
+    fireEvent.click(screen.getByText('Mock Import Map'));
     expect(setToolWindowBadge).toHaveBeenCalledWith('devtools', '!');
   });
 });
