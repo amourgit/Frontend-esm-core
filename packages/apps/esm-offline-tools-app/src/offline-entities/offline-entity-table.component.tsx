@@ -1,5 +1,4 @@
 import React, { type ChangeEvent, useMemo, useState } from 'react';
-import { capitalize } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -21,7 +20,6 @@ import {
 } from '@carbon/react';
 import { Renew } from '@carbon/react/icons';
 import {
-  age,
   deleteSynchronizationItem,
   getDynamicOfflineDataEntries,
   getFullSynchronizationItems,
@@ -37,6 +35,7 @@ import EmptyState from './empty-state.component';
 import LastUpdatedTableCell from './last-updated-table-cell.component';
 import EntityNameTableCell from './entity-name-table-cell.component';
 import styles from './offline-entity-table.scss';
+import type { OfflineEntity } from '../types';
 
 export interface OfflineEntityTableProps {
   isInteractive: boolean;
@@ -63,14 +62,14 @@ const OfflineEntityTable: React.FC<OfflineEntityTableProps> = ({ isInteractive, 
     offlineRegisteredEntitiesSwr.mutate();
   };
 
-  const handleRemovePatientsFromOfflineListClick = async (selectedRows) => {
+  const handleRemoveEntitiesFromOfflineListClick = async (selectedRows) => {
     const closeModal = showModal('offline-tools-confirmation-modal', {
-      title: t('offlineEntitiesTableDeleteConfirmationModalTitle', 'Remove offline patients'),
+      title: t('offlineEntitiesTableDeleteConfirmationModalTitle', 'Remove offline entities'),
       children: t(
         'offlineEntitiesTableDeleteConfirmationModalContent',
         'Are you sure that you want to remove all selected entities from the offline list? They will no longer be available in offline mode and any newly registered entity will be permanently deleted.',
       ),
-      confirmText: t('offlineEntitiesTableDeleteConfirmationModalConfirm', 'Remove patients'),
+      confirmText: t('offlineEntitiesTableDeleteConfirmationModalConfirm', 'Remove entities'),
       cancelText: t('offlineEntitiesTableDeleteConfirmationModalCancel', 'Cancel'),
       closeModal: () => closeModal(),
       onConfirm: async () => {
@@ -135,13 +134,13 @@ const OfflineEntityTable: React.FC<OfflineEntityTableProps> = ({ isInteractive, 
                   >
                     {selectedRows.length === 1
                       ? t('offlineEntitiesTableUpdateEntity', 'Update entity')
-                      : t('offlineEntitiesTableUpdatePatients', 'Update patients')}
+                      : t('offlineEntitiesTableUpdateEntities', 'Update entities')}
                   </Button>
                   <Button
                     className={styles.tablePrimaryAction}
                     kind="danger"
                     size={toolbarItemSize}
-                    onClick={() => handleRemovePatientsFromOfflineListClick(selectedRows)}
+                    onClick={() => handleRemoveEntitiesFromOfflineListClick(selectedRows)}
                   >
                     {t('offlineEntitiesTableRemoveFromOfflineList', 'Remove from list')}
                   </Button>
@@ -219,14 +218,6 @@ function useOfflineEntityTableHeaders() {
         key: 'lastUpdated',
         header: t('offlineEntitiesTableHeaderLastUpdated', 'Last updated'),
       },
-      {
-        key: 'gender',
-        header: t('offlineEntitiesTableHeaderGender', 'Gender'),
-      },
-      {
-        key: 'age',
-        header: t('offlineEntitiesTableHeaderAge', 'Age'),
-      },
     ],
     [t],
   );
@@ -239,14 +230,14 @@ function useOfflineEntityTableRows(syncingEntityUuids: Array<string>) {
   return useMemo(() => {
     const result = [];
     const mapEntityToRow = (
-      entity: fhir.Patient,
+      entity: OfflineEntity,
       isNewlyRegistered: boolean,
       lastSyncState?: DynamicOfflineDataSyncState,
     ) => ({
       id: entity.id,
       name: {
         value: <EntityNameTableCell key={entity.id} entity={entity} isNewlyRegistered={isNewlyRegistered} />,
-        filterableValue: JSON.stringify(entity.name),
+        filterableValue: entity.name ?? '',
       },
       lastUpdated: isNewlyRegistered ? (
         '--'
@@ -258,8 +249,6 @@ function useOfflineEntityTableRows(syncingEntityUuids: Array<string>) {
           lastSyncState={lastSyncState}
         />
       ),
-      gender: capitalize(entity.gender),
-      age: entity.birthDate ? age(entity.birthDate) : '',
     });
 
     for (const entity of offlineRegisteredEntitiesSwr.data ?? []) {
@@ -276,8 +265,8 @@ function useOfflineEntityTableRows(syncingEntityUuids: Array<string>) {
 
 async function syncSelectedOfflineEntities(selectedEntityUuids: Array<string>) {
   const offlineEntityEntries = await getDynamicOfflineDataEntries('entity-registration');
-  const syncablePatientUuids = offlineEntityEntries.map((entry) => entry.identifier);
-  const offlineEntityUuidsToSync = selectedEntityUuids.filter((id) => syncablePatientUuids.includes(id));
+  const syncableEntityUuids = offlineEntityEntries.map((entry) => entry.identifier);
+  const offlineEntityUuidsToSync = selectedEntityUuids.filter((id) => syncableEntityUuids.includes(id));
 
   return await Promise.all(
     offlineEntityUuidsToSync.map((entityUuid) => syncDynamicOfflineData('entity', entityUuid)),
@@ -286,25 +275,25 @@ async function syncSelectedOfflineEntities(selectedEntityUuids: Array<string>) {
 
 async function removeSelectedOfflineEntities(selectedEntityUuids: Array<string>) {
   const offlineEntityEntries = await getDynamicOfflineDataEntries('entity');
-  const offlineRegisteredPatients = await getFullSynchronizationItems<{
-    fhirEntity: fhir.Patient;
+  const offlineRegisteredEntities = await getFullSynchronizationItems<{
+    entity: OfflineEntity;
   }>('entity-registration');
   const offlineEntityUuidsToBeDeleted = selectedEntityUuids.filter((id) =>
     offlineEntityEntries.some((entry) => entry.identifier === id),
   );
-  const offlineRegisteredPatientUuidsToBeDeleted = selectedEntityUuids.filter(
+  const offlineRegisteredEntityUuidsToBeDeleted = selectedEntityUuids.filter(
     (id) => !offlineEntityUuidsToBeDeleted.includes(id),
   );
 
   const promises = [
     ...offlineEntityUuidsToBeDeleted.map((entityUuid) => removeDynamicOfflineData('entity', entityUuid)),
-    ...offlineRegisteredPatientUuidsToBeDeleted.map(async (entityUuid) => {
-      const offlineRegisteredPatient = offlineRegisteredPatients.find(
-        (syncItem) => syncItem.content.fhirEntity.id === entityUuid,
+    ...offlineRegisteredEntityUuidsToBeDeleted.map(async (entityUuid) => {
+      const offlineRegisteredEntity = offlineRegisteredEntities.find(
+        (syncItem) => syncItem.content.entity.id === entityUuid,
       );
 
-      if (offlineRegisteredPatient) {
-        await deleteSynchronizationItem(offlineRegisteredPatient.id);
+      if (offlineRegisteredEntity) {
+        await deleteSynchronizationItem(offlineRegisteredEntity.id);
       }
     }),
   ];

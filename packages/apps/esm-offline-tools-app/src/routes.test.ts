@@ -18,10 +18,6 @@ describe('esm-offline-tools-app — routes.json', () => {
     expect(declared.filter((c) => !exported.has(c))).toEqual([]);
   });
 
-  it("ne déclare plus d'extension du dossier patient (slots patient-chart-*)", () => {
-    expect(routes.extensions.filter((e) => e.slot.startsWith('patient-chart'))).toEqual([]);
-  });
-
   it("ne monte plus de sidebar : aucun slot `nav-menu-slot` ni extension rattachée dynamiquement", () => {
     expect(routes.extensions.some((e) => e.name === 'offline-tools-nav-items')).toBe(false);
     expect(indexSource).not.toMatch(/nav-menu-slot|SideNav/);

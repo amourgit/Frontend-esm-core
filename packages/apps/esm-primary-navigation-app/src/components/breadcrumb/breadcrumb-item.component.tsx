@@ -21,7 +21,7 @@ import { ConfigurableLink, Type, useConfig, validators } from '@egen-civitas/esm
 //      "slot": "top-nav-breadcrumb-slot",
 //      "component": "breadcrumbItem",
 //      "order": 10,
-//      "config": { "title": "Mes patients", "target": "${egenSpaBase}/mon-app/liste" }
+//      "config": { "title": "Mes dossiers", "target": "${egenSpaBase}/mon-app/liste" }
 //    }
 //
 //  `target` est optionnel : à omettre pour l'item courant (page active, non

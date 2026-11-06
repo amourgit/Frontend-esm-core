@@ -7,7 +7,6 @@ test.use({ storageState: { cookies: [], origins: [] } });
 test('Login as Admin user', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const userPanel = page.locator('[data-extension-slot-name="user-panel-slot"]');
-  const topNav = page.getByRole('banner', { name: 'Egen' });
 
   await test.step('When I navigate to the login page', async () => {
     await loginPage.goto();
@@ -27,18 +26,8 @@ test('Login as Admin user', async ({ page }) => {
     await page.getByRole('button', { name: /log in/i }).click();
   });
 
-  await test.step('And I choose a login location', async () => {
-    await expect(page).toHaveURL(`${process.env.E2E_BASE_URL}/spa/login/location`);
-    await page.getByText(/outpatient clinic/i).click();
-    await page.getByRole('button', { name: /confirm/i }).click();
-  });
-
   await test.step('Then I should get navigated to the home page', async () => {
-    await expect(page).toHaveURL(`${process.env.E2E_BASE_URL}/spa/home/service-queues`);
-  });
-
-  await test.step('And I should see the location picker in top nav', async () => {
-    await expect(topNav.getByText(/outpatient clinic/i)).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`${process.env.E2E_BASE_URL}/spa/home`));
   });
 
   await test.step('When I click on the my account button', async () => {

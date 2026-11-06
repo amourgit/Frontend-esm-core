@@ -11,12 +11,6 @@
   "footerlogo": "Logo del Pie de Página",
   "invalidCredentials": "Nombre de usuario o contraseña inválidos",
   "learnMore": "Más información",
-  "locationPreferenceRemoved": "Preferencia de ubicación de inicio de sesión eliminada",
-  "locationPreferenceRemovedMessage": "Necesitarás seleccionar una ubicación en cada inicio de sesión",
-  "locationSaved": "Ubicación guardada",
-  "locationSaveMessage": "Su ubicación preferida ha sido guardada para futuros inicios de sesión",
-  "locationUpdated": "Ubicación actualizada",
-  "locationUpdateMessage": "Su ubicación preferida ha sido actualizada",
   "loggingIn": "Iniciando sesión",
   "login": "Iniciar sesión",
   "loginButtonIconDescription": "Botón de inicio de sesión",
@@ -30,12 +24,7 @@
   "passwordChangedSuccessfully": "Contraseña cambiada exitosamente",
   "passwordConfirmationRequired": "Se requiere confirmar la contraseña",
   "passwordsDoNotMatch": "Las contraseñas no coinciden",
-  "poweredBySubtext": "Un sistema de registros médicos de código abierto y una comunidad global",
-  "rememberLocationForFutureLogins": "Recordar mi ubicación para futuros inicios de sesión",
-  "selectYourLocation": "Seleccione su ubicación en la lista a continuación. Utilice la barra de búsqueda para encontrar su ubicación.",
   "showPassword": "Mostrar contraseña",
-  "submitting": "Enviando",
   "username": "Nombre de usuario",
-  "validValueRequired": "Se requiere un valor válido",
-  "welcome": "Bienvenido"
+  "validValueRequired": "Se requiere un valor válido"
 }

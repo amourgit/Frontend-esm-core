@@ -3,6 +3,7 @@ import useSWR, { type SWRResponse } from 'swr';
 import { getSynchronizationItems, getDynamicOfflineDataEntries } from '@egen-civitas/esm-framework';
 import { fetchEntity } from '../entity-resource';
 import merge from 'lodash-es/merge';
+import type { OfflineEntity } from '../types';
 
 function useDynamicOfflineDataEntries(type: string) {
   return useSWR(`dynamicOfflineData/entries/${type}`, () => getDynamicOfflineDataEntries(type));
@@ -12,49 +13,49 @@ function useSynchronizationItems<T>(type: string) {
   return useSWR(`syncQueue/items/${type}`, () => getSynchronizationItems<T>(type));
 }
 
-function useFhirEntities(ids: Array<string>) {
+function useRemoteEntities(ids: Array<string>) {
   const stableIds = useMemo(() => [...ids].sort(), [ids]);
-  return useSWR(stableIds.length ? ['fhirEntities', stableIds] : null, () =>
+  return useSWR(stableIds.length ? ['remoteEntities', stableIds] : null, () =>
     Promise.all(stableIds.map((entityId) => fetchEntity(entityId))),
   );
 }
 
 export function useOfflineRegisteredEntities() {
   const offlineEntitiesSwr = useDynamicOfflineDataEntries('entity');
-  const entitySyncItemsSwr = useSynchronizationItems<{ fhirEntity?: fhir.Patient }>('entity-registration');
+  const entitySyncItemsSwr = useSynchronizationItems<{ entity?: OfflineEntity }>('entity-registration');
 
   return useMergedSwr(() => {
     return (entitySyncItemsSwr.data ?? [])
       .filter((registrationItem) => {
         return (
-          registrationItem.fhirEntity &&
+          registrationItem.entity &&
           !(offlineEntitiesSwr.data ?? []).find(
-            (offlineEntry) => offlineEntry.identifier === registrationItem.fhirEntity.id,
+            (offlineEntry) => offlineEntry.identifier === registrationItem.entity.id,
           )
         );
       })
-      .map((item) => item.fhirEntity);
+      .map((item) => item.entity);
   }, [offlineEntitiesSwr, entitySyncItemsSwr]);
 }
 
 export function useOfflineEntitiesWithEntries() {
   const offlineEntitiesSwr = useDynamicOfflineDataEntries('entity');
-  const entitySyncItemsSwr = useSynchronizationItems<{ fhirEntity?: fhir.Patient }>('entity-registration');
-  const fhirEntitiesSwr = useFhirEntities(offlineEntitiesSwr.data?.map((entry) => entry.identifier) ?? []);
+  const entitySyncItemsSwr = useSynchronizationItems<{ entity?: OfflineEntity }>('entity-registration');
+  const remoteEntitiesSwr = useRemoteEntities(offlineEntitiesSwr.data?.map((entry) => entry.identifier) ?? []);
 
   return useMergedSwr(() => {
     return (offlineEntitiesSwr.data ?? []).map((offlineEntry) => {
-      const matchingFhirEntity = (fhirEntitiesSwr.data ?? []).find(
+      const matchingRemoteEntity = (remoteEntitiesSwr.data ?? []).find(
         (entity) => entity?.id === offlineEntry.identifier,
       );
       const offlineUpdates = (entitySyncItemsSwr.data ?? [])
-        .filter((syncItem) => syncItem.fhirEntity?.id === offlineEntry.identifier)
-        .map((item) => item.fhirEntity);
-      const finalEntity = merge({}, matchingFhirEntity, ...offlineUpdates) as fhir.Patient;
+        .filter((syncItem) => syncItem.entity?.id === offlineEntry.identifier)
+        .map((item) => item.entity);
+      const finalEntity = merge({}, matchingRemoteEntity, ...offlineUpdates) as OfflineEntity;
 
       return { entity: finalEntity, entry: offlineEntry };
     });
-  }, [offlineEntitiesSwr, entitySyncItemsSwr, fhirEntitiesSwr]);
+  }, [offlineEntitiesSwr, entitySyncItemsSwr, remoteEntitiesSwr]);
 }
 
 export function useOfflineEntityStats() {

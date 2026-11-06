@@ -44,7 +44,7 @@ export const BASE_EGEN_ROUTES: AIRouteDefinition[] = [
   {
     path: '/offline-tools',
     description:
-      "Page de gestion du mode hors-ligne : opt-in/opt-out du mode offline, liste des patients " +
+      "Page de gestion du mode hors-ligne : opt-in/opt-out du mode offline, liste des entités " +
       'synchronisés localement et des actions en attente de synchronisation.',
   },
 ];

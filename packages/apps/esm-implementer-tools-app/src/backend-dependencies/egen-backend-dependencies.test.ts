@@ -114,7 +114,7 @@ describe('egen-backend-dependencies', () => {
         data: {
           results: [
             { uuid: 'webservices.rest', version: '2.24.0' },
-            { uuid: 'fhir2', version: '1.5.0' },
+            { uuid: 'data-service', version: '1.5.0' },
           ],
           links: [],
         },
@@ -136,7 +136,7 @@ describe('egen-backend-dependencies', () => {
             },
           },
         ],
-        ['@egen-civitas/esm-app-2', { backendDependencies: { fhir2: '^1.0.0' } }],
+        ['@egen-civitas/esm-app-2', { backendDependencies: { 'data-service': '^1.0.0' } }],
       ];
 
       const result = await checkModules();
@@ -154,7 +154,7 @@ describe('egen-backend-dependencies', () => {
         data: {
           results: [
             { uuid: 'webservices.rest', version: '2.24.0' },
-            { uuid: 'fhir2', version: '1.5.0' },
+            { uuid: 'data-service', version: '1.5.0' },
           ],
           links: [],
         },
@@ -168,7 +168,7 @@ describe('egen-backend-dependencies', () => {
           {
             backendDependencies: { 'webservices.rest': '^2.0.0' },
             optionalBackendDependencies: {
-              fhir2: '^1.0.0',
+              'data-service': '^1.0.0',
               'optional-missing': '^1.0.0',
             },
           },
@@ -180,7 +180,7 @@ describe('egen-backend-dependencies', () => {
       expect(result[0].dependencies).toHaveLength(2);
       // Should include both required and installed optional
       expect(result[0].dependencies.find((d) => d.name === 'webservices.rest')).toBeDefined();
-      expect(result[0].dependencies.find((d) => d.name === 'fhir2')).toBeDefined();
+      expect(result[0].dependencies.find((d) => d.name === 'data-service')).toBeDefined();
       // Should not include missing optional dependencies
       expect(result[0].dependencies.find((d) => d.name === 'optional-missing')).toBeUndefined();
     });
@@ -190,7 +190,7 @@ describe('egen-backend-dependencies', () => {
         data: {
           results: [
             { uuid: 'webservices.rest', version: '2.24.0' },
-            { uuid: 'fhir2', version: '1.5.0' },
+            { uuid: 'data-service', version: '1.5.0' },
           ],
           links: [],
         },
@@ -204,9 +204,9 @@ describe('egen-backend-dependencies', () => {
           {
             backendDependencies: { 'webservices.rest': '^2.0.0' },
             optionalBackendDependencies: {
-              fhir2: {
+              'data-service': {
                 version: '^1.0.0',
-                feature: 'fhir-support' as any,
+                feature: 'data-support' as any,
               },
             },
           },
@@ -215,9 +215,9 @@ describe('egen-backend-dependencies', () => {
 
       const result = await checkModules();
 
-      const fhir2Dep = result[0].dependencies.find((d) => d.name === 'fhir2');
-      expect(fhir2Dep).toBeDefined();
-      expect(fhir2Dep?.requiredVersion).toBe('^1.0.0');
+      const dataServiceDep = result[0].dependencies.find((d) => d.name === 'data-service');
+      expect(dataServiceDep).toBeDefined();
+      expect(dataServiceDep?.requiredVersion).toBe('^1.0.0');
     });
 
     it('should cache results across multiple calls', async () => {
