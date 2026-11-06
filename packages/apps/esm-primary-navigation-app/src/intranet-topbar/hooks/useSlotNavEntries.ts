@@ -1,6 +1,11 @@
 import { useMemo } from 'react';
-import { isNavEntryMeta, type NavEntryMeta, useExtensionSlotMeta } from '@egen-civitas/esm-framework';
-import { NAV_SLOTS } from '../utils/navSlots';
+import {
+  isNavEntryMeta,
+  type NavEntryMeta,
+  TOPBAR_LEVEL2_NAV_SLOT,
+  TOPBAR_NAV_SLOT,
+  useExtensionSlotMeta,
+} from '@egen-civitas/esm-framework';
 
 /** Une entrée déclarée sur le slot : le nom de l'extension (routes.json) et sa `meta` validée. */
 export interface SlotNavEntry {
@@ -14,9 +19,9 @@ export interface SlotNavEntry {
  * Les `meta` invalides sont ignorées (le script `verify:nav` les signale à la compilation).
  */
 export function useSlotNavEntries(): SlotNavEntry[] {
-  // Un nombre FIXE d'appels de hook : un par nom de slot (le nom officiel puis l'ancien).
-  const current = useExtensionSlotMeta<unknown>(NAV_SLOTS[0]);
-  const legacy = useExtensionSlotMeta<unknown>(NAV_SLOTS[1]);
+  // Un nombre FIXE d'appels de hook : un par nom de slot (le nom officiel puis l'ancien, `@deprecated` côté framework mais encore déclaré par des apps déployées).
+  const current = useExtensionSlotMeta<unknown>(TOPBAR_NAV_SLOT);
+  const legacy = useExtensionSlotMeta<unknown>(TOPBAR_LEVEL2_NAV_SLOT);
   return useMemo(
     () =>
       Object.entries({ ...legacy, ...current })

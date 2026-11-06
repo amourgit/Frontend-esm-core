@@ -22,7 +22,7 @@ de `esm-not-found-app`.
 
 ## Navigation de niveau 2 (TopBar)
 
-Déclarée dans `src/routes.json` (slot `topbar-level2-nav`, espace `intranet`) : section **Sites** avec
+Déclarée dans `src/routes.json` (slot `topbar-nav-slot`, espace `intranet`) : section **Sites** avec
 « Tous les sites » (`sectionRoute`) et une entrée par direction. Les entrées par direction sont statiques
 tant que la liste des sites est une donnée d'exemple ; elles devront être générées depuis l'API.
 

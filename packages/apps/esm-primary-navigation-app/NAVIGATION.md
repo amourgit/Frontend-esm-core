@@ -1,7 +1,7 @@
 # Navigation de la TopBar
 
 La navigation n'est **écrite nulle part dans la TopBar** : chaque app déclare ses
-propres entrées dans son `routes.json` (slot officiel `topbar-nav-slot` ; l'ancien nom `topbar-level2-nav` reste lu et valide), et la TopBar les assemble en
+propres entrées dans son `routes.json` (slot `topbar-nav-slot` ; l'ancien nom `topbar-level2-nav` reste lu pour les apps déjà déployées), et la TopBar les assemble en
 arborescence. Sans déclaration, la navigation est vide — il n'existe plus aucune maquette de repli.
 
 Il n'y a plus de barre latérale globale : seuls la TopBar et le footer sont globaux. Une app qui

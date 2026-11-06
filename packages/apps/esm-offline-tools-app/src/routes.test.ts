@@ -32,7 +32,7 @@ describe('esm-offline-tools-app — routes.json', () => {
     expect(rail?.meta).toMatchObject({ title: expect.any(String) });
     expect((rail?.meta as { global?: boolean }).global).toBeUndefined();
 
-    const subOptions = routes.extensions.filter((e) => e.slot === 'topbar-level2-nav');
+    const subOptions = routes.extensions.filter((e) => e.slot === 'topbar-nav-slot');
     expect(subOptions.length).toBeGreaterThan(0);
     for (const e of subOptions) {
       expect(e.meta).toMatchObject({ section: 'offline-tools' });
@@ -44,7 +44,7 @@ describe('esm-offline-tools-app — routes.json', () => {
     const pages = routes.extensions
       .filter((e) => e.slot === 'offline-tools-page-slot')
       .map((e) => (e.meta as { name: string }).name);
-    for (const e of routes.extensions.filter((x) => x.slot === 'topbar-level2-nav')) {
+    for (const e of routes.extensions.filter((x) => x.slot === 'topbar-nav-slot')) {
       const route = (e.meta as { route: string }).route;
       if (route === 'offline-tools') continue;
       expect(pages).toContain(route.replace('offline-tools/', ''));

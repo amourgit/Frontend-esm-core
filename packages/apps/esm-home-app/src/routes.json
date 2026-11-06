@@ -11,7 +11,7 @@
   "extensions": [
     {
       "name": "home-nav-accueil",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,

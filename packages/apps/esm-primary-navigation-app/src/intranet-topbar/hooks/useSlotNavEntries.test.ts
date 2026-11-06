@@ -1,10 +1,11 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { useExtensionSlotMeta } from '@egen-civitas/esm-framework';
-import { NAV_SLOTS } from '../utils/navSlots';
 import { useSlotNavEntries } from './useSlotNavEntries';
 
 vi.mock('@egen-civitas/esm-framework', () => ({
+  TOPBAR_NAV_SLOT: 'topbar-nav-slot',
+  TOPBAR_LEVEL2_NAV_SLOT: 'topbar-level2-nav',
   useExtensionSlotMeta: vi.fn(),
   isNavEntryMeta: (m: unknown) => Boolean(m && typeof m === 'object' && 'section' in m && 'label' in m && 'route' in m),
 }));
@@ -12,12 +13,6 @@ vi.mock('@egen-civitas/esm-framework', () => ({
 const meta = (route: string) => ({ section: 'docs', label: route, route });
 
 describe('useSlotNavEntries', () => {
-  it('le nom officiel du slot ne porte aucun numéro de niveau, l’ancien nom reste lu', () => {
-    expect(NAV_SLOTS[0]).toBe('topbar-nav-slot');
-    expect(NAV_SLOTS[0]).not.toMatch(/level\d/i);
-    expect(NAV_SLOTS).toContain('topbar-level2-nav');
-  });
-
   it('fusionne les entrées du slot officiel et de l’ancien slot, et ignore les meta invalides', () => {
     vi.mocked(useExtensionSlotMeta).mockImplementation(((slot: string) =>
       slot === 'topbar-nav-slot'

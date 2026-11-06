@@ -28,7 +28,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const slotEntries = useSlotNavEntries();
 
   // Navigation : construite UNIQUEMENT à partir des entrées que les apps déclarent sur
-  // le slot `topbar-level2-nav`, filtrées pour l'espace actif. Aucune donnée codée en dur.
+  // le slot `topbar-nav-slot`, filtrées pour l'espace actif. Aucune donnée codée en dur.
   const currentWorkspace = useMemo<Workspace>(() => {
     const base = WORKSPACES_MOCK_DATA.find((w) => w.id === workspaceId) || WORKSPACES_MOCK_DATA[0];
     return { ...base, navItems: buildNavItemsFromSlot(slotEntries, base.id, t) };
