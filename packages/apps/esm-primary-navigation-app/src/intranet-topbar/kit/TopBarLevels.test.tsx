@@ -1,3 +1,6 @@
+/* eslint-disable testing-library/no-container, testing-library/no-node-access --
+   Ce test vérifie le SQUELETTE du DOM (niveaux `data-level`, régions `data-slot`) : ce sont des contrats de
+   structure sans rôle ARIA ni texte accessible, donc inatteignables par les requêtes Testing Library. */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';

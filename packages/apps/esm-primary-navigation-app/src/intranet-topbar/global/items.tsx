@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { interpolateUrl, navigate as frameworkNavigate, useConfig } from '@egen-civitas/esm-framework';
+import { ExtensionSlot, interpolateUrl, navigate as frameworkNavigate, useConfig } from '@egen-civitas/esm-framework';
 import { EgenLogo } from '../components/ui/EgenLogo';
 import { GooeyInput } from '../components/ui/GooeyInput';
 import { WorkspaceAndSiteSelectorsColumn } from '../components/shell/WorkspaceAndSiteSelectorsColumn';
@@ -15,7 +15,6 @@ import {
   ThemeToggleOption,
   UserMenuOption,
 } from '../components/options';
-import { ExtensionSlot } from '@egen-civitas/esm-framework';
 import { playXboxSound } from '../utils/xboxAudio';
 import { type ConfigSchema } from '../../config-schema';
 import { registerTopBarItem, useTopBarUi, type TopBarItem } from '../kit';
