@@ -1,5 +1,4 @@
 {
-  "builtWith": "აგებულია პროგრამით",
   "cancel": "გაუქმება",
   "change": "შეცვლა",
   "changeLocation": "მდებარეობის შეცვლა",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "პაროლის შეცვლის შეცდომა",
   "footerlogo": "ქვედა კოლონტიტულის ლოგო",
   "invalidCredentials": "არასწორი მომხმარებლის სახელი ან პაროლი",
-  "learnMore": "გაიგეთ მეტი",
   "loggingIn": "მიმდინარეობს შესვლა",
   "login": "შესვლა",
   "loginButtonIconDescription": "შესვლის ღილაკი",

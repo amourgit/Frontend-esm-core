@@ -1,5 +1,4 @@
 {
-  "builtWith": "Costruito con",
   "cancel": "Annulla",
   "change": "Cambia",
   "changeLocation": "Cambiare sede",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Errore nella modifica della password",
   "footerlogo": "Logo del piè di pagina",
   "invalidCredentials": "Nome utente o password non validi",
-  "learnMore": "Scopri di più",
   "loggingIn": "Accesso in corso",
   "login": "Accedi",
   "loginButtonIconDescription": "Pulsante di accesso",

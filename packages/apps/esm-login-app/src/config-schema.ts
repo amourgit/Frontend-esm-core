@@ -68,7 +68,7 @@ export const configSchema = {
         },
       },
       _default: [],
-      _description: 'An array of logos to be displayed in the footer next to the Egen logo.',
+      _description: 'An array of logos to be displayed in the footer next to the CIVITAS logo.',
     },
   },
   showPasswordOnSeparateScreen: {

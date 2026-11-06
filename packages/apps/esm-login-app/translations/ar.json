@@ -1,5 +1,4 @@
 {
-  "builtWith": "Built with",
   "cancel": "يلغي",
   "change": "تغيير",
   "changeLocation": "Change location",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "خطأ في تغيير كلمة المرور",
   "footerlogo": "شعار التذييل",
   "invalidCredentials": "بيانات الدخول غير صحيحة",
-  "learnMore": "Learn more",
   "loggingIn": "جار الدخول",
   "login": "تسجيل الدخول",
   "loginButtonIconDescription": "Log in button",

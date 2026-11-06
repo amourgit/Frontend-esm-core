@@ -1,5 +1,4 @@
 {
-  "builtWith": "Built with",
   "cancel": "বাতিল",
   "change": "পরিবর্তন",
   "changeLocation": "Change location",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "পাসওয়ার্ড পরিবর্তনে ত্রুটি দেখা দিয়েছে",
   "footerlogo": "Footer Logo",
   "invalidCredentials": "ইউজারনেম অথবা পাসওয়ার্ড সঠিক নয়",
-  "learnMore": "আরো জানুন",
   "loggingIn": "লগ ইন হচ্ছে",
   "login": "লগ ইন",
   "loginButtonIconDescription": "লগ ইন বাটন",

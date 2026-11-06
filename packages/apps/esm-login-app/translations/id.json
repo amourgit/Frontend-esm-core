@@ -1,5 +1,4 @@
 {
-  "builtWith": "Dibangun dengan",
   "cancel": "Batal",
   "change": "Ubah",
   "changeLocation": "Ubah lokasi",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Gagal mengubah kata sandi",
   "footerlogo": "Logo Footer",
   "invalidCredentials": "Username atau kata sandi tidak valid",
-  "learnMore": "Pelajari lebih lanjut",
   "loggingIn": "Sedang masuk",
   "login": "Masuk",
   "loginButtonIconDescription": "Tombol masuk",

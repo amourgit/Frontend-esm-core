@@ -1,5 +1,4 @@
 {
-  "builtWith": "Built with",
   "cancel": "Cancel",
   "change": "ផ្លាស់ប្តូរ",
   "changeLocation": "Change location",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Error changing password",
   "footerlogo": "Footer Logo",
   "invalidCredentials": "ឈ្មោះអ្នកប្រើប្រាស់ និងលេខកូដសំងាត់មិនត្រឹមត្រូវ",
-  "learnMore": "Learn more",
   "loggingIn": "ចូលប្រើប្រព័ន្ធ",
   "login": "ឡកចូលក្នុងប្រព័ន្ធ",
   "loginButtonIconDescription": "Log in button",

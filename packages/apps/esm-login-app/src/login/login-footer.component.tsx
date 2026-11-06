@@ -1,11 +1,15 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight } from 'lucide-react';
 import { useConfig } from '@egen-civitas/esm-framework';
-import { egenLogoFull } from '../brand';
+import { civitasLogoWordmark, civitasWebsite } from '../brand';
 import { type ConfigSchema } from '../config-schema';
 
-/** Pied de page de la connexion : « Built with EGEN », lien d'info et logos additionnels (`footer.additionalLogos`). */
+/**
+ * Pied de page de la connexion : crédit de l'éditeur (logo CIVITAS, lien vers son site) et logos additionnels
+ * (`footer.additionalLogos`). EGEN est le produit, CIVITAS l'entreprise qui l'a créé : c'est elle qui est créditée ici.
+ *
+ * Le logo CIVITAS est argenté : il est posé sur une pastille sombre pour rester lisible quel que soit le thème.
+ */
 export const LoginFooter: React.FC = () => {
   const { t } = useTranslation();
   const config = useConfig<ConfigSchema>();
@@ -18,18 +22,17 @@ export const LoginFooter: React.FC = () => {
   return (
     <footer className="relative z-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-border/40 bg-card/60 px-4 py-3 text-xs text-muted-foreground backdrop-blur-md">
       <div className="flex flex-wrap items-center justify-center gap-2">
-        <span>{t('builtWith', 'Built with')}</span>
-        <img alt={t('egenLogo', 'Egen logo')} className="h-7 w-auto object-contain" src={egenLogoFull} />
-        <span className="hidden sm:inline">{t('poweredBySubtext', 'La plateforme éducative nationale du Gabon')}</span>
+        <span>{t('builtBy', 'Built by')}</span>
         <a
-          className="inline-flex items-center gap-1 font-semibold text-foreground/80 transition-colors hover:text-foreground"
-          href="https://egen.alpha.vercel.com"
+          aria-label={t('civitasLinkLabel', 'Visit the CIVITAS website (opens in a new tab)')}
+          className="inline-flex items-center rounded-md bg-[#0e0e11] px-3 py-1.5 shadow-sm ring-1 ring-black/10 transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          href={civitasWebsite}
           rel="noopener noreferrer"
           target="_blank"
         >
-          {t('learnMore', 'Learn more')}
-          <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+          <img alt={t('civitasLogo', 'CIVITAS logo')} className="h-5 w-auto object-contain" src={civitasLogoWordmark} />
         </a>
+        <span className="hidden sm:inline">{t('poweredBySubtext', 'La plateforme éducative nationale du Gabon')}</span>
       </div>
 
       {logos.length > 0 && (

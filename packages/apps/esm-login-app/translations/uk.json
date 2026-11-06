@@ -1,5 +1,4 @@
 {
-  "builtWith": "Built with",
   "cancel": "Cancel",
   "change": "Change",
   "changeLocation": "Change location",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Error changing password",
   "footerlogo": "Footer Logo",
   "invalidCredentials": "Invalid username or password",
-  "learnMore": "Learn more",
   "loggingIn": "Logging in",
   "login": "Логін",
   "loginButtonIconDescription": "Log in button",

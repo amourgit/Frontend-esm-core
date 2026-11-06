@@ -1,5 +1,4 @@
 {
-  "builtWith": "Built with",
   "cancel": "Cancel",
   "change": "Change",
   "changeLocation": "Change location",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Error changing password",
   "footerlogo": "Footer Logo",
   "invalidCredentials": "Jina la mtumiaji au nenosiri batili",
-  "learnMore": "Learn more",
   "loggingIn": "Logging in",
   "login": "Ingia",
   "loginButtonIconDescription": "Log in button",
