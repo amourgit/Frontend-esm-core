@@ -24,20 +24,15 @@ Les deux sont en PNG RGBA (fond transparent) et lisibles sur fond clair comme so
 **Ne pas leur appliquer de filtre CSS** (`brightness(0) invert(1)` etc.) : ce sont des
 logos en couleurs.
 
-## Les variantes CIVITAS
+## Le logo CIVITAS
 
-| Variante | Fichier | Usage |
-| --- | --- | --- |
-| **Lockup complet** (tête + « CIVITAS » + signature) | `civitas-logo-full.png` (392 × 422) | emplacements hauts : page de présentation, document, écran d'accueil |
-| **Nom seul** « CIVITAS » | `civitas-logo-wordmark.png` (374 × 67) | emplacements bas et larges : pied de page, signature |
+| Fichier | Usage |
+| --- | --- |
+| `civitas-logo-full.png` (392 × 422) | logo complet (tête + « CIVITAS » + signature), tel que fourni : pied de page de la connexion, mentions d'éditeur |
 
-Le lockup est **vertical** : réduit à la hauteur d'un pied de page, le nom y devient illisible ;
-c'est pourquoi le nom seul existe (il en est la 2e bande, extraite telle quelle, sans retouche).
-Les masters ne font que 500 px : les dérivés gardent cette résolution (aucun agrandissement).
-
-**Le logo CIVITAS est argenté/blanc** : lisible sur fond sombre, très pâle sur fond clair. Toujours
-le poser sur un **fond sombre** (pastille, bandeau), jamais directement sur un fond clair ni avec un
-filtre CSS. Voir le pied de page de la connexion.
+C'est le logo fourni, sans retouche : seules les marges transparentes sont rognées pour qu'il remplisse
+l'espace qu'on lui donne. Le master ne fait que 500 px : le dérivé garde cette résolution (aucun
+agrandissement). Le logo est argenté/blanc : il se lit mieux sur fond sombre que sur fond clair.
 
 ## Arborescence
 
@@ -49,9 +44,8 @@ branding/
 │   └── civitas-logo-full-master.png  500 × 500
 ├── egen-logo-icon.png            Version web du logo seul   (dérivée du master)
 ├── egen-logo-full.png            Version web du logo complet (dérivée du master)
-├── civitas-logo-full.png         CIVITAS, lockup complet (dérivé du master)
-├── civitas-logo-wordmark.png     CIVITAS, nom seul        (dérivé du master)
-├── generate-derivatives.py       Régénère les 6 dérivés depuis les masters
+├── civitas-logo-full.png         CIVITAS, logo complet    (dérivé du master)
+├── generate-derivatives.py       Régénère les 5 dérivés depuis les masters
 └── shell/                        Surcouche fournie à l'app-shell du framework
     ├── favicon.ico                   16/32/48/64 px — LOGO SEUL
     └── icon-512.png                  icône PWA 512 px — LOGO SEUL
@@ -67,13 +61,13 @@ fichiers de ce dossier. Importer **toujours** depuis ce module, jamais le PNG
 directement, et ne jamais en copier un dans une app :
 
 ```ts
-import { egenLogoFull, egenLogoIcon, civitasLogoWordmark, civitasWebsite } from '../brand'; // chemin relatif au fichier
+import { egenLogoFull, egenLogoIcon, civitasLogoFull, civitasWebsite } from '../brand'; // chemin relatif au fichier
 
 <img src={egenLogoFull} alt="EGEN" className="h-11 w-auto" />
 ```
 
 Apps concernées aujourd'hui : `esm-primary-navigation-app` (les deux variantes EGEN) et
-`esm-login-app` (logo EGEN complet, et CIVITAS nom seul + `civitasWebsite` pour le pied de page). Pour en ajouter une, créer son `src/brand.ts`
+`esm-login-app` (logo EGEN complet, et logo CIVITAS complet + `civitasWebsite` pour le pied de page). Pour en ajouter une, créer son `src/brand.ts`
 en ne ré-exportant **que les variantes utilisées** (chaque import est embarqué dans le
 bundle de l'app). Le chemin relatif vers `branding/` est toujours `../../../../branding/`
 depuis `packages/apps/<app>/src/`. L'app doit aussi déclarer `*.png` dans son
@@ -97,5 +91,5 @@ depuis les masters : recadrage sur le contenu réel,
 suppression du voile alpha résiduel du détourage, redimensionnement (alpha
 prémultiplié), puis export. Si un master change, régénérer **les quatre** fichiers
 (`egen-logo-icon.png`, `egen-logo-full.png`, `shell/favicon.ico`, `shell/icon-512.png`)
-pour qu'ils restent cohérents. Les deux dérivés CIVITAS (`civitas-logo-full.png`,
-`civitas-logo-wordmark.png`) ne dépendent que de `source/civitas-logo-full-master.png`.
+pour qu'ils restent cohérents. Le dérivé CIVITAS (`civitas-logo-full.png`) ne dépend que de
+`source/civitas-logo-full-master.png`.

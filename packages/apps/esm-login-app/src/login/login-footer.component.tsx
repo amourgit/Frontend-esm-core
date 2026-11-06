@@ -1,14 +1,15 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '@egen-civitas/esm-framework';
-import { civitasLogoWordmark, civitasWebsite } from '../brand';
+import { civitasLogoFull, civitasWebsite } from '../brand';
 import { type ConfigSchema } from '../config-schema';
 
 /**
  * Pied de page de la connexion : crédit de l'éditeur (logo CIVITAS, lien vers son site) et logos additionnels
  * (`footer.additionalLogos`). EGEN est le produit, CIVITAS l'entreprise qui l'a créé : c'est elle qui est créditée ici.
  *
- * Le logo CIVITAS est argenté : il est posé sur une pastille sombre pour rester lisible quel que soit le thème.
+ * Le logo CIVITAS est le logo complet fourni, sans retouche. Sa hauteur s'adapte à l'espace disponible : elle suit la
+ * hauteur de la fenêtre (9 %), bornée entre 3,5 rem et 6 rem, pour rester lisible sans écraser la page.
  */
 export const LoginFooter: React.FC = () => {
   const { t } = useTranslation();
@@ -25,12 +26,16 @@ export const LoginFooter: React.FC = () => {
         <span>{t('builtBy', 'Built by')}</span>
         <a
           aria-label={t('civitasLinkLabel', 'Visit the CIVITAS website (opens in a new tab)')}
-          className="inline-flex items-center rounded-md bg-[#0e0e11] px-3 py-1.5 shadow-sm ring-1 ring-black/10 transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          className="inline-flex items-center rounded-md transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           href={civitasWebsite}
           rel="noopener noreferrer"
           target="_blank"
         >
-          <img alt={t('civitasLogo', 'CIVITAS logo')} className="h-5 w-auto object-contain" src={civitasLogoWordmark} />
+          <img
+            alt={t('civitasLogo', 'CIVITAS logo')}
+            className="h-[clamp(3.5rem,9vh,6rem)] w-auto object-contain"
+            src={civitasLogoFull}
+          />
         </a>
         <span className="hidden sm:inline">{t('poweredBySubtext', 'La plateforme éducative nationale du Gabon')}</span>
       </div>
