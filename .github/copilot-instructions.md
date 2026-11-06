@@ -164,7 +164,7 @@ Follow the conventions at https://egen.alpha.vercel.com/docs/coding-conventions/
 
 ## PR Title and Description Format
 
-Title format: `(type) Short description` - e.g., `(feat) Add patient search to login page`
+Title format: `(type) Short description` - e.g., `(feat) Add search to login page`
 
 Allowed types: `feat`, `fix`, `chore`, `docs`, `test`, `BREAKING`. Do **not** use `refactor`.
 

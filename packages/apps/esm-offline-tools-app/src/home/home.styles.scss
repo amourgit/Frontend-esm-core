@@ -1,7 +1,7 @@
 @use '@carbon/layout';
 @use '@egen-civitas/esm-styleguide/src/vars' as *;
 
-.offlinePatientsTableContainer {
+.offlineEntitiesTableContainer {
   border-top: 1px solid $ui-03;
   padding: layout.$spacing-05;
 }

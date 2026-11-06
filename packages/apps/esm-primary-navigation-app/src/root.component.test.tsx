@@ -46,7 +46,7 @@ vi.mock('react-router-dom', () => ({
 }));
 
 vi.mock('./components/topbar/topbar.component', () => ({
-  default: () => <div data-testid="navbar">Mock EMR</div>,
+  default: () => <div data-testid="navbar">Mock App</div>,
 }));
 
 const mockUseConfig = vi.mocked(useConfig);
@@ -55,7 +55,7 @@ const mockUseSession = vi.mocked(useSession);
 const mockIsDesktop = vi.mocked(isDesktop);
 
 mockUseConfig.mockReturnValue({
-  logo: { src: null, alt: null, name: 'Mock EMR', link: 'Mock EMR' },
+  logo: { src: null, alt: null, name: 'Mock App', link: 'Mock App' },
 });
 mockUseAssignedExtensions.mockReturnValue(['mock-extension'] as unknown as AssignedExtension[]);
 mockUseSession.mockReturnValue(mockSession as unknown as Session);

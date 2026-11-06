@@ -7,7 +7,7 @@ import styles from './home.styles.scss';
 
 /**
  * The offline tool's home/dashboard page.
- * Renders the overview cards and provides an extension slot for the read-only offline patient table.
+ * Renders the overview cards and provides an extension slot for the read-only offline entities table.
  *
  * Designs: https://egen.alpha.vercel.com/design-system
  */

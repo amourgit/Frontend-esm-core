@@ -11,12 +11,6 @@
   "footerlogo": "Logo subsol",
   "invalidCredentials": "Nume de utilizator sau parolă incorectă",
   "learnMore": "Află mai multe",
-  "locationPreferenceRemoved": "Preferința pentru locație a fost eliminată",
-  "locationPreferenceRemovedMessage": "Va trebui să selectezi o locație la fiecare autentificare",
-  "locationSaved": "Locație salvată",
-  "locationSaveMessage": "Locația preferată a fost salvată pentru autentificările viitoare",
-  "locationUpdated": "Locație actualizată",
-  "locationUpdateMessage": "Locația preferată pentru autentificare a fost actualizată",
   "loggingIn": "Autentificare în curs",
   "login": "Autentificare",
   "loginButtonIconDescription": "Buton de autentificare",
@@ -30,12 +24,7 @@
   "passwordChangedSuccessfully": "Parola a fost schimbată cu succes",
   "passwordConfirmationRequired": "Confirmarea parolei este obligatorie",
   "passwordsDoNotMatch": "Parolele nu se potrivesc",
-  "poweredBySubtext": "Un sistem open-source pentru evidența medicală și o comunitate globală",
-  "rememberLocationForFutureLogins": "Ține minte locația pentru autentificări viitoare",
-  "selectYourLocation": "Selectează locația din lista de mai jos. Folosește bara de căutare pentru a o găsi.",
   "showPassword": "Afișează parola",
-  "submitting": "Se trimite",
   "username": "Nume de utilizator",
-  "validValueRequired": "Este necesară o valoare validă",
-  "welcome": "Bun venit"
+  "validValueRequired": "Este necesară o valoare validă"
 }

@@ -30,10 +30,11 @@ import {
   type SyncItem,
 } from '@egen-civitas/esm-framework';
 import styles from './offline-actions-table.styles.scss';
+import type { OfflineEntity } from '../types';
 
 export interface SyncItemWithEntity {
   item: SyncItem;
-  entity?: fhir.Patient;
+  entity?: OfflineEntity;
 }
 
 type OfflineActionsTableHeaders = 'createdOn' | 'entity' | 'action' | 'error';
@@ -164,8 +165,7 @@ const TableSkeleton: React.FC = () => (
 
 function getEntityName({ item, entity }: SyncItemWithEntity) {
   if (!item.descriptor?.entityUuid) return undefined;
-  const name = entity?.name?.[0];
-  return name ? `${(name.given ?? []).join(' ')} ${name.family}` : item.descriptor.entityUuid;
+  return entity?.name || item.descriptor.entityUuid;
 }
 
 function ActionNameLink({ syncItem }: { syncItem: SyncItem }) {

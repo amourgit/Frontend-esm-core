@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import OfflineActionsTable, { type SyncItemWithEntity } from './offline-actions-table.component';
 import { usePendingSyncItems, useSyncItemEntities } from '../hooks/offline-actions';
 import NoActionsEmptyState from './no-actions-empty-state.component';
+import type { OfflineEntity } from '../types';
 
 export interface OfflineActionsProps {
   /** If specified, shows a single entity's offline actions only. */
@@ -65,7 +66,7 @@ const OfflineActions: React.FC<OfflineActionsProps> = ({ entityUuid }) => {
 
 function getSyncItemsWithEntity(
   syncItems: Array<SyncItem> = [],
-  entities: Array<fhir.Patient> = [],
+  entities: Array<OfflineEntity> = [],
 ): Array<SyncItemWithEntity> {
   return syncItems.map((item) => ({
     item,

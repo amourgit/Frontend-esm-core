@@ -102,7 +102,7 @@
       "offline": true
     },
     {
-      "name": "offline-tools-dashboard-patients-card",
+      "name": "offline-tools-dashboard-entities-card",
       "slot": "offline-tools-dashboard-cards",
       "component": "offlineToolsEntitiesCard",
       "online": true,

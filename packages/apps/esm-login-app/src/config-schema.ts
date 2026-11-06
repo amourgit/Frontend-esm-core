@@ -29,33 +29,6 @@ export const configSchema = {
         `Provider type '${provider.type}' requires an explicit loginUrl that is not the default SPA login route.`,
     ),
   ],
-  chooseLocation: {
-    enabled: {
-      _type: Type.Boolean,
-      _default: true,
-      _description:
-        "Whether to show a 'Choose Location' screen after login. " +
-        "If true, the user will be taken to the URL set in the 'links.loginSuccess' config property after choosing a location.",
-    },
-    numberToShow: {
-      _type: Type.Number,
-      _default: 8,
-      _description: 'The number of locations displayed in the location picker.',
-      _validators: [validator((v: unknown) => typeof v === 'number' && v > 0, 'Must be greater than zero')],
-    },
-    locationsPerRequest: {
-      _type: Type.Number,
-      _default: 50,
-      _description: 'The number of results to fetch in each cycle of infinite scroll.',
-      _validators: [validator((v: unknown) => typeof v === 'number' && v > 0, 'Must be greater than zero')],
-    },
-    useLoginLocationTag: {
-      _type: Type.Boolean,
-      _default: true,
-      _description:
-        "Whether to display only locations with the 'Login Location' tag. If false, all locations are shown.",
-    },
-  },
   links: {
     loginSuccess: {
       _type: Type.String,
@@ -200,12 +173,6 @@ export interface ConfigSchema {
   background: {
     image: string;
     color: string;
-  };
-  chooseLocation: {
-    enabled: boolean;
-    locationsPerRequest: number;
-    numberToShow: number;
-    useLoginLocationTag: boolean;
   };
   footer: {
     additionalLogos: Array<{

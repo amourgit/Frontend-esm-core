@@ -11,12 +11,6 @@
   "footerlogo": "Logo Footer",
   "invalidCredentials": "Username atau kata sandi tidak valid",
   "learnMore": "Pelajari lebih lanjut",
-  "locationPreferenceRemoved": "Preferensi lokasi login dihapus",
-  "locationPreferenceRemovedMessage": "Anda perlu memilih lokasi setiap kali login",
-  "locationSaved": "Lokasi disimpan",
-  "locationSaveMessage": "Lokasi pilihan Anda telah disimpan untuk login berikutnya",
-  "locationUpdated": "Lokasi diperbarui",
-  "locationUpdateMessage": "Lokasi login pilihan Anda telah diperbarui",
   "loggingIn": "Sedang masuk",
   "login": "Masuk",
   "loginButtonIconDescription": "Tombol masuk",
@@ -30,12 +24,7 @@
   "passwordChangedSuccessfully": "Kata sandi berhasil diubah",
   "passwordConfirmationRequired": "Konfirmasi kata sandi wajib diisi",
   "passwordsDoNotMatch": "Kata sandi tidak cocok",
-  "poweredBySubtext": "Sistem rekam medis sumber terbuka dan komunitas global",
-  "rememberLocationForFutureLogins": "Ingat lokasi saya untuk login berikutnya",
-  "selectYourLocation": "Pilih lokasi Anda dari daftar berikut. Gunakan bilah pencarian untuk menemukan lokasi Anda.",
   "showPassword": "Tampilkan kata sandi",
-  "submitting": "Mengirim",
   "username": "Nama pengguna",
-  "validValueRequired": "Nilai yang valid diperlukan",
-  "welcome": "Selamat datang"
+  "validValueRequired": "Nilai yang valid diperlukan"
 }

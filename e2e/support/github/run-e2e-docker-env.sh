@@ -210,43 +210,9 @@ jq -n \
   --arg apps "$apps" \
   --arg app_names "$(echo ${app_names[@]})" \
   '{
-    "@egen/esm-active-visits-app": "next",
-    "@egen/esm-appointments-app": "next",
-    "@egen/esm-bed-management-app": "next",
-    "@egen/esm-cohort-builder-app": "next",
-    "@egen/esm-dispensing-app": "next",
-    "@egen/esm-fast-data-entry-app": "next",
-    "@egen/esm-form-builder-app": "next",
-    "@egen/esm-form-engine-app": "next",
-    "@egen/esm-generic-patient-widgets-app": "next",
     "@egen/esm-home-app": "next",
-    "@egen/esm-laboratory-app": "next",
-    "@egen/esm-openconceptlab-app": "next",
-    "@egen/esm-patient-allergies-app": "next",
-    "@egen/esm-patient-attachments-app": "next",
-    "@egen/esm-patient-banner-app": "next",
-    "@egen/esm-patient-chart-app": "next",
-    "@egen/esm-patient-conditions-app": "next",
-    "@egen/esm-patient-flags-app": "next",
-    "@egen/esm-patient-forms-app": "next",
-    "@egen/esm-patient-immunizations-app": "next",
-    "@egen/esm-patient-list-management-app": "next",
-    "@egen/esm-patient-lists-app": "next",
-    "@egen/esm-patient-medications-app": "next",
-    "@egen/esm-patient-notes-app": "next",
-    "@egen/esm-patient-orders-app": "next",
-    "@egen/esm-patient-programs-app": "next",
-    "@egen/esm-patient-registration-app": "next",
-    "@egen/esm-patient-search-app": "next",
-    "@egen/esm-patient-task-list-app": "next",
-    "@egen/esm-patient-tests-app": "next",
-    "@egen/esm-patient-vitals-app": "next",
-    "@egen/esm-service-queues-app": "next",
     "@egen/esm-system-admin-app": "next",
-    "@egen/esm-user-onboarding-app": "next",
-    "@egen/esm-ward-app": "next",
-    "@egen/esm-stock-management-app": "next",
-    "@egen/esm-billing-app": "next"
+    "@egen/esm-user-onboarding-app": "next"
   } + (
     ($apps | split("\n")) as $apps | ($app_names | split(" ") | map("/app/" + .)) as $app_files
     | [$apps, $app_files]

@@ -14,8 +14,6 @@ test('View action buttons in the navbar', async ({ page }) => {
     await page.getByLabel(/^password$/i).waitFor({ state: 'visible', timeout: 10000 });
     await page.getByLabel(/^password$/i).fill(`${process.env.E2E_USER_ADMIN_PASSWORD}`);
     await page.getByRole('button', { name: /log in/i }).click();
-    await page.getByText(/outpatient clinic/i).click();
-    await page.getByRole('button', { name: /confirm/i }).click();
   });
 
   await test.step('When I visit the home page', async () => {
@@ -23,8 +21,6 @@ test('View action buttons in the navbar', async ({ page }) => {
   });
 
   await test.step('Then the action buttons should be in the top nav', async () => {
-    await expect(topNav.getByRole('button', { name: /search patient/i })).toBeVisible();
-    await expect(topNav.getByRole('button', { name: /add patient/i })).toBeVisible();
     await expect(topNav.getByRole('button', { name: /implementer tools/i })).toBeVisible();
     await expect(topNav.getByRole('button', { name: /my account/i })).toBeVisible();
     await expect(topNav.getByRole('button', { name: /app menu/i })).toBeVisible();

@@ -25,13 +25,6 @@
   ],
   "extensions": [
     {
-      "name": "location-picker",
-      "slot": "location-picker",
-      "component": "locationPicker",
-      "online": true,
-      "offline": true
-    },
-    {
       "name": "logout-button",
       "slot": "user-panel-bottom-slot",
       "component": "logoutButton",
@@ -44,14 +37,6 @@
       "component": "changePasswordLink",
       "online": true,
       "offline": true
-    },
-    {
-      "name": "location-changer",
-      "slot": "context-switcher-footer-slot",
-      "component": "changeLocationLink",
-      "online": true,
-      "offline": true,
-      "order": 10
     }
   ],
   "modals": [

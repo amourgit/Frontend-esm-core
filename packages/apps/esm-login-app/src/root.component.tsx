@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ChangePassword from './change-password/change-password.component';
-import LocationPickerView from './location-picker/location-picker-view.component';
 import RedirectLogout from './redirect-logout/redirect-logout.component';
 
 // Chargé à la demande : le CSS Tailwind de la page de connexion (et ses
@@ -28,7 +27,6 @@ const Root: React.FC = () => {
             </Suspense>
           }
         />
-        <Route path="login/location" element={<LocationPickerView />} />
         <Route path="logout" element={<RedirectLogout />} />
         <Route path="change-password" element={<ChangePassword />} />
       </Routes>

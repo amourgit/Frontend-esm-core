@@ -3,15 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Link, Tag } from '@carbon/react';
 import { navigate } from '@egen-civitas/esm-framework';
 import styles from './entity-name-table-cell.scss';
+import type { OfflineEntity } from '../types';
 
 export interface EntityNameTableCellProps {
-  entity: fhir.Patient;
+  entity: OfflineEntity;
   isNewlyRegistered?: boolean;
 }
 
 const EntityNameTableCell: React.FC<EntityNameTableCellProps> = ({ entity, isNewlyRegistered = false }) => {
   const { t } = useTranslation();
-  const name = `${[entity.name?.[0]?.given, entity.name?.[0]?.family].filter(Boolean).join(' ')}`;
+  const name = entity.name ?? entity.id;
 
   return (
     <div className={styles.cellContainer}>
