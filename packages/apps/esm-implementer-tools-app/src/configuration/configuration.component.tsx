@@ -83,12 +83,11 @@ export const Configuration: React.FC = () => {
     const result = cloneDeep(config);
     for (let slot of Object.values(extensionStore.slots)) {
       if (slot.moduleName) {
-        if (!result[slot.moduleName].extensionSlots) {
-          result[slot.moduleName].extensionSlots = {};
-        }
-        if (!result[slot.moduleName].extensionSlots[slot.name]) {
-          result[slot.moduleName].extensionSlots[slot.name] = {};
-        }
+        // Un slot peut appartenir à un module sans schéma de configuration (ex. slots de la TopBar, des rails) :
+        // on crée la branche au lieu de lire `undefined.extensionSlots` (ce qui faisait planter toute la zone).
+        const moduleConfig = (result[slot.moduleName] ??= {});
+        const slots = (moduleConfig.extensionSlots ??= {});
+        slots[slot.name] ??= {};
       }
     }
     return result;
@@ -114,9 +113,10 @@ export const Configuration: React.FC = () => {
     return filterText ? getRelatedBranches(combinedConfig, filterText) : combinedConfig;
   }, [filterText, combinedConfig]);
 
-  const mainContentHeight = isConfigToolbarOpen ? 'calc(50vh - 7rem)' : 'calc(50vh - 2rem)';
+  // La zone basse est redimensionnable par le shell : le contenu remplit l'espace restant (plus de hauteur en vh).
+  const mainContentHeight = '100%';
   return (
-    <>
+    <div className={styles.root}>
       <div className={styles.tools}>
         <div className={styles.toggleToolbarButton}>
           <OpenOrCloseButton isConfigToolbarOpen={isConfigToolbarOpen} toggleIsToolbarOpen={toggleIsToolbarOpen} />
@@ -183,7 +183,7 @@ export const Configuration: React.FC = () => {
           </FlexGrid>
         ) : null}
       </div>
-      <div className={styles.mainContent} style={{ height: mainContentHeight }}>
+      <div className={styles.mainContent}>
         {isJsonModeEnabled ? (
           <JsonEditor height={mainContentHeight} />
         ) : (
@@ -197,6 +197,6 @@ export const Configuration: React.FC = () => {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };

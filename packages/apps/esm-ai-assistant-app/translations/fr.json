@@ -3,6 +3,7 @@
   "assistantActions": "Actions exécutées par l'assistant",
   "assistantClose": "Fermer l'assistant",
   "assistantConnectionError": "Connexion à l'assistant impossible pour le moment.",
+  "assistantDisabled": "L'assistant IA n'est pas activé sur cet environnement.",
   "assistantError": "Une erreur est survenue.",
   "assistantIncompatible": "Version de l'assistant incompatible avec le serveur.",
   "assistantListening": "Je vous écoute…",

@@ -1,12 +1,5 @@
+import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle, toggleToolWindow } from '@egen-civitas/esm-framework';
 import {
-  defineConfigSchema,
-  getAsyncLifecycle,
-  getSyncLifecycle,
-  registerToolWindow,
-  toggleToolWindow,
-} from '@egen-civitas/esm-framework';
-import {
-  getAIConfig,
   initAIFramework,
   defineAIModule,
   getRoutesCatalogForLLM,
@@ -81,17 +74,8 @@ export function startupApp() {
     ],
   });
 
-  // Couche 1 IA désactivée (EGEN_AI_ENABLED=false) : aucune option dans le rail, absence silencieuse.
-  if (!getAIConfig().enabled) return;
-
-  registerToolWindow({
-    moduleName,
-    name: ASSISTANT_TOOL_WINDOW,
-    anchor: 'bottom',
-    meta: { title: 'Assistant IA', titleKey: 'assistant', icon: 'Bot', order: 10, global: true, rail: 'right' },
-    load: assistantRailPanel,
-  });
-
+  // L'option « Assistant IA » du rail droit est déclarée dans routes.json (comme Aide, Logs, Implementer Tools) :
+  // visible dès le montage du shell, sans dépendre de l'ordre de chargement de cette app.
   // Bascule demandée depuis la TopBar (bouton Assistant IA du niveau 2) — événement window :
   // aucune dépendance de code entre les deux apps.
   window.addEventListener('egen:assistant-toggle', () => toggleToolWindow('bottom', ASSISTANT_TOOL_WINDOW));
