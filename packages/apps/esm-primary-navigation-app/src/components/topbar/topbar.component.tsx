@@ -11,18 +11,18 @@ import { SiteProvider } from '../../intranet-topbar/context/SiteContext';
 //
 //  La TopBar vit ENTIÈREMENT dans cette app (`src/intranet-topbar`) : elle ne
 //  dépend plus du composant `TopBar` / `TopBarIconButton` / `TopBarAvatar` du
-//  framework. Deux niveaux :
+//  framework. Une pile de N niveaux (nombre déduit du contenu et de `topbar.levels`),
+//  chacun fait de trois régions : gauche · centre · droite. N'importe quelle app peut
+//  y placer des composants (slots `topbar-l<N>-<région>-slot`, voir kit/regions.ts).
 //
-//  Niveau 1 : [Hamburger] Logo EGEN · sélecteurs Espace/Site · (info-slot) ·
-//             Recherche Gooey · Langue · Apps · Raccourcis · Notifications ·
-//             Plein écran · Thème · (actions-slot) · Utilisateur ·
-//             (trailing-slot) · Date/Heure
-//  Niveau 2 : Navigation déroulante (accueil) ou fil d'Ariane contextuel
-//             (+ slots "top-nav-level2-start-slot", "top-nav-breadcrumb-slot" et
-//             "top-nav-level2-end-slot" — ce dernier accueille p.ex. le bouton Assistant IA)
+//  Placement d'usine des éléments globaux (modifiable via `topbar.placement`,
+//  voir intranet-topbar/global/placement.ts) :
+//    l1 : Logo EGEN · sélecteurs Espace/Site | Recherche · Langue · Apps · Raccourcis ·
+//         Plein écran · Thème · Utilisateur · Date/Heure
+//    l2 : Navigation déroulante (accueil) ou fil d'Ariane contextuel
 // =============================================================================
 
-/** Publie la hauteur réelle de la TopBar (2 niveaux) dans `--egen-topnav-height`. */
+/** Publie la hauteur réelle de la TopBar (tous niveaux confondus) dans `--egen-topnav-height`. */
 function useTopNavHeightVariable(ref: React.RefObject<HTMLDivElement>) {
   useEffect(() => {
     const element = ref.current;

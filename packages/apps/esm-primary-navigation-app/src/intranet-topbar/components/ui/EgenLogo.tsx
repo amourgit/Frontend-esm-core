@@ -1,6 +1,6 @@
 import React from 'react';
 import { egenLogoFull, egenLogoIcon } from '../../../brand';
-import styles from '../shell/topbar-level1.scss';
+import styles from '../shell/topbar-global-items.scss';
 
 interface EgenLogoProps {
   className?: string;

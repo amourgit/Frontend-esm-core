@@ -16,7 +16,7 @@ import { useWorkspace } from '../../context/WorkspaceContext';
 import { useSite } from '../../context/SiteContext';
 import { playXboxSound } from '../../utils/xboxAudio';
 import { type SiteItem } from '../../data/sitesData';
-import styles from './topbar-level1.scss';
+import styles from './topbar-global-items.scss';
 
 // =============================================================================
 //  Sélecteurs du niveau 1 de la TopBar (à droite du logo)
@@ -28,7 +28,7 @@ import styles from './topbar-level1.scss';
 //     de la page de démonstration du home (items avec `group`, `icon`, `description`).
 //
 //  Mise en page : en desktop (≥ 1024px) les deux sélecteurs sont en ligne ; en tablette / mobile
-//  ils sont en colonne (voir `.selectors` dans topbar-level1.scss).
+//  ils sont en colonne (voir `.selectors` dans topbar-global-items.scss).
 // =============================================================================
 
 interface WorkspaceAndSiteSelectorsColumnProps {

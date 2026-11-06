@@ -14,7 +14,10 @@ import { findEmployeeByParam, getEmployeeUuid } from "../../data/directoryData";
 import { playXboxSound } from "../../utils/xboxAudio";
 
 // =============================================================================
-//  FIL D'ARIANE — NIVEAU 2 DE LA TOPBAR
+//  FIL D'ARIANE DE LA TOPBAR
+//
+//  Élément de navigation : il s'affiche dans la région que lui attribue `global/placement.ts` (par défaut au
+//  centre du niveau 2), sans rien supposer du niveau où il se trouve.
 //
 //  Qui fait quoi, dans l'ordre :
 //   1. `buildBreadcrumbModel` (utils/) lit l'arbre de navigation + le chemin courant et produit
@@ -46,7 +49,7 @@ interface ChainItem {
 
 const TEXT = "text-[11px] sm:text-xs md:text-sm";
 
-export function BreadcrumbLevel2Nav({ onToggleFullMenu }: Props) {
+export function BreadcrumbNav({ onToggleFullMenu }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
   const { workspaceId, currentWorkspace } = useWorkspace();

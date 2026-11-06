@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 // Test de cohérence : chaque entrée de navigation déclarée sur le slot
-// `topbar-level2-nav` doit pointer vers une route réellement déclarée dans un
+// `topbar-nav-slot` (ou son ancien nom `topbar-level2-nav`) doit pointer vers une route réellement déclarée dans un
 // `pages[].route` d'une app (route exacte ou sous-route d'une page).
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
-const SLOT = 'topbar-level2-nav';
+// Nom officiel puis ancien nom : les deux sont lus par la TopBar et par le panneau de section du rail.
+const NAV_SLOTS = ['topbar-nav-slot', 'topbar-level2-nav'];
 const RAIL_SLOTS = ['shell-rail-left-slot', 'shell-rail-bottom-slot', 'shell-rail-right-slot'];
 const appsDir = 'packages/apps';
 const norm = (r) => String(r).replace(/^\/+|\/+$/g, '');
@@ -21,7 +22,7 @@ for (const file of routesFiles) {
   const json = JSON.parse(readFileSync(file, 'utf8'));
   for (const p of json.pages ?? []) if (typeof p.route === 'string') pageRoutes.push(norm(p.route));
   for (const e of json.extensions ?? []) {
-    if (e.slot === SLOT) entries.push({ file, e });
+    if (NAV_SLOTS.includes(e.slot)) entries.push({ file, e });
     if (RAIL_SLOTS.includes(e.slot)) railEntries.push({ file, e });
   }
 }
@@ -85,7 +86,7 @@ for (const app of readdirSync(appsDir)) {
     if (!/\.(tsx?|scss|css|json)$/.test(f) || /\.test\.tsx?$/.test(f)) continue;
     const text = readFileSync(f, 'utf8');
     for (const re of FORBIDDEN_SIDEBAR) {
-      if (re.test(text)) errors.push(`${f}: sidebar interdite (${re}) — utiliser un rail (shell-rail-*-slot) et topbar-level2-nav`);
+      if (re.test(text)) errors.push(`${f}: sidebar interdite (${re}) — utiliser un rail (shell-rail-*-slot) et topbar-nav-slot`);
     }
   }
 }

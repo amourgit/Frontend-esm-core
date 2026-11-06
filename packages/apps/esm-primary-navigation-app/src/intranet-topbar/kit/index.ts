@@ -7,4 +7,11 @@ export { useDeclaredLevels } from './declared-levels';
 export * from './transient-store';
 export * from './transient-time';
 export { TopBarRegion } from './TopBarRegion';
-export { TopBarLevels, pickBackground, type PrimaryLevelClasses } from './TopBarLevels';
+export {
+  TopBarLevels,
+  pickBackground,
+  COMPACT_SKIN,
+  type LevelSkin,
+  type LevelPosition,
+  type SkinResolver,
+} from './TopBarLevels';

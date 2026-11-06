@@ -28,7 +28,7 @@ export const offlineToolsLink = getSyncLifecycle(offlineToolsLinkComponent, opti
 // Option du rail gauche (slot `shell-rail-left-slot`) : ses sous-options se chargent dans la zone gauche.
 export const offlineToolsRail = getSyncLifecycle(RailPanel, { ...options, featureName: 'offline-tools-rail' });
 
-// Entrées de navigation (slot `topbar-level2-nav`) et enregistrement des pages (slot `offline-tools-page-slot`) :
+// Entrées de navigation (slot `topbar-nav-slot`) et enregistrement des pages (slot `offline-tools-page-slot`) :
 // ne rendent rien, seule leur `meta` (routes.json) est lue (sous-options du rail, TopBar niveau 2, page).
 export const offlineToolsNavEntry = getSyncLifecycle(() => null, { ...options, featureName: 'offline-tools-nav-entry' });
 

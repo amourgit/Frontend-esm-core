@@ -27,7 +27,7 @@ const entry = (over: Partial<NavEntryMeta> = {}, name = `ext-${++n}`): SlotNavEn
 });
 
 describe('buildNavItemsFromSlot', () => {
-  it('sans aucune entrée déclarée : niveau 2 vide (rien de codé en dur)', () => {
+  it('sans aucune entrée déclarée : navigation vide (rien de codé en dur)', () => {
     expect(buildNavItemsFromSlot([], 'intranet', t)).toEqual([]);
   });
 
@@ -76,7 +76,7 @@ describe('buildNavItemsFromSlot', () => {
       expect(buildNavItemsFromSlot(entries, 'extranet', t).map((i) => i.sectionKey)).toEqual(['partenaires', 'aide', 'recherche']);
     });
 
-    it('un espace sans entrée déclarée a un niveau 2 vide', () => {
+    it('un espace sans entrée déclarée a une navigation vide', () => {
       expect(buildNavItemsFromSlot([entries[0]], 'public', t)).toEqual([]);
     });
 

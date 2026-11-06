@@ -1,31 +1,44 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { type NavItem } from './DropdownNavigation';
 import { bindNavSelection } from '../../utils/navSelection';
 import { playXboxSound } from '../../utils/xboxAudio';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { useIsDesktop, useIsMobile } from '../../hooks/useMediaQuery';
-import { TopBarLevels, TopBarUiProvider, type PrimaryLevelClasses, type TopBarUi } from '../../kit';
+import {
+  COMPACT_SKIN,
+  TopBarLevels,
+  TopBarUiProvider,
+  type LevelSkin,
+  type SkinResolver,
+  type TopBarUi,
+} from '../../kit';
 import { useConfig } from '@egen-civitas/esm-framework';
 import { type ConfigSchema } from '../../../config-schema';
 import { GlobalCallbacksProvider } from '../../global/GlobalCallbacks';
 import { TopBarNavProvider } from '../../global/NavContext';
 import { registerGlobalTopBarItems } from '../../global/items';
-import styles from './topbar-level1.scss';
+import styles from './topbar-skeleton.scss';
 
-// Éléments globaux enregistrés une seule fois, avant le premier rendu (pas de scintillement).
+// Éléments globaux enregistrés avec leur placement d'usine avant le premier rendu (pas de scintillement) ;
+// les surcharges de la config `topbar.placement` sont appliquées juste après, avant la première peinture.
 registerGlobalTopBarItems();
 
 /** Chemins considérés comme "accueil" (le core sert l'accueil sur /home ; les autres sont des alias GED). */
 const HOME_PATHS = ['/', '/home', '/accueil'];
 
-const PRIMARY_CLASSES: PrimaryLevelClasses = {
+/** Peau de la première rangée (celle qui porte le logo et la recherche) : rangée pleine, robuste en mobile. */
+const FULL_SKIN: LevelSkin = {
   row: styles.row,
   left: styles.regionLeft,
   center: styles.regionCenter,
   right: styles.regionRight,
   rightFull: styles.regionRightFull,
+  yieldLeftToSearch: true,
 };
+
+/** Habillage par POSITION dans la pile (première rangée / les autres), jamais par numéro de niveau. */
+const skinFor: SkinResolver = ({ isFirst }) => (isFirst ? FULL_SKIN : COMPACT_SKIN);
 
 export interface SupremeIntranetTopBarProps {
   onOpenGlobalSearch?: () => void;
@@ -36,8 +49,8 @@ export interface SupremeIntranetTopBarProps {
 //  TOPBAR — hôte
 //
 //  Ne contient AUCUN élément : il porte l'état d'interface partagé (panneau ouvert, recherche, taille d'écran),
-//  la navigation du niveau 2 et dispose les régions du niveau 1 (gauche / centre / droite). Tout ce qui
-//  s'affiche vient d'éléments globaux (`global/items.tsx`) ou d'extensions d'apps (slots `topbar-*-slot`).
+//  la navigation, et délègue la pile de niveaux à <TopBarLevels> (chaque niveau = régions gauche / centre /
+//  droite, identiques pour tous). Tout ce qui s'affiche vient d'éléments globaux (`global/items.tsx`) ou d'extensions d'apps (slots `topbar-*-slot`).
 //  Contrat complet : kit/regions.ts (régions) et kit/layout-store.ts (personnalisation par une app).
 // =============================================================================
 export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }: SupremeIntranetTopBarProps) {
@@ -51,6 +64,15 @@ export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [showFullNav, setShowFullNav] = useState(false);
+  // Placement des éléments globaux : usine + surcharges de la config (`topbar.placement`).
+  const placement = config.topbar?.placement;
+  const placementKey = JSON.stringify(placement ?? {});
+  useLayoutEffect(() => {
+    registerGlobalTopBarItems(placement);
+    // `placementKey` : ne ré-enregistre que si la config change vraiment (objet de config non stable).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placementKey]);
+
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -90,7 +112,7 @@ export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }
     [activeMenu, searchOpen, isMobile, isDesktop],
   );
 
-  // Niveau 2 : arborescence déclarée par les apps (slot), reliée à la logique de clic globale
+  // Navigation : arborescence déclarée par les apps (slot), reliée à la logique de clic globale
   const navItems = useMemo<NavItem[]>(
     () =>
       bindNavSelection(currentWorkspace.navItems || [], {
@@ -125,11 +147,7 @@ export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }
           <TopBarNavProvider value={nav}>
             <header className="w-full bg-transparent transition-colors overflow-visible flex flex-col">
               {/* Pile de niveaux (1…N) : nombre et contenu déduits des éléments, extensions et de `topbar.levels` */}
-              <TopBarLevels
-                config={config.topbar?.levels}
-                dateRules={config.topbar?.announcements}
-                primaryClasses={PRIMARY_CLASSES}
-              />
+              <TopBarLevels config={config.topbar?.levels} dateRules={config.topbar?.announcements} skinFor={skinFor} />
             </header>
           </TopBarNavProvider>
         </GlobalCallbacksProvider>

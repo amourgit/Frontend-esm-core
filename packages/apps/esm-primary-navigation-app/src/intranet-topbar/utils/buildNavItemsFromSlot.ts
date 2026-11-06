@@ -30,8 +30,8 @@ interface SectionDraft {
 }
 
 /**
- * Construit le niveau 2 de la TopBar à partir des SEULES entrées déclarées par les apps sur le slot
- * `topbar-level2-nav`. Aucune donnée codée en dur : sans déclaration, le niveau 2 est vide.
+ * Construit la navigation de la TopBar à partir des SEULES entrées déclarées par les apps sur le slot
+ * `topbar-nav-slot`. Aucune donnée codée en dur : sans déclaration, la navigation est vide.
  *
  * - Filtrage par espace : une entrée n'est retenue que si `isNavEntryInWorkspace(meta, workspaceId)`.
  *   La section d'un espace est composée des seules entrées qui y sont visibles ; une section sans

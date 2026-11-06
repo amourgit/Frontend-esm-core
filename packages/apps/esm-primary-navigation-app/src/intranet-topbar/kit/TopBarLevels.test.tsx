@@ -33,7 +33,7 @@ vi.mock('@egen-civitas/esm-framework', () => ({
 }));
 vi.mock('../hooks/useActiveAppModules', () => ({ useActiveAppModules: () => state.active }));
 
-import { TopBarLevels } from './TopBarLevels';
+import { COMPACT_SKIN, TopBarLevels } from './TopBarLevels';
 import { TopBarUiProvider, type TopBarUi } from './context';
 import { registerTopBarItem } from './items';
 
@@ -48,7 +48,8 @@ const ui: TopBarUi = {
   isMobile: false,
   isDesktop: true,
 };
-const primaryClasses = { row: 'row', left: 'left', center: 'center', right: 'right' };
+const fullSkin = { row: 'row', left: 'left', center: 'center', right: 'right' };
+const firstRowFull = ({ isFirst }: { isFirst: boolean }) => (isFirst ? fullSkin : COMPACT_SKIN);
 
 function attach(slot: string, id: string, moduleName: string, meta?: { global?: boolean }) {
   state.attached[slot] = [...(state.attached[slot] ?? []), id];
@@ -60,7 +61,7 @@ function attach(slot: string, id: string, moduleName: string, meta?: { global?: 
 const renderBar = (config?: { min: number; max: number; disabled: number[] }) =>
   render(
     <TopBarUiProvider value={ui}>
-      <TopBarLevels config={config} primaryClasses={primaryClasses} />
+      <TopBarLevels config={config} skinFor={firstRowFull} />
     </TopBarUiProvider>,
   );
 
@@ -80,7 +81,11 @@ describe('TopBarLevels', () => {
   it('rend 2 niveaux par défaut, chacun avec trois régions', () => {
     const { container } = renderBar({ min: 2, max: 8, disabled: [] });
     expect(levelsRendered(container)).toEqual(['1', '2']);
-    expect(container.querySelectorAll('[data-slot^="topbar-l2-"]')).toHaveLength(3);
+    // trois régions de contenu + le calque d'arrière-plan
+    for (const region of ['left', 'center', 'right', 'background']) {
+      expect(container.querySelectorAll(`[data-slot="topbar-l2-${region}"]`)).toHaveLength(1);
+    }
+    expect(container.querySelectorAll('[data-slot^="topbar-l2-"]')).toHaveLength(4);
   });
 
   it('une extension au niveau 4 (app active) crée 4 niveaux', () => {
@@ -157,5 +162,90 @@ describe('TopBarLevels', () => {
     const transient = container.querySelector('[data-transient="t1"]')!;
     expect(transient).toHaveTextContent('flash');
     expect(last.compareDocumentPosition(transient) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  describe('squelette uniforme', () => {
+    /** Empreinte structurelle d'une rangée : ses enfants, avec le numéro de niveau retiré. */
+    const skeleton = (row: Element, level: number) =>
+      Array.from(row.children)
+        .map((c) => c.getAttribute('data-slot') ?? c.tagName.toLowerCase())
+        .map((x) => x.replace(`l${level}-`, 'lN-').replace(`-${level}`, '-N'))
+        .join(' | ');
+
+    it('toutes les rangées ont le même squelette : arrière-plan + gauche + centre + droite', () => {
+      const { container } = renderBar({ min: 6, max: 8, disabled: [] });
+      const rows = Array.from(container.querySelectorAll('[data-level]'));
+      expect(rows).toHaveLength(6);
+      const signatures = rows.slice(1).map((row, i) => skeleton(row, i + 2));
+      // les rangées compactes sont strictement identiques entre elles
+      expect(new Set(signatures).size).toBe(1);
+      // et chaque rangée, la première comprise, expose les quatre régions
+      rows.forEach((row, i) => {
+        const level = i + 1;
+        for (const region of ['background', 'left', 'center', 'right']) {
+          expect(row.querySelector(`[data-slot="topbar-l${level}-${region}"]`)).not.toBeNull();
+        }
+      });
+    });
+
+    it('la peau dépend de la POSITION, pas du numéro : sans le niveau 2, le niveau 3 est une rangée compacte', () => {
+      const seen: Array<{ level: number; index: number; isFirst: boolean; isLast: boolean }> = [];
+      const spy = (pos: { level: number; index: number; isFirst: boolean; isLast: boolean }) => {
+        seen.push({ level: pos.level, index: pos.index, isFirst: pos.isFirst, isLast: pos.isLast });
+        return pos.isFirst ? fullSkin : COMPACT_SKIN;
+      };
+      const { container } = render(
+        <TopBarUiProvider value={ui}>
+          <TopBarLevels config={{ min: 3, max: 8, disabled: [2] }} skinFor={spy} />
+        </TopBarUiProvider>,
+      );
+      expect(levelsRendered(container)).toEqual(['1', '3']);
+      expect(seen).toContainEqual({ level: 1, index: 0, isFirst: true, isLast: false });
+      expect(seen).toContainEqual({ level: 3, index: 1, isFirst: false, isLast: true });
+      expect(container.querySelector('[data-level="1"]')).toHaveAttribute('data-level-first');
+      expect(container.querySelector('[data-level="1"]')).not.toHaveAttribute('role');
+      expect(container.querySelector('[data-level="3"]')).not.toHaveAttribute('data-level-first');
+      expect(container.querySelector('[data-level="3"]')).toHaveAttribute('role', 'toolbar');
+    });
+
+    it('sans `skinFor`, tous les niveaux (le premier compris) reçoivent la peau compacte', () => {
+      const { container } = render(
+        <TopBarUiProvider value={ui}>
+          <TopBarLevels config={{ min: 3, max: 8, disabled: [] }} />
+        </TopBarUiProvider>,
+      );
+      container.querySelectorAll('[data-level]').forEach((row) => expect(row).toHaveAttribute('role', 'toolbar'));
+    });
+
+    it('un composant quelconque d’une app s’ajoute à n’importe quelle région de n’importe quel niveau', () => {
+      for (const [region, level] of [
+        ['l1-left', 1],
+        ['l3-center', 3],
+        ['l5-right', 5],
+      ] as const) {
+        registerTopBarItem({ id: `libre-${region}`, region, component: () => <i>{`contenu ${region}`}</i> });
+        const { container, unmount } = renderBar({ min: 1, max: 8, disabled: [] });
+        expect(container.querySelector(`[data-slot="topbar-${region}"]`)).toHaveTextContent(`contenu ${region}`);
+        expect(levelsRendered(container).length).toBeGreaterThanOrEqual(level);
+        unmount();
+      }
+    });
+
+    it('la région gauche cède sa place à la recherche en mobile seulement si la peau le demande', () => {
+      const mobile: TopBarUi = { ...ui, searchOpen: true, isMobile: true, isDesktop: false };
+      registerTopBarItem({ id: 'gauche-test', region: 'l1-left', component: () => <u>gauche</u> });
+      const yielding = { ...fullSkin, yieldLeftToSearch: true, rightFull: 'full' };
+      const { container } = render(
+        <TopBarUiProvider value={mobile}>
+          <TopBarLevels
+            config={{ min: 2, max: 8, disabled: [] }}
+            skinFor={({ isFirst }) => (isFirst ? yielding : COMPACT_SKIN)}
+          />
+        </TopBarUiProvider>,
+      );
+      expect(container.querySelector('[data-slot="topbar-l1-left"]')).toHaveClass('hidden');
+      expect(container.querySelector('[data-slot="topbar-l1-right"]')).toHaveClass('full');
+      expect(container.querySelector('[data-slot="topbar-l2-left"]')).not.toHaveClass('hidden');
+    });
   });
 });

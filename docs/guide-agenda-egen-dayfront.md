@@ -112,7 +112,7 @@ Apps existantes (13) : `esm-ai-assistant-app`, `esm-annuaire-app`, `esm-devtools
 - **`src/index.ts`** : `getSyncLifecycle(rootComponent, { featureName, moduleName })`, `defineConfigSchema(moduleName, configSchema)` dans `startupApp`, `importTranslation = require.context('../translations', false, /.json$/, 'lazy')`, et une extension `navEntry` qui ne rend rien (`getSyncLifecycle(() => null, …)`).
   - ⚠ **Incohérence à connaître** : `package.json` dit `@egen/esm-annuaire-app` mais `index.ts` utilise `moduleName = '@egen-civitas/esm-annuaire-app'`. Le nom Module Federation vient du `package.json` ; le `moduleName` sert à la config/traductions. Pour l'agenda, **choisis une convention et tiens-la** (recommandation : même motif que l'annuaire pour rester homogène, et documenter l'écart) — **⚠ À VÉRIFIER** l'effet exact sur `importTranslation`/`getConfig`.
 - **`src/root.component.tsx`** : `BrowserRouter basename={window.getEgenSpaBase()}` + `Routes`. Import Tailwind en tout premier.
-- **`src/routes.json`** : 1 `pages[]` (`component: "root"`, `route: "annuaire"`, `online: true`, `offline: false`) + `extensions[]` sur le slot **`topbar-level2-nav`** (composant `navEntry`, `order`, `meta: { section, sectionLabel, group, groupLabel, label, description, icon, route }`).
+- **`src/routes.json`** : 1 `pages[]` (`component: "root"`, `route: "annuaire"`, `online: true`, `offline: false`) + `extensions[]` sur le slot **`topbar-nav-slot`** (composant `navEntry`, `order`, `meta: { section, sectionLabel, group, groupLabel, label, description, icon, route }`).
 - **Tests** : `vitest.config.ts` (environnement `happy-dom`, alias `@egen-civitas/esm-framework` → `@egen-civitas/esm-framework/mock`, plugin `scss-identity`), `src/test-utils/{setup.tsx,framework-mock.ts,shell-background.ts}`.
 - **`tsconfig.json`** : `jsx: react`, `moduleResolution: bundler`, `include: ["src/**/*"]`, `noEmit`.
 - **`src/declarations.d.ts`** : déclare `*.scss`, `*.css`, `*.png/.svg/.jpg/.jpeg`.
@@ -123,7 +123,7 @@ Apps existantes (13) : `esm-ai-assistant-app`, `esm-annuaire-app`, `esm-devtools
 - `packages/apps/esm-primary-navigation-app/NAVIGATION.md` : explique que **la TopBar consolide les entrées déclarées par chaque app** (`useSlotNavEntries` → `buildNavItemsFromSlot`). Une section déclarée par une app **remplace** les sous-menus de la maquette `data/workspaceMockData.ts`. `icon` doit être dans la **liste blanche** `data/navIcons.ts` (qui contient déjà `Calendar` et `CalendarCheck`).
 - `workspaceMockData.ts` contient déjà **des liens `'/informations/agenda'`** (lignes ≈ 133-157, 213-216, 512-514, 600-602) : **l'ancien emplacement prévu de l'agenda était dans l'app Informations**. Il faut décider ce qu'on en fait (Phase 5).
 - `BreadcrumbLevel2Nav.tsx` contient de la logique **codée en dur pour `annuaire`** (lignes ≈ 74-180, 413). Elle ne gère pas `agenda` : le fil d'Ariane s'affichera sans cas particulier (acceptable) ou demandera un petit ajout.
-- `tools/check-nav-routes.mjs` (lancé par `yarn verify` et la CI) **échoue** si une entrée `topbar-level2-nav` n'a pas `section`, `group`, `label`, `route`, ou si `route` ne correspond à aucun `pages[].route` (égalité ou sous-route).
+- `tools/check-nav-routes.mjs` (lancé par `yarn verify` et la CI) **échoue** si une entrée `topbar-nav-slot` n'a pas `section`, `group`, `label`, `route`, ou si `route` ne correspond à aucun `pages[].route` (égalité ou sous-route).
 - `tools/sync-egen-deps.mjs` (`yarn deps:egen`) aligne toutes les dépendances `@egen-civitas/*` sur la dernière version npm. La CI le lance en mode `--check` (informatif).
 
 **Docs internes à connaître** (`Frontend-esm-core/docs/`) : `analyse-auth-session.md` (le store de session, `egenFetch`, bypass dev ; **règle importante : `esm-api`, `esm-config`, `esm-react-utils`, `esm-state`, `esm-tenant` doivent être déclarés partagés en singleton dans chaque app** — c'est ce que fait la liste de `peerDependencies` copiée de l'annuaire), `analyse-esm-tenant.md` (54 Ko — multi-tenant), `analyse-separation-framework.md`, `dev-lien-local-framework.md` (**ne pas relier le framework en workspace/portal : essayé deux fois, abandonné** ; utiliser `yarn link` ciblé sur un seul paquet ou publier), `guide-composants-et-theme.md` (31 Ko — composants et thème).
@@ -1999,7 +1999,7 @@ export function startupApp() {
 // Lifecycle ASYNCHRONE : FullCalendar n'est chargé qu'à la première visite de /agenda (ADR-6).
 export const root = getAsyncLifecycle(() => import('./root.component'), options);
 
-// Extension de navigation (slot `topbar-level2-nav`) : ne rend rien, seule sa `meta` est lue.
+// Extension de navigation (slot `topbar-nav-slot`) : ne rend rien, seule sa `meta` est lue.
 export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'agenda-nav-entry' });
 ```
 

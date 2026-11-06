@@ -3,65 +3,64 @@
 Rend la topbar principale de l'application EGEN : la barre de navigation
 persistante affichée en haut de tous les espaces tenant authentifiés.
 
-## Architecture — deux niveaux
+## Architecture — N niveaux, trois régions chacun
+
+La TopBar est une **pile de niveaux** (`1` en haut, puis `2`, `3`…). Leur nombre n'est écrit nulle part : il se déduit de
+ce qui est déclaré et de la config `topbar.levels` (voir « TopBar modulaire »). **Tous les niveaux ont le même
+squelette** — aucun n'est un cas particulier :
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│ NIVEAU 1 (Header, ~48px)                                                 │
-│ [Hamburger·Logo·Recherche·Contexte] [slot info] [Actions·User·slot fin] │
-├─────────────────────────────────────────────────────────────────────────┤
-│ NIVEAU 2 (barre d'outils de l'app, ~40px)                                │
-│ [top-nav-app-slot] │ [navigation / fil d'Ariane] ........ [slot fin]     │
+┌ niveau N ───────────────────────────────────────────────────────────────┐
+│ [calque d'arrière-plan : l<N>-background]                                │
+│  l<N>-left          │  l<N>-center                    │  l<N>-right      │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-Les deux niveaux sont extensibles : n'importe quelle autre app du monorepo
-peut y injecter du contenu via son propre `routes.json`, sans toucher à ce
-package.
+N'importe quelle app du monorepo (ou distante) peut y injecter des composants, dans **n'importe quelle région de
+n'importe quel niveau**, via son propre `routes.json` (slot `topbar-l<N>-<région>-slot`), sans toucher à ce package ;
+un composant ainsi injecté peut lui-même exposer ses propres slots d'extension. Rien dans le code ne dépend d'un numéro
+de niveau (un test de non-régression, `no-hardcoded-levels.test.ts`, le garantit).
 
-## Points d'extension — Niveau 1 (barre principale)
+Placement d'usine des éléments globaux (déplaçable par la config `topbar.placement`, voir plus bas) :
+
+| Niveau | Gauche            | Centre                                     | Droite                                                                 |
+|--------|-------------------|--------------------------------------------|------------------------------------------------------------------------|
+| 1      | logo + sélecteurs | —                                          | recherche · langue · apps · raccourcis · plein écran · thème · utilisateur · horloge |
+| 2      | —                 | navigation déroulante ou fil d'Ariane      | —                                                                      |
+
+## Autres points d'extension (hors régions)
 
 | Slot                     | Rendu par                          | Alimenté aujourd'hui par                          |
 |--------------------------|-------------------------------------|----------------------------------------------------|
-| `top-nav-info-slot`      | Centre de la barre, texte discret   | —  (ouvert, libre)                                 |
-| `top-nav-actions-slot`   | Zone droite (niveau 1)              | extensions d'apps (voir « TopBar modulaire »)      |
-| `top-nav-trailing-slot`  | Zone droite, tout à la fin          | — (ouvert, libre)                                  |
 | `app-menu-slot`          | Grille du panneau "Applications"    | `esm-offline-tools-app`                            |
 | `quick-access-slot`      | Liste du panneau "Raccourcis"       | — (ouvert, libre)                                  |
 | `notifications-nav-menu-slot` | Zone droite « Notifications » (rail droit, rendu par `esm-notifications-app`) | — (ouvert, libre) |
 | `user-panel-slot`        | Panneau utilisateur (haut)          | Cette app (profil, langue), `esm-login-app`, `esm-offline-tools-app` |
 | `user-panel-bottom-slot` | Panneau utilisateur (bas)           | `esm-login-app`                                    |
+| `topbar-nav-start-slot`  | Juste avant la navigation           | — (ouvert, libre)                                  |
+| `top-nav-breadcrumb-slot`| Fil d'Ariane par extensions (voir ci-dessous) | `breadcrumb-item`                        |
 
-⚠️ Ne pas confondre `app-menu-slot` (contenu du panneau applications) avec
-`top-nav-trailing-slot` (bouton en toute fin de topbar) : ce sont deux
-slots indépendants malgré la proximité de leurs noms d'origine.
+## Slots historiques (compatibilité)
 
-## Points d'extension — Niveau 2 (barre d'outils de l'application)
+Les anciens slots nommés restent honorés : chacun est rattaché à la région équivalente (tableau unique :
+`src/intranet-topbar/kit/legacy-slots.ts`) et se comporte comme le slot officiel de cette région. Les nouvelles apps
+utilisent les slots `topbar-l<N>-<région>-slot`.
 
-Le niveau 2 est une rangée compacte de widgets (design « barre d'outils d'IDE ») en trois zones :
-
-```
-┌──────────────┬──────────────────────────────────────────┬─────────────┐
-│ ZONE APP     │ ZONE NAVIGATION                           │ ZONE FIN    │
-│ top-nav-app- │ menu déroulant (accueil) ou fil d'Ariane  │ top-nav-    │
-│ slot         │ + top-nav-level2-start-slot               │ level2-end- │
-│ (app active) │ + top-nav-breadcrumb-slot                 │ slot        │
-└──────────────┴──────────────────────────────────────────┴─────────────┘
-```
-
-| Slot                        | Zone       | Contenu |
-|-----------------------------|------------|---------|
-| `top-nav-app-slot`          | App        | Contenu de barre d'outils **propre à l'app active** (logo, nom, actions). N'affiche que les extensions de l'app dont une page est montée ; le code des apps inactives n'est pas chargé. Alimenté aujourd'hui par `esm-home-app`. |
-| `top-nav-level2-start-slot` | Navigation | Historique, avant les options de navigation. |
-| `top-nav-breadcrumb-slot`   | Navigation | Fil d'Ariane par extensions (voir ci-dessous). |
-| `top-nav-level2-end-slot`   | Fin        | Contributions **globales** (assistant IA — `esm-ai-assistant-app`). |
+| Slot historique            | Équivaut à               | Alimenté aujourd'hui par   |
+|----------------------------|--------------------------|----------------------------|
+| `top-nav-info-slot`        | `topbar-l1-center-slot`  | — (ouvert, libre)          |
+| `top-nav-actions-slot`     | `topbar-l1-right-slot`   | extensions d'apps          |
+| `top-nav-trailing-slot`    | `topbar-l1-right-slot`   | — (ouvert, libre)          |
+| `top-nav-app-slot`         | `topbar-l2-left-slot`    | `esm-home-app` (contenu de barre d'outils **propre à l'app active**) |
+| `top-nav-level2-end-slot`  | `topbar-l2-right-slot`   | `esm-ai-assistant-app` (contributions **globales**) |
+| `top-nav-level2-start-slot`| `topbar-nav-start-slot`  | — (ouvert, libre)          |
 
 ### Déclarer le contenu de barre d'outils d'une app
 
 ```json
 {
   "extensions": [
-    { "name": "mon-app-toolbar", "slot": "top-nav-app-slot", "component": "appToolbar", "order": 0 }
+    { "name": "mon-app-toolbar", "slot": "topbar-l2-left-slot", "component": "appToolbar", "order": 0 }
   ]
 }
 ```
@@ -130,8 +129,7 @@ globaux** (`src/intranet-topbar/global/items.tsx`) ou d'**extensions** d'apps.
 
 **Déclarer du contenu** : slot `topbar-l<N>-<région>-slot` dans le `routes.json` de n'importe quelle app
 (ex. `topbar-l3-right-slot` = niveau 3, région droite). Visible quand l'app est active, ou toujours avec `meta.global: true`.
-Slots historiques honorés : `top-nav-info-slot` (l1-center), `top-nav-actions-slot` / `top-nav-trailing-slot` (l1-right),
-`top-nav-app-slot` (l2-left), `top-nav-level2-end-slot` (l2-right).
+Slots historiques toujours honorés : voir « Slots historiques (compatibilité) » plus haut.
 
 **Nombre de niveaux** (règles uniques) :
 1. = max(`topbar.levels.min`, plus haut niveau déclaré par du contenu visible, `levels.min` d'une app active), plafonné à
@@ -147,6 +145,20 @@ Slots historiques honorés : `top-nav-info-slot` (l1-center), `top-nav-actions-s
 ```
 
 `min`/`max` = 1 → TopBar « à l'ancienne » à une seule rangée (la navigation passe au centre du niveau 1). Défaut : `min 2`, `max 8`.
+
+**Placer un élément global où l'on veut** — `topbar.placement` (identifiant de l'élément → région `l<N>-left|center|right`,
+N ≥ 1). Le placement d'usine est dans `src/intranet-topbar/global/placement.ts`, seul endroit où il est écrit :
+
+```json
+{ "topbar": { "placement": { "clock": "l3-right", "nav": "l1-center" } } }
+```
+
+Entrée inconnue ou région invalide : ignorée avec un avertissement console. Si le niveau visé n'est pas rendu, la règle 3
+ci-dessus s'applique (le contenu s'affiche sur le niveau rendu inférieur le plus proche).
+
+**Habillage d'une rangée** — le squelette est identique partout ; seule la « peau » CSS (`LevelSkin`) peut varier. L'hôte
+(`SupremeIntranetTopBar`) la choisit d'après la **position** de la rangée dans la pile (`skinFor` : première rangée /
+autres), jamais d'après son numéro.
 
 **Personnaliser depuis une app montée** — store global `egen-topbar-layout` (aucune dépendance de code), valable tant que
 l'app propriétaire est active. Règles de région : `hidden`, `only`, `hide`, `hideGlobal` (`id` d'élément ou `name`
@@ -170,7 +182,7 @@ store.setState((s) => ({
 ```
 
 Éléments globaux : `brand`, `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `user`, `clock`,
-`menu-panel` (niveau 1), `nav` (niveau 2). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
+`menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
 
 ### Hauteur de la TopBar et contenu des apps
 

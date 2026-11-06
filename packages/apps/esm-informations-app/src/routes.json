@@ -25,7 +25,7 @@
     },
     {
       "name": "informations-nav-news-1",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -46,7 +46,7 @@
     },
     {
       "name": "informations-nav-news-2",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -67,7 +67,7 @@
     },
     {
       "name": "informations-nav-news-3",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -88,7 +88,7 @@
     },
     {
       "name": "informations-nav-news-4",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -109,7 +109,7 @@
     },
     {
       "name": "informations-nav-annonces-1",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -130,7 +130,7 @@
     },
     {
       "name": "informations-nav-annonces-2",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -151,7 +151,7 @@
     },
     {
       "name": "informations-nav-annonces-3",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -172,7 +172,7 @@
     },
     {
       "name": "informations-nav-annonces-4",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -193,7 +193,7 @@
     },
     {
       "name": "informations-nav-agenda-1",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -214,7 +214,7 @@
     },
     {
       "name": "informations-nav-agenda-2",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -235,7 +235,7 @@
     },
     {
       "name": "informations-nav-agenda-3",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
@@ -256,7 +256,7 @@
     },
     {
       "name": "informations-nav-agenda-4",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,

@@ -8,7 +8,7 @@ export interface NavSelectionDeps {
 }
 
 /**
- * Applique la logique de sélection d'un bouton du niveau 2 : si une app a déclaré un comportement
+ * Applique la logique de sélection d'un bouton de navigation : si une app a déclaré un comportement
  * (`registerNavBehavior`) pour cette cible, c'est lui qui s'exécute (il peut rappeler `runDefault`) ;
  * sinon la logique globale s'applique. Lu au moment du clic : un comportement enregistré tardivement
  * est pris en compte sans reconstruire la navigation.

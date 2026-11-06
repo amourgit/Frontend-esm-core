@@ -12,7 +12,7 @@
   "extensions": [
     {
       "name": "assistant-robot-button",
-      "slot": "top-nav-level2-end-slot",
+      "slot": "topbar-l2-right-slot",
       "component": "assistantRobotButton",
       "online": true,
       "offline": false,

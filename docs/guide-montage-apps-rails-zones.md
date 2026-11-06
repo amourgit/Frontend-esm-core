@@ -14,7 +14,7 @@ Règles :
 
 - Chaque app ajoute ses options à côté de celles des autres : aucune extension d'une autre app n'est retirée ni remplacée.
 - Les sous-options d'une option se chargent dans la zone du même côté que son rail (option du rail gauche → zone gauche, rail droit → zone droite).
-- Rail gauche : déclarer les sous-options sur `topbar-level2-nav` (`NavEntryMeta`, `section` = identifiant de l'app) et afficher `<SectionNavPanel section="mon-app" />` comme composant de l'option. Un clic navigue vers la route et met à jour la zone principale.
+- Rail gauche : déclarer les sous-options sur `topbar-nav-slot` (`NavEntryMeta`, `section` = identifiant de l'app) et afficher `<SectionNavPanel section="mon-app" />` comme composant de l'option. Un clic navigue vers la route et met à jour la zone principale.
 - Les composants d'entrée de navigation ne rendent rien (`getSyncLifecycle(() => null, …)`) : seule leur `meta` est lue.
 - `node tools/check-nav-routes.mjs` valide les routes et les `meta` des rails.
 

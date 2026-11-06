@@ -33,7 +33,7 @@
     },
     {
       "name": "offline-tools-nav-home",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "offlineToolsNavEntry",
       "online": true,
       "offline": true,
@@ -54,7 +54,7 @@
     },
     {
       "name": "offline-tools-nav-entities",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "offlineToolsNavEntry",
       "online": true,
       "offline": true,
@@ -75,7 +75,7 @@
     },
     {
       "name": "offline-tools-nav-actions",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "offlineToolsNavEntry",
       "online": true,
       "offline": true,
