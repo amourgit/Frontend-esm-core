@@ -141,9 +141,9 @@ describe('TopBarLevels', () => {
   });
 
   it('fond d’un niveau : transparent par défaut, surchargé par une app active', () => {
-    const first = renderBar();
-    expect(first.container.querySelector('[data-level="1"]')).not.toHaveAttribute('style');
-    first.unmount();
+    const view = renderBar();
+    expect(view.container.querySelector('[data-level="1"]')).not.toHaveAttribute('style');
+    view.unmount();
 
     state.claims = { '@egen/esm-annuaire-app': { levels: { background: { 1: 'rgb(1, 2, 3)' } } } };
     const { container } = renderBar();
