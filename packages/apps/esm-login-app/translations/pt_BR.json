@@ -1,5 +1,4 @@
 {
-  "builtWith": "Construído com",
   "cancel": "Cancelar",
   "change": "Alterar",
   "changeLocation": "Mudar localidade",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Erro ao alterar a senha",
   "footerlogo": "Logo do Rodapé",
   "invalidCredentials": "Usuário ou senha inválidos",
-  "learnMore": "Aprender mais",
   "loggingIn": "Autenticando",
   "login": "Entrar",
   "loginButtonIconDescription": "Botão de Entrar",

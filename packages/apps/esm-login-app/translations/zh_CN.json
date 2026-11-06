@@ -1,5 +1,4 @@
 {
-  "builtWith": "构建者",
   "cancel": "取消",
   "change": "更改",
   "changeLocation": "改变位置",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "修改密码时出错",
   "footerlogo": "页脚图标",
   "invalidCredentials": "用户名或密码无效",
-  "learnMore": "学习更多",
   "loggingIn": "登录中",
   "login": "登录",
   "loginButtonIconDescription": "登入按钮",

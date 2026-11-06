@@ -1,8 +1,9 @@
-"""Génère les dérivés web du branding EGEN à partir des masters (jamais modifiés).
+"""Génère les dérivés web du branding (EGEN, produit — CIVITAS, éditeur) à partir des masters (jamais modifiés).
 
 Usage :  python3 branding/generate-derivatives.py      (nécessite Pillow et numpy)
 
-Produit : egen-logo-icon.png, egen-logo-full.png, shell/favicon.ico, shell/icon-512.png
+Produit : egen-logo-icon.png, egen-logo-full.png, shell/favicon.ico, shell/icon-512.png,
+          civitas-logo-full.png, civitas-logo-wordmark.png
 """
 import os
 
@@ -13,6 +14,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))  # indépendant du dossier 
 
 SRC_ICON = "source/egen-logo-icon-master.png"
 SRC_FULL = "source/egen-logo-full-master.png"
+SRC_CIVITAS = "source/civitas-logo-full-master.png"
 
 def bbox(im, thr):
     a = np.array(im.getchannel("A"))
@@ -35,6 +37,23 @@ def to_square(im):
     out = Image.new("RGBA", (s, s), (0, 0, 0, 0))
     out.paste(im, ((s - im.width) // 2, (s - im.height) // 2))
     return out
+
+def horizontal_bands(im, thr=40, min_gap=4):
+    """Bandes horizontales de contenu (y0, y1), séparées par au moins `min_gap` lignes vides."""
+    rows = (np.array(im.getchannel("A")) > thr).sum(axis=1)
+    found, start, last, gap = [], None, 0, 0
+    for y, v in enumerate(rows):
+        if v > 0:
+            start = y if start is None else start
+            last, gap = y, 0
+        elif start is not None:
+            gap += 1
+            if gap >= min_gap:
+                found.append((start, last + 1))
+                start = None
+    if start is not None:
+        found.append((start, last + 1))
+    return found
 
 icon = Image.open(SRC_ICON).convert("RGBA")
 full = Image.open(SRC_FULL).convert("RGBA")
@@ -62,7 +81,19 @@ pwa = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
 pwa.paste(icon, (6, 6), icon)
 pwa.save("shell/icon-512.png", optimize=True)
 
-for f in ["egen-logo-icon.png", "egen-logo-full.png", "shell/favicon.ico", "shell/icon-512.png"]:
+# 5) CIVITAS, lockup complet (tête + nom + signature) : recadré (+16 px), à la résolution du master (500 px : pas
+#    d'agrandissement, donc pas de flou). Logo argenté : à poser sur fond sombre (voir branding/README.md).
+civitas = denoise_alpha(Image.open(SRC_CIVITAS).convert("RGBA"))
+crop_pad(civitas, 5, 16).save("civitas-logo-full.png", optimize=True)
+
+# 6) CIVITAS, nom seul — variante horizontale pour les emplacements bas (pied de page) où le lockup vertical
+#    deviendrait illisible. Le lockup se compose de 3 bandes : tête / nom / signature ; on garde la 2e (le nom).
+name_y0, name_y1 = horizontal_bands(civitas)[1]
+name_band = civitas.crop((0, max(0, name_y0 - 6), civitas.width, min(civitas.height, name_y1 + 6)))
+crop_pad(name_band, 5, 8).save("civitas-logo-wordmark.png", optimize=True)
+
+for f in ["egen-logo-icon.png", "egen-logo-full.png", "shell/favicon.ico", "shell/icon-512.png",
+          "civitas-logo-full.png", "civitas-logo-wordmark.png"]:
     im = Image.open(f)
     print(f"{f:28s} {im.size!s:12s} {os.path.getsize(f)/1024:7.1f} Ko  mode={im.mode}")
 print("favicon tailles:", sorted(Image.open('shell/favicon.ico').info.get('sizes')))

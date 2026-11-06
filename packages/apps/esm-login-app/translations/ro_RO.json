@@ -1,5 +1,4 @@
 {
-  "builtWith": "Realizat cu",
   "cancel": "Anulează",
   "change": "Schimbă",
   "changeLocation": "Schimbă locația",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Eroare la schimbarea parolei",
   "footerlogo": "Logo subsol",
   "invalidCredentials": "Nume de utilizator sau parolă incorectă",
-  "learnMore": "Află mai multe",
   "loggingIn": "Autentificare în curs",
   "login": "Autentificare",
   "loginButtonIconDescription": "Buton de autentificare",

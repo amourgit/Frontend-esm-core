@@ -1,5 +1,4 @@
 {
-  "builtWith": "Desarrollado con",
   "cancel": "Cancelar",
   "change": "Cambiar",
   "changeLocation": "Cambiar ubicación",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Error al cambiar la contraseña",
   "footerlogo": "Logo del Pie de Página",
   "invalidCredentials": "Nombre de usuario o contraseña inválidos",
-  "learnMore": "Más información",
   "loggingIn": "Iniciando sesión",
   "login": "Iniciar sesión",
   "loginButtonIconDescription": "Botón de inicio de sesión",

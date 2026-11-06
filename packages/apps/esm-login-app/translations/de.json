@@ -1,5 +1,4 @@
 {
-  "builtWith": "Erstellt mit",
   "cancel": "Abbrechen",
   "change": "Ändern",
   "changeLocation": "Standort ändern",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Fehler beim Ändern des Passworts",
   "footerlogo": "Logo in der Fußzeile",
   "invalidCredentials": "Ungültiger Benutzername oder ungültiges Passwort",
-  "learnMore": "Mehr erfahren",
   "loggingIn": "Anmelden",
   "login": "Login",
   "loginButtonIconDescription": "Anmeldebutton",

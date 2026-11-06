@@ -1,5 +1,4 @@
 {
-  "builtWith": "Built with",
   "cancel": "Hủy",
   "change": "Thay đổi",
   "changeLocation": "Change location",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Lỗi khi thay đổi mật khẩu",
   "footerlogo": "Logo chân trang",
   "invalidCredentials": "Sai tên đăng nhập hoặc mật khẩu",
-  "learnMore": "Learn more",
   "loggingIn": "Đăng nhập",
   "login": "Đăng nhập",
   "loginButtonIconDescription": "Log in button",

@@ -1,5 +1,4 @@
 {
-  "builtWith": "נבנה עם",
   "cancel": "Cancel",
   "change": "שינוי",
   "changeLocation": "החלפת מקום",
@@ -10,7 +9,6 @@
   "errorChangingPassword": "Error changing password",
   "footerlogo": "לוגו תחתון",
   "invalidCredentials": "שם משתמש או סיסמה לא תקינים",
-  "learnMore": "מידע נוסף",
   "loggingIn": "Logging in",
   "login": "התחברות",
   "loginButtonIconDescription": "כפתור כניסה",
