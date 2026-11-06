@@ -23,14 +23,16 @@ describe('LoginFooter', () => {
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
-  it('affiche le logo CIVITAS dans le lien, sur une pastille sombre (le logo est argenté)', () => {
+  it('affiche le logo CIVITAS complet, tel que fourni, dans le lien (sans pastille)', () => {
     render(<LoginFooter />);
 
     const logo = screen.getByRole('img', { name: /logo CIVITAS|CIVITAS logo/i });
-    expect(logo).toHaveAttribute('src', expect.stringMatching(/civitas-logo-wordmark/));
+    expect(logo).toHaveAttribute('src', expect.stringMatching(/civitas-logo-full/));
     const link = screen.getByRole('link', { name: /CIVITAS/i });
     expect(link).toContainElement(logo);
-    expect(link.className).toMatch(/bg-\[#0e0e11\]/);
+    expect(link.className).not.toMatch(/bg-/);
+    // Taille adaptée à l'espace disponible du pied de page (suit la hauteur de la fenêtre, bornée).
+    expect(logo.className).toMatch(/h-\[clamp\(3\.5rem,9vh,6rem\)\]/);
   });
 
   it("ne montre plus le logo EGEN dans le pied de page (EGEN est le produit, pas l'éditeur)", () => {

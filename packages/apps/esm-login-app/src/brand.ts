@@ -8,12 +8,12 @@
  * Deux marques à ne pas confondre : EGEN est le produit, CIVITAS l'entreprise qui l'a créé.
  *
  *  - `egenLogoFull` : logo + « EGEN » écrit (connexion, en-têtes)
- *  - `civitasLogoWordmark` : « CIVITAS » seul, logo argenté à poser sur fond sombre (pied de page : « créé par »)
+ *  - `civitasLogoFull` : logo CIVITAS complet (tête + nom + signature), tel que fourni (pied de page : « créé par »)
  *  - `civitasWebsite` : site de CIVITAS, cible du lien du logo CIVITAS
  */
-import civitasLogoWordmark from '../../../../branding/civitas-logo-wordmark.png';
+import civitasLogoFull from '../../../../branding/civitas-logo-full.png';
 import egenLogoFull from '../../../../branding/egen-logo-full.png';
 
 export const civitasWebsite = 'https://civitas-africa.vercel.app/';
 
-export { civitasLogoWordmark, egenLogoFull };
+export { civitasLogoFull, egenLogoFull };
