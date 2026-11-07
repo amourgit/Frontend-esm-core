@@ -29,33 +29,6 @@
   }
 }
 
-// ── Logo : taille FIXE, jamais compressé par le flex, quelle que soit l'app active ───────
-.logoLink {
-  display: flex;
-  align-items: center;
-  flex: 0 0 auto; // ne grandit pas, NE RÉTRÉCIT JAMAIS
-  cursor: pointer;
-  overflow: visible;
-}
-
-.logoNav {
-  height: 36px;
-  min-height: 36px;
-  flex: 0 0 auto;
-
-  img {
-    height: 100%;
-    width: auto;
-    max-width: none; // le reset Tailwind (`img { max-width: 100% }`) ne doit jamais comprimer le logo
-    flex: 0 0 auto;
-  }
-
-  @media (min-width: 640px) {
-    height: 44px;
-    min-height: 44px;
-  }
-}
-
 // ── Sélecteurs Espace + Site : GRILLE, deux cellules de même hauteur ────────────────────
 //   desktop (≥ 1024px)      : une ligne, deux colonnes  [ Espace ][ Site ]
 //   tablette / mobile       : une colonne, deux lignes  [ Espace ] / [ Site ]

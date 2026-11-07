@@ -66,7 +66,8 @@ import { egenLogoFull, egenLogoIcon, civitasLogoFull, civitasWebsite } from '../
 <img src={egenLogoFull} alt="EGEN" className="h-11 w-auto" />
 ```
 
-Apps concernées aujourd'hui : `esm-primary-navigation-app` (les deux variantes EGEN) et
+Apps concernées aujourd'hui : `esm-branding-app` (logo EGEN complet, par défaut du logo de la TopBar ;
+l'entreprise peut le remplacer par la config) et
 `esm-login-app` (logo EGEN complet, et logo CIVITAS complet + `civitasWebsite` pour le pied de page). Pour en ajouter une, créer son `src/brand.ts`
 en ne ré-exportant **que les variantes utilisées** (chaque import est embarqué dans le
 bundle de l'app). Le chemin relatif vers `branding/` est toujours `../../../../branding/`

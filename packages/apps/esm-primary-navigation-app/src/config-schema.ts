@@ -61,7 +61,7 @@ export const configSchema = {
       _elements: { _type: Type.String },
       _default: {},
       _description:
-        'Moves a global TopBar element to another region of any level, e.g. {"clock": "l3-right", "nav": "l1-center"}. Keys: brand, search, language, divider, apps, quick-access, fullscreen, theme, user, clock, menu-panel, nav. Values: l<N>-left | l<N>-center | l<N>-right (N >= 1). Invalid entries are ignored with a console warning; if the target level is not rendered, the content shows on the nearest lower rendered level.',
+        'Moves a global TopBar element to another region of any level, e.g. {"clock": "l3-right", "nav": "l1-center"}. Keys: context-selectors, search, language, divider, apps, quick-access, fullscreen, theme, user, clock, menu-panel, nav. Values: l<N>-left | l<N>-center | l<N>-right (N >= 1). Invalid entries are ignored with a console warning; if the target level is not rendered, the content shows on the nearest lower rendered level.',
     },
     announcements: {
       requireOffset: {

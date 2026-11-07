@@ -15,7 +15,7 @@ import { parseRegionId, type TopBarRegionId } from '../kit/regions';
 // =============================================================================
 
 export const GLOBAL_ITEM_IDS = [
-  'brand',
+  'context-selectors',
   'search',
   'language',
   'divider',
@@ -39,7 +39,7 @@ export interface ItemPlacement {
 
 /** Placement d'usine. */
 export const DEFAULT_PLACEMENT: Readonly<Record<GlobalItemId, ItemPlacement>> = {
-  brand: { region: 'l1-left', order: 0 },
+  'context-selectors': { region: 'l1-left', order: 0 },
   search: { region: 'l1-right', order: 0 },
   language: { region: 'l1-right', order: 10 },
   divider: { region: 'l1-right', order: 20 },

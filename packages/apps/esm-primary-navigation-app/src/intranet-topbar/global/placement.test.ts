@@ -8,6 +8,12 @@ describe('placement des éléments globaux', () => {
     for (const { region } of Object.values(DEFAULT_PLACEMENT)) expect(isContentRegionId(region)).toBe(true);
   });
 
+  it("la TopBar ne porte aucune identité d'entreprise : pas d'élément « brand » ni de logo (c'est l'app de branding)", () => {
+    expect(GLOBAL_ITEM_IDS).not.toContain('brand');
+    expect(GLOBAL_ITEM_IDS.filter((id) => /brand|logo/i.test(id))).toEqual([]);
+    expect(DEFAULT_PLACEMENT['context-selectors']).toEqual({ region: 'l1-left', order: 0 });
+  });
+
   it('sans surcharge : placement d’usine', () => {
     expect(resolvePlacement(undefined)).toEqual(DEFAULT_PLACEMENT);
     expect(resolvePlacement({})).toEqual(DEFAULT_PLACEMENT);

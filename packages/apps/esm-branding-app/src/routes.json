@@ -1,0 +1,16 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "brand-logo",
+      "slot": "topbar-l1-left-slot",
+      "component": "brandLogo",
+      "online": true,
+      "offline": true,
+      "order": 0,
+      "meta": {
+        "global": true
+      }
+    }
+  ]
+}

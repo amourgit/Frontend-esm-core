@@ -91,6 +91,24 @@ describe('TopBarLevels', () => {
     expect(container.querySelectorAll('[data-slot^="topbar-l2-"]')).toHaveLength(4);
   });
 
+  it("dans une région, les extensions précèdent les éléments globaux : le logo injecté par une app reste à gauche des sélecteurs", () => {
+    registerTopBarItem({ id: 'selecteurs', region: 'l1-left', order: 0, component: () => <span>SELECTEURS</span> });
+    attach('topbar-l1-left-slot', 'brand-logo', '@egen/esm-branding-app', { global: true });
+    const { container } = renderBar({ min: 1, max: 8, disabled: [] });
+
+    const region = container.querySelector('[data-slot="topbar-l1-left"]') as HTMLElement;
+    expect(Array.from(region.children).map((n) => n.textContent)).toEqual(['brand-logo', 'SELECTEURS']);
+  });
+
+  it("une extension globale d'une app non active s'affiche quand même (logo toujours présent)", () => {
+    attach('topbar-l1-left-slot', 'brand-logo', '@egen/esm-branding-app', { global: true });
+    attach('topbar-l1-left-slot', 'autre', '@egen/esm-autre-app');
+    renderBar({ min: 1, max: 8, disabled: [] });
+
+    expect(screen.getByTestId('topbar-l1-left-slot')).toHaveTextContent('brand-logo');
+    expect(screen.getByTestId('topbar-l1-left-slot')).not.toHaveTextContent('autre');
+  });
+
   it('une extension au niveau 4 (app active) crée 4 niveaux', () => {
     attach('topbar-l4-right-slot', 'annuaire-filtre', '@egen/esm-annuaire-app');
     const { container } = renderBar({ min: 1, max: 8, disabled: [] });

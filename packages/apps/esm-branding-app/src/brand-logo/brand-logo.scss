@@ -1,0 +1,29 @@
+.logo {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto; // ne grandit pas, NE RÉTRÉCIT JAMAIS
+  text-decoration: none;
+  transition: opacity 150ms;
+
+  &:is(a) {
+    cursor: pointer;
+  }
+
+  &:is(a):hover {
+    opacity: 0.95;
+  }
+}
+
+.image {
+  display: block;
+  height: var(--logo-compact-height, 36px);
+  width: auto;
+  max-width: none; // le reset Tailwind (`img { max-width: 100% }`) ne doit jamais comprimer le logo
+  flex: 0 0 auto;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.3));
+
+  @media (min-width: 640px) {
+    height: var(--logo-height, 44px);
+  }
+}
