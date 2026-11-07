@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ExtensionSlot, interpolateUrl, navigate as frameworkNavigate, useConfig } from '@egen-civitas/esm-framework';
-import { EgenLogo } from '../components/ui/EgenLogo';
 import { GooeyInput } from '../components/ui/GooeyInput';
 import { WorkspaceAndSiteSelectorsColumn } from '../components/shell/WorkspaceAndSiteSelectorsColumn';
 import { DropdownNavigation } from '../components/shell/DropdownNavigation';
@@ -27,28 +26,17 @@ import styles from '../components/shell/topbar-global-items.scss';
 // =============================================================================
 //  ÉLÉMENTS GLOBAUX DE LA TOPBAR — indépendants de toute app métier
 //
-//  Logo + sélecteurs, recherche, langue, lanceur, raccourcis, plein écran, thème, menu utilisateur,
+//  Sélecteurs d'espace et de site, recherche, langue, lanceur, raccourcis, plein écran, thème, menu utilisateur,
 //  horloge, panneau latéral et navigation. Chacun s'enregistre dans une région du kit, là où l'indique
 //  `placement.ts` (surchargeable par la config `topbar.placement`) : ce fichier ne connaît AUCUN niveau.
 //  Une app peut les masquer ou les remplacer (voir kit/layout-store.ts) sans toucher à ce fichier.
 //  « Implementer tools » n'est plus ici : c'est une option du rail droit (esm-implementer-tools-app).
 // =============================================================================
 
-const BrandItem: React.FC = () => {
-  const navigate = useNavigate();
+const ContextSelectorsItem: React.FC = () => {
   const { onShowNotification } = useGlobalCallbacks();
   return (
     <div className={styles.left}>
-      <div
-        onClick={() => {
-          playXboxSound('select');
-          navigate('/home');
-        }}
-        className={`${styles.logoLink} group hover:opacity-95 transition-opacity`}
-        title="EGEN — Écosystème Gouvernemental de l’Économie Numérique"
-      >
-        <EgenLogo size="nav" variant="full" />
-      </div>
       <WorkspaceAndSiteSelectorsColumn onShowNotification={onShowNotification} />
     </div>
   );
@@ -190,7 +178,7 @@ type ItemDefinition = Omit<TopBarItem, 'region' | 'order' | 'id'> & { id: Global
 
 /** Les éléments globaux, SANS placement : la région et l'ordre viennent de `placement.ts`. */
 const GLOBAL_ITEMS: readonly ItemDefinition[] = [
-  { id: 'brand', component: BrandItem, hideOnSearch: 'mobile' },
+  { id: 'context-selectors', component: ContextSelectorsItem, hideOnSearch: 'mobile' },
   { id: 'search', component: SearchItem },
   { id: 'language', component: LanguageOption as React.FC, hideOnSearch: 'touch' },
   { id: 'divider', component: DividerItem, hideOnSearch: 'touch' },

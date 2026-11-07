@@ -9,7 +9,9 @@ import { parseRegionId, regionId, slotNamesFor, type TopBarRegion as Region, typ
 // =============================================================================
 //  <TopBarRegion> — une région d'un niveau (neutre)
 //
-//  Rend les éléments puis les slots d'extension de la région. Quand des niveaux voisins ne sont pas rendus,
+//  Rend les slots d'extension de la région PUIS ses éléments globaux : l'identité (logo…) injectée par une app
+//  précède ainsi les éléments encore portés par la TopBar. Ces éléments sont transitoires (ils migrent vers des
+//  apps) : quand il n'y en aura plus, il ne restera que les slots. Quand des niveaux voisins ne sont pas rendus,
 //  `sources` liste les niveaux dont le contenu s'affiche ici (règle 3 de levels.ts). Chaque source applique SES
 //  règles de layout. Ne sait RIEN du métier.
 // =============================================================================
@@ -72,6 +74,14 @@ export const TopBarRegion: React.FC<Props> = ({ level, region, sources = [level]
 
   return (
     <div data-slot={`topbar-${id}`} className={className}>
+      {sources.flatMap((src) => {
+        const source = regionId(src, region);
+        const rule = layout.ruleFor(source);
+        if (rule.hidden) return [];
+        return slotNamesFor(source).map((name) => (
+          <RegionSlot key={name} name={name} source={source} rule={rule} state={state} background={region === 'background'} />
+        ));
+      })}
       {items.map((i) => {
         const Item = i.component;
         const cls = hideOn(i) ? 'hidden' : i.visibleFrom ? SCREEN_CLASS[i.visibleFrom] : 'contents';
@@ -80,14 +90,6 @@ export const TopBarRegion: React.FC<Props> = ({ level, region, sources = [level]
             <Item />
           </div>
         );
-      })}
-      {sources.flatMap((src) => {
-        const source = regionId(src, region);
-        const rule = layout.ruleFor(source);
-        if (rule.hidden) return [];
-        return slotNamesFor(source).map((name) => (
-          <RegionSlot key={name} name={name} source={source} rule={rule} state={state} background={region === 'background'} />
-        ));
       })}
     </div>
   );

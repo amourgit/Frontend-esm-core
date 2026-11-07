@@ -22,6 +22,7 @@ A set of frontend modules provides the core technical functionality of the appli
 - [@egen/esm-login-app](packages/apps/esm-login-app)
 - [@egen/esm-primary-navigation-app](packages/apps/esm-primary-navigation-app)
 - [@egen/esm-offline-tools-app](packages/apps/esm-offline-tools-app)
+- [@egen/esm-branding-app](packages/apps/esm-branding-app)
 
 ## Development
 

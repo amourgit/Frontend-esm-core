@@ -181,8 +181,12 @@ store.setState((s) => ({
 // Au démontage de la page : retirer la clé de l'app dans `claims`.
 ```
 
-Éléments globaux : `brand`, `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `user`, `clock`,
+Éléments globaux : `context-selectors`, `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `user`, `clock`,
 `menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
+
+**Identité d'entreprise : jamais dans la TopBar.** Le logo (et le nom, le slogan) est injecté par l'app
+`@egen/esm-branding-app` comme extension du slot neutre `topbar-l1-left-slot`. Dans une région, les extensions sont rendues
+avant les éléments globaux. Les éléments globaux restants sont transitoires : ils migreront vers des apps dédiées.
 
 ### Hauteur de la TopBar et contenu des apps
 
