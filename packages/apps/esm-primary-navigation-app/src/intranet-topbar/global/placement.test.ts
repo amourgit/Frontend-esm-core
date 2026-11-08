@@ -23,13 +23,13 @@ describe('placement des éléments globaux', () => {
     const p = resolvePlacement({ clock: 'l4-right', nav: 'l1-center' });
     expect(p.clock).toEqual({ region: 'l4-right', order: DEFAULT_PLACEMENT.clock.order });
     expect(p.nav.region).toBe('l1-center');
-    expect(p.user).toEqual(DEFAULT_PLACEMENT.user);
+    expect(p.theme).toEqual(DEFAULT_PLACEMENT.theme);
   });
 
   it('ignore (avec avertissement) un élément inconnu ou une région invalide, sans rien casser', () => {
     const warn = vi.fn();
     const p = resolvePlacement(
-      { inconnu: 'l1-left', clock: 'l3-background', theme: 'milieu', user: 42, apps: 'l0-left', nav: 'l2-left' },
+      { inconnu: 'l1-left', clock: 'l3-background', theme: 'milieu', search: 42, apps: 'l0-left', nav: 'l2-left' },
       warn,
     );
     expect(warn).toHaveBeenCalledTimes(5);

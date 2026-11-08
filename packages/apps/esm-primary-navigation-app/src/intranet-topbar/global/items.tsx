@@ -12,7 +12,6 @@ import {
   LanguageOption,
   QuickAccessOption,
   ThemeToggleOption,
-  UserMenuOption,
 } from '../components/options';
 import { playXboxSound } from '../utils/xboxAudio';
 import { type ConfigSchema } from '../../config-schema';
@@ -104,11 +103,6 @@ const QuickAccessItem: React.FC = () => {
   return <QuickAccessOption open={ui.isActivePanel('quickAccess')} onToggle={() => ui.togglePanel('quickAccess')} />;
 };
 
-const UserItem: React.FC = () => {
-  const ui = useTopBarUi();
-  return <UserMenuOption open={ui.isActivePanel('userMenu')} onToggle={() => ui.togglePanel('userMenu')} />;
-};
-
 function formatClock() {
   const now = new Date();
   const hours = now.getHours();
@@ -186,7 +180,6 @@ const GLOBAL_ITEMS: readonly ItemDefinition[] = [
   { id: 'quick-access', component: QuickAccessItem, hideOnSearch: 'touch' },
   { id: 'fullscreen', component: FullscreenOption as React.FC, visibleFrom: 'desktop' },
   { id: 'theme', component: ThemeToggleOption as React.FC, visibleFrom: 'desktop' },
-  { id: 'user', component: UserItem, hideOnSearch: 'touch' },
   { id: 'clock', component: ClockItem },
   { id: 'menu-panel', component: MenuPanelItem, hideOnSearch: 'touch' },
   { id: 'nav', component: NavigationItem },

@@ -3,7 +3,7 @@
    structure sans rôle ARIA ni texte accessible, donc inatteignables par les requêtes Testing Library. */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 
 const state = vi.hoisted(() => ({
@@ -17,6 +17,17 @@ const state = vi.hoisted(() => ({
 
 vi.mock('@egen-civitas/esm-framework/src/internal', () => ({
   getExtensionInternalStore: () => ({ getState: () => state.internal, subscribe: () => () => {} }),
+  getExtensionStore: () => ({
+    getState: () => ({
+      slots: Object.fromEntries(
+        Object.entries(state.attached).map(([slot, ids]) => [
+          slot,
+          { assignedExtensions: ids.map((id) => ({ id, name: id, ...state.extensions[id] })) },
+        ]),
+      ),
+    }),
+    subscribe: () => () => {},
+  }),
 }));
 vi.mock('@egen-civitas/esm-framework', () => ({
   getGlobalStore: (name: string) => ({ __name: name }),
@@ -40,6 +51,14 @@ import { COMPACT_SKIN, TopBarLevels } from './TopBarLevels';
 import { TopBarUiProvider, type TopBarUi } from './context';
 import { registerTopBarItem } from './items';
 
+// Le registre d'éléments est global : tout élément enregistré par un test est désenregistré à la fin.
+const registered: Array<() => void> = [];
+const registerItem: typeof registerTopBarItem = (item) => {
+  const off = registerTopBarItem(item);
+  registered.push(off);
+  return off;
+};
+
 const ui: TopBarUi = {
   activeMenu: null,
   isActivePanel: () => false,
@@ -54,12 +73,25 @@ const ui: TopBarUi = {
 const fullSkin = { row: 'row', left: 'left', center: 'center', right: 'right' };
 const firstRowFull = ({ isFirst }: { isFirst: boolean }) => (isFirst ? fullSkin : COMPACT_SKIN);
 
-function attach(slot: string, id: string, moduleName: string, meta?: { global?: boolean }) {
+function attach(slot: string, id: string, moduleName: string, meta?: { global?: boolean }, order?: number) {
   state.attached[slot] = [...(state.attached[slot] ?? []), id];
   state.extensions[id] = { moduleName, meta };
+  state.internal.extensions[id] = { moduleName, meta, order };
   state.internal.slots[slot] = { attachedIds: state.attached[slot] };
-  state.internal.extensions[id] = { moduleName, meta };
 }
+
+/** Contenu des enfants visibles d'une région : les `SlotRegistrar` (cachés, vides) enregistrent les slots sans rien rendre. */
+const visibleChildren = (region: HTMLElement) =>
+  Array.from(region.children)
+    .filter((n) => !n.classList.contains('hidden'))
+    .map((n) => n.textContent);
+
+/** Contenu rendu dans un slot (extensions + éventuel registrar caché). */
+const slotText = (name: string) =>
+  screen
+    .getAllByTestId(name)
+    .map((n) => n.textContent)
+    .join('');
 
 const renderBar = (config?: { min: number; max: number; disabled: number[] }) =>
   render(
@@ -72,6 +104,10 @@ const levelsRendered = (container: HTMLElement) =>
   Array.from(container.querySelectorAll('[data-level]')).map((n) => n.getAttribute('data-level'));
 
 describe('TopBarLevels', () => {
+  afterEach(() => {
+    registered.splice(0).forEach((off) => off());
+  });
+
   beforeEach(() => {
     state.attached = {};
     state.extensions = {};
@@ -92,12 +128,32 @@ describe('TopBarLevels', () => {
   });
 
   it("dans une région, les extensions précèdent les éléments globaux : le logo injecté par une app reste à gauche des sélecteurs", () => {
-    registerTopBarItem({ id: 'selecteurs', region: 'l1-left', order: 0, component: () => <span>SELECTEURS</span> });
+    registerItem({ id: 'selecteurs', region: 'l1-left', order: 0, component: () => <span>SELECTEURS</span> });
     attach('topbar-l1-left-slot', 'brand-logo', '@egen/esm-branding-app', { global: true });
     const { container } = renderBar({ min: 1, max: 8, disabled: [] });
 
     const region = container.querySelector('[data-slot="topbar-l1-left"]') as HTMLElement;
-    expect(Array.from(region.children).map((n) => n.textContent)).toEqual(['brand-logo', 'SELECTEURS']);
+    expect(visibleChildren(region)).toEqual(['brand-logo', 'SELECTEURS']);
+  });
+
+  it("entrelace éléments et extensions par `order` : une extension d'ordre 90 se place entre un élément d'ordre 70 et un d'ordre 100", () => {
+    registerItem({ id: 'theme', region: 'l1-right', order: 70, component: () => <span>THEME</span> });
+    registerItem({ id: 'clock', region: 'l1-right', order: 100, component: () => <span>CLOCK</span> });
+    attach('topbar-l1-right-slot', 'user-menu', '@egen/esm-user-profile-app', { global: true }, 90);
+    const { container } = renderBar({ min: 1, max: 8, disabled: [] });
+
+    const region = container.querySelector('[data-slot="topbar-l1-right"]') as HTMLElement;
+    expect(visibleChildren(region)).toEqual(['THEME', 'user-menu', 'CLOCK']);
+  });
+
+  it('plusieurs extensions du même slot sont rendues chacune à son ordre, entrelacées avec les éléments', () => {
+    registerItem({ id: 'milieu', region: 'l1-right', order: 50, component: () => <span>MILIEU</span> });
+    attach('topbar-l1-right-slot', 'ext-b', '@egen/esm-b-app', { global: true }, 80);
+    attach('topbar-l1-right-slot', 'ext-a', '@egen/esm-a-app', { global: true }, 10);
+    const { container } = renderBar({ min: 1, max: 8, disabled: [] });
+
+    const region = container.querySelector('[data-slot="topbar-l1-right"]') as HTMLElement;
+    expect(visibleChildren(region)).toEqual(['ext-a', 'MILIEU', 'ext-b']);
   });
 
   it("une extension globale d'une app non active s'affiche quand même (logo toujours présent)", () => {
@@ -105,15 +161,15 @@ describe('TopBarLevels', () => {
     attach('topbar-l1-left-slot', 'autre', '@egen/esm-autre-app');
     renderBar({ min: 1, max: 8, disabled: [] });
 
-    expect(screen.getByTestId('topbar-l1-left-slot')).toHaveTextContent('brand-logo');
-    expect(screen.getByTestId('topbar-l1-left-slot')).not.toHaveTextContent('autre');
+    expect(slotText('topbar-l1-left-slot')).toContain('brand-logo');
+    expect(slotText('topbar-l1-left-slot')).not.toContain('autre');
   });
 
   it('une extension au niveau 4 (app active) crée 4 niveaux', () => {
     attach('topbar-l4-right-slot', 'annuaire-filtre', '@egen/esm-annuaire-app');
     const { container } = renderBar({ min: 1, max: 8, disabled: [] });
     expect(levelsRendered(container)).toEqual(['1', '2', '3', '4']);
-    expect(screen.getByTestId('topbar-l4-right-slot')).toHaveTextContent('annuaire-filtre');
+    expect(slotText('topbar-l4-right-slot')).toContain('annuaire-filtre');
   });
 
   it("une extension d'une app inactive ne crée pas de niveau ; une globale oui", () => {
@@ -121,17 +177,19 @@ describe('TopBarLevels', () => {
     attach('topbar-l5-left-slot', 'globale', '@egen/esm-sites-app', { global: true });
     const { container } = renderBar({ min: 1, max: 8, disabled: [] });
     expect(levelsRendered(container)).toEqual(['1', '2', '3', '4', '5']);
-    expect(screen.getByTestId('topbar-l3-left-slot')).not.toHaveTextContent('autre');
-    expect(screen.getByTestId('topbar-l5-left-slot')).toHaveTextContent('globale');
+    expect(slotText('topbar-l3-left-slot')).not.toContain('autre');
+    expect(slotText('topbar-l5-left-slot')).toContain('globale');
   });
 
   it('niveau 2 désactivé : son contenu (slot historique compris) s’affiche au niveau 1, même région', () => {
     attach('top-nav-level2-end-slot', 'assistant', '@egen/esm-ai-app', { global: true });
     const { container } = renderBar({ min: 1, max: 8, disabled: [2] });
     expect(levelsRendered(container)).toEqual(['1']);
-    expect(
-      container.querySelector('[data-slot="topbar-l1-right"] [data-testid="top-nav-level2-end-slot"]'),
-    ).toHaveTextContent('assistant');
+    // Le slot est monté deux fois : instance cachée (enregistrement) + extension rendue.
+    const rendered = Array.from(
+      container.querySelectorAll('[data-slot="topbar-l1-right"] [data-testid="top-nav-level2-end-slot"]'),
+    ).map((n) => n.textContent);
+    expect(rendered.join('')).toContain('assistant');
   });
 
   it('éléments : un élément du niveau 2 passe au niveau 1 quand le niveau 2 est absent', () => {

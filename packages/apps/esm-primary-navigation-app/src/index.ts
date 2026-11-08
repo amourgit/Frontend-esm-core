@@ -3,16 +3,11 @@ import {
   defineConfigSchema,
   defineExtensionConfigSchema,
   getAsyncLifecycle,
-  getSessionStore,
   getSyncLifecycle,
-  interpolateUrl,
-  navigate,
 } from '@egen-civitas/esm-framework';
-import { type Application } from 'single-spa';
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';
 import primaryNavRootComponent from './root.component';
-import userPanelComponent from './components/user-panel-switcher/user-panel-switcher.component';
 import changeLanguageLinkComponent from './components/change-language/change-language-link.extension';
 import workspaceSelectorMenuComponent from './components/workspace-selector-menu/workspace-selector-menu.extension';
 import genericLinkComponent, { genericLinkConfigSchema } from './components/generic-link/generic-link.component';
@@ -31,49 +26,9 @@ export function startupApp() {
   defineExtensionConfigSchema('breadcrumb-item', breadcrumbItemConfigSchema);
 }
 
-// ─── Page : la TopBar (elle gère elle-même la garde d'authentification) ──────
+// Page : la TopBar. Squelette neutre : elle ne connaît ni la session ni l'authentification (garde et redirection
+// racine : @egen/esm-user-profile-app), ni le logo (@egen/esm-branding-app).
 export const root = getSyncLifecycle(primaryNavRootComponent, options);
-
-// ─── Racine du SPA (/) — démarre sur l'écran d'accueil (@egen-civitas/esm-home-app) ──
-// La TopBar (page 'root' ci-dessus) matche AUSSI la racine ("" ne commence
-// par aucun des préfixes exclus du routeRegex) et gère elle-même la garde de
-// session (→ /login si absente). Cette page 'redirect', montée en parallèle
-// uniquement sur le chemin exact "/", pousse l'utilisateur AUTHENTIFIÉ vers
-// /home dès que la session est résolue — sans elle, la racine resterait
-// vide pour un utilisateur connecté (aucune app de contenu ne matche "/" par
-// défaut). Si la session n'est pas (encore) authentifiée, cette page ne fait
-// STRICTEMENT rien : c'est la TopBar qui décide seule du redirect vers
-// /login, pour ne jamais avoir deux navigations concurrentes.
-export const redirect: Application = async () => {
-  let unsubscribe: (() => void) | undefined;
-
-  const redirectToHomeIfAuthenticated = (): boolean => {
-    const state = getSessionStore().getState();
-    if (state.loaded && state.session?.authenticated) {
-      navigate({ to: interpolateUrl('${egenSpaBase}/home') });
-      return true;
-    }
-    return false;
-  };
-
-  return {
-    bootstrap: async () => {},
-    mount: async () => {
-      if (!redirectToHomeIfAuthenticated()) {
-        unsubscribe = getSessionStore().subscribe(() => {
-          if (redirectToHomeIfAuthenticated()) {
-            unsubscribe?.();
-            unsubscribe = undefined;
-          }
-        });
-      }
-    },
-    unmount: async () => {
-      unsubscribe?.();
-      unsubscribe = undefined;
-    },
-  };
-};
 
 // ─── NOTE ARCHITECTURE ───────────────────────────────────────────────────────
 // userMenuButton, appMenuButton, notificationsMenuButton et breadcrumbNav ne
@@ -89,8 +44,6 @@ export const redirect: Application = async () => {
 // injectent des boutons additionnels (aide, raccourcis, etc.) — voir
 // routes.json.
 // ──────────────────────────────────────────────────────────────────────────
-
-export const userPanel = getSyncLifecycle(userPanelComponent, options);
 
 export const changeLanguageLink = getSyncLifecycle(changeLanguageLinkComponent, options);
 

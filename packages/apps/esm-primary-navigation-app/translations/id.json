@@ -6,8 +6,5 @@
   "changeDefaultLocaleExplanation": "Leave this unchecked to change language for this session only",
   "changeLanguage": "Ubah bahasa",
   "changingLanguage": "Mengubah bahasa",
-  "notifications": "Notifikasi",
-  "userMenu": "Menu pengguna",
-  "userMenuOptions": "Opsi menu pengguna",
-  "userMenuTooltip": "Akun Saya"
+  "notifications": "Notifikasi"
 }

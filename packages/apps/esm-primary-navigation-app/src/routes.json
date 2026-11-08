@@ -10,23 +10,9 @@
       "online": true,
       "offline": true,
       "containerDomId": "egen-top-nav-app-container"
-    },
-    {
-      "component": "redirect",
-      "routeRegex": "^$",
-      "online": true,
-      "offline": true
     }
   ],
   "extensions": [
-    {
-      "name": "default-user-panel",
-      "slot": "user-panel-slot",
-      "component": "userPanel",
-      "online": true,
-      "offline": true,
-      "order": 0
-    },
     {
       "name": "change-language",
       "slot": "user-panel-slot",

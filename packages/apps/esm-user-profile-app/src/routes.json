@@ -1,0 +1,41 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "pages": [
+    {
+      "component": "sessionGuard",
+      "routeRegex": "^(?!(?:login|logout|change-password)/?)",
+      "online": true,
+      "offline": true
+    },
+    {
+      "component": "rootRedirect",
+      "routeRegex": "^$",
+      "online": true,
+      "offline": true
+    }
+  ],
+  "extensions": [
+    {
+      "name": "user-menu",
+      "slot": "topbar-l1-right-slot",
+      "component": "userMenu",
+      "online": true,
+      "offline": true,
+      "order": 90,
+      "meta": {
+        "global": true
+      }
+    },
+    {
+      "name": "default-user-panel",
+      "slot": "user-panel-slot",
+      "component": "userPanel",
+      "online": true,
+      "offline": true,
+      "order": 0
+    }
+  ],
+  "backendDependencies": {
+    "webservices.rest": ">=2.2.0"
+  }
+}

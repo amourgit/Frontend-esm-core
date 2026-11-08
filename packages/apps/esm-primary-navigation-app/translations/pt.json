@@ -6,8 +6,5 @@
   "changeDefaultLocaleExplanation": "Leave this unchecked to change language for this session only",
   "changeLanguage": "Alterar língua",
   "changingLanguage": "Alterando língua",
-  "notifications": "Notificações",
-  "userMenu": "User menu",
-  "userMenuOptions": "User menu options",
-  "userMenuTooltip": "Minha Conta"
+  "notifications": "Notificações"
 }

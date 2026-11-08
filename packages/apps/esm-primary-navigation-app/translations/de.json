@@ -6,8 +6,5 @@
   "changeDefaultLocaleExplanation": "Lassen Sie dieses Kontrollkästchen deaktiviert, um die Sprache nur für diese Sitzung zu ändern",
   "changeLanguage": "Sprache ändern",
   "changingLanguage": "Sprache ändern",
-  "notifications": "Benachrichtigungen",
-  "userMenu": "Benutzermenü",
-  "userMenuOptions": "Optionen im Benutzermenü",
-  "userMenuTooltip": "Mein Konto"
+  "notifications": "Benachrichtigungen"
 }
