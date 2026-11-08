@@ -6,8 +6,5 @@
   "changeDefaultLocaleExplanation": "Leave this unchecked to change language for this session only",
   "changeLanguage": "ენის შეცვლა",
   "changingLanguage": "მიმდინარეობს ენის შეცვლა",
-  "notifications": "გაფრთხილებები",
-  "userMenu": "მომხმარებლის მენიუ",
-  "userMenuOptions": "მომხმარებლის მენიუს მორგება",
-  "userMenuTooltip": "ჩემი ანგარიში"
+  "notifications": "გაფრთხილებები"
 }

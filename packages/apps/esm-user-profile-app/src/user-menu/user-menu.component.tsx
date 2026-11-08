@@ -1,32 +1,54 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Switcher, SwitcherDivider } from '@carbon/react';
 import { ExtensionSlot, useAssignedExtensions, useSession } from '@egen-civitas/esm-framework';
-import { WaterGlassModal } from '../ui/WaterGlassModal';
-import { OPTION_PANEL_CLASS, type OptionPanelProps } from './TopBarOptionButton';
-import styles from './topbar-options.scss';
+import { GlassPanel } from './glass-panel.component';
+import styles from './user-menu.scss';
 
-// Menu utilisateur — services réels : identité de la session + extensions
-// "user-panel-slot" / "user-panel-bottom-slot" (déconnexion, langue, etc.).
-// Les extensions sont des `SwitcherItem` Carbon → conservées dans un `Switcher`.
+// =============================================================================
+//  MENU UTILISATEUR — extension de la TopBar
+//
+//  Avatar (initiale du nom) qui ouvre un panneau : identité de la session + extensions des slots `user-panel-slot` et
+//  `user-panel-bottom-slot` (déconnexion, langue…), que d'autres apps alimentent. Rien d'autre n'est affiché si aucune
+//  extension n'y est attachée.
+//
+//  La TopBar passe à toute extension un `state` (reçu ici comme props) : ouverture exclusive des panneaux, recherche
+//  ouverte, type d'écran. Monté hors d'une TopBar (props absentes), le menu gère lui-même son ouverture.
+// =============================================================================
 
-const UserMenuOption: React.FC<OptionPanelProps> = ({ open, onToggle, className = '' }) => {
+const PANEL_ID = 'userMenu';
+const PANEL_CLASS = 'fixed sm:absolute top-14 sm:top-10 left-2 right-2 sm:left-auto sm:right-0 max-w-sm z-[9999]';
+
+interface TopBarState {
+  isActivePanel?: (panelId: string) => boolean;
+  togglePanel?: (panelId: string) => void;
+  searchOpen?: boolean;
+  isDesktop?: boolean;
+}
+
+const UserMenu: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpen, isDesktop }) => {
   const { t } = useTranslation();
   const session = useSession();
   const topItems = useAssignedExtensions('user-panel-slot');
   const bottomItems = useAssignedExtensions('user-panel-bottom-slot');
+  const [localOpen, setLocalOpen] = useState(false);
+
+  const open = isActivePanel ? isActivePanel(PANEL_ID) : localOpen;
+  const toggle = () => (togglePanel ? togglePanel(PANEL_ID) : setLocalOpen((value) => !value));
 
   const displayName = session?.user?.person?.display ?? session?.user?.display ?? '';
   const systemId = session?.user?.systemId ?? session?.user?.username ?? '';
   const initial = useMemo(() => (displayName ? displayName.trim().charAt(0).toUpperCase() : '?'), [displayName]);
 
+  // Recherche ouverte sur un écran tactile : la place revient à la recherche.
+  if (searchOpen && isDesktop === false) return null;
   if (topItems.length === 0 && bottomItems.length === 0) return null;
 
   return (
-    <div className={`relative overflow-visible items-center shrink-0 ${className || 'flex'}`}>
+    <div className="relative overflow-visible items-center shrink-0 flex">
       <button
         type="button"
-        onClick={onToggle}
+        onClick={toggle}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={t('userMenuTooltip', 'Mon compte : {{name}}', { name: displayName })}
@@ -40,9 +62,8 @@ const UserMenuOption: React.FC<OptionPanelProps> = ({ open, onToggle, className 
       </button>
 
       {open && (
-        <WaterGlassModal
-          align="none"
-          className={`${OPTION_PANEL_CLASS} w-[calc(100vw-16px)] sm:w-64 max-w-xs`}
+        <GlassPanel
+          className={`${PANEL_CLASS} w-[calc(100vw-16px)] sm:w-64 max-w-xs`}
           contentClassName="p-2.5"
           header={
             <div className="flex items-center gap-2.5" role="menu" aria-label={t('userMenu', 'Menu utilisateur')}>
@@ -62,10 +83,10 @@ const UserMenuOption: React.FC<OptionPanelProps> = ({ open, onToggle, className 
             <SwitcherDivider className={styles.divider} aria-hidden="true" />
             <ExtensionSlot className={styles.fullWidth} name="user-panel-bottom-slot" />
           </Switcher>
-        </WaterGlassModal>
+        </GlassPanel>
       )}
     </div>
   );
 };
 
-export default UserMenuOption;
+export default UserMenu;

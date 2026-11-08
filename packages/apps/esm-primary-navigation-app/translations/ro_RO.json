@@ -6,8 +6,5 @@
   "changeDefaultLocaleExplanation": "Leave this unchecked to change language for this session only",
   "changeLanguage": "Schimbă limba",
   "changingLanguage": "Se schimbă limba",
-  "notifications": "Notificări",
-  "userMenu": "Meniul utilizatorului",
-  "userMenuOptions": "Opțiuni meniu utilizator",
-  "userMenuTooltip": "Contul meu"
+  "notifications": "Notificări"
 }

@@ -35,7 +35,7 @@ Placement d'usine des éléments globaux (déplaçable par la config `topbar.pla
 | `app-menu-slot`          | Grille du panneau "Applications"    | `esm-offline-tools-app`                            |
 | `quick-access-slot`      | Liste du panneau "Raccourcis"       | — (ouvert, libre)                                  |
 | `notifications-nav-menu-slot` | Zone droite « Notifications » (rail droit, rendu par `esm-notifications-app`) | — (ouvert, libre) |
-| `user-panel-slot`        | Panneau utilisateur (haut)          | Cette app (profil, langue), `esm-login-app`, `esm-offline-tools-app` |
+| `user-panel-slot`        | Panneau utilisateur (haut)          | `esm-user-profile-app` (identité), cette app (langue), `esm-login-app`, `esm-offline-tools-app` |
 | `user-panel-bottom-slot` | Panneau utilisateur (bas)           | `esm-login-app`                                    |
 | `topbar-nav-start-slot`  | Juste avant la navigation           | — (ouvert, libre)                                  |
 | `top-nav-breadcrumb-slot`| Fil d'Ariane par extensions (voir ci-dessous) | `breadcrumb-item`                        |
@@ -181,12 +181,16 @@ store.setState((s) => ({
 // Au démontage de la page : retirer la clé de l'app dans `claims`.
 ```
 
-Éléments globaux : `context-selectors`, `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `user`, `clock`,
+Éléments globaux : `context-selectors`, `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `clock`,
 `menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
 
+**Identité et session : jamais dans la TopBar.** Le menu utilisateur, le garde d'authentification et la redirection de la
+racine viennent de `@egen/esm-user-profile-app`.
+
 **Identité d'entreprise : jamais dans la TopBar.** Le logo (et le nom, le slogan) est injecté par l'app
-`@egen/esm-branding-app` comme extension du slot neutre `topbar-l1-left-slot`. Dans une région, les extensions sont rendues
-avant les éléments globaux. Les éléments globaux restants sont transitoires : ils migreront vers des apps dédiées.
+`@egen/esm-branding-app` comme extension du slot neutre `topbar-l1-left-slot`. Une région rend ses éléments globaux et ses
+extensions dans UN SEUL ordre, trié par niveau puis par `order` (celui de l'élément, ou celui du `routes.json` de
+l'extension ; à `order` égal, l'extension passe avant). Les éléments globaux restants sont transitoires : ils migreront vers des apps dédiées.
 
 ### Hauteur de la TopBar et contenu des apps
 

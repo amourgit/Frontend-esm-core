@@ -8,8 +8,5 @@
   "changeLanguageError": "Impossible de changer la langue",
   "changingLanguage": "Changement de langue",
   "notifications": "Notifications",
-  "tryAgain": "Veuillez réessayer",
-  "userMenu": "Menu utilisateur",
-  "userMenuOptions": "Options du menu utilisateur",
-  "userMenuTooltip": "Mon compte"
+  "tryAgain": "Veuillez réessayer"
 }

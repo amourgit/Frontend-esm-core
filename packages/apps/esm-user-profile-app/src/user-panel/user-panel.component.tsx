@@ -2,7 +2,8 @@ import React from 'react';
 import { SwitcherItem } from '@carbon/react';
 import { UserAvatarIcon, useSession } from '@egen-civitas/esm-framework';
 
-const UserPanelSwitcher: React.FC = () => {
+/** Identité de la session, affichée en tête du panneau du menu utilisateur (slot `user-panel-slot`). */
+const UserPanel: React.FC = () => {
   const session = useSession();
   return (
     <SwitcherItem aria-label="User">
@@ -12,4 +13,4 @@ const UserPanelSwitcher: React.FC = () => {
   );
 };
 
-export default UserPanelSwitcher;
+export default UserPanel;

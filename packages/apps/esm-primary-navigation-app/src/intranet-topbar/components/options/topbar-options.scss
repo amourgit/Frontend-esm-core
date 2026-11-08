@@ -71,19 +71,6 @@
   }
 }
 
-.fullWidth {
-  width: 100%;
-}
-
-.divider {
-  border-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-// Extensions du menu utilisateur (Carbon SwitcherItem)
-.switcher {
-  background: transparent;
-  align-items: start;
-}
 
 .switcher :global(.cds--switcher__item) {
   height: layout.$spacing-09;

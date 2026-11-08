@@ -6,8 +6,5 @@
   "changeDefaultLocaleExplanation": "Leave this unchecked to change language for this session only",
   "changeLanguage": "Change language",
   "changingLanguage": "Changing language",
-  "notifications": "התראות",
-  "userMenu": "תפריט משתמש",
-  "userMenuOptions": "אפשרויות תפריט משתמש",
-  "userMenuTooltip": "My Account"
+  "notifications": "התראות"
 }

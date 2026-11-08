@@ -1,7 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useSession } from '@egen-civitas/esm-framework';
-import { useTenantMode } from '@egen-civitas/esm-tenant';
 import { SupremeIntranetTopBar } from '../../intranet-topbar/components/shell/SupremeIntranetTopBar';
 import { WorkspaceProvider } from '../../intranet-topbar/context/WorkspaceContext';
 import { SiteProvider } from '../../intranet-topbar/context/SiteContext';
@@ -17,8 +14,9 @@ import { SiteProvider } from '../../intranet-topbar/context/SiteContext';
 //
 //  Placement d'usine des éléments globaux (modifiable via `topbar.placement`,
 //  voir intranet-topbar/global/placement.ts) :
-//    l1 : Logo EGEN · sélecteurs Espace/Site | Recherche · Langue · Apps · Raccourcis ·
-//         Plein écran · Thème · Utilisateur · Date/Heure
+//    l1 : sélecteurs Espace/Site | Recherche · Langue · Apps · Raccourcis · Plein écran · Thème · Date/Heure
+//    Injectés par des apps, par extensions : le logo (@egen/esm-branding-app, l1-left) et le menu
+//    utilisateur (@egen/esm-user-profile-app, l1-right)
 //    l2 : Navigation déroulante (accueil) ou fil d'Ariane contextuel
 // =============================================================================
 
@@ -48,46 +46,19 @@ const TopBarContent: React.FC = () => {
 };
 
 // =============================================================================
-//  TOPBAR — Garde d'authentification (LOGIQUE PRÉSERVÉE À L'IDENTIQUE)
+//  TOPBAR — squelette neutre
 //
-//  RESPONSABILITÉ :
-//    • Rend la topbar quand l'utilisateur est connecté.
-//    • En mode SINGLE/OFF : redirige vers /login si non connecté
-//      (le Guard tenant est silencieux dans ces modes).
-//    • En mode MULTI : NE redirige PAS (le TenantRoutingGuard le fait déjà) ;
-//      rendre null évite une navigation simultanée contradictoire.
-//
-//  RÈGLE D'OR :
-//    Mode multi  → Guard redirige vers /login,  TopBar rend null
-//    Mode single → Guard silencieux,             TopBar redirige vers /login
+//  Rend toujours la pile de niveaux ; elle ne connaît NI la session NI l'authentification. Le renvoi vers la
+//  connexion d'un utilisateur sans session, la redirection de la racine du SPA et le menu utilisateur appartiennent à
+//  `@egen/esm-user-profile-app` ; le logo à `@egen/esm-branding-app`. Chacune de ces apps injecte son élément par
+//  extension, là où elle le décide.
 // =============================================================================
-const TopBar: React.FC = () => {
-  const session = useSession();
-  const tenantMode = useTenantMode();
-  const egenSpaBase = window['getEgenSpaBase']();
-
-  const currentReferrer = window.location.pathname.slice(
-    window.location.pathname.indexOf(egenSpaBase) + egenSpaBase.length - 1,
-  );
-
-  // Connecté → rendre la topbar complète (tous modes)
-  if (session?.authenticated && session?.user?.person) {
-    return (
-      <WorkspaceProvider>
-        <SiteProvider>
-          <TopBarContent />
-        </SiteProvider>
-      </WorkspaceProvider>
-    );
-  }
-
-  // Non connecté, mode multi → Guard TenantRoutingGuard gère la redirection
-  if (tenantMode === 'multi') {
-    return null;
-  }
-
-  // Non connecté, mode SINGLE / OFF → TopBar gère la redirection
-  return <Navigate to="/login" state={{ referrer: currentReferrer }} />;
-};
+const TopBar: React.FC = () => (
+  <WorkspaceProvider>
+    <SiteProvider>
+      <TopBarContent />
+    </SiteProvider>
+  </WorkspaceProvider>
+);
 
 export default TopBar;

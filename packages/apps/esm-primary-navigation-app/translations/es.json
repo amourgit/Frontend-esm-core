@@ -6,8 +6,5 @@
   "changeDefaultLocaleExplanation": "Deje esta opción sin marcar para cambiar el idioma únicamente de esta sesión",
   "changeLanguage": "Cambiar idioma",
   "changingLanguage": "Cambiando idioma",
-  "notifications": "Notificaciones",
-  "userMenu": "Menú de usuario",
-  "userMenuOptions": " Opciones del menú de usuario",
-  "userMenuTooltip": "Mi Cuenta"
+  "notifications": "Notificaciones"
 }
