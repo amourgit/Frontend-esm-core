@@ -1,0 +1,32 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "pages": [
+    {
+      "component": "root",
+      "route": "character-factory",
+      "online": true,
+      "offline": false
+    }
+  ],
+  "extensions": [
+    {
+      "name": "character-factory-nav",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 600,
+      "meta": {
+        "section": "character-factory",
+        "sectionLabel": "Character Factory",
+        "group": "personnages",
+        "groupLabel": "Personnages 3D",
+        "label": "Character Factory",
+        "description": "Création et personnalisation de personnages 3D",
+        "icon": "User",
+        "route": "character-factory",
+        "workspaces": ["intranet"]
+      }
+    }
+  ]
+}

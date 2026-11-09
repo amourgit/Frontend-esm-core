@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "esnext",
+    "target": "es2015",
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "lib": ["dom", "es2020", "es2022"],
+    "noEmit": true
+  },
+  "include": ["src/*.ts", "src/*.tsx", "src/declarations.d.ts"]
+}
