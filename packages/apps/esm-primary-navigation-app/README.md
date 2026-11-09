@@ -3,30 +3,61 @@
 Rend la topbar principale de l'application EGEN : la barre de navigation
 persistante affichée en haut de tous les espaces tenant authentifiés.
 
-## Architecture — N niveaux, trois régions chacun
+## Architecture — des niveaux déclarés par les apps, trois régions chacun
 
-La TopBar est une **pile de niveaux** (`1` en haut, puis `2`, `3`…). Leur nombre n'est écrit nulle part : il se déduit de
-ce qui est déclaré et de la config `topbar.levels` (voir « TopBar modulaire »). **Tous les niveaux ont le même
-squelette** — aucun n'est un cas particulier :
+La TopBar est une **pile de niveaux** que les **apps déclarent**. La TopBar elle-même ne numérote ni ne nomme aucun
+niveau : un niveau existe parce qu'une app y place un composant (avec le nom qu'elle choisit), et ses composants
+s'assemblent avec ceux des autres apps qui déclarent le même nom. **Tous les niveaux ont le même squelette** — aucun
+n'est un cas particulier :
 
 ```
-┌ niveau N ───────────────────────────────────────────────────────────────┐
-│ [calque d'arrière-plan : l<N>-background]                                │
-│  l<N>-left          │  l<N>-center                    │  l<N>-right      │
+┌ niveau (nom déclaré par les apps) ──────────────────────────────────────┐
+│ [calque d'arrière-plan : background]                                     │
+│  left               │  center                         │  right           │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-N'importe quelle app du monorepo (ou distante) peut y injecter des composants, dans **n'importe quelle région de
-n'importe quel niveau**, via son propre `routes.json` (slot `topbar-l<N>-<région>-slot`), sans toucher à ce package ;
-un composant ainsi injecté peut lui-même exposer ses propres slots d'extension. Rien dans le code ne dépend d'un numéro
-de niveau (un test de non-régression, `no-hardcoded-levels.test.ts`, le garantit).
+**Un seul slot** : `topbar-slot`. Une app y attache son extension et DÉCLARE son placement dans `meta.topbar`
+(`routes.json`), sans toucher à ce package :
 
-Placement d'usine des éléments globaux (déplaçable par la config `topbar.placement`, voir plus bas) :
+```json
+{
+  "name": "ma-banniere",
+  "slot": "topbar-slot",
+  "component": "banner",
+  "meta": {
+    "global": true,
+    "topbar": { "level": "promo", "rank": 40, "region": "center", "order": 10 }
+  }
+}
+```
 
-| Niveau | Gauche            | Centre                                     | Droite                                                                 |
-|--------|-------------------|--------------------------------------------|------------------------------------------------------------------------|
-| 1      | logo + sélecteurs | —                                          | recherche · langue · apps · raccourcis · plein écran · thème · utilisateur · horloge |
-| 2      | —                 | navigation déroulante ou fil d'Ariane      | —                                                                      |
+| Champ `meta.topbar` | Rôle |
+|---------------------|------|
+| `level`  | Nom du niveau (obligatoire ; minuscules, chiffres, tirets). Créé s'il n'existe pas ; s'il existe déjà (autre app), le composant s'y ajoute. |
+| `rank`   | Position du niveau dans la pile (croissant). Facultatif : sans rang, le niveau se place sous les niveaux classés, par nom. Plusieurs rangs pour un même niveau : le plus petit gagne. |
+| `region` | `left` · `center` · `right` · `background` (défaut `left`). |
+| `order`  | Ordre dans la région (défaut : `order` de l'extension dans `routes.json`, sinon 0). |
+| `before` / `after` | Position **par référence** : nom d'une autre extension du même niveau. Le composant se place juste avant / après elle, dans SA région (même si c'est une autre région que celle déclarée). Référence absente : `region` + `order` s'appliquent ; cycle : ignoré. |
+
+Visible quand l'app est active, ou toujours avec `meta.global: true`. Une déclaration invalide (niveau absent ou mal
+formé, région inconnue) n'affiche rien et avertit dans la console : jamais fatale. Un composant ainsi injecté peut
+lui-même exposer ses propres slots d'extension. Rien dans le kit ne dépend d'un niveau précis (un test de
+non-régression, `no-hardcoded-levels.test.ts`, le garantit).
+
+Cette app déclare, pour ses éléments globaux, les niveaux `main` (rang 10) et `navigation` (rang 20) — voir
+`src/intranet-topbar/global/placement.ts`. Placement d'usine (déplaçable par la config `topbar.placement`) :
+
+| Niveau       | Gauche            | Centre                                | Droite                                                                 |
+|--------------|-------------------|---------------------------------------|------------------------------------------------------------------------|
+| `main`       | logo + sélecteurs | —                                     | recherche · langue · apps · raccourcis · plein écran · thème · utilisateur · horloge |
+| `navigation` | identité de l'app active | navigation déroulante ou fil d'Ariane | contributions globales (ex. assistant IA)                         |
+
+### Niveau éphémère (annonce, bandeau)
+
+Une app qui veut une annonce limitée dans le temps ouvre un **niveau éphémère** (`openTopBarLevel`, voir
+`kit/transient-store.ts`) : il se place sous la pile, avec début différé (`startsAt`), fin (`expiresAt` / `ttl`) et
+animation. Il ne dépend d'aucun nom de niveau existant.
 
 ## Autres points d'extension (hors régions)
 
@@ -40,35 +71,24 @@ Placement d'usine des éléments globaux (déplaçable par la config `topbar.pla
 | `topbar-nav-start-slot`  | Juste avant la navigation           | — (ouvert, libre)                                  |
 | `top-nav-breadcrumb-slot`| Fil d'Ariane par extensions (voir ci-dessous) | `breadcrumb-item`                        |
 
-## Slots historiques (compatibilité)
-
-Les anciens slots nommés restent honorés : chacun est rattaché à la région équivalente (tableau unique :
-`src/intranet-topbar/kit/legacy-slots.ts`) et se comporte comme le slot officiel de cette région. Les nouvelles apps
-utilisent les slots `topbar-l<N>-<région>-slot`.
-
-| Slot historique            | Équivaut à               | Alimenté aujourd'hui par   |
-|----------------------------|--------------------------|----------------------------|
-| `top-nav-info-slot`        | `topbar-l1-center-slot`  | — (ouvert, libre)          |
-| `top-nav-actions-slot`     | `topbar-l1-right-slot`   | extensions d'apps          |
-| `top-nav-trailing-slot`    | `topbar-l1-right-slot`   | — (ouvert, libre)          |
-| `top-nav-app-slot`         | `topbar-l2-left-slot`    | `esm-home-app` (contenu de barre d'outils **propre à l'app active**) |
-| `top-nav-level2-end-slot`  | `topbar-l2-right-slot`   | `esm-ai-assistant-app` (contributions **globales**) |
-| `top-nav-level2-start-slot`| `topbar-nav-start-slot`  | — (ouvert, libre)          |
-
 ### Déclarer le contenu de barre d'outils d'une app
 
 ```json
 {
   "extensions": [
-    { "name": "mon-app-toolbar", "slot": "topbar-l2-left-slot", "component": "appToolbar", "order": 0 }
+    {
+      "name": "mon-app-toolbar",
+      "slot": "topbar-slot",
+      "component": "appToolbar",
+      "meta": { "topbar": { "level": "navigation", "rank": 20, "region": "left", "order": 0 } }
+    }
   ]
 }
 ```
 
-L'extension reçoit l'état de slot (`isActivePanel`, `togglePanel`, `hidePanel`). Elle doit être un
+L'extension reçoit l'état de slot (`isActivePanel`, `togglePanel`, `hidePanel`, `level`, `region`). Elle doit être un
 widget compact (hauteur 32 px, `rounded-lg`, survol `hover:bg-white/10`) ; voir
-`esm-home-app/src/topbar/home-app-toolbar.extension.tsx` comme référence. Une app dont aucune
-extension n'est déclarée n'affiche rien dans la zone app (le séparateur disparaît aussi).
+`esm-home-app/src/topbar/home-app-toolbar.extension.tsx` comme référence.
 
 ### Fil d'Ariane par extensions
 
@@ -121,40 +141,31 @@ La barre de recherche navigue réellement vers `search.path` à la soumission
 (Entrée ou icône) — pointez cette config vers votre propre app de résultats
 de recherche si vous en développez une.
 
-## TopBar modulaire (N niveaux)
+## TopBar modulaire (niveaux déclarés par les apps)
 
-La TopBar est une pile de **niveaux** numérotés (`1` en haut, `2`, `3`…). Chaque niveau a la même structure : trois **régions**
-neutres `l<N>-left | l<N>-center | l<N>-right`. Elle ne connaît aucune app : tout ce qui s'y affiche vient d'**éléments
-globaux** (`src/intranet-topbar/global/items.tsx`) ou d'**extensions** d'apps.
+La TopBar est une pile de **niveaux** que les apps déclarent (voir « Architecture »). Chaque niveau a la même structure :
+trois **régions** neutres `left | center | right`. Elle ne connaît aucune app : tout ce qui s'y affiche vient d'**éléments
+globaux** (`src/intranet-topbar/global/items.tsx`) ou d'**extensions** d'apps attachées au slot `topbar-slot`.
 
-**Déclarer du contenu** : slot `topbar-l<N>-<région>-slot` dans le `routes.json` de n'importe quelle app
-(ex. `topbar-l3-right-slot` = niveau 3, région droite). Visible quand l'app est active, ou toujours avec `meta.global: true`.
-Slots historiques toujours honorés : voir « Slots historiques (compatibilité) » plus haut.
+**Pile des niveaux** (règles uniques, `kit/levels.ts`) :
+1. Ordre : d'abord les niveaux listés dans `topbar.levels.order` (dans cet ordre), puis les niveaux classés par `rank`
+   croissant, puis ceux sans rang par nom.
+2. Un niveau est masqué par `topbar.levels.hidden`, ou par `levels.hide` d'une app active. Le premier niveau de la pile
+   n'est jamais masqué. `topbar.levels.keep` (ou `levels.keep` d'une app active) force le rendu d'un niveau même vide.
+3. Au plus `topbar.levels.max` niveaux (défaut 8) sont rendus.
+4. Le contenu d'un niveau non rendu (masqué, ou au-delà du max) s'affiche sur le niveau rendu **précédent** de la pile,
+   dans la **même région**. Rien n'est perdu en silence.
 
-**Nombre de niveaux** (règles uniques) :
-1. = max(`topbar.levels.min`, plus haut niveau déclaré par du contenu visible, `levels.min` d'une app active), plafonné à
-   `topbar.levels.max`. Un contenu au niveau 5 crée 5 niveaux, intermédiaires vides compris.
-2. Un niveau ≥ 2 peut être désactivé (`topbar.levels.disabled`, ou `levels.hide` d'une app active). Le niveau 1 jamais.
-3. Le contenu d'un niveau non rendu (désactivé, ou au-dessus du max) s'affiche sur le niveau rendu **inférieur le plus
-   proche**, dans la **même région**. Rien n'est perdu en silence.
-
-**Configuration du projet** (`config.json`, module `@egen-civitas/esm-primary-navigation-app`) :
-
-```json
-{ "topbar": { "levels": { "min": 1, "max": 1, "disabled": [] } } }
-```
-
-`min`/`max` = 1 → TopBar « à l'ancienne » à une seule rangée (la navigation passe au centre du niveau 1). Défaut : `min 2`, `max 8`.
-
-**Placer un élément global où l'on veut** — `topbar.placement` (identifiant de l'élément → région `l<N>-left|center|right`,
-N ≥ 1). Le placement d'usine est dans `src/intranet-topbar/global/placement.ts`, seul endroit où il est écrit :
+**Placer un élément global où l'on veut** — `topbar.placement` (identifiant de l'élément → `"<niveau>:<région>"`). Le
+placement d'usine est dans `src/intranet-topbar/global/placement.ts`, seul endroit où il est écrit. Un niveau inconnu est
+créé :
 
 ```json
-{ "topbar": { "placement": { "clock": "l3-right", "nav": "l1-center" } } }
+{ "topbar": { "placement": { "clock": "navigation:right", "nav": "main:center" } } }
 ```
 
-Entrée inconnue ou région invalide : ignorée avec un avertissement console. Si le niveau visé n'est pas rendu, la règle 3
-ci-dessus s'applique (le contenu s'affiche sur le niveau rendu inférieur le plus proche).
+Entrée inconnue ou valeur invalide : ignorée avec un avertissement console. Si le niveau visé n'est pas rendu, la règle 4
+ci-dessus s'applique.
 
 **Habillage d'une rangée** — le squelette est identique partout ; seule la « peau » CSS (`LevelSkin`) peut varier. L'hôte
 (`SupremeIntranetTopBar`) la choisit d'après la **position** de la rangée dans la pile (`skinFor` : première rangée /
@@ -162,19 +173,19 @@ autres), jamais d'après son numéro.
 
 **Personnaliser depuis une app montée** — store global `egen-topbar-layout` (aucune dépendance de code), valable tant que
 l'app propriétaire est active. Règles de région : `hidden`, `only`, `hide`, `hideGlobal` (`id` d'élément ou `name`
-d'extension), visant la région où le contenu est *déclaré*. Règles de niveaux : `min`, `hide`.
+d'extension), visant la région où le contenu est *déclaré*. Règles de niveaux : `keep`, `hide` (noms de niveaux), `background`.
 
 ```ts
 import { getGlobalStore } from '@egen-civitas/esm-framework';
 
 const store = getGlobalStore('egen-topbar-layout', { claims: {} });
-// Page « détail d'un collaborateur » : niveau 1 réduit à ses propres boutons (retour) + recherche
+// Page « détail d'un collaborateur » : le niveau `main` réduit à ses propres boutons (retour) + recherche
 store.setState((s) => ({
   claims: {
     ...s.claims,
     '@egen-civitas/esm-annuaire-app': {
-      regions: { 'l1-left': { hideGlobal: true }, 'l1-right': { only: ['search'] } },
-      levels: { min: 3, hide: [2] },
+      regions: { 'main:left': { hideGlobal: true }, 'main:right': { only: ['search'] } },
+      levels: { keep: ['promo'], hide: ['navigation'] },
     },
   },
 }));
@@ -188,15 +199,15 @@ store.setState((s) => ({
 racine viennent de `@egen/esm-user-profile-app`.
 
 **Identité d'entreprise : jamais dans la TopBar.** Le logo (et le nom, le slogan) est injecté par l'app
-`@egen/esm-branding-app` comme extension du slot neutre `topbar-l1-left-slot`. Une région rend ses éléments globaux et ses
-extensions dans UN SEUL ordre, trié par niveau puis par `order` (celui de l'élément, ou celui du `routes.json` de
-l'extension ; à `order` égal, l'extension passe avant). Les éléments globaux restants sont transitoires : ils migreront vers des apps dédiées.
+`@egen/esm-branding-app` comme extension du slot neutre `topbar-slot` (`meta.topbar` : niveau `main`, région gauche). Une région rend ses éléments globaux et ses
+extensions dans UN SEUL ordre, trié par `order` (celui de `meta.topbar`, de l'élément, ou à défaut celui du `routes.json` de
+l'extension ; à `order` égal, l'extension passe avant), les références `before` / `after` s'appliquant ensuite. Les éléments globaux restants sont transitoires : ils migreront vers des apps dédiées.
 
 ### Hauteur de la TopBar et contenu des apps
 
 Le shell mesure en direct le conteneur de la TopBar (`#egen-top-nav-app-container`, hauteur automatique) et publie
 `--egen-navbar-height` (idem `--egen-footer-height` pour le footer). Le nombre de niveaux n'y change rien : la hauteur est
-celle de ce qui est réellement rendu, quel que soit N. Le contenu des apps doit s'appuyer sur ces variables, jamais sur une
+celle de ce qui est réellement rendu. Le contenu des apps doit s'appuyer sur ces variables, jamais sur une
 hauteur codée en dur :
 
 ```css
@@ -209,12 +220,11 @@ height: calc(100dvh - var(--egen-navbar-height, 0px) - var(--egen-footer-height,
 
 Transparent par défaut. Deux façons de le surcharger, depuis n'importe quelle app :
 - **valeur CSS** : `levels.background: { <niveau>: '<valeur de background>' }` dans le layout (store `egen-topbar-layout`) ;
-- **composant** : extension dans le slot `topbar-l<N>-background-slot` (calque derrière le contenu du niveau N, sans capter la souris).
+- **composant** : extension du slot `topbar-slot` avec `meta.topbar.region: "background"` (calque derrière le contenu du niveau, sans capter la souris).
 
 ### Niveaux éphémères (bandeaux, défilants, notifications)
 
-Une app ajoute un niveau **sans connaître le nombre de niveaux** : il se place après le dernier niveau numéroté (2 niveaux →
-il devient le 3e) ; plusieurs s'empilent dans l'ordre d'ouverture. Entrée et sortie animées (hauteur + fondu, la hauteur du
+Une app ajoute un niveau **sans connaître le nombre de niveaux** : il se place sous le dernier niveau de la pile ; plusieurs s'empilent dans l'ordre d'ouverture. Entrée et sortie animées (hauteur + fondu, la hauteur du
 contenu des apps suit car le shell mesure la TopBar en direct ; `prefers-reduced-motion` respecté). N'importe quelle app peut
 en ouvrir un (annonces, notifications, alertes) : le contrat est le store global, sans dépendance de code.
 

@@ -25,11 +25,19 @@
     },
     {
       "name": "home-app-toolbar",
-      "slot": "topbar-l2-left-slot",
+      "slot": "topbar-slot",
       "component": "appToolbar",
       "online": true,
       "offline": false,
-      "order": 0
+      "order": 0,
+      "meta": {
+        "topbar": {
+          "level": "navigation",
+          "rank": 20,
+          "region": "left",
+          "order": 0
+        }
+      }
     },
     {
       "name": "home-social-links-section",

@@ -89,7 +89,7 @@ export const root = getSyncLifecycle(assistantRootComponent, options);
 export const assistantRailPanel = getSyncLifecycle(AssistantRailPanelComponent, options);
 
 // ─── Bouton Assistant IA (niveau 2 de la TopBar) ─────────────────────────────
-// Injecté dans le slot `topbar-l2-right-slot` (voir routes.json) : la TopBar
+// Injecté dans le slot neutre `topbar-slot`, placement déclaré dans `meta.topbar` (voir routes.json) : la TopBar
 // n'embarque plus aucun élément assistant en dur.
 export const assistantRobotButton = getAsyncLifecycle(
   () => import('./assistant-experience/components/AssistantRobotButtonExtension'),

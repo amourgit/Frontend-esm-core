@@ -1,16 +1,15 @@
 import type React from 'react';
 import { useSyncExternalStore } from 'react';
-import type { TopBarRegionId } from './regions';
+import { readPlacement, type TopBarPlacement } from './placement';
 
-// Registre d'ÉLÉMENTS : composants ajoutés à une région depuis le module global de cette app.
-// (Les autres apps passent par les slots d'extension, voir regions.ts.)
+// Registre d'ÉLÉMENTS : composants posés dans la TopBar depuis le module global de cette app. Ils se placent avec la
+// MÊME déclaration que les extensions d'apps (voir placement.ts) : ni plus ni moins privilégiés.
 
 export interface TopBarItem {
-  /** Identifiant unique : sert aux règles `only` / `hide`. */
+  /** Identifiant unique : sert aux règles `only` / `hide` et aux références `before` / `after`. */
   id: string;
-  region: TopBarRegionId;
-  /** Ordre dans la région (croissant). */
-  order?: number;
+  /** Placement déclaré (`level` obligatoire). */
+  placement: TopBarPlacement;
   component: React.ComponentType;
   /** Élément global (masquable en bloc par `hideGlobal`). Défaut : `true`. */
   global?: boolean;
@@ -19,6 +18,11 @@ export interface TopBarItem {
   /** Affichage conditionnel par taille d'écran. Défaut : partout. */
   visibleFrom?: 'tablet' | 'desktop';
 }
+
+/** Ce que l'on passe à `registerTopBarItem` : le placement peut être partiel (région, ordre : valeurs par défaut). */
+export type TopBarItemInput = Omit<TopBarItem, 'placement'> & {
+  placement: Partial<TopBarPlacement> & { level: string };
+};
 
 const items = new Map<string, TopBarItem>();
 const listeners = new Set<() => void>();
@@ -29,7 +33,10 @@ const emit = () => {
   listeners.forEach((l) => l());
 };
 
-export function registerTopBarItem(item: TopBarItem): () => void {
+export function registerTopBarItem(input: TopBarItemInput): () => void {
+  const placement = readPlacement(input.placement, 0, input.id);
+  if (!placement) return () => undefined;
+  const item: TopBarItem = { ...input, placement };
   items.set(item.id, item);
   emit();
   return () => {

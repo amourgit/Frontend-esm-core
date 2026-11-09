@@ -129,7 +129,7 @@ const ClockItem: React.FC = () => {
 const MenuPanelItem: React.FC = () => <TopBarMenuPanel />;
 
 /** Slots qui précèdent la navigation : l'officiel puis l'historique (toujours honoré). */
-const NAV_START_SLOTS = ['topbar-nav-start-slot', 'top-nav-level2-start-slot'] as const;
+const NAV_START_SLOTS = ['topbar-nav-start-slot'] as const;
 
 /** Navigation : menu déroulant (accueil) ou fil d'Ariane, plus leurs slots. Se place dans la région choisie par `placement.ts`. */
 const NavigationItem: React.FC = () => {
@@ -168,7 +168,7 @@ const NavigationItem: React.FC = () => {
   );
 };
 
-type ItemDefinition = Omit<TopBarItem, 'region' | 'order' | 'id'> & { id: GlobalItemId };
+type ItemDefinition = Omit<TopBarItem, 'placement' | 'id'> & { id: GlobalItemId };
 
 /** Les éléments globaux, SANS placement : la région et l'ordre viennent de `placement.ts`. */
 const GLOBAL_ITEMS: readonly ItemDefinition[] = [
@@ -191,5 +191,8 @@ const GLOBAL_ITEMS: readonly ItemDefinition[] = [
  */
 export function registerGlobalTopBarItems(overrides?: Readonly<Record<string, unknown>>): void {
   const placement = resolvePlacement(overrides);
-  for (const item of GLOBAL_ITEMS) registerTopBarItem({ ...item, ...placement[item.id] });
+  for (const item of GLOBAL_ITEMS) {
+    const { level, rank, region, order } = placement[item.id];
+    registerTopBarItem({ ...item, placement: { level, rank, region, order } });
+  }
 }

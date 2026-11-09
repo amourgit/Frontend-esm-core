@@ -3,13 +3,19 @@
   "extensions": [
     {
       "name": "brand-logo",
-      "slot": "topbar-l1-left-slot",
+      "slot": "topbar-slot",
       "component": "brandLogo",
       "online": true,
       "offline": true,
       "order": 0,
       "meta": {
-        "global": true
+        "global": true,
+        "topbar": {
+          "level": "main",
+          "rank": 10,
+          "region": "left",
+          "order": 0
+        }
       }
     }
   ]

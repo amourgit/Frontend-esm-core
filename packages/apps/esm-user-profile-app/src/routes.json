@@ -17,13 +17,19 @@
   "extensions": [
     {
       "name": "user-menu",
-      "slot": "topbar-l1-right-slot",
+      "slot": "topbar-slot",
       "component": "userMenu",
       "online": true,
       "offline": true,
       "order": 90,
       "meta": {
-        "global": true
+        "global": true,
+        "topbar": {
+          "level": "main",
+          "rank": 10,
+          "region": "right",
+          "order": 90
+        }
       }
     },
     {

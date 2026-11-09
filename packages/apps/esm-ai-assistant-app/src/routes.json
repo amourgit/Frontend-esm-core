@@ -12,11 +12,19 @@
   "extensions": [
     {
       "name": "assistant-robot-button",
-      "slot": "topbar-l2-right-slot",
+      "slot": "topbar-slot",
       "component": "assistantRobotButton",
       "online": true,
       "offline": false,
-      "order": 0
+      "order": 0,
+      "meta": {
+        "topbar": {
+          "level": "navigation",
+          "rank": 20,
+          "region": "right",
+          "order": 0
+        }
+      }
     },
     {
       "name": "assistant",

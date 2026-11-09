@@ -1,56 +1,56 @@
-import { LEGACY_SLOTS } from './legacy-slots';
 // =============================================================================
-//  TOPBAR KIT — contrat des niveaux et régions (neutre : aucune logique métier)
+//  TOPBAR KIT — contrat neutre des niveaux et des régions (aucune logique métier, aucun niveau nommé ici)
 //
-//  La TopBar est une pile de NIVEAUX numérotés 1, 2, 3… (1 = en haut). Le nombre de niveaux n'est pas figé :
-//  il se déduit de ce qui est déclaré (voir levels.ts). TOUS les niveaux ont le même squelette, trois régions
-//  (aucun n'est un cas particulier) :
+//  La TopBar est une pile de NIVEAUX. Un niveau n'est ni numéroté ni nommé par la TopBar : il EXISTE parce qu'une
+//  app (ou un élément global) le DÉCLARE, avec le nom qu'elle choisit (`primary`, `promo`, `agenda`…). Plusieurs apps
+//  peuvent déclarer le même niveau : leurs composants s'assemblent alors dans CE niveau (il est créé une seule fois).
 //
-//      l<N>-left  |  l<N>-center  |  l<N>-right          ex. l3-right = niveau 3, région droite
+//  Tous les niveaux ont le même squelette, trois régions (aucun n'est un cas particulier) :
 //
-//  Une région est alimentée de deux façons, sur le même pied d'égalité :
-//   • les ÉLÉMENTS (`registerTopBarItem`) : composants du module global de cette app ;
-//   • les EXTENSIONS d'apps : slot `topbar-l<N>-<région>-slot` (ex. `topbar-l3-right-slot`) dans le `routes.json`
-//     de n'importe quelle app (déployée, distante ou fédérée).
+//      left  |  center  |  right
 //
-//  Chaque niveau a aussi un calque d'ARRIÈRE-PLAN : `l<N>-background` (slot `topbar-l<N>-background-slot`), derrière le
-//  contenu, transparent par défaut. Une app y injecte ce qu'elle veut (dégradé, image, animation…).
+//  plus un calque d'ARRIÈRE-PLAN (`background`), derrière le contenu, transparent par défaut.
 //
-//  Une extension s'affiche si son app est active (une page montée) ou si elle déclare `meta.global: true`.
+//  UN SEUL slot d'extension : `topbar-slot`. Chaque extension y déclare son PLACEMENT dans `meta.topbar` :
+//
+//      { "name": "ma-banniere", "slot": "topbar-slot", "component": "banner",
+//        "meta": { "topbar": { "level": "promo", "rank": 40, "region": "center", "order": 10 } } }
+//
+//  Voir placement.ts pour la forme complète (`before` / `after` : position par référence à une autre extension).
 // =============================================================================
+
+/** Le seul slot d'extension de la TopBar : les apps y attachent leurs composants et déclarent leur placement. */
+export const TOPBAR_SLOT = 'topbar-slot';
 
 /** Régions de CONTENU d'un niveau. */
 export type TopBarContentRegion = 'left' | 'center' | 'right';
 /** + `background` : calque d'arrière-plan du niveau (derrière le contenu, sans interaction). */
 export type TopBarRegion = TopBarContentRegion | 'background';
-export type TopBarRegionId = `l${number}-${TopBarRegion}`;
 
 export const TOPBAR_REGIONS: readonly TopBarContentRegion[] = ['left', 'center', 'right'];
+export const TOPBAR_ALL_REGIONS: readonly TopBarRegion[] = [...TOPBAR_REGIONS, 'background'];
 
-/** Plafond absolu du nombre de niveaux (garde-fou contre une déclaration erronée). */
+/** Plafond absolu du nombre de niveaux rendus (garde-fou contre une déclaration erronée). */
 export const TOPBAR_HARD_MAX_LEVELS = 12;
 
-export const regionId = (level: number, region: TopBarRegion): TopBarRegionId => `l${level}-${region}`;
+/** Identifiant de niveau : minuscules, chiffres et tirets, commence par une lettre (ex. `primary`, `promo-ete`). */
+export const LEVEL_ID_PATTERN = /^[a-z][a-z0-9-]{0,47}$/;
+export const isLevelId = (value: unknown): value is string => typeof value === 'string' && LEVEL_ID_PATTERN.test(value);
 
-export function parseRegionId(id: string): { level: number; region: TopBarRegion } | null {
-  const m = /^l(\d+)-(left|center|right|background)$/.exec(id);
-  return m ? { level: Number(m[1]), region: m[2] as TopBarRegion } : null;
-}
+export const isRegion = (value: unknown): value is TopBarRegion =>
+  typeof value === 'string' && (TOPBAR_ALL_REGIONS as readonly string[]).includes(value);
+export const isContentRegion = (value: unknown): value is TopBarContentRegion =>
+  typeof value === 'string' && (TOPBAR_REGIONS as readonly string[]).includes(value);
 
-/** Nom du slot d'extension d'une région (ex. `topbar-l1-right-slot`). */
-export const topBarSlotName = (id: TopBarRegionId) => `topbar-${id}-slot`;
+/** Clé d'une région d'un niveau : `<niveau>:<région>` (ex. `primary:right`). */
+export type TopBarRegionKey = `${string}:${TopBarRegion}`;
+export const regionKey = (level: string, region: TopBarRegion): TopBarRegionKey => `${level}:${region}`;
 
-/** Tous les slots d'une région : le slot officiel puis les slots historiques. */
-export const slotNamesFor = (id: TopBarRegionId): string[] => [topBarSlotName(id), ...(LEGACY_SLOTS[id] ?? [])];
-
-export { LEGACY_SLOTS };
-
-const LEGACY_REVERSE: Record<string, TopBarRegionId> = Object.fromEntries(
-  Object.entries(LEGACY_SLOTS).flatMap(([id, slots]) => slots.map((s) => [s, id as TopBarRegionId])),
-);
-
-/** Région d'un nom de slot (officiel ou historique) ; `null` si ce n'est pas un slot de la TopBar. */
-export function regionOfSlot(slotName: string): TopBarRegionId | null {
-  const m = /^topbar-(l\d+-(?:left|center|right|background))-slot$/.exec(slotName);
-  return (m?.[1] as TopBarRegionId | undefined) ?? LEGACY_REVERSE[slotName] ?? null;
+export function parseRegionKey(key: unknown): { level: string; region: TopBarRegion } | null {
+  if (typeof key !== 'string') return null;
+  const i = key.lastIndexOf(':');
+  if (i < 1) return null;
+  const level = key.slice(0, i);
+  const region = key.slice(i + 1);
+  return isLevelId(level) && isRegion(region) ? { level, region } : null;
 }

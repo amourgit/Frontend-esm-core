@@ -4,9 +4,14 @@ import routes from './routes.json';
 describe('routes.json', () => {
   const extension = (name: string) => routes.extensions.find((e) => e.name === name);
 
-  it('le menu utilisateur est une extension globale du slot neutre de droite du niveau 1, à sa place historique', () => {
+  it('le menu utilisateur est une extension globale du slot neutre de la TopBar, placée à droite à sa place historique', () => {
     expect(extension('user-menu')).toEqual(
-      expect.objectContaining({ slot: 'topbar-l1-right-slot', component: 'userMenu', order: 90, meta: { global: true } }),
+      expect.objectContaining({
+        slot: 'topbar-slot',
+        component: 'userMenu',
+        order: 90,
+        meta: { global: true, topbar: { level: 'main', rank: 10, region: 'right', order: 90 } },
+      }),
     );
   });
 
@@ -16,7 +21,7 @@ describe('routes.json', () => {
     );
   });
 
-  it("le garde couvre tout sauf login, logout et change-password ; la redirection ne couvre que la racine", () => {
+  it('le garde couvre tout sauf login, logout et change-password ; la redirection ne couvre que la racine', () => {
     const [guard, redirect] = routes.pages;
     expect(guard.component).toBe('sessionGuard');
     const guardRegex = new RegExp(guard.routeRegex);

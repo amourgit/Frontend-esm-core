@@ -36,24 +36,31 @@ export const configSchema = {
   },
   topbar: {
     levels: {
-      min: {
-        _type: Type.Number,
-        _default: 2,
+      order: {
+        _type: Type.Array,
+        _elements: { _type: Type.String },
+        _default: [],
         _description:
-          'Minimum number of TopBar levels always rendered (rows), even when empty. Use 1 for a classic single-row TopBar.',
+          'Level names pinned at the top of the TopBar stack, in this order. Takes precedence over the `rank` declared by apps. Levels not listed follow, ordered by rank then by name.',
+      },
+      hidden: {
+        _type: Type.Array,
+        _elements: { _type: Type.String },
+        _default: [],
+        _description:
+          'Level names that are never rendered. Their content is shown on the previous rendered level of the stack, same region. The first level of the stack cannot be hidden.',
+      },
+      keep: {
+        _type: Type.Array,
+        _elements: { _type: Type.String },
+        _default: [],
+        _description: 'Level names always rendered, even when no app has put anything in them (empty row).',
       },
       max: {
         _type: Type.Number,
         _default: 8,
         _description:
-          'Maximum number of TopBar levels. Content declared on a level above this maximum is shown on the highest allowed level.',
-      },
-      disabled: {
-        _type: Type.Array,
-        _elements: { _type: Type.Number },
-        _default: [],
-        _description:
-          'Levels (2 and above) that are never rendered. Their content is shown on the nearest enabled lower level, same region. Level 1 cannot be disabled.',
+          'Maximum number of rendered TopBar levels. Content of the levels beyond this maximum is shown on the last rendered level.',
       },
     },
     placement: {
@@ -61,7 +68,7 @@ export const configSchema = {
       _elements: { _type: Type.String },
       _default: {},
       _description:
-        'Moves a global TopBar element to another region of any level, e.g. {"clock": "l3-right", "nav": "l1-center"}. Keys: context-selectors, search, language, divider, apps, quick-access, fullscreen, theme, clock, menu-panel, nav. Values: l<N>-left | l<N>-center | l<N>-right (N >= 1). Invalid entries are ignored with a console warning; if the target level is not rendered, the content shows on the nearest lower rendered level.',
+        'Moves a global TopBar element to another level and region, e.g. {"clock": "navigation:right", "nav": "main:center"}. Keys: context-selectors, search, language, divider, apps, quick-access, fullscreen, theme, clock, menu-panel, nav. Values: "<level>:<left|center|right>"; the level is created if no app declared it yet. Invalid entries are ignored with a console warning; if the target level is not rendered, the content shows on the previous rendered level.',
     },
     announcements: {
       requireOffset: {
@@ -111,7 +118,7 @@ export type ConfigSchema = {
     path: string;
   };
   topbar: {
-    levels: { min: number; max: number; disabled: number[] };
+    levels: { order: string[]; hidden: string[]; keep: string[]; max: number };
     placement: Record<string, string>;
     announcements: { requireOffset: boolean; defaultOffset: string };
   };

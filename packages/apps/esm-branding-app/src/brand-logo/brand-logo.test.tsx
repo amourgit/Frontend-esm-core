@@ -8,7 +8,9 @@ import BrandLogo from './brand-logo.component';
 const mockUseConfig = vi.mocked(useConfig);
 
 /** Config par défaut du schéma (ce que l'app reçoit tant que l'entreprise ne renseigne rien), avec surcharges. */
-function config(overrides: Partial<{ organization: Partial<ConfigSchema['organization']>; logo: Partial<ConfigSchema['logo']> }> = {}) {
+function config(
+  overrides: Partial<{ organization: Partial<ConfigSchema['organization']>; logo: Partial<ConfigSchema['logo']> }> = {},
+) {
   const defaults = (group: Record<string, { _default: unknown }>) =>
     Object.fromEntries(Object.entries(group).map(([key, value]) => [key, value._default]));
   return {
@@ -33,11 +35,17 @@ describe('BrandLogo', () => {
 
   it("affiche le logo et l'identité renseignés par l'entreprise", () => {
     mockUseConfig.mockReturnValue(
-      config({ organization: { name: 'Acme', description: 'Gouvernance' }, logo: { src: 'https://cdn.example.org/acme.svg' } }),
+      config({
+        organization: { name: 'Acme', description: 'Gouvernance' },
+        logo: { src: 'https://cdn.example.org/acme.svg' },
+      }),
     );
     render(<BrandLogo />);
 
-    expect(screen.getByRole('img', { name: 'Acme — Gouvernance' })).toHaveAttribute('src', 'https://cdn.example.org/acme.svg');
+    expect(screen.getByRole('img', { name: 'Acme — Gouvernance' })).toHaveAttribute(
+      'src',
+      'https://cdn.example.org/acme.svg',
+    );
     expect(screen.getByRole('link', { name: 'Acme — Gouvernance' })).toHaveAttribute('title', 'Acme — Gouvernance');
   });
 
@@ -55,7 +63,7 @@ describe('BrandLogo', () => {
     expect(screen.getByRole('img', { name: 'Acme' })).toBeInTheDocument();
   });
 
-  it("se met à jour à chaud quand la configuration change, sans rien remonter", () => {
+  it('se met à jour à chaud quand la configuration change, sans rien remonter', () => {
     const { rerender } = render(<BrandLogo />);
     expect(screen.getByRole('img')).toHaveAttribute('src', expect.stringMatching(/egen-logo-full/));
 
@@ -110,10 +118,15 @@ describe('BrandLogo', () => {
 });
 
 describe('routes.json', () => {
-  it('attache le logo au slot neutre du niveau 1, comme extension globale', async () => {
+  it('attache le logo au slot neutre de la TopBar et déclare son niveau et son emplacement, comme extension globale', async () => {
     const routes = (await import('../routes.json')).default as { extensions: Array<Record<string, unknown>> };
     expect(routes.extensions).toEqual([
-      expect.objectContaining({ name: 'brand-logo', slot: 'topbar-l1-left-slot', component: 'brandLogo', meta: { global: true } }),
+      expect.objectContaining({
+        name: 'brand-logo',
+        slot: 'topbar-slot',
+        component: 'brandLogo',
+        meta: { global: true, topbar: { level: 'main', rank: 10, region: 'left', order: 0 } },
+      }),
     ]);
   });
 });

@@ -31,7 +31,7 @@ export const root = getSyncLifecycle(rootComponent, options);
 // routes.json) est lue par la TopBar du niveau 2 — c'est le bouton « Accueil » de la navigation.
 export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'home-nav-entry' });
 
-// Contenu de la TopBar propre à l'app (slot `topbar-l2-left-slot`) : identité + actions de l'app Accueil.
+// Contenu de la TopBar propre à l'app (slot `topbar-slot`, placement dans `meta.topbar`) : identité + actions de l'app Accueil.
 export const appToolbar = getSyncLifecycle(HomeAppToolbar, { ...options, featureName: 'home-app-toolbar' });
 
 // Section « Nous suivre » du slot `home-sections` (page d'accueil).

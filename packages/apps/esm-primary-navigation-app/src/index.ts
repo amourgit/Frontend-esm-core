@@ -31,18 +31,11 @@ export function startupApp() {
 export const root = getSyncLifecycle(primaryNavRootComponent, options);
 
 // ─── NOTE ARCHITECTURE ───────────────────────────────────────────────────────
-// userMenuButton, appMenuButton, notificationsMenuButton et breadcrumbNav ne
-// sont PLUS enregistrés comme extensions auto-injectées dans un slot que
-// cette app rend elle-même (ancienne indirection `top-nav-actions-slot` /
-// `top-nav-trailing-slot` (anciennement `top-nav-app-menu-slot`, renommé
-// pour ne plus se confondre avec `app-menu-slot`, le slot du PANNEAU
-// applications — deux slots totalement distincts) / `notifications-menu-
-// button-slot`, jamais alimentée par personne pour les notifications →
-// bouton invisible en prod). Ils sont désormais importés et composés
-// directement dans `topbar.component.tsx`. Les slots `top-nav-actions-slot`
-// et `top-nav-trailing-slot` restent ouverts pour que D'AUTRES apps y
-// injectent des boutons additionnels (aide, raccourcis, etc.) — voir
-// routes.json.
+// La TopBar est un squelette neutre : un seul slot d'extension, `topbar-slot`.
+// Chaque app y attache ses composants et DÉCLARE leur niveau, leur région et
+// leur position dans `meta.topbar` de son routes.json (voir README, section
+// « Architecture »). Les menus (applications, raccourcis, plein écran…) sont
+// importés et composés directement par cette app (`intranet-topbar/global`).
 // ──────────────────────────────────────────────────────────────────────────
 
 export const changeLanguageLink = getSyncLifecycle(changeLanguageLinkComponent, options);

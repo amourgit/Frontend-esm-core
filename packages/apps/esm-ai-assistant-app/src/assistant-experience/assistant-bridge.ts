@@ -6,7 +6,7 @@ import { type AssistantMode } from '@egen-civitas/esm-styleguide';
 //  PONT D'ÉTAT ASSISTANT (store global + commandes)
 //
 //  Le bouton robot vit dans la TopBar (esm-primary-navigation-app, via le slot
-//  `topbar-l2-right-slot`) alors que le moteur vocal, l'overlay 3D et
+//  `topbar-slot`) alors que le moteur vocal, l'overlay 3D et
 //  l'espace audio vivent dans la racine de CETTE app : ce sont deux racines
 //  React distinctes, un contexte React ne peut donc pas les relier.
 //

@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 // Test de cohérence : chaque entrée de navigation déclarée sur le slot
-// `topbar-nav-slot` (ou son ancien nom `topbar-level2-nav`) doit pointer vers une route réellement déclarée dans un
+// `topbar-nav-slot` doit pointer vers une route réellement déclarée dans un
 // `pages[].route` d'une app (route exacte ou sous-route d'une page).
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
-// Nom officiel puis ancien nom : les deux sont lus par la TopBar et par le panneau de section du rail.
-const NAV_SLOTS = ['topbar-nav-slot', 'topbar-level2-nav'];
+const NAV_SLOTS = ['topbar-nav-slot'];
 const RAIL_SLOTS = ['shell-rail-left-slot', 'shell-rail-bottom-slot', 'shell-rail-right-slot'];
 const appsDir = 'packages/apps';
 const norm = (r) => String(r).replace(/^\/+|\/+$/g, '');
@@ -50,6 +49,32 @@ for (const { file, e } of entries) {
     const r = norm(m[k]);
     if (!pageRoutes.some((p) => r === p || r.startsWith(p + '/'))) {
       errors.push(`${file}: "${e.name}" — ${k} "${m[k]}" ne correspond à aucun pages[].route`);
+    }
+  }
+}
+
+// Composants de la TopBar : un seul slot neutre `topbar-slot`, le placement est DÉCLARÉ dans `meta.topbar`
+// (niveau nommé par l'app, jamais numéroté ni encodé dans un nom de slot).
+const LEVEL_ID = /^[a-z][a-z0-9-]{0,47}$/;
+const REGIONS = ['left', 'center', 'right', 'background'];
+for (const file of routesFiles) {
+  for (const e of JSON.parse(readFileSync(file, 'utf8')).extensions ?? []) {
+    if (/^topbar-(?:l\d+|level\d*)-|^top-nav-(?:level|actions|trailing|info|app)/.test(e.slot ?? '')) {
+      errors.push(`${file}: "${e.name}" — slot figé sur un niveau (${e.slot}) : utiliser "topbar-slot" + meta.topbar`);
+    }
+    if (e.slot !== 'topbar-slot') continue;
+    const t = e.meta?.topbar;
+    if (!t || typeof t !== 'object') {
+      errors.push(`${file}: "${e.name}" — meta.topbar manquant (attendu : { level, region?, order?, rank?, before?, after? })`);
+      continue;
+    }
+    if (!LEVEL_ID.test(t.level ?? '')) errors.push(`${file}: "${e.name}" — meta.topbar.level invalide "${t.level}" (minuscules, chiffres, tirets)`);
+    if (t.region !== undefined && !REGIONS.includes(t.region)) errors.push(`${file}: "${e.name}" — meta.topbar.region invalide "${t.region}"`);
+    for (const k of ['rank', 'order']) {
+      if (t[k] !== undefined && !Number.isFinite(t[k])) errors.push(`${file}: "${e.name}" — meta.topbar.${k} doit être un nombre`);
+    }
+    for (const k of ['before', 'after']) {
+      if (t[k] !== undefined && (typeof t[k] !== 'string' || !t[k])) errors.push(`${file}: "${e.name}" — meta.topbar.${k} doit être un nom d'extension`);
     }
   }
 }

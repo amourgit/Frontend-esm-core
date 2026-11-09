@@ -1,7 +1,7 @@
 import { getGlobalStore, useStore } from '@egen-civitas/esm-framework';
 import { useMemo } from 'react';
 import { useActiveAppModules } from '../hooks/useActiveAppModules';
-import type { TopBarRegionId } from './regions';
+import type { TopBarRegionKey } from './regions';
 
 // =============================================================================
 //  LAYOUT DE LA TOPBAR — personnalisation par l'app montée
@@ -11,14 +11,14 @@ import type { TopBarRegionId } from './regions';
 //    import { getGlobalStore } from '@egen-civitas/esm-framework';
 //    const store = getGlobalStore('egen-topbar-layout', { claims: {} });
 //    store.setState((s) => ({ claims: { ...s.claims, '@mon-org/esm-annuaire-app': {
-//      regions: { 'l1-left': { hideGlobal: true }, 'l1-right': { only: ['search'] } },   // page « détail »
-//      levels: { min: 3, hide: [2], background: { 1: 'linear-gradient(90deg,#0f172a,#134e4a)' } }, // rangées, fonds
+//      regions: { 'primary:left': { hideGlobal: true }, 'primary:right': { only: ['search'] } },   // page « détail »
+//      levels: { keep: ['promo'], hide: ['secondary'], background: { primary: 'linear-gradient(90deg,#0f172a,#134e4a)' } },
 //    } } }));
 //    // …et retirer la clé de l'app au démontage de la page.
 //
 //  Store global du framework (nom `egen-topbar-layout`) : utilisable depuis toute app, sans dépendance de code.
 //  Les règles d'une app ne valent QUE tant qu'elle est active. Une règle de région vise la région où le contenu est
-//  DÉCLARÉ (`l3-right`), même si ce contenu est affiché plus bas parce que le niveau 3 n'est pas rendu.
+//  DÉCLARÉ (`promo:right`), même si ce contenu est affiché sur un autre niveau parce que `promo` n'est pas rendu.
 // =============================================================================
 
 export const TOPBAR_LAYOUT_STORE = 'egen-topbar-layout';
@@ -35,16 +35,17 @@ export interface TopBarRegionRule {
 }
 
 export interface TopBarLevelsRule {
-  /** Nombre minimal de niveaux rendus pendant que l'app est active. */
-  min?: number;
-  /** Niveaux (≥ 2) à ne pas rendre pendant que l'app est active. */
-  hide?: number[];
+  /** Niveaux (par nom) rendus même vides pendant que l'app est active. */
+  keep?: string[];
+  /** Niveaux (par nom) à ne pas rendre pendant que l'app est active. */
+  hide?: string[];
   /** Arrière-plan CSS par niveau (valeur de `background` : couleur, dégradé, `url(…)`…). Transparent par défaut. */
-  background?: Record<number, string>;
+  background?: Record<string, string>;
 }
 
 export interface TopBarLayout {
-  regions?: Partial<Record<TopBarRegionId, TopBarRegionRule>>;
+  /** Clé `<niveau>:<région>` (ex. `primary:right`). */
+  regions?: Partial<Record<TopBarRegionKey, TopBarRegionRule>>;
   levels?: TopBarLevelsRule;
 }
 
@@ -90,8 +91,8 @@ export function mergeRules(rules: TopBarRegionRule[]): TopBarRegionRule {
 
 export interface ResolvedTopBarLayout {
   /** Règle effective d'une région (fusion des apps actives). */
-  ruleFor: (id: TopBarRegionId) => TopBarRegionRule;
-  levels: { min?: number; hide: number[]; background: Record<number, string> };
+  ruleFor: (key: TopBarRegionKey) => TopBarRegionRule;
+  levels: { keep: string[]; hide: string[]; background: Record<string, string> };
 }
 
 /** Layout effectif : fusion des layouts des apps actuellement actives. */
@@ -104,7 +105,7 @@ export function useTopBarLayout(): ResolvedTopBarLayout {
       .map(([, layout]) => layout);
     // Règle mémorisée par région : même objet tant que les claims/apps actives ne changent pas (références stables
     // pour les `select` / `useCallback` des slots, sinon chaque rendu relancerait leurs effets).
-    const cache = new Map<TopBarRegionId, TopBarRegionRule>();
+    const cache = new Map<TopBarRegionKey, TopBarRegionRule>();
     return {
       ruleFor: (id) => {
         let rule = cache.get(id);
@@ -115,7 +116,7 @@ export function useTopBarLayout(): ResolvedTopBarLayout {
         return rule;
       },
       levels: {
-        min: layouts.reduce<number | undefined>((m, l) => (l.levels?.min ? Math.max(m ?? 0, l.levels.min) : m), undefined),
+        keep: layouts.flatMap((l) => l.levels?.keep ?? []),
         hide: layouts.flatMap((l) => l.levels?.hide ?? []),
         background: Object.assign({}, ...layouts.map((l) => l.levels?.background ?? {})),
       },

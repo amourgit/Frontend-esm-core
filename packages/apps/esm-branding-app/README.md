@@ -7,13 +7,13 @@ la TopBar** ; la TopBar elle-même ne contient ni logo ni nom d'entreprise.
 
 ## Principe
 
-La TopBar est un squelette neutre : des niveaux, des régions (`left`, `center`, `right`, `background`) et des slots
-d'extension (`topbar-l<N>-<région>-slot`). Elle ne sait pas ce qu'on y monte. Cette app attache simplement une extension
-à un slot ; changer d'endroit, de logo ou de nom n'a jamais besoin de modifier la TopBar.
+La TopBar est un squelette neutre : des niveaux que les apps déclarent, des régions (`left`, `center`, `right`, `background`) et un seul slot
+d'extension (`topbar-slot`). Elle ne sait pas ce qu'on y monte. Cette app attache simplement une extension
+au slot et déclare son niveau et son emplacement dans `meta.topbar` ; changer d'endroit, de logo ou de nom n'a jamais besoin de modifier la TopBar.
 
 | Extension | Slot par défaut | Contenu |
 | --- | --- | --- |
-| `brand-logo` | `topbar-l1-left-slot` (ordre 0, globale) | Logo de l'entreprise, cliquable |
+| `brand-logo` | `topbar-slot` — `meta.topbar` : niveau `main`, région `left`, ordre 0 (globale) | Logo de l'entreprise, cliquable |
 
 `meta.global: true` : le logo est présent quelle que soit l'app active.
 
@@ -46,7 +46,7 @@ Clé de config : `@egen-civitas/esm-branding-app`.
 ## Changer l'endroit
 
 Le logo n'est pas figé à gauche : c'est le choix par défaut de cette app (`routes.json`). Pour le placer ailleurs (centre,
-droite, un autre niveau), modifier le slot de l'extension `brand-logo` dans `routes.json`, ou utiliser la configuration
+droite, un autre niveau), modifier `meta.topbar` de l'extension `brand-logo` dans `routes.json` (niveau, région, ordre, ou `before` / `after` une autre extension), ou utiliser la configuration
 d'extensions du framework (`extensionSlots`, `add` / `remove` / `order`). La TopBar n'est jamais modifiée.
 
 ## Ajouter d'autres éléments d'identité

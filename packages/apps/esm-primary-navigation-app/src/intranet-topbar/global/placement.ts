@@ -1,18 +1,24 @@
-import { parseRegionId, type TopBarRegionId } from '../kit/regions';
+import { parsePlacementShorthand, type TopBarContentRegion } from '../kit';
 
 // =============================================================================
 //  PLACEMENT DES ÉLÉMENTS GLOBAUX — où chaque élément global s'affiche par défaut
 //
-//  C'est le SEUL endroit où le placement par défaut des éléments globaux est écrit. Le code des éléments
-//  (`items.tsx`) ne connaît aucun niveau. Un déploiement peut déplacer n'importe quel élément vers n'importe
-//  quelle région de n'importe quel niveau avec la config `topbar.placement` :
+//  C'est le SEUL endroit où cette app DÉCLARE ses niveaux et le placement par défaut de ses éléments globaux. Le kit
+//  de la TopBar ne connaît aucun niveau ; le code des éléments (`items.tsx`) non plus. Les niveaux `main` et
+//  `navigation` sont créés ici comme n'importe quelle app crée le sien : une autre app peut y placer ses composants
+//  (en les nommant dans `meta.topbar.level`) ou déclarer un tout autre niveau.
 //
-//      "topbar": { "placement": { "clock": "l3-right", "nav": "l1-center" } }
+//  Un déploiement peut déplacer n'importe quel élément vers n'importe quel niveau avec la config `topbar.placement`
+//  (`"<niveau>:<région>"`, le niveau est créé s'il n'existe pas) :
 //
-//  Une région invalide ou un identifiant inconnu est ignoré (avertissement console), jamais fatal.
-//  Si le niveau visé n'est pas rendu (`topbar.levels`), le contenu s'affiche sur le niveau rendu inférieur le
-//  plus proche (voir kit/levels.ts) : rien n'est perdu.
+//      "topbar": { "placement": { "clock": "navigation:right", "nav": "main:center" } }
+//
+//  Une valeur invalide ou un identifiant inconnu est ignoré (avertissement console), jamais fatal. Si le niveau visé
+//  n'est pas rendu (`topbar.levels`), le contenu s'affiche sur le niveau précédent de la pile (voir kit/levels.ts).
 // =============================================================================
+
+/** Niveaux déclarés par cette app, avec leur rang dans la pile. */
+export const GLOBAL_LEVEL_RANKS: Readonly<Record<string, number>> = { main: 10, navigation: 20 };
 
 export const GLOBAL_ITEM_IDS = [
   'context-selectors',
@@ -31,34 +37,36 @@ export const GLOBAL_ITEM_IDS = [
 export type GlobalItemId = (typeof GLOBAL_ITEM_IDS)[number];
 
 export interface ItemPlacement {
-  region: TopBarRegionId;
+  level: string;
+  rank?: number;
+  region: TopBarContentRegion;
   /** Ordre dans la région (croissant). */
   order: number;
 }
 
+const at = (level: string, region: TopBarContentRegion, order: number): ItemPlacement => ({
+  level,
+  rank: GLOBAL_LEVEL_RANKS[level],
+  region,
+  order,
+});
+
 /** Placement d'usine. */
 export const DEFAULT_PLACEMENT: Readonly<Record<GlobalItemId, ItemPlacement>> = {
-  'context-selectors': { region: 'l1-left', order: 0 },
-  search: { region: 'l1-right', order: 0 },
-  language: { region: 'l1-right', order: 10 },
-  divider: { region: 'l1-right', order: 20 },
-  apps: { region: 'l1-right', order: 30 },
-  'quick-access': { region: 'l1-right', order: 40 },
-  fullscreen: { region: 'l1-right', order: 60 },
-  theme: { region: 'l1-right', order: 70 },
-  clock: { region: 'l1-right', order: 100 },
-  'menu-panel': { region: 'l1-right', order: 110 },
-  nav: { region: 'l2-center', order: 0 },
+  'context-selectors': at('main', 'left', 0),
+  search: at('main', 'right', 0),
+  language: at('main', 'right', 10),
+  divider: at('main', 'right', 20),
+  apps: at('main', 'right', 30),
+  'quick-access': at('main', 'right', 40),
+  fullscreen: at('main', 'right', 60),
+  theme: at('main', 'right', 70),
+  clock: at('main', 'right', 100),
+  'menu-panel': at('main', 'right', 110),
+  nav: at('navigation', 'center', 0),
 };
 
 const isGlobalItemId = (id: string): id is GlobalItemId => (GLOBAL_ITEM_IDS as readonly string[]).includes(id);
-
-/** Une région de CONTENU valide (`l<N>-left|center|right`, N ≥ 1) : le calque `background` n'accueille pas d'éléments. */
-export function isContentRegionId(value: unknown): value is TopBarRegionId {
-  if (typeof value !== 'string') return false;
-  const parsed = parseRegionId(value);
-  return Boolean(parsed && parsed.region !== 'background' && parsed.level >= 1);
-}
 
 /**
  * Placement effectif : l'usine, puis les surcharges valides de la config. L'`order` d'usine est conservé
@@ -69,18 +77,19 @@ export function resolvePlacement(
   warn: (message: string) => void = (m) => console.warn(m),
 ): Record<GlobalItemId, ItemPlacement> {
   const result = { ...DEFAULT_PLACEMENT } as Record<GlobalItemId, ItemPlacement>;
-  for (const [id, region] of Object.entries(overrides ?? {})) {
+  for (const [id, value] of Object.entries(overrides ?? {})) {
     if (!isGlobalItemId(id)) {
       warn(`[topbar] topbar.placement : élément inconnu « ${id} » (attendu : ${GLOBAL_ITEM_IDS.join(', ')}).`);
       continue;
     }
-    if (!isContentRegionId(region)) {
+    const target = parsePlacementShorthand(value);
+    if (!target) {
       warn(
-        `[topbar] topbar.placement : région invalide « ${String(region)} » pour « ${id} » (attendu : l<N>-left|center|right).`,
+        `[topbar] topbar.placement : valeur invalide « ${String(value)} » pour « ${id} » (attendu : <niveau>:left|center|right).`,
       );
       continue;
     }
-    result[id] = { ...result[id], region };
+    result[id] = { ...result[id], ...target, rank: GLOBAL_LEVEL_RANKS[target.level] };
   }
   return result;
 }

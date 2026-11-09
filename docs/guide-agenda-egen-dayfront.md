@@ -1950,7 +1950,7 @@ export async function deleteTask(
   "extensions": [
     {
       "name": "agenda-nav-mon-agenda",
-      "slot": "topbar-level2-nav",
+      "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,

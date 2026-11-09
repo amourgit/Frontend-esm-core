@@ -1,27 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { LEGACY_SLOTS, regionId, regionOfSlot, slotNamesFor, topBarSlotName } from './regions';
+import { isLevelId, parseRegionKey, regionKey, TOPBAR_SLOT } from './regions';
 
-describe('régions et slots', () => {
-  it('le slot officiel d’une région est topbar-l<N>-<région>-slot, pour tout N', () => {
-    expect(topBarSlotName(regionId(7, 'center'))).toBe('topbar-l7-center-slot');
-    expect(regionOfSlot('topbar-l9-background-slot')).toBe('l9-background');
-    expect(regionOfSlot('topbar-transient-slot')).toBeNull();
+describe('contrat des régions', () => {
+  it('un seul slot neutre, sans niveau ni région dans son nom', () => {
+    expect(TOPBAR_SLOT).toBe('topbar-slot');
   });
 
-  it('chaque slot historique reste rattaché à sa région et reste honoré', () => {
-    for (const [region, slots] of Object.entries(LEGACY_SLOTS)) {
-      for (const slot of slots) {
-        expect(regionOfSlot(slot)).toBe(region);
-        expect(slotNamesFor(region as `l${number}-left`)).toContain(slot);
-      }
-    }
-    // contrat de compatibilité des apps déjà déployées
-    expect(regionOfSlot('top-nav-level2-end-slot')).toBe('l2-right');
-    expect(regionOfSlot('top-nav-app-slot')).toBe('l2-left');
-    expect(regionOfSlot('top-nav-actions-slot')).toBe('l1-right');
+  it('un niveau se nomme librement (minuscules, chiffres, tirets), sans numéro imposé', () => {
+    for (const ok of ['main', 'promo-ete', 'agenda2', 'a']) expect(isLevelId(ok)).toBe(true);
+    for (const ko of ['', 'Main', '2fast', 'a b', 'a:b', 'a/b', 42, undefined, 'x'.repeat(49)])
+      expect(isLevelId(ko)).toBe(false);
   });
 
-  it('le slot officiel passe toujours en premier', () => {
-    expect(slotNamesFor('l1-right')[0]).toBe('topbar-l1-right-slot');
+  it('clé de région : aller-retour <niveau>:<région>', () => {
+    expect(regionKey('promo', 'right')).toBe('promo:right');
+    expect(parseRegionKey('promo:right')).toEqual({ level: 'promo', region: 'right' });
+    expect(parseRegionKey('promo:background')).toEqual({ level: 'promo', region: 'background' });
+    expect(parseRegionKey('promo:milieu')).toBeNull();
+    expect(parseRegionKey('l1-right')).toBeNull();
+    expect(parseRegionKey(':right')).toBeNull();
   });
 });

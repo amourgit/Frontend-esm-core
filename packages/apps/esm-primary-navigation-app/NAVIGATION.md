@@ -1,7 +1,7 @@
 # Navigation de la TopBar
 
 La navigation n'est **écrite nulle part dans la TopBar** : chaque app déclare ses
-propres entrées dans son `routes.json` (slot `topbar-nav-slot` ; l'ancien nom `topbar-level2-nav` reste lu pour les apps déjà déployées), et la TopBar les assemble en
+propres entrées dans son `routes.json` (slot `topbar-nav-slot`), et la TopBar les assemble en
 arborescence. Sans déclaration, la navigation est vide — il n'existe plus aucune maquette de repli.
 
 Il n'y a plus de barre latérale globale : seuls la TopBar et le footer sont globaux. Une app qui
@@ -10,7 +10,7 @@ veut une navigation interne affiche sa propre barre latérale dans son contenu.
 > Le **sélecteur d'espace** (Intranet, Extranet…) définit le contexte. La navigation en
 > dépend : elle n'affiche que les entrées déclarées pour l'espace actif.
 >
-> La navigation est un **élément global** (`nav`) comme un autre : par défaut au centre du niveau 2, mais
+> La navigation est un **élément global** (`nav`) comme un autre : par défaut au centre du niveau `navigation`, mais
 > elle peut être placée dans n'importe quelle région de n'importe quel niveau (config `topbar.placement`, voir le README).
 
 ## Déclarer ses entrées (dans l'app)
@@ -26,7 +26,7 @@ veut une navigation interne affiche sa propre barre latérale dans son contenu.
    ```json
    {
      "name": "mon-app-nav-contacts",
-     "slot": "topbar-level2-nav",
+     "slot": "topbar-nav-slot",
      "component": "navEntry",
      "online": true,
      "offline": false,
@@ -136,5 +136,5 @@ Cette fonctionnalité s'appuie sur `NavEntryMeta.workspaces` / `group` facultati
 ## À gauche de la navigation : le contenu de l'app active
 
 La TopBar peut recevoir, à gauche de la navigation, le contenu de barre d'outils de
-l'**app active** (région `l2-left`, slot `topbar-l2-left-slot` ; l'ancien nom `top-nav-app-slot` reste honoré) : identité (logo + nom), actions propres. Voir le
+l'**app active** (slot `topbar-slot`, `meta.topbar` : niveau `navigation`, région `left`) : identité (logo + nom), actions propres. Voir le
 README pour le contrat du slot. Les options de navigation décrites ci-dessus restent inchangées.

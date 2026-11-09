@@ -7,7 +7,7 @@ vers la connexion un utilisateur sans session. La TopBar, elle, ne sait rien de 
 
 | Élément | Où | Rôle |
 | --- | --- | --- |
-| Extension `user-menu` | slot `topbar-l1-right-slot`, ordre 90, globale | Avatar (initiale du nom) qui ouvre un panneau |
+| Extension `user-menu` | slot `topbar-slot`, `meta.topbar` : niveau `main`, région `right`, ordre 90, globale | Avatar (initiale du nom) qui ouvre un panneau |
 | Extension `default-user-panel` | slot `user-panel-slot`, ordre 0 | Identité de la session, première ligne du panneau |
 | Page `sessionGuard` | toutes les routes sauf `login`, `logout`, `change-password` | Renvoie vers la connexion l'utilisateur sans session |
 | Page `rootRedirect` | racine du SPA (`/`) | Envoie l'utilisateur authentifié vers l'accueil |
@@ -47,8 +47,9 @@ La TopBar passe à toute extension un `state` (reçu comme props) : ouverture ex
 avec les autres panneaux, et pour s'effacer quand la recherche s'ouvre sur un écran tactile. Monté hors d'une TopBar
 (props absentes), il gère lui-même son ouverture.
 
-Son placement n'est pas figé : la place « entre le thème et l'horloge » vient de son `order` (90) dans `routes.json`,
-partagé avec les éléments globaux de la région. Changer de slot ou d'ordre ne demande aucune modification de la TopBar.
+Son placement n'est pas figé : la place « entre le thème et l'horloge » vient de son `order` (90) dans `meta.topbar`,
+partagé avec les éléments globaux de la région. Changer de niveau, de région ou d'ordre (ou se placer `after` une autre
+extension) ne demande aucune modification de la TopBar.
 
 ## Styles
 

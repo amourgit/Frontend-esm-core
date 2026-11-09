@@ -18,7 +18,7 @@ export function startupApp() {
   defineConfigSchema(moduleName, configSchema);
 }
 
-// Menu utilisateur : extension du slot neutre `topbar-l1-right-slot` (voir routes.json). Il ouvre un panneau dont le contenu
+// Menu utilisateur : extension du slot neutre `topbar-slot` (voir routes.json : `meta.topbar`). Il ouvre un panneau dont le contenu
 // vient des slots `user-panel-slot` / `user-panel-bottom-slot`, que d'autres apps alimentent (déconnexion, langue…).
 export const userMenu = getSyncLifecycle(UserMenuComponent, options);
 

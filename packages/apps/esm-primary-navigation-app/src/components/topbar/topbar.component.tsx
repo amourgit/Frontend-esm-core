@@ -8,16 +8,16 @@ import { SiteProvider } from '../../intranet-topbar/context/SiteContext';
 //
 //  La TopBar vit ENTIÈREMENT dans cette app (`src/intranet-topbar`) : elle ne
 //  dépend plus du composant `TopBar` / `TopBarIconButton` / `TopBarAvatar` du
-//  framework. Une pile de N niveaux (nombre déduit du contenu et de `topbar.levels`),
-//  chacun fait de trois régions : gauche · centre · droite. N'importe quelle app peut
-//  y placer des composants (slots `topbar-l<N>-<région>-slot`, voir kit/regions.ts).
+//  framework. Une pile de niveaux que les APPS déclarent (nom, rang), chacun fait de
+//  trois régions : gauche · centre · droite. N'importe quelle app y place des composants
+//  par le slot neutre `topbar-slot` + `meta.topbar` (voir kit/regions.ts, kit/placement.ts).
 //
 //  Placement d'usine des éléments globaux (modifiable via `topbar.placement`,
 //  voir intranet-topbar/global/placement.ts) :
-//    l1 : sélecteurs Espace/Site | Recherche · Langue · Apps · Raccourcis · Plein écran · Thème · Date/Heure
-//    Injectés par des apps, par extensions : le logo (@egen/esm-branding-app, l1-left) et le menu
-//    utilisateur (@egen/esm-user-profile-app, l1-right)
-//    l2 : Navigation déroulante (accueil) ou fil d'Ariane contextuel
+//    niveau `main` : sélecteurs Espace/Site | Recherche · Langue · Apps · Raccourcis · Plein écran · Thème · Date/Heure
+//    Injectés par des apps, par extensions : le logo (@egen/esm-branding-app) et le menu
+//    utilisateur (@egen/esm-user-profile-app)
+//    niveau `navigation` : Navigation déroulante (accueil) ou fil d'Ariane contextuel
 // =============================================================================
 
 /** Publie la hauteur réelle de la TopBar (tous niveaux confondus) dans `--egen-topnav-height`. */
