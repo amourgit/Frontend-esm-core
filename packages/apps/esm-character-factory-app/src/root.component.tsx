@@ -1,7 +1,8 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Web3Provider } from '@ethersproject/providers';
 import { Web3ReactProvider } from '@web3-react/core';
-import './studio/lib/localization/i18n';
+import { registerStudioTranslations } from './studio/lib/localization/i18n';
 import App from './studio/App';
 import { AccountProvider } from './studio/context/AccountContext';
 import { AudioProvider } from './studio/context/AudioContext';
@@ -36,6 +37,9 @@ function loadOnce(tag: 'script' | 'link', url: string): Promise<void> {
 
 export default function Root() {
   const [ready, setReady] = useState(false);
+  // i18n du Core (partagé) : on y enregistre l'espace de noms de l'app avant tout rendu enfant
+  const { i18n } = useTranslation();
+  useMemo(() => registerStudioTranslations(i18n), [i18n]);
 
   useEffect(() => {
     const base = `${__webpack_public_path__}character-factory-assets`;

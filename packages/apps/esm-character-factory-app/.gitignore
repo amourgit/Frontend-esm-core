@@ -1,0 +1,3 @@
+# Le .gitignore racine du Core ignore tout dossier nommé `lib` ; celui-ci est du code source hérité de CharacterStudio.
+!src/studio/lib/
+!src/studio/lib/**
