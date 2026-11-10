@@ -46,7 +46,8 @@ module.exports = (env, argv) => {
   config.plugins.push(
     new DefinePlugin({
       'import.meta.env': JSON.stringify(viteEnv),
-      'import.meta.env.VITE_ASSET_PATH': '(__webpack_public_path__ + "character-factory-assets")',
+      // valorisée à l'exécution par src/asset-base.ts (chargé en premier par root.component)
+      'import.meta.env.VITE_ASSET_PATH': 'globalThis.__EGEN_CHARACTER_FACTORY_ASSETS__',
     }),
     new ProvidePlugin({ Buffer: [require.resolve('buffer/'), 'Buffer'] }),
     new CopyRspackPlugin({

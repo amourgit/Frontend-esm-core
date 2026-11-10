@@ -1,3 +1,4 @@
+import './asset-base'; // doit rester le PREMIER import (voir asset-base.ts)
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Web3Provider } from '@ethersproject/providers';
@@ -11,8 +12,6 @@ import { SceneProvider } from './studio/context/SceneContext';
 import { SoundProvider } from './studio/context/SoundContext';
 import { ViewProvider } from './studio/context/ViewContext';
 import RouteSync from './route-sync';
-
-declare const __webpack_public_path__: string;
 
 const getLibrary = (provider: any) => {
   const library = new Web3Provider(provider);
@@ -43,7 +42,7 @@ export default function Root() {
   useMemo(() => registerStudioTranslations(i18n), [i18n]);
 
   useEffect(() => {
-    const base = `${__webpack_public_path__}character-factory-assets`;
+    const base = (globalThis as any).__EGEN_CHARACTER_FACTORY_ASSETS__ as string;
     Promise.all([loadOnce('script', `${base}/ktx2/libktx.js`), loadOnce('link', `${base}/style.css`)])
       .catch((e) => console.error(e))
       .finally(() => setReady(true));

@@ -39,4 +39,12 @@ describe('routes.json — disposition dans le shell EGEN', () => {
     const orders = routes.extensions.filter((e) => e.slot === 'topbar-nav-slot').map((e) => e.order)
     expect(new Set(orders).size).toBe(orders.length)
   })
+
+  it("n'est pas capturée par la page 404 (routeRegex de esm-not-found-app)", () => {
+    const notFound = JSON.parse(readFileSync(resolve(root, '../esm-not-found-app/src/routes.json'), 'utf8'))
+    const regex = new RegExp(notFound.pages[0].routeRegex)
+    const paths = [APP_ROUTE, ...routes.extensions.filter((e) => e.slot === 'topbar-nav-slot').map((e) => e.meta.route)]
+    for (const path of paths) expect(regex.test(path), `${path} ne doit pas déclencher la 404`).toBe(false)
+    expect(regex.test('route-inconnue')).toBe(true)
+  })
 })
