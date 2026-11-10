@@ -310,6 +310,15 @@ export class CharacterManager {
       });
       this.avatar = {};
     }
+    /**
+     * EGEN: libération des ressources liées à cette instance (démontage de l'app).
+     * N'altère pas le comportement existant : méthode ajoutée, appelée uniquement par sceneInitializer.dispose().
+     */
+    dispose(){
+      try { this.removeCurrentManifest(); } catch (e) { console.warn(e); }
+      this.lookAtManager?.dispose?.();
+      this.animationManager?.dispose?.();
+    }
     removeCurrentManifest(){
       this.removeCurrentCharacter();
       this.manifestDataManager.clearManifests();

@@ -41,6 +41,7 @@ export const SceneProvider = (props) => {
   const [debugMode, setDebugMode] = useState(false);
 
   let loaded = false
+  let disposeScene = null
   let [isLoaded, setIsLoaded] = useState(false)
   useEffect(()=>{
     // hacky prevention of double render
@@ -53,8 +54,10 @@ export const SceneProvider = (props) => {
       camera,
       controls,
       characterManager,
-      sceneElements
+      sceneElements,
+      dispose
     } = sceneInitializer("editor-scene");
+    disposeScene = dispose;
     setCamera(camera);
     setScene(scene);
     setCharacterManager(characterManager);
@@ -66,6 +69,8 @@ export const SceneProvider = (props) => {
     setLoraDataGenerator(new LoraDataGenerator(characterManager))
     setSpriteAtlasGenerator(new SpriteAtlasGenerator(characterManager))
     setThumbnailsGenerator(new ThumbnailGenerator(characterManager))
+    // EGEN: libération de la scène 3D quand le shell démonte l'application
+    return () => { disposeScene?.() }
   },[])
 
 

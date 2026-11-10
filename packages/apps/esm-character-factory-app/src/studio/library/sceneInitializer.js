@@ -72,16 +72,22 @@ export function sceneInitializer(canvasId) {
     };
 
     window.addEventListener("resize", handleResize);
+    let resizeObserver = null;
     if (typeof ResizeObserver !== "undefined" && canvasRef?.parentElement) {
-        new ResizeObserver(handleResize).observe(canvasRef.parentElement);
+        resizeObserver = new ResizeObserver(handleResize);
+        resizeObserver.observe(canvasRef.parentElement);
     }
     renderer.setPixelRatio(window.devicePixelRatio);
     handleResize();
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const clock = new THREE.Clock();
+    // EGEN: cycle de vie — la boucle doit pouvoir être arrêtée quand l'app est démontée par le shell
+    let disposed = false;
+    let rafId = 0;
     const animate = () => {
-        requestAnimationFrame(animate);
+        if (disposed) return;
+        rafId = requestAnimationFrame(animate);
         const delta = clock.getDelta();
         controls.target.clamp(minPan, maxPan);
         controls?.update();
@@ -115,12 +121,36 @@ export function sceneInitializer(canvasId) {
     
     canvasRef.addEventListener("click", handleMouseClick);
 
+    // EGEN: libère tout ce que cette initialisation a créé (boucle, écouteurs, GPU). Appelé au démontage.
+    const dispose = () => {
+        if (disposed) return;
+        disposed = true;
+        cancelAnimationFrame(rafId);
+        window.removeEventListener("resize", handleResize);
+        resizeObserver?.disconnect();
+        canvasRef?.removeEventListener("click", handleMouseClick);
+        controls.dispose();
+        try { characterManager.dispose?.(); } catch (e) { console.warn("characterManager.dispose", e); }
+        scene.traverse((obj) => {
+            obj.geometry?.dispose?.();
+            const materials = Array.isArray(obj.material) ? obj.material : obj.material ? [obj.material] : [];
+            materials.forEach((m) => {
+                Object.values(m).forEach((v) => { if (v && v.isTexture) v.dispose(); });
+                m.dispose?.();
+            });
+        });
+        scene.environment?.dispose?.();
+        renderer.dispose();
+        renderer.forceContextLoss();
+    };
+
     return {
         scene,
         camera,
         controls,
         characterManager,
         sceneElements,
-        clock
+        clock,
+        dispose
     };
 }

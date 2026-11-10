@@ -30,21 +30,22 @@ export class LookAtManager {
       left: {maxy:15, miny:20,maxx:35, minx:35},
       right: {maxy:15, miny:20,maxx:35, minx:35},
     }
-    window.addEventListener("mousemove", (e)=>{
+    this._onMouseMove = (e)=>{
       this.curMousePos = {x:e.clientX, y: e.clientY}
-    })
-    const canvasRef = document.getElementById(canvasID)
-    if (canvasRef){
-      canvasRef.addEventListener("mouseleave", ()=>{
-        this.onCanvas = false;
-      })
-      canvasRef.addEventListener("mouseenter", ()=>{
-        this.onCanvas = true;
-      })
     }
-    window.addEventListener("resize", () => {
+    window.addEventListener("mousemove", this._onMouseMove)
+    const canvasRef = document.getElementById(canvasID)
+    this._canvasRef = canvasRef
+    this._onMouseLeave = ()=>{ this.onCanvas = false; }
+    this._onMouseEnter = ()=>{ this.onCanvas = true; }
+    if (canvasRef){
+      canvasRef.addEventListener("mouseleave", this._onMouseLeave)
+      canvasRef.addEventListener("mouseenter", this._onMouseEnter)
+    }
+    this._onResize = () => {
       this.hotzoneSection  = getHotzoneSection()
-    });
+    }
+    window.addEventListener("resize", this._onResize);
 
     function getHotzoneSection(){
       const width = window.innerWidth * screenViewPercentage / 100
@@ -180,5 +181,13 @@ export class LookAtManager {
           if (boneInfo.rightEyeBone) this._moveJoint(boneInfo.rightEyeBone, this.maxLookPercent.right)
         })
     }
+  }
+
+  // EGEN: retire les écouteurs globaux installés par le constructeur (démontage de l'app)
+  dispose(){
+    window.removeEventListener("mousemove", this._onMouseMove)
+    window.removeEventListener("resize", this._onResize)
+    this._canvasRef?.removeEventListener("mouseleave", this._onMouseLeave)
+    this._canvasRef?.removeEventListener("mouseenter", this._onMouseEnter)
   }
 }
