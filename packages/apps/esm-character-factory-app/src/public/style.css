@@ -1,3 +1,5 @@
+/* EGEN: toutes les règles sont rattachées à .character-factory-stage (zone de l'app). Le CSS d'origine ciblait html, body et
+   #root et modifiait donc la hauteur, la police et les barres de défilement de TOUT le shell. */
 /* New UI: TT Squares Condensed Font */
 @font-face {
   font-family: "TTSC-Black-Italic";
@@ -40,26 +42,24 @@
   src: url("./fonts/tt-squares/TT Squares Condensed Thin.otf");
 }
 
-html,
-body {
+.character-factory-stage {
   margin: 0;
   padding: 0;
-  height: 100%;
   font-family: "TTSC-Regular";
 }
 
-#root {
+.character-factory-stage #root {
   height: 100%;
   overflow: hidden;
 }
 
-::-webkit-scrollbar {
+.character-factory-stage ::-webkit-scrollbar {
   width: 0.1em;
 }
-::-webkit-scrollbar-track {
+.character-factory-stage ::-webkit-scrollbar-track {
   box-shadow: transparent;
 }
-::-webkit-scrollbar-thumb {
+.character-factory-stage ::-webkit-scrollbar-thumb {
   background: rgb(0,149,100);
 background: -moz-linear-gradient(180deg, rgba(0,149,100,0) 0%, rgba(8,234,160,0.6) 50%, rgba(0,149,100,0) 100%);
 background: -webkit-linear-gradient(180deg, rgba(0,149,100,0) 0%, rgba(8,234,160,0.6) 50%, rgba(0,149,100,0) 100%);
@@ -67,13 +67,13 @@ background: linear-gradient(180deg, rgba(0,149,100,0) 0%, rgba(8,234,160,0.6) 50
 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#009564",endColorstr="#009564",GradientType=1);
 }
 
-.horizontalScroll ::-webkit-scrollbar {
+.character-factory-stage .horizontalScroll ::-webkit-scrollbar {
   height: 0.1em;
 }
-.horizontalScroll ::-webkit-scrollbar-track {
+.character-factory-stage .horizontalScroll ::-webkit-scrollbar-track {
   box-shadow: transparent;
 }
-.horizontalScroll ::-webkit-scrollbar-thumb {
+.character-factory-stage .horizontalScroll ::-webkit-scrollbar-thumb {
   background: rgb(0,149,100);
 background: -moz-linear-gradient(180deg, rgba(0,149,100,0) 0%, rgba(8,234,160,0.6) 50%, rgba(0,149,100,0) 100%);
 background: -webkit-linear-gradient(180deg, rgba(0,149,100,0) 0%, rgba(8,234,160,0.6) 50%, rgba(0,149,100,0) 100%);
@@ -81,13 +81,13 @@ background: linear-gradient(180deg, rgba(0,149,100,0) 0%, rgba(8,234,160,0.6) 50
 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#009564",endColorstr="#009564",GradientType=1);
 }
 
-.root {
+.character-factory-stage .root {
   overflow: hidden;
   margin: 0;
   padding: 0;
 }
 
-#editor-scene {
+.character-factory-stage #editor-scene {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -98,7 +98,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#009564",endCo
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
 }
 
-.loadingIndicator {
+.character-factory-stage .loadingIndicator {
   display: none;
   pointer-events: none;
   position: absolute;
@@ -112,10 +112,10 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#009564",endCo
   border-radius: 10px;
   filter: drop-shadow(1px 1px 2px black);
 }
-.loadingIndicator.active {
+.character-factory-stage .loadingIndicator.active {
   display: block;
 }
-.loadingIndicator > img {
+.character-factory-stage .loadingIndicator > img {
   position: absolute;
   left: 0;
   right: 0;
@@ -126,11 +126,11 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#009564",endCo
   margin: auto;
 }
 
-.rotate{
-  animation: rotate 2.2s linear infinite;
+.character-factory-stage .rotate {
+  animation: cf-rotate 2.2s linear infinite;
 }
 
-.sectionTitle {
+.character-factory-stage .sectionTitle {
   position: absolute;
   top: 34px;
   left: 32px;
@@ -140,7 +140,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#009564",endCo
   font-size: 16px;
 }
 
-.generalTitle {
+.character-factory-stage .generalTitle {
   position: absolute;
   top: 16px;
   left: 32px;
@@ -152,6 +152,6 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#009564",endCo
   text-transform: uppercase;
 }
 
-@keyframes rotate{
+@keyframes cf-rotate{
   to{ transform: rotate(360deg); }
 }

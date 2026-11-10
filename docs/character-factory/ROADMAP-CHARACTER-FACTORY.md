@@ -178,7 +178,7 @@ Phases 1 à 4 sont **terminées** (audit, compatibilité, fork, intégration au 
 |---|---|---|---|---|---|
 | F5.1 | Thème EGEN sur l'UI héritée | FE | **[E]** CSS modules hérités | **[A]** Mapper les couleurs vers `--colors-*` / `--panel-*` via une feuille `integration/theme.scss`, sans réécrire les sources héritées | v1 |
 | F5.2 | Visuels d'accueil EGEN | FE | **[E]** images CharacterStudio | **[N]** Nouveaux visuels | v1 |
-| F5.3 | Panneaux hérités bornés à la zone | FE | **[A]** `100vw/100vh` hérités | **[A]** Convertir en dimensions relatives au conteneur | v1 |
+| F5.3 | Panneaux hérités bornés à la zone | FE | **[A]** `100vw/100vh` hérités | **Fait** : `vh/vw` convertis en `cqh/cqw` au build, hauteur de zone mesurée, `style.css` rattaché à `.character-factory-stage` | v1 |
 
 **Acceptation** : aucune couleur codée en dur ajoutée ; rendu sans débordement à 3 largeurs (mobile, portable, large) ; aucun libellé « CharacterStudio » visible.
 **Modules** : `integration/`, CSS héritées (changements de variables uniquement).

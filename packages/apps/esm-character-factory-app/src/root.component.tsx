@@ -1,5 +1,5 @@
 import './asset-base'; // doit rester le PREMIER import (voir asset-base.ts)
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Web3Provider } from '@ethersproject/providers';
 import { Web3ReactProvider } from '@web3-react/core';
@@ -37,6 +37,9 @@ function loadOnce(tag: 'script' | 'link', url: string): Promise<void> {
 
 export default function Root() {
   const [ready, setReady] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
+  // Position réelle du haut de la zone (TopBar, bandeaux éventuels…) : mesurée plutôt que supposée.
+  const [stageTop, setStageTop] = useState<number | null>(null);
   // i18n du Core (partagé) : on y enregistre l'espace de noms de l'app avant tout rendu enfant
   const { i18n } = useTranslation();
   useMemo(() => registerStudioTranslations(i18n), [i18n]);
@@ -48,6 +51,22 @@ export default function Root() {
       .finally(() => setReady(true));
   }, []);
 
+  // La hauteur disponible = fenêtre - position réelle de la zone - footer/zone basse du shell.
+  useLayoutEffect(() => {
+    const measure = () => {
+      const top = stageRef.current?.getBoundingClientRect().top;
+      if (typeof top === 'number') setStageTop(Math.max(0, Math.round(top)));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null;
+    observer?.observe(document.body);
+    return () => {
+      window.removeEventListener('resize', measure);
+      observer?.disconnect();
+    };
+  }, [ready]);
+
   if (!ready) return null;
 
   return (
@@ -55,16 +74,25 @@ export default function Root() {
     // `transform` crée un bloc contenant : les éléments `position: fixed` hérités de CharacterStudio
     // (canvas, panneaux) restent bornés à cette zone au lieu de recouvrir la TopBar et les rails.
     <div
+      ref={stageRef}
       className="character-factory-stage"
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: 'calc(100dvh - var(--egen-navbar-height, 0px) - var(--egen-footer-height, 0px))',
-        overflow: 'hidden',
-        transform: 'translateZ(0)',
-        background: 'var(--colors-surface-background)',
-        color: 'var(--colors-surface-foreground)',
-      }}
+      style={
+        {
+          position: 'relative',
+          width: '100%',
+          // Repli = patron des autres apps ; remplacé par la mesure réelle dès qu'elle est disponible
+          height:
+            stageTop === null
+              ? 'calc(100dvh - var(--egen-navbar-height, 0px) - var(--egen-footer-height, 0px))'
+              : `calc(100dvh - ${stageTop}px - var(--egen-footer-height, 0px) - var(--egen-zone-bottom-height, 0px))`,
+          overflow: 'hidden',
+          transform: 'translateZ(0)',
+          // Les unités héritées vh/vw sont converties en cqh/cqw : elles se calent sur CETTE zone
+          containerType: 'size',
+          background: 'var(--colors-surface-background)',
+          color: 'var(--colors-surface-foreground)',
+        } as React.CSSProperties
+      }
     >
       <canvas id="editor-scene" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
       <div id="root" style={{ overflow: 'hidden', width: '100%', height: '100%' }}>
