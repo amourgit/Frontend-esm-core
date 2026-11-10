@@ -60,15 +60,23 @@ export function sceneInitializer(canvasId) {
     const minPan = new THREE.Vector3(-0.5, 0, -0.5);
     const maxPan = new THREE.Vector3(0.5, 1.7, 0.5);
 
+    // EGEN: le canvas est monté dans la zone principale du shell, pas en plein écran : on suit la taille
+    // de son conteneur (et non celle de la fenêtre), y compris quand les rails/zones s'ouvrent ou se ferment.
     const handleResize = () => {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.aspect = window.innerWidth / window.innerHeight;
+        const parent = canvasRef?.parentElement;
+        const width = parent?.clientWidth || window.innerWidth;
+        const height = parent?.clientHeight || window.innerHeight;
+        renderer.setSize(width, height, false);
+        camera.aspect = width / height;
         camera.updateProjectionMatrix();
     };
 
     window.addEventListener("resize", handleResize);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (typeof ResizeObserver !== "undefined" && canvasRef?.parentElement) {
+        new ResizeObserver(handleResize).observe(canvasRef.parentElement);
+    }
     renderer.setPixelRatio(window.devicePixelRatio);
+    handleResize();
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const clock = new THREE.Clock();

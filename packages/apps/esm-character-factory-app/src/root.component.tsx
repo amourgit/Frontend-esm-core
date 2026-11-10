@@ -10,6 +10,7 @@ import { LanguageProvider } from './studio/context/LanguageContext';
 import { SceneProvider } from './studio/context/SceneContext';
 import { SoundProvider } from './studio/context/SoundContext';
 import { ViewProvider } from './studio/context/ViewContext';
+import RouteSync from './route-sync';
 
 declare const __webpack_public_path__: string;
 
@@ -51,9 +52,23 @@ export default function Root() {
   if (!ready) return null;
 
   return (
-    <>
-      <canvas id="editor-scene" style={{ position: 'fixed', top: 0, left: 0 }} width="100%" height="100%" />
-      <div id="root" style={{ overflow: 'hidden' }}>
+    // Conteneur ancré dans la zone principale du shell (même patron de hauteur que les autres apps).
+    // `transform` crée un bloc contenant : les éléments `position: fixed` hérités de CharacterStudio
+    // (canvas, panneaux) restent bornés à cette zone au lieu de recouvrir la TopBar et les rails.
+    <div
+      className="character-factory-stage"
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: 'calc(100dvh - var(--egen-navbar-height, 0px) - var(--egen-footer-height, 0px))',
+        overflow: 'hidden',
+        transform: 'translateZ(0)',
+        background: 'var(--colors-surface-background)',
+        color: 'var(--colors-surface-foreground)',
+      }}
+    >
+      <canvas id="editor-scene" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+      <div id="root" style={{ overflow: 'hidden', width: '100%', height: '100%' }}>
         <Web3ReactProvider getLibrary={getLibrary}>
           <AccountProvider>
             <LanguageProvider>
@@ -61,6 +76,7 @@ export default function Root() {
                 <ViewProvider>
                   <SceneProvider>
                     <SoundProvider>
+                      <RouteSync />
                       <Suspense>
                         <App />
                       </Suspense>
@@ -72,6 +88,6 @@ export default function Root() {
           </AccountProvider>
         </Web3ReactProvider>
       </div>
-    </>
+    </div>
   );
 }

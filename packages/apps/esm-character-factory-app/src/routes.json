@@ -10,22 +10,122 @@
   ],
   "extensions": [
     {
-      "name": "character-factory-nav",
+      "name": "character-factory-rail",
+      "slot": "shell-rail-left-slot",
+      "component": "railPanel",
+      "online": true,
+      "offline": false,
+      "order": 40,
+      "meta": {
+        "title": "Character Factory",
+        "icon": "User",
+        "order": 40,
+        "global": true
+      }
+    },
+    {
+      "name": "character-factory-nav-home",
       "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
-      "order": 600,
+      "order": 700,
       "meta": {
         "section": "character-factory",
         "sectionLabel": "Character Factory",
         "group": "personnages",
         "groupLabel": "Personnages 3D",
-        "label": "Character Factory",
-        "description": "Création et personnalisation de personnages 3D",
-        "icon": "User",
+        "label": "Accueil",
+        "description": "Présentation et accès rapide à la création",
+        "icon": "Sparkles",
         "route": "character-factory",
-        "workspaces": ["intranet"]
+        "workspaces": [
+          "intranet"
+        ]
+      }
+    },
+    {
+      "name": "character-factory-nav-create",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 710,
+      "meta": {
+        "section": "character-factory",
+        "sectionLabel": "Character Factory",
+        "group": "personnages",
+        "groupLabel": "Personnages 3D",
+        "label": "Créer un personnage",
+        "description": "Choisir une classe et personnaliser l'apparence",
+        "icon": "UserPlus",
+        "route": "character-factory/creer",
+        "workspaces": [
+          "intranet"
+        ]
+      }
+    },
+    {
+      "name": "character-factory-nav-load",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 720,
+      "meta": {
+        "section": "character-factory",
+        "sectionLabel": "Character Factory",
+        "group": "personnages",
+        "groupLabel": "Personnages 3D",
+        "label": "Charger un personnage",
+        "description": "Ouvrir un personnage ou un modèle existant",
+        "icon": "FolderOpen",
+        "route": "character-factory/charger",
+        "workspaces": [
+          "intranet"
+        ]
+      }
+    },
+    {
+      "name": "character-factory-nav-batch-export",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 730,
+      "meta": {
+        "section": "character-factory",
+        "sectionLabel": "Character Factory",
+        "group": "production",
+        "groupLabel": "Production",
+        "label": "Export par lot",
+        "description": "Exporter plusieurs personnages en une fois",
+        "icon": "Archive",
+        "route": "character-factory/export-lot",
+        "workspaces": [
+          "intranet"
+        ]
+      }
+    },
+    {
+      "name": "character-factory-nav-batch-manifest",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 740,
+      "meta": {
+        "section": "character-factory",
+        "sectionLabel": "Character Factory",
+        "group": "production",
+        "groupLabel": "Production",
+        "label": "Manifestes par lot",
+        "description": "Générer les manifestes de plusieurs personnages",
+        "icon": "FileText",
+        "route": "character-factory/manifestes",
+        "workspaces": [
+          "intranet"
+        ]
       }
     }
   ]

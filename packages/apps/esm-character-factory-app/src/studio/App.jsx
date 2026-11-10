@@ -216,7 +216,7 @@ export default function App() {
   return (
     <Fragment>
       
-      <div className="generalTitle">Character Studio</div>
+      <div className="generalTitle">EGEN Character Factory</div>
 
       {/* <LanguageSwitch /> */}
       <MessageWindow

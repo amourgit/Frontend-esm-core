@@ -339,7 +339,7 @@ function getVRMMeta( vrmMeta){
   vrmMeta = vrmMeta||{}
 
   const defaults = {
-    authors:["CharacterStudio"],
+    authors:["EGEN Character Factory"],
     metaVersion:"1",
     version:"v1",
     name:"CharacterCreator",

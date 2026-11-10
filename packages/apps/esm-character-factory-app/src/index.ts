@@ -1,5 +1,6 @@
 import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
+import RailPanel from './rail-panel.component';
 
 // =============================================================================
 //  ESM CHARACTER FACTORY APP — Point d'entrée
@@ -21,6 +22,9 @@ export function startupApp() {
 }
 
 export const root = getAsyncLifecycle(() => import('./root.component'), options);
+
+// Option du rail gauche (zone gauche) : affiche les sous-options de la section `character-factory`.
+export const railPanel = getSyncLifecycle(RailPanel, { ...options, featureName: 'character-factory-rail' });
 
 // Entrée de navigation (slot `topbar-nav-slot`) : ne rend rien, seule sa `meta` est lue.
 export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'character-factory-nav-entry' });
