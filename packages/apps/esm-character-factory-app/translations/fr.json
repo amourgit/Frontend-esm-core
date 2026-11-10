@@ -1,1 +1,5 @@
-{ "character-factory": "Character Factory", "title": "Character Factory" }
+{
+  "character-factory": "Character Factory",
+  "title": "Character Factory",
+  "characterFactoryAppMenuLink": "Character Factory"
+}

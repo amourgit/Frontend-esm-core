@@ -1,6 +1,7 @@
 import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@egen-civitas/esm-framework';
 import { configSchema } from './config-schema';
 import RailPanel from './rail-panel.component';
+import AppMenuLink from './app-menu-link.component';
 
 // =============================================================================
 //  ESM CHARACTER FACTORY APP — Point d'entrée
@@ -22,6 +23,9 @@ export function startupApp() {
 }
 
 export const root = getAsyncLifecycle(() => import('./root.component'), options);
+
+// Tuile de la grille « Applications » de la TopBar (slot `app-menu-slot`).
+export const appMenuLink = getSyncLifecycle(AppMenuLink, { ...options, featureName: 'character-factory-app-menu-link' });
 
 // Option du rail gauche (zone gauche) : affiche les sous-options de la section `character-factory`.
 export const railPanel = getSyncLifecycle(RailPanel, { ...options, featureName: 'character-factory-rail' });

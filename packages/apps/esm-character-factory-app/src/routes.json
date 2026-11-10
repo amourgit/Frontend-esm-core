@@ -24,6 +24,13 @@
       }
     },
     {
+      "name": "character-factory-app-menu-link",
+      "slot": "app-menu-slot",
+      "component": "appMenuLink",
+      "online": true,
+      "offline": false
+    },
+    {
       "name": "character-factory-nav-home",
       "slot": "topbar-nav-slot",
       "component": "navEntry",
@@ -41,7 +48,8 @@
         "route": "character-factory",
         "workspaces": [
           "intranet"
-        ]
+        ],
+        "sectionRoute": "character-factory"
       }
     },
     {
