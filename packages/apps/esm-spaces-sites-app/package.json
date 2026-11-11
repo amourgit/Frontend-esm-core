@@ -1,0 +1,110 @@
+{
+  "name": "@egen/esm-spaces-sites-app",
+  "version": "1.0.0",
+  "license": "MPL-2.0",
+  "description": "Espaces (intranet, extranet…) et sites (arbre de profondeur illimitée) : sélecteurs de la TopBar injectés par extension, contexte actif partagé",
+  "browser": "dist/egen-esm-spaces-sites-app.js",
+  "main": "src/index.ts",
+  "source": true,
+  "scripts": {
+    "start": "egen develop",
+    "serve": "rspack serve --mode=development",
+    "debug": "npm run serve",
+    "test": "cross-env TZ=UTC vitest run --passWithNoTests",
+    "test:watch": "cross-env TZ=UTC vitest watch",
+    "coverage": "cross-env TZ=UTC vitest run --coverage --passWithNoTests",
+    "build": "rspack --mode=production",
+    "build:development": "rspack --mode=development",
+    "analyze": "rspack --mode=production --env analyze=true",
+    "typescript": "tsc",
+    "lint": "eslint src --ext ts,tsx",
+    "extract-translations": "i18next 'src/**/*.component.tsx' --config='../../../tools/i18next-parser.config.js'"
+  },
+  "keywords": [
+    "egen",
+    "microfrontends"
+  ],
+  "browserslist": [
+    "extends browserslist-config-egen"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amourgit/Frontend-esm-core.git",
+    "directory": "packages/apps/esm-spaces-sites-app"
+  },
+  "bugs": {
+    "url": "https://github.com/amourgit/Frontend-esm-core/issues"
+  },
+  "homepage": "https://github.com/amourgit/Frontend-esm-core/tree/main/packages/apps/esm-spaces-sites-app#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@carbon/react": "1.x",
+    "@egen-civitas/esm-api": ">=2.0.0",
+    "@egen-civitas/esm-config": ">=2.0.0",
+    "@egen-civitas/esm-context": ">=1.0.2",
+    "@egen-civitas/esm-data-api": ">=2.0.0",
+    "@egen-civitas/esm-dynamic-loading": ">=2.0.1",
+    "@egen-civitas/esm-error-handling": ">=1.0.2",
+    "@egen-civitas/esm-extensions": ">=2.1.0",
+    "@egen-civitas/esm-feature-flags": ">=1.0.2",
+    "@egen-civitas/esm-framework": ">=3.0.0",
+    "@egen-civitas/esm-globals": ">=2.0.0",
+    "@egen-civitas/esm-navigation": ">=1.0.2",
+    "@egen-civitas/esm-react-utils": ">=3.0.0",
+    "@egen-civitas/esm-routes": ">=1.1.0",
+    "@egen-civitas/esm-state": ">=1.0.3",
+    "@egen-civitas/esm-styleguide": ">=3.0.0",
+    "@egen-civitas/esm-tenant": ">=1.0.2",
+    "@egen-civitas/esm-utils": ">=2.0.0",
+    "dayjs": "1.x",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "react-i18next": "16.x",
+    "rxjs": "7.x",
+    "single-spa": "6.x",
+    "swr": "2.x"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "happy-dom": "^21.0.4",
+    "i18next": "^25.10.10",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^16.6.6",
+    "react-is": "^17.0.2",
+    "sass": "^1.107.0",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "dependencies": {
+    "@carbon/react": "^1.92.1",
+    "@egen-civitas/esm-api": "^2.0.0",
+    "@egen-civitas/esm-config": "^2.0.0",
+    "@egen-civitas/esm-context": "^1.0.2",
+    "@egen-civitas/esm-data-api": "^2.0.0",
+    "@egen-civitas/esm-dynamic-loading": "^2.0.1",
+    "@egen-civitas/esm-error-handling": "^1.0.2",
+    "@egen-civitas/esm-expression-evaluator": "^1.0.1",
+    "@egen-civitas/esm-extensions": "^2.4.0",
+    "@egen-civitas/esm-feature-flags": "^1.0.2",
+    "@egen-civitas/esm-framework": "^3.1.0",
+    "@egen-civitas/esm-globals": "^2.0.0",
+    "@egen-civitas/esm-navigation": "^1.0.2",
+    "@egen-civitas/esm-offline": "^1.0.3",
+    "@egen-civitas/esm-react-utils": "^3.0.0",
+    "@egen-civitas/esm-routes": "^1.1.0",
+    "@egen-civitas/esm-state": "^1.0.3",
+    "@egen-civitas/esm-styleguide": "^3.3.0",
+    "@egen-civitas/esm-tenant": "^1.0.2",
+    "@egen-civitas/esm-translations": "^1.0.3",
+    "@egen-civitas/esm-utils": "^2.0.0",
+    "dayjs": "^1.11.10",
+    "lodash-es": "^4.18.1",
+    "lucide-react": "^1.65.0",
+    "rxjs": "^7.8.1",
+    "single-spa": "^6.0.0",
+    "swr": "^2.2.0"
+  }
+}

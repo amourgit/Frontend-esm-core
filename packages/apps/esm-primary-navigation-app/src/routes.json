@@ -22,21 +22,6 @@
       "order": 1
     },
     {
-      "name": "workspace-selector-menu",
-      "slot": "staggered-menu-slot",
-      "component": "workspaceSelectorMenu",
-      "online": true,
-      "offline": true,
-      "meta": {
-        "title": "Espace",
-        "area": "top",
-        "order": 0,
-        "priority": 100,
-        "global": true,
-        "showTitle": true
-      }
-    },
-    {
       "name": "link",
       "component": "linkComponent",
       "online": true,

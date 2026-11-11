@@ -120,6 +120,70 @@
       }
     },
     {
+      "name": "sites-registry-dsi",
+      "slot": "sites-registry-slot",
+      "component": "siteDeclaration",
+      "online": true,
+      "offline": true,
+      "meta": {
+        "site": {
+          "id": "srv-8f92a10b",
+          "name": "Direction des Systèmes d'Information",
+          "shortName": "DSI",
+          "category": "Technologies & Infras",
+          "description": "Infrastructures cloud, sécurité IAM, réseaux d'entreprise, support utilisateur et gouvernance GED."
+        }
+      }
+    },
+    {
+      "name": "sites-registry-drh",
+      "slot": "sites-registry-slot",
+      "component": "siteDeclaration",
+      "online": true,
+      "offline": true,
+      "meta": {
+        "site": {
+          "id": "srv-3c71e92d",
+          "name": "Direction des Ressources Humaines",
+          "shortName": "DRH",
+          "category": "Administration & Personnel",
+          "description": "Gestion des talents, paie, mobilités internes, carrières et formations professionnelles."
+        }
+      }
+    },
+    {
+      "name": "sites-registry-dlb",
+      "slot": "sites-registry-slot",
+      "component": "siteDeclaration",
+      "online": true,
+      "offline": true,
+      "meta": {
+        "site": {
+          "id": "srv-6a10f44e",
+          "name": "Direction de la Logistique & Bâtiments",
+          "shortName": "DLB",
+          "category": "Moyens Généraux",
+          "description": "Gestion des véhicules, approvisionnements, maintenance du patrimoine et accès physiques."
+        }
+      }
+    },
+    {
+      "name": "sites-registry-dfc",
+      "slot": "sites-registry-slot",
+      "component": "siteDeclaration",
+      "online": true,
+      "offline": true,
+      "meta": {
+        "site": {
+          "id": "srv-9d82b51c",
+          "name": "Direction Financière & Comptabilité",
+          "shortName": "DFC",
+          "category": "Finances & Budget",
+          "description": "Engagements budgétaires, trésorerie, facturation, contrôle de gestion et audits financiers."
+        }
+      }
+    },
+    {
       "name": "sites-home-sites-section",
       "slot": "home-sections",
       "component": "homeSitesSection",

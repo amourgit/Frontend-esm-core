@@ -1,0 +1,37 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "context-selectors",
+      "slot": "topbar-slot",
+      "component": "contextSelectors",
+      "online": true,
+      "offline": true,
+      "order": 10,
+      "meta": {
+        "global": true,
+        "topbar": {
+          "level": "main",
+          "rank": 10,
+          "region": "left",
+          "after": "brand-logo"
+        }
+      }
+    },
+    {
+      "name": "space-selector-menu",
+      "slot": "staggered-menu-slot",
+      "component": "spaceMenu",
+      "online": true,
+      "offline": true,
+      "meta": {
+        "title": "Espace",
+        "area": "top",
+        "order": 0,
+        "priority": 100,
+        "global": true,
+        "showTitle": true
+      }
+    }
+  ]
+}

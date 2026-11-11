@@ -1,0 +1,12 @@
+{
+  "allOf": "Tout {{name}}",
+  "allSites": "Tous les sites",
+  "noSiteFound": "Aucun site trouvé.",
+  "searchSite": "Rechercher un site...",
+  "siteActivated": "Site activé : {{name}}",
+  "siteFilterReset": "Filtre de site réinitialisé",
+  "siteSelection": "Sélection du site",
+  "space": "Espace",
+  "spaceActivated": "Espace activé : {{name}}",
+  "subsiteSelection": "Sélection du sous-site (niveau {{level}})"
+}

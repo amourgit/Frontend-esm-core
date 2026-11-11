@@ -9,7 +9,6 @@ import { configSchema } from './config-schema';
 import { moduleName } from './constants';
 import primaryNavRootComponent from './root.component';
 import changeLanguageLinkComponent from './components/change-language/change-language-link.extension';
-import workspaceSelectorMenuComponent from './components/workspace-selector-menu/workspace-selector-menu.extension';
 import genericLinkComponent, { genericLinkConfigSchema } from './components/generic-link/generic-link.component';
 import breadcrumbItemComponent, { breadcrumbItemConfigSchema } from './components/breadcrumb/breadcrumb-item.component';
 
@@ -40,8 +39,6 @@ export const root = getSyncLifecycle(primaryNavRootComponent, options);
 
 export const changeLanguageLink = getSyncLifecycle(changeLanguageLinkComponent, options);
 
-// Choix de l'Espace dans le StaggeredMenuPanel (slot `staggered-menu-slot`, permanent : `meta.global`).
-export const workspaceSelectorMenu = getSyncLifecycle(workspaceSelectorMenuComponent, options);
 
 export const changeLanguageModal = getAsyncLifecycle(
   () => import('./components/change-language/change-language.modal'),

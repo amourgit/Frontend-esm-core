@@ -30,6 +30,10 @@ export const root = getSyncLifecycle(rootComponent, options);
 // `meta` (déclarée dans routes.json) est lue par la TopBar du niveau 2.
 export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'sites-nav-entry' });
 
+// Déclaration d'un site dans le registre partagé (slot de DONNÉES `sites-registry-slot`, lu par @egen/esm-spaces-sites-app) :
+// le site est décrit dans `meta.site` de routes.json ; ce composant ne rend rien. Un site de plus = une entrée de plus.
+export const siteDeclaration = getSyncLifecycle(() => null, { ...options, featureName: 'sites-registry-declaration' });
+
 // Sections du slot `home-sections` (page d'accueil) : chaque extension rend sa propre `Section`.
 // Le composant est chargé à la demande, donc seulement quand la page qui expose le slot est affichée.
 export const homeSitesSection = getAsyncLifecycle(() => import('./home-sections/sites/sites-section.extension'), {

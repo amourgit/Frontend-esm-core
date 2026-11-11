@@ -14,7 +14,8 @@ describe('placement des éléments globaux', () => {
   it("la TopBar ne porte aucune identité d'entreprise : pas d'élément « brand » ni de logo (c'est l'app de branding)", () => {
     expect(GLOBAL_ITEM_IDS).not.toContain('brand');
     expect(GLOBAL_ITEM_IDS.filter((id) => /brand|logo/i.test(id))).toEqual([]);
-    expect(DEFAULT_PLACEMENT['context-selectors']).toEqual({ level: 'main', rank: 10, region: 'left', order: 0 });
+    // Espace et Site : app dédiée (@egen/esm-spaces-sites-app), pas un élément de la TopBar.
+    expect(GLOBAL_ITEM_IDS.filter((id) => /selector|space|site|workspace/i.test(id))).toEqual([]);
   });
 
   it('sans surcharge : placement d’usine', () => {
