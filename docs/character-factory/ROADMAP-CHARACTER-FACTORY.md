@@ -24,7 +24,7 @@ Règles de lecture :
 
 | Terme | Définition | Ne pas confondre avec |
 |---|---|---|
-| **Ressource** | Un élément 3D indépendant : personnage, vêtement, accessoire, animation, expression, texture, environnement. A un id, une version, des fichiers, des métadonnées, une compatibilité, un statut. | Un « trait » de CharacterStudio (lié à un manifeste de personnage). |
+| **Ressource** | Un élément 3D indépendant : personnage, vêtement, accessoire, animation, expression, texture, environnement (+ `part` : élément modulaire issu d'un manifeste CharacterStudio, dont le manifeste ne précise pas s'il s'agit d'un vêtement ou d'un accessoire). A un id, une version, des fichiers, des métadonnées, une compatibilité, un statut. | Un « trait » de CharacterStudio (lié à un manifeste de personnage). |
 | **Composition** | Un assemblage enregistré : un personnage de base + des éléments + des réglages d'apparence. **Référence** les ressources (id + version), ne les copie pas. | Un export VRM/GLB fusionné. |
 | **Variante** | Une composition dérivée d'une autre (`variantOf`). Indépendante après création. | Une version. |
 | **Version** | État daté et immuable (une fois publiée) d'une ressource ou d'une composition. | Une variante. |
@@ -203,13 +203,13 @@ Phases 1 à 4 sont **terminées** (audit, compatibilité, fork, intégration au 
 
 | ID | Fonctionnalité | Côté | Existant | À faire | Prio |
 |---|---|---|---|---|---|
-| F7.1 | Types et validateurs de `Resource`, `Composition`, `PresentationProfile`, `StateSet`, `Instruction` | FE | **[N]** | Écrire dans `domain/` (validation manuelle, **aucune dépendance ajoutée**) | v1 |
-| F7.2 | Ports (`ResourceRepository`, `CompositionRepository`, `ProfileRepository`, `PermissionPort`, `RuntimeChannel`) | FE | **[N]** | Interfaces dans `ports/` | v1 |
-| F7.3 | Adaptateur manifeste historique → ressources | FE | **[A]** `manifestDataManager` | Lire un manifeste CharacterStudio et produire un catalogue de `Resource` (lecture seule) | v1 |
-| F7.4 | Persistance locale temporaire des compositions et profils | FE | **[A]** `Storage.js` (un seul avatar) | Adaptateur `browser-storage` (IndexedDB), multi-compositions | v1 |
-| F7.5 | Résolution composition → liste d'assets à charger | FE | **[N]** | `CompositionService.resolve()` | v1 |
-| F7.6 | Contrats backend documentés (liste des opérations attendues) | BE | **[N]** | Document `BACKEND-CONTRATS.md` issu des ports ; pas d'implémentation | v1 |
-| F7.7 | ADR de l'architecture de code (§5) | — | — | Valider ou ajuster | v1 |
+| F7.1 | Types et validateurs de `Resource`, `Composition`, `PresentationProfile`, `StateSet`, `Instruction` | FE | **[N]** | **Fait** — `src/domain/` (validation manuelle, aucune dépendance ajoutée) | v1 |
+| F7.2 | Ports (`ResourceRepository`, `CompositionRepository`, `ProfileRepository`, `PermissionPort`, `RuntimeChannel`) | FE | **[N]** | **Fait** — `src/ports/index.ts` | v1 |
+| F7.3 | Adaptateur manifeste historique → ressources | FE | **[A]** `manifestDataManager` | **Fait** — `src/adapters/legacy-manifest` ; testé sur manifeste **synthétique** (à confirmer sur un manifeste réel) | v1 |
+| F7.4 | Persistance locale temporaire des compositions et profils | FE | **[A]** `Storage.js` (un seul avatar) | **Écrit, non validé en navigateur** — `src/adapters/browser-storage` (IndexedDB) ; dépôts mémoire testés | v1 |
+| F7.5 | Résolution composition → liste d'assets à charger | FE | **[N]** | **Fait** — `CompositionService.resolve()` | v1 |
+| F7.6 | Contrats backend documentés (liste des opérations attendues) | BE | **[N]** | **Fait** — `BACKEND-CONTRATS.md` | v1 |
+| F7.7 | ADR de l'architecture de code (§5) | — | — | **Rédigé** — `ADR-001-ARCHITECTURE-CODE.md`, **en attente de validation** (D4) | v1 |
 
 **Acceptation** : tests purs (sans three ni React) ; aller-retour composition → sauvegarde → relecture identique ; aucune copie de fichier 3D dans une composition ; un manifeste réel est converti sans perte.
 **Hors périmètre** : toute UI, tout appel réseau.
@@ -397,6 +397,7 @@ Principe : **décision et orchestration = backend ; rendu et exécution graphiqu
 | 1 à 4 | Terminées |
 | 5 Identité et shell | En cours |
 | 6 Stabilisation et cycle de vie | Code terminé (F6.1, F6.2, F6.4, F6.5) ; validation navigateur de la matrice F6.3 à faire |
-| 7 à 15 | À faire |
+| 7 Socle domaine | Code et docs terminés ; à valider : IndexedDB en navigateur, manifeste réel, ADR (D4) |
+| 8 à 15 | À faire |
 
 Correspondance avec la feuille de route initiale : ancienne P5 → P5 ; ancienne P6 → P6 ; ancienne P7 (extensibilité) → P7 (ports) et P15 ; ancienne P8 (validation) → P15.
