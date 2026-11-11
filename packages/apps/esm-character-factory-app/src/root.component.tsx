@@ -4,6 +4,7 @@ import { useConfig } from '@egen-civitas/esm-framework';
 import { applyAssetBase } from './asset-base';
 import { isWebGLAvailable } from './webgl-support';
 import type { CharacterFactoryConfig } from './config-schema';
+import ShellBackground from './shell-background';
 
 // Le moteur (CharacterStudio + three.js) est lourd : il n'est chargé qu'une fois la configuration lue,
 // la base d'assets appliquée et WebGL vérifié.
@@ -128,11 +129,12 @@ export default function Root() {
           transform: 'translateZ(0)',
           // Les unités héritées vh/vw sont converties en cqh/cqw : elles se calent sur CETTE zone
           containerType: 'size',
-          background: 'var(--colors-surface-background)',
           color: 'var(--colors-surface-foreground)',
         } as React.CSSProperties
       }
     >
+      {/* Arrière-plan de la page : déclaré au shell (hôte global), l'app ne dessine plus de fond opaque */}
+      <ShellBackground />
       {phase === 'checking' && <Status title={t('loading', 'Chargement…')} />}
       {phase === 'no-webgl' && (
         <Status
