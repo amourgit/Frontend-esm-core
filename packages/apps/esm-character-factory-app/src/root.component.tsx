@@ -1,55 +1,94 @@
-import './asset-base'; // doit rester le PREMIER import (voir asset-base.ts)
-import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Web3Provider } from '@ethersproject/providers';
-import { Web3ReactProvider } from '@web3-react/core';
-import { registerStudioTranslations } from './studio/lib/localization/i18n';
-import App from './studio/App';
-import { AccountProvider } from './studio/context/AccountContext';
-import { AudioProvider } from './studio/context/AudioContext';
-import { LanguageProvider } from './studio/context/LanguageContext';
-import { SceneProvider } from './studio/context/SceneContext';
-import { SoundProvider } from './studio/context/SoundContext';
-import { ViewProvider } from './studio/context/ViewContext';
-import RouteSync from './route-sync';
+import { useConfig } from '@egen-civitas/esm-framework';
+import { applyAssetBase } from './asset-base';
+import { isWebGLAvailable } from './webgl-support';
+import type { CharacterFactoryConfig } from './config-schema';
 
-const getLibrary = (provider: any) => {
-  const library = new Web3Provider(provider);
-  library.pollingInterval = 12000;
-  return library;
-};
+// Le moteur (CharacterStudio + three.js) est lourd : il n'est chargé qu'une fois la configuration lue,
+// la base d'assets appliquée et WebGL vérifié.
+const StudioRoot = React.lazy(() => import('./studio-root'));
 
-// L'ancien index.html chargeait ces ressources globalement ; elles sont désormais
-// injectées par l'application elle-même (une seule fois), depuis ses propres assets.
+type Phase = 'checking' | 'ready' | 'no-webgl';
+
+// L'ancien index.html chargeait ces ressources globalement ; elles sont injectées par l'application elle-même
+// (une seule fois), depuis ses propres assets.
 function loadOnce(tag: 'script' | 'link', url: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const attr = tag === 'script' ? 'src' : 'href';
     if (document.querySelector(`${tag}[data-character-factory="${url}"]`)) return resolve();
     const el: any = document.createElement(tag);
     el.setAttribute('data-character-factory', url);
     if (tag === 'link') el.rel = 'stylesheet';
     el.onload = () => resolve();
     el.onerror = () => reject(new Error(`Character Factory: échec de chargement de ${url}`));
-    el[attr] = url;
+    el[tag === 'script' ? 'src' : 'href'] = url;
     document.head.appendChild(el);
   });
 }
 
+function Status({ title, hint, onRetry }: { title: string; hint?: string; onRetry?: () => void }) {
+  const { t } = useTranslation();
+  return (
+    <div
+      role="status"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.75rem',
+        height: '100%',
+        padding: '2rem',
+        textAlign: 'center',
+        color: 'var(--colors-surface-foreground)',
+      }}
+    >
+      <strong>{title}</strong>
+      {hint && <span style={{ opacity: 0.75 }}>{hint}</span>}
+      {onRetry && (
+        <button type="button" onClick={onRetry} style={{ cursor: 'pointer' }}>
+          {t('retry', 'Réessayer')}
+        </button>
+      )}
+    </div>
+  );
+}
+
+// Capte les erreurs de rendu et d'échec de chargement du moteur (réseau, chunk manquant) au lieu d'un écran vide.
+class ErrorBoundary extends React.Component<
+  { fallback: (retry: () => void) => React.ReactNode; children: React.ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch(error: unknown) {
+    console.error('Character Factory:', error);
+  }
+  render() {
+    return this.state.failed ? this.props.fallback(() => this.setState({ failed: false })) : this.props.children;
+  }
+}
+
 export default function Root() {
-  const [ready, setReady] = useState(false);
+  const { t } = useTranslation();
+  const config = useConfig<CharacterFactoryConfig>();
+  const [phase, setPhase] = useState<Phase>('checking');
   const stageRef = useRef<HTMLDivElement>(null);
   // Position réelle du haut de la zone (TopBar, bandeaux éventuels…) : mesurée plutôt que supposée.
   const [stageTop, setStageTop] = useState<number | null>(null);
-  // i18n du Core (partagé) : on y enregistre l'espace de noms de l'app avant tout rendu enfant
-  const { i18n } = useTranslation();
-  useMemo(() => registerStudioTranslations(i18n), [i18n]);
 
   useEffect(() => {
-    const base = (globalThis as any).__EGEN_CHARACTER_FACTORY_ASSETS__ as string;
+    if (!isWebGLAvailable()) {
+      setPhase('no-webgl');
+      return;
+    }
+    const base = applyAssetBase(config?.assetBaseUrl);
     Promise.all([loadOnce('script', `${base}/ktx2/libktx.js`), loadOnce('link', `${base}/style.css`)])
       .catch((e) => console.error(e))
-      .finally(() => setReady(true));
-  }, []);
+      .finally(() => setPhase('ready'));
+  }, [config?.assetBaseUrl]);
 
   // La hauteur disponible = fenêtre - position réelle de la zone - footer/zone basse du shell.
   useLayoutEffect(() => {
@@ -65,9 +104,9 @@ export default function Root() {
       window.removeEventListener('resize', measure);
       observer?.disconnect();
     };
-  }, [ready]);
+  }, []);
 
-  if (!ready) return null;
+  const retry = useCallback(() => window.location.reload(), []);
 
   return (
     // Conteneur ancré dans la zone principale du shell (même patron de hauteur que les autres apps).
@@ -94,27 +133,32 @@ export default function Root() {
         } as React.CSSProperties
       }
     >
-      <canvas id="editor-scene" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      <div id="root" style={{ overflow: 'hidden', width: '100%', height: '100%' }}>
-        <Web3ReactProvider getLibrary={getLibrary}>
-          <AccountProvider>
-            <LanguageProvider>
-              <AudioProvider>
-                <ViewProvider>
-                  <SceneProvider>
-                    <SoundProvider>
-                      <RouteSync />
-                      <Suspense>
-                        <App />
-                      </Suspense>
-                    </SoundProvider>
-                  </SceneProvider>
-                </ViewProvider>
-              </AudioProvider>
-            </LanguageProvider>
-          </AccountProvider>
-        </Web3ReactProvider>
-      </div>
+      {phase === 'checking' && <Status title={t('loading', 'Chargement…')} />}
+      {phase === 'no-webgl' && (
+        <Status
+          title={t('webglUnavailable', 'Le rendu 3D est indisponible')}
+          hint={t(
+            'webglUnavailableHint',
+            "Activez l'accélération matérielle dans votre navigateur ou utilisez un navigateur compatible WebGL.",
+          )}
+        />
+      )}
+      {phase === 'ready' && (
+        <ErrorBoundary
+          fallback={(retryRender) => (
+            <Status
+              title={t('loadError', "Impossible de charger l'éditeur 3D")}
+              hint={t('loadErrorHint', 'Vérifiez votre connexion puis réessayez.')}
+              onRetry={retryRender}
+            />
+          )}
+        >
+          <canvas id="editor-scene" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+          <Suspense fallback={<Status title={t('loading', 'Chargement…')} />}>
+            <StudioRoot />
+          </Suspense>
+        </ErrorBoundary>
+      )}
     </div>
   );
 }

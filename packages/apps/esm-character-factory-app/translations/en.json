@@ -1,5 +1,11 @@
 {
   "character-factory": "Character Factory",
   "title": "Character Factory",
-  "characterFactoryAppMenuLink": "Character Factory"
+  "characterFactoryAppMenuLink": "Character Factory",
+  "loading": "Loading…",
+  "retry": "Retry",
+  "webglUnavailable": "3D rendering is unavailable",
+  "webglUnavailableHint": "Enable hardware acceleration in your browser or use a WebGL-capable browser.",
+  "loadError": "Unable to load the 3D editor",
+  "loadErrorHint": "Check your connection and try again."
 }

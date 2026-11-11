@@ -82,18 +82,25 @@ global.OffscreenCanvas = class OffscreenCanvas {
   }
 }
 
-// Mock LIBKTX for ktx library
-global.LIBKTX = {
-  KTX2File: class MockKTX2File {
-    constructor() {
-      this.valid = true
-    }
-    getWidth() { return 256 }
-    getHeight() { return 256 }
-    transcode() { return true }
-    getImageData() { return new Uint8Array(256 * 256 * 4) }
+// Mock LIBKTX for ktx library.
+// EGEN: le vrai LIBKTX (libktx.js) est une FONCTION qui renvoie une promesse du module ; VRMExporterv0.js instancie
+// KTXTools dès son évaluation et l'appelle. Le mock d'origine était un simple objet -> "externalKtxlib is not a function"
+// dès qu'un test importe le moteur. On le rend appelable et on conserve la propriété d'origine.
+class MockKTX2File {
+  constructor() {
+    this.valid = true
   }
+  getWidth() { return 256 }
+  getHeight() { return 256 }
+  transcode() { return true }
+  getImageData() { return new Uint8Array(256 * 256 * 4) }
 }
+const libktxModule = {
+  KTX2File: MockKTX2File,
+  GL: { createContext: () => 1, makeContextCurrent: () => {} },
+}
+global.LIBKTX = Object.assign(() => Promise.resolve(libktxModule), { KTX2File: MockKTX2File })
+if (typeof window !== 'undefined') window.LIBKTX = global.LIBKTX
 
 // Mock File API
 global.File = class MockFile {

@@ -1,5 +1,11 @@
 {
   "character-factory": "Character Factory",
   "title": "Character Factory",
-  "characterFactoryAppMenuLink": "Character Factory"
+  "characterFactoryAppMenuLink": "Character Factory",
+  "loading": "Chargement…",
+  "retry": "Réessayer",
+  "webglUnavailable": "Le rendu 3D est indisponible",
+  "webglUnavailableHint": "Activez l'accélération matérielle dans votre navigateur ou utilisez un navigateur compatible WebGL.",
+  "loadError": "Impossible de charger l'éditeur 3D",
+  "loadErrorHint": "Vérifiez votre connexion puis réessayez."
 }

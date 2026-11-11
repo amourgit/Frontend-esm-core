@@ -191,9 +191,9 @@ Phases 1 à 4 sont **terminées** (audit, compatibilité, fork, intégration au 
 |---|---|---|---|
 | F6.1 | Cycle de vie : boucle de rendu, écouteurs, contexte WebGL, audio libérés au démontage | FE | **Fait** (`sceneInitializer.dispose`, `LookAtManager.dispose`, `AudioProvider`) |
 | F6.2 | Cohérence vue ↔ scène : changer de vue depuis le shell nettoie la scène comme les boutons « Retour » d'origine | FE | **Fait** (`route-sync`) |
-| F6.3 | Matrice de non-régression des fonctions d'origine (création, chargement, morphologie, vêtements, textures, couleurs, aperçu, export VRM/GLB, lot) | FE | À faire |
-| F6.4 | Indépendance des assets externes : inventaire `loot-assets`, réglage `assetBaseUrl` effectif | FE | À faire (décision D2) |
-| F6.5 | États de chargement et d'erreur homogènes (échec réseau d'un manifeste, WebGL indisponible) | FE | À faire |
+| F6.3 | Matrice de non-régression des fonctions d'origine (création, chargement, morphologie, vêtements, textures, couleurs, aperçu, export VRM/GLB, lot) | FE | **Matrice écrite** (`MATRICE-NON-REGRESSION.md`, 23 lignes) ; validation navigateur à faire |
+| F6.4 | Indépendance des assets externes : inventaire `loot-assets`, réglage `assetBaseUrl` effectif | FE | **Fait** (`ASSETS-EXTERNES.md`) ; rapatriement des personnages = décision D2 |
+| F6.5 | États de chargement et d'erreur homogènes (échec réseau d'un manifeste, WebGL indisponible) | FE | **Fait** (WebGL, chargement du moteur, erreur de rendu) ; échec d'un manifeste distant : R22 à valider |
 
 **Acceptation** : quitter et revenir 10 fois → un seul contexte WebGL actif, aucun avatar résiduel, aucune musique résiduelle, mémoire stable ; chaque ligne de la matrice F6.3 validée ; message clair si WebGL est indisponible.
 
@@ -396,7 +396,7 @@ Principe : **décision et orchestration = backend ; rendu et exécution graphiqu
 |---|---|
 | 1 à 4 | Terminées |
 | 5 Identité et shell | En cours |
-| 6 Stabilisation et cycle de vie | En cours (F6.1, F6.2 faits) |
+| 6 Stabilisation et cycle de vie | Code terminé (F6.1, F6.2, F6.4, F6.5) ; validation navigateur de la matrice F6.3 à faire |
 | 7 à 15 | À faire |
 
 Correspondance avec la feuille de route initiale : ancienne P5 → P5 ; ancienne P6 → P6 ; ancienne P7 (extensibilité) → P7 (ports) et P15 ; ancienne P8 (validation) → P15.
