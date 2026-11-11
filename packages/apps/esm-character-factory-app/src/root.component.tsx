@@ -5,10 +5,12 @@ import { applyAssetBase } from './asset-base';
 import { isWebGLAvailable } from './webgl-support';
 import type { CharacterFactoryConfig } from './config-schema';
 import ShellBackground from './shell-background';
+import { appSection, type AppSection } from './app-section';
 
 // Le moteur (CharacterStudio + three.js) est lourd : il n'est chargé qu'une fois la configuration lue,
 // la base d'assets appliquée et WebGL vérifié.
 const StudioRoot = React.lazy(() => import('./studio-root'));
+const LibraryPage = React.lazy(() => import('./features/library/LibraryPage'));
 
 type Phase = 'checking' | 'ready' | 'no-webgl';
 
@@ -76,12 +78,24 @@ export default function Root() {
   const { t } = useTranslation();
   const config = useConfig<CharacterFactoryConfig>();
   const [phase, setPhase] = useState<Phase>('checking');
+  // Sections exclusives (un seul contexte WebGL à la fois) : l'éditeur et la bibliothèque
+  const [section, setSection] = useState<AppSection>(() => appSection(window.location.pathname));
+  useEffect(() => {
+    const update = () => setSection(appSection(window.location.pathname));
+    window.addEventListener('popstate', update);
+    window.addEventListener('single-spa:routing-event', update);
+    return () => {
+      window.removeEventListener('popstate', update);
+      window.removeEventListener('single-spa:routing-event', update);
+    };
+  }, []);
   const stageRef = useRef<HTMLDivElement>(null);
   // Position réelle du haut de la zone (TopBar, bandeaux éventuels…) : mesurée plutôt que supposée.
   const [stageTop, setStageTop] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!isWebGLAvailable()) {
+    // WebGL n'est indispensable qu'à l'éditeur ; la bibliothèque reste utilisable sans (seul l'aperçu 3D est indisponible)
+    if (section === 'studio' && !isWebGLAvailable()) {
       setPhase('no-webgl');
       return;
     }
@@ -89,7 +103,7 @@ export default function Root() {
     Promise.all([loadOnce('script', `${base}/ktx2/libktx.js`), loadOnce('link', `${base}/style.css`)])
       .catch((e) => console.error(e))
       .finally(() => setPhase('ready'));
-  }, [config?.assetBaseUrl]);
+  }, [config?.assetBaseUrl, section]);
 
   // La hauteur disponible = fenêtre - position réelle de la zone - footer/zone basse du shell.
   useLayoutEffect(() => {
@@ -155,10 +169,18 @@ export default function Root() {
             />
           )}
         >
-          <canvas id="editor-scene" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-          <Suspense fallback={<Status title={t('loading', 'Chargement…')} />}>
-            <StudioRoot />
-          </Suspense>
+          {section === 'library' ? (
+            <Suspense fallback={<Status title={t('loading', 'Chargement…')} />}>
+              <LibraryPage />
+            </Suspense>
+          ) : (
+            <>
+              <canvas id="editor-scene" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+              <Suspense fallback={<Status title={t('loading', 'Chargement…')} />}>
+                <StudioRoot />
+              </Suspense>
+            </>
+          )}
         </ErrorBoundary>
       )}
     </div>

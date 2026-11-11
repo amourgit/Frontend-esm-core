@@ -22,3 +22,8 @@ export function applyAssetBase(configured?: string | null): string {
   (globalThis as any)[ASSET_BASE_GLOBAL] = base;
   return base;
 }
+
+/** Base d'assets courante (valeur posée par applyAssetBase). */
+export function currentAssetBase(): string {
+  return (globalThis as any)[ASSET_BASE_GLOBAL] ?? '';
+}

@@ -42,3 +42,21 @@ describe('architecture — dépendances entre couches', () => {
     })
   }
 })
+
+// runtime/ : dépend de three, jamais de React, du Core ni du code hérité ; features/ : jamais du code hérité (src/studio)
+describe('architecture — runtime et features', () => {
+  it('runtime/ n\'importe ni React, ni le Core, ni studio/', () => {
+    for (const file of walk(join(src, 'runtime'))) {
+      for (const spec of importsOf(file)) {
+        for (const rule of [/^react(-dom)?(\/|$)/, /^@egen-civitas\//, /studio(\/|$)/]) expect(spec, `${relative(src, file)} importe « ${spec} »`).not.toMatch(rule)
+      }
+    }
+  })
+  it('features/ n\'importe pas studio/ (passer par runtime/engine-adapter)', () => {
+    const files = walk(join(src, 'features'))
+    expect(files.length).toBeGreaterThan(0)
+    for (const file of files) {
+      for (const spec of importsOf(file)) expect(spec, `${relative(src, file)} importe « ${spec} »`).not.toMatch(/studio(\/|$)/)
+    }
+  })
+})

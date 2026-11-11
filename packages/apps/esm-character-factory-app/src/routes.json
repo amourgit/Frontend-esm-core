@@ -135,6 +135,27 @@
           "intranet"
         ]
       }
+    },
+    {
+      "name": "character-factory-nav-library",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 690,
+      "meta": {
+        "section": "character-factory",
+        "sectionLabel": "Character Factory",
+        "group": "ressources",
+        "groupLabel": "Ressources",
+        "label": "Bibliothèque",
+        "description": "Parcourir, rechercher et prévisualiser les ressources 3D",
+        "icon": "Layers",
+        "route": "character-factory/bibliotheque",
+        "workspaces": [
+          "intranet"
+        ]
+      }
     }
   ]
 }

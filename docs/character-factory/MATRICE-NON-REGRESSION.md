@@ -28,5 +28,11 @@ Prérequis : personnage utilisable (voir `ASSETS-EXTERNES.md` §2.1). **Statut �
 | R21 | WebGL indisponible | Désactiver l'accélération matérielle | Message clair, pas d'écran vide | `runtime-support.test.js` | À valider |
 | R22 | Échec réseau | Bloquer `m3-org.github.io` | Message d'erreur / personnage non chargé sans plantage du shell | — | À valider |
 | R23 | Langue | Changer la langue du shell | Textes de l'app suivent (en / fr) | — | À valider |
+| R24 | Bibliothèque : catalogue | Rail → Bibliothèque | Onglets par type avec compteurs, cartes avec miniatures | `library.test.js` (page, catalogue) | À valider |
+| R25 | Bibliothèque : recherche / filtres / tri | Saisir, choisir type, collection, tri | Liste filtrée immédiatement | `library.test.js` | À valider |
+| R26 | Bibliothèque : fiche | Cliquer une carte | Métadonnées, fichiers, compatibilité affichés | `library.test.js` | À valider |
+| R27 | Bibliothèque : aperçu 3D | Fiche d'un élément VRM → « Afficher l'aperçu 3D » | Modèle tourne, cadré ; fermer libère le contexte WebGL | `frameDistance` seulement | À valider |
+| R28 | Sections exclusives | Éditeur → Bibliothèque → Éditeur ×5 | Un seul contexte WebGL actif (`chrome://gpu`), pas d'avatar résiduel | `appSection` | À valider |
+| R29 | Source indisponible | Bloquer `m3-org.github.io` | Bandeau « source(s) indisponible(s) », reste du catalogue affiché | `library.test.js` | À valider |
 
 Règle : la phase 6 n'est « terminée » que lorsque toutes les lignes sont **Validé**. Reporter ici la date et l'auteur de chaque validation.

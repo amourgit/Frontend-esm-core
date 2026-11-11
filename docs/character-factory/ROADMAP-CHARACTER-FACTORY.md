@@ -218,12 +218,12 @@ Phases 1 à 4 sont **terminées** (audit, compatibilité, fork, intégration au 
 
 | ID | Fonctionnalité | Côté | Existant | À faire | Prio |
 |---|---|---|---|---|---|
-| F8.1 | Catalogue par type (personnages, vêtements, accessoires, animations, expressions, textures) | FE | **[N]** | `features/library` | v1 |
-| F8.2 | Recherche, filtres, tri, collections, tags | FE (+BE pour grands volumes) | **[N]** | Filtrage local d'abord | v1 |
-| F8.3 | Fiche ressource (métadonnées, fichiers, version, statut, compatibilité résumée) | FE | **[N]** | Panneau de détail | v1 |
-| F8.4 | Aperçu isolé d'une ressource | FE | **[A]** moteur de scène | Un **renderer partagé** (contrainte : limite de contextes WebGL du navigateur) | v1 |
-| F8.5 | Miniatures | FE | **[E]** `thumbnailsGenerator` | Branchement | v1 |
-| F8.6 | Option « Bibliothèque » dans le rail | FE | — | `routes.json` + `route-sync` | v1 |
+| F8.1 | Catalogue par type (personnages, vêtements, accessoires, animations, expressions, textures) | FE | **[N]** | **Fait** — `features/library` (onglets par type avec compteurs) ; non validé en navigateur | v1 |
+| F8.2 | Recherche, filtres, tri, collections, tags | FE (+BE pour grands volumes) | **[N]** | **Partiel** — recherche (nom + étiquettes), type, collection, tri : faits. **Filtre par étiquette non exposé dans l'UI** (le dépôt le supporte) | v1 |
+| F8.3 | Fiche ressource (métadonnées, fichiers, version, statut, compatibilité résumée) | FE | **[N]** | **Fait** — panneau de détail | v1 |
+| F8.4 | Aperçu isolé d'une ressource | FE | **[A]** moteur de scène | **Écrit, NON VALIDÉ en navigateur** — `runtime/preview-viewer.ts` : un contexte WebGL par aperçu, créé à la demande et libéré ; la bibliothèque et l'éditeur sont des sections exclusives (le moteur de l'éditeur est démonté) | v1 |
+| F8.5 | Miniatures | FE | **[E]** `thumbnailsGenerator` | **Partiel** — utilise les miniatures déclarées dans les manifestes ; `thumbnailsGenerator` non branché | v1 |
+| F8.6 | Option « Bibliothèque » dans le rail | FE | — | **Fait** — entrée `character-factory/bibliotheque` (groupe « Ressources ») ; sections exclusives via `app-section.ts` | v1 |
 | F8.7 | Ressources « environnement » | FE | **[A]** à vérifier | À cadrer | v2 |
 
 **Backend attendu** : lister, rechercher, lire une ressource, servir les fichiers et aperçus.
@@ -398,6 +398,7 @@ Principe : **décision et orchestration = backend ; rendu et exécution graphiqu
 | 5 Identité et shell | En cours |
 | 6 Stabilisation et cycle de vie | Code terminé (F6.1, F6.2, F6.4, F6.5) ; validation navigateur de la matrice F6.3 à faire |
 | 7 Socle domaine | Code et docs terminés ; à valider : IndexedDB en navigateur, manifeste réel, ADR (D4) |
-| 8 à 15 | À faire |
+| 8 Bibliothèque | Code terminé (F8.2 et F8.5 partiels) ; validation navigateur à faire |
+| 9 à 15 | À faire |
 
 Correspondance avec la feuille de route initiale : ancienne P5 → P5 ; ancienne P6 → P6 ; ancienne P7 (extensibilité) → P7 (ports) et P15 ; ancienne P8 (validation) → P15.
