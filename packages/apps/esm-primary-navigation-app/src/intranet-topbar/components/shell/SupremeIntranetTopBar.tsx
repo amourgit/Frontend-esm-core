@@ -42,7 +42,6 @@ const skinFor: SkinResolver = ({ isFirst }) => (isFirst ? FULL_SKIN : COMPACT_SK
 
 export interface SupremeIntranetTopBarProps {
   onOpenGlobalSearch?: () => void;
-  onShowNotification?: (msg: string, type?: 'success' | 'info' | 'warning' | 'error') => void;
 }
 
 // =============================================================================
@@ -53,7 +52,7 @@ export interface SupremeIntranetTopBarProps {
 //  droite, identiques pour tous). Tout ce qui s'affiche vient d'éléments globaux (`global/items.tsx`) ou d'extensions d'apps (slots `topbar-*-slot`).
 //  Contrat complet : kit/regions.ts (régions) et kit/layout-store.ts (personnalisation par une app).
 // =============================================================================
-export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }: SupremeIntranetTopBarProps) {
+export function SupremeIntranetTopBar({ onOpenGlobalSearch }: SupremeIntranetTopBarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname.replace(/\/+$/, '') || '/';
@@ -143,7 +142,7 @@ export function SupremeIntranetTopBar({ onOpenGlobalSearch, onShowNotification }
       className="w-full shrink-0 z-50 select-none relative font-sans text-slate-100 overflow-visible bg-transparent"
     >
       <TopBarUiProvider value={ui}>
-        <GlobalCallbacksProvider value={{ onOpenGlobalSearch, onShowNotification }}>
+        <GlobalCallbacksProvider value={{ onOpenGlobalSearch }}>
           <TopBarNavProvider value={nav}>
             <header className="w-full bg-transparent transition-colors overflow-visible flex flex-col">
               {/* Pile de niveaux (1…N) : nombre et contenu déduits des éléments, extensions et de `topbar.levels` */}

@@ -21,7 +21,6 @@ import { parsePlacementShorthand, type TopBarContentRegion } from '../kit';
 export const GLOBAL_LEVEL_RANKS: Readonly<Record<string, number>> = { main: 10, navigation: 20 };
 
 export const GLOBAL_ITEM_IDS = [
-  'context-selectors',
   'search',
   'language',
   'divider',
@@ -53,7 +52,6 @@ const at = (level: string, region: TopBarContentRegion, order: number): ItemPlac
 
 /** Placement d'usine. */
 export const DEFAULT_PLACEMENT: Readonly<Record<GlobalItemId, ItemPlacement>> = {
-  'context-selectors': at('main', 'left', 0),
   search: at('main', 'right', 0),
   language: at('main', 'right', 10),
   divider: at('main', 'right', 20),

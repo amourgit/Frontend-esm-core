@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { SupremeIntranetTopBar } from '../../intranet-topbar/components/shell/SupremeIntranetTopBar';
 import { WorkspaceProvider } from '../../intranet-topbar/context/WorkspaceContext';
-import { SiteProvider } from '../../intranet-topbar/context/SiteContext';
 
 // =============================================================================
 //  TOPBAR — Barre de navigation principale EGEN (design "Supreme Intranet")
@@ -55,9 +54,7 @@ const TopBarContent: React.FC = () => {
 // =============================================================================
 const TopBar: React.FC = () => (
   <WorkspaceProvider>
-    <SiteProvider>
-      <TopBarContent />
-    </SiteProvider>
+    <TopBarContent />
   </WorkspaceProvider>
 );
 

@@ -50,7 +50,7 @@ Cette app déclare, pour ses éléments globaux, les niveaux `main` (rang 10) et
 
 | Niveau       | Gauche            | Centre                                | Droite                                                                 |
 |--------------|-------------------|---------------------------------------|------------------------------------------------------------------------|
-| `main`       | logo + sélecteurs | —                                     | recherche · langue · apps · raccourcis · plein écran · thème · utilisateur · horloge |
+| `main`       | logo + Espace/Site (apps) | —                                     | recherche · langue · apps · raccourcis · plein écran · thème · utilisateur · horloge |
 | `navigation` | identité de l'app active | navigation déroulante ou fil d'Ariane | contributions globales (ex. assistant IA)                         |
 
 ### Niveau éphémère (annonce, bandeau)
@@ -192,8 +192,12 @@ store.setState((s) => ({
 // Au démontage de la page : retirer la clé de l'app dans `claims`.
 ```
 
-Éléments globaux : `context-selectors`, `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `clock`,
+Éléments globaux : `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `clock`,
 `menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
+
+**Espace et Site : jamais dans la TopBar.** Les sélecteurs, la liste des Espaces et l'arbre des sites viennent de
+`@egen/esm-spaces-sites-app` (extension du slot `topbar-slot`). La TopBar ne fait que LIRE l'Espace actif et le registre des
+sites dans le store global `egen-spaces-sites` (navigation filtrée par Espace, fil d'Ariane avec la chaîne de sites).
 
 **Identité et session : jamais dans la TopBar.** Le menu utilisateur, le garde d'authentification et la redirection de la
 racine viennent de `@egen/esm-user-profile-app`.

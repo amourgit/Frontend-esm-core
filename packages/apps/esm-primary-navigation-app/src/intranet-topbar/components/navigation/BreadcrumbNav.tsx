@@ -9,7 +9,8 @@ import { useWorkspace } from "../../context/WorkspaceContext";
 import { bindNavSelection } from "../../utils/navSelection";
 import { buildBreadcrumbModel, type Crumb, type CrumbOption } from "../../utils/buildBreadcrumbModel";
 import { computeBreadcrumbCollapse } from "../../utils/computeBreadcrumbCollapse";
-import { SITES_LIST } from "../../data/sitesData";
+import { useSpacesSitesState } from "../../hooks/useSpacesSitesState";
+import { findSiteChain } from "../../utils/findSiteChain";
 import { findEmployeeByParam, getEmployeeUuid } from "../../data/directoryData";
 import { playXboxSound } from "../../utils/xboxAudio";
 
@@ -85,7 +86,9 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
 
   // ── 2. Contexte propre à certaines pages : site, fiche collaborateur ─────────────────────
   const path = location.pathname.toLowerCase();
-  const currentSite = SITES_LIST.find((s) => path.includes(s.uuid.toLowerCase()));
+  // Les sites viennent du registre partagé (app des sites) : arbre de profondeur illimitée, donc une chaîne de sites.
+  const { sites } = useSpacesSitesState();
+  const siteChain = useMemo(() => findSiteChain(sites, path), [sites, path]);
 
   const annuaireMatch = location.pathname.match(/^\/annuaire\/([^/]+)(?:\/.*)?$/i);
   const rawParam = annuaireMatch ? annuaireMatch[1] : null;
@@ -126,26 +129,31 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
     const chain: ChainItem[] = [{ key: model.home.key, label: model.home.label, crumb: model.home }];
     if (model.section) chain.push({ key: model.section.key, label: model.section.label, crumb: model.section });
 
-    if (currentSite) {
+    // Un repère par site de la chaîne ; seul le dernier (le plus profond) porte l'identifiant copiable.
+    siteChain.forEach((site, index) => {
+      const label = site.shortName || site.name;
+      const isLast = index === siteChain.length - 1;
       chain.push({
-        key: `site-${currentSite.uuid}`,
-        label: currentSite.shortName,
-        custom: (
+        key: `site-${site.id}`,
+        label,
+        custom: isLast ? (
           <span className="inline-flex min-w-0 max-w-full items-center gap-1">
-            <span className={`truncate font-bold text-white ${TEXT}`}>{currentSite.shortName}</span>
+            <span className={`truncate font-bold text-white ${TEXT}`}>{label}</span>
             <button
               type="button"
-              onClick={(e) => copy(currentSite.uuid, "site", e)}
-              className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded bg-teal-500/10 px-1.5 py-0.5 font-mono text-[9px] text-teal-300 transition-colors hover:bg-teal-500/20 sm:text-[11px]"
-              title="Cliquer pour copier l'UUID du site"
+              onClick={(e) => copy(site.id, "site", e)}
+              className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded bg-teal-500/10 px-1.5 py-0.5 font-mono text-[9px] text-teal-300 transition-colors hover:bg-teal-500/20"
+              title="Cliquer pour copier l'identifiant du site"
             >
-              <span>({currentSite.uuid})</span>
+              <span>({site.id})</span>
               {copied === "site" ? <Check className="h-2.5 w-2.5 text-emerald-400" /> : <Copy className="h-2.5 w-2.5 text-teal-400" />}
             </button>
           </span>
+        ) : (
+          <span className={`truncate font-semibold text-slate-200 ${TEXT}`}>{label}</span>
         ),
       });
-    }
+    });
 
     if (collaboratorUuid) {
       chain.push({
@@ -188,7 +196,7 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
     }
     return chain;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [model, currentSite, collaborator, collaboratorUuid, fallbackEntryTitle, copied]);
+  }, [model, siteChain, collaborator, collaboratorUuid, fallbackEntryTitle, copied]);
 
   // ── 4. Repli sous « … » quand le fil ne tient pas ────────────────────────────────────────
   const itemsSignature = items.map((i) => `${i.key}:${i.label}`).join("|");

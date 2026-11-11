@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ExtensionSlot, interpolateUrl, navigate as frameworkNavigate, useConfig } from '@egen-civitas/esm-framework';
 import { GooeyInput } from '../components/ui/GooeyInput';
-import { WorkspaceAndSiteSelectorsColumn } from '../components/shell/WorkspaceAndSiteSelectorsColumn';
 import { DropdownNavigation } from '../components/shell/DropdownNavigation';
 import { BreadcrumbNav } from '../components/navigation/BreadcrumbNav';
 import { TopBarMenuPanel } from '../components/shell/TopBarMenuPanel';
@@ -31,15 +30,6 @@ import styles from '../components/shell/topbar-global-items.scss';
 //  Une app peut les masquer ou les remplacer (voir kit/layout-store.ts) sans toucher à ce fichier.
 //  « Implementer tools » n'est plus ici : c'est une option du rail droit (esm-implementer-tools-app).
 // =============================================================================
-
-const ContextSelectorsItem: React.FC = () => {
-  const { onShowNotification } = useGlobalCallbacks();
-  return (
-    <div className={styles.left}>
-      <WorkspaceAndSiteSelectorsColumn onShowNotification={onShowNotification} />
-    </div>
-  );
-};
 
 const SearchItem: React.FC = () => {
   const ui = useTopBarUi();
@@ -172,7 +162,6 @@ type ItemDefinition = Omit<TopBarItem, 'placement' | 'id'> & { id: GlobalItemId 
 
 /** Les éléments globaux, SANS placement : la région et l'ordre viennent de `placement.ts`. */
 const GLOBAL_ITEMS: readonly ItemDefinition[] = [
-  { id: 'context-selectors', component: ContextSelectorsItem, hideOnSearch: 'mobile' },
   { id: 'search', component: SearchItem },
   { id: 'language', component: LanguageOption as React.FC, hideOnSearch: 'touch' },
   { id: 'divider', component: DividerItem, hideOnSearch: 'touch' },

@@ -2,7 +2,6 @@ import React, { createContext, useContext } from 'react';
 
 /** Callbacks optionnels fournis par l'hôte de la TopBar aux éléments globaux. */
 export interface TopBarGlobalCallbacks {
-  onShowNotification?: (msg: string, type?: 'success' | 'info' | 'warning' | 'error') => void;
   onOpenGlobalSearch?: () => void;
 }
 
