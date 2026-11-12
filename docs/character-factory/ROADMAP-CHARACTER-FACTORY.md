@@ -392,6 +392,18 @@ Principe : **décision et orchestration = backend ; rendu et exécution graphiqu
 
 ## 11. Suivi
 
+> **État global : EN PAUSE** (12 novembre 2026). L'intégration de Character Factory est suspendue au profit d'une autre intégration. Tout est poussé sur la branche `feature/character-factory` du Core (non fusionnée dans `main`).
+
+**Points de reprise, dans l'ordre**
+1. **Validation navigateur** des lignes « À valider » de `MATRICE-NON-REGRESSION.md` (R1 à R41), en priorité : persistance IndexedDB des compositions (R35), aperçu 3D des personnages (R30), démontage / un seul contexte WebGL (R18, R28).
+2. **Décisions D1 à D5** (ADR-001, appliquées par défaut) et **D2** : rapatriement des personnages `loot-assets` (aucun n'est embarqué).
+3. **Fin de la phase 5** : thème EGEN sur l'interface héritée (F5.1) et visuels d'accueil (F5.2) ; le design sera refait.
+4. **Phase 10 incomplète** : couleurs / textures / morphologie des compositions (nécessite `runtime/engine-adapter`), comparaison 3D côte à côte.
+5. **Phase 11** (animations, expressions, états), à débuter par le test préalable F11.0 (couches d'animation simultanées), qui exige un navigateur.
+6. Phases 12 à 15 non commencées.
+
+
+
 | Phase | Statut |
 |---|---|
 | 1 à 4 | Terminées |
