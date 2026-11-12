@@ -25,3 +25,5 @@
 .notice { margin: 0 1.25rem 0.75rem; padding: 0.6rem 0.9rem; font-size: 0.85rem; border-radius: var(--border-radius-md, 0.5rem); border: 1px solid color-mix(in srgb, currentColor 30%, transparent); background: color-mix(in srgb, currentColor 8%, transparent); }
 .empty { padding: 2rem; text-align: center; opacity: 0.75; }
 .overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 1rem; text-align: center; font-size: 0.85rem; background: color-mix(in srgb, currentColor 6%, transparent); }
+.cell { display: flex; }
+.cell > .card { flex: 1; min-width: 0; }

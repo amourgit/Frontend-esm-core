@@ -47,5 +47,13 @@
   "status_draft": "Brouillon",
   "status_validated": "Validé",
   "status_published": "Publié",
-  "status_deprecated": "Déprécié"
+  "status_deprecated": "Déprécié",
+  "libCompatWith": "Vérifier la compatibilité avec",
+  "libCompatNone": "Compatibilité : aucun personnage",
+  "libHideIncompatible": "Masquer les incompatibles",
+  "libCompatSection": "Compatibilité avec {{name}}",
+  "libAdaptation": "Adaptation proposée",
+  "verdict_compatible": "✓ Compatible",
+  "verdict_adaptation": "⚠ Adaptation requise",
+  "verdict_incompatible": "✕ Incompatible"
 }

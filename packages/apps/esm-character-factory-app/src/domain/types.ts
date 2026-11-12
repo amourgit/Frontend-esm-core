@@ -48,6 +48,8 @@ export interface Resource {
   version: string;
   status: PublicationStatus;
   files: ResourceFile[];
+  /** Éléments assemblés par défaut pour ce personnage (ex. traits initiaux d'un manifeste historique) : sert à l'aperçu. */
+  defaults?: VersionRef[];
   compatibility: ResourceCompatibility;
   source: { origin: ResourceOrigin; reference?: string; license?: string; author?: string };
   scope?: { tenantId?: string; organizationId?: string };

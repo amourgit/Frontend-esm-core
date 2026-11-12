@@ -68,13 +68,18 @@ export async function loadLegacyCatalog(assetBase: string, fetcher: Fetcher = de
       const manifest = await getJson(fetcher, manifestUrl).catch((e) => {
         throw Object.assign(new Error(e.message), { source: manifestUrl });
       });
-      return { collection: { id, name, manifestUrl }, resources: legacyManifestToResources(manifest, { collectionId: id, collectionName: name, manifestUrl }) };
+      const portrait = c.portrait ? resolveUrl(c.portrait, rootUrl) : null;
+      return { collection: { id, name, manifestUrl }, portrait, resources: legacyManifestToResources(manifest, { collectionId: id, collectionName: name, manifestUrl }) };
     }),
   );
   settled.forEach((s) => {
     if (s.status === 'fulfilled') {
       result.collections.push(s.value.collection);
       result.resources.push(...s.value.resources);
+      const character = s.value.resources.find((r) => r.id === `legacy:${s.value.collection.id}`);
+      if (character && s.value.portrait) {
+        character.files.push({ role: 'preview', uri: s.value.portrait, format: (s.value.portrait.split(/[?#]/)[0].split('.').pop() ?? '').toLowerCase() });
+      }
     } else {
       result.errors.push({ source: (s.reason as any)?.source ?? 'manifeste', message: (s.reason as Error).message });
     }

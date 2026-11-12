@@ -7,7 +7,7 @@ import styles from './library.module.css';
 type State = 'loading' | 'ready' | 'error' | 'no-webgl';
 
 /** Aperçu 3D d'une ressource. Un seul contexte WebGL par aperçu, libéré au démontage. */
-export default function ResourcePreview3D({ uri }: { uri: string }) {
+export default function ResourcePreview3D({ uris }: { uris: string[] }) {
   const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const viewerRef = useRef<PreviewViewer | null>(null);
@@ -32,7 +32,7 @@ export default function ResourcePreview3D({ uri }: { uri: string }) {
     let cancelled = false;
     setState('loading');
     viewer
-      .load(uri)
+      .load(uris)
       .then(() => !cancelled && setState('ready'))
       .catch((e) => {
         if (cancelled) return;
@@ -42,7 +42,7 @@ export default function ResourcePreview3D({ uri }: { uri: string }) {
     return () => {
       cancelled = true;
     };
-  }, [uri]);
+  }, [uris.join('|')]);
 
   const message =
     state === 'loading'

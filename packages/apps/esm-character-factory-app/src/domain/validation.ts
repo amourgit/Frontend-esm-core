@@ -51,6 +51,7 @@ export function validateResource(r: Resource): ValidationResult {
   if (!Array.isArray(r?.tags)) e.push('tags: tableau requis');
   if (!Array.isArray(r?.collections)) e.push('collections: tableau requis');
   if (!r?.compatibility || !Array.isArray(r.compatibility.slots)) e.push('compatibility.slots: tableau requis');
+  if (r?.defaults !== undefined && (!Array.isArray(r.defaults) || !r.defaults.every(isRef))) e.push('defaults: tableau de références {id, version}');
   if (!r?.source?.origin) e.push('source.origin: requis');
   return result(e);
 }

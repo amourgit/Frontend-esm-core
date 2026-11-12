@@ -17,7 +17,7 @@ const manifest = {
     {
       trait: 'CHEST',
       name: 'Torse',
-      collection: [{ id: 'c1', name: 'Chemise', directory: ['chest/c1.vrm', 'chest/c1_alt.vrm'], thumbnail: 'c1.png', restrictedItems: ['LEGS_x'] }],
+      collection: [{ id: 'c1', name: 'Chemise', directory: ['chest/c1.vrm', 'chest/c1_alt.vrm'], thumbnail: 'c1.png', restrictedItems: ['b1', 'inexistant'] }],
     },
   ],
   textureCollections: [{ trait: 'CHEST', collection: [{ id: 't1', name: 'Rouge', directory: 'tex/red.png', thumbnail: 'red_thumb.png' }] }],
@@ -43,19 +43,27 @@ describe('adaptateur manifeste historique -> ressources', () => {
     ])
   })
 
-  it('gère un `directory` en tableau (plusieurs fichiers) et transporte restrictedItems tel quel', () => {
+  it('gère un `directory` en tableau (plusieurs fichiers) et résout restrictedItems en conflits entre ressources', () => {
     const chest = resources.find((r) => r.id === CHEST.id)
     expect(chest.files.filter((f) => f.role === 'original').map((f) => f.uri)).toEqual([
       'https://assets.example/char/traits/chest/c1.vrm',
       'https://assets.example/char/traits/chest/c1_alt.vrm',
     ])
-    expect(chest.compatibility.constraints).toEqual(['legacy-restricted-item:LEGS_x'])
+    expect(chest.compatibility.constraints).toEqual([`conflicts-with:${BODY.id}`]) // « inexistant » est ignoré, comme dans le code d'origine
     expect(chest.compatibility.slots).toEqual(['CHEST'])
   })
 
   it('résout les chemins relatifs contre l\'URL du manifeste', () => {
     const rel = legacyManifestToResources({ ...manifest, assetsLocation: './x' }, { collectionId: 'r', manifestUrl: 'https://h.example/m/manifest.json' })
     expect(rel.find((r) => r.id === 'legacy:r:BODY:b1').files[0].uri).toBe('https://h.example/m/x/traits/body/b1.vrm')
+  })
+
+  it('le personnage référence ses éléments par défaut (traits initiaux, ou requis + aléatoires)', () => {
+    expect(resources.find((r) => r.id === BASE.id).defaults).toEqual([BODY])
+    const withInitial = legacyManifestToResources({ ...manifest, initialTraits: ['CHEST', 'BODY'] }, { collectionId: 'demo' })
+    expect(withInitial[0].defaults).toEqual([CHEST, BODY])
+    const fallback = legacyManifestToResources({ ...manifest, requiredTraits: [] }, { collectionId: 'demo' })
+    expect(fallback[0].defaults).toEqual([BODY]) // repli : premier élément du premier groupe
   })
 
   it('toutes les ressources produites sont valides', () => {

@@ -4,8 +4,9 @@ import type { PublicationStatus, Resource, ResourceKind } from '../../domain/typ
 import { MemoryResourceRepository } from '../../adapters/memory';
 import { currentAssetBase } from '../../asset-base';
 import { loadLegacyCatalog, type CatalogResult } from './catalog';
-import { computeFacets, previewable3dFile, sortResources, thumbnailOf, type SortKey } from './library-model';
+import { computeFacets, previewUris, sortResources, thumbnailOf, type SortKey } from './library-model';
 import ResourcePreview3D from './ResourcePreview3D';
+import { checkPair, type CompatibilityReport, type Verdict } from '../../domain/compatibility';
 import styles from './library.module.css';
 
 const KIND_DEFAULTS: Record<ResourceKind, string> = {
@@ -25,6 +26,7 @@ const STATUS_DEFAULTS: Record<PublicationStatus, string> = {
   deprecated: 'Déprécié',
 };
 const DEFAULT_ANIMATIONS = 'default-animations';
+const VERDICT_DEFAULTS: Record<Verdict, string> = { compatible: '✓ Compatible', adaptation: '⚠ Adaptation requise', incompatible: '✕ Incompatible' };
 
 /**
  * Bibliothèque de ressources (phase 8). Les données viennent d'un ResourceRepository (port) : aujourd'hui alimenté par
@@ -41,6 +43,8 @@ export default function LibraryPage() {
   const [sort, setSort] = useState<SortKey>('name');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [compatWith, setCompatWith] = useState<string>('');
+  const [hideIncompatible, setHideIncompatible] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -65,12 +69,21 @@ export default function LibraryPage() {
     };
   }, [repo, catalog, kind, query, collection, sort]);
 
+  // Compatibilité de chaque ressource avec le personnage choisi (règles pures du domaine)
+  const target = useMemo(() => catalog?.resources.find((r) => r.id === compatWith) ?? null, [catalog, compatWith]);
+  const reports = useMemo(() => {
+    const map = new Map<string, CompatibilityReport>();
+    if (target && catalog) catalog.resources.forEach((r) => r.id !== target.id && r.kind !== 'character' && map.set(r.id, checkPair(r, target)));
+    return map;
+  }, [catalog, target]);
+  const shown = hideIncompatible ? visible.filter((r) => reports.get(r.id)?.verdict !== 'incompatible') : visible;
+  const verdictLabel = (v: Verdict) => t(`verdict_${v}`, VERDICT_DEFAULTS[v]);
   const facets = useMemo(() => computeFacets(catalog?.resources ?? []), [catalog]);
   const collectionName = (id: string) =>
     id === DEFAULT_ANIMATIONS ? t('libDefaultAnimations', 'Animations par défaut') : (catalog?.collections.find((c) => c.id === id)?.name ?? id);
   const kindLabel = (k: ResourceKind) => t(`kind_${k}`, KIND_DEFAULTS[k]);
-  const selected = visible.find((r) => r.id === selectedId) ?? null;
-  const previewFile = selected ? previewable3dFile(selected) : null;
+  const selected = shown.find((r) => r.id === selectedId) ?? null;
+  const previewModels = useMemo(() => (selected && catalog ? previewUris(selected, catalog.resources) : []), [selected, catalog]);
 
   useEffect(() => setShowPreview(false), [selectedId]);
 
@@ -95,6 +108,19 @@ export default function LibraryPage() {
             </option>
           ))}
         </select>
+        <select className={styles.select} value={compatWith} onChange={(e) => setCompatWith(e.target.value)} aria-label={t('libCompatWith', 'Vérifier la compatibilité avec')}>
+          <option value="">{t('libCompatNone', 'Compatibilité : aucun personnage')}</option>
+          {catalog.resources.filter((r) => r.kind === 'character').map((r) => (
+            <option key={r.id} value={r.id}>
+              {r.name}
+            </option>
+          ))}
+        </select>
+        {target && (
+          <label>
+            <input type="checkbox" checked={hideIncompatible} onChange={(e) => setHideIncompatible(e.target.checked)} /> {t('libHideIncompatible', 'Masquer les incompatibles')}
+          </label>
+        )}
         <select className={styles.select} value={sort} onChange={(e) => setSort(e.target.value as SortKey)} aria-label={t('libSort', 'Trier par')}>
           <option value="name">{t('libSortName', 'Nom')}</option>
           <option value="kind">{t('libSortKind', 'Type')}</option>
@@ -134,15 +160,15 @@ export default function LibraryPage() {
       )}
 
       <div className={styles.body}>
-        <div className={styles.grid} role="list">
-          {visible.length === 0 && <div className={styles.empty}>{t('libEmpty', 'Aucune ressource ne correspond.')}</div>}
-          {visible.map((r) => {
+        <div className={styles.grid} role="list" data-testid="resource-grid">
+          {shown.length === 0 && <div className={styles.empty}>{t('libEmpty', 'Aucune ressource ne correspond.')}</div>}
+          {shown.map((r) => {
             const thumb = thumbnailOf(r);
+            const report = reports.get(r.id);
             return (
+              <div key={r.id} role="listitem" className={styles.cell}>
               <button
-                key={r.id}
                 type="button"
-                role="listitem"
                 className={`${styles.card} ${r.id === selectedId ? styles.cardSelected : ''}`}
                 onClick={() => setSelectedId(r.id)}
                 aria-pressed={r.id === selectedId}
@@ -154,7 +180,9 @@ export default function LibraryPage() {
                 )}
                 <span className={styles.cardName}>{r.name}</span>
                 <span className={styles.badge}>{kindLabel(r.kind)}</span>
+                {report && <span className={styles.badge}>{verdictLabel(report.verdict)}</span>}
               </button>
+              </div>
             );
           })}
         </div>
@@ -186,10 +214,24 @@ export default function LibraryPage() {
                 <dd>{selected.source.reference ?? selected.source.origin}</dd>
               </dl>
 
-              {previewFile &&
+              {target && reports.get(selected.id) && (
+                <div data-testid="compat-detail">
+                  <strong>{t('libCompatSection', 'Compatibilité avec {{name}}', { name: target.name })}</strong> : {verdictLabel(reports.get(selected.id)!.verdict)}
+                  <ul className={styles.files}>
+                    {reports.get(selected.id)!.reasons.map((r) => (
+                      <li key={r.code}>{t(`compat_${r.code}`, r.message)}</li>
+                    ))}
+                    {reports.get(selected.id)!.adaptations.map((a) => (
+                      <li key={a.type}>{t('libAdaptation', 'Adaptation proposée')} : {a.description}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {previewModels.length > 0 &&
                 (showPreview ? (
                   <>
-                    <ResourcePreview3D uri={previewFile.uri} />
+                    <ResourcePreview3D uris={previewModels} />
                     <button type="button" className={styles.button} onClick={() => setShowPreview(false)}>
                       {t('libHidePreview', "Masquer l'aperçu 3D")}
                     </button>

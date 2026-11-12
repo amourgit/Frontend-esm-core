@@ -221,7 +221,7 @@ Phases 1 à 4 sont **terminées** (audit, compatibilité, fork, intégration au 
 | F8.1 | Catalogue par type (personnages, vêtements, accessoires, animations, expressions, textures) | FE | **[N]** | **Fait** — `features/library` (onglets par type avec compteurs) ; non validé en navigateur | v1 |
 | F8.2 | Recherche, filtres, tri, collections, tags | FE (+BE pour grands volumes) | **[N]** | **Partiel** — recherche (nom + étiquettes), type, collection, tri : faits. **Filtre par étiquette non exposé dans l'UI** (le dépôt le supporte) | v1 |
 | F8.3 | Fiche ressource (métadonnées, fichiers, version, statut, compatibilité résumée) | FE | **[N]** | **Fait** — panneau de détail | v1 |
-| F8.4 | Aperçu isolé d'une ressource | FE | **[A]** moteur de scène | **Écrit, NON VALIDÉ en navigateur** — `runtime/preview-viewer.ts` : un contexte WebGL par aperçu, créé à la demande et libéré ; la bibliothèque et l'éditeur sont des sections exclusives (le moteur de l'éditeur est démonté) | v1 |
+| F8.4 | Aperçu isolé d'une ressource | FE | **[A]** moteur de scène | **Validé en navigateur (aperçu des éléments)** ; **personnages : aperçu = éléments par défaut du manifeste (`initialTraits`), ajouté après retour utilisateur, non encore validé** — `runtime/preview-viewer.ts` : un contexte WebGL par aperçu, créé à la demande et libéré ; la bibliothèque et l'éditeur sont des sections exclusives (le moteur de l'éditeur est démonté) | v1 |
 | F8.5 | Miniatures | FE | **[E]** `thumbnailsGenerator` | **Partiel** — utilise les miniatures déclarées dans les manifestes ; `thumbnailsGenerator` non branché | v1 |
 | F8.6 | Option « Bibliothèque » dans le rail | FE | — | **Fait** — entrée `character-factory/bibliotheque` (groupe « Ressources ») ; sections exclusives via `app-section.ts` | v1 |
 | F8.7 | Ressources « environnement » | FE | **[A]** à vérifier | À cadrer | v2 |
@@ -233,11 +233,11 @@ Phases 1 à 4 sont **terminées** (audit, compatibilité, fork, intégration au 
 
 | ID | Fonctionnalité | Côté | Existant | À faire | Prio |
 |---|---|---|---|---|---|
-| F9.1 | Descripteur de compatibilité : os humanoïdes présents, slots, points d'attache, matériaux, contraintes | FE (calcul local) / BE (stockage) | **[A]** `ManifestRestrictions` (exclusions seulement) | Calcul à l'indexation | v1 |
-| F9.2 | Moteur de règles : **compatible / adaptation requise / incompatible**, avec raisons | FE | **[N]** | `CompatibilityService` | v1 |
-| F9.3 | Indicateurs dans la bibliothèque et le composeur | FE | **[N]** | Badges + explication | v1 |
-| F9.4 | Adaptations réalisables (retargeting animation vers VRM, échelle, recoloration) | FE | **[E]** retargeting Mixamo | Exposer comme « adaptation proposée » | v1 |
-| F9.5 | Compatibilité animation ↔ personnage | FE | **[A]** | Basée sur l'humanoïde | v1 |
+| F9.1 | Descripteur de compatibilité : os humanoïdes présents, slots, points d'attache, matériaux, contraintes | FE (calcul local) / BE (stockage) | **[A]** `ManifestRestrictions` (exclusions seulement) | **Partiel** — squelette, emplacements et conflits entre éléments (`restrictedItems`, symétrique) issus du **manifeste**. L'inspection du **fichier** (os présents, matériaux, points d'attache) arrive avec l'import (P13). `traitRestrictions` (règles entre traits) non interprété | v1 |
+| F9.2 | Moteur de règles : **compatible / adaptation requise / incompatible**, avec raisons | FE | **[N]** | **Fait** — `domain/compatibility.ts` (règles pures) + `CompatibilityService` (compositions) ; ce qui n'est pas vérifiable est signalé en `info` sans changer le verdict | v1 |
+| F9.3 | Indicateurs dans la bibliothèque et le composeur | FE | **[N]** | **Fait pour la bibliothèque** (sélecteur « vérifier la compatibilité avec », badges, raisons, masquer les incompatibles) ; **composeur : P10** | v1 |
+| F9.4 | Adaptations réalisables (retargeting animation vers VRM, échelle, recoloration) | FE | **[E]** retargeting Mixamo | **Partiel** — recalage FBX → VRM proposé et signalé ; échelle et recoloration non traitées | v1 |
+| F9.5 | Compatibilité animation ↔ personnage | FE | **[A]** | **Fait** — basée sur le squelette déclaré (humanoïde VRM) et le format | v1 |
 | F9.6 | Auto-rigging, retopologie, personnages non humanoïdes | — | **[N]** | Point d'extension seulement | v2 |
 
 **Acceptation** : pour un jeu d'essai connu, chaque verdict (compatible / adaptation / incompatible) est correct et explique pourquoi.
@@ -399,6 +399,7 @@ Principe : **décision et orchestration = backend ; rendu et exécution graphiqu
 | 6 Stabilisation et cycle de vie | Code terminé (F6.1, F6.2, F6.4, F6.5) ; validation navigateur de la matrice F6.3 à faire |
 | 7 Socle domaine | Code et docs terminés ; à valider : IndexedDB en navigateur, manifeste réel, ADR (D4) |
 | 8 Bibliothèque | Code terminé (F8.2 et F8.5 partiels) ; validation navigateur à faire |
-| 9 à 15 | À faire |
+| 9 Compatibilité | Code terminé (F9.1, F9.4 partiels) ; validation navigateur à faire |
+| 10 à 15 | À faire |
 
 Correspondance avec la feuille de route initiale : ancienne P5 → P5 ; ancienne P6 → P6 ; ancienne P7 (extensibilité) → P7 (ports) et P15 ; ancienne P8 (validation) → P15.

@@ -39,6 +39,17 @@ export function previewable3dFile(resource: Resource) {
   return resource.files.find((f) => f.role === 'original' && ['vrm', 'glb', 'gltf'].includes(f.format)) ?? null;
 }
 
+/** Modèles 3D à charger pour l'aperçu : le fichier de la ressource, ou, pour un personnage, ses éléments par défaut. */
+export function previewUris(resource: Resource, all: Resource[]): string[] {
+  const own = previewable3dFile(resource);
+  if (own) return [own.uri];
+  return (resource.defaults ?? []).flatMap((ref) => {
+    const part = all.find((r) => r.id === ref.id && r.version === ref.version);
+    const file = part && previewable3dFile(part);
+    return file ? [file.uri] : [];
+  });
+}
+
 export function thumbnailOf(resource: Resource): string | null {
   return resource.files.find((f) => f.role === 'preview')?.uri ?? null;
 }

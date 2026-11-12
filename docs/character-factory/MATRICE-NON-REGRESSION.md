@@ -34,5 +34,9 @@ Prérequis : personnage utilisable (voir `ASSETS-EXTERNES.md` §2.1). **Statut �
 | R27 | Bibliothèque : aperçu 3D | Fiche d'un élément VRM → « Afficher l'aperçu 3D » | Modèle tourne, cadré ; fermer libère le contexte WebGL | `frameDistance` seulement | À valider |
 | R28 | Sections exclusives | Éditeur → Bibliothèque → Éditeur ×5 | Un seul contexte WebGL actif (`chrome://gpu`), pas d'avatar résiduel | `appSection` | À valider |
 | R29 | Source indisponible | Bloquer `m3-org.github.io` | Bandeau « source(s) indisponible(s) », reste du catalogue affiché | `library.test.js` | À valider |
+| R30 | Aperçu 3D d'un personnage | Bibliothèque → onglet Personnage → fiche → « Afficher l'aperçu 3D » | Le personnage de base s'assemble à partir de ses éléments par défaut | `previewUris` | À valider |
+| R31 | Portrait des personnages | Bibliothèque → onglet Personnage | Portrait du manifeste racine en miniature | `library.test.js` | À valider |
+| R32 | Compatibilité : badges | Choisir un personnage dans « Vérifier la compatibilité avec » | ✓ / ⚠ / ✕ sur chaque carte ; raisons dans la fiche | `compatibility.test.js`, `library.test.js` | À valider |
+| R33 | Compatibilité : masquer | Cocher « Masquer les incompatibles » | Les ✕ disparaissent | `library.test.js` | À valider |
 
 Règle : la phase 6 n'est « terminée » que lorsque toutes les lignes sont **Validé**. Reporter ici la date et l'auteur de chaque validation.

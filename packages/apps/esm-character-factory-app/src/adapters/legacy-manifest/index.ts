@@ -9,7 +9,8 @@ import type { Resource, ResourceFile } from '../../domain/types';
 //
 //  LIMITES (documentées, voir ROADMAP P9) :
 //   - le manifeste historique ne distingue pas corps / vêtement / accessoire : les éléments sont de kind « part » ;
-//   - `traitRestrictions` (règles entre traits) n'est PAS interprété ici : c'est le rôle du moteur de compatibilité (P9) ;
+//   - `traitRestrictions` (règles entre traits, forme non confirmée) n'est PAS interprété ; seules les restrictions au niveau
+//     des éléments (`restrictedItems`, forme confirmée dans manifestRestrictions.js) le sont ;
 //   - les couleurs (colorCollections) sont des valeurs, pas des fichiers : elles ne sont pas des ressources.
 // =============================================================================
 
@@ -64,6 +65,24 @@ export function legacyManifestToResources(manifest: any, options: LegacyManifest
 
   const groups: any[] = asArray(manifest.traits);
   const resources: Resource[] = [];
+  const resourceId = (trait: string, itemId: string) => `legacy:${collectionId}:${trait}:${itemId}`;
+
+  // Même résolution que ManifestRestrictions : un item restreint désigne un autre item par son `id` (premier trouvé).
+  const resourceIdByItemId = new Map<string, string>();
+  for (const group of groups) for (const item of asArray<any>(group.collection)) if (!resourceIdByItemId.has(item.id)) resourceIdByItemId.set(item.id, resourceId(group.trait, item.id));
+
+  // Éléments par défaut = premier élément de chaque trait initial (initialTraits, sinon requis + aléatoires),
+  // comme CharacterManifestData ; à défaut, le premier élément du premier groupe.
+  const declaredInitial = asArray<string>(manifest.initialTraits);
+  const initialTraits = declaredInitial.length ? declaredInitial : [...new Set([...asArray<string>(manifest.requiredTraits), ...asArray<string>(manifest.randomTraits)])];
+  let seeds = initialTraits.flatMap((trait) => {
+    const item = asArray<any>(groups.find((g) => g.trait === trait)?.collection)[0];
+    return item ? [{ trait, item }] : [];
+  });
+  if (!seeds.length) {
+    const group = groups.find((g) => asArray<any>(g.collection).length);
+    if (group) seeds = [{ trait: group.trait, item: asArray<any>(group.collection)[0] }];
+  }
 
   // Agrégat « personnage » : la collection elle-même (sans fichier propre ; ses parties sont des ressources distinctes)
   resources.push({
@@ -75,6 +94,7 @@ export function legacyManifestToResources(manifest: any, options: LegacyManifest
     version: '1',
     status: 'published',
     files: [],
+    defaults: seeds.map(({ trait, item }) => ({ id: resourceId(trait, item.id), version: '1' })),
     compatibility: { skeleton: 'vrm-humanoid', slots: groups.map((g) => g.trait), attachmentPoints: [], constraints: [] },
     source,
   });
@@ -82,7 +102,7 @@ export function legacyManifestToResources(manifest: any, options: LegacyManifest
   for (const group of groups) {
     for (const item of asArray<any>(group.collection)) {
       resources.push({
-        id: `legacy:${collectionId}:${group.trait}:${item.id}`,
+        id: resourceId(group.trait, item.id),
         kind: 'part',
         name: item.name ?? item.id,
         tags: [group.trait, ...(group.name ? [group.name] : [])],
@@ -94,8 +114,12 @@ export function legacyManifestToResources(manifest: any, options: LegacyManifest
           skeleton: 'vrm-humanoid',
           slots: [group.trait],
           attachmentPoints: [],
-          // Seule la donnée brute au niveau de l'élément est transportée ; l'interprétation relève de P9.
-          constraints: asArray<string>(item.restrictedItems).map((r) => `legacy-restricted-item:${r}`),
+          // restrictedItems : A ne peut pas être porté avec B (relation symétrique, cf. manifestRestrictions.js).
+          // Un item introuvable est ignoré, comme le fait le code d'origine (simple avertissement).
+          constraints: asArray<string>(item.restrictedItems).flatMap((r) => {
+            const target = resourceIdByItemId.get(r);
+            return target && target !== resourceId(group.trait, item.id) ? [`conflicts-with:${target}`] : [];
+          }),
         },
         source,
       });

@@ -54,16 +54,20 @@ export class PreviewViewer {
     this.camera.updateProjectionMatrix();
   }
 
-  async load(uri: string): Promise<void> {
+  /** Charge un ou plusieurs modèles (ex. les éléments par défaut d'un personnage) dans un même ensemble. */
+  async load(uris: string | string[]): Promise<void> {
     const token = ++this.loadToken;
     this.clearModel();
     const loader = new GLTFLoader();
     loader.register((parser) => new VRMLoaderPlugin(parser));
-    const gltf = await loader.loadAsync(uri);
+    const gltfs = await Promise.all((Array.isArray(uris) ? uris : [uris]).map((uri) => loader.loadAsync(uri)));
     if (this.disposed || token !== this.loadToken) return; // fermé ou remplacé pendant le chargement
-    const vrm = (gltf.userData as any).vrm;
-    if (vrm) (VRMUtils as any).rotateVRM0?.(vrm);
-    const model: THREE.Object3D = vrm?.scene ?? gltf.scene;
+    const model = new THREE.Group();
+    for (const gltf of gltfs) {
+      const vrm = (gltf.userData as any).vrm;
+      if (vrm) (VRMUtils as any).rotateVRM0?.(vrm);
+      model.add(vrm?.scene ?? gltf.scene);
+    }
     this.scene.add(model);
     this.model = model;
     const box = new THREE.Box3().setFromObject(model);
