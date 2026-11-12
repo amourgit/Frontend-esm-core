@@ -61,20 +61,22 @@ describe('CompositionsPage — parcours complet', () => {
     mockCatalog.mockResolvedValue(catalog())
     const repository = new MemoryCompositionRepository()
     render(React.createElement(CompositionsPage, { repository }))
-    await screen.findByLabelText('Nom de la composition')
+    await screen.findByRole('button', { name: /Nouvelle composition/ })
     return repository
   }
+  // Parcours guidé : bouton principal -> panneau de création (nom + carte du personnage) -> « Créer la composition »
   const create = async (name) => {
+    fireEvent.click(screen.getByRole('button', { name: /Nouvelle composition/ }))
     fireEvent.change(screen.getByLabelText('Nom de la composition'), { target: { value: name } })
-    fireEvent.change(screen.getByLabelText('Personnage de base'), { target: { value: 'legacy:demo' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Nouvelle composition' }))
+    fireEvent.click(screen.getByRole('button', { name: /Démo/ }))
+    fireEvent.click(screen.getByRole('button', { name: 'Créer la composition' }))
     await screen.findByLabelText('Version')
   }
   const choose = (slot, id) => fireEvent.change(screen.getByLabelText(new RegExp(`^${slot}`)), { target: { value: id } })
 
   it('créer, enregistrer, publier (immuable), nouvelle version, variante, comparer', async () => {
     const repository = await setup()
-    expect(screen.getByText(/Aucune composition/)).toBeTruthy()
+    expect(screen.getByText(/Vous n'avez pas encore de composition/)).toBeTruthy()
 
     // création + choix d'un élément
     await create('Tenue A')
@@ -122,13 +124,13 @@ describe('CompositionsPage — parcours complet', () => {
     expect(all.find((c) => c.name === 'Tenue B').variantOf).toMatchObject({ version: 2 })
 
     // liste + comparaison
-    fireEvent.click(screen.getByRole('button', { name: /Compositions/ }))
+    fireEvent.click(screen.getByRole('button', { name: /Mes compositions/ }))
     const list = await screen.findByTestId('composition-list')
     expect(within(list).getAllByRole('listitem')).toHaveLength(2)
     expect(within(list).getByText('variante de Tenue A')).toBeTruthy()
     fireEvent.click(screen.getByLabelText('Sélectionner Tenue A'))
     fireEvent.click(screen.getByLabelText('Sélectionner Tenue B'))
-    fireEvent.click(screen.getByRole('button', { name: /Comparer \(2\/3\)/ }))
+    fireEvent.click(screen.getByRole('button', { name: /Comparer la sélection \(2\/3\)/ }))
     const table = await screen.findByTestId('compare-table')
     const chestRow = within(table).getByText('CHEST').closest('tr')
     expect(chestRow.getAttribute('data-different')).toBe('true') // Pull (A) ≠ — (B)
@@ -153,8 +155,61 @@ describe('CompositionsPage — parcours complet', () => {
     expect(screen.getByTestId('preview-stub').textContent).toBe('https://assets.example/char/traits/b1.vrm,https://assets.example/char/traits/c2.vrm')
   })
 
-  it('compare : le bouton exige 2 à 3 compositions', async () => {
+  it('état vide : explique les étapes et propose de créer ; le panneau dit ce qu\'il manque', async () => {
     await setup()
-    expect(screen.getByRole('button', { name: /Comparer \(0\/3\)/ }).disabled).toBe(true)
+    expect(screen.getByText(/Créez une composition : un nom et un personnage de base/)).toBeTruthy()
+    expect(screen.getByText(/Choisissez un élément pour chaque emplacement/)).toBeTruthy()
+    expect(screen.getByText(/puis publiez/)).toBeTruthy()
+    expect(screen.queryByRole('button', { name: /Comparer/ })).toBeNull() // inutile tant qu'il y a moins de 2 compositions
+
+    fireEvent.click(screen.getByRole('button', { name: 'Créer ma première composition' }))
+    const panel = screen.getByRole('region', { name: 'Créer une composition' })
+    const submit = within(panel).getByRole('button', { name: 'Créer la composition' })
+    expect(submit.disabled).toBe(true)
+    expect(within(panel).getByText('Il manque : un nom, un personnage de base.')).toBeTruthy()
+
+    fireEvent.change(within(panel).getByLabelText('Nom de la composition'), { target: { value: 'X' } })
+    expect(within(panel).getByText('Il manque : un personnage de base.')).toBeTruthy()
+    fireEvent.click(within(panel).getByRole('button', { name: /Démo/ }))
+    expect(within(panel).getByRole('button', { name: /Démo/ }).getAttribute('aria-pressed')).toBe('true')
+    expect(submit.disabled).toBe(false)
+    expect(within(panel).queryByText(/Il manque/)).toBeNull()
+
+    fireEvent.click(within(panel).getByRole('button', { name: 'Annuler' }))
+    expect(screen.queryByRole('region', { name: 'Créer une composition' })).toBeNull()
+  })
+
+  it('sans personnage disponible : explique pourquoi', async () => {
+    mockCatalog.mockResolvedValue({ resources: [], collections: [], errors: [{ source: 'u', message: 'HTTP 404' }] })
+    render(React.createElement(CompositionsPage, { repository: new MemoryCompositionRepository() }))
+    fireEvent.click(await screen.findByRole('button', { name: /Nouvelle composition/ }))
+    expect(screen.getByText(/Aucun personnage disponible/)).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Créer la composition' }).disabled).toBe(true)
+  })
+
+  it('éditeur : signale les modifications non enregistrées et explique pourquoi « Publier » est indisponible', async () => {
+    await setup()
+    await create('Guide')
+    expect(screen.queryByText(/Modifications non enregistrées/)).toBeNull()
+    expect(screen.getByText(/1\. Personnage de base/)).toBeTruthy()
+    expect(screen.getByText(/4\. Aperçu 3D/)).toBeTruthy()
+
+    choose('CHEST', CHEST2.id)
+    expect(screen.getByText(/Modifications non enregistrées/)).toBeTruthy()
+    expect(screen.getByText('Enregistrez vos modifications pour pouvoir publier.')).toBeTruthy()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Enregistrer' }))
+    await waitFor(() => expect(screen.queryByText(/Modifications non enregistrées/)).toBeNull())
+    expect(await screen.findByText(/Publier rend cette version immuable/)).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Publier cette version' }).disabled).toBe(false)
+  })
+
+  it('conflit : la raison de l\'indisponibilité de « Publier » est affichée', async () => {
+    await setup()
+    await create('Conflit 2')
+    choose('BODY', BODY.id)
+    choose('CHEST', CHEST1.id)
+    fireEvent.click(screen.getByRole('button', { name: 'Enregistrer' }))
+    expect(await screen.findByText(/Corrigez les incompatibilités/)).toBeTruthy()
   })
 })

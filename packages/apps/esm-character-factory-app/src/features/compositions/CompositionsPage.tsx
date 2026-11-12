@@ -9,6 +9,7 @@ import { currentAssetBase } from '../../asset-base';
 import { getCatalog, resourceRepositoryFor } from '../catalog-store';
 import type { CatalogResult } from '../library/catalog';
 import ResourcePreview3D from '../library/ResourcePreview3D';
+import { thumbnailOf } from '../library/library-model';
 import { candidatesForSlot, compositionPreviewUris, diffCompositions, latestPerComposition, slotsOf } from './composition-model';
 import { createCompositionRepository } from './repositories';
 import { VERDICT_DEFAULTS } from '../verdict-labels';
@@ -125,35 +126,100 @@ function CompositionList({
 }) {
   const { t } = useTranslation();
   const characters = resources.filter((r) => r.kind === 'character');
+  const [creating, setCreating] = useState(false);
   const [name, setName] = useState('');
   const [baseId, setBaseId] = useState('');
   const [picked, setPicked] = useState<string[]>([]);
   const base = characters.find((c) => c.id === baseId);
   const nameOfId = (id: string) => latest.find((c) => c.id === id)?.name ?? id;
   const toggle = (id: string) => setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : p.length < 3 ? [...p, id] : p));
+  const missing = [!name.trim() && t('cmpMissingName', 'un nom'), !base && t('cmpMissingBase', 'un personnage de base')].filter(Boolean) as string[];
+  const open = () => setCreating(true);
+  const cancel = () => {
+    setCreating(false);
+    setName('');
+    setBaseId('');
+  };
 
   return (
     <>
-      <div className={styles.toolbar}>
-        <input className={styles.search} value={name} onChange={(e) => setName(e.target.value)} placeholder={t('cmpName', 'Nom de la composition')} aria-label={t('cmpName', 'Nom de la composition')} />
-        <select className={styles.select} value={baseId} onChange={(e) => setBaseId(e.target.value)} aria-label={t('cmpBase', 'Personnage de base')}>
-          <option value="">{t('cmpChooseBase', 'Choisir un personnage de base…')}</option>
-          {characters.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-        <button type="button" className={styles.button} disabled={!name.trim() || !base} onClick={() => base && onCreate(name.trim(), base)}>
-          {t('cmpNew', 'Nouvelle composition')}
-        </button>
-        <button type="button" className={styles.button} disabled={picked.length < 2} onClick={() => onCompare(picked)}>
-          {t('cmpCompare', 'Comparer')} ({picked.length}/3)
-        </button>
+      <div className={styles.header}>
+        <h2 className={styles.title}>{t('cmpTitle', 'Mes compositions')}</h2>
+        <div className={styles.actions}>
+          {latest.length >= 2 && (
+            <>
+              <button type="button" className={styles.button} disabled={picked.length < 2} onClick={() => onCompare(picked)}>
+                {t('cmpCompareSelected', 'Comparer la sélection ({{count}}/3)', { count: picked.length })}
+              </button>
+              {picked.length < 2 && <span className={styles.hint}>{t('cmpCompareHint', 'Cochez 2 ou 3 compositions pour les comparer.')}</span>}
+            </>
+          )}
+          {!creating && (
+            <button type="button" className={styles.primary} onClick={open}>
+              ＋ {t('cmpNew', 'Nouvelle composition')}
+            </button>
+          )}
+        </div>
       </div>
+
+      {creating && (
+        <section className={styles.panel} aria-label={t('cmpCreateTitle', 'Créer une composition')}>
+          <h3>{t('cmpCreateTitle', 'Créer une composition')}</h3>
+          <label className={styles.field}>
+            <strong>{t('cmpStep1', '1. Donnez-lui un nom')}</strong>
+            <input className={styles.search} value={name} onChange={(e) => setName(e.target.value)} placeholder={t('cmpNamePlaceholder', 'Ex. : Tenue de réception')} aria-label={t('cmpName', 'Nom de la composition')} autoFocus />
+          </label>
+          <div className={styles.field}>
+            <strong>{t('cmpStep2', '2. Choisissez le personnage de base')}</strong>
+            {characters.length === 0 ? (
+              <p className={styles.hint} role="status">
+                {t('cmpNoCharacters', "Aucun personnage disponible : le catalogue n'a pas pu être chargé. Ouvrez la bibliothèque pour voir quelles sources sont indisponibles.")}
+              </p>
+            ) : (
+              <div className={styles.charGrid}>
+                {characters.map((c) => {
+                  const thumb = thumbnailOf(c);
+                  return (
+                    <button key={c.id} type="button" aria-pressed={c.id === baseId} className={`${styles.charCard} ${c.id === baseId ? styles.charCardSelected : ''}`} onClick={() => setBaseId(c.id)}>
+                      {thumb ? <img className={styles.thumb} src={thumb} alt="" loading="lazy" /> : <div className={`${styles.thumb} ${styles.thumbEmpty}`}>{t('kind_character', 'Personnage')}</div>}
+                      <span>{c.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+          <div className={styles.actions}>
+            <button type="button" className={styles.primary} disabled={missing.length > 0} onClick={() => base && onCreate(name.trim(), base)}>
+              {t('cmpCreate', 'Créer la composition')}
+            </button>
+            <button type="button" className={styles.button} onClick={cancel}>
+              {t('cmpCancel', 'Annuler')}
+            </button>
+            {missing.length > 0 && <span className={styles.hint}>{t('cmpMissingWhat', 'Il manque : {{what}}.', { what: missing.join(', ') })}</span>}
+          </div>
+        </section>
+      )}
+
       <div className={styles.body}>
         <div className={styles.grid} role="list" data-testid="composition-list">
-          {latest.length === 0 && <div className={styles.empty}>{t('cmpEmpty', 'Aucune composition. Choisissez un personnage de base et donnez un nom pour commencer.')}</div>}
+          {latest.length === 0 && !creating && (
+            <div className={styles.empty} style={{ gridColumn: '1 / -1' }}>
+              <p>
+                <strong>{t('cmpEmptyTitle', "Vous n'avez pas encore de composition.")}</strong>
+              </p>
+              <ol className={styles.steps} style={{ textAlign: 'left', display: 'inline-flex' }}>
+                <li>{t('cmpEmptyStep1', 'Créez une composition : un nom et un personnage de base.')}</li>
+                <li>{t('cmpEmptyStep2', 'Choisissez un élément pour chaque emplacement.')}</li>
+                <li>{t('cmpEmptyStep3', 'Vérifiez la compatibilité, enregistrez, puis publiez (la version devient immuable).')}</li>
+              </ol>
+              <p>
+                <button type="button" className={styles.primary} onClick={open}>
+                  {t('cmpFirst', 'Créer ma première composition')}
+                </button>
+              </p>
+            </div>
+          )}
           {latest.map((c) => (
             <div key={c.id} role="listitem" className={styles.cell}>
               <div className={styles.card}>
@@ -162,12 +228,14 @@ function CompositionList({
                   v{c.version} · {t(`status_${c.status}`, STATUS_DEFAULTS[c.status])}
                 </span>
                 {c.variantOf && <span className={styles.badge}>{t('cmpVariantOf', 'variante de {{name}}', { name: nameOfId(c.variantOf.id) })}</span>}
-                <label>
-                  <input type="checkbox" checked={picked.includes(c.id)} onChange={() => toggle(c.id)} aria-label={`${t('cmpSelect', 'Sélectionner')} ${c.name}`} /> {t('cmpSelect', 'Sélectionner')}
-                </label>
-                <button type="button" className={styles.button} onClick={() => onOpen(c)} aria-label={`${t('cmpOpen', 'Ouvrir')} ${c.name}`}>
+                <button type="button" className={styles.primary} onClick={() => onOpen(c)} aria-label={`${t('cmpOpen', 'Ouvrir')} ${c.name}`}>
                   {t('cmpOpen', 'Ouvrir')}
                 </button>
+                {latest.length >= 2 && (
+                  <label>
+                    <input type="checkbox" checked={picked.includes(c.id)} onChange={() => toggle(c.id)} aria-label={`${t('cmpSelect', 'Sélectionner')} ${c.name}`} /> {t('cmpToCompare', 'Comparer')}
+                  </label>
+                )}
               </div>
             </div>
           ))}
@@ -208,6 +276,7 @@ function CompositionEditor({
   const [showPreview, setShowPreview] = useState(false);
 
   const base = resources.find((r) => r.id === draft.base.id && r.version === draft.base.version);
+  const baseThumb = base ? thumbnailOf(base) : null;
   const dirty = JSON.stringify({ name: draft.name, items: draft.items }) !== JSON.stringify({ name: composition.name, items: composition.items });
   const previewModels = useMemo(() => compositionPreviewUris(draft, resources), [draft, resources]);
   const nameOf = (ref: { id: string }) => resources.find((r) => r.id === ref.id)?.name ?? ref.id;
@@ -227,21 +296,20 @@ function CompositionEditor({
       items: [...d.items.filter((i) => i.slot !== slot), ...(resource ? [{ slot, ref: { id: resource.id, version: resource.version } }] : [])],
     }));
   };
-  const canPublish = !readOnly && !dirty && !!compat && compat.verdict !== 'incompatible';
+  const incompatible = !!compat && compat.verdict === 'incompatible';
+  const canPublish = !readOnly && !dirty && !!compat && !incompatible;
+  const publishHint = dirty
+    ? t('cmpHintPublishSave', 'Enregistrez vos modifications pour pouvoir publier.')
+    : incompatible
+      ? t('cmpHintPublishIncompat', 'Corrigez les incompatibilités (section 3) pour pouvoir publier.')
+      : t('cmpHintPublishOk', 'Publier rend cette version immuable : pour la modifier ensuite, créez une nouvelle version.');
 
   return (
-    <div className={styles.body} style={{ flexDirection: 'column' }}>
-      <div className={styles.toolbar} style={{ padding: 0 }}>
+    <div className={styles.editorBody}>
+      <div className={styles.statusLine} style={{ paddingTop: '1rem' }}>
         <button type="button" className={styles.button} onClick={onBack}>
-          ← {t('cmpBack', 'Compositions')}
+          ← {t('cmpBack', 'Mes compositions')}
         </button>
-        <input
-          className={styles.search}
-          value={draft.name}
-          disabled={readOnly}
-          onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
-          aria-label={t('cmpName', 'Nom de la composition')}
-        />
         <select className={styles.select} value={composition.version} onChange={(e) => onOpenVersion(Number(e.target.value))} aria-label={t('cmpVersion', 'Version')}>
           {versions.map((v) => (
             <option key={v.version} value={v.version}>
@@ -249,23 +317,38 @@ function CompositionEditor({
             </option>
           ))}
         </select>
+        <span className={styles.badge}>{t(`status_${composition.status}`, STATUS_DEFAULTS[composition.status])}</span>
+        {dirty && <span className={styles.dirty}>● {t('cmpDirty', 'Modifications non enregistrées')}</span>}
       </div>
 
+      <label className={styles.field}>
+        <strong>{t('cmpNameLabel', 'Nom')}</strong>
+        <input className={styles.search} value={draft.name} disabled={readOnly} onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))} aria-label={t('cmpName', 'Nom de la composition')} />
+      </label>
+
       {readOnly && (
-        <div className={styles.notice} role="status">
+        <div className={styles.notice} role="status" style={{ margin: 0 }}>
           {t('cmpImmutable', 'Cette version est « {{status}} » : elle est immuable. Créez une nouvelle version pour la modifier.', { status: t(`status_${composition.status}`, STATUS_DEFAULTS[composition.status]) })}
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-        <section style={{ flex: '1 1 18rem' }} aria-label={t('cmpSlots', 'Emplacements')}>
-          <p>
-            <strong>{t('cmpBase', 'Personnage de base')}</strong> : {base?.name ?? draft.base.id}
-          </p>
+      <div className={styles.cols}>
+        <section className={styles.section} aria-label={t('cmpSec1', '1. Personnage de base')}>
+          <h3>{t('cmpSec1', '1. Personnage de base')}</h3>
+          <div className={styles.statusLine}>
+            {baseThumb && <img className={styles.thumb} style={{ width: '4rem' }} src={baseThumb} alt="" />}
+            <strong>{base?.name ?? draft.base.id}</strong>
+          </div>
+          <p className={styles.hint}>{t('cmpBaseLocked', 'Le personnage de base ne peut pas être changé : créez une nouvelle composition pour en utiliser un autre.')}</p>
+        </section>
+
+        <section className={styles.section} aria-label={t('cmpSec2', '2. Éléments par emplacement')}>
+          <h3>{t('cmpSec2', '2. Éléments par emplacement')}</h3>
+          <p className={styles.hint}>{t('cmpSlotsHint', "Choisissez un élément par emplacement. « Par défaut » garde l'élément d'origine du personnage. ✓ compatible · ⚠ adaptation requise · ✕ incompatible.")}</p>
           {slotsOf(base).map((slot) => {
             const chosen = draft.items.find((i) => i.slot === slot);
             return (
-              <label key={slot} style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '0.75rem' }}>
+              <label key={slot} className={styles.field}>
                 {slot}
                 <select className={styles.select} value={chosen?.ref.id ?? ''} disabled={readOnly} onChange={(e) => setSlot(slot, e.target.value)}>
                   <option value="">{t('cmpDefault', '— par défaut —')}</option>
@@ -279,10 +362,14 @@ function CompositionEditor({
             );
           })}
         </section>
+      </div>
 
-        <section style={{ flex: '1 1 18rem' }} aria-label={t('cmpCompat', 'Compatibilité')}>
-          <strong>{t('cmpCompat', 'Compatibilité')}</strong> :{' '}
-          <span data-testid="compat-verdict">{compat ? t(`verdict_${compat.verdict}`, VERDICT_DEFAULTS[compat.verdict]) : '…'}</span>
+      <div className={styles.cols}>
+        <section className={styles.section} aria-label={t('cmpSec3', '3. Vérification')}>
+          <h3>{t('cmpSec3', '3. Vérification')}</h3>
+          <div>
+            <strong>{t('cmpCompat', 'Compatibilité')}</strong> : <span data-testid="compat-verdict">{compat ? t(`verdict_${compat.verdict}`, VERDICT_DEFAULTS[compat.verdict]) : '…'}</span>
+          </div>
           <ul className={styles.files}>
             {compat?.items.flatMap((i) => i.report.reasons.map((r) => <li key={`${i.slot}-${r.code}`}>{i.slot} — {t(`compat_${r.code}`, r.message)}</li>))}
             {compat?.conflicts.map((c) => (
@@ -293,42 +380,56 @@ function CompositionEditor({
             {compat?.missing.map((m) => (
               <li key={m.id}>{t('cmpMissing', 'Ressource introuvable')} : {m.id}</li>
             ))}
+            {compat && compat.verdict === 'compatible' && !compat.items.some((i) => i.report.reasons.length) && <li>{t('cmpAllGood', 'Aucun problème détecté.')}</li>}
           </ul>
-          {previewModels.length > 0 &&
-            (showPreview ? (
-              <>
-                <ResourcePreview3D uris={previewModels} />
-                <button type="button" className={styles.button} onClick={() => setShowPreview(false)}>
-                  {t('libHidePreview', "Masquer l'aperçu 3D")}
-                </button>
-              </>
-            ) : (
-              <button type="button" className={styles.button} onClick={() => setShowPreview(true)}>
-                {t('libShowPreview', "Afficher l'aperçu 3D")}
+        </section>
+
+        <section className={styles.section} aria-label={t('cmpSec4', '4. Aperçu 3D')}>
+          <h3>{t('cmpSec4', '4. Aperçu 3D')}</h3>
+          {previewModels.length === 0 ? (
+            <p className={styles.hint}>{t('cmpNoPreview', "Aucun modèle 3D à afficher pour cette composition.")}</p>
+          ) : showPreview ? (
+            <>
+              <ResourcePreview3D uris={previewModels} />
+              <button type="button" className={styles.button} onClick={() => setShowPreview(false)}>
+                {t('libHidePreview', "Masquer l'aperçu 3D")}
               </button>
-            ))}
+            </>
+          ) : (
+            <button type="button" className={styles.button} onClick={() => setShowPreview(true)}>
+              {t('libShowPreview', "Afficher l'aperçu 3D")}
+            </button>
+          )}
         </section>
       </div>
 
-      <div className={styles.toolbar} style={{ padding: 0 }}>
+      <section className={styles.section} aria-label={t('cmpActions', 'Actions')}>
+        <h3>{t('cmpActions', 'Actions')}</h3>
         {!readOnly && (
-          <>
-            <button type="button" className={styles.button} disabled={!dirty} onClick={() => onSave({ name: draft.name, items: draft.items })}>
+          <div className={styles.actions}>
+            <button type="button" className={styles.primary} disabled={!dirty} onClick={() => onSave({ name: draft.name, items: draft.items })}>
               {t('cmpSave', 'Enregistrer')}
             </button>
-            <button type="button" className={styles.button} disabled={!canPublish} onClick={onPublish} title={dirty ? t('cmpSaveFirst', "Enregistrez d'abord") : undefined}>
+            <button type="button" className={styles.button} disabled={!canPublish} onClick={onPublish}>
               {t('cmpPublish', 'Publier cette version')}
             </button>
-          </>
+            <span className={styles.hint}>{publishHint}</span>
+          </div>
         )}
-        <button type="button" className={styles.button} onClick={onNewVersion}>
-          {t('cmpNewVersion', 'Nouvelle version')}
-        </button>
-        <input className={styles.search} value={variantName} onChange={(e) => setVariantName(e.target.value)} placeholder={t('cmpVariantName', 'Nom de la variante')} aria-label={t('cmpVariantName', 'Nom de la variante')} />
-        <button type="button" className={styles.button} disabled={!variantName.trim()} onClick={() => onVariant(variantName.trim())}>
-          {t('cmpVariant', 'Créer une variante')}
-        </button>
-      </div>
+        <div className={styles.actions}>
+          <button type="button" className={styles.button} onClick={onNewVersion}>
+            {t('cmpNewVersion', 'Nouvelle version')}
+          </button>
+          <span className={styles.hint}>{t('cmpHintNewVersion', 'Crée un brouillon à partir de cette version ; la version actuelle reste inchangée.')}</span>
+        </div>
+        <div className={styles.actions}>
+          <input className={styles.search} style={{ flex: '0 1 16rem' }} value={variantName} onChange={(e) => setVariantName(e.target.value)} placeholder={t('cmpVariantName', 'Nom de la variante')} aria-label={t('cmpVariantName', 'Nom de la variante')} />
+          <button type="button" className={styles.button} disabled={!variantName.trim()} onClick={() => onVariant(variantName.trim())}>
+            {t('cmpVariant', 'Créer une variante')}
+          </button>
+          <span className={styles.hint}>{t('cmpHintVariant', 'Une variante est une nouvelle composition indépendante, qui part des mêmes éléments.')}</span>
+        </div>
+      </section>
     </div>
   );
 }
@@ -350,7 +451,7 @@ function CompareView({ compositions, resources, resourceRepo, onBack }: { compos
     <div className={styles.body} style={{ flexDirection: 'column' }}>
       <div>
         <button type="button" className={styles.button} onClick={onBack}>
-          ← {t('cmpBack', 'Compositions')}
+          ← {t('cmpBack', 'Mes compositions')}
         </button>
       </div>
       <div style={{ overflow: 'auto' }}>

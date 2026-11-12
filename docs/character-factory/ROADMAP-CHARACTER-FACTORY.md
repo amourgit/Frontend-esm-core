@@ -246,7 +246,7 @@ Phases 1 à 4 sont **terminées** (audit, compatibilité, fork, intégration au 
 
 | ID | Fonctionnalité | Côté | Existant | À faire | Prio |
 |---|---|---|---|---|---|
-| F10.1 | Composeur : personnage → tenue → accessoires → couleurs / morphologie | FE | **[E]** `Appearance` (flux historique) | **Partiel** — personnage de base + un élément par emplacement, avec verdict de compatibilité par option. **Couleurs, textures et morphologie : NON faites** (elles relèvent du moteur historique, à relier via `runtime/engine-adapter`, qui n'existe pas encore) | v1 |
+| F10.1 | Composeur : personnage → tenue → accessoires → couleurs / morphologie | FE | **[E]** `Appearance` (flux historique) | **Partiel** (UX guidée après retour utilisateur : bouton principal, panneau de création avec cartes de personnages, éditeur en 4 sections, raisons affichées) — personnage de base + un élément par emplacement, avec verdict de compatibilité par option. **Couleurs, textures et morphologie : NON faites** (elles relèvent du moteur historique, à relier via `runtime/engine-adapter`, qui n'existe pas encore) | v1 |
 | F10.2 | Visualisation temps réel | FE | **[E]** | **Partiel** — aperçu 3D assemblé (éléments par défaut + éléments choisis), rechargé à chaque changement ; pas le moteur temps réel historique | v1 |
 | F10.3 | Enregistrer une composition (références épinglées) | FE + BE | **[N]** | **Fait** — `CompositionService`, IndexedDB (non validé en navigateur ; repli mémoire avec avertissement) | v1 |
 | F10.4 | Rouvrir et modifier une composition | FE + BE | **[N]** | **Fait** (brouillons ; versions non brouillon en lecture seule) | v1 |
