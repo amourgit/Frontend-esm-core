@@ -11,6 +11,7 @@ import { appSection, type AppSection } from './app-section';
 // la base d'assets appliquée et WebGL vérifié.
 const StudioRoot = React.lazy(() => import('./studio-root'));
 const LibraryPage = React.lazy(() => import('./features/library/LibraryPage'));
+const CompositionsPage = React.lazy(() => import('./features/compositions/CompositionsPage'));
 
 type Phase = 'checking' | 'ready' | 'no-webgl';
 
@@ -169,9 +170,9 @@ export default function Root() {
             />
           )}
         >
-          {section === 'library' ? (
+          {section === 'library' || section === 'compositions' ? (
             <Suspense fallback={<Status title={t('loading', 'Chargement…')} />}>
-              <LibraryPage />
+              {section === 'library' ? <LibraryPage /> : <CompositionsPage />}
             </Suspense>
           ) : (
             <>

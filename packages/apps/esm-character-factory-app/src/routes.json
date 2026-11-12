@@ -156,6 +156,27 @@
           "intranet"
         ]
       }
+    },
+    {
+      "name": "character-factory-nav-compositions",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 695,
+      "meta": {
+        "section": "character-factory",
+        "sectionLabel": "Character Factory",
+        "group": "ressources",
+        "groupLabel": "Ressources",
+        "label": "Mes compositions",
+        "description": "Assembler un personnage, créer des variantes, versionner et comparer",
+        "icon": "Star",
+        "route": "character-factory/compositions",
+        "workspaces": [
+          "intranet"
+        ]
+      }
     }
   ]
 }

@@ -246,14 +246,14 @@ Phases 1 à 4 sont **terminées** (audit, compatibilité, fork, intégration au 
 
 | ID | Fonctionnalité | Côté | Existant | À faire | Prio |
 |---|---|---|---|---|---|
-| F10.1 | Composeur : personnage → tenue → accessoires → couleurs / morphologie | FE | **[E]** `Appearance` (flux historique) | Reconstruire sur le modèle `Composition` via `engine-adapter` | v1 |
-| F10.2 | Visualisation temps réel | FE | **[E]** | Conserver | v1 |
-| F10.3 | Enregistrer une composition (références épinglées) | FE + BE | **[N]** | `CompositionService.save` | v1 |
-| F10.4 | Rouvrir et modifier une composition | FE + BE | **[N]** | Chargement par résolution | v1 |
-| F10.5 | Variantes : dupliquer = copier les **références** (`variantOf`), jamais les fichiers | FE + BE | **[N]** | Action « Créer une variante » | v1 |
-| F10.6 | Comparer 2 à 3 variantes | FE | **[N]** | Instantanés / rendu alterné (un seul renderer) | v1 |
-| F10.7 | Brouillon et versions nommées d'une composition | FE + BE | **[N]** | Historique simple | v1 |
-| F10.8 | Le flux historique (Créer → Apparence → Enregistrer) reste utilisable | FE | **[E]** | Non-régression | v1 |
+| F10.1 | Composeur : personnage → tenue → accessoires → couleurs / morphologie | FE | **[E]** `Appearance` (flux historique) | **Partiel** — personnage de base + un élément par emplacement, avec verdict de compatibilité par option. **Couleurs, textures et morphologie : NON faites** (elles relèvent du moteur historique, à relier via `runtime/engine-adapter`, qui n'existe pas encore) | v1 |
+| F10.2 | Visualisation temps réel | FE | **[E]** | **Partiel** — aperçu 3D assemblé (éléments par défaut + éléments choisis), rechargé à chaque changement ; pas le moteur temps réel historique | v1 |
+| F10.3 | Enregistrer une composition (références épinglées) | FE + BE | **[N]** | **Fait** — `CompositionService`, IndexedDB (non validé en navigateur ; repli mémoire avec avertissement) | v1 |
+| F10.4 | Rouvrir et modifier une composition | FE + BE | **[N]** | **Fait** (brouillons ; versions non brouillon en lecture seule) | v1 |
+| F10.5 | Variantes : dupliquer = copier les **références** (`variantOf`), jamais les fichiers | FE + BE | **[N]** | **Fait** — la variante garde la version source exacte ; aucune copie de fichier (vérifié sur les données stockées) | v1 |
+| F10.6 | Comparer 2 à 3 variantes | FE | **[N]** | **Partiel** — tableau comparatif (base, emplacements, verdict) ; **pas de rendu 3D côte à côte** | v1 |
+| F10.7 | Brouillon et versions nommées d'une composition | FE + BE | **[N]** | **Fait** — brouillon → publiée (immuable) ; nouvelle version = copie de références ; publication refusée si incompatible. Statut `validated` supporté par le service, non exposé dans l'UI ; versions « nommées » : non (numérotées) | v1 |
+| F10.8 | Le flux historique (Créer → Apparence → Enregistrer) reste utilisable | FE | **[E]** | Inchangé (aucun fichier de `studio/` modifié pour cette phase) ; à revalider (R2 à R14) | v1 |
 
 **Acceptation** : scénario 3 déroulé de bout en bout : 3 variantes issues des mêmes ressources, modifiées indépendamment, **sans aucun fichier 3D dupliqué** (vérifié sur les données stockées).
 
@@ -400,6 +400,7 @@ Principe : **décision et orchestration = backend ; rendu et exécution graphiqu
 | 7 Socle domaine | Code et docs terminés ; à valider : IndexedDB en navigateur, manifeste réel, ADR (D4) |
 | 8 Bibliothèque | Code terminé (F8.2 et F8.5 partiels) ; validation navigateur à faire |
 | 9 Compatibilité | Code terminé (F9.1, F9.4 partiels) ; validation navigateur à faire |
-| 10 à 15 | À faire |
+| 10 Compositions | Code terminé (F10.1, F10.2, F10.6 partiels) ; validation navigateur à faire |
+| 11 à 15 | À faire |
 
 Correspondance avec la feuille de route initiale : ancienne P5 → P5 ; ancienne P6 → P6 ; ancienne P7 (extensibilité) → P7 (ports) et P15 ; ancienne P8 (validation) → P15.

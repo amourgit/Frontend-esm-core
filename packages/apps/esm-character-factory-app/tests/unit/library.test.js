@@ -14,9 +14,10 @@ import { collectionIdFromUrl, resolveUrl } from '../../src/features/library/cata
 import { computeFacets, sortResources, previewable3dFile, previewUris, thumbnailOf } from '../../src/features/library/library-model'
 import { frameDistance } from '../../src/runtime/preview-viewer'
 import LibraryPage from '../../src/features/library/LibraryPage'
+import { resetCatalog } from '../../src/features/catalog-store'
 import { legacyManifestToResources, rootAnimationsToResources } from '../../src/adapters/legacy-manifest'
 
-afterEach(() => { cleanup(); mockCatalog.mockReset() })
+afterEach(() => { cleanup(); mockCatalog.mockReset(); resetCatalog() })
 
 const characterManifest = (trait) => ({
   assetsLocation: 'https://assets.example/c',

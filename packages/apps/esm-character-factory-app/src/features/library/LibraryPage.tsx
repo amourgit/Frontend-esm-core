@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import type { PublicationStatus, Resource, ResourceKind } from '../../domain/types';
 import { MemoryResourceRepository } from '../../adapters/memory';
 import { currentAssetBase } from '../../asset-base';
-import { loadLegacyCatalog, type CatalogResult } from './catalog';
+import type { CatalogResult } from './catalog';
+import { getCatalog } from '../catalog-store';
 import { computeFacets, previewUris, sortResources, thumbnailOf, type SortKey } from './library-model';
 import ResourcePreview3D from './ResourcePreview3D';
 import { checkPair, type CompatibilityReport, type Verdict } from '../../domain/compatibility';
+import { VERDICT_DEFAULTS } from '../verdict-labels';
 import styles from './library.module.css';
 
 const KIND_DEFAULTS: Record<ResourceKind, string> = {
@@ -26,7 +28,6 @@ const STATUS_DEFAULTS: Record<PublicationStatus, string> = {
   deprecated: 'Déprécié',
 };
 const DEFAULT_ANIMATIONS = 'default-animations';
-const VERDICT_DEFAULTS: Record<Verdict, string> = { compatible: '✓ Compatible', adaptation: '⚠ Adaptation requise', incompatible: '✕ Incompatible' };
 
 /**
  * Bibliothèque de ressources (phase 8). Les données viennent d'un ResourceRepository (port) : aujourd'hui alimenté par
@@ -48,7 +49,7 @@ export default function LibraryPage() {
 
   useEffect(() => {
     let cancelled = false;
-    loadLegacyCatalog(currentAssetBase()).then((result) => {
+    getCatalog(currentAssetBase()).then((result) => {
       if (cancelled) return;
       repo.seed(result.resources);
       setCatalog(result);

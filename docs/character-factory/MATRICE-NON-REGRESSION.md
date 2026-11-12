@@ -38,5 +38,11 @@ Prérequis : personnage utilisable (voir `ASSETS-EXTERNES.md` §2.1). **Statut �
 | R31 | Portrait des personnages | Bibliothèque → onglet Personnage | Portrait du manifeste racine en miniature | `library.test.js` | À valider |
 | R32 | Compatibilité : badges | Choisir un personnage dans « Vérifier la compatibilité avec » | ✓ / ⚠ / ✕ sur chaque carte ; raisons dans la fiche | `compatibility.test.js`, `library.test.js` | À valider |
 | R33 | Compatibilité : masquer | Cocher « Masquer les incompatibles » | Les ✕ disparaissent | `library.test.js` | À valider |
+| R34 | Compositions : créer | Rail → Mes compositions → nom + personnage → Nouvelle composition | Éditeur ouvert avec les emplacements du personnage | `compositions.test.js` | À valider |
+| R35 | Compositions : enregistrer et rouvrir | Choisir des éléments → Enregistrer → recharger la page → Ouvrir | Composition retrouvée (IndexedDB) | repli mémoire testé ; **IndexedDB non testé** | À valider |
+| R36 | Compositions : publier | Publier une version compatible | Lecture seule + bandeau « immuable » ; publication refusée si incompatible | `compositions.test.js` | À valider |
+| R37 | Compositions : version et variante | Nouvelle version ; Créer une variante | v2 brouillon (v1 intacte) ; variante indépendante, étiquetée | `compositions.test.js` | À valider |
+| R38 | Compositions : comparer | Cocher 2 à 3 compositions → Comparer | Tableau avec ≠ sur les emplacements qui diffèrent et le verdict | `compositions.test.js` | À valider |
+| R39 | Compositions : aperçu 3D | « Afficher l'aperçu 3D » dans l'éditeur | Personnage assemblé avec les éléments choisis | `compositionPreviewUris` | À valider |
 
 Règle : la phase 6 n'est « terminée » que lorsque toutes les lignes sont **Validé**. Reporter ici la date et l'auteur de chaque validation.
