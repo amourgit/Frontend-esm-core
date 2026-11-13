@@ -64,7 +64,7 @@
     "@egen-civitas/esm-translations": "^1.0.4",
     "@egen-civitas/esm-utils": "^2.0.0",
     "@egen-civitas/tailwind-preset": "^1.4.0",
-    "@hookform/resolvers": "^6.0.2",
+    "@hookform/resolvers": "^7.0.3",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",
     "dayjs": "^1.11.10",
