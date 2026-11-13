@@ -1,5 +1,4 @@
 export { default as AppsMenuOption } from './AppsMenuOption';
-export { default as LanguageOption } from './LanguageOption';
 export { default as QuickAccessOption } from './QuickAccessOption';
 export { default as FullscreenOption } from './FullscreenOption';
 export { default as ThemeToggleOption } from './ThemeToggleOption';

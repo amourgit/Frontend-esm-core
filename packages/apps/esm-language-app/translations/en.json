@@ -1,0 +1,10 @@
+{
+  "cancel": "Cancel",
+  "change": "Change",
+  "changeDefaultLocale": "Update your default locale",
+  "changeDefaultLocaleExplanation": "Leave this unchecked to change language for this session only",
+  "changeLanguage": "Change language",
+  "changeLanguageError": "Could not change the language",
+  "changingLanguage": "Changing language",
+  "tryAgain": "Please try again"
+}

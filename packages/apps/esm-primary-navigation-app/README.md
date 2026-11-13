@@ -192,7 +192,7 @@ store.setState((s) => ({
 // Au démontage de la page : retirer la clé de l'app dans `claims`.
 ```
 
-Éléments globaux : `search`, `language`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `clock`,
+Éléments globaux : `search`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `clock`,
 `menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
 
 **Espace et Site : jamais dans la TopBar.** Les sélecteurs, la liste des Espaces et l'arbre des sites viennent de

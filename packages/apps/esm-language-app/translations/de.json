@@ -1,0 +1,8 @@
+{
+  "cancel": "Abbrechen",
+  "change": "Ändern",
+  "changeDefaultLocale": "Aktualisieren Sie Ihre Standardeinstellung für die Sprache und das Land",
+  "changeDefaultLocaleExplanation": "Lassen Sie dieses Kontrollkästchen deaktiviert, um die Sprache nur für diese Sitzung zu ändern",
+  "changeLanguage": "Sprache ändern",
+  "changingLanguage": "Sprache ändern"
+}

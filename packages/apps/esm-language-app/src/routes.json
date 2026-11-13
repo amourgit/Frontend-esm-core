@@ -1,0 +1,36 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "language-switcher",
+      "slot": "topbar-slot",
+      "component": "languageSwitcher",
+      "online": true,
+      "offline": true,
+      "order": 10,
+      "meta": {
+        "global": true,
+        "topbar": {
+          "level": "main",
+          "rank": 10,
+          "region": "right",
+          "order": 10
+        }
+      }
+    },
+    {
+      "name": "change-language",
+      "slot": "user-panel-slot",
+      "component": "changeLanguageLink",
+      "online": true,
+      "offline": true,
+      "order": 1
+    }
+  ],
+  "modals": [
+    {
+      "name": "change-language-modal",
+      "component": "changeLanguageModal"
+    }
+  ]
+}

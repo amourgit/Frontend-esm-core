@@ -8,7 +8,6 @@ import {
 import { configSchema } from './config-schema';
 import { moduleName } from './constants';
 import primaryNavRootComponent from './root.component';
-import changeLanguageLinkComponent from './components/change-language/change-language-link.extension';
 import genericLinkComponent, { genericLinkConfigSchema } from './components/generic-link/generic-link.component';
 import breadcrumbItemComponent, { breadcrumbItemConfigSchema } from './components/breadcrumb/breadcrumb-item.component';
 
@@ -37,13 +36,8 @@ export const root = getSyncLifecycle(primaryNavRootComponent, options);
 // importés et composés directement par cette app (`intranet-topbar/global`).
 // ──────────────────────────────────────────────────────────────────────────
 
-export const changeLanguageLink = getSyncLifecycle(changeLanguageLinkComponent, options);
 
 
-export const changeLanguageModal = getAsyncLifecycle(
-  () => import('./components/change-language/change-language.modal'),
-  options,
-);
 
 export const linkComponent = getSyncLifecycle(genericLinkComponent, {
   featureName: 'Link',
