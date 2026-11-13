@@ -22,7 +22,6 @@ export const GLOBAL_LEVEL_RANKS: Readonly<Record<string, number>> = { main: 10, 
 
 export const GLOBAL_ITEM_IDS = [
   'search',
-  'language',
   'divider',
   'apps',
   'quick-access',
@@ -53,7 +52,6 @@ const at = (level: string, region: TopBarContentRegion, order: number): ItemPlac
 /** Placement d'usine. */
 export const DEFAULT_PLACEMENT: Readonly<Record<GlobalItemId, ItemPlacement>> = {
   search: at('main', 'right', 0),
-  language: at('main', 'right', 10),
   divider: at('main', 'right', 20),
   apps: at('main', 'right', 30),
   'quick-access': at('main', 'right', 40),

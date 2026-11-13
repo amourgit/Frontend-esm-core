@@ -1,10 +1,4 @@
 {
   "AppMenuTooltip": "აპის მენიუ",
-  "cancel": "გაუქმება",
-  "change": "შეცვლა",
-  "changeDefaultLocale": "Update your default locale",
-  "changeDefaultLocaleExplanation": "Leave this unchecked to change language for this session only",
-  "changeLanguage": "ენის შეცვლა",
-  "changingLanguage": "მიმდინარეობს ენის შეცვლა",
   "notifications": "გაფრთხილებები"
 }

@@ -21,6 +21,9 @@ describe('TopBar : aucune logique de session ni de profil', () => {
   it("n'embarque plus ni menu utilisateur ni panneau d'identité", () => {
     expect(() => read('intranet-topbar/components/options/UserMenuOption.tsx')).toThrow();
     expect(() => read('components/user-panel-switcher/user-panel-switcher.component.tsx')).toThrow();
+    // La langue (bouton, lien, fenêtre) appartient à `@egen/esm-language-app`.
+    expect(() => read('intranet-topbar/components/options/LanguageOption.tsx')).toThrow();
+    expect(() => read('components/change-language/change-language.modal.tsx')).toThrow();
   });
 
   it("ne déclare ni page de redirection racine ni extension de profil : c'est le rôle de l'app dédiée", () => {

@@ -8,7 +8,6 @@ import { TopBarMenuPanel } from '../components/shell/TopBarMenuPanel';
 import {
   AppsMenuOption,
   FullscreenOption,
-  LanguageOption,
   QuickAccessOption,
   ThemeToggleOption,
 } from '../components/options';
@@ -163,7 +162,6 @@ type ItemDefinition = Omit<TopBarItem, 'placement' | 'id'> & { id: GlobalItemId 
 /** Les éléments globaux, SANS placement : la région et l'ordre viennent de `placement.ts`. */
 const GLOBAL_ITEMS: readonly ItemDefinition[] = [
   { id: 'search', component: SearchItem },
-  { id: 'language', component: LanguageOption as React.FC, hideOnSearch: 'touch' },
   { id: 'divider', component: DividerItem, hideOnSearch: 'touch' },
   { id: 'apps', component: AppsItem, hideOnSearch: 'touch' },
   { id: 'quick-access', component: QuickAccessItem, hideOnSearch: 'touch' },

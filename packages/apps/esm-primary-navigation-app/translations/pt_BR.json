@@ -1,10 +1,4 @@
 {
   "AppMenuTooltip": "Menu do Aplicativo",
-  "cancel": "Cancelar",
-  "change": "Alterar",
-  "changeDefaultLocale": "Update your default locale",
-  "changeDefaultLocaleExplanation": "Leave this unchecked to change language for this session only",
-  "changeLanguage": "Alterar idioma",
-  "changingLanguage": "Alterando idioma",
   "notifications": "Notificações"
 }

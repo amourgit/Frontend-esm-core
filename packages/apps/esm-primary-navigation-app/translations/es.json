@@ -1,10 +1,4 @@
 {
   "AppMenuTooltip": "Menú de la Aplicación",
-  "cancel": "Cancelar",
-  "change": "Cambiar",
-  "changeDefaultLocale": "Actualice su configuración regional predeterminada",
-  "changeDefaultLocaleExplanation": "Deje esta opción sin marcar para cambiar el idioma únicamente de esta sesión",
-  "changeLanguage": "Cambiar idioma",
-  "changingLanguage": "Cambiando idioma",
   "notifications": "Notificaciones"
 }
