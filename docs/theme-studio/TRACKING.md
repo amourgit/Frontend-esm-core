@@ -7,8 +7,8 @@ Format géré par `node tools/theme-studio-tracking.mjs` (claim / release / comp
 | P0 | Cadrage & fork | [x] done | — | 2026-11-12 |
 | P1 | Squelette de l'app | [x] done | — | 2026-11-13 |
 | P2 | Modèle de thème Studio | [x] done | — | 2026-11-13 |
-| P3 | Catalogue de contrôles & niveaux | [ ] todo | — | — |
-| P4 | Store d'édition | [ ] todo | — | — |
+| P3 | Catalogue de contrôles & niveaux | [x] done | — | 2026-11-13 |
+| P4 | Store d'édition | [x] done | — | 2026-11-13 |
 | P5 | Adaptateur TweakCN | [ ] todo | — | — |
 | P6 | Import / Export / Validation / Bibliothèque | [ ] todo | — | — |
 | P7 | Pont runtime (ThemeRuntimePort) | [ ] todo | — | — |
