@@ -5,28 +5,249 @@
       "component": "root",
       "route": "theme-studio",
       "online": true,
-      "offline": true
+      "offline": false
     }
   ],
   "extensions": [
     {
-      "name": "theme-studio-nav",
+      "name": "theme-studio-rail",
+      "slot": "shell-rail-left-slot",
+      "component": "railPanel",
+      "online": true,
+      "offline": false,
+      "order": 45,
+      "meta": {
+        "title": "Theme Studio",
+        "icon": "Palette",
+        "order": 45,
+        "global": false
+      }
+    },
+    {
+      "name": "theme-studio-app-menu-link",
+      "slot": "app-menu-slot",
+      "component": "appMenuLink",
+      "online": true,
+      "offline": false
+    },
+    {
+      "name": "theme-studio-nav-essentials",
       "slot": "topbar-nav-slot",
       "component": "navEntry",
       "online": true,
       "offline": false,
-      "order": 900,
+      "order": 800,
       "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "conception",
+        "groupLabel": "Conception",
+        "label": "Essentiels",
+        "description": "Couleurs de marque, fond, rayon et polices",
+        "icon": "Sparkles",
+        "route": "theme-studio",
         "workspaces": [
           "intranet"
         ],
-        "section": "design",
-        "sectionLabel": "Design",
-        "sectionRoute": "theme-studio",
-        "label": "Theme Studio",
-        "description": "Créer, prévisualiser et appliquer le thème EGEN",
+        "sectionRoute": "theme-studio"
+      }
+    },
+    {
+      "name": "theme-studio-nav-colors",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 810,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "conception",
+        "groupLabel": "Conception",
+        "label": "Couleurs",
+        "description": "Marque, sémantique, surfaces et bordures",
         "icon": "Palette",
-        "route": "theme-studio"
+        "route": "theme-studio/couleurs",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
+      }
+    },
+    {
+      "name": "theme-studio-nav-typography",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 820,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "conception",
+        "groupLabel": "Conception",
+        "label": "Typographie",
+        "description": "Familles, tailles, graisses et espacement des lettres",
+        "icon": "Type",
+        "route": "theme-studio/typographie",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
+      }
+    },
+    {
+      "name": "theme-studio-nav-shapes",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 830,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "conception",
+        "groupLabel": "Conception",
+        "label": "Formes & ombres",
+        "description": "Rayons, ombres et espacements",
+        "icon": "Box",
+        "route": "theme-studio/formes",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
+      }
+    },
+    {
+      "name": "theme-studio-nav-layout",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 840,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "conception",
+        "groupLabel": "Conception",
+        "label": "Mise en page",
+        "description": "Dimensions du shell, rails et zones",
+        "icon": "LayoutDashboard",
+        "route": "theme-studio/mise-en-page",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
+      }
+    },
+    {
+      "name": "theme-studio-nav-effects",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 850,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "conception",
+        "groupLabel": "Conception",
+        "label": "Effets & animations",
+        "description": "Flou, transitions et animations",
+        "icon": "Zap",
+        "route": "theme-studio/effets",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
+      }
+    },
+    {
+      "name": "theme-studio-nav-components",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 860,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "composants",
+        "groupLabel": "Composants",
+        "label": "Composants",
+        "description": "Variantes et états de chaque composant",
+        "icon": "Blocks",
+        "route": "theme-studio/composants",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
+      }
+    },
+    {
+      "name": "theme-studio-nav-library",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 870,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "themes",
+        "groupLabel": "Thèmes",
+        "label": "Mes thèmes",
+        "description": "Enregistrer, ouvrir, dupliquer, importer et exporter",
+        "icon": "Library",
+        "route": "theme-studio/bibliotheque",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
+      }
+    },
+    {
+      "name": "theme-studio-nav-rest",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 880,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "avance",
+        "groupLabel": "Avancé",
+        "label": "Autres tokens",
+        "description": "Panels, z-index, icônes… (Expert)",
+        "icon": "Settings2",
+        "route": "theme-studio/autres",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
+      }
+    },
+    {
+      "name": "theme-studio-nav-json",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 890,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "avance",
+        "groupLabel": "Avancé",
+        "label": "JSON",
+        "description": "Éditeur du thème complet (Expert)",
+        "icon": "Braces",
+        "route": "theme-studio/json",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
       }
     }
   ]

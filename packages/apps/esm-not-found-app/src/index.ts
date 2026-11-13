@@ -8,7 +8,7 @@ import rootComponent from './root.component';
 //  autre app du système (voir le routeRegex négatif dans routes.json, qui
 //  exclut explicitement toutes les routes déjà déclarées ailleurs dans le
 //  monorepo — login, logout, change-password, home,
-//  offline-tools — et la racine vide, gérée par son propre redirect).
+//  theme-studio, offline-tools — et la racine vide, gérée par son propre redirect).
 //  Rendue en plein écran, SANS TopBar : la page pose html[data-public-route]
 //  à son montage (mécanisme du shell, comme esm-login-app) ce qui masque la
 //  TopBar, les rails et le footer.

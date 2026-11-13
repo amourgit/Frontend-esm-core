@@ -116,6 +116,21 @@ for (const app of readdirSync(appsDir)) {
   }
 }
 
+// Garde-fou 404 : toute route de page déclarée par une app doit être EXCLUE du routeRegex de esm-not-found-app,
+// sinon la page 404 s'affiche par-dessus l'app (cas vécu : theme-studio).
+const notFoundFile = join(appsDir, 'esm-not-found-app', 'src', 'routes.json');
+if (existsSync(notFoundFile)) {
+  const nf = JSON.parse(readFileSync(notFoundFile, 'utf8')).pages?.[0]?.routeRegex;
+  if (nf) {
+    const re = new RegExp(nf);
+    for (const route of new Set(pageRoutes)) {
+      if (route && re.test(route)) {
+        errors.push(`esm-not-found-app: la route de page "${route}" n'est pas exclue de son routeRegex → 404 affichée. Ajouter "${route.split('/')[0]}" à l'alternation.`);
+      }
+    }
+  }
+}
+
 if (errors.length) {
   console.error(`Navigation incohérente (${errors.length}) :\n- ${errors.join('\n- ')}`);
   process.exit(1);
