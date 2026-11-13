@@ -1,0 +1,11 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "pages": [
+    {
+      "component": "root",
+      "route": "theme-studio",
+      "online": true,
+      "offline": true
+    }
+  ]
+}

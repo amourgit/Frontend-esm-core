@@ -5,8 +5,8 @@ Format géré par `node tools/theme-studio-tracking.mjs` (claim / release / comp
 | Phase | Titre | Statut | Verrou | Validée le |
 |-------|-------|--------|--------|------------|
 | P0 | Cadrage & fork | [x] done | — | 2026-11-12 |
-| P1 | Squelette de l'app | [ ] todo | — | — |
-| P2 | Modèle de thème Studio | [ ] todo | — | — |
+| P1 | Squelette de l'app | [x] done | — | 2026-11-13 |
+| P2 | Modèle de thème Studio | [x] done | — | 2026-11-13 |
 | P3 | Catalogue de contrôles & niveaux | [ ] todo | — | — |
 | P4 | Store d'édition | [ ] todo | — | — |
 | P5 | Adaptateur TweakCN | [ ] todo | — | — |
