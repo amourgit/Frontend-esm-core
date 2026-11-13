@@ -9,7 +9,7 @@ Format géré par `node tools/theme-studio-tracking.mjs` (claim / release / comp
 | P2 | Modèle de thème Studio | [x] done | — | 2026-11-13 |
 | P3 | Catalogue de contrôles & niveaux | [x] done | — | 2026-11-13 |
 | P4 | Store d'édition | [x] done | — | 2026-11-13 |
-| P5 | Adaptateur TweakCN | [ ] todo | — | — |
+| P5 | Adaptateur TweakCN | [x] done | — | 2026-11-13 |
 | P6 | Import / Export / Validation / Bibliothèque | [ ] todo | — | — |
 | P7 | Pont runtime (ThemeRuntimePort) | [ ] todo | — | — |
 | P8 | UI de l'éditeur | [ ] todo | — | — |

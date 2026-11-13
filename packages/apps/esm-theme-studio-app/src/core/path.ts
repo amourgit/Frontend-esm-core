@@ -62,3 +62,12 @@ export function diffPaths(a: unknown, b: unknown): string[] {
   const keys = new Set([...left.keys(), ...right.keys()]);
   return [...keys].filter((k) => left.get(k) !== right.get(k)).sort();
 }
+
+/** Fusion profonde immutable (les tableaux et valeurs de `source` remplacent ceux de `target`). */
+export function mergeDeep<T extends Record<string, unknown>>(target: T, source: Record<string, unknown>): T {
+  const out: Record<string, unknown> = { ...target };
+  for (const [k, v] of Object.entries(source)) {
+    out[k] = isPlainObject(v) && isPlainObject(out[k]) ? mergeDeep(out[k] as Record<string, unknown>, v) : clone(v);
+  }
+  return out as T;
+}
