@@ -1,20 +1,22 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { componentStyle } from '../core/component-style';
-import { COMPONENTS, getComponent } from '../core/components';
+import {
+  Button, Checkbox, Dropdown, InlineNotification, ProgressBar, RadioButton, RadioButtonGroup, Select, SelectItem, Slider, Tab, TabList, TabPanel, TabPanels, Table, TableBody, TableCell,
+  TableHead, TableHeader, TableRow, Tabs, Tag, TextArea, TextInput, Tile, Toggle,
+} from '@carbon/react';
+import { previewStyle } from '../core/carbon-scope';
+import { generateScale, SCALE_STEPS } from '../core/color';
+import { getIn } from '../core/path';
 import { useServices, useStudio } from './studio-context';
 import styles from './studio.scss';
 
-type Tag = 'div' | 'button' | 'span' | 'input' | 'th' | 'td';
+// Prévisualisation avec les VRAIS composants Carbon/EGEN (aucun composant propre au Studio, cf. cahier §24).
+// Les surcharges au niveau composant (`components.*`) seront visibles ici dès que les composants les consomment (lot TokiForge/composants).
 
-/** Élément stylé par le registre : le Studio ne crée aucun composant spécifique, il habille des éléments neutres avec les tokens. */
-const Styled: React.FC<{ c: string; v?: string; s?: string; as?: Tag; children?: React.ReactNode; extra?: React.CSSProperties; label?: string }> = ({ c, v, s = 'default', as: Tag = 'div', children, extra, label }) => {
-  const variant = v ?? getComponent(c)?.variants[0] ?? 'base';
-  const style = { ...componentStyle(c, variant, s), ...extra } as React.CSSProperties;
-  const props = { style, 'data-component': c, 'data-variant': variant, 'data-state': s, 'aria-label': label } as Record<string, unknown>;
-  if (Tag === 'input') return <input {...props} readOnly value={String(children ?? '')} disabled={s === 'disabled'} />;
-  return React.createElement(Tag, props, children);
-};
+const BUTTON_KINDS = ['primary', 'secondary', 'tertiary', 'ghost', 'danger', 'danger--tertiary', 'danger--ghost'] as const;
+const TAG_TYPES = ['red', 'magenta', 'purple', 'blue', 'cyan', 'teal', 'green', 'gray', 'warm-gray'] as const;
+const NOTIFS = ['info', 'success', 'warning', 'error'] as const;
+const SCALES = ['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info'];
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <section className={styles.previewSection}>
@@ -23,180 +25,121 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
   </section>
 );
 
-/** Vitrine du Design System : tout ce qui est dans le registre est visible, variante × état. */
-export const Showcase: React.FC = () => {
-  const { t } = useTranslation();
-  const button = getComponent('button')!;
-  const input = getComponent('input')!;
+const ButtonsTab: React.FC = () => (
+  <>
+    <Section title="Button — kinds">
+      <div className={styles.row}>{BUTTON_KINDS.map((k) => <Button key={k} kind={k}>{k}</Button>)}</div>
+    </Section>
+    <Section title="Button — tailles & état désactivé">
+      <div className={styles.row}>
+        {(['sm', 'md', 'lg'] as const).map((s) => <Button key={s} size={s}>{s}</Button>)}
+        <Button disabled>disabled</Button>
+      </div>
+    </Section>
+    <Section title="Tags">
+      <div className={styles.row}>{TAG_TYPES.map((t) => <Tag key={t} type={t}>{t}</Tag>)}</div>
+    </Section>
+    <Section title="Notifications">
+      {NOTIFS.map((k) => <InlineNotification key={k} kind={k} lowContrast hideCloseButton title={`Notification ${k}`} subtitle="Message d’exemple" />)}
+    </Section>
+  </>
+);
+
+const FormsTab: React.FC = () => (
+  <div className={styles.formGrid}>
+    <TextInput id="pv-text" labelText="Champ texte" placeholder="Saisir…" />
+    <TextInput id="pv-invalid" labelText="Champ invalide" invalid invalidText="Valeur incorrecte" defaultValue="oops" />
+    <Select id="pv-select" labelText="Liste">{['Option A', 'Option B'].map((o) => <SelectItem key={o} value={o} text={o} />)}</Select>
+    <Dropdown id="pv-dropdown" titleText="Dropdown" label="Choisir" items={['Un', 'Deux', 'Trois']} itemToString={(i: string | null) => i ?? ''} />
+    <TextArea id="pv-area" labelText="Zone de texte" rows={3} />
+    <Slider id="pv-slider" labelText="Curseur" min={0} max={100} value={40} />
+    <Checkbox id="pv-check" labelText="Case à cocher" defaultChecked />
+    <RadioButtonGroup legendText="Boutons radio" name="pv-radio" defaultSelected="a">
+      <RadioButton id="pv-ra" labelText="A" value="a" />
+      <RadioButton id="pv-rb" labelText="B" value="b" />
+    </RadioButtonGroup>
+    <Toggle id="pv-toggle" labelText="Interrupteur" defaultToggled />
+  </div>
+);
+
+const DataTab: React.FC = () => (
+  <>
+    <Section title="Tableau">
+      <Table size="md" aria-label="Exemple">
+        <TableHead><TableRow>{['Nom', 'Rôle', 'Statut'].map((h) => <TableHeader key={h}>{h}</TableHeader>)}</TableRow></TableHead>
+        <TableBody>
+          {[['Awa', 'Admin', 'Actif'], ['Marc', 'Membre', 'Invité'], ['Léa', 'Membre', 'Actif']].map((r) => <TableRow key={r[0]}>{r.map((c) => <TableCell key={c}>{c}</TableCell>)}</TableRow>)}
+        </TableBody>
+      </Table>
+    </Section>
+    <Section title="Tuiles & progression">
+      <div className={styles.row}>
+        <Tile>Tuile standard</Tile>
+        <Tile>Autre tuile</Tile>
+      </div>
+      <ProgressBar label="Avancement" value={65} max={100} />
+    </Section>
+  </>
+);
+
+const TypographyTab: React.FC = () => (
+  <div style={{ fontFamily: 'var(--typography-font-family-body)' }}>
+    <h1 style={{ fontFamily: 'var(--typography-font-family-heading)' }}>Titre principal</h1>
+    <h2 style={{ fontFamily: 'var(--typography-font-family-heading)' }}>Sous-titre</h2>
+    <p>Corps de texte : la hiérarchie visuelle suit la typographie du thème édité.</p>
+    <code style={{ fontFamily: 'var(--typography-font-family-mono)' }}>const theme = egen.studio();</code>
+  </div>
+);
+
+const ColorsTab: React.FC = () => {
+  const { doc, mode } = useStudio();
   return (
     <>
-      <Section title={t('typography', 'Typographie')}>
-        <h1 style={{ fontFamily: 'var(--typography-font-family-heading)', fontSize: 'var(--typography-font-size-3xl-size, 1.875rem)', margin: 0 }}>Titre principal</h1>
-        <h2 style={{ fontFamily: 'var(--typography-font-family-heading)', fontSize: 'var(--typography-font-size-xl-size, 1.25rem)', margin: '0.5rem 0' }}>Sous-titre</h2>
-        <p style={{ fontFamily: 'var(--typography-font-family-body)', fontSize: 'var(--typography-font-size-base-size, 1rem)' }}>Corps de texte : la hiérarchie visuelle évolue avec la typographie du thème.</p>
-        <code style={{ fontFamily: 'var(--typography-font-family-mono)' }}>const theme = egen.studio();</code>
-      </Section>
-
-      <Section title="Button — variantes × états">
-        <div className={styles.matrix}>
-          {button.variants.map((variant) => (
-            <div key={variant} className={styles.matrixRow}>
-              <span className={styles.matrixLabel}>{variant}</span>
-              {button.states.map((s) => (
-                <Styled key={s} c="button" v={variant} s={s} as="button">
-                  {s}
-                </Styled>
-              ))}
-            </div>
+      {SCALES.map((family) => {
+        const scale = getIn(doc, ['colors', family]) as Record<string, string> | undefined;
+        if (!scale) return null;
+        return (
+          <Section key={family} title={family}>
+            <div className={styles.scale}>{SCALE_STEPS.map((s) => <span key={s} title={`${family}-${s}`} style={{ background: `var(--colors-${family}-${s})` }}>{s}</span>)}</div>
+          </Section>
+        );
+      })}
+      <Section title={`Surfaces (${mode})`}>
+        <div className={styles.scale}>
+          {Object.keys((getIn(doc, ['colors', 'surface', mode]) as object) ?? {}).map((k) => (
+            <span key={k} title={k} style={{ background: `var(--colors-surface-${k.replace(/([A-Z])/g, '-$1').toLowerCase()})`, color: 'var(--colors-surface-foreground)' }}>{k}</span>
           ))}
-        </div>
-      </Section>
-
-      <Section title="Champs">
-        <div className={styles.row}>
-          {input.states.map((s) => (
-            <Styled key={s} c="input" v="outline" s={s} as="input">
-              {s}
-            </Styled>
-          ))}
-        </div>
-        <div className={styles.row}>
-          <Styled c="select" as="div" extra={{ minWidth: '8rem' }}>
-            Sélection ▾
-          </Styled>
-          <Styled c="checkbox" as="span" extra={{ display: 'inline-block' }} />
-          <Styled c="radio" as="span" extra={{ display: 'inline-block', borderRadius: '9999px' }} />
-          <Styled c="switch" as="span" extra={{ display: 'inline-block', height: '1.25rem' }} />
-        </div>
-      </Section>
-
-      <Section title="Cartes">
-        <div className={styles.row}>
-          {getComponent('card')!.variants.map((v) => (
-            <Styled key={v} c="card" v={v} extra={{ flex: '1 1 10rem' }}>
-              <strong>{v}</strong>
-              <p style={{ margin: '0.25rem 0 0' }}>Contenu de carte</p>
-            </Styled>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Badges, alertes, notifications">
-        <div className={styles.row}>
-          {getComponent('badge')!.variants.map((v) => (
-            <Styled key={v} c="badge" v={v} as="span">
-              {v}
-            </Styled>
-          ))}
-        </div>
-        {getComponent('alert')!.variants.map((v) => (
-          <Styled key={v} c="alert" v={v} extra={{ marginTop: '0.5rem' }}>
-            Alerte {v}
-          </Styled>
-        ))}
-        <div className={styles.row} style={{ marginTop: '0.5rem' }}>
-          {getComponent('toast')!.variants.map((v) => (
-            <Styled key={v} c="toast" v={v}>
-              Toast {v}
-            </Styled>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Tableau">
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              {['Nom', 'Rôle', 'Statut'].map((h) => (
-                <Styled key={h} c="table" as="th" extra={{ background: 'var(--components-table-base-default-header-background, var(--colors-surface-muted))', textAlign: 'left' }}>
-                  {h}
-                </Styled>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {(['default', 'hover', 'selected'] as const).map((s, i) => (
-              <tr key={s}>
-                {[`Ligne ${i + 1}`, 'Membre', s].map((cell) => (
-                  <Styled key={cell} c="table" s={s} as="td">
-                    {cell}
-                  </Styled>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Section>
-
-      <Section title="Navigation, onglets, menus">
-        <div className={styles.row}>
-          {getComponent('tabs')!.states.map((s) => (
-            <Styled key={s} c="tabs" v="pill" s={s} as="span">
-              Onglet {s}
-            </Styled>
-          ))}
-        </div>
-        <div className={styles.row}>
-          {getComponent('navigation')!.states.map((s) => (
-            <Styled key={s} c="navigation" s={s} as="span">
-              Lien {s}
-            </Styled>
-          ))}
-        </div>
-        <Styled c="dropdown" extra={{ display: 'inline-block', marginTop: '0.5rem' }}>
-          {(['default', 'hover', 'selected'] as const).map((s) => (
-            <Styled key={s} c="dropdown" s={s}>
-              Entrée {s}
-            </Styled>
-          ))}
-        </Styled>
-      </Section>
-
-      <Section title="Dialogues, infobulles, panneaux">
-        <div className={styles.row}>
-          <Styled c="dialog" extra={{ flex: '1 1 14rem' }}>
-            <strong>Confirmer l’action</strong>
-            <p>Voulez-vous vraiment continuer ?</p>
-            <div className={styles.row}>
-              <Styled c="button" v="primary" as="button">
-                Confirmer
-              </Styled>
-              <Styled c="button" v="outline" as="button">
-                Annuler
-              </Styled>
-            </div>
-          </Styled>
-          <Styled c="tooltip" extra={{ alignSelf: 'start' }}>
-            Infobulle
-          </Styled>
-        </div>
-      </Section>
-
-      <Section title="Disposition (sidebar + header)">
-        <div className={styles.miniLayout}>
-          <Styled c="sidebar" extra={{ width: '6rem', padding: '0.5rem' }}>
-            Sidebar
-          </Styled>
-          <div style={{ flex: 1 }}>
-            <Styled c="header" extra={{ height: '2.5rem', padding: '0 0.75rem', display: 'flex', alignItems: 'center' }}>
-              Header
-            </Styled>
-            <p style={{ padding: '0.75rem' }}>Contenu ({COMPONENTS.length} composants au registre)</p>
-          </div>
         </div>
       </Section>
     </>
   );
 };
 
-/** Conteneur de prévisualisation : variables CSS scopées, indépendantes du mode de l'application. */
+/** Conteneur de prévisualisation : variables du thème édité + pont Carbon scopés, indépendants du thème de l'application. */
 export const Preview: React.FC = () => {
   const { runtime } = useServices();
   const { doc, mode } = useStudio();
-  const vars = useMemo(() => runtime.previewVars(doc, mode), [runtime, doc, mode]);
+  const { t } = useTranslation();
+  const style = useMemo(() => previewStyle(runtime.previewVars(doc, mode)), [runtime, doc, mode]);
+  void generateScale;
   return (
-    <div className={styles.preview} data-theme={mode} data-testid="preview" style={vars as React.CSSProperties}>
-      <Showcase />
+    <div className={styles.preview} data-theme={mode} data-carbon-theme={mode === 'dark' ? 'g100' : 'white'} data-testid="preview" style={style as React.CSSProperties}>
+      <Tabs>
+        <TabList aria-label={t('preview', 'Prévisualisation')} contained>
+          <Tab>{t('pvComponents', 'Composants')}</Tab>
+          <Tab>{t('pvForms', 'Formulaires')}</Tab>
+          <Tab>{t('pvData', 'Données')}</Tab>
+          <Tab>{t('typography', 'Typographie')}</Tab>
+          <Tab>{t('pvColors', 'Couleurs')}</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel><ButtonsTab /></TabPanel>
+          <TabPanel><FormsTab /></TabPanel>
+          <TabPanel><DataTab /></TabPanel>
+          <TabPanel><TypographyTab /></TabPanel>
+          <TabPanel><ColorsTab /></TabPanel>
+        </TabPanels>
+      </Tabs>
     </div>
   );
 };

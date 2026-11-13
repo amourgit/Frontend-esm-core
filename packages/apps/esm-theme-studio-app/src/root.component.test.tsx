@@ -20,14 +20,19 @@ vi.mock('./core/runtime-factory', async () => {
 });
 
 import Root from './root.component';
+import { resetStudioServices } from './services';
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  resetStudioServices();
+  window.localStorage.clear();
+});
 
 describe('Root', () => {
   it('ouvre le Studio sur le thème actif de l’environnement', () => {
     render(<Root />);
     expect(screen.getByTestId('theme-studio')).toBeTruthy();
-    expect((screen.getByLabelText('Nom du thème') as HTMLInputElement).value).toBe('Actif');
+    expect((screen.getByRole('textbox', { name: 'Nom du thème' }) as HTMLInputElement).value).toBe('Actif');
   });
 
   it('refuse l’accès sans le privilège requis', () => {

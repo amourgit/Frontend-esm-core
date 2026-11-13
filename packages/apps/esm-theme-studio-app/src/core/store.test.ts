@@ -115,3 +115,27 @@ describe('store d’édition', () => {
     expect(calls).toBe(before);
   });
 });
+
+describe('load avec base distincte (reprise de brouillon)', () => {
+  it('le brouillon repris reste « modifié » par rapport au thème de départ', () => {
+    const s = createStudioStore(doc);
+    s.load({ ...doc, borderRadius: { md: '2rem' } }, 'Brouillon', doc);
+    expect(s.isDirty()).toBe(true);
+    expect(s.changedPaths()).toEqual(['borderRadius.md']);
+    expect(s.getState().name).toBe('Brouillon');
+  });
+});
+
+describe('changements sans effet', () => {
+  it('ne créent pas d’historique et ne vident pas « Rétablir »', () => {
+    let t = 0;
+    const s = createStudioStore(doc, { now: () => (t += 5000) });
+    const radius = def('borderRadius.md');
+    s.setValue(radius, '2rem');
+    s.undo();
+    expect(s.getState().canRedo).toBe(true);
+    s.setValue(radius, '0.75rem'); // même valeur que l'actuelle
+    expect(s.getState().canRedo).toBe(true);
+    expect(s.getState().canUndo).toBe(false);
+  });
+});

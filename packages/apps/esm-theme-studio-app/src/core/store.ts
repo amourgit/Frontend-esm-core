@@ -56,7 +56,8 @@ export function createStudioStore(initial: ThemeDoc, options: { name?: string; n
 
   /** Applique un nouveau document en alimentant l'historique (coalescé pour les glissements de curseur). */
   const commit = (next: ThemeDoc, key: string) => {
-    if (next === state.doc) return;
+    // Un changement sans effet (même valeur) n'est ni une modification ni une entrée d'historique.
+    if (next === state.doc || JSON.stringify(next) === JSON.stringify(state.doc)) return;
     const t = now();
     const coalesce = key !== '' && key === lastEdit.key && t - lastEdit.at < COALESCE_MS && past.length > 0;
     if (!coalesce) {
@@ -141,12 +142,12 @@ export function createStudioStore(initial: ThemeDoc, options: { name?: string; n
     },
 
     /** Charge un thème (import, duplication, sélection de bibliothèque) ; l'historique repart de zéro. */
-    load(doc: ThemeDoc, name?: string) {
+    load(doc: ThemeDoc, name?: string, base?: ThemeDoc) {
       past = [];
       future = [];
       lastEdit = { key: '', at: 0 };
       const nm = name ?? (isPlainObject(doc.meta) && typeof doc.meta.name === 'string' ? doc.meta.name : state.name);
-      emit({ doc: clone(doc), base: clone(doc), name: nm });
+      emit({ doc: clone(doc), base: clone(base ?? doc), name: nm });
     },
 
     /** Marque le brouillon comme enregistré (la base devient le brouillon courant). */

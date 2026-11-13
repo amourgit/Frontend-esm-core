@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Select, SelectItem, Slider, Tag, TextInput, Toggle } from '@carbon/react';
 import { generateScale, SCALE_STEPS, toHex, contrastRatio, wcagLevel } from '../core/color';
 import type { ControlDef } from '../core/catalog';
 import styles from './studio.scss';
@@ -21,30 +22,57 @@ export const SHADOW_PRESETS: Record<string, string> = {
 };
 
 const hex6 = (v: string) => (toHex(v) ?? '#000000').slice(0, 7);
-
-const ColorInput: React.FC<ControlProps> = ({ def, value, placeholder, onChange }) => (
-  <span className={styles.colorField}>
-    <input type="color" aria-label={def.label} value={hex6(value || placeholder || '')} onChange={(e) => onChange(e.target.value)} />
-    <input type="text" aria-label={`${def.label} (valeur)`} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} spellCheck={false} />
-  </span>
+const idOf = (def: ControlDef, suffix = '') => `studio-${def.id.replace(/[^a-zA-Z0-9]+/g, '-')}${suffix}`;
+const text = (def: ControlDef, value: string, placeholder: string | undefined, onChange: (v: string) => void, extra: Record<string, unknown> = {}) => (
+  <TextInput id={idOf(def)} size="sm" labelText={def.label} value={value} placeholder={placeholder} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} spellCheck={false} {...extra} />
 );
 
+const ColorInput: React.FC<ControlProps> = ({ def, value, placeholder, onChange }) => (
+  <div className={styles.colorField}>
+    {text(def, value, placeholder, onChange)}
+    <input type="color" className={styles.colorSwatch} aria-label={`${def.label} (sélecteur)`} value={hex6(value || placeholder || '')} onChange={(e) => onChange(e.target.value)} />
+  </div>
+);
+
+/** Vrai pendant un geste de l'utilisateur sur le curseur : Carbon rappelle `onChange` aussi quand la valeur change de l'extérieur (annuler, import…). */
+function useUserGesture() {
+  const active = useRef(false);
+  useEffect(() => {
+    const stop = () => (active.current = false);
+    window.addEventListener('pointerup', stop);
+    window.addEventListener('mouseup', stop);
+    window.addEventListener('touchend', stop);
+    return () => {
+      window.removeEventListener('pointerup', stop);
+      window.removeEventListener('mouseup', stop);
+      window.removeEventListener('touchend', stop);
+    };
+  }, []);
+  const start = () => (active.current = true);
+  return { active, bind: { onPointerDown: start, onMouseDown: start, onTouchStart: start, onKeyDown: start, onKeyUp: () => (active.current = false), onBlur: () => (active.current = false) } };
+}
+
 const LengthInput: React.FC<ControlProps> = ({ def, value, placeholder, onChange }) => {
+  const gesture = useUserGesture();
   const m = value.trim().match(/^(-?[\d.]+)(px|rem|em|%)?$/);
   const unit = m?.[2] ?? 'px';
   const max = unit === 'px' ? 64 : unit === '%' ? 100 : 4;
   return (
-    <span className={styles.lengthField}>
-      {m && <input type="range" aria-label={`${def.label} (curseur)`} min={0} max={max} step={unit === 'px' || unit === '%' ? 1 : 0.05} value={parseFloat(m[1])} onChange={(e) => onChange(`${e.target.value}${unit}`)} />}
-      <input type="text" aria-label={def.label} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} spellCheck={false} />
-    </span>
+    <div className={styles.lengthField}>
+      {text(def, value, placeholder, onChange)}
+      {m && (
+        <div {...gesture.bind}>
+          <Slider id={idOf(def, '-slider')} hideTextInput labelText="" ariaLabelInput={`${def.label} (curseur)`} min={0} max={max} step={unit === 'px' || unit === '%' ? 1 : 0.05} value={parseFloat(m[1])} onChange={({ value: v }: { value: number }) => gesture.active.current && onChange(`${v}${unit}`)} />
+        </div>
+      )}
+    </div>
   );
 };
 
 export const ScaleInput: React.FC<ControlProps> = ({ def, value, onChange }) => {
   const scale = generateScale(value);
   return (
-    <span className={styles.scaleField}>
+    <div className={styles.scaleField}>
       <ColorInput def={def} value={value} onChange={onChange} />
       {scale && (
         <span className={styles.scaleStrip} aria-hidden="true">
@@ -53,11 +81,11 @@ export const ScaleInput: React.FC<ControlProps> = ({ def, value, onChange }) => 
           ))}
         </span>
       )}
-    </span>
+    </div>
   );
 };
 
-/** Choisit le widget adapté au type de token. */
+/** Choisit le composant Carbon adapté au type de token. */
 export const ControlInput: React.FC<ControlProps> = (props) => {
   const { def, value, placeholder, onChange } = props;
   switch (def.kind) {
@@ -68,13 +96,13 @@ export const ControlInput: React.FC<ControlProps> = (props) => {
     case 'length':
       return <LengthInput {...props} />;
     case 'number':
-      return <input type="number" aria-label={def.label} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />;
+      return text(def, value, placeholder, onChange, { type: 'number' });
     case 'boolean':
-      return <input type="checkbox" aria-label={def.label} checked={value === 'true'} onChange={(e) => onChange(String(e.target.checked))} />;
+      return <Toggle id={idOf(def)} size="sm" labelText={def.label} labelA="" labelB="" toggled={value === 'true'} onToggle={(on: boolean) => onChange(String(on))} />;
     case 'font':
       return (
         <>
-          <input type="text" list="studio-fonts" aria-label={def.label} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+          {text(def, value, placeholder, onChange, { list: 'studio-fonts' })}
           <datalist id="studio-fonts">
             {FONT_PRESETS.map((f) => (
               <option key={f} value={f} />
@@ -84,32 +112,30 @@ export const ControlInput: React.FC<ControlProps> = (props) => {
       );
     case 'shadow':
       return (
-        <span className={styles.shadowField}>
-          <select aria-label={`${def.label} (préréglage)`} value="" onChange={(e) => e.target.value && onChange(SHADOW_PRESETS[e.target.value])}>
-            <option value="">…</option>
+        <div className={styles.shadowField}>
+          {text(def, value, placeholder, onChange)}
+          <Select id={idOf(def, '-preset')} size="sm" labelText={`${def.label} (préréglage)`} hideLabel value="" onChange={(e: React.ChangeEvent<HTMLSelectElement>) => e.target.value && onChange(SHADOW_PRESETS[e.target.value])}>
+            <SelectItem value="" text="Préréglage…" />
             {Object.keys(SHADOW_PRESETS).map((k) => (
-              <option key={k} value={k}>
-                {k}
-              </option>
+              <SelectItem key={k} value={k} text={k} />
             ))}
-          </select>
-          <input type="text" aria-label={def.label} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} spellCheck={false} />
-        </span>
+          </Select>
+        </div>
       );
     default:
-      return <input type="text" aria-label={def.label} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />;
+      return text(def, value, placeholder, onChange);
   }
 };
 
-/** Indicateur de contraste texte/fond (aide à l'accessibilité, cf. contrast-checker de TweakCN). */
+/** Contraste texte/fond (aide à l'accessibilité, équivalent du contrast-checker de TweakCN). */
 export const ContrastBadge: React.FC<{ foreground: string; background: string }> = ({ foreground, background }) => {
   const { t } = useTranslation();
   const ratio = contrastRatio(foreground, background);
   if (ratio === null) return null;
   const level = wcagLevel(ratio);
   return (
-    <span className={styles.contrast} data-level={level} title={t('contrast', 'Contraste')}>
+    <Tag size="sm" type={level === 'fail' ? 'red' : level === 'AA-large' ? 'warm-gray' : 'green'} title={t('contrast', 'Contraste')}>
       {ratio}:1 · {level}
-    </span>
+    </Tag>
   );
 };

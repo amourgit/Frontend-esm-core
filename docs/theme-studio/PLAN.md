@@ -17,6 +17,12 @@ Référence : `docs/integration-tweakcn.md` (cahier des charges). Suivi : `docs/
 | A9 | Simple → Avancé → Expert | Chaque contrôle du catalogue porte un `level`. Expert ajoute un éditeur générique de **toutes** les feuilles JSON (aucune propriété EGEN n'est inaccessible). |
 | A10 | Permissions | Privilège configurable (`config-schema`) ; vérification centralisée, désactivable en dev. |
 
+| A11 | Qui applique le thème ? | **Le Studio produit** (thème EGEN valide, stockage, import/export). **TokiForge applique** (tokens runtime, scopes, cascade). **Les composants Carbon/EGEN consomment** (lot ultérieur). Le Studio ne remet le thème au moteur que par `ThemeRuntimePort` (« Appliquer » = délégation, pas une logique d'application propre). |
+| A12 | Intégration au shell | Modèle `character-factory` : page `theme-studio/<segment>` (une route par page d'édition), option de **rail gauche** (`SectionNavPanel`), entrées `topbar-nav-slot` groupées, tuile `app-menu-slot`. Aucune sidebar propre. **La route doit être exclue du `routeRegex` de `esm-not-found-app`** (oubli de P10 à l'origine du 404) → garde-fou CI dans `tools/check-nav-routes.mjs`. |
+| A13 | Pages TweakCN portées | Retenues : **éditeur** (Colors/Typography/Other → pages Couleurs, Typographie, Formes…), **thèmes enregistrés** (→ Mes thèmes), import/export. Écartées : accueil, tarifs, communauté, galerie publique, IA, Figma, tableau de bord, compte, **connexion/OAuth** (l'identité est gérée par le shell). |
+| A14 | États | Services en singleton de session (changer de route ne perd rien), brouillon + niveau persistés (anti-rebond), reprise du brouillon, mode d'édition qui suit le mode de l'app, états d'écran : accès refusé, démarrage vide, brouillon restauré, erreur isolée (boundary), niveaux Simple/Avancé/Expert avec bascule guidée. |
+| A15 | Composants UI | **Carbon/EGEN d'abord** : chrome du Studio et prévisualisation en vrais composants Carbon. La prévisualisation redéclare le pont `--cds-*` (généré depuis le framework) sur son conteneur pour suivre le thème ÉDITÉ. Pas de shadcn, pas de composant propre au Studio. |
+
 ## Phases
 
 ### P0 — Cadrage & fork
@@ -67,3 +73,18 @@ Route + navigation, permissions, lien depuis Paramètres › Apparence, README, 
 - Une phase = un verrou dans `TRACKING.md` (`node tools/theme-studio-tracking.mjs claim P4 <nom>`).
 - Une phase n'est cochée qu'avec ses tests verts (`complete P4`).
 - Commit + push sur `feat/theme-studio` à chaque validation de phase.
+
+### P11 — Alignement shell : routes, rail, TopBar, 404, états
+`pages.ts` (source unique des pages), `routes.json` (rail, menu Applications, entrées TopBar groupées), exclusion du 404 + garde-fou CI, routage page↔URL, services singleton, brouillon/préférences persistés, mode synchronisé.
+**Tests** : `pages.test` (cohérence routes.json↔pages), `check-nav-routes` (404), `services.test`, `draft.test`, `use-routed-page.test`.
+
+### P12 — Pages d'édition en Carbon/EGEN
+Pages Essentiels, Couleurs, Typographie, Formes, Mise en page, Effets, Composants, Mes thèmes, Autres tokens, JSON ; barre d'actions ; contrôles Carbon ; UX deux colonnes (contrôles | aperçu) de TweakCN. Sans accueil ni login.
+**Tests** : `studio-app.test` (niveaux, pages, undo/redo, bibliothèque, import, erreur isolée).
+
+### P13 — Prévisualisation avec composants Carbon réels
+Pont `--cds-*` scopé (`tools/theme-studio-sync-bridge.mjs` → `carbon-bridge.generated.ts`), onglets Composants/Formulaires/Données/Typographie/Couleurs.
+**Tests** : `carbon-scope.test`, rendu Carbon réel dans `studio-app.test`.
+
+### P14 — Frontières, documentation, clôture
+Guide : responsabilités Studio/TokiForge/composants, inventaire TweakCN, états, procédure d'ajout d'une route.

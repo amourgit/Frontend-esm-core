@@ -4,7 +4,7 @@ import { controlsForPage } from './page-controls';
 import { APP_ROUTE, DEFAULT_PAGE, PAGES, pageFromPath, routeOf, segmentFromPath } from './pages';
 import routes from './routes.json';
 
-type Ext = { name: string; slot: string; component: string; meta?: Record<string, unknown> };
+type Ext = { name: string; slot: string; component: string; order?: number; meta?: Record<string, unknown> };
 const exts = (routes as { extensions: Ext[] }).extensions;
 const navEntries = exts.filter((e) => e.slot === 'topbar-nav-slot');
 

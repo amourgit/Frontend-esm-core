@@ -1,4 +1,5 @@
-// Chrome du Studio : uniquement des variables du thème EGEN (aucune couleur codée en dur).
+// Chrome du Studio : composants Carbon + variables du thème EGEN uniquement (aucune couleur codée en dur).
+// La navigation est portée par le shell (rail gauche + TopBar) : pas de sidebar propre à l'app.
 .studio {
   display: flex;
   flex-direction: column;
@@ -14,72 +15,43 @@
   gap: 0.5rem;
   align-items: center;
   padding: 0.5rem 1rem;
-  background: var(--colors-surface-header);
-  color: var(--colors-surface-header-foreground);
   border-bottom: 1px solid var(--colors-border-divider);
-
-  button,
-  select,
-  input[type='text'] {
-    padding: 0.25rem 0.625rem;
-    border: 1px solid var(--colors-border-input);
-    border-radius: var(--border-radius-md);
-    background: var(--colors-surface-card);
-    color: var(--colors-surface-card-foreground);
-    cursor: pointer;
-  }
-  button:disabled { opacity: 0.45; cursor: default; }
+  background: var(--colors-surface-card);
 }
-.dirty { color: var(--colors-warning-500); font-size: 0.8125rem; }
 .status { min-height: 1.25rem; padding: 0 1rem; font-size: 0.8125rem; color: var(--colors-surface-muted-foreground); }
-.body { display: grid; grid-template-columns: 14rem minmax(18rem, 26rem) 1fr; flex: 1; min-height: 0; }
-.nav, .controls, .previewPane { overflow: auto; padding: 1rem; border-right: 1px solid var(--colors-border-divider); }
-.nav {
-  background: var(--colors-surface-sidebar);
-  color: var(--colors-surface-sidebar-foreground);
-  h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--colors-surface-muted-foreground); }
-  ul { list-style: none; margin: 0; padding: 0; }
-  li button, ul button {
-    width: 100%; text-align: left; padding: 0.375rem 0.5rem; border: 0; background: transparent; color: inherit;
-    border-radius: var(--border-radius-md); cursor: pointer;
-    &[aria-current='true'] { background: var(--colors-surface-accent); color: var(--colors-surface-accent-foreground); }
-  }
-}
-.segmented {
-  display: flex; margin-bottom: 0.75rem; border: 1px solid var(--colors-border-input); border-radius: var(--border-radius-md); overflow: hidden;
-  button { flex: 1; padding: 0.25rem; border: 0; background: transparent; color: inherit; cursor: pointer;
-    &[aria-pressed='true'] { background: var(--colors-primary-500); color: var(--colors-on-primary); } }
-}
-.variantPicker { display: grid; gap: 0.5rem; margin-top: 0.75rem; label { display: grid; gap: 0.25rem; font-size: 0.8125rem; } }
-.group { border: 1px solid var(--colors-border-divider); border-radius: var(--border-radius-md); margin: 0 0 1rem; legend { padding: 0 0.375rem; font-weight: 600; } }
-.controlRow {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; padding: 0.375rem 0;
-  label { display: flex; flex: 1; gap: 0.5rem; align-items: center; justify-content: space-between; }
-  &[data-modified='true'] .controlLabel { color: var(--colors-primary-500); font-weight: 600; }
-  input[type='text'], input[type='number'], select { min-width: 0; width: 9rem; padding: 0.25rem 0.375rem; border: 1px solid var(--colors-border-input); border-radius: var(--border-radius-sm); background: var(--colors-surface-background); color: inherit; }
-}
-.colorField, .lengthField, .shadowField, .scaleField { display: inline-flex; gap: 0.25rem; align-items: center; }
-.scaleField { flex-direction: column; align-items: flex-end; }
-.scaleStrip { display: flex; i { width: 0.75rem; height: 0.75rem; } }
-.origin { flex-basis: 100%; color: var(--colors-surface-muted-foreground); font-size: 0.75rem; }
-.hint { color: var(--colors-surface-muted-foreground); }
-.linkButton { border: 0; background: transparent; color: var(--colors-primary-500); cursor: pointer; }
-.inlineCheck { display: inline-flex; gap: 0.375rem; align-items: center; font-size: 0.8125rem; }
-.contrast { font-size: 0.75rem; padding: 0 0.375rem; border-radius: var(--border-radius-full); background: var(--colors-surface-muted);
-  &[data-level='fail'] { color: var(--colors-error-500); } }
-.jsonPanel { margin-top: 1rem; textarea { width: 100%; min-height: 14rem; font-family: var(--typography-font-family-mono); font-size: 0.75rem; background: var(--colors-surface-muted); color: inherit; border: 1px solid var(--colors-border-input); } }
+.body { display: grid; grid-template-columns: minmax(20rem, 28rem) 1fr; flex: 1; min-height: 0; }
+.bodyWide { display: block; flex: 1; min-height: 0; overflow: auto; }
+.controls, .previewPane { overflow: auto; padding: 1rem; }
+.controls { border-right: 1px solid var(--colors-border-divider); }
+.bodyWide .controls { border-right: 0; max-width: 60rem; }
+.pageTitle { margin: 0; font-size: 1.25rem; }
+.hint { color: var(--colors-surface-muted-foreground); font-size: 0.875rem; margin: 0.25rem 0 1rem; }
+.subtitle { margin: 1.5rem 0 0.5rem; }
+.empty { display: grid; gap: 0.75rem; justify-items: start; }
+.pickers { display: grid; gap: 0.5rem; grid-template-columns: repeat(3, 1fr); margin-bottom: 0.75rem; }
+.controlRow { padding: 0.5rem 0; border-bottom: 1px solid var(--colors-border-divider);
+  &[data-modified='true'] { border-left: 3px solid var(--colors-primary-500); padding-left: 0.5rem; } }
+.controlMeta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; min-height: 0; small { color: var(--colors-surface-muted-foreground); } }
+.colorField { display: flex; align-items: flex-end; gap: 0.5rem; > div:first-child { flex: 1; } }
+.colorSwatch { width: 2rem; height: 2rem; padding: 0; border: 1px solid var(--colors-border-input); background: transparent; cursor: pointer; }
+.lengthField, .shadowField, .scaleField { display: grid; gap: 0.5rem; }
+.scaleStrip { display: flex; i { flex: 1; height: 0.5rem; } }
+.dot { display: inline-block; width: 0.75rem; height: 0.75rem; margin-right: 0.375rem; border: 1px solid var(--colors-border-input); vertical-align: middle; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1rem; }
+.themeTile { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+.jsonPanel { display: grid; gap: 0.75rem; justify-items: start; textarea { width: 100%; font-family: var(--typography-font-family-mono); font-size: 0.75rem; } }
 
-// Prévisualisation : variables scopées posées en style inline ; le fond/texte viennent du thème édité, pas de celui de l'app.
+// Prévisualisation : variables du thème édité + pont Carbon posés en style inline sur ce conteneur (indépendant du thème de l'app).
 .preview {
-  padding: 1.25rem; border: 1px solid var(--colors-border-divider); border-radius: var(--border-radius-lg);
-  background: var(--colors-surface-background); color: var(--colors-surface-foreground);
+  padding: 1rem;
+  border: 1px solid var(--colors-border-divider);
+  background: var(--colors-surface-background);
+  color: var(--colors-surface-foreground);
   font-family: var(--typography-font-family-body);
 }
-.previewSection { margin-bottom: 1.5rem; h4 { margin: 0 0 0.5rem; opacity: 0.7; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; } }
+.previewSection { margin: 1rem 0; h4 { margin: 0 0 0.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; } }
 .row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
-.matrix { overflow-x: auto; }
-.matrixRow { display: flex; gap: 0.375rem; align-items: center; margin-bottom: 0.375rem; button { white-space: nowrap; font-size: 0.75rem; } }
-.matrixLabel { width: 6.5rem; flex: none; font-size: 0.75rem; opacity: 0.7; }
-.miniLayout { display: flex; border: 1px solid var(--colors-border-divider); border-radius: var(--border-radius-md); overflow: hidden; }
+.formGrid { display: grid; gap: 1rem; padding: 1rem 0; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+.scale { display: grid; grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr)); span { padding: 0.75rem 0.25rem; font-size: 0.6875rem; text-align: center; color: var(--colors-on-primary); } }
 
-@media (max-width: 1100px) { .body { grid-template-columns: 1fr; } }
+@media (max-width: 1100px) { .body { grid-template-columns: 1fr; } .controls { border-right: 0; } }

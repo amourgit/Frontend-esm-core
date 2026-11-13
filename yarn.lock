@@ -2553,7 +2553,7 @@ __metadata:
     "@egen-civitas/esm-state": ">=1.0.3"
     "@egen-civitas/esm-styleguide": ">=3.0.0"
     "@egen-civitas/esm-tenant": ">=1.0.2"
-    "@egen-civitas/esm-theme": ">=1.1.0"
+    "@egen-civitas/esm-theme": ">=1.0.1"
     "@egen-civitas/esm-utils": ">=2.0.0"
     dayjs: 1.x
     react: 18.x
