@@ -11,7 +11,7 @@ export function createRuntime(requested = 'esm-theme'): ThemeRuntimePort {
     setThemeMode: (mode) => esmTheme.setThemeMode(mode),
     subscribe: (listener) => {
       try {
-        return esmTheme.getThemeEngine().subscribe((s) => listener({ mode: s.mode }));
+        return esmTheme.getThemeEngine().subscribe((s: { mode: 'light' | 'dark' }) => listener({ mode: s.mode }));
       } catch {
         return () => undefined; // moteur non initialisé (rendu isolé)
       }

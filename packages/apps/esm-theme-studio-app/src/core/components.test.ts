@@ -63,3 +63,15 @@ describe('resolveComponentToken', () => {
     expect(r).toEqual({ value: 'var(--border-radius-md)', source: null });
   });
 });
+
+import { componentStyle } from './component-style';
+describe('componentStyle', () => {
+  it('traduit le registre en CSS avec cascade de variables', () => {
+    const s = componentStyle('button', 'primary', 'hover');
+    expect(s.background).toContain('--components-button-primary-hover-background');
+    expect(s.borderRadius).toContain('--components-button-primary-default-radius');
+    expect(s.padding).toContain('--components-button-base-default-padding-x');
+    expect(componentStyle('button', 'primary', 'disabled').opacity).toBe('0.5');
+    expect(componentStyle('inconnu', 'x')).toEqual({});
+  });
+});

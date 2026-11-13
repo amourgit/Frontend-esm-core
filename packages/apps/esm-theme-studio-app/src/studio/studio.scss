@@ -1,0 +1,85 @@
+// Chrome du Studio : uniquement des variables du thème EGEN (aucune couleur codée en dur).
+.studio {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 32rem;
+  background: var(--colors-surface-background);
+  color: var(--colors-surface-foreground);
+  font-family: var(--typography-font-family-body);
+}
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: var(--colors-surface-header);
+  color: var(--colors-surface-header-foreground);
+  border-bottom: 1px solid var(--colors-border-divider);
+
+  button,
+  select,
+  input[type='text'] {
+    padding: 0.25rem 0.625rem;
+    border: 1px solid var(--colors-border-input);
+    border-radius: var(--border-radius-md);
+    background: var(--colors-surface-card);
+    color: var(--colors-surface-card-foreground);
+    cursor: pointer;
+  }
+  button:disabled { opacity: 0.45; cursor: default; }
+}
+.dirty { color: var(--colors-warning-500); font-size: 0.8125rem; }
+.status { min-height: 1.25rem; padding: 0 1rem; font-size: 0.8125rem; color: var(--colors-surface-muted-foreground); }
+.body { display: grid; grid-template-columns: 14rem minmax(18rem, 26rem) 1fr; flex: 1; min-height: 0; }
+.nav, .controls, .previewPane { overflow: auto; padding: 1rem; border-right: 1px solid var(--colors-border-divider); }
+.nav {
+  background: var(--colors-surface-sidebar);
+  color: var(--colors-surface-sidebar-foreground);
+  h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--colors-surface-muted-foreground); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li button, ul button {
+    width: 100%; text-align: left; padding: 0.375rem 0.5rem; border: 0; background: transparent; color: inherit;
+    border-radius: var(--border-radius-md); cursor: pointer;
+    &[aria-current='true'] { background: var(--colors-surface-accent); color: var(--colors-surface-accent-foreground); }
+  }
+}
+.segmented {
+  display: flex; margin-bottom: 0.75rem; border: 1px solid var(--colors-border-input); border-radius: var(--border-radius-md); overflow: hidden;
+  button { flex: 1; padding: 0.25rem; border: 0; background: transparent; color: inherit; cursor: pointer;
+    &[aria-pressed='true'] { background: var(--colors-primary-500); color: var(--colors-on-primary); } }
+}
+.variantPicker { display: grid; gap: 0.5rem; margin-top: 0.75rem; label { display: grid; gap: 0.25rem; font-size: 0.8125rem; } }
+.group { border: 1px solid var(--colors-border-divider); border-radius: var(--border-radius-md); margin: 0 0 1rem; legend { padding: 0 0.375rem; font-weight: 600; } }
+.controlRow {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; padding: 0.375rem 0;
+  label { display: flex; flex: 1; gap: 0.5rem; align-items: center; justify-content: space-between; }
+  &[data-modified='true'] .controlLabel { color: var(--colors-primary-500); font-weight: 600; }
+  input[type='text'], input[type='number'], select { min-width: 0; width: 9rem; padding: 0.25rem 0.375rem; border: 1px solid var(--colors-border-input); border-radius: var(--border-radius-sm); background: var(--colors-surface-background); color: inherit; }
+}
+.colorField, .lengthField, .shadowField, .scaleField { display: inline-flex; gap: 0.25rem; align-items: center; }
+.scaleField { flex-direction: column; align-items: flex-end; }
+.scaleStrip { display: flex; i { width: 0.75rem; height: 0.75rem; } }
+.origin { flex-basis: 100%; color: var(--colors-surface-muted-foreground); font-size: 0.75rem; }
+.hint { color: var(--colors-surface-muted-foreground); }
+.linkButton { border: 0; background: transparent; color: var(--colors-primary-500); cursor: pointer; }
+.inlineCheck { display: inline-flex; gap: 0.375rem; align-items: center; font-size: 0.8125rem; }
+.contrast { font-size: 0.75rem; padding: 0 0.375rem; border-radius: var(--border-radius-full); background: var(--colors-surface-muted);
+  &[data-level='fail'] { color: var(--colors-error-500); } }
+.jsonPanel { margin-top: 1rem; textarea { width: 100%; min-height: 14rem; font-family: var(--typography-font-family-mono); font-size: 0.75rem; background: var(--colors-surface-muted); color: inherit; border: 1px solid var(--colors-border-input); } }
+
+// Prévisualisation : variables scopées posées en style inline ; le fond/texte viennent du thème édité, pas de celui de l'app.
+.preview {
+  padding: 1.25rem; border: 1px solid var(--colors-border-divider); border-radius: var(--border-radius-lg);
+  background: var(--colors-surface-background); color: var(--colors-surface-foreground);
+  font-family: var(--typography-font-family-body);
+}
+.previewSection { margin-bottom: 1.5rem; h4 { margin: 0 0 0.5rem; opacity: 0.7; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; } }
+.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.matrix { overflow-x: auto; }
+.matrixRow { display: flex; gap: 0.375rem; align-items: center; margin-bottom: 0.375rem; button { white-space: nowrap; font-size: 0.75rem; } }
+.matrixLabel { width: 6.5rem; flex: none; font-size: 0.75rem; opacity: 0.7; }
+.miniLayout { display: flex; border: 1px solid var(--colors-border-divider); border-radius: var(--border-radius-md); overflow: hidden; }
+
+@media (max-width: 1100px) { .body { grid-template-columns: 1fr; } }

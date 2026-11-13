@@ -12,6 +12,6 @@ Format géré par `node tools/theme-studio-tracking.mjs` (claim / release / comp
 | P5 | Adaptateur TweakCN | [x] done | — | 2026-11-13 |
 | P6 | Import / Export / Validation / Bibliothèque | [x] done | — | 2026-11-13 |
 | P7 | Pont runtime (ThemeRuntimePort) | [x] done | — | 2026-11-13 |
-| P8 | UI de l'éditeur | [ ] todo | — | — |
-| P9 | Prévisualisation / vitrine | [ ] todo | — | — |
+| P8 | UI de l'éditeur | [x] done | — | 2026-11-13 |
+| P9 | Prévisualisation / vitrine | [x] done | — | 2026-11-13 |
 | P10 | Intégration native & clôture | [ ] todo | — | — |
