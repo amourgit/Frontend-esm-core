@@ -16,3 +16,6 @@ export function startupApp() {
 
 // Page : EGEN Theme Studio (route `theme-studio`)
 export const root = getSyncLifecycle(rootComponent, options);
+
+// Entrée de navigation (slot `topbar-nav-slot`, voir routes.json) : le rendu est assuré par la TopBar à partir de `meta`.
+export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'theme-studio-nav-entry' });

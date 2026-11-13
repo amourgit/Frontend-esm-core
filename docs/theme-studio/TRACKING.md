@@ -14,4 +14,4 @@ Format géré par `node tools/theme-studio-tracking.mjs` (claim / release / comp
 | P7 | Pont runtime (ThemeRuntimePort) | [x] done | — | 2026-11-13 |
 | P8 | UI de l'éditeur | [x] done | — | 2026-11-13 |
 | P9 | Prévisualisation / vitrine | [x] done | — | 2026-11-13 |
-| P10 | Intégration native & clôture | [ ] todo | — | — |
+| P10 | Intégration native & clôture | [x] done | — | 2026-11-13 |

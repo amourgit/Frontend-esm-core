@@ -7,5 +7,27 @@
       "online": true,
       "offline": true
     }
+  ],
+  "extensions": [
+    {
+      "name": "theme-studio-nav",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 900,
+      "meta": {
+        "workspaces": [
+          "intranet"
+        ],
+        "section": "design",
+        "sectionLabel": "Design",
+        "sectionRoute": "theme-studio",
+        "label": "Theme Studio",
+        "description": "Créer, prévisualiser et appliquer le thème EGEN",
+        "icon": "Palette",
+        "route": "theme-studio"
+      }
+    }
   ]
 }
