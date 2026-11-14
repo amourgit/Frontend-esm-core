@@ -2683,7 +2683,7 @@ __metadata:
     vite: "npm:^8.3.5"
     vitest: "npm:^5.0.5"
     zod: "npm:^3.25.76"
-    zustand: "npm:^5.0.3"
+    zustand: "npm:^4.5.5"
   peerDependencies:
     "@carbon/react": 1.x
     "@egen-civitas/esm-api": ">=2.0.0"
@@ -23146,26 +23146,5 @@ __metadata:
     react:
       optional: true
   checksum: 10/481b8210187b69678074a1ca51107654c2379688e90407bfcb7961e0803a259742bfd0d77171c3f07e290896ad55fe9659b3863f30d34cb2572650ead1249f25
-  languageName: node
-  linkType: hard
-
-"zustand@npm:^5.0.3":
-  version: 5.1.0
-  resolution: "zustand@npm:5.1.0"
-  peerDependencies:
-    "@types/react": ">=18.0.0"
-    immer: ">=9.0.6"
-    react: ">=18.0.0"
-    use-sync-external-store: ">=1.2.0"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    immer:
-      optional: true
-    react:
-      optional: true
-    use-sync-external-store:
-      optional: true
-  checksum: 10/e61f77a22c5db4695f30cb23fcb98ea9f81a6c4ed6c1188d163a5c69a385d013e3d382d819fa2797f7161862460553346b7941e7e9ac2d2b6ac27d7c3487b57b
   languageName: node
   linkType: hard
