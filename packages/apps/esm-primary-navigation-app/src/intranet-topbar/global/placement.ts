@@ -25,9 +25,6 @@ export const GLOBAL_ITEM_IDS = [
   'divider',
   'apps',
   'quick-access',
-  'fullscreen',
-  'theme',
-  'clock',
   'menu-panel',
   'nav',
 ] as const;
@@ -55,9 +52,6 @@ export const DEFAULT_PLACEMENT: Readonly<Record<GlobalItemId, ItemPlacement>> = 
   divider: at('main', 'right', 20),
   apps: at('main', 'right', 30),
   'quick-access': at('main', 'right', 40),
-  fullscreen: at('main', 'right', 60),
-  theme: at('main', 'right', 70),
-  clock: at('main', 'right', 100),
   'menu-panel': at('main', 'right', 110),
   nav: at('navigation', 'center', 0),
 };

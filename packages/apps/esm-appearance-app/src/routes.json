@@ -1,0 +1,39 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "fullscreen-toggle",
+      "slot": "topbar-slot",
+      "component": "fullscreenToggle",
+      "online": true,
+      "offline": true,
+      "order": 60,
+      "meta": {
+        "global": true,
+        "topbar": {
+          "level": "main",
+          "rank": 10,
+          "region": "right",
+          "order": 60
+        }
+      }
+    },
+    {
+      "name": "theme-toggle",
+      "slot": "topbar-slot",
+      "component": "themeToggle",
+      "online": true,
+      "offline": true,
+      "order": 70,
+      "meta": {
+        "global": true,
+        "topbar": {
+          "level": "main",
+          "rank": 10,
+          "region": "right",
+          "order": 70
+        }
+      }
+    }
+  ]
+}

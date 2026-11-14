@@ -7,9 +7,7 @@ import { BreadcrumbNav } from '../components/navigation/BreadcrumbNav';
 import { TopBarMenuPanel } from '../components/shell/TopBarMenuPanel';
 import {
   AppsMenuOption,
-  FullscreenOption,
   QuickAccessOption,
-  ThemeToggleOption,
 } from '../components/options';
 import { playXboxSound } from '../utils/xboxAudio';
 import { type ConfigSchema } from '../../config-schema';
@@ -92,29 +90,6 @@ const QuickAccessItem: React.FC = () => {
   return <QuickAccessOption open={ui.isActivePanel('quickAccess')} onToggle={() => ui.togglePanel('quickAccess')} />;
 };
 
-function formatClock() {
-  const now = new Date();
-  const hours = now.getHours();
-  const mins = String(now.getMinutes()).padStart(2, '0');
-  const timeStr = `${hours % 12 || 12}:${mins} ${hours >= 12 ? 'PM' : 'AM'}`;
-  const date = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  return { timeStr, dateLongStr: date.charAt(0).toUpperCase() + date.slice(1) };
-}
-
-const ClockItem: React.FC = () => {
-  const [{ timeStr, dateLongStr }, setClock] = useState(formatClock);
-  useEffect(() => {
-    const id = setInterval(() => setClock(formatClock()), 15000);
-    return () => clearInterval(id);
-  }, []);
-  return (
-    <div className={styles.clock} aria-live="off">
-      <span className={styles.clockTime}>{timeStr}</span>
-      <span className={styles.clockDate}>{dateLongStr}</span>
-    </div>
-  );
-};
-
 const MenuPanelItem: React.FC = () => <TopBarMenuPanel />;
 
 /** Slots qui précèdent la navigation : l'officiel puis l'historique (toujours honoré). */
@@ -165,9 +140,6 @@ const GLOBAL_ITEMS: readonly ItemDefinition[] = [
   { id: 'divider', component: DividerItem, hideOnSearch: 'touch' },
   { id: 'apps', component: AppsItem, hideOnSearch: 'touch' },
   { id: 'quick-access', component: QuickAccessItem, hideOnSearch: 'touch' },
-  { id: 'fullscreen', component: FullscreenOption as React.FC, visibleFrom: 'desktop' },
-  { id: 'theme', component: ThemeToggleOption as React.FC, visibleFrom: 'desktop' },
-  { id: 'clock', component: ClockItem },
   { id: 'menu-panel', component: MenuPanelItem, hideOnSearch: 'touch' },
   { id: 'nav', component: NavigationItem },
 ];

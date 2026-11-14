@@ -1,0 +1,22 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "clock",
+      "slot": "topbar-slot",
+      "component": "clock",
+      "online": true,
+      "offline": true,
+      "order": 100,
+      "meta": {
+        "global": true,
+        "topbar": {
+          "level": "main",
+          "rank": 10,
+          "region": "right",
+          "order": 100
+        }
+      }
+    }
+  ]
+}
