@@ -63,7 +63,7 @@ Le navigateur la résout seul grâce à `var(--components-button-primary-hover-r
 3. Toute **nouvelle route racine d'une app** doit être ajoutée au `routeRegex` de `esm-not-found-app` : `node tools/check-nav-routes.mjs` échoue sinon.
 
 ### Pont Carbon de la prévisualisation
-`node tools/theme-studio-sync-bridge.mjs [chemin/_carbon-bridge.scss]` régénère `src/core/carbon-bridge.generated.ts` quand le pont du framework évolue.
+Voir [INTEGRATION-TWEAKCN.md](./INTEGRATION-TWEAKCN.md) : le CSS de l’éditeur est généré par `tools/theme-studio-build-css.mjs` (`build:css`).
 
 ### Architecture
 ```

@@ -1,3 +1,5 @@
+> ⚠️ **Révisé** : la décision A1 (réécriture en Carbon) est abandonnée. Voir [INTEGRATION-TWEAKCN.md](./INTEGRATION-TWEAKCN.md) (éditeur TweakCN d’origine intégré).
+
 # EGEN Theme Studio — Plan d'exécution par phases
 
 Référence : `docs/integration-tweakcn.md` (cahier des charges). Suivi : `docs/theme-studio/TRACKING.md`.

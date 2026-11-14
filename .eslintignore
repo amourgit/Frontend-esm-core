@@ -2,3 +2,5 @@ node_modules
 packages/*/dist
 packages/*/node_modules
 !packages/tooling/storybook/.storybook
+# Code tiers TweakCN (Theme Studio) : vendorisé, voir packages/apps/esm-theme-studio-app/src/tweakcn/NOTICE.md
+packages/apps/esm-theme-studio-app/src/tweakcn/
