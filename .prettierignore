@@ -7,3 +7,5 @@ docs/
 *.ejs
 packages/esm-styleguide/src/**/*.html
 .github/
+# CSS généré par tools/theme-studio-build-css.mjs (sortie canonique du générateur)
+packages/apps/esm-theme-studio-app/src/tweakcn/tweakcn.generated.tw.css

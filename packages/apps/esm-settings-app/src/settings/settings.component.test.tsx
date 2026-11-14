@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { showModal } from '@egen-civitas/esm-framework';
+import { navigate, showModal } from '@egen-civitas/esm-framework';
 import { toggleThemeMode } from '@egen-civitas/esm-theme';
 import SettingsPanel from './settings-panel.component';
 import AppearanceSection from './appearance-section.component';
@@ -11,6 +11,7 @@ import LanguageSection from './language-section.component';
 vi.mock('@egen-civitas/esm-framework', () => ({
   ExtensionSlot: ({ name }: { name: string }) => <div data-testid={`slot-${name}`} />,
   showModal: vi.fn(() => vi.fn()),
+  navigate: vi.fn(),
   useSession: () => ({ locale: 'fr' }),
 }));
 vi.mock('@egen-civitas/esm-theme', () => ({
@@ -45,5 +46,11 @@ describe('Panneau Paramètres', () => {
     expect(screen.getByText('FR')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Changer de langue/ }));
     expect(showModal).toHaveBeenCalledWith('change-language-modal', expect.objectContaining({ size: 'sm' }));
+  });
+
+  it("ouvre le Theme Studio depuis l'apparence", () => {
+    render(<AppearanceSection />);
+    fireEvent.click(screen.getByRole('button', { name: 'Ouvrir le Theme Studio' }));
+    expect(navigate).toHaveBeenCalledWith({ to: '${egenSpaBase}/theme-studio' });
   });
 });

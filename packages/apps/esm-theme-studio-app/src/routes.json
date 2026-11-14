@@ -1,0 +1,56 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "pages": [
+    {
+      "component": "root",
+      "route": "theme-studio",
+      "online": true,
+      "offline": false
+    }
+  ],
+  "extensions": [
+    {
+      "name": "theme-studio-rail",
+      "slot": "shell-rail-left-slot",
+      "component": "railPanel",
+      "online": true,
+      "offline": false,
+      "order": 45,
+      "meta": {
+        "title": "Theme Studio",
+        "icon": "Palette",
+        "order": 45,
+        "global": false
+      }
+    },
+    {
+      "name": "theme-studio-app-menu-link",
+      "slot": "app-menu-slot",
+      "component": "appMenuLink",
+      "online": true,
+      "offline": false
+    },
+    {
+      "name": "theme-studio-nav-editor",
+      "slot": "topbar-nav-slot",
+      "component": "navEntry",
+      "online": true,
+      "offline": false,
+      "order": 800,
+      "meta": {
+        "section": "theme-studio",
+        "sectionLabel": "Theme Studio",
+        "group": "conception",
+        "groupLabel": "Conception",
+        "label": "Éditeur de thème",
+        "description": "Concevez, prévisualisez et appliquez le thème du projet",
+        "icon": "Palette",
+        "route": "theme-studio",
+        "workspaces": [
+          "intranet"
+        ],
+        "sectionRoute": "theme-studio"
+      }
+    }
+  ]
+}
