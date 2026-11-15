@@ -1,7 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ExtensionSlot, interpolateUrl, navigate as frameworkNavigate, useConfig } from '@egen-civitas/esm-framework';
-import { GooeyInput } from '../components/ui/GooeyInput';
+import React, { useMemo } from 'react';
+import { ExtensionSlot } from '@egen-civitas/esm-framework';
 import { DropdownNavigation } from '../components/shell/DropdownNavigation';
 import { BreadcrumbNav } from '../components/navigation/BreadcrumbNav';
 import { TopBarMenuPanel } from '../components/shell/TopBarMenuPanel';
@@ -9,11 +7,8 @@ import {
   AppsMenuOption,
   QuickAccessOption,
 } from '../components/options';
-import { playXboxSound } from '../utils/xboxAudio';
-import { type ConfigSchema } from '../../config-schema';
 import { registerTopBarItem, useTopBarUi, type TopBarItem } from '../kit';
 import { resolvePlacement, type GlobalItemId } from './placement';
-import { useGlobalCallbacks } from './GlobalCallbacks';
 import { useTopBarNav } from './NavContext';
 import optionStyles from '../components/options/topbar-options.scss';
 import styles from '../components/shell/topbar-global-items.scss';
@@ -21,62 +16,11 @@ import styles from '../components/shell/topbar-global-items.scss';
 // =============================================================================
 //  ÉLÉMENTS GLOBAUX DE LA TOPBAR — indépendants de toute app métier
 //
-//  Sélecteurs d'espace et de site, recherche, langue, lanceur, raccourcis, plein écran, thème, menu utilisateur,
-//  horloge, panneau latéral et navigation. Chacun s'enregistre dans une région du kit, là où l'indique
+//  Lanceur, raccourcis, panneau latéral et navigation (les autres éléments sont des extensions d'apps). Chacun s'enregistre dans une région du kit, là où l'indique
 //  `placement.ts` (surchargeable par la config `topbar.placement`) : ce fichier ne connaît AUCUN niveau.
 //  Une app peut les masquer ou les remplacer (voir kit/layout-store.ts) sans toucher à ce fichier.
 //  « Implementer tools » n'est plus ici : c'est une option du rail droit (esm-implementer-tools-app).
 // =============================================================================
-
-const SearchItem: React.FC = () => {
-  const ui = useTopBarUi();
-  const config = useConfig<ConfigSchema>();
-  const { onOpenGlobalSearch } = useGlobalCallbacks();
-  const [query, setQuery] = useState('');
-  const hideLeft = ui.searchOpen && ui.isMobile;
-
-  return (
-    <div
-      className="relative overflow-visible flex items-center justify-start gap-2"
-      style={hideLeft ? { flex: '1 1 auto' } : undefined}
-    >
-      <GooeyInput
-        placeholder="Rechercher..."
-        collapsedWidth={115}
-        expandedWidth={220}
-        expandedOffset={40}
-        value={query}
-        onValueChange={setQuery}
-        expanded={ui.searchOpen}
-        onOpenChange={ui.setSearchOpen}
-        onClick={() => {
-          playXboxSound('toggle');
-          ui.closePanels();
-        }}
-        onSubmit={(val) => {
-          const q = val.trim();
-          if (!q) return;
-          frameworkNavigate({ to: `${interpolateUrl(config.search.path)}?q=${encodeURIComponent(q)}` });
-          onOpenGlobalSearch?.();
-        }}
-      />
-      {ui.searchOpen && !ui.isDesktop && (
-        <button
-          type="button"
-          onClick={() => {
-            playXboxSound('toggle');
-            setQuery('');
-            ui.setSearchOpen(false);
-          }}
-          className="text-xs text-teal-300 hover:text-white font-semibold px-3.5 py-1.5 rounded-full backdrop-blur-md bg-white/[0.08] hover:bg-white/[0.16] border border-white/20 hover:border-teal-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.08)] transition-all cursor-pointer shrink-0 whitespace-nowrap active:scale-95"
-          title="Annuler la recherche"
-        >
-          Annuler
-        </button>
-      )}
-    </div>
-  );
-};
 
 const DividerItem: React.FC = () => <div aria-hidden="true" className="h-4 w-px bg-white/20 mx-0.5 hidden sm:block" />;
 
@@ -136,7 +80,6 @@ type ItemDefinition = Omit<TopBarItem, 'placement' | 'id'> & { id: GlobalItemId 
 
 /** Les éléments globaux, SANS placement : la région et l'ordre viennent de `placement.ts`. */
 const GLOBAL_ITEMS: readonly ItemDefinition[] = [
-  { id: 'search', component: SearchItem },
   { id: 'divider', component: DividerItem, hideOnSearch: 'touch' },
   { id: 'apps', component: AppsItem, hideOnSearch: 'touch' },
   { id: 'quick-access', component: QuickAccessItem, hideOnSearch: 'touch' },

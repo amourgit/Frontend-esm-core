@@ -26,14 +26,6 @@ export const configSchema = {
       _validators: [validators.isUrl],
     },
   },
-  search: {
-    path: {
-      _type: Type.String,
-      _default: '${egenSpaBase}/search',
-      _description:
-        "The route to navigate to when a query is submitted from the topbar's search bar (appended as a `?q=` parameter). Point this at whichever app renders your search results.",
-    },
-  },
   topbar: {
     levels: {
       order: {
@@ -68,7 +60,7 @@ export const configSchema = {
       _elements: { _type: Type.String },
       _default: {},
       _description:
-        'Moves a global TopBar element to another level and region, e.g. {"clock": "navigation:right", "nav": "main:center"}. Keys: context-selectors, search, divider, apps, quick-access, fullscreen, theme, clock, menu-panel, nav. Values: "<level>:<left|center|right>"; the level is created if no app declared it yet. Invalid entries are ignored with a console warning; if the target level is not rendered, the content shows on the previous rendered level.',
+        'Moves a global TopBar element to another level and region, e.g. {"clock": "navigation:right", "nav": "main:center"}. Keys: divider, apps, quick-access, menu-panel, nav. Values: "<level>:<left|center|right>"; the level is created if no app declared it yet. Invalid entries are ignored with a console warning; if the target level is not rendered, the content shows on the previous rendered level.',
     },
     announcements: {
       requireOffset: {
@@ -113,9 +105,6 @@ export type ConfigSchema = {
     alt: string;
     name: string;
     link: string;
-  };
-  search: {
-    path: string;
   };
   topbar: {
     levels: { order: string[]; hidden: string[]; keep: string[]; max: number };

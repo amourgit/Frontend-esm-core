@@ -134,12 +134,9 @@ slot de son choix :
 | Clé                  | Défaut                       | Description                                              |
 |-----------------------|------------------------------|------------------------------------------------------------|
 | `logo.src/alt/name/link` | —                          | Personnalisation du logo (voir `config-schema.ts`)        |
-| `search.path`         | `${egenSpaBase}/search`      | Route ciblée par la barre de recherche (`?q=` en query)   |
 | `externalRefLinks`    | `[]`                         | Liens externes affichés dans le panneau "Applications"    |
 
-La barre de recherche navigue réellement vers `search.path` à la soumission
-(Entrée ou icône) — pointez cette config vers votre propre app de résultats
-de recherche si vous en développez une.
+La recherche n'est plus dans cette app : voir `@egen/esm-search-app` (config `search.path`).
 
 ## TopBar modulaire (niveaux déclarés par les apps)
 
@@ -184,7 +181,7 @@ store.setState((s) => ({
   claims: {
     ...s.claims,
     '@egen-civitas/esm-annuaire-app': {
-      regions: { 'main:left': { hideGlobal: true }, 'main:right': { only: ['search'] } },
+      regions: { 'main:left': { hideGlobal: true }, 'main:right': { only: ['apps'] } },
       levels: { keep: ['promo'], hide: ['navigation'] },
     },
   },
@@ -192,12 +189,13 @@ store.setState((s) => ({
 // Au démontage de la page : retirer la clé de l'app dans `claims`.
 ```
 
-Éléments globaux : `search`, `divider`, `apps`, `quick-access`, `fullscreen`, `theme`, `clock`,
-`menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
+Éléments globaux restants (en cours de migration vers des apps) : `divider`, `apps`, `quick-access`, `menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
 
 **Espace et Site : jamais dans la TopBar.** Les sélecteurs, la liste des Espaces et l'arbre des sites viennent de
 `@egen/esm-spaces-sites-app` (extension du slot `topbar-slot`). La TopBar ne fait que LIRE l'Espace actif et le registre des
 sites dans le store global `egen-spaces-sites` (navigation filtrée par Espace, fil d'Ariane avec la chaîne de sites).
+
+**Recherche : jamais dans la TopBar.** Le champ animé et sa destination (`search.path`) viennent de `@egen/esm-search-app`.
 
 **Identité et session : jamais dans la TopBar.** Le menu utilisateur, le garde d'authentification et la redirection de la
 racine viennent de `@egen/esm-user-profile-app`.

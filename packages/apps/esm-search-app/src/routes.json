@@ -1,0 +1,22 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "search",
+      "slot": "topbar-slot",
+      "component": "search",
+      "online": true,
+      "offline": true,
+      "order": 0,
+      "meta": {
+        "global": true,
+        "topbar": {
+          "level": "main",
+          "rank": 10,
+          "region": "right",
+          "order": 0
+        }
+      }
+    }
+  ]
+}

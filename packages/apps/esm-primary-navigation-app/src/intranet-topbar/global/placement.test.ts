@@ -42,7 +42,7 @@ describe('placement des éléments globaux', () => {
         inconnu: 'main:left',
         apps: 'agenda:background',
         divider: 'milieu',
-        search: 42,
+        'quick-access': 42,
         'menu-panel': 'l1-left',
         nav: 'navigation:left',
       },

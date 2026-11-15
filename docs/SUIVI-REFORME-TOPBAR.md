@@ -1,7 +1,7 @@
 # Suivi — Réforme de la TopBar neutre (un squelette, des apps qui l'alimentent)
 
-> **Point de reprise** : état au commit `main` = `df1fb0d` (core) et `768c770` (framework). Dernière étape terminée :
-> **T7 — apparence et horloge**. **Prochaine tâche : T8 — la recherche** (voir ci-dessous).
+> **Point de reprise** : état au commit `main` = `c05c0f3` (core) et `768c770` (framework). Dernière étape terminée :
+> **T8 — la recherche**. **Prochaine tâche : T9 — le lanceur d'applications** (voir ci-dessous).
 > Mettre à jour ce fichier à CHAQUE tâche terminée (état, commit, décisions, pièges) avant de pousser.
 
 ## 1. Philosophie (ne pas la remettre en cause)
@@ -37,36 +37,24 @@ session, ni sélecteur, ni bouton. Chaque **app spécialisée** injecte son él�
 | T5 | Éradication hospitalière | *(framework + core)* | patients / FHIR / hôpital supprimés ; voir §6 |
 | T6 | Langue | `esm-language-app` | `language-switcher` → main · right · 10 ; `change-language` → `user-panel-slot` ; modale `change-language-modal` |
 | T7 | Apparence + horloge | `esm-appearance-app`, `esm-clock-app` | `fullscreen-toggle` → main · right · 60 ; `theme-toggle` → main · right · 70 ; `clock` → main · right · 100 |
+| T8 | Recherche | `esm-search-app` | `search` → main · right · 0 ; config `search.path` ; `GooeyInput` déplacé (`src/search/gooey-input.component.tsx`) ; `GlobalCallbacks` / `onOpenGlobalSearch` supprimés (code mort) |
 
 Extensions d'autres apps déjà sur `topbar-slot` : `home-app-toolbar` (esm-home-app → navigation · left · 0) et
 `assistant-robot-button` (esm-ai-assistant-app → navigation · right · 0).
 
 ## 3. Reste dans la TopBar (`esm-primary-navigation-app`) — à migrer dans cet ordre
 
-État du code : `src/intranet-topbar/global/items.tsx` enregistre encore **6 éléments globaux** (placement d'usine dans
+État du code : `src/intranet-topbar/global/items.tsx` enregistre encore **5 éléments globaux** (placement d'usine dans
 `global/placement.ts`). Le but final est que ce fichier, `placement.ts` et le mécanisme `registerTopBarItem` **disparaissent**.
 
 | Tâche | Élément(s) | Placement actuel | App cible (décision prise) |
 | --- | --- | --- | --- |
-| **T8** | `search` | main · right · 0 | `esm-search-app` |
 | **T9** | `divider`, `apps` (+ `quick-access`) | main · right · 20 / 30 / 40 | `esm-launcher-app` (menu des applications + séparateur) ; **`quick-access` : à supprimer** (le slot `quick-access-slot` n'a aucune extension : bouton mort, l'app quick-access passe par le rail) |
 | **T10** | `menu-panel` | main · right · 110 | `esm-side-panel-app` |
 | **T11** | `nav` + fil d'Ariane | navigation · center · 0 | `esm-navigation-app` |
-| **T12** | Fin de réforme | — | supprimer `global/`, `registerTopBarItem`, `topbar.placement` (config), `xboxAudio.ts`, `GlobalCallbacks` ; la TopBar = kit + shell + providers |
+| **T12** | Fin de réforme | — | supprimer `global/`, `registerTopBarItem`, `topbar.placement` (config), `xboxAudio.ts` ; la TopBar = kit + shell + providers |
 
-### T8 — Recherche (prochaine tâche)
-- **Code à porter** : `SearchItem` dans `intranet-topbar/global/items.tsx` + `components/ui/GooeyInput.tsx` (champ animé).
-  Vérifier d'abord les imports de `GooeyInput` (utilitaires `cn`, etc.) et ses usages ailleurs (`grep -rn GooeyInput`).
-- **Config à déplacer** de `esm-primary-navigation-app/src/config-schema.ts` vers la nouvelle app : `search.path` (destination
-  `?q=` de la recherche). Retirer la clé de la navigation.
-- **État TopBar utilisé** (reçu en props par une extension : `searchOpen`, `setSearchOpen`, `closePanels`, `isMobile`, `isDesktop`).
-  L'extension doit s'en servir exactement comme `SearchItem` (ouvre/ferme la recherche, ferme les panneaux).
-- **À supprimer comme code mort** : le callback `onOpenGlobalSearch` de `GlobalCallbacks` (aucun appelant n'en fournit).
-- **Traductions** : clés de recherche (« Rechercher… ») à déplacer par langue (voir la méthode §5).
-- **Extension** : `search` → `topbar-slot`, `meta.topbar` = `{ level: main, rank: 10, region: right, order: 0 }`, `global: true`.
-- **Tests** à écrire : ouverture/fermeture, navigation vers `search.path?q=`, encodage de la requête, masquage tactile.
-
-### T9 — Lanceur (applications)
+### T9 — Lanceur (applications) (prochaine tâche)
 - **Code** : `components/options/AppsMenuOption.tsx` (bouton + panneau de grille), classes `.grid*` de
   `components/options/topbar-options.scss`, `DividerItem`, `QuickAccessItem` (à supprimer, voir ci-dessus).
 - **Config à déplacer** : `externalRefLinks` (liens externes du menu). **Slot de contenu** : `app-menu-slot`
@@ -90,7 +78,7 @@ Extensions d'autres apps déjà sur `topbar-slot` : `home-app-toolbar` (esm-home
 - `WorkspaceProvider` lit déjà l'Espace actif dans le store `egen-spaces-sites` (ne pas le recréer).
 
 ### T12 — Fin de réforme
-- Supprimer `utils/xboxAudio.ts` (822 l., plus utilisé une fois les derniers boutons migrés), `global/`, `GlobalCallbacks`,
+- Supprimer `utils/xboxAudio.ts` (822 l., plus utilisé une fois les derniers boutons migrés), `global/`,
   `registerTopBarItem` et la clé de config `topbar.placement` ; mettre à jour le README de la TopBar et ce fichier.
 - Vérifier avec `grep -rn "registerTopBarItem\|topbar.placement"` qu'il ne reste rien, puis réécrire le test d'architecture
   (`components/topbar/topbar.architecture.test.ts`) : plus aucun composant métier dans `esm-primary-navigation-app`.
@@ -132,6 +120,10 @@ Extensions d'autres apps déjà sur `topbar-slot` : `home-app-toolbar` (esm-home
   ont supprimé trop de lignes une fois (toujours relire le `git diff`).
 - **Sons d'interface** : supprimés avec les boutons migrés (logo, sélecteurs, langue, thème…) ; si on les veut, ce sera une app
   dédiée qui écoute des événements, jamais un retour dans la TopBar.
+
+- **Outillage (sandbox)** : le `yarn` vendored plante ; utiliser `@yarnpkg/cli-dist@4.10.3` (`npm i` dans un dossier à part) via un shim `yarn` mis dans le `PATH` — `turbo` en a besoin (« Unable to find package manager binary »). Un `yarn install` long doit être lancé détaché (`setsid nohup … &`) et interrogé par petits `sleep`.
+- **`translations/en.json` vide** : le scaffold le crée avec `touch` (0 octet) → le build échoue (« JSON parse error: Unexpected end of JSON »). Toujours y écrire `{}`.
+- **Tests de `GooeyInput`** : replié, le déclencheur est un `div` (pas un `button`) et l'`input` (`type="search"`, rôle `searchbox`) ne reçoit pas les clics ; cliquer son parent avec `fireEvent`. `interpolateUrl` est le vrai (non mocké) : fournir `window.getEgenSpaBase`.
 
 ## 6. Dettes et décisions en attente
 
