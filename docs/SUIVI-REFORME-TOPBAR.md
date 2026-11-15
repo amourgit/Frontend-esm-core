@@ -1,0 +1,160 @@
+# Suivi — Réforme de la TopBar neutre (un squelette, des apps qui l'alimentent)
+
+> **Point de reprise** : état au commit `main` = `df1fb0d` (core) et `768c770` (framework). Dernière étape terminée :
+> **T7 — apparence et horloge**. **Prochaine tâche : T8 — la recherche** (voir ci-dessous).
+> Mettre à jour ce fichier à CHAQUE tâche terminée (état, commit, décisions, pièges) avant de pousser.
+
+## 1. Philosophie (ne pas la remettre en cause)
+
+La TopBar est un **squelette neutre**, comme les rails et zones. Elle ne contient **aucun** élément en dur : ni logo, ni
+session, ni sélecteur, ni bouton. Chaque **app spécialisée** injecte son élément par **extension** du **slot neutre unique**
+`topbar-slot`, et **déclare elle-même** dans `meta.topbar` où le placer :
+
+```json
+{ "name": "language-switcher", "slot": "topbar-slot", "component": "languageSwitcher", "order": 10,
+  "meta": { "global": true, "topbar": { "level": "main", "rank": 10, "region": "right", "order": 10 } } }
+```
+
+- `level` : nom d'un niveau, **créé par l'app qui le déclare** (jamais numéroté, jamais dans un nom de slot ni de fichier) ;
+  plusieurs apps peuvent déclarer le même niveau, tous leurs éléments s'y assemblent. `rank` : place du niveau dans la pile.
+- `region` : `left` | `center` | `right` | `background`. `order` : place dans la région, **partagée** entre éléments globaux
+  et extensions ; à égalité, l'extension passe avant. `before` / `after` : placement **par référence** à une autre extension.
+- `meta.global: true` : toujours affichée ; sinon, seulement quand l'app est active (une de ses pages est montée).
+- Le contrat complet est dans `packages/apps/esm-primary-navigation-app/README.md` (section « Un seul slot »).
+- Cas à part, déjà fait : **niveaux éphémères** (annonces à durée, `startsAt` / `expiresAt` ISO 8601 avec décalage) via le
+  store `egen-topbar-transient` ; non concerné par la migration.
+- Règles de codage : `.github/copilot-instructions.md` et `docs/guide-montage-apps-rails-zones.md`. Styles en `*.scss`
+  (aucun `*.module.scss` dans le dépôt), `*.component.tsx`, `*.test.tsx`, textes via `t('clé', 'défaut')`.
+
+## 2. Fait (sur `main`)
+
+| # | Tâche | App créée | Ce qu'elle injecte (extension → placement) |
+| --- | --- | --- | --- |
+| T1 | Logo / identité de l'entreprise | `esm-branding-app` | `brand-logo` → main · left · 0 ; config `organization`, `logo` (modifiable à chaud) |
+| T2 | Profil utilisateur + session | `esm-user-profile-app` | `user-menu` → main · right · 90 ; `default-user-panel` → `user-panel-slot` ; pages `sessionGuard` (renvoi vers la connexion) et `rootRedirect` (racine → accueil) |
+| T3 | Niveaux déclarés par les apps | *(TopBar)* | slot unique `topbar-slot` + `meta.topbar` ; plus aucun `topbar-l<N>-…` dans le code |
+| T4 | Espace + Site (arbre infini) | `esm-spaces-sites-app` | `context-selectors` → main · left · après `brand-logo` ; `space-selector-menu` → `staggered-menu-slot` ; store global `egen-spaces-sites` ; registre des sites (slot de données `sites-registry-slot` + config) |
+| T5 | Éradication hospitalière | *(framework + core)* | patients / FHIR / hôpital supprimés ; voir §6 |
+| T6 | Langue | `esm-language-app` | `language-switcher` → main · right · 10 ; `change-language` → `user-panel-slot` ; modale `change-language-modal` |
+| T7 | Apparence + horloge | `esm-appearance-app`, `esm-clock-app` | `fullscreen-toggle` → main · right · 60 ; `theme-toggle` → main · right · 70 ; `clock` → main · right · 100 |
+
+Extensions d'autres apps déjà sur `topbar-slot` : `home-app-toolbar` (esm-home-app → navigation · left · 0) et
+`assistant-robot-button` (esm-ai-assistant-app → navigation · right · 0).
+
+## 3. Reste dans la TopBar (`esm-primary-navigation-app`) — à migrer dans cet ordre
+
+État du code : `src/intranet-topbar/global/items.tsx` enregistre encore **6 éléments globaux** (placement d'usine dans
+`global/placement.ts`). Le but final est que ce fichier, `placement.ts` et le mécanisme `registerTopBarItem` **disparaissent**.
+
+| Tâche | Élément(s) | Placement actuel | App cible (décision prise) |
+| --- | --- | --- | --- |
+| **T8** | `search` | main · right · 0 | `esm-search-app` |
+| **T9** | `divider`, `apps` (+ `quick-access`) | main · right · 20 / 30 / 40 | `esm-launcher-app` (menu des applications + séparateur) ; **`quick-access` : à supprimer** (le slot `quick-access-slot` n'a aucune extension : bouton mort, l'app quick-access passe par le rail) |
+| **T10** | `menu-panel` | main · right · 110 | `esm-side-panel-app` |
+| **T11** | `nav` + fil d'Ariane | navigation · center · 0 | `esm-navigation-app` |
+| **T12** | Fin de réforme | — | supprimer `global/`, `registerTopBarItem`, `topbar.placement` (config), `xboxAudio.ts`, `GlobalCallbacks` ; la TopBar = kit + shell + providers |
+
+### T8 — Recherche (prochaine tâche)
+- **Code à porter** : `SearchItem` dans `intranet-topbar/global/items.tsx` + `components/ui/GooeyInput.tsx` (champ animé).
+  Vérifier d'abord les imports de `GooeyInput` (utilitaires `cn`, etc.) et ses usages ailleurs (`grep -rn GooeyInput`).
+- **Config à déplacer** de `esm-primary-navigation-app/src/config-schema.ts` vers la nouvelle app : `search.path` (destination
+  `?q=` de la recherche). Retirer la clé de la navigation.
+- **État TopBar utilisé** (reçu en props par une extension : `searchOpen`, `setSearchOpen`, `closePanels`, `isMobile`, `isDesktop`).
+  L'extension doit s'en servir exactement comme `SearchItem` (ouvre/ferme la recherche, ferme les panneaux).
+- **À supprimer comme code mort** : le callback `onOpenGlobalSearch` de `GlobalCallbacks` (aucun appelant n'en fournit).
+- **Traductions** : clés de recherche (« Rechercher… ») à déplacer par langue (voir la méthode §5).
+- **Extension** : `search` → `topbar-slot`, `meta.topbar` = `{ level: main, rank: 10, region: right, order: 0 }`, `global: true`.
+- **Tests** à écrire : ouverture/fermeture, navigation vers `search.path?q=`, encodage de la requête, masquage tactile.
+
+### T9 — Lanceur (applications)
+- **Code** : `components/options/AppsMenuOption.tsx` (bouton + panneau de grille), classes `.grid*` de
+  `components/options/topbar-options.scss`, `DividerItem`, `QuickAccessItem` (à supprimer, voir ci-dessus).
+- **Config à déplacer** : `externalRefLinks` (liens externes du menu). **Slot de contenu** : `app-menu-slot`
+  (alimenté aujourd'hui par `offline-tools-link` de `esm-offline-tools-app`) — **le conserver tel quel**.
+- Panneau exclusif via l'état TopBar (`isActivePanel('appMenu')`, `togglePanel('appMenu')`), comme le menu utilisateur.
+
+### T10 — Panneau latéral
+- **Code** : `components/shell/TopBarMenuPanel.tsx` (+ test) et styles `.menuToggle*` de `topbar-global-items.scss`.
+  Utilise `MenuToggleButton` / `StaggeredMenuPanel` du framework. **Slot de contenu** : `staggered-menu-slot` (déjà alimenté
+  par `space-selector-menu` de `esm-spaces-sites-app`).
+
+### T11 — Navigation et fil d'Ariane (le plus gros)
+- **Code** : `components/navigation/BreadcrumbNav.tsx` (489 l.), `DropdownNavigation`, `NavigationItem`, `context/NavContext`,
+  `context/WorkspaceContext.tsx`, `hooks/useSlotNavEntries.ts`, `utils/buildNavItemsFromSlot.ts`, `utils/buildBreadcrumbModel`,
+  `utils/findSiteChain.ts`, scss associés. **Données** : le slot `topbar-nav-slot` (24 entrées déclarées par 5 apps, `meta.workspaces`
+  pour filtrer par Espace) — **ne pas changer ce contrat**.
+- **Dette à résoudre dans cette tâche** : le fil d'Ariane contient encore de la logique propre à l'annuaire
+  (`/annuaire/<param>`, onglets `contacts` / `organigramme` / `structures`) et une copie de l'annuaire
+  (`data/directoryData.ts`, 585 lignes). **Chaque app doit fournir ses propres libellés de fil d'Ariane** (extension/slot de
+  données), la navigation ne doit connaître aucune app.
+- `WorkspaceProvider` lit déjà l'Espace actif dans le store `egen-spaces-sites` (ne pas le recréer).
+
+### T12 — Fin de réforme
+- Supprimer `utils/xboxAudio.ts` (822 l., plus utilisé une fois les derniers boutons migrés), `global/`, `GlobalCallbacks`,
+  `registerTopBarItem` et la clé de config `topbar.placement` ; mettre à jour le README de la TopBar et ce fichier.
+- Vérifier avec `grep -rn "registerTopBarItem\|topbar.placement"` qu'il ne reste rien, puis réécrire le test d'architecture
+  (`components/topbar/topbar.architecture.test.ts`) : plus aucun composant métier dans `esm-primary-navigation-app`.
+
+## 4. Procédure type d'une migration (à suivre pour T8 → T11)
+
+1. `git checkout main && git pull`, puis `git checkout -b feat/<nom>`.
+2. `python3 tools/scaffold-app.py esm-<nom>-app "<description>" "<deps>" <sous-dossiers>` (ossature conforme au projet).
+3. **Porter** le code de la TopBar (le déplacer, `git mv` quand c'est un dossier entier : l'historique est conservé), l'adapter
+   en **extension** : l'état de la TopBar arrive en **props** (`isActivePanel`, `togglePanel`, `searchOpen`, `isDesktop`…) ;
+   le composant doit aussi marcher **sans** TopBar (props absentes).
+4. `src/index.ts` (`getSyncLifecycle` / `getAsyncLifecycle`, `importTranslation`), `src/routes.json` (extension sur `topbar-slot`
+   avec `meta.topbar`, **même placement que l'ancien élément**), `config-schema.ts` si l'élément avait de la config.
+5. **Traductions** : déplacer les clés par langue de `esm-primary-navigation-app/translations/*.json` vers la nouvelle app
+   (méthode : parcourir les 41 fichiers, copier les clés utilisées, les retirer de la navigation ; ne PAS retirer une clé encore
+   utilisée ailleurs — vérifier par `git grep` ; `en.json` peut rester `{}` quand les défauts sont dans le code).
+6. **Retirer** de la TopBar : composant, élément global, clé de `placement.ts`, export `options/index.ts`, styles, tests,
+   mentions du README ; corriger `placement.test.ts` (ses exemples utilisent des identifiants d'éléments existants).
+7. **Tests** de la nouvelle app (comportement, props TopBar, routes) + test d'architecture si pertinent. Le fichier de tests doit
+   demander le mock du framework : `vi.mock('@egen-civitas/esm-framework', () => import('@egen-civitas/esm-framework/mock'))`.
+8. README de l'app, entrée dans le README racine, `.changeset/<nom>.md` (TopBar en `major`), `yarn install`.
+9. **Valider** : `npx tsc --noEmit`, `npx eslint src --ext ts,tsx`, `npx cross-env TZ=UTC vitest run`, dans CHAQUE app touchée ;
+   `node tools/check-nav-routes.mjs` ; `npx turbo run build --filter=<apps touchées>` ; `yarn install --immutable`.
+10. Commit, **fusion** dans `main`, `git push --no-verify origin main` (préférence du projet), mettre ce fichier à jour.
+
+## 5. Pièges déjà rencontrés (à ne pas refaire)
+
+- **`yarn.lock`** : toute nouvelle app le modifie ; en cas de conflit à la fusion, prendre celui de `main` puis relancer
+  `yarn install` (jamais le fusionner à la main). Vérifier `yarn install --immutable` avant de pousser.
+- **Versions `@egen-civitas/*`** : un commit concurrent les aligne parfois sur le framework publié (4.x) ; l'ossature part de
+  `esm-user-profile-app`, donc déjà alignée. Si `--immutable` échoue, recopier les plages de cette app.
+- **Config de tests** : celle de `esm-primary-navigation-app` (plugin `.scss`) est la bonne ; le framework n'y est pas mocké
+  automatiquement (voir étape 7). Les types du mock du framework publié sont périmés : charger le mock par `vi.importActual('…/mock')`.
+- **Boucle de rendu** : ne JAMAIS s'abonner à l'état complet du store d'extensions (React #185) ; dériver une signature primitive
+  (voir `kit/region-extensions.ts`).
+- **Slots enregistrés** : une région monte un `SlotRegistrar` caché par slot pour que la configuration `extensionSlots` d'un
+  déploiement (ajouts/retraits) soit prise en compte ; ne pas le retirer.
+- **Dans le shell** : `mkdir -p a/{b,c}` ne développe pas les accolades (sh) ; les remplacements par regex sur de gros fichiers
+  ont supprimé trop de lignes une fois (toujours relire le `git diff`).
+- **Sons d'interface** : supprimés avec les boutons migrés (logo, sélecteurs, langue, thème…) ; si on les veut, ce sera une app
+  dédiée qui écoute des événements, jamais un retour dans la TopBar.
+
+## 6. Dettes et décisions en attente
+
+- **Mutualiser** `OptionButton` (copié dans `esm-language-app`, `esm-appearance-app`) et le panneau « verre d'eau » (`GlassPanel`
+  dans `esm-user-profile-app`) en **composants du framework** (styleguide), avant T9/T10 qui en auront encore besoin. Nécessite une
+  version publiée du framework (le core le consomme depuis npm).
+- **Sites en trois exemplaires** : `esm-sites-app` garde ses propres jeux de données pour ses pages (`data/sites-data.ts`,
+  `home-sections/sites/sites.data.ts`) ; à rebrancher sur le registre `egen-spaces-sites`.
+- **Token / session** : aucune surveillance ni relance périodique du token n'existe dans le dépôt (la session vit dans le framework,
+  `esm-api`). Si on la veut, l'ajouter dans `esm-user-profile-app`.
+- **Éradication hospitalière** (faite) — décisions laissées ouvertes : `LICENSE` (clause « Healthcare Disclaimer » d'origine, avis
+  juridique requis, non modifié) ; `CHANGELOG.md` (historique, non purgé) ; `getSessionLocation` / `setSessionLocation` dans
+  `esm-api` ; module backend `webservices.rest` ; icônes `programs` / `pedestrian-family` et pictogramme `service-queues` gardés.
+- **Branches** : `feat/annuaire-welcome-banner` = test du bandeau éphémère, **volontairement non fusionnée** (déjà sur GitHub).
+  `dependabot/…/type-definitions-*` (`@types/fhir` 0.0.44) est **sans objet** : à fermer sans fusionner.
+- **Échecs de tests/typecheck anciens** existent dans le dépôt (hooks husky ignorés par choix, `--no-verify`) ; ce qui compte pour
+  l'instant : **le build vert**. Ne pas confondre avec une régression de la réforme (comparer à `main` avant d'accuser).
+- **Jumeau CIVITAS TV** : `tools/shared-paths.txt` / `SYNC-CORE-TV.md` — vérifier si des fichiers de la TopBar y sont partagés avant
+  de finaliser T11/T12.
+- **Sécurité** : le token GitHub de travail a été collé en clair dans une conversation : **le révoquer** et en générer un nouveau.
+
+## 7. Prompt de reprise (à coller au début de la prochaine session)
+
+> Reprends la réforme de la TopBar neutre. Lis `docs/SUIVI-REFORME-TOPBAR.md`, vérifie que `main` est à jour, puis fais la
+> tâche **T8 (recherche → `esm-search-app`)** en suivant la procédure du §4, valide (§4 étape 9), fusionne dans `main`, pousse avec
+> `--no-verify`, et mets le fichier de suivi à jour (point de reprise = T9). Enchaîne T9, T10, T11, T12 sans me redemander.
