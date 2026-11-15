@@ -50,7 +50,7 @@ Cette app déclare, pour ses éléments globaux, les niveaux `main` (rang 10) et
 
 | Niveau       | Gauche            | Centre                                | Droite                                                                 |
 |--------------|-------------------|---------------------------------------|------------------------------------------------------------------------|
-| `main`       | logo + Espace/Site (apps) | —                                     | recherche · langue · séparateur · apps · plein écran · thème · utilisateur · horloge |
+| `main`       | logo + Espace/Site (apps) | —                                     | recherche · langue · séparateur · apps · plein écran · thème · utilisateur · horloge · panneau latéral |
 | `navigation` | identité de l'app active | navigation déroulante ou fil d'Ariane | contributions globales (ex. assistant IA)                         |
 
 ### Niveau éphémère (annonce, bandeau)
@@ -179,7 +179,7 @@ store.setState((s) => ({
   claims: {
     ...s.claims,
     '@egen-civitas/esm-annuaire-app': {
-      regions: { 'main:left': { hideGlobal: true }, 'main:right': { only: ['menu-panel'] } },
+      regions: { 'main:left': { hideGlobal: true }, 'main:right': { only: ['nav'] } },
       levels: { keep: ['promo'], hide: ['navigation'] },
     },
   },
@@ -187,11 +187,13 @@ store.setState((s) => ({
 // Au démontage de la page : retirer la clé de l'app dans `claims`.
 ```
 
-Éléments globaux restants (en cours de migration vers des apps) : `menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
+Éléments globaux restants (en cours de migration vers des apps) : `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
 
 **Espace et Site : jamais dans la TopBar.** Les sélecteurs, la liste des Espaces et l'arbre des sites viennent de
 `@egen/esm-spaces-sites-app` (extension du slot `topbar-slot`). La TopBar ne fait que LIRE l'Espace actif et le registre des
 sites dans le store global `egen-spaces-sites` (navigation filtrée par Espace, fil d'Ariane avec la chaîne de sites).
+
+**Panneau latéral : jamais dans la TopBar.** Le bouton et le panneau (`staggered-menu-slot`) viennent de `@egen/esm-side-panel-app`.
 
 **Lanceur d'applications : jamais dans la TopBar.** Le bouton, le panneau, le séparateur et les liens externes (`externalRefLinks`) viennent de `@egen/esm-launcher-app` ; il lit le slot `app-menu-slot`. Il n'existe plus de panneau « Raccourcis » dans la TopBar : l'app `quick-access` passe par le rail droit.
 

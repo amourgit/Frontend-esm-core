@@ -1,0 +1,17 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "side-panel",
+      "slot": "topbar-slot",
+      "component": "sidePanel",
+      "online": true,
+      "offline": true,
+      "order": 110,
+      "meta": {
+        "global": true,
+        "topbar": { "level": "main", "rank": 10, "region": "right", "order": 110 }
+      }
+    }
+  ]
+}

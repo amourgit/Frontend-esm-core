@@ -1,7 +1,7 @@
 # Suivi — Réforme de la TopBar neutre (un squelette, des apps qui l'alimentent)
 
-> **Point de reprise** : état au commit `main` = `2cd7585` (core) et `768c770` (framework). Dernière étape terminée :
-> **T9 — le lanceur d'applications**. **Prochaine tâche : T10 — le panneau latéral** (voir ci-dessous).
+> **Point de reprise** : état au commit `main` = `@@HASH@@` (core) et `768c770` (framework). Dernière étape terminée :
+> **T10 — le panneau latéral**. **Prochaine tâche : T11 — navigation et fil d'Ariane** (voir ci-dessous).
 > Mettre à jour ce fichier à CHAQUE tâche terminée (état, commit, décisions, pièges) avant de pousser.
 
 ## 1. Philosophie (ne pas la remettre en cause)
@@ -39,27 +39,22 @@ session, ni sélecteur, ni bouton. Chaque **app spécialisée** injecte son él�
 | T7 | Apparence + horloge | `esm-appearance-app`, `esm-clock-app` | `fullscreen-toggle` → main · right · 60 ; `theme-toggle` → main · right · 70 ; `clock` → main · right · 100 |
 | T8 | Recherche | `esm-search-app` | `search` → main · right · 0 ; config `search.path` ; `GooeyInput` déplacé (`src/search/gooey-input.component.tsx`) ; `GlobalCallbacks` / `onOpenGlobalSearch` supprimés (code mort) |
 | T9 | Lanceur d'applications | `esm-launcher-app` | `topbar-divider` → main · right · 20 ; `app-launcher` → main · right · 30 ; config `externalRefLinks` ; contenu = slot `app-menu-slot` (inchangé) ; `quick-access` supprimé (bouton mort) ; clé de traduction `AppMenuTooltip` déplacée (41 langues) |
+| T10 | Panneau latéral | `esm-side-panel-app` | `side-panel` → main · right · 110 ; contenu = slot `staggered-menu-slot` (inchangé) ; `TopBarMenuPanel` déplacé avec test et styles |
 
 Extensions d'autres apps déjà sur `topbar-slot` : `home-app-toolbar` (esm-home-app → navigation · left · 0) et
 `assistant-robot-button` (esm-ai-assistant-app → navigation · right · 0).
 
 ## 3. Reste dans la TopBar (`esm-primary-navigation-app`) — à migrer dans cet ordre
 
-État du code : `src/intranet-topbar/global/items.tsx` enregistre encore **2 éléments globaux** (`menu-panel`, `nav`) (placement d'usine dans
+État du code : `src/intranet-topbar/global/items.tsx` enregistre encore **1 élément global** (`nav`) (placement d'usine dans
 `global/placement.ts`). Le but final est que ce fichier, `placement.ts` et le mécanisme `registerTopBarItem` **disparaissent**.
 
 | Tâche | Élément(s) | Placement actuel | App cible (décision prise) |
 | --- | --- | --- | --- |
-| **T10** | `menu-panel` | main · right · 110 | `esm-side-panel-app` |
 | **T11** | `nav` + fil d'Ariane | navigation · center · 0 | `esm-navigation-app` |
 | **T12** | Fin de réforme | — | supprimer `global/`, `registerTopBarItem`, `topbar.placement` (config), `xboxAudio.ts` ; la TopBar = kit + shell + providers |
 
-### T10 — Panneau latéral (prochaine tâche)
-- **Code** : `components/shell/TopBarMenuPanel.tsx` (+ test) et styles `.menuToggle*` de `topbar-global-items.scss`.
-  Utilise `MenuToggleButton` / `StaggeredMenuPanel` du framework. **Slot de contenu** : `staggered-menu-slot` (déjà alimenté
-  par `space-selector-menu` de `esm-spaces-sites-app`).
-
-### T11 — Navigation et fil d'Ariane (le plus gros)
+### T11 — Navigation et fil d'Ariane (prochaine tâche, le plus gros)
 - **Code** : `components/navigation/BreadcrumbNav.tsx` (489 l.), `DropdownNavigation`, `NavigationItem`, `context/NavContext`,
   `context/WorkspaceContext.tsx`, `hooks/useSlotNavEntries.ts`, `utils/buildNavItemsFromSlot.ts`, `utils/buildBreadcrumbModel`,
   `utils/findSiteChain.ts`, scss associés. **Données** : le slot `topbar-nav-slot` (24 entrées déclarées par 5 apps, `meta.workspaces`

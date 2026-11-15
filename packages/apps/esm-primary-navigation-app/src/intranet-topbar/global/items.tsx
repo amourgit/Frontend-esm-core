@@ -2,23 +2,20 @@ import React, { useMemo } from 'react';
 import { ExtensionSlot } from '@egen-civitas/esm-framework';
 import { DropdownNavigation } from '../components/shell/DropdownNavigation';
 import { BreadcrumbNav } from '../components/navigation/BreadcrumbNav';
-import { TopBarMenuPanel } from '../components/shell/TopBarMenuPanel';
 import { registerTopBarItem, useTopBarUi, type TopBarItem } from '../kit';
 import { resolvePlacement, type GlobalItemId } from './placement';
 import { useTopBarNav } from './NavContext';
 import optionStyles from '../components/options/topbar-options.scss';
-import styles from '../components/shell/topbar-global-items.scss';
 
 // =============================================================================
 //  ÉLÉMENTS GLOBAUX DE LA TOPBAR — indépendants de toute app métier
 //
-//  Panneau latéral et navigation (les autres éléments sont des extensions d'apps). Chacun s'enregistre dans une région du kit, là où l'indique
+//  Navigation (les autres éléments sont des extensions d'apps). Chacun s'enregistre dans une région du kit, là où l'indique
 //  `placement.ts` (surchargeable par la config `topbar.placement`) : ce fichier ne connaît AUCUN niveau.
 //  Une app peut les masquer ou les remplacer (voir kit/layout-store.ts) sans toucher à ce fichier.
 //  « Implementer tools » n'est plus ici : c'est une option du rail droit (esm-implementer-tools-app).
 // =============================================================================
 
-const MenuPanelItem: React.FC = () => <TopBarMenuPanel />;
 
 /** Slots qui précèdent la navigation : l'officiel puis l'historique (toujours honoré). */
 const NAV_START_SLOTS = ['topbar-nav-start-slot'] as const;
@@ -64,7 +61,6 @@ type ItemDefinition = Omit<TopBarItem, 'placement' | 'id'> & { id: GlobalItemId 
 
 /** Les éléments globaux, SANS placement : la région et l'ordre viennent de `placement.ts`. */
 const GLOBAL_ITEMS: readonly ItemDefinition[] = [
-  { id: 'menu-panel', component: MenuPanelItem, hideOnSearch: 'touch' },
   { id: 'nav', component: NavigationItem },
 ];
 

@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { MenuToggleButton, StaggeredMenuPanel } from '@egen-civitas/esm-framework';
-import styles from './topbar-global-items.scss';
-import closeStyles from './top-bar-menu-panel.scss';
+import styles from './side-panel.scss';
+import closeStyles from './side-panel-close.scss';
 
 // =============================================================================
-//  Panneau latéral de la TopBar (StaggeredMenuPanel) + son bouton déclencheur
+//  PANNEAU LATÉRAL — extension de la TopBar (StaggeredMenuPanel) + son bouton déclencheur
 //
-//   • Le bouton, petit, est à l'extrême droite du niveau 1.
+//   • Le bouton, petit, est à l'extrême droite du niveau `main` (placement déclaré dans `routes.json`).
 //   • Le panneau s'ouvre à DROITE ; il se ferme par le bouton de fermeture de son coin haut-droite, par un
 //     clic à côté ou par Échap. Ce bouton est fourni ICI (`PanelCloseButton`) et non par le panneau du shell :
 //     il reste donc présent quel que soit le panneau que le shell exécute (`showCloseButton={false}` évite le
 //     doublon avec celui des versions récentes).
-//   • Son contenu est entièrement fourni par les apps (slot `staggered-menu-slot`) : l'Espace y est posé en
-//     permanence par `workspace-selector-menu` (routes.json de cette app).
+//   • Son contenu est entièrement fourni par les apps (slot `staggered-menu-slot`) : les Espaces y sont posés par
+//     `space-selector-menu` (esm-spaces-sites-app).
 //
 //  Le panneau est monté dans `document.body` (portail) : la TopBar a un fond « verre » (backdrop-filter),
 //  qui deviendrait le repère de son `position: fixed` et le ferait sortir de l'écran.
@@ -30,9 +31,10 @@ const PANEL_LAYER_COLORS = ['var(--colors-secondary-300)', 'var(--colors-primary
 
 /** Bouton de fermeture, dans le coin haut-droite du panneau, au-dessus de lui. */
 function PanelCloseButton({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const { t } = useTranslation();
   return (
     <div className={closeStyles.closeFrame} data-testid="menu-panel-close-frame" data-open={isOpen ? 'true' : 'false'}>
-      <button type="button" className={closeStyles.closeButton} aria-label="Fermer le menu" onClick={onClose}>
+      <button type="button" className={closeStyles.closeButton} aria-label={t('closeMenu', 'Fermer le menu')} onClick={onClose}>
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -48,12 +50,15 @@ function PanelCloseButton({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   );
 }
 
-interface TopBarMenuPanelProps {
-  /** Classe du bouton (ex. masquage quand la recherche est ouverte en mobile). */
+/** État de la TopBar reçu en props (facultatif : l'extension marche aussi hors d'une TopBar). */
+interface SidePanelProps {
+  /** Classe du bouton. */
   className?: string;
+  searchOpen?: boolean;
+  isDesktop?: boolean;
 }
 
-export function TopBarMenuPanel({ className }: TopBarMenuPanelProps) {
+export function SidePanel({ className, searchOpen, isDesktop }: SidePanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const close = useCallback(() => setIsOpen(false), []);
   const toggle = useCallback(() => setIsOpen((open) => !open), []);
@@ -66,6 +71,9 @@ export function TopBarMenuPanel({ className }: TopBarMenuPanelProps) {
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [isOpen, close]);
+
+  // Recherche ouverte sur un écran tactile : la place revient à la recherche.
+  if (searchOpen && isDesktop === false) return null;
 
   return (
     <>
@@ -95,3 +103,5 @@ export function TopBarMenuPanel({ className }: TopBarMenuPanelProps) {
     </>
   );
 }
+
+export default SidePanel;

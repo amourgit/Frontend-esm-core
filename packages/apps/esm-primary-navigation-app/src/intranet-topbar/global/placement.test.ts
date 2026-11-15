@@ -24,29 +24,24 @@ describe('placement des éléments globaux', () => {
   });
 
   it('une surcharge déplace un élément vers n’importe quel niveau (même inconnu), en gardant son ordre', () => {
-    const p = resolvePlacement({ 'menu-panel': 'agenda:right', nav: 'main:center' });
-    expect(p['menu-panel']).toEqual({
+    const p = resolvePlacement({ nav: 'agenda:right' });
+    expect(p.nav).toEqual({
       level: 'agenda',
       rank: undefined,
       region: 'right',
-      order: DEFAULT_PLACEMENT['menu-panel'].order,
+      order: DEFAULT_PLACEMENT.nav.order,
     });
-    expect(p.nav).toMatchObject({ level: 'main', rank: GLOBAL_LEVEL_RANKS.main, region: 'center' });
+    expect(resolvePlacement({ nav: 'main:center' }).nav).toMatchObject({
+      level: 'main',
+      rank: GLOBAL_LEVEL_RANKS.main,
+      region: 'center',
+    });
   });
 
   it('ignore (avec avertissement) un élément inconnu (déjà migré en app) ou une valeur invalide, sans rien casser', () => {
     const warn = vi.fn();
-    const p = resolvePlacement(
-      {
-        inconnu: 'main:left',
-        search: 'main:left',
-        divider: 'main:left',
-        'menu-panel': 'agenda:background',
-        nav: 42,
-      },
-      warn,
-    );
-    expect(warn).toHaveBeenCalledTimes(5);
+    const p = resolvePlacement({ inconnu: 'main:left', search: 'main:left', 'menu-panel': 'main:left', nav: 42 }, warn);
+    expect(warn).toHaveBeenCalledTimes(4);
     expect(p).toEqual(DEFAULT_PLACEMENT);
   });
 });

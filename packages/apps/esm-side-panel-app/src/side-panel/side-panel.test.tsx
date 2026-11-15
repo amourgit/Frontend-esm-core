@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-import { TopBarMenuPanel } from './TopBarMenuPanel';
+import SidePanel from './side-panel.component';
 
 const panelProps = vi.hoisted(() => ({ last: {} as Record<string, unknown> }));
 
@@ -24,9 +24,9 @@ vi.mock('@egen-civitas/esm-framework', () => ({
   },
 }));
 
-describe('TopBarMenuPanel', () => {
+describe('SidePanel', () => {
   it('ouvre le panneau à droite depuis le bouton, et le referme par son bouton de fermeture', () => {
-    render(<TopBarMenuPanel />);
+    render(<SidePanel />);
     const panel = screen.getByTestId('panel');
     expect(panel).toHaveAttribute('data-position', 'right');
     expect(panel).toHaveAttribute('data-open', 'false');
@@ -39,7 +39,7 @@ describe('TopBarMenuPanel', () => {
   });
 
   it('se referme avec Échap, mais pas avec une autre touche', () => {
-    render(<TopBarMenuPanel />);
+    render(<SidePanel />);
     fireEvent.click(screen.getByRole('button', { name: 'toggle' }));
     fireEvent.keyDown(document, { key: 'Enter' });
     expect(screen.getByTestId('panel')).toHaveAttribute('data-open', 'true');
@@ -48,19 +48,19 @@ describe('TopBarMenuPanel', () => {
   });
 
   it('monte le panneau dans document.body (portail), hors de la TopBar', () => {
-    const { container } = render(<TopBarMenuPanel />);
+    const { container } = render(<SidePanel />);
     expect(within(container).queryByTestId('panel')).not.toBeInTheDocument();
     expect(within(document.body).getByTestId('panel')).toBeInTheDocument();
   });
 
   it("restaure l'animation de couleurs d'ouverture, comme la vitrine des composants", () => {
-    render(<TopBarMenuPanel />);
+    render(<SidePanel />);
     expect(panelProps.last.colors).toEqual(['var(--colors-secondary-300)', 'var(--colors-primary-600)']);
     expect(panelProps.last.accentColor).toBe('var(--colors-primary-600)');
   });
 
   it('a son propre bouton de fermeture, accessible, qui ferme le panneau', () => {
-    render(<TopBarMenuPanel />);
+    render(<SidePanel />);
     fireEvent.click(screen.getByRole('button', { name: 'toggle' }));
     expect(screen.getByTestId('panel')).toHaveAttribute('data-open', 'true');
 
@@ -69,7 +69,7 @@ describe('TopBarMenuPanel', () => {
   });
 
   it("place ce bouton dans le portail, hors de la TopBar, et suit l'état ouvert/fermé", () => {
-    const { container } = render(<TopBarMenuPanel />);
+    const { container } = render(<SidePanel />);
     const button = screen.getByRole('button', { name: 'Fermer le menu' });
     expect(within(container).queryByRole('button', { name: 'Fermer le menu' })).not.toBeInTheDocument();
     expect(within(document.body).getByRole('button', { name: 'Fermer le menu' })).toBe(button);
@@ -80,13 +80,21 @@ describe('TopBarMenuPanel', () => {
   });
 
   it('désactive le bouton du panneau du shell pour éviter un doublon', () => {
-    render(<TopBarMenuPanel />);
+    render(<SidePanel />);
     expect(panelProps.last.showCloseButton).toBe(false);
   });
 
   it('active le clic à côté et transmet la classe au bouton', () => {
-    render(<TopBarMenuPanel className="hidden" />);
+    render(<SidePanel className="hidden" />);
     expect(panelProps.last.closeOnClickAway).toBe(true);
     expect(screen.getByRole('button', { name: 'toggle' })).toHaveClass('hidden');
+  });
+
+  it('cède la place à la recherche ouverte sur un écran tactile, mais pas sur desktop', () => {
+    const { container, rerender } = render(<SidePanel searchOpen isDesktop={false} />);
+    expect(within(container).queryByRole('button', { name: 'toggle' })).not.toBeInTheDocument();
+
+    rerender(<SidePanel searchOpen isDesktop />);
+    expect(screen.getByRole('button', { name: 'toggle' })).toBeInTheDocument();
   });
 });
