@@ -1,6 +1,6 @@
 # Suivi — Réforme de la TopBar neutre (un squelette, des apps qui l'alimentent)
 
-> **Point de reprise** : état au commit `main` = `@@HASH@@` (core) et `768c770` (framework). Dernière étape terminée :
+> **Point de reprise** : état au commit `main` = `c5a55a3` (core) et `768c770` (framework). Dernière étape terminée :
 > **T10 — le panneau latéral**. **Prochaine tâche : T11 — navigation et fil d'Ariane** (voir ci-dessous).
 > Mettre à jour ce fichier à CHAQUE tâche terminée (état, commit, décisions, pièges) avant de pousser.
 
