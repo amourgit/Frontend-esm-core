@@ -19,6 +19,8 @@
 @source "../../*/src/**/*.{ts,tsx}";
 @source not "../../*/src/**/*.test.{ts,tsx}";
 @source not "../../*/src/**/setup-tests.{ts,tsx}";
+/* Le Theme Studio embarque son propre CSS Tailwind scopé (tools/theme-studio-build-css.mjs) : ne pas le scanner ici. */
+@source not "../../esm-theme-studio-app/src/tweakcn/**";
 
 @theme {
   --breakpoint-xs: 30rem;

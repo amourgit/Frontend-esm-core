@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Moon, Sun } from 'lucide-react';
+import { navigate } from '@egen-civitas/esm-framework';
 import { getThemeEngine, getThemeState, toggleThemeMode, type ThemeMode } from '@egen-civitas/esm-theme';
 import { SettingsSection } from './settings-section.component';
 import styles from './settings.scss';
@@ -41,6 +42,10 @@ const AppearanceSection: React.FC = () => {
           {t('darkMode', 'Sombre')}
         </button>
       </div>
+      {/* Personnalisation fine : ouvre l'application Theme Studio (esm-theme-studio-app). */}
+      <button type="button" className={styles.segment} onClick={() => navigate({ to: '${egenSpaBase}/theme-studio' })}>
+        {t('openThemeStudio', 'Ouvrir le Theme Studio')}
+      </button>
     </SettingsSection>
   );
 };

@@ -79,9 +79,5 @@
     "turbo": "^2.10.11",
     "typescript": "^5.8.3",
     "webpack": "^5.112.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": "eslint --cache --fix --max-warnings 0",
-    "*.{css,scss,ts,tsx}": "prettier --write --list-different"
   }
 }
