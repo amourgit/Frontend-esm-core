@@ -1,6 +1,6 @@
 # Suivi — Réforme de la TopBar neutre (un squelette, des apps qui l'alimentent)
 
-> **Point de reprise** : état au commit `main` = `@@HASH@@` (core) et `768c770` (framework). Dernière étape terminée :
+> **Point de reprise** : état au commit `main` = `2cd7585` (core) et `768c770` (framework). Dernière étape terminée :
 > **T9 — le lanceur d'applications**. **Prochaine tâche : T10 — le panneau latéral** (voir ci-dessous).
 > Mettre à jour ce fichier à CHAQUE tâche terminée (état, commit, décisions, pièges) avant de pousser.
 
