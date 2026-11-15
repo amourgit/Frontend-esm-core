@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 // Garde-fou : les niveaux de la TopBar sont DÉCLARÉS par les apps ; le kit n'en connaît aucun (ni numéro, ni nom), et
 // aucun slot n'encode un niveau (`topbar-l<N>-<région>-slot`…). Si ce test échoue, un niveau s'est glissé dans le code : le
-// déplacer dans la déclaration d'une app (`meta.topbar`) ou dans global/placement.ts.
+// déplacer dans la déclaration d'une app (`meta.topbar`) .
 
 const root = __dirname;
 const walk = (dir: string): string[] =>

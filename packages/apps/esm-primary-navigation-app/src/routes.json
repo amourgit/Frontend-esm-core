@@ -11,19 +11,5 @@
       "offline": true,
       "containerDomId": "egen-top-nav-app-container"
     }
-  ],
-  "extensions": [
-    {
-      "name": "link",
-      "component": "linkComponent",
-      "online": true,
-      "offline": true
-    },
-    {
-      "name": "breadcrumb-item",
-      "component": "breadcrumbItem",
-      "online": true,
-      "offline": true
-    }
   ]
 }

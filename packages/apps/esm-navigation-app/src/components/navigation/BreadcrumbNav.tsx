@@ -11,19 +11,18 @@ import { buildBreadcrumbModel, type Crumb, type CrumbOption } from "../../utils/
 import { computeBreadcrumbCollapse } from "../../utils/computeBreadcrumbCollapse";
 import { useSpacesSitesState } from "../../hooks/useSpacesSitesState";
 import { findSiteChain } from "../../utils/findSiteChain";
-import { findEmployeeByParam, getEmployeeUuid } from "../../data/directoryData";
-import { playXboxSound } from "../../utils/xboxAudio";
+import { useBreadcrumbContext } from "../../breadcrumb-context";
 
 // =============================================================================
 //  FIL D'ARIANE DE LA TOPBAR
 //
-//  Élément de navigation : il s'affiche dans la région que lui attribue `global/placement.ts` (par défaut au
-//  centre du niveau 2), sans rien supposer du niveau où il se trouve.
+//  Élément de navigation : il s'affiche là où `routes.json` de cette app le place (`meta.topbar`), sans rien supposer
+//  du niveau où il se trouve.
 //
 //  Qui fait quoi, dans l'ordre :
 //   1. `buildBreadcrumbModel` (utils/) lit l'arbre de navigation + le chemin courant et produit
 //      les maillons « Accueil › Section › Entrée » AVEC, pour chacun, ses alternatives de même niveau.
-//   2. Ce composant y ajoute les maillons de contexte (site, collaborateur) puis les affiche.
+//   2. Ce composant y ajoute les maillons de contexte (sites, maillons publiés par la page) puis les affiche.
 //   3. Un maillon qui a des alternatives ouvre un menu en verre qui les liste ; sinon c'est un lien
 //      (ou la page courante s'il est le dernier).
 //   4. Si le fil ne tient pas dans la largeur, `computeBreadcrumbCollapse` dit combien de maillons
@@ -31,8 +30,8 @@ import { playXboxSound } from "../../utils/xboxAudio";
 //      du plus proche de la racine au plus proche de la page. Le clic sur « … » liste les maillons
 //      repliés. Pas de débordement → pas de « … ».
 //
-//  Exemple : Accueil › Annuaire › Organigramme › #968579 › Détails — trop long :
-//  Accueil › … › #968579 › Détails ; le clic sur « … » affiche « Annuaire » puis « Organigramme ».
+//  Exemple : Accueil › Section › Sous-section › #968579 › Détails — trop long :
+//  Accueil › … › #968579 › Détails ; le clic sur « … » affiche « Section » puis « Sous-section ».
 // =============================================================================
 
 interface Props {
@@ -44,7 +43,7 @@ interface ChainItem {
   key: string;
   label: string;
   crumb?: Crumb;
-  /** Maillon de contexte (site, collaborateur) : contenu libre, sans alternatives. */
+  /** Maillon de contexte (site, maillon publié par la page) : contenu libre, sans alternatives. */
   custom?: React.ReactNode;
 }
 
@@ -59,7 +58,7 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
   const measureRef = useRef<HTMLOListElement | null>(null);
   const [openKey, setOpenKey] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState(0);
-  const [copied, setCopied] = useState<"site" | "collab" | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
 
   // ── 1. Arbre de navigation (déclaré par les apps) → modèle du fil ─────────────────────────
   const navItems = useMemo(
@@ -67,7 +66,6 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
       bindNavSelection(currentWorkspace?.navItems ?? [], {
         workspaceId,
         runDefault: (route) => {
-          playXboxSound("select");
           if (route) navigate(`/${route}`);
         },
       }),
@@ -75,7 +73,6 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
   );
 
   const goHome = useCallback(() => {
-    playXboxSound("select");
     navigate("/home");
   }, [navigate]);
 
@@ -84,47 +81,25 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
     [navItems, location.pathname, goHome],
   );
 
-  // ── 2. Contexte propre à certaines pages : site, fiche collaborateur ─────────────────────
+  // ── 2. Contexte propre à certaines pages : sites (registre partagé) et maillons publiés par la page elle-même ─────
   const path = location.pathname.toLowerCase();
   // Les sites viennent du registre partagé (app des sites) : arbre de profondeur illimitée, donc une chaîne de sites.
   const { sites } = useSpacesSitesState();
   const siteChain = useMemo(() => findSiteChain(sites, path), [sites, path]);
 
-  const annuaireMatch = location.pathname.match(/^\/annuaire\/([^/]+)(?:\/.*)?$/i);
-  const rawParam = annuaireMatch ? annuaireMatch[1] : null;
-  const isAnnuaireTab = rawParam ? ["contacts", "organigramme", "structures"].includes(rawParam.toLowerCase()) : false;
-  const collaborator = rawParam && !isAnnuaireTab ? findEmployeeByParam(rawParam) : undefined;
-  const collaboratorUuid = collaborator
-    ? collaborator.uuid || getEmployeeUuid(collaborator)
-    : rawParam && !isAnnuaireTab
-      ? rawParam
-      : null;
+  // Maillons de contexte (fiche, dossier…) et titre de repli : publiés par la page (`breadcrumb-context.ts`), jamais déduits ici.
+  const pageContext = useBreadcrumbContext();
+  const contextCrumbs = pageContext.crumbs;
+  const fallbackEntryTitle = !model.entry ? (pageContext.entryTitle ?? null) : null;
 
-  // Onglets d'une fiche collaborateur (hors arbre de navigation).
-  let fallbackEntryTitle: string | null = null;
-  if (collaboratorUuid && !model.entry) {
-    const tabs: [string, string][] = [
-      ["/purchase-history", "Purchase History"],
-      ["/wishlist", "Wishlist"],
-      ["/review", "Review"],
-      ["/loyalty", "Loyalty Program"],
-      ["/support", "Support Ticket"],
-      ["/insight", "Insight"],
-      ["/activity", "Activity"],
-      ["/details", "Détails"],
-    ];
-    fallbackEntryTitle = tabs.find(([segment]) => path.includes(segment))?.[1] ?? null;
-  }
-
-  const copy = (text: string, which: "site" | "collab", e: React.MouseEvent) => {
+  const copy = (text: string, which: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    playXboxSound("select");
     navigator.clipboard?.writeText(text);
     setCopied(which);
     setTimeout(() => setCopied(null), 2000);
   };
 
-  // ── 3. Chaîne ordonnée : Accueil › Section › [site] › [collaborateur] › Entrée ───────────
+  // ── 3. Chaîne ordonnée : Accueil › Section › [sites] › [contexte de la page] › Entrée ───────────
   const items: ChainItem[] = useMemo(() => {
     const chain: ChainItem[] = [{ key: model.home.key, label: model.home.label, crumb: model.home }];
     if (model.section) chain.push({ key: model.section.key, label: model.section.label, crumb: model.section });
@@ -141,12 +116,12 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
             <span className={`truncate font-bold text-white ${TEXT}`}>{label}</span>
             <button
               type="button"
-              onClick={(e) => copy(site.id, "site", e)}
+              onClick={(e) => copy(site.id, `site-${site.id}`, e)}
               className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded bg-teal-500/10 px-1.5 py-0.5 font-mono text-[9px] text-teal-300 transition-colors hover:bg-teal-500/20"
               title="Cliquer pour copier l'identifiant du site"
             >
               <span>({site.id})</span>
-              {copied === "site" ? <Check className="h-2.5 w-2.5 text-emerald-400" /> : <Copy className="h-2.5 w-2.5 text-teal-400" />}
+              {copied === `site-${site.id}` ? <Check className="h-2.5 w-2.5 text-emerald-400" /> : <Copy className="h-2.5 w-2.5 text-teal-400" />}
             </button>
           </span>
         ) : (
@@ -155,33 +130,35 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
       });
     });
 
-    if (collaboratorUuid) {
+    contextCrumbs.forEach((crumb) => {
       chain.push({
-        key: `collab-${collaboratorUuid}`,
-        label: collaborator?.fullName ?? `#${collaboratorUuid}`,
+        key: crumb.key,
+        label: crumb.label,
         custom: (
           <span className="inline-flex min-w-0 max-w-full items-center gap-1.5">
-            {collaborator?.avatar && (
+            {crumb.imageUrl && (
               <img
-                src={collaborator.avatar}
-                alt={collaborator.fullName}
+                src={crumb.imageUrl}
+                alt={crumb.label}
                 className="h-4 w-4 shrink-0 rounded-full border border-white/20 object-cover sm:h-5 sm:w-5"
               />
             )}
-            <button
-              type="button"
-              onClick={(e) => copy(collaboratorUuid, "collab", e)}
-              className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-md border border-amber-400/30 bg-amber-400/15 px-1.5 py-0.5 font-mono text-[10px] font-bold text-amber-300 transition-all hover:bg-amber-400/25 sm:text-xs"
-              title="Cliquer pour copier l'UUID du collaborateur"
-            >
-              <span>#{collaboratorUuid}</span>
-              {copied === "collab" ? <Check className="h-2.5 w-2.5 text-emerald-400" /> : <Copy className="h-2.5 w-2.5 text-amber-300/70" />}
-            </button>
-            {collaborator && <span className={`truncate font-bold text-white ${TEXT}`}>{collaborator.fullName}</span>}
+            {crumb.copyText && (
+              <button
+                type="button"
+                onClick={(e) => copy(crumb.copyText as string, crumb.key, e)}
+                className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-md border border-amber-400/30 bg-amber-400/15 px-1.5 py-0.5 font-mono text-[10px] font-bold text-amber-300 transition-all hover:bg-amber-400/25 sm:text-xs"
+                title={crumb.copyTitle ?? "Cliquer pour copier l'identifiant"}
+              >
+                <span>#{crumb.copyText}</span>
+                {copied === crumb.key ? <Check className="h-2.5 w-2.5 text-emerald-400" /> : <Copy className="h-2.5 w-2.5 text-amber-300/70" />}
+              </button>
+            )}
+            <span className={`truncate font-bold text-white ${TEXT}`}>{crumb.label}</span>
           </span>
         ),
       });
-    }
+    });
 
     if (model.entry) {
       chain.push({ key: model.entry.key, label: model.entry.label, crumb: model.entry });
@@ -191,12 +168,12 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
         label: fallbackEntryTitle,
         custom: <span className={`truncate font-bold text-teal-300 ${TEXT}`}>{fallbackEntryTitle}</span>,
       });
-    } else if (model.next && model.atSectionRoot && !collaboratorUuid) {
+    } else if (model.next && model.atSectionRoot && contextCrumbs.length === 0) {
       chain.push({ key: model.next.key, label: model.next.label, crumb: model.next });
     }
     return chain;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [model, siteChain, collaborator, collaboratorUuid, fallbackEntryTitle, copied]);
+  }, [model, siteChain, contextCrumbs, fallbackEntryTitle, copied]);
 
   // ── 4. Repli sous « … » quand le fil ne tient pas ────────────────────────────────────────
   const itemsSignature = items.map((i) => `${i.key}:${i.label}`).join("|");
@@ -310,7 +287,6 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
             aria-haspopup="listbox"
             aria-expanded={interactive ? openKey === crumb.key : undefined}
             onClick={() => {
-              playXboxSound("select");
               setOpenKey((prev) => (prev === crumb.key ? null : crumb.key));
             }}
             title={`${crumb.label} — afficher les options de ce niveau`}
@@ -382,7 +358,6 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
                       aria-haspopup="menu"
                       aria-expanded={openKey === "ellipsis"}
                       onClick={() => {
-                        playXboxSound("select");
                         setOpenKey((prev) => (prev === "ellipsis" ? null : "ellipsis"));
                       }}
                       className={`cursor-pointer px-0.5 font-bold text-slate-300 transition-colors hover:text-white ${TEXT}`}
@@ -473,7 +448,6 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
         <button
           type="button"
           onClick={() => {
-            playXboxSound("select");
             if (onToggleFullMenu) onToggleFullMenu();
             else navigate("/home");
           }}

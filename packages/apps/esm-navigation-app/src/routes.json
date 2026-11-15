@@ -1,0 +1,29 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "topbar-navigation",
+      "slot": "topbar-slot",
+      "component": "navigation",
+      "online": true,
+      "offline": true,
+      "order": 0,
+      "meta": {
+        "global": true,
+        "topbar": { "level": "navigation", "rank": 20, "region": "center", "order": 0 }
+      }
+    },
+    {
+      "name": "link",
+      "component": "linkComponent",
+      "online": true,
+      "offline": true
+    },
+    {
+      "name": "breadcrumb-item",
+      "component": "breadcrumbItem",
+      "online": true,
+      "offline": true
+    }
+  ]
+}

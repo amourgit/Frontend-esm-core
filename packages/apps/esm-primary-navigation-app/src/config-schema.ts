@@ -55,13 +55,6 @@ export const configSchema = {
           'Maximum number of rendered TopBar levels. Content of the levels beyond this maximum is shown on the last rendered level.',
       },
     },
-    placement: {
-      _type: Type.Object,
-      _elements: { _type: Type.String },
-      _default: {},
-      _description:
-        'Moves a global TopBar element to another level and region, e.g. {"clock": "navigation:right", "nav": "main:center"}. Keys: nav. Values: "<level>:<left|center|right>"; the level is created if no app declared it yet. Invalid entries are ignored with a console warning; if the target level is not rendered, the content shows on the previous rendered level.',
-    },
     announcements: {
       requireOffset: {
         _type: Type.Boolean,
@@ -91,7 +84,6 @@ export type ConfigSchema = {
   };
   topbar: {
     levels: { order: string[]; hidden: string[]; keep: string[]; max: number };
-    placement: Record<string, string>;
     announcements: { requireOffset: boolean; defaultOffset: string };
   };
 };

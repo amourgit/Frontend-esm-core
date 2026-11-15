@@ -45,8 +45,8 @@ formé, région inconnue) n'affiche rien et avertit dans la console : jamais fat
 lui-même exposer ses propres slots d'extension. Rien dans le kit ne dépend d'un niveau précis (un test de
 non-régression, `no-hardcoded-levels.test.ts`, le garantit).
 
-Cette app déclare, pour ses éléments globaux, les niveaux `main` (rang 10) et `navigation` (rang 20) — voir
-`src/intranet-topbar/global/placement.ts`. Placement d'usine (déplaçable par la config `topbar.placement`) :
+Cette app ne déclare plus aucun élément : les niveaux `main` (rang 10) et `navigation` (rang 20) sont déclarés par les
+apps qui y placent leurs extensions (`meta.topbar`). Disposition d'usine, résultat des déclarations des apps :
 
 | Niveau       | Gauche            | Centre                                | Droite                                                                 |
 |--------------|-------------------|---------------------------------------|------------------------------------------------------------------------|
@@ -67,8 +67,8 @@ animation. Il ne dépend d'aucun nom de niveau existant.
 | `notifications-nav-menu-slot` | Zone droite « Notifications » (rail droit, rendu par `esm-notifications-app`) | — (ouvert, libre) |
 | `user-panel-slot`        | Panneau utilisateur (haut)          | `esm-user-profile-app` (identité), cette app (langue), `esm-login-app`, `esm-offline-tools-app` |
 | `user-panel-bottom-slot` | Panneau utilisateur (bas)           | `esm-login-app`                                    |
-| `topbar-nav-start-slot`  | Juste avant la navigation           | — (ouvert, libre)                                  |
-| `top-nav-breadcrumb-slot`| Fil d'Ariane par extensions (voir ci-dessous) | `breadcrumb-item`                        |
+| `topbar-nav-start-slot`  | Juste avant la navigation (lu par `esm-navigation-app`) | — (ouvert, libre)                    |
+| `top-nav-breadcrumb-slot`| Fil d'Ariane par extensions (lu par `esm-navigation-app`, voir ci-dessous) | `breadcrumb-item` |
 
 ### Déclarer le contenu de barre d'outils d'une app
 
@@ -93,7 +93,7 @@ widget compact (hauteur 32 px, `rounded-lg`, survol `hover:bg-white/10`) ; voir
 
 `top-nav-breadcrumb-slot` : entièrement invisible (hauteur 0) tant qu'aucune
 extension n'y est assignée. Utiliser le composant générique `breadcrumb-item`
-(fourni par cette app, aucun code à écrire) :
+(fourni par `@egen/esm-navigation-app`, aucun code à écrire) :
 
 ```json
 {
@@ -121,7 +121,7 @@ deux items et le style "actif" du dernier sont gérés automatiquement.
 
 ## Composants génériques réutilisables (enregistrés sans slot fixe)
 
-Ces composants ne sont attachés à aucun slot par cette app — n'importe quelle
+Ces composants (fournis par `@egen/esm-navigation-app`) ne sont attachés à aucun slot par cette app — n'importe quelle
 autre app les utilise depuis son propre `routes.json` en les pointant vers le
 slot de son choix :
 
@@ -139,8 +139,8 @@ La recherche n'est plus dans cette app : voir `@egen/esm-search-app` (config `se
 ## TopBar modulaire (niveaux déclarés par les apps)
 
 La TopBar est une pile de **niveaux** que les apps déclarent (voir « Architecture »). Chaque niveau a la même structure :
-trois **régions** neutres `left | center | right`. Elle ne connaît aucune app : tout ce qui s'y affiche vient d'**éléments
-globaux** (`src/intranet-topbar/global/items.tsx`) ou d'**extensions** d'apps attachées au slot `topbar-slot`.
+trois **régions** neutres `left | center | right`. Elle ne connaît aucune app : tout ce qui s'y affiche vient
+d'**extensions** d'apps attachées au slot `topbar-slot`.
 
 **Pile des niveaux** (règles uniques, `kit/levels.ts`) :
 1. Ordre : d'abord les niveaux listés dans `topbar.levels.order` (dans cet ordre), puis les niveaux classés par `rank`
@@ -150,17 +150,6 @@ globaux** (`src/intranet-topbar/global/items.tsx`) ou d'**extensions** d'apps at
 3. Au plus `topbar.levels.max` niveaux (défaut 8) sont rendus.
 4. Le contenu d'un niveau non rendu (masqué, ou au-delà du max) s'affiche sur le niveau rendu **précédent** de la pile,
    dans la **même région**. Rien n'est perdu en silence.
-
-**Placer un élément global où l'on veut** — `topbar.placement` (identifiant de l'élément → `"<niveau>:<région>"`). Le
-placement d'usine est dans `src/intranet-topbar/global/placement.ts`, seul endroit où il est écrit. Un niveau inconnu est
-créé :
-
-```json
-{ "topbar": { "placement": { "clock": "navigation:right", "nav": "main:center" } } }
-```
-
-Entrée inconnue ou valeur invalide : ignorée avec un avertissement console. Si le niveau visé n'est pas rendu, la règle 4
-ci-dessus s'applique.
 
 **Habillage d'une rangée** — le squelette est identique partout ; seule la « peau » CSS (`LevelSkin`) peut varier. L'hôte
 (`SupremeIntranetTopBar`) la choisit d'après la **position** de la rangée dans la pile (`skinFor` : première rangée /
@@ -187,11 +176,15 @@ store.setState((s) => ({
 // Au démontage de la page : retirer la clé de l'app dans `claims`.
 ```
 
-Éléments globaux restants (en cours de migration vers des apps) : `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
+« Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
 
 **Espace et Site : jamais dans la TopBar.** Les sélecteurs, la liste des Espaces et l'arbre des sites viennent de
 `@egen/esm-spaces-sites-app` (extension du slot `topbar-slot`). La TopBar ne fait que LIRE l'Espace actif et le registre des
 sites dans le store global `egen-spaces-sites` (navigation filtrée par Espace, fil d'Ariane avec la chaîne de sites).
+
+**Navigation : jamais dans la TopBar.** Le menu déroulant, le fil d'Ariane, la lecture des entrées `topbar-nav-slot` et de
+l'Espace actif viennent de `@egen/esm-navigation-app`. Les apps fournissent leurs propres maillons de fil d'Ariane : voir son
+README (store `egen-breadcrumb-context`).
 
 **Panneau latéral : jamais dans la TopBar.** Le bouton et le panneau (`staggered-menu-slot`) viennent de `@egen/esm-side-panel-app`.
 

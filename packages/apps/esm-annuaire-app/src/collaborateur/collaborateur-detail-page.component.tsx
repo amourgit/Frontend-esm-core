@@ -19,6 +19,7 @@ import { CollaborateurShippingAddressCard } from '../collaborateur/collaborateur
 import { CollaborateurContactInfoCard } from '../collaborateur/collaborateur-contact-info-card.component';
 import { CollaborateurRoleCard } from '../collaborateur/collaborateur-role-card.component';
 import { CollaborateurTagsCard } from '../collaborateur/collaborateur-tags-card.component';
+import { useCollaborateurBreadcrumb } from './breadcrumb-context';
 
 interface CollaborateurDetailPageProps {
   onShowToast?: (msg: string, type?: 'info' | 'success' | 'warning') => void;
@@ -53,6 +54,9 @@ export function CollaborateurDetailPage({ onShowToast }: CollaborateurDetailPage
   }, [targetParam]);
 
   const employeeUuid = employee.uuid || getEmployeeUuid(employee);
+
+  // Contexte du fil d'Ariane de la TopBar : publié par la page (la TopBar ne connaît pas l'annuaire).
+  useCollaborateurBreadcrumb(employee, employeeUuid, location.pathname);
 
   // Détection de l'onglet actif à partir de l'URL (ex: /annuaire/968579/wishlist ou /annuaire/968579/details/wishlist)
   const getTabFromLocation = (): CollaborateurTabKey => {

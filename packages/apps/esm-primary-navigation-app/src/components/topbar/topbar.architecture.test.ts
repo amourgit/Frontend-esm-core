@@ -12,7 +12,7 @@ const SESSION_LOGIC = /useSession|useTenantMode|getSessionStore|<Navigate\b|refe
 describe('TopBar : aucune logique de session ni de profil', () => {
   it.each([
     ['components/topbar/topbar.component.tsx'],
-    ['intranet-topbar/global/items.tsx'],
+    ['intranet-topbar/components/shell/SupremeIntranetTopBar.tsx'],
     ['intranet-topbar/kit/TopBarRegion.tsx'],
   ])('%s ne contient aucune logique de session', (file) => {
     expect(read(file)).not.toMatch(SESSION_LOGIC);
@@ -29,9 +29,26 @@ describe('TopBar : aucune logique de session ni de profil', () => {
   it("ne déclare ni page de redirection racine ni extension de profil : c'est le rôle de l'app dédiée", () => {
     const routes = JSON.parse(read('routes.json')) as {
       pages: Array<{ component: string }>;
-      extensions: Array<{ name: string }>;
+      extensions?: Array<{ name: string }>;
     };
     expect(routes.pages.map((p) => p.component)).toEqual(['root']);
-    expect(routes.extensions.map((e) => e.name)).not.toContain('default-user-panel');
+    expect((routes.extensions ?? []).map((e) => e.name)).not.toContain('default-user-panel');
+  });
+
+  it("ne déclare aucune extension : navigation, lanceur, recherche… sont injectés par les apps dédiées", () => {
+    const routes = JSON.parse(read('routes.json')) as { extensions?: unknown[] };
+    expect(routes.extensions ?? []).toEqual([]);
+  });
+
+  it("n'embarque plus la navigation (menu déroulant, fil d'Ariane, Espace actif) : c'est `@egen/esm-navigation-app`", () => {
+    for (const file of [
+      'intranet-topbar/components/navigation/BreadcrumbNav.tsx',
+      'intranet-topbar/components/shell/DropdownNavigation.tsx',
+      'intranet-topbar/context/WorkspaceContext.tsx',
+      'intranet-topbar/data/directoryData.ts',
+      'intranet-topbar/global/items.tsx',
+    ]) {
+      expect(() => read(file)).toThrow();
+    }
   });
 });

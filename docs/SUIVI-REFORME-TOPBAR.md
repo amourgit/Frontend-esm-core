@@ -1,7 +1,7 @@
 # Suivi — Réforme de la TopBar neutre (un squelette, des apps qui l'alimentent)
 
-> **Point de reprise** : état au commit `main` = `c5a55a3` (core) et `768c770` (framework). Dernière étape terminée :
-> **T10 — le panneau latéral**. **Prochaine tâche : T11 — navigation et fil d'Ariane** (voir ci-dessous).
+> **Point de reprise** : état au commit `main` = `@@HASH@@` (core) et `768c770` (framework). Dernière étape terminée :
+> **T11 — navigation et fil d'Ariane**. **Prochaine tâche : T12 — fin de réforme** (voir ci-dessous).
 > Mettre à jour ce fichier à CHAQUE tâche terminée (état, commit, décisions, pièges) avant de pousser.
 
 ## 1. Philosophie (ne pas la remettre en cause)
@@ -40,34 +40,24 @@ session, ni sélecteur, ni bouton. Chaque **app spécialisée** injecte son él�
 | T8 | Recherche | `esm-search-app` | `search` → main · right · 0 ; config `search.path` ; `GooeyInput` déplacé (`src/search/gooey-input.component.tsx`) ; `GlobalCallbacks` / `onOpenGlobalSearch` supprimés (code mort) |
 | T9 | Lanceur d'applications | `esm-launcher-app` | `topbar-divider` → main · right · 20 ; `app-launcher` → main · right · 30 ; config `externalRefLinks` ; contenu = slot `app-menu-slot` (inchangé) ; `quick-access` supprimé (bouton mort) ; clé de traduction `AppMenuTooltip` déplacée (41 langues) |
 | T10 | Panneau latéral | `esm-side-panel-app` | `side-panel` → main · right · 110 ; contenu = slot `staggered-menu-slot` (inchangé) ; `TopBarMenuPanel` déplacé avec test et styles |
+| T11 | Navigation et fil d'Ariane | `esm-navigation-app` | `topbar-navigation` → navigation (rang 20) · center · 0 ; routeur et `WorkspaceProvider` propres à l'extension ; `link` et `breadcrumb-item` déménagés ; **contexte de fil publié par les pages** dans le store `egen-breadcrumb-context` (contrat dans le README de l'app, référence : `esm-annuaire-app/src/collaborateur/breadcrumb-context.ts`) ; copie de l'annuaire (`directoryData.ts`) et logique `/annuaire/…` supprimées ; `global/` et config `topbar.placement` supprimés |
 
 Extensions d'autres apps déjà sur `topbar-slot` : `home-app-toolbar` (esm-home-app → navigation · left · 0) et
 `assistant-robot-button` (esm-ai-assistant-app → navigation · right · 0).
 
 ## 3. Reste dans la TopBar (`esm-primary-navigation-app`) — à migrer dans cet ordre
 
-État du code : `src/intranet-topbar/global/items.tsx` enregistre encore **1 élément global** (`nav`) (placement d'usine dans
-`global/placement.ts`). Le but final est que ce fichier, `placement.ts` et le mécanisme `registerTopBarItem` **disparaissent**.
+État du code : `global/` et `topbar.placement` sont déjà supprimés (T11) ; il reste le registre d'éléments du kit
+(`kit/items.ts`, `registerTopBarItem`, `hideGlobal` / `only` / `hide` de `layout-store.ts`) et `utils/xboxAudio.ts`, à supprimer en T12.
 
 | Tâche | Élément(s) | Placement actuel | App cible (décision prise) |
 | --- | --- | --- | --- |
 | **T11** | `nav` + fil d'Ariane | navigation · center · 0 | `esm-navigation-app` |
-| **T12** | Fin de réforme | — | supprimer `global/`, `registerTopBarItem`, `topbar.placement` (config), `xboxAudio.ts` ; la TopBar = kit + shell + providers |
+| **T12** | Fin de réforme | — | supprimer `registerTopBarItem` (kit/items.ts) et les règles `only`/`hide`/`hideGlobal` qui ne portent que sur eux, `xboxAudio.ts` (le `togglePanel` de l'hôte joue encore un son) ; la TopBar = kit + shell + providers |
 
-### T11 — Navigation et fil d'Ariane (prochaine tâche, le plus gros)
-- **Code** : `components/navigation/BreadcrumbNav.tsx` (489 l.), `DropdownNavigation`, `NavigationItem`, `context/NavContext`,
-  `context/WorkspaceContext.tsx`, `hooks/useSlotNavEntries.ts`, `utils/buildNavItemsFromSlot.ts`, `utils/buildBreadcrumbModel`,
-  `utils/findSiteChain.ts`, scss associés. **Données** : le slot `topbar-nav-slot` (24 entrées déclarées par 5 apps, `meta.workspaces`
-  pour filtrer par Espace) — **ne pas changer ce contrat**.
-- **Dette à résoudre dans cette tâche** : le fil d'Ariane contient encore de la logique propre à l'annuaire
-  (`/annuaire/<param>`, onglets `contacts` / `organigramme` / `structures`) et une copie de l'annuaire
-  (`data/directoryData.ts`, 585 lignes). **Chaque app doit fournir ses propres libellés de fil d'Ariane** (extension/slot de
-  données), la navigation ne doit connaître aucune app.
-- `WorkspaceProvider` lit déjà l'Espace actif dans le store `egen-spaces-sites` (ne pas le recréer).
-
-### T12 — Fin de réforme
-- Supprimer `utils/xboxAudio.ts` (822 l., plus utilisé une fois les derniers boutons migrés), `global/`,
-  `registerTopBarItem` et la clé de config `topbar.placement` ; mettre à jour le README de la TopBar et ce fichier.
+### T12 — Fin de réforme (prochaine tâche)
+- Supprimer `utils/xboxAudio.ts` (822 l. ; seul `togglePanel` de l'hôte l'utilise encore), le registre d'éléments du kit
+  (`registerTopBarItem`, `TopBarRegion` côté éléments) et ses règles associées dans `layout-store.ts` (README compris : `only: ['nav']`, `hideGlobal`) ; mettre à jour le README de la TopBar et ce fichier.
 - Vérifier avec `grep -rn "registerTopBarItem\|topbar.placement"` qu'il ne reste rien, puis réécrire le test d'architecture
   (`components/topbar/topbar.architecture.test.ts`) : plus aucun composant métier dans `esm-primary-navigation-app`.
 

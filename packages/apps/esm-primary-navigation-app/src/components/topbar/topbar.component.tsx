@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { SupremeIntranetTopBar } from '../../intranet-topbar/components/shell/SupremeIntranetTopBar';
-import { WorkspaceProvider } from '../../intranet-topbar/context/WorkspaceContext';
 
 // =============================================================================
 //  TOPBAR — Barre de navigation principale EGEN (design "Supreme Intranet")
@@ -11,12 +10,8 @@ import { WorkspaceProvider } from '../../intranet-topbar/context/WorkspaceContex
 //  trois régions : gauche · centre · droite. N'importe quelle app y place des composants
 //  par le slot neutre `topbar-slot` + `meta.topbar` (voir kit/regions.ts, kit/placement.ts).
 //
-//  Placement d'usine des éléments globaux (modifiable via `topbar.placement`,
-//  voir intranet-topbar/global/placement.ts) :
-//    niveau `main` : sélecteurs Espace/Site | Recherche · Langue · Apps · Raccourcis · Plein écran · Thème · Date/Heure
-//    Injectés par des apps, par extensions : le logo (@egen/esm-branding-app) et le menu
-//    utilisateur (@egen/esm-user-profile-app)
-//    niveau `navigation` : Navigation déroulante (accueil) ou fil d'Ariane contextuel
+//  Elle ne contient AUCUN élément : tout ce qui s'affiche est injecté par des apps (logo, Espace/Site, recherche, langue,
+//  lanceur, thème, horloge, panneau latéral, navigation…), chacune déclarant son niveau et sa place dans `meta.topbar`.
 // =============================================================================
 
 /** Publie la hauteur réelle de la TopBar (tous niveaux confondus) dans `--egen-topnav-height`. */
@@ -52,10 +47,6 @@ const TopBarContent: React.FC = () => {
 //  `@egen/esm-user-profile-app` ; le logo à `@egen/esm-branding-app`. Chacune de ces apps injecte son élément par
 //  extension, là où elle le décide.
 // =============================================================================
-const TopBar: React.FC = () => (
-  <WorkspaceProvider>
-    <TopBarContent />
-  </WorkspaceProvider>
-);
+const TopBar: React.FC = () => <TopBarContent />;
 
 export default TopBar;
