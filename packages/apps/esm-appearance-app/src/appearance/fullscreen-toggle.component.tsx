@@ -1,10 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Maximize2, Minimize2 } from 'lucide-react';
-import { TopBarOptionButton } from './TopBarOptionButton';
+import { OptionButton } from './option-button.component';
 
 /** Bascule plein écran, branchée directement sur la Fullscreen API. */
-const FullscreenOption: React.FC<{ className?: string }> = ({ className = '' }) => {
+/** Props transmises par la TopBar à ses extensions : en dessous du desktop, la place est laissée à la recherche. */
+interface TopBarState {
+  isDesktop?: boolean;
+}
+
+const FullscreenToggle: React.FC<TopBarState> = ({ isDesktop }) => {
   const { t } = useTranslation();
   const [isFullscreen, setIsFullscreen] = useState(() => Boolean(document.fullscreenElement));
 
@@ -22,9 +27,11 @@ const FullscreenOption: React.FC<{ className?: string }> = ({ className = '' }) 
     }
   }, []);
 
+  if (isDesktop === false) return null;
+
   return (
-    <div className={`relative overflow-visible items-center ${className || 'flex'}`}>
-      <TopBarOptionButton
+    <div className="relative flex items-center overflow-visible">
+      <OptionButton
         label={isFullscreen ? t('exitFullscreen', 'Quitter le plein écran') : t('enterFullscreen', 'Plein écran')}
         onClick={handleToggle}
         icon={isFullscreen ? <Minimize2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> : <Maximize2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" />}
@@ -33,4 +40,4 @@ const FullscreenOption: React.FC<{ className?: string }> = ({ className = '' }) 
   );
 };
 
-export default FullscreenOption;
+export default FullscreenToggle;

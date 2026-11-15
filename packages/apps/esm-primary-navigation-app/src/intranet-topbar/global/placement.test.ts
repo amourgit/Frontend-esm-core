@@ -24,15 +24,15 @@ describe('placement des éléments globaux', () => {
   });
 
   it('une surcharge déplace un élément vers n’importe quel niveau (même inconnu), en gardant son ordre', () => {
-    const p = resolvePlacement({ clock: 'agenda:right', nav: 'main:center' });
-    expect(p.clock).toEqual({
+    const p = resolvePlacement({ apps: 'agenda:right', nav: 'main:center' });
+    expect(p.apps).toEqual({
       level: 'agenda',
       rank: undefined,
       region: 'right',
-      order: DEFAULT_PLACEMENT.clock.order,
+      order: DEFAULT_PLACEMENT.apps.order,
     });
     expect(p.nav).toMatchObject({ level: 'main', rank: GLOBAL_LEVEL_RANKS.main, region: 'center' });
-    expect(p.theme).toEqual(DEFAULT_PLACEMENT.theme);
+    expect(p.divider).toEqual(DEFAULT_PLACEMENT.divider);
   });
 
   it('ignore (avec avertissement) un élément inconnu ou une valeur invalide, sans rien casser', () => {
@@ -40,10 +40,10 @@ describe('placement des éléments globaux', () => {
     const p = resolvePlacement(
       {
         inconnu: 'main:left',
-        clock: 'agenda:background',
-        theme: 'milieu',
+        apps: 'agenda:background',
+        divider: 'milieu',
         search: 42,
-        apps: 'l1-left',
+        'menu-panel': 'l1-left',
         nav: 'navigation:left',
       },
       warn,
