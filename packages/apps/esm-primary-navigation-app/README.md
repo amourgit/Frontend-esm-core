@@ -50,7 +50,7 @@ Cette app déclare, pour ses éléments globaux, les niveaux `main` (rang 10) et
 
 | Niveau       | Gauche            | Centre                                | Droite                                                                 |
 |--------------|-------------------|---------------------------------------|------------------------------------------------------------------------|
-| `main`       | logo + Espace/Site (apps) | —                                     | recherche · langue · apps · raccourcis · plein écran · thème · utilisateur · horloge |
+| `main`       | logo + Espace/Site (apps) | —                                     | recherche · langue · séparateur · apps · plein écran · thème · utilisateur · horloge |
 | `navigation` | identité de l'app active | navigation déroulante ou fil d'Ariane | contributions globales (ex. assistant IA)                         |
 
 ### Niveau éphémère (annonce, bandeau)
@@ -63,8 +63,7 @@ animation. Il ne dépend d'aucun nom de niveau existant.
 
 | Slot                     | Rendu par                          | Alimenté aujourd'hui par                          |
 |--------------------------|-------------------------------------|----------------------------------------------------|
-| `app-menu-slot`          | Grille du panneau "Applications"    | `esm-offline-tools-app`                            |
-| `quick-access-slot`      | Liste du panneau "Raccourcis"       | — (ouvert, libre)                                  |
+| `app-menu-slot`          | Grille du panneau "Applications" (lue par `esm-launcher-app`) | `esm-offline-tools-app` |
 | `notifications-nav-menu-slot` | Zone droite « Notifications » (rail droit, rendu par `esm-notifications-app`) | — (ouvert, libre) |
 | `user-panel-slot`        | Panneau utilisateur (haut)          | `esm-user-profile-app` (identité), cette app (langue), `esm-login-app`, `esm-offline-tools-app` |
 | `user-panel-bottom-slot` | Panneau utilisateur (bas)           | `esm-login-app`                                    |
@@ -134,7 +133,6 @@ slot de son choix :
 | Clé                  | Défaut                       | Description                                              |
 |-----------------------|------------------------------|------------------------------------------------------------|
 | `logo.src/alt/name/link` | —                          | Personnalisation du logo (voir `config-schema.ts`)        |
-| `externalRefLinks`    | `[]`                         | Liens externes affichés dans le panneau "Applications"    |
 
 La recherche n'est plus dans cette app : voir `@egen/esm-search-app` (config `search.path`).
 
@@ -181,7 +179,7 @@ store.setState((s) => ({
   claims: {
     ...s.claims,
     '@egen-civitas/esm-annuaire-app': {
-      regions: { 'main:left': { hideGlobal: true }, 'main:right': { only: ['apps'] } },
+      regions: { 'main:left': { hideGlobal: true }, 'main:right': { only: ['menu-panel'] } },
       levels: { keep: ['promo'], hide: ['navigation'] },
     },
   },
@@ -189,11 +187,13 @@ store.setState((s) => ({
 // Au démontage de la page : retirer la clé de l'app dans `claims`.
 ```
 
-Éléments globaux restants (en cours de migration vers des apps) : `divider`, `apps`, `quick-access`, `menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
+Éléments globaux restants (en cours de migration vers des apps) : `menu-panel`, `nav` (placement d'usine : voir plus haut). « Implementer tools » n'est plus dans la TopBar : option du rail droit (bas).
 
 **Espace et Site : jamais dans la TopBar.** Les sélecteurs, la liste des Espaces et l'arbre des sites viennent de
 `@egen/esm-spaces-sites-app` (extension du slot `topbar-slot`). La TopBar ne fait que LIRE l'Espace actif et le registre des
 sites dans le store global `egen-spaces-sites` (navigation filtrée par Espace, fil d'Ariane avec la chaîne de sites).
+
+**Lanceur d'applications : jamais dans la TopBar.** Le bouton, le panneau, le séparateur et les liens externes (`externalRefLinks`) viennent de `@egen/esm-launcher-app` ; il lit le slot `app-menu-slot`. Il n'existe plus de panneau « Raccourcis » dans la TopBar : l'app `quick-access` passe par le rail droit.
 
 **Recherche : jamais dans la TopBar.** Le champ animé et sa destination (`search.path`) viennent de `@egen/esm-search-app`.
 

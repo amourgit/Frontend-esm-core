@@ -11,7 +11,7 @@ import type { TopBarRegionKey } from './regions';
 //    import { getGlobalStore } from '@egen-civitas/esm-framework';
 //    const store = getGlobalStore('egen-topbar-layout', { claims: {} });
 //    store.setState((s) => ({ claims: { ...s.claims, '@mon-org/esm-annuaire-app': {
-//      regions: { 'primary:left': { hideGlobal: true }, 'primary:right': { only: ['apps'] } },   // page « détail »
+//      regions: { 'primary:left': { hideGlobal: true }, 'primary:right': { only: ['menu-panel'] } },   // page « détail »
 //      levels: { keep: ['promo'], hide: ['secondary'], background: { primary: 'linear-gradient(90deg,#0f172a,#134e4a)' } },
 //    } } }));
 //    // …et retirer la clé de l'app au démontage de la page.

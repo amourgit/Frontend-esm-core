@@ -3,10 +3,6 @@ import { ExtensionSlot } from '@egen-civitas/esm-framework';
 import { DropdownNavigation } from '../components/shell/DropdownNavigation';
 import { BreadcrumbNav } from '../components/navigation/BreadcrumbNav';
 import { TopBarMenuPanel } from '../components/shell/TopBarMenuPanel';
-import {
-  AppsMenuOption,
-  QuickAccessOption,
-} from '../components/options';
 import { registerTopBarItem, useTopBarUi, type TopBarItem } from '../kit';
 import { resolvePlacement, type GlobalItemId } from './placement';
 import { useTopBarNav } from './NavContext';
@@ -16,23 +12,11 @@ import styles from '../components/shell/topbar-global-items.scss';
 // =============================================================================
 //  ÉLÉMENTS GLOBAUX DE LA TOPBAR — indépendants de toute app métier
 //
-//  Lanceur, raccourcis, panneau latéral et navigation (les autres éléments sont des extensions d'apps). Chacun s'enregistre dans une région du kit, là où l'indique
+//  Panneau latéral et navigation (les autres éléments sont des extensions d'apps). Chacun s'enregistre dans une région du kit, là où l'indique
 //  `placement.ts` (surchargeable par la config `topbar.placement`) : ce fichier ne connaît AUCUN niveau.
 //  Une app peut les masquer ou les remplacer (voir kit/layout-store.ts) sans toucher à ce fichier.
 //  « Implementer tools » n'est plus ici : c'est une option du rail droit (esm-implementer-tools-app).
 // =============================================================================
-
-const DividerItem: React.FC = () => <div aria-hidden="true" className="h-4 w-px bg-white/20 mx-0.5 hidden sm:block" />;
-
-const AppsItem: React.FC = () => {
-  const ui = useTopBarUi();
-  return <AppsMenuOption open={ui.isActivePanel('appMenu')} onToggle={() => ui.togglePanel('appMenu')} />;
-};
-
-const QuickAccessItem: React.FC = () => {
-  const ui = useTopBarUi();
-  return <QuickAccessOption open={ui.isActivePanel('quickAccess')} onToggle={() => ui.togglePanel('quickAccess')} />;
-};
 
 const MenuPanelItem: React.FC = () => <TopBarMenuPanel />;
 
@@ -80,9 +64,6 @@ type ItemDefinition = Omit<TopBarItem, 'placement' | 'id'> & { id: GlobalItemId 
 
 /** Les éléments globaux, SANS placement : la région et l'ordre viennent de `placement.ts`. */
 const GLOBAL_ITEMS: readonly ItemDefinition[] = [
-  { id: 'divider', component: DividerItem, hideOnSearch: 'touch' },
-  { id: 'apps', component: AppsItem, hideOnSearch: 'touch' },
-  { id: 'quick-access', component: QuickAccessItem, hideOnSearch: 'touch' },
   { id: 'menu-panel', component: MenuPanelItem, hideOnSearch: 'touch' },
   { id: 'nav', component: NavigationItem },
 ];

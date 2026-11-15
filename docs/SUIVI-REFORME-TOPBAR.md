@@ -1,7 +1,7 @@
 # Suivi — Réforme de la TopBar neutre (un squelette, des apps qui l'alimentent)
 
-> **Point de reprise** : état au commit `main` = `02d6e76` (core) et `768c770` (framework). Dernière étape terminée :
-> **T8 — la recherche**. **Prochaine tâche : T9 — le lanceur d'applications** (voir ci-dessous).
+> **Point de reprise** : état au commit `main` = `@@HASH@@` (core) et `768c770` (framework). Dernière étape terminée :
+> **T9 — le lanceur d'applications**. **Prochaine tâche : T10 — le panneau latéral** (voir ci-dessous).
 > Mettre à jour ce fichier à CHAQUE tâche terminée (état, commit, décisions, pièges) avant de pousser.
 
 ## 1. Philosophie (ne pas la remettre en cause)
@@ -38,30 +38,23 @@ session, ni sélecteur, ni bouton. Chaque **app spécialisée** injecte son él�
 | T6 | Langue | `esm-language-app` | `language-switcher` → main · right · 10 ; `change-language` → `user-panel-slot` ; modale `change-language-modal` |
 | T7 | Apparence + horloge | `esm-appearance-app`, `esm-clock-app` | `fullscreen-toggle` → main · right · 60 ; `theme-toggle` → main · right · 70 ; `clock` → main · right · 100 |
 | T8 | Recherche | `esm-search-app` | `search` → main · right · 0 ; config `search.path` ; `GooeyInput` déplacé (`src/search/gooey-input.component.tsx`) ; `GlobalCallbacks` / `onOpenGlobalSearch` supprimés (code mort) |
+| T9 | Lanceur d'applications | `esm-launcher-app` | `topbar-divider` → main · right · 20 ; `app-launcher` → main · right · 30 ; config `externalRefLinks` ; contenu = slot `app-menu-slot` (inchangé) ; `quick-access` supprimé (bouton mort) ; clé de traduction `AppMenuTooltip` déplacée (41 langues) |
 
 Extensions d'autres apps déjà sur `topbar-slot` : `home-app-toolbar` (esm-home-app → navigation · left · 0) et
 `assistant-robot-button` (esm-ai-assistant-app → navigation · right · 0).
 
 ## 3. Reste dans la TopBar (`esm-primary-navigation-app`) — à migrer dans cet ordre
 
-État du code : `src/intranet-topbar/global/items.tsx` enregistre encore **5 éléments globaux** (placement d'usine dans
+État du code : `src/intranet-topbar/global/items.tsx` enregistre encore **2 éléments globaux** (`menu-panel`, `nav`) (placement d'usine dans
 `global/placement.ts`). Le but final est que ce fichier, `placement.ts` et le mécanisme `registerTopBarItem` **disparaissent**.
 
 | Tâche | Élément(s) | Placement actuel | App cible (décision prise) |
 | --- | --- | --- | --- |
-| **T9** | `divider`, `apps` (+ `quick-access`) | main · right · 20 / 30 / 40 | `esm-launcher-app` (menu des applications + séparateur) ; **`quick-access` : à supprimer** (le slot `quick-access-slot` n'a aucune extension : bouton mort, l'app quick-access passe par le rail) |
 | **T10** | `menu-panel` | main · right · 110 | `esm-side-panel-app` |
 | **T11** | `nav` + fil d'Ariane | navigation · center · 0 | `esm-navigation-app` |
 | **T12** | Fin de réforme | — | supprimer `global/`, `registerTopBarItem`, `topbar.placement` (config), `xboxAudio.ts` ; la TopBar = kit + shell + providers |
 
-### T9 — Lanceur (applications) (prochaine tâche)
-- **Code** : `components/options/AppsMenuOption.tsx` (bouton + panneau de grille), classes `.grid*` de
-  `components/options/topbar-options.scss`, `DividerItem`, `QuickAccessItem` (à supprimer, voir ci-dessus).
-- **Config à déplacer** : `externalRefLinks` (liens externes du menu). **Slot de contenu** : `app-menu-slot`
-  (alimenté aujourd'hui par `offline-tools-link` de `esm-offline-tools-app`) — **le conserver tel quel**.
-- Panneau exclusif via l'état TopBar (`isActivePanel('appMenu')`, `togglePanel('appMenu')`), comme le menu utilisateur.
-
-### T10 — Panneau latéral
+### T10 — Panneau latéral (prochaine tâche)
 - **Code** : `components/shell/TopBarMenuPanel.tsx` (+ test) et styles `.menuToggle*` de `topbar-global-items.scss`.
   Utilise `MenuToggleButton` / `StaggeredMenuPanel` du framework. **Slot de contenu** : `staggered-menu-slot` (déjà alimenté
   par `space-selector-menu` de `esm-spaces-sites-app`).
@@ -128,7 +121,7 @@ Extensions d'autres apps déjà sur `topbar-slot` : `home-app-toolbar` (esm-home
 ## 6. Dettes et décisions en attente
 
 - **Mutualiser** `OptionButton` (copié dans `esm-language-app`, `esm-appearance-app`) et le panneau « verre d'eau » (`GlassPanel`
-  dans `esm-user-profile-app`) en **composants du framework** (styleguide), avant T9/T10 qui en auront encore besoin. Nécessite une
+  dans `esm-user-profile-app`) en **composants du framework** (styleguide), — le lanceur (T9) a ajouté un 3ᵉ exemplaire de `GlassPanel` et un `OptionButton` à pastille ; T10 en aura encore besoin. Nécessite une
   version publiée du framework (le core le consomme depuis npm).
 - **Sites en trois exemplaires** : `esm-sites-app` garde ses propres jeux de données pour ses pages (`data/sites-data.ts`,
   `home-sections/sites/sites.data.ts`) ; à rebrancher sur le registre `egen-spaces-sites`.

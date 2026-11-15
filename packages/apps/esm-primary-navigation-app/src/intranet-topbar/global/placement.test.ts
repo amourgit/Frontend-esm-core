@@ -24,31 +24,29 @@ describe('placement des éléments globaux', () => {
   });
 
   it('une surcharge déplace un élément vers n’importe quel niveau (même inconnu), en gardant son ordre', () => {
-    const p = resolvePlacement({ apps: 'agenda:right', nav: 'main:center' });
-    expect(p.apps).toEqual({
+    const p = resolvePlacement({ 'menu-panel': 'agenda:right', nav: 'main:center' });
+    expect(p['menu-panel']).toEqual({
       level: 'agenda',
       rank: undefined,
       region: 'right',
-      order: DEFAULT_PLACEMENT.apps.order,
+      order: DEFAULT_PLACEMENT['menu-panel'].order,
     });
     expect(p.nav).toMatchObject({ level: 'main', rank: GLOBAL_LEVEL_RANKS.main, region: 'center' });
-    expect(p.divider).toEqual(DEFAULT_PLACEMENT.divider);
   });
 
-  it('ignore (avec avertissement) un élément inconnu ou une valeur invalide, sans rien casser', () => {
+  it('ignore (avec avertissement) un élément inconnu (déjà migré en app) ou une valeur invalide, sans rien casser', () => {
     const warn = vi.fn();
     const p = resolvePlacement(
       {
         inconnu: 'main:left',
-        apps: 'agenda:background',
-        divider: 'milieu',
-        'quick-access': 42,
-        'menu-panel': 'l1-left',
-        nav: 'navigation:left',
+        search: 'main:left',
+        divider: 'main:left',
+        'menu-panel': 'agenda:background',
+        nav: 42,
       },
       warn,
     );
     expect(warn).toHaveBeenCalledTimes(5);
-    expect(p).toEqual({ ...DEFAULT_PLACEMENT, nav: { ...DEFAULT_PLACEMENT.nav, region: 'left' } });
+    expect(p).toEqual(DEFAULT_PLACEMENT);
   });
 });

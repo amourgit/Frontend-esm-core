@@ -1,0 +1,29 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "extensions": [
+    {
+      "name": "topbar-divider",
+      "slot": "topbar-slot",
+      "component": "divider",
+      "online": true,
+      "offline": true,
+      "order": 20,
+      "meta": {
+        "global": true,
+        "topbar": { "level": "main", "rank": 10, "region": "right", "order": 20 }
+      }
+    },
+    {
+      "name": "app-launcher",
+      "slot": "topbar-slot",
+      "component": "launcher",
+      "online": true,
+      "offline": true,
+      "order": 30,
+      "meta": {
+        "global": true,
+        "topbar": { "level": "main", "rank": 10, "region": "right", "order": 30 }
+      }
+    }
+  ]
+}
