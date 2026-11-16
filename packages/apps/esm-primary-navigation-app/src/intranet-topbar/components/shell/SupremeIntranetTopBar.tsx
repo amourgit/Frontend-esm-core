@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { playXboxSound } from '../../utils/xboxAudio';
 import { useIsDesktop, useIsMobile } from '../../hooks/useMediaQuery';
 import {
   COMPACT_SKIN,
@@ -31,7 +30,7 @@ const skinFor: SkinResolver = ({ isFirst }) => (isFirst ? FULL_SKIN : COMPACT_SK
 //
 //  Ne contient AUCUN élément : il porte l'état d'interface partagé (panneau ouvert, recherche, taille d'écran),
 //  la navigation, et délègue la pile de niveaux à <TopBarLevels> (chaque niveau = régions gauche / centre /
-//  droite, identiques pour tous). Tout ce qui s'affiche vient d'éléments globaux (`global/items.tsx`) ou d'extensions d'apps (slots `topbar-*-slot`).
+//  droite, identiques pour tous). Tout ce qui s'affiche vient d'extensions d'apps attachées au slot `topbar-slot`.
 //  Contrat complet : kit/regions.ts (régions) et kit/layout-store.ts (personnalisation par une app).
 // =============================================================================
 export function SupremeIntranetTopBar() {
@@ -60,7 +59,6 @@ export function SupremeIntranetTopBar() {
       activeMenu,
       isActivePanel: (name) => activeMenu === name,
       togglePanel: (name) => {
-        playXboxSound('toggle');
         setActiveMenu((prev) => (prev === name ? null : name));
       },
       hidePanel: (name) => () => setActiveMenu((prev) => (prev === name ? null : prev)),

@@ -11,7 +11,7 @@ import type { TopBarRegionKey } from './regions';
 //    import { getGlobalStore } from '@egen-civitas/esm-framework';
 //    const store = getGlobalStore('egen-topbar-layout', { claims: {} });
 //    store.setState((s) => ({ claims: { ...s.claims, '@mon-org/esm-annuaire-app': {
-//      regions: { 'primary:left': { hideGlobal: true }, 'primary:right': { only: ['nav'] } },   // page « détail »
+//      regions: { 'primary:left': { hideGlobal: true }, 'primary:right': { only: ['topbar-navigation'] } },   // page « détail »
 //      levels: { keep: ['promo'], hide: ['secondary'], background: { primary: 'linear-gradient(90deg,#0f172a,#134e4a)' } },
 //    } } }));
 //    // …et retirer la clé de l'app au démontage de la page.
@@ -26,11 +26,11 @@ export const TOPBAR_LAYOUT_STORE = 'egen-topbar-layout';
 export interface TopBarRegionRule {
   /** Masque toute la région. */
   hidden?: boolean;
-  /** N'affiche QUE ces éléments / extensions (par `id` d'élément ou `name` d'extension). */
+  /** N'affiche QUE ces extensions (par `name`, tel que déclaré dans `routes.json`). */
   only?: string[];
-  /** Masque ces éléments / extensions. */
+  /** Masque ces extensions (par `name`). */
   hide?: string[];
-  /** Masque tout ce qui est global (éléments globaux et extensions `meta.global`) ; l'app garde ses propres ajouts. */
+  /** Masque tout ce qui est global (extensions `meta.global`) ; l'app garde ses propres ajouts. */
   hideGlobal?: boolean;
 }
 
@@ -67,7 +67,7 @@ export function applyTopBarLayout(owner: string, layout: TopBarLayout): () => vo
     });
 }
 
-/** Vrai si un élément / une extension (`id`) peut s'afficher sous la règle d'une région. */
+/** Vrai si une extension (`name`) peut s'afficher sous la règle d'une région. */
 export function isAllowedByRule(id: string, isGlobal: boolean, rule: TopBarRegionRule): boolean {
   if (rule.hidden) return false;
   if (rule.only && !rule.only.includes(id)) return false;

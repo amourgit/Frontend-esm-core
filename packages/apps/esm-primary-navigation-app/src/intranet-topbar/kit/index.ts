@@ -1,6 +1,5 @@
 export * from './regions';
 export * from './placement';
-export * from './items';
 export * from './context';
 export * from './layout-store';
 export * from './levels';

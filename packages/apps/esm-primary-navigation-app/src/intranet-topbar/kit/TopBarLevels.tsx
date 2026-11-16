@@ -3,7 +3,6 @@ import { useActiveAppModules } from '../hooks/useActiveAppModules';
 import { useTopBarUi } from './context';
 import { computeLevels, type DeclaredLevel, type TopBarLevelsConfig } from './levels';
 import { useTopBarExtensions } from './extensions';
-import { useTopBarItems } from './items';
 import { isAllowedByRule, useTopBarLayout } from './layout-store';
 import { resolveLevelEntries, type ResolvedRegions } from './placement';
 import { regionKey } from './regions';
@@ -129,20 +128,16 @@ export const TopBarLevels: React.FC<{
 }> = ({ config, skinFor = defaultSkinFor, dateRules }) => {
   const ui = useTopBarUi();
   const extensions = useTopBarExtensions();
-  const items = useTopBarItems();
   const active = useActiveAppModules();
   const layout = useTopBarLayout();
 
-  // Contenu VISIBLE : extensions d'apps actives (ou `meta.global`) et éléments enregistrés.
+  // Contenu VISIBLE : extensions d'apps actives (ou `meta.global`).
   const visible = useMemo(() => extensions.filter((e) => e.global || active.has(e.moduleName)), [extensions, active]);
 
   // Niveaux déclarés par ce contenu (nom + rang éventuel).
   const declared = useMemo<DeclaredLevel[]>(
-    () => [
-      ...visible.map((e) => ({ id: e.placement.level, rank: e.placement.rank })),
-      ...items.map((i) => ({ id: i.placement.level, rank: i.placement.rank })),
-    ],
-    [visible, items],
+    () => visible.map((e) => ({ id: e.placement.level, rank: e.placement.rank })),
+    [visible],
   );
   const resolution = useMemo(() => computeLevels(config, declared, layout.levels), [config, declared, layout.levels]);
 
@@ -165,20 +160,8 @@ export const TopBarLevels: React.FC<{
         payload: { kind: 'extension', extension, source: level },
       });
     }
-    for (const item of items) {
-      const { level, region } = item.placement;
-      const rule = layout.ruleFor(regionKey(level, region));
-      if (rule.hidden || !isAllowedByRule(item.id, item.global !== false, rule)) continue;
-      add(level, {
-        key: item.id,
-        placement: item.placement,
-        group: resolution.stack.indexOf(level),
-        tie: 1,
-        payload: { kind: 'item', item, source: level },
-      });
-    }
     return new Map([...groups].map(([level, entries]) => [level, resolveLevelEntries(entries)] as const));
-  }, [visible, items, resolution, layout]);
+  }, [visible, resolution, layout]);
 
   // Publie le nombre de rangées rendues (`--egen-topbar-levels`) : information pour les apps (décalages, styles).
   // La HAUTEUR totale, elle, est mesurée par le shell sur le conteneur de la TopBar (`--egen-navbar-height`).

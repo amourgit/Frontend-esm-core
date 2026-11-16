@@ -2,30 +2,25 @@ import React, { useCallback, useMemo } from 'react';
 import { ExtensionSlot, type AssignedExtension } from '@egen-civitas/esm-framework';
 import { useTopBarUi } from './context';
 import type { TopBarExtension } from './extensions';
-import type { TopBarItem } from './items';
 import type { PlacedEntry } from './placement';
 import { TOPBAR_SLOT, type TopBarRegion as Region } from './regions';
 
 // =============================================================================
 //  <TopBarRegion> — une région d'un niveau (neutre)
 //
-//  Rend, dans l'ordre calculé par `resolveLevelEntries` (placement.ts), les éléments globaux et les extensions que les
-//  apps ont placés ici. Rien n'est réservé à un objet : un logo, un profil, un bouton se placent où leur app le décide.
+//  Rend, dans l'ordre calculé par `resolveLevelEntries` (placement.ts), les extensions que les apps ont placées ici. Rien n'est réservé à un objet : un logo, un profil, un bouton se placent où leur app le décide.
 //  Ne sait RIEN du métier.
 // =============================================================================
-
-const SCREEN_CLASS: Record<NonNullable<TopBarItem['visibleFrom']>, string> = {
-  tablet: 'hidden md:contents',
-  desktop: 'hidden lg:contents',
-};
 
 const SLOT_CLASS = 'flex shrink-0 items-center gap-1 empty:hidden';
 const BACKGROUND_SLOT_CLASS = 'absolute inset-0 empty:hidden';
 
-/** Ce que porte une entrée de région : une extension d'app ou un élément global, et le niveau où elle est DÉCLARÉE. */
-export type RegionPayload =
-  | { kind: 'extension'; extension: TopBarExtension; source: string }
-  | { kind: 'item'; item: TopBarItem; source: string };
+/** Ce que porte une entrée de région : une extension d'app, et le niveau où elle est DÉCLARÉE. */
+export interface RegionPayload {
+  kind: 'extension';
+  extension: TopBarExtension;
+  source: string;
+}
 
 export type RegionEntry = PlacedEntry<RegionPayload>;
 
@@ -72,25 +67,11 @@ export const TopBarRegion: React.FC<Props> = ({ level, region, entries, classNam
   const state = useMemo(() => ({ ...ui, level, region }), [ui, level, region]);
   const background = region === 'background';
 
-  const hideOn = (i: TopBarItem) =>
-    ui.searchOpen && ((i.hideOnSearch === 'mobile' && ui.isMobile) || (i.hideOnSearch === 'touch' && !ui.isDesktop));
-
   return (
     <div data-region={region} className={className}>
-      {entries.map(({ payload }) => {
-        if (payload.kind === 'extension') {
-          const { extension } = payload;
-          return <ExtensionEntry key={extension.id} extension={extension} state={state} background={background} />;
-        }
-        const { item } = payload;
-        const Item = item.component;
-        const cls = hideOn(item) ? 'hidden' : item.visibleFrom ? SCREEN_CLASS[item.visibleFrom] : 'contents';
-        return (
-          <div key={item.id} data-topbar-item={item.id} className={cls}>
-            <Item />
-          </div>
-        );
-      })}
+      {entries.map(({ payload: { extension } }) => (
+        <ExtensionEntry key={extension.id} extension={extension} state={state} background={background} />
+      ))}
     </div>
   );
 };

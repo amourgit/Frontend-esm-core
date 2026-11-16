@@ -2,7 +2,7 @@
 //  TOPBAR KIT — contrat neutre des niveaux et des régions (aucune logique métier, aucun niveau nommé ici)
 //
 //  La TopBar est une pile de NIVEAUX. Un niveau n'est ni numéroté ni nommé par la TopBar : il EXISTE parce qu'une
-//  app (ou un élément global) le DÉCLARE, avec le nom qu'elle choisit (`primary`, `promo`, `agenda`…). Plusieurs apps
+//  app le DÉCLARE, avec le nom qu'elle choisit (`primary`, `promo`, `agenda`…). Plusieurs apps
 //  peuvent déclarer le même niveau : leurs composants s'assemblent alors dans CE niveau (il est créé une seule fois).
 //
 //  Tous les niveaux ont le même squelette, trois régions (aucun n'est un cas particulier) :

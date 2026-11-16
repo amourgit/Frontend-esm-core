@@ -45,7 +45,7 @@ formé, région inconnue) n'affiche rien et avertit dans la console : jamais fat
 lui-même exposer ses propres slots d'extension. Rien dans le kit ne dépend d'un niveau précis (un test de
 non-régression, `no-hardcoded-levels.test.ts`, le garantit).
 
-Cette app ne déclare plus aucun élément : les niveaux `main` (rang 10) et `navigation` (rang 20) sont déclarés par les
+Cette app ne déclare plus aucun élément (`routes.json` sans extension) : les niveaux `main` (rang 10) et `navigation` (rang 20) sont déclarés par les
 apps qui y placent leurs extensions (`meta.topbar`). Disposition d'usine, résultat des déclarations des apps :
 
 | Niveau       | Gauche            | Centre                                | Droite                                                                 |
@@ -156,7 +156,7 @@ d'**extensions** d'apps attachées au slot `topbar-slot`.
 autres), jamais d'après son numéro.
 
 **Personnaliser depuis une app montée** — store global `egen-topbar-layout` (aucune dépendance de code), valable tant que
-l'app propriétaire est active. Règles de région : `hidden`, `only`, `hide`, `hideGlobal` (`id` d'élément ou `name`
+l'app propriétaire est active. Règles de région : `hidden`, `only`, `hide`, `hideGlobal` (`name`
 d'extension), visant la région où le contenu est *déclaré*. Règles de niveaux : `keep`, `hide` (noms de niveaux), `background`.
 
 ```ts
@@ -168,7 +168,7 @@ store.setState((s) => ({
   claims: {
     ...s.claims,
     '@egen-civitas/esm-annuaire-app': {
-      regions: { 'main:left': { hideGlobal: true }, 'main:right': { only: ['nav'] } },
+      regions: { 'main:left': { hideGlobal: true }, 'main:right': { only: ['topbar-navigation'] } },
       levels: { keep: ['promo'], hide: ['navigation'] },
     },
   },
@@ -196,9 +196,9 @@ README (store `egen-breadcrumb-context`).
 racine viennent de `@egen/esm-user-profile-app`.
 
 **Identité d'entreprise : jamais dans la TopBar.** Le logo (et le nom, le slogan) est injecté par l'app
-`@egen/esm-branding-app` comme extension du slot neutre `topbar-slot` (`meta.topbar` : niveau `main`, région gauche). Une région rend ses éléments globaux et ses
-extensions dans UN SEUL ordre, trié par `order` (celui de `meta.topbar`, de l'élément, ou à défaut celui du `routes.json` de
-l'extension ; à `order` égal, l'extension passe avant), les références `before` / `after` s'appliquant ensuite. Les éléments globaux restants sont transitoires : ils migreront vers des apps dédiées.
+`@egen/esm-branding-app` comme extension du slot neutre `topbar-slot` (`meta.topbar` : niveau `main`, région gauche). Une région rend ses
+extensions dans UN SEUL ordre, trié par `order` (celui de `meta.topbar`, ou à défaut celui du `routes.json` de
+l'extension), les références `before` / `after` s'appliquant ensuite.
 
 ### Hauteur de la TopBar et contenu des apps
 

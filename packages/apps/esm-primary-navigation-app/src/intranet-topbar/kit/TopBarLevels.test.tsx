@@ -48,13 +48,6 @@ vi.mock('../hooks/useActiveAppModules', () => ({ useActiveAppModules: () => stat
 
 import { COMPACT_SKIN, TopBarLevels } from './TopBarLevels';
 import { TopBarUiProvider, type TopBarUi } from './context';
-import { registerTopBarItem, type TopBarItemInput } from './items';
-
-// Le registre d'éléments est global : tout élément enregistré par un test est désenregistré à la fin.
-const registered: Array<() => void> = [];
-const registerItem = (item: TopBarItemInput) => {
-  registered.push(registerTopBarItem(item));
-};
 
 const ui: TopBarUi = {
   activeMenu: null,
@@ -91,7 +84,7 @@ const levelsRendered = (container: HTMLElement) =>
 const regionOf = (container: HTMLElement, level: string, region: string) =>
   container.querySelector(`[data-level="${level}"] [data-region="${region}"]`) as HTMLElement;
 
-/** Contenu visible d'une région, dans l'ordre (les ids des extensions et des éléments). */
+/** Contenu visible d'une région, dans l'ordre (les ids des extensions). */
 const content = (container: HTMLElement, level: string, region: string) =>
   Array.from(regionOf(container, level, region).children)
     .map((c) => c.textContent)
@@ -99,7 +92,6 @@ const content = (container: HTMLElement, level: string, region: string) =>
 
 describe('TopBarLevels — niveaux déclarés par les apps', () => {
   afterEach(() => {
-    registered.splice(0).forEach((off) => off());
     vi.restoreAllMocks();
   });
 
@@ -148,23 +140,6 @@ describe('TopBarLevels — niveaux déclarés par les apps', () => {
     declare('y', { level: 'main', region: 'right', order: 1 }, APP, {}, 99);
     const { container } = renderBar();
     expect(content(container, 'main', 'right')).toEqual(['y', 'z']);
-  });
-
-  it('éléments globaux et extensions s’entrelacent dans un seul ordre (extension avant élément à égalité)', () => {
-    registerItem({
-      id: 'horloge',
-      placement: { level: 'main', region: 'right', order: 100 },
-      component: () => <i>horloge</i>,
-    });
-    registerItem({
-      id: 'theme',
-      placement: { level: 'main', region: 'right', order: 70 },
-      component: () => <i>theme</i>,
-    });
-    declare('profil', { level: 'main', region: 'right', order: 90 });
-    declare('egal', { level: 'main', region: 'right', order: 70 });
-    const { container } = renderBar();
-    expect(content(container, 'main', 'right')).toEqual(['egal', 'theme', 'profil', 'horloge']);
   });
 
   describe('pile des niveaux', () => {
@@ -362,21 +337,17 @@ describe('TopBarLevels — niveaux déclarés par les apps', () => {
       container.querySelectorAll('[data-level]').forEach((row) => expect(row).toHaveAttribute('role', 'toolbar'));
     });
 
-    it('un élément se place dans n’importe quelle région de n’importe quel niveau, par son nom', () => {
+    it('une extension se place dans n’importe quelle région de n’importe quel niveau, par son nom', () => {
       for (const [level, region] of [
         ['un', 'left'],
         ['trois', 'center'],
         ['cinq', 'right'],
       ] as const) {
-        registerItem({
-          id: `libre-${level}`,
-          placement: { level, region },
-          component: () => <i>{`contenu ${level}`}</i>,
-        });
+        declare(`libre-${level}`, { level, region });
       }
       const { container } = renderBar();
       expect(levelsRendered(container)).toEqual(['cinq', 'trois', 'un']);
-      expect(regionOf(container, 'trois', 'center')).toHaveTextContent('contenu trois');
+      expect(regionOf(container, 'trois', 'center')).toHaveTextContent('libre-trois');
     });
 
     it('la région gauche cède sa place à la recherche en mobile seulement si la peau le demande', () => {
