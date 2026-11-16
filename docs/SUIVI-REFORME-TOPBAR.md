@@ -1,6 +1,6 @@
 # Suivi — Réforme de la TopBar neutre (un squelette, des apps qui l'alimentent)
 
-> **Point de reprise** : état au commit `main` = `@@HASH@@` (core) et `768c770` (framework). Dernière étape terminée :
+> **Point de reprise** : état au commit `main` = `cf09c18` (core) et `768c770` (framework). Dernière étape terminée :
 > **T12 — fin de réforme**. **La migration T1 → T12 est terminée** : la TopBar est un squelette neutre (kit + hôte), plus aucun
 > élément en dur. Il ne reste que les dettes du §6.
 > Mettre à jour ce fichier à CHAQUE tâche terminée (état, commit, décisions, pièges) avant de pousser.
