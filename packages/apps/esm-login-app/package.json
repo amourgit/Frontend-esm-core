@@ -108,7 +108,7 @@
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
-    "@vitest/coverage-v8": "^5.0.5",
+    "@vitest/coverage-v8": "^5.1.0",
     "cross-env": "^10.1.0",
     "happy-dom": "^21.0.4",
     "i18next": "^25.10.10",
@@ -121,6 +121,6 @@
     "sass": "^1.107.0",
     "swr": "2.5.1",
     "vite": "^8.3.5",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
   }
 }
