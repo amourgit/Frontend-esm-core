@@ -10,9 +10,9 @@
     "@types/react": "18.3.25",
     "csstype": "3.2.3",
     "@egen-civitas/esm-framework": "^4.1.0",
-    "@egen-civitas/esm-styleguide": "^4.0.0",
-    "@egen-civitas/esm-app-shell": "^2.9.0",
-    "@egen-civitas/rspack-config": "^1.1.0"
+    "@egen-civitas/esm-styleguide": "^4.1.0",
+    "@egen-civitas/esm-app-shell": "^2.11.1",
+    "@egen-civitas/rspack-config": "^1.2.0"
   },
   "scripts": {
     "run:egen": "egen",
@@ -39,8 +39,8 @@
   },
   "devDependencies": {
     "@egen-civitas/egen": "^2.3.0",
-    "@egen-civitas/esm-app-shell": "^2.9.0",
-    "@egen-civitas/rspack-config": "^1.1.0",
+    "@egen-civitas/esm-app-shell": "^2.11.1",
+    "@egen-civitas/rspack-config": "^1.2.0",
     "@playwright/test": "^1.64.1",
     "@rspack/cli": "2.3.0",
     "@rspack/core": "2.3.0",
