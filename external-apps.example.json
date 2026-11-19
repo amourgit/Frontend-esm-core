@@ -1,0 +1,8 @@
+{
+  "$comment": "Copier en external-apps.json puis `yarn external:sync`. Voir docs/integration-apps/12-apps-externes-en-production.md",
+  "registry": "https://registry.npmjs.org",
+  "apps": {
+    "@acme/esm-hello-app": "1.0.0"
+  },
+  "remote": []
+}

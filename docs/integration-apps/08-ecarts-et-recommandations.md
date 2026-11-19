@@ -10,9 +10,9 @@ Aucun code n'a été modifié pour cet audit. Les recommandations (💡) découl
 | Déclarer pages/extensions/modales/workspaces/flags | ✅ disponible (workspaces/flags non utilisés dans le Core) |
 | Charger une app externe en **développement** | ✅ disponible (`egen develop --sources/--importmap/--routes`, `egen:develop`) |
 | Distribuer des apps externes **npm/tarball** | ✅ disponible, 🟡 non joué, non utilisé par le Core |
-| Charger une app externe **en production du Core** (`serve-prod.mjs`) | ⛔ absent |
+| Charger une app externe **en production du Core** (`serve-prod.mjs`) | ✅ disponible (`yarn external:sync`, doc 12) |
 | Découverte automatique (manifeste, balayage de domaine) | ⛔ absent |
-| Validation de conformité d'une app externe | ⛔ absent |
+| Validation de conformité d'une app externe | 🟡 partielle : validation côté Core à la publication (doc 12) ; pas de `egen check-app` côté Framework |
 | Adaptateurs Vue / Angular | ⛔ absents |
 | Multi-versions d'une même app | ⛔ absent |
 | Documentation d'intégration externe | ⛔ absente avant ce dossier |
@@ -23,7 +23,7 @@ Aucun code n'a été modifié pour cet audit. Les recommandations (💡) découl
 
 | # | Écart | Preuve | Importance | Impact sur la compatibilité | Option (💡) |
 | --- | --- | --- | --- | --- | --- |
-| **G1** | `serve-prod.mjs` ne voit que `packages/apps/*` | `serve-prod.mjs` l.60–80 | 🔴 | Aucune app externe en production Core | (a) `external-apps.json` lu au démarrage et fusionné (import map + registry) ; (b) consommer un registry URL ; (c) abandonner le serveur maison pour `egen assemble` + `egen build` (déjà dans le Framework) |
+| **G1** ✅ **traité** (doc 12) | `serve-prod.mjs` ne voyait que `packages/apps/*` | `serve-prod.mjs` (version d'origine) | 🔴 | Aucune app externe en production Core | (a) `external-apps.json` lu au démarrage et fusionné (import map + registry) ; (b) consommer un registry URL ; (c) abandonner le serveur maison pour `egen assemble` + `egen build` (déjà dans le Framework) |
 | **G2** | Pas de découverte | `route-maps.ts` ne lit que le DOM | 🟠 | Inscription manuelle obligatoire | fichier de manifeste d'app (URL conventionnelle) lu par un service d'assemblage ; reste du ressort de l'opérateur |
 | **G3** | `serve-prod` lit `src/routes.json` : pas de `frameworkRange` | idem | 🟠 | garde-fou de version inactif en production Core | lire `dist/routes.json` (déjà estampillé par le build) |
 | **G4** | Pas de validateur de conformité | recherche négative | 🟠 | erreurs d'intégration découvertes à l'exécution | commande `egen check-app` : vérifie `name`, `browser`, conteneur `var`, `./start`, `routes.json` ↔ exports |

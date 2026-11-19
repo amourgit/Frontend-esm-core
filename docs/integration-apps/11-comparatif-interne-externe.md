@@ -9,9 +9,9 @@ Synthèse de 04 et 05. Le **contrat côté Shell est identique** ; seuls diffèr
 | **Commun (obligatoire des deux côtés)** | `name` unique · `browser` + `main` · conteneur MF `var` `slugify(name)` · `./start` · exports = fonctions → lifecycles · `routes.json` correspondant aux exports · `peerDependencies` défini (config EGEN) | idem |
 | **Config de build** | config par défaut (27/28) ou enveloppe documentée (1/28) | config par défaut (React) ou maison (Vue/Angular) |
 | **Générateurs d'import map/registry** | `egen develop` (dev) · `serve-prod.mjs` (prod) | `egen develop --sources/--importmap/--routes`, `egen:develop` (dev) · `egen assemble` (+ `egen build`) · fichiers à la main (prod) |
-| **Découverte** | **automatique** par scan de `packages/apps/*` | ⛔ **aucune** : inscription explicite (import map **et** registry) |
+| **Découverte** | **automatique** par scan de `packages/apps/*` | **déclarative** : `external-apps.json` (prod Core) ; pas d'auto-découverte |
 | **Enregistrement** | aucun (le dossier suffit) | `spa-build-config.json` (npm/`file:`/`https:`) ou entrées d'URL |
-| **Production avec `serve-prod.mjs`** | ✅ | ⛔ non supporté |
+| **Production avec `serve-prod.mjs`** | ✅ (scan de `packages/apps/*`) | ✅ via `yarn external:sync` + verrou (doc 12) |
 | **Production avec `egen assemble`/`build`** | possible (non utilisé par le Core) | ✅ voie prévue |
 | **`frameworkRange` en production** | ⛔ non estampillé (`serve-prod` lit `src/routes.json`) | ✅ estampillé (`dist/routes.json` de l'assemblage) |
 | **Dépendances EGEN** | `@egen-civitas/*` en `dependencies` **et** `peerDependencies` | idem (mode B) ; aucune en mode A |

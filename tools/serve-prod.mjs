@@ -10,8 +10,13 @@
  *   - fichiers streamés depuis le disque (précompressés .br/.gz si présents) ;
  *   - proxy optionnel de l'API vers EGEN_BACKEND.
  *
+ * Apps EXTERNES : publiées depuis external-apps/external-apps.lock.json (généré par
+ * `yarn external:sync`), validées par tools/external-apps.mjs (une app fautive est
+ * rejetée, jamais publiée), rechargeables à chaud par `kill -HUP <pid>`.
+ *
  * Variables : PORT, HOST, EGEN_SPA_PATH, EGEN_API_URL, EGEN_BACKEND,
- *             EGEN_BRAND_DIR, EGEN_OFFLINE, EGEN_TENANT_* (cf. RUNTIME_BRIDGED_VARS).
+ *             EGEN_BRAND_DIR, EGEN_OFFLINE, EGEN_TENANT_* (cf. RUNTIME_BRIDGED_VARS),
+ *             EGEN_EXTERNAL_DIR, EGEN_EXTERNAL_STRICT, EGEN_EXTERNAL_ALLOW_HTTP.
  */
 import http from 'node:http';
 import https from 'node:https';
@@ -19,6 +24,7 @@ import { createRequire } from 'node:module';
 import { createReadStream, existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, dirname, extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { formatReport, loadExternalApps } from './external-apps.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const log = (...a) => console.log('[egen-prod]', ...a);
@@ -42,6 +48,9 @@ const SPA = trim(env.EGEN_SPA_PATH || '/egen-civitas/spa');
 const API = trim(env.EGEN_API_URL || '/egen-civitas');
 const BACKEND = env.EGEN_BACKEND ? new URL(env.EGEN_BACKEND) : null;
 const OFFLINE = env.EGEN_OFFLINE === 'true';
+const EXTERNAL_DIR = resolve(ROOT, env.EGEN_EXTERNAL_DIR || 'external-apps');
+const EXTERNAL_STRICT = env.EGEN_EXTERNAL_STRICT === 'true';
+const EXTERNAL_ALLOW_HTTP = env.EGEN_EXTERNAL_ALLOW_HTTP === 'true';
 
 // Variables à injecter sur window au runtime (idem `egen develop`).
 const BRIDGED = [
@@ -77,10 +86,36 @@ for (const dir of readdirSync(appsDir)) {
   const rf = join(appsDir, dir, 'src', 'routes.json');
   if (existsSync(rf)) routes[pkg.name] = { ...JSON.parse(readFileSync(rf, 'utf8')), version: pkg.version };
 }
-const importMapJson = JSON.stringify({ imports: importMap });
-const routesJson = JSON.stringify(routes);
 log(`${mounts.size} applications : ${[...mounts.keys()].join(', ')}`);
 if (!mounts.size) { console.error('Aucune app compilée.'); process.exit(1); }
+
+// ── Apps externes (verrou external-apps.lock.json) ──────────────────────────
+// Les apps internes priment : un nom déjà pris est rejeté côté externe.
+const internalNames = new Set(Object.keys(importMap));
+let importMapJson = '';
+let routesJson = '';
+let externalMounts = new Map();
+let externalStatusJson = '[]';
+
+function publishRegistries() {
+  const ext = loadExternalApps({ dir: EXTERNAL_DIR, spaPath: SPA, internalNames, allowHttp: EXTERNAL_ALLOW_HTTP });
+  externalMounts = ext.mounts;
+  importMapJson = JSON.stringify({ imports: { ...importMap, ...ext.importMap } });
+  routesJson = JSON.stringify({ ...routes, ...ext.routes });
+  externalStatusJson = JSON.stringify({
+    apps: ext.apps.map(({ name, kind, version, status, errors, warnings }) => ({ name, kind, version, status, errors, warnings })),
+  });
+  formatReport(ext.apps).forEach((l) => log(`externes : ${l}`));
+  return ext.apps.some((a) => a.status === 'rejected');
+}
+if (publishRegistries() && EXTERNAL_STRICT) {
+  console.error('[egen-prod] apps externes rejetées en mode strict (EGEN_EXTERNAL_STRICT=true).');
+  process.exit(1);
+}
+process.on('SIGHUP', () => {
+  log('SIGHUP : rechargement des apps externes');
+  publishRegistries();
+});
 
 // ── App shell + index.html ──────────────────────────────────────────────────
 const require = createRequire(import.meta.url);
@@ -166,10 +201,17 @@ const server = http.createServer((req, res) => {
       const rel = pathname.slice(SPA.length).replace(/^\/+/, '');
       if (rel === 'importmap.json') return sendBuffer(req, res, TYPES['.json'], importMapJson);
       if (rel === 'routes.registry.json') return sendBuffer(req, res, TYPES['.json'], routesJson);
+      if (rel === 'external-apps.status.json') return sendBuffer(req, res, TYPES['.json'], externalStatusJson);
 
       let m;
       if ((m = rel.match(/^apps\/([^/]+)\/(.+)$/)) && mounts.has(m[1])) {
         const f = safeJoin(mounts.get(m[1]), m[2]);
+        const st = f && fileStat(f);
+        if (st) return sendFile(req, res, f, st);
+        res.writeHead(404); return res.end('Not found');
+      }
+      if ((m = rel.match(/^external\/([^/]+)\/(.+)$/)) && externalMounts.has(m[1])) {
+        const f = safeJoin(externalMounts.get(m[1]), m[2]);
         const st = f && fileStat(f);
         if (st) return sendFile(req, res, f, st);
         res.writeHead(404); return res.end('Not found');

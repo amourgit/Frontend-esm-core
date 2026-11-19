@@ -12,7 +12,7 @@ Légende de preuve : voir 00. Chemins `fw/` = Frontend-esm-framework.
 | **E2 — Paquet npm (ou tarball `file:`/`https://`) assemblé dans une distribution** | `spa-build-config.json` → `egen assemble` | `egen assemble` | ✅ |
 | **E3 — Bundle hébergé ailleurs, référencé par URL** | entrée d'import map absolue + entrée de registry | fichiers `importmap.json` / `routes.registry.json` ou variables du Shell | ✅ pour le chargement, 🟡 pour le réseau/CORS |
 
-⛔ **Aucune de ces formes n'est prise en charge par `core/tools/serve-prod.mjs`** (voir §4.2).
+✅ **Mise à jour :** `serve-prod.mjs` prend désormais en charge les formes E2 et E3 en production via `yarn external:sync` (voir [12](12-apps-externes-en-production.md)). Le §4.2 ci-dessous décrit le comportement **d'origine** (apps internes seules), conservé pour les apps internes.
 
 ## 2. Indépendance du projet externe
 
@@ -86,6 +86,8 @@ Source : `fw/packages/tooling/egen/src/cli.ts`, `src/utils/importmap.ts`.
 - Le Shell passe en mode « développement » (`spaEnv`) : les surcharges `localStorage` (`import-map-override:`, `egen-routes:`) sont actives (ce sont des **outils de poste de dev**, pas un mécanisme de déploiement).
 
 ### 4.2 `core/tools/serve-prod.mjs` (production du Core)
+
+> **Évolution :** depuis l'ajout de `tools/external-apps.mjs` et `tools/sync-external-apps.mjs`, `serve-prod` publie aussi les apps externes validées (document 12). Ce qui suit décrit la découverte **des apps internes**.
 
 Lecture du code (`core/tools/serve-prod.mjs`, lignes 60–80) :
 
