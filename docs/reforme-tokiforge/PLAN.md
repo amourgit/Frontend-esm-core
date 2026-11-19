@@ -48,6 +48,24 @@ L'AGPL imposerait de publier le code de tout ce qui l'embarque, y compris par us
 | TF2b | **Bascule du framework** : remplacer `@egen-civitas/esm-theme` par le runtime, migrer le contrat de variables, supprimer l'ancien moteur | **à faire — décisions requises (§4)** |
 | TF4 | Penpot ↔ composants | hors périmètre actuel |
 
+## 3bis. Constat du 19/11 : ce qui est réellement branché aujourd'hui
+
+Vérifié dans le code (framework `main` et core `main`) :
+
+- Le shell (`esm-app-shell/src/run.ts`) construit sa liste de thèmes à partir de **deux sources** : `theme.default.json` (livré avec le shell, **ancien schéma**) et, en option,
+  `window.egenThemeUrls[]` (URLs de thèmes au même ancien schéma). `esm-theme` les télécharge, les valide (zod), les fusionne par priorité et injecte des variables CSS.
+  Le README du core décrit de même un `themeUrl: '/themes/<tenant>.json'` par tenant.
+- **Aucun appel à TokiForge n'existe** dans le core ni dans le framework ; TokiForge n'est cité que dans les documents.
+- Conséquence : la chaîne **Tweakcn → TokiForge (service, fait) → Core** n'est pas branchée. Le dernier maillon manque : un runtime dans le shell qui lit le thème effectif auprès de
+  TokiForge (`GET /v1/resolve?app=…`) et l'applique. C'est l'objet de TF2b.
+
+**Architecture cible (précisée par le propriétaire du projet)** : TokiForge est un projet local autonome, **non joignable par le framework** (bibliothèque publiée sur npm). C'est le **Core déployé**
+qui joint TokiForge, par configuration (URL du service). Le framework ne contient que le **runtime** (du code, sans appel réseau câblé) et des composants qui **consomment uniquement les tokens**
+(variables CSS), tout en laissant chaque application étendre un composant précis avec des classes Tailwind.
+
+**Publication** : un push sur `main` du framework publie automatiquement ses paquets sur npm (CI). Le runtime sera donc intégré **dans** le framework, en remplacement de `@egen-civitas/esm-theme`
+(code MIT issu de `egen-tokiforge`, attribution conservée), plutôt que d'ajouter un paquet séparé. Toute livraison sur `main` du framework devant être sûre, elle n'est poussée qu'après validation complète.
+
 ## 4. TF2b — mesure du chantier (framework, `main`)
 
 Sur `main` (Carbon/SCSS déjà retirés), le preset Tailwind v4 relie déjà les noms sémantiques shadcn (`bg-background`, `text-foreground`, `border-border`…) à l'ancien moteur par
@@ -74,5 +92,5 @@ La bascule doit partir de `main`, dans une branche dédiée, et non de l'ancien 
 1. **Verre / translucide / panneaux (69 occ.)** : (a) clés d'extension dans le contrat (valeurs par défaut fournies par TokiForge, non éditables dans Tweakcn) — *recommandé, cohérent avec « le format s'enrichira »* ; (b) supprimer l'effet ; (c) le rendre statique.
 2. **`success` / `warning` / `info` (27 occ.)** : clés d'extension (`success`, `success-foreground`…), avec défauts — *recommandé*.
 3. **Échelle `neutral` (≈ 80 occ.)** : dérivée de `background`/`foreground` par `color-mix` — *recommandé*.
-4. **Base de travail** : branche dédiée créée depuis `main` du framework (la branche de réforme reste intacte).
-5. **Publication** : qui publie `@egen-civitas/tokiforge-core` et `-react` sur npm, et sous quel nom exact ?
+4. **Base de travail** : `main` du core et du framework (confirmé). Travail préparé sur une branche, poussé sur `main` du framework seulement une fois validé (push = publication npm).
+5. **Emplacement du runtime** : intégré au framework en remplacement d'`esm-theme` (recommandé, aucun nouveau paquet à publier).
