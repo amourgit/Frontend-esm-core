@@ -20,6 +20,7 @@ Elle est volontairement **isolée** du reste de `docs/` : tout ce qui est écrit
 | 10 | [Exemples de projets](10-exemples.md) | React interne, React externe, Vue externe, Angular externe |
 | 11 | [Comparatif interne / externe](11-comparatif-interne-externe.md) | Tableau de synthèse |
 | 12 | [Apps externes en production](12-apps-externes-en-production.md) | Procédure `external:sync`, règles d'alignement, rechargement à chaud (✅ implémenté) |
+| 13 | [Extension multi-technologies](13-extension-multi-technologies.md) | Socle commun + Vue (✅), Angular et Next.js (conception) |
 
 ## Légende des niveaux de preuve
 

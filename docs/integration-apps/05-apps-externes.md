@@ -47,7 +47,7 @@ Légende de preuve : voir 00. Chemins `fw/` = Frontend-esm-framework.
 | **Config EGEN** : `module.exports = require('@egen-civitas/egen/default-rspack-config')` | projets React/TS | `./start`, `library var`, `shared`, `routes.json` estampillé, `.env`, `buildmanifest` fournis ; **le plus sûr** |
 | **Config maison** (Webpack/Rspack/autre) | Vue, Angular, existant | à vous de reproduire **exactement** : `name`, `library:{type:'var',name:slugify(name)}`, `exposes:{'./start':…}`, `filename`, `publicPath:'auto'`, `shared` singleton, copie de `routes.json` dans le dossier de sortie. **Rien dans EGEN ne le vérifie** (⛔ pas de validateur de conformité). |
 
-🟡 La config par défaut ne définit pas `entry` : Rspack applique donc son entrée par défaut (`./src`, qui résout `src/index.*` grâce à `resolve.extensions`). Déduit de la lecture, non exécuté : garder `src/index.ts(x)`.
+✅ La config par défaut ne définit pas `entry` : Rspack applique son entrée par défaut (`./src` → `src/index.*`). **Vérifié par essai** (Rspack 1.7, config équivalente) : sans `src/index.*` la compilation échoue (*Can't resolve './src'*). Toujours fournir `src/index.ts(x)`.
 
 ## 3. Contrat d'intégration avec le Shell
 

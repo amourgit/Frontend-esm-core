@@ -31,7 +31,7 @@ Aucun code n'a été modifié pour cet audit. Les recommandations (💡) découl
 | **G6** | Multi-version impossible au runtime | une clé = une URL | 🟢 | pas de canary par app | clé versionnée (`nom@major`) côté registry si besoin |
 | **G7** | Nom d'exposition fixé `./start` | `dynamic-loading.ts` | 🟢 | contrainte pour outillages tiers | documenter (fait) |
 | **G8** | Mode `async` des conteneurs `type: 'module'` non pris en charge | `window[slug]` | 🟢 | Vite-federation ESM ne convient pas sans adaptation | documenter / adapter `importDynamic` |
-| **G9** | Vue/Angular : pas d'adaptateur ni d'exemple | recherche négative | 🟠 | compat. non démontrée | prototype Vue puis Angular (06), puis paquet `esm-vue-utils`/`esm-angular-utils` si validé |
+| **G9** | Vue ✅ **traité** (`esm-vue-utils`, doc 13) ; Angular et Next.js : à faire | recherche négative puis implémentation | 🟠 | Vue démontré hors Shell ; Angular/Next non démontrés | prototype Angular puis `esm-angular-utils` ; cadrage Next.js (13 §5–6) |
 
 ### Incohérences et dette (Core ↔ Framework)
 

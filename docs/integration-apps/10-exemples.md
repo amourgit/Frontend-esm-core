@@ -6,7 +6,7 @@ Statut de chaque exemple :
 | --- | --- |
 | 1. React interne | ✅ **calqué sur `esm-footer-app`** (fichiers réels du Core) ; non compilé pendant l'audit (🟡) |
 | 2. React externe | ✅ contrat vérifié dans le code ; **non compilé** (🟡) |
-| 3. Vue externe | ⚠️ **non éprouvé** : contrat EGEN vérifié, mais aucun adaptateur Vue n'existe dans EGEN ; les parties marquées **ÉCO** viennent de l'écosystème et doivent être validées par prototype |
+| 3. Vue externe | ✅ **construit et chargé selon le protocole du Shell** avec `esm-vue-utils` (hors Shell réel) |
 | 4. Angular externe | ⚠️ **non éprouvé** (même réserve, risque plus élevé) |
 
 Convention : `slug(name) = name.replace(/[\/\-@]/g, '_')`.
@@ -289,17 +289,18 @@ Identique à l'exemple 1 à partir de l'étape 2 ; la seule différence est l'**
 
 ---
 
-## Exemple 3 — App Vue **externe** (⚠️ non éprouvé)
+## Exemple 3 — App Vue **externe** (✅ construit et chargé selon le protocole du Shell)
+
+Statut : **testé** avec Vue 3.5, `single-spa-vue` 3.0.1, Rspack 1.7 et `@egen-civitas/esm-vue-utils` (branche `feature/multi-techno-utils` du Framework, voir [13](13-extension-multi-technologies.md) §4). Chargement par `<script>`, `init`, `get('./start')`, montage page + extension, démontage : OK. **Non couvert** : Shell réel, cohabitation avec React.
 
 ### Arborescence
 ```
 esm-acme-vue-app/
 ├── package.json
-├── rspack.config.js           # config MAISON (pas la config EGEN)
-├── tsconfig.json
+├── rspack.config.js
 └── src/
-    ├── start.ts               # exposé en ./start
-    ├── App.vue
+    ├── index.ts          # OBLIGATOIRE (entrée par défaut de Rspack) : export * from './start'
+    ├── start.ts          # exposé en ./start
     └── routes.json
 ```
 
@@ -311,82 +312,77 @@ esm-acme-vue-app/
   "browser": "dist/acme-esm-vue-app.js",
   "main": "src/start.ts",
   "files": ["dist"],
-  "scripts": {
-    "start": "rspack serve --mode=development --port 8601",
-    "build": "rspack --mode=production"
-  },
-  "egen:develop": { "command": "npm run start", "url": "http://localhost:8601/acme-esm-vue-app.js" },
-  "dependencies": { "vue": "^3.5.0", "single-spa-vue": "^3.0.0" },
-  "devDependencies": { "@rspack/cli": "^1.0.0", "@rspack/core": "^1.0.0", "vue-loader": "^17.0.0", "typescript": "^5.8.3" }
+  "scripts": { "build": "rspack --mode=production" },
+  "egen:develop": { "command": "rspack serve --mode=development --port 8601", "url": "http://localhost:8601/acme-esm-vue-app.js" },
+  "dependencies": { "vue": "^3.5.0", "@egen-civitas/esm-vue-utils": "^0.1.0" },
+  "devDependencies": { "@rspack/cli": "^1.0.0", "@rspack/core": "^1.0.0", "typescript": "^5.8.3" }
 }
 ```
-(`egen:develop` : voir 05 §4.1. Versions indicatives ; **ÉCO** : `single-spa-vue`, `vue-loader`.)
+(`@egen-civitas/esm-vue-utils` : disponible après publication ; voir 13 §7.)
 
-### `rspack.config.js` (squelette ; exigences EGEN en gras dans les commentaires)
+### `src/start.ts`
+```ts
+import { defineComponent, h } from 'vue';
+import { getSyncLifecycle, useComponentContext, useTranslation } from '@egen-civitas/esm-vue-utils';
+
+const Page = defineComponent({
+  setup() {
+    const ctx = useComponentContext();
+    const { t } = useTranslation();
+    return () => h('section', [h('h1', t('title', 'Page Vue')), h('small', ctx.moduleName)]);
+  },
+});
+const Widget = defineComponent({ render: () => h('div', 'widget Vue') });
+
+const options = { moduleName: '@acme/esm-vue-app', featureName: 'vue-demo' }; // moduleName = name
+export const root = getSyncLifecycle(Page, options);
+export const widget = getSyncLifecycle(Widget, options);
+```
+`src/index.ts` : `export * from './start';` — `src/routes.json` :
+```json
+{ "pages": [ { "component": "root", "route": "acme-vue" } ],
+  "extensions": [ { "name": "acme-vue-widget", "component": "widget", "slot": "home-sections" } ] }
+```
+(Fichiers `.vue` : ajouter `vue-loader` + `VueLoaderPlugin` à la config ; l'essai n'a utilisé que des fonctions de rendu.)
+
+### `rspack.config.js` (configuration testée)
 ```js
 const path = require('path');
 const { container, CopyRspackPlugin } = require('@rspack/core');
-const { VueLoaderPlugin } = require('vue-loader');
 const pkg = require('./package.json');
-const slug = pkg.name.replace(/[\/\-@]/g, '_');             // EXIGENCE : global = slug(name)
+const slug = pkg.name.replace(/[\/\-@]/g, '_');             // global attendu par le Shell
 
 module.exports = {
-  entry: './src/start.ts',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: path.basename(pkg.browser),
-    publicPath: 'auto',                                       // EXIGENCE : chunks relatifs à l'URL du bundle
-    library: { type: 'var', name: slug },                     // EXIGENCE : conteneur global
-    clean: true,
-  },
-  resolve: { extensions: ['.ts', '.js', '.vue'] },
-  devServer: { headers: { 'Access-Control-Allow-Origin': '*' }, port: 8601 },
-  module: { rules: [
-    { test: /\.vue$/, loader: 'vue-loader' },                 // ÉCO
-    { test: /\.ts$/, loader: 'builtin:swc-loader', options: { jsc: { parser: { syntax: 'typescript' } } }, type: 'javascript/auto' },
-  ]},
+  mode: 'production',
+  // PAS de `entry` ni de `output.filename` : le conteneur MF porte le nom du fichier
+  output: { path: path.resolve(__dirname, 'dist'), publicPath: 'auto', clean: true },
+  resolve: { extensions: ['.ts', '.js', '.json'], extensionAlias: { '.js': ['.ts', '.tsx', '.js'] } },
+  module: { rules: [{ test: /\.ts$/, loader: 'builtin:swc-loader', type: 'javascript/auto',
+    options: { jsc: { parser: { syntax: 'typescript' }, target: 'es2020' } } }] },
   plugins: [
-    new VueLoaderPlugin(),
     new container.ModuleFederationPlugin({
       name: pkg.name,
-      library: { type: 'var', name: slug },
+      library: { type: 'var', name: slug },                  // EXIGENCE : conteneur global
       filename: path.basename(pkg.browser),
-      exposes: { './start': './src/start.ts' },               // EXIGENCE : ./start
-      shared: {},                                             // Vue embarqué (non partagé par le Shell)
+      exposes: { './start': './src/start.ts' },              // EXIGENCE : ./start
+      shared: {},                                            // vue embarqué (non partagé par le Shell)
     }),
-    new CopyRspackPlugin({ patterns: [{ from: 'src/routes.json', to: 'routes.json' }] }), // EXIGENCE : routes.json à côté du bundle
+    new CopyRspackPlugin({ patterns: [{ from: 'src/routes.json', to: 'routes.json' }] }), // à côté du bundle
   ],
 };
 ```
 
-### `src/start.ts`
-```ts
-import { h, createApp } from 'vue';
-import singleSpaVue from 'single-spa-vue';       // ÉCO
-import App from './App.vue';
-
-const vueLifecycles = singleSpaVue({
-  createApp,
-  appOptions: (props) => ({ render: () => h(App, { ...props }) }),
-  // ÉCO : pour extensions/modales, monter dans props.domElement
-});
-
-// EXIGENCE EGEN : chaque export = FONCTION renvoyant les lifecycles
-export const root = () => Promise.resolve(vueLifecycles);
+### Commandes, résultat, enregistrement
+```bash
+npm run build                  # dist/acme-esm-vue-app.js (conteneur), routes.json, chunks, main.js
+npm pack                       # acme-esm-vue-app-1.0.0.tgz
+# Core : external-apps.json → { "apps": { "@acme/esm-vue-app": "file:/chemin/acme-esm-vue-app-1.0.0.tgz" } }
+yarn external:sync && kill -HUP <pid-serve-prod>
 ```
+Développement : `egen:develop` + `--routes` (05 §4.1 : routes non ajoutées automatiquement dans ce cas).
 
-### `src/routes.json`
-```json
-{ "pages": [ { "component": "root", "route": "acme-vue" } ] }
-```
-
-### Commandes et enregistrement
-- Dev : `npx egen develop --sources . --routes ./src/routes.registry.dev.json`, où ce fichier est `{"@acme/esm-vue-app": <contenu de routes.json>}` (**nécessaire** : routes non ajoutées pour `egen:develop`, 05 §4.1). Alternative : lancer `egen develop` puis « toucher » `src/routes.json`.
-- Production : `npm run build && npm pack`, puis E2 ou E3 comme l'exemple 2.
-- **À valider par prototype** : montage comme page, montage comme extension (parcel), démontage sans fuite, cohabitation avec une app React.
-
-### Cheminement
-Import map `@acme/esm-vue-app → URL` → `<script>` → `window._acme_esm_vue_app` → `get('./start')` → `root()` → lifecycle `single-spa-vue` → Vue monté dans le `<div id="single-spa-application:@acme/esm-vue-app-page-0">`.
+### Cheminement vérifié
+`<script>` → `window._acme_esm_vue_app` → `init({})` → `get('./start')()` → `root()` → lifecycles `single-spa-vue` → monté dans `#single-spa-application:<nom>` (page) ou `domElement` (extension).
 
 ---
 
