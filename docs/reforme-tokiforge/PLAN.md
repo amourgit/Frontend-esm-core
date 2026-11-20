@@ -66,6 +66,20 @@ qui joint TokiForge, par configuration (URL du service). Le framework ne contien
 **Publication** : un push sur `main` du framework publie automatiquement ses paquets sur npm (CI). Le runtime sera donc intégré **dans** le framework, en remplacement de `@egen-civitas/esm-theme`
 (code MIT issu de `egen-tokiforge`, attribution conservée), plutôt que d'ajouter un paquet séparé. Toute livraison sur `main` du framework devant être sûre, elle n'est poussée qu'après validation complète.
 
+## 3ter. Avancement du 20/11 (dépôt `amourgit/egen-tokiforge`, branche `feature/reforme-tokiforge`)
+
+Architecture validée : **Penpot** (conception) · **Tweakcn** (édition de thème) · **TokiForge** (cycle de vie, versions, couches, surcharges, distribution) ; le **backend du Core** appelle TokiForge avec une clé serveur,
+le navigateur ne parle qu'au Core. Détail : `docs/ARCHITECTURE.md` du dépôt TokiForge.
+
+Livré et testé (276 tests dont 17 de bout en bout Tweakcn → TokiForge → Core → navigateur) :
+- faille d'**injection CSS** découverte et corrigée (grammaire stricte des valeurs, garde en profondeur) ;
+- `schemaVersion`, métadonnées, provenance par version ; couches app > tenant > global ; **surcharges par utilisateur** (portée réservée au backend du Core, liste blanche, plafond, garde-fou de contraste, refiltrage à la résolution) ;
+- projection **DTCG** sans perte (Penpot, Style Dictionary) ; accusés « thème réellement appliqué » ; backend de référence du Core (harnais d'essai) ;
+- image Docker du service (étapes rejouées à la main ; `docker build` non exécuté).
+
+À faire, dans l'ordre : (1) modèle canonique à trois niveaux (primitives → sémantiques → composants) et clés d'extension (verre/panneaux, success/warning/info) ; (2) bascule du framework (TF2b, §4) avec runtime intégré à `esm-theme` ;
+(3) câblage du vrai backend du Core ; (4) import DTCG depuis Penpot et sorties mobile via Style Dictionary (si le besoin mobile est confirmé).
+
 ## 4. TF2b — mesure du chantier (framework, `main`)
 
 Sur `main` (Carbon/SCSS déjà retirés), le preset Tailwind v4 relie déjà les noms sémantiques shadcn (`bg-background`, `text-foreground`, `border-border`…) à l'ancien moteur par
