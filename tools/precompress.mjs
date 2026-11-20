@@ -29,4 +29,11 @@ for (const app of await fs.readdir(join(ROOT, 'packages/apps'))) {
     await walk(resolve(ROOT, 'packages/apps', app, dirname(j.browser || j.main)));
   } catch {}
 }
+// Apps externes hébergées par le Core (yarn external:sync) : mêmes optimisations.
+const EXTERNAL = resolve(ROOT, process.env.EGEN_EXTERNAL_DIR || 'external-apps');
+try {
+  for (const e of await fs.readdir(EXTERNAL, { withFileTypes: true })) {
+    if (e.isDirectory() && e.name !== 'remote') await walk(join(EXTERNAL, e.name));
+  }
+} catch {}
 console.log(`[precompress] ${n} fichiers .br, ${(saved / 1048576).toFixed(1)} Mo économisés`);

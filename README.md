@@ -225,6 +225,15 @@ Versioning, releasing, and publishing `@egen-civitas/*` packages (and generating
 
 This repo's own `package.json` is `"private": true` and isn't published; it's versioned and deployed independently of the framework.
 
+### Multiplateforme (Web, Android, iOS)
+
+Le programme qui rend les apps de ce dépôt exécutables dans une application native (WebView dans un Host Capacitor), sans régression Web, est documenté dans
+[`docs/multiplateforme/`](docs/multiplateforme/README.md) : cadrage, état des lieux, classification des 26 apps, **plan par phases (P0 à P10)**, contrat de session et de login natifs,
+guide du développeur, tests et CI, registre des décisions et des risques. L'avancement est dans [`docs/SUIVI-MULTIPLATEFORME.md`](docs/SUIVI-MULTIPLATEFORME.md).
+
+**Règles à connaître avant de modifier une app** : le Web ne change pas ; aucun jeton dans le WebView ; aucune ressource distante en natif ; liens externes par `ExternalLink` (jamais `<a target="_blank">` brut) ;
+publication manuelle : incrémenter `version` de l'app modifiée (sinon elle n'est pas republiée).
+
 ## Design Patterns
 
 For documentation about our design patterns, please visit our [design system documentation website](https://egen.alpha.vercel.com/design-system).

@@ -93,5 +93,6 @@ package-lock.json
 /playwright/.cache/
 e2e/storageState.json
 
-# Theme Studio : le dossier `lib/` du code TweakCN vendorisé (utils, shims, pont hôte) doit être versionné
-!packages/apps/esm-theme-studio-app/src/tweakcn/lib/
+
+# Apps externes récupérées par `yarn external:sync` (généré)
+/external-apps/
