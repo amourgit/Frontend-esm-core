@@ -35,7 +35,7 @@ Chaque maillon est détaillé ci-dessous avec sa preuve.
 
 ## 4. Import map : d'où vient-elle, que contient-elle
 
-- **Format** : `{ "imports": { "<nom du paquet>": "<URL du bundle>" } }` ; type `ImportMap` dans `fw/packages/framework/esm-globals/src/types.ts`.
+- **Format** : `{ "imports": { "<nom du paquet>": "<URL du bundle>" }, "aliases"?: { "<alias>": "<nom réel>" } }` ; type `ImportMap` dans `fw/packages/framework/esm-globals/src/types.ts`. `aliases` (facultatif, ajout de la branche `feature/multi-techno-utils`) permet à `importDynamic` de retrouver un paquet par un nom alternatif ; une clé de `imports` prime toujours.
 - **Lecture** : `getCurrentPageMap()` (`fw/packages/framework/esm-dynamic-loading/src/import-maps.ts`) lit **toutes** les balises `<script type="systemjs-importmap">` du DOM (inline ou `src`), fusionne leurs `imports` (la dernière gagne).
 - **Production du HTML** : `fw/packages/shell/esm-app-shell/src/index.ejs` émet la balise (inline si `EGEN_ESM_IMPORTMAP`, sinon `src=<publicPath>/importmap.json`) ; `serve-prod.mjs` remplace/sert le même fichier.
 - **Surcharges de développement** : préfixe `localStorage` `import-map-override:`, actives **uniquement** si `window.spaEnv === 'development'` ; en production `addImportMapOverride` est un no-op journalisé (`[Security] … disabled`). Cibles natives : toujours désactivées.

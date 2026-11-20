@@ -48,6 +48,9 @@ const SPA = trim(env.EGEN_SPA_PATH || '/egen-civitas/spa');
 const API = trim(env.EGEN_API_URL || '/egen-civitas');
 const BACKEND = env.EGEN_BACKEND ? new URL(env.EGEN_BACKEND) : null;
 const OFFLINE = env.EGEN_OFFLINE === 'true';
+// Alias d'import map : namespace i18n/config des apps internes (`@egen-civitas/<app>`) -> nom du paquet
+// (`@egen/<app>`), pour que le Shell retrouve les traductions (cf. docs/integration-apps/08, écart E2).
+const IMPORTMAP_ALIASES = env.EGEN_IMPORTMAP_ALIASES !== 'false';
 const EXTERNAL_DIR = resolve(ROOT, env.EGEN_EXTERNAL_DIR || 'external-apps');
 const EXTERNAL_STRICT = env.EGEN_EXTERNAL_STRICT === 'true';
 const EXTERNAL_ALLOW_HTTP = env.EGEN_EXTERNAL_ALLOW_HTTP === 'true';
@@ -69,6 +72,7 @@ for (const [k, w, t] of BRIDGED) if (env[k] !== undefined) overrides[w] = t === 
 // ── Découverte des apps (lecture de fichiers uniquement, aucun import JS) ───
 const appsDir = resolve(ROOT, 'packages/apps');
 const importMap = {};
+const aliases = {};
 const routes = {};
 const mounts = new Map(); // dirName -> dossier dist
 for (const dir of readdirSync(appsDir)) {
@@ -83,6 +87,8 @@ for (const dir of readdirSync(appsDir)) {
   }
   mounts.set(dir, distDir);
   importMap[pkg.name] = `${SPA}/apps/${dir}/${basename(entry)}`;
+  const alias = `@egen-civitas/${pkg.name.split('/').pop()}`;
+  if (IMPORTMAP_ALIASES && alias !== pkg.name) aliases[alias] = pkg.name;
   const rf = join(appsDir, dir, 'src', 'routes.json');
   if (existsSync(rf)) routes[pkg.name] = { ...JSON.parse(readFileSync(rf, 'utf8')), version: pkg.version };
 }
@@ -100,7 +106,10 @@ let externalStatusJson = '[]';
 function publishRegistries() {
   const ext = loadExternalApps({ dir: EXTERNAL_DIR, spaPath: SPA, internalNames, allowHttp: EXTERNAL_ALLOW_HTTP });
   externalMounts = ext.mounts;
-  importMapJson = JSON.stringify({ imports: { ...importMap, ...ext.importMap } });
+  const imports = { ...importMap, ...ext.importMap };
+  // un nom présent dans `imports` (ex. app externe homonyme) n'est jamais remplacé par un alias
+  const effectiveAliases = Object.fromEntries(Object.entries(aliases).filter(([k, v]) => !(k in imports) && v in imports));
+  importMapJson = JSON.stringify(Object.keys(effectiveAliases).length ? { imports, aliases: effectiveAliases } : { imports });
   routesJson = JSON.stringify({ ...routes, ...ext.routes });
   externalStatusJson = JSON.stringify({
     apps: ext.apps.map(({ name, kind, version, status, errors, warnings }) => ({ name, kind, version, status, errors, warnings })),
