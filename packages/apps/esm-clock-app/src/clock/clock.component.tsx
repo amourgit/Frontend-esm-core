@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from './clock.scss';
+import styles from './clock.module.css';
 
 // =============================================================================
 //  HORLOGE — extension de la TopBar : l'heure (12 h) et la date longue, en français. Se met à jour toutes les 15 s.

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfig, useSession } from '@egen-civitas/esm-framework';
 import type { ConfigSchema } from '../../config-schema';
 import { useSpeechRecognition } from '../../hooks/use-speech-recognition';
-import styles from './chat-input.scss';
+import styles from './chat-input.module.css';
 
 const SendIcon: React.FC = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">

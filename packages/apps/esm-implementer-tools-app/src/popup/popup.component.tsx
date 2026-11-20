@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ContentSwitcher, Switch } from '@carbon/react';
+import { Tabs, TabsList, TabsTrigger } from '@egen-civitas/esm-framework';
 import { useTranslation } from 'react-i18next';
 import { Configuration } from '../configuration/configuration.component';
 import { FrontendModules } from '../frontend-modules/frontend-modules.component';
@@ -7,7 +7,7 @@ import { BackendDependencies } from '../backend-dependencies/backend-dependencie
 import { FeatureFlags } from '../feature-flags/feature-flags.component';
 import type { FrontendModule } from '../types';
 import type { ResolvedDependenciesModule } from '../backend-dependencies/egen-backend-dependencies';
-import styles from './popup.styles.scss';
+import styles from './popup.styles.module.css';
 
 interface DevToolsPopupProps {
   frontendModules: Array<FrontendModule>;
@@ -44,27 +44,14 @@ export default function Popup({
     <div className={styles.popup}>
       <div className={styles.topBar}>
         <div className={styles.tabs}>
-          <ContentSwitcher
-            className={styles.contentSwitcher}
-            selectedIndex={activeTab}
-            onChange={(switcherItem: SwitcherItem) => {
-              setActiveTab(switcherItem.index);
-            }}
-            size="lg"
-          >
-            <Switch name="configuration-tab" text={t('configuration', 'Configuration')} className="darkThemeSwitch" />
-            <Switch
-              name="frontend-modules-tab"
-              text={t('frontendModules', 'Frontend modules')}
-              className="darkThemeSwitch"
-            />
-            <Switch
-              name="backend-modules-tab"
-              text={t('backendModules', 'Backend modules')}
-              className="darkThemeSwitch"
-            />
-            <Switch name="feature-flags-tab" text={t('featureFlags', 'Feature flags')} className="darkThemeSwitch" />
-          </ContentSwitcher>
+          <Tabs value={String(activeTab)} onValueChange={(value) => setActiveTab(Number(value))}>
+            <TabsList className={styles.contentSwitcher}>
+            <TabsTrigger value="0" className="darkThemeSwitch">{t('configuration', 'Configuration')}</TabsTrigger>
+            <TabsTrigger value="1" className="darkThemeSwitch">{t('frontendModules', 'Frontend modules')}</TabsTrigger>
+            <TabsTrigger value="2" className="darkThemeSwitch">{t('backendModules', 'Backend modules')}</TabsTrigger>
+            <TabsTrigger value="3" className="darkThemeSwitch">{t('featureFlags', 'Feature flags')}</TabsTrigger>
+          </TabsList>
+          </Tabs>
         </div>
       </div>
       <div className={styles.content}>{tabContent}</div>

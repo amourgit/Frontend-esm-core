@@ -12,8 +12,6 @@ updates:
       prefix: "(chore)"
       prefix-development: "(chore)"
     ignore:
-      # Carbon Design System — handled manually; updates risk UI regressions
-      - dependency-name: "@carbon/*"
       # ESLint v9 requires flat config migration
       - dependency-name: "eslint"
         update-types: ["version-update:semver-major"]
@@ -128,7 +126,6 @@ updates:
           - "fork-ts-checker-webpack-plugin"
           - "css-loader"
           - "style-loader"
-          - "sass-loader"
           - "postcss-loader"
           - "postcss"
           - "autoprefixer"

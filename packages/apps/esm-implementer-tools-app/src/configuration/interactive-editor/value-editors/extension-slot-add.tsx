@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FilterableMultiSelect } from '@carbon/react';
+import { Autocomplete } from '@egen-civitas/esm-framework';
 import type { ExtensionInternalStore } from '@egen-civitas/esm-framework/src/internal';
 import { getExtensionInternalStore } from '@egen-civitas/esm-framework/src/internal';
 
@@ -17,12 +17,12 @@ export function ExtensionSlotAdd({ value, setValue }) {
   }, []);
 
   return (
-    <FilterableMultiSelect
-      id={`add-select`}
-      items={availableExtensions.map((name) => ({ id: name, label: name }))}
+    <Autocomplete
+      id="add-select"
+      items={availableExtensions.map((name) => ({ value: name, label: name }))}
       placeholder="Select extensions"
-      onChange={(value) => setValue(value.selectedItems.map((v) => v.id))}
-      initialSelectedItems={value}
+      value={value}
+      onValueChange={(selected: string[]) => setValue(selected)}
     />
   );
 }

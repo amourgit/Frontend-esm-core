@@ -5,7 +5,7 @@ import { ExtensionSlot, useAssignedExtensions, useConfig } from '@egen-civitas/e
 import { type ConfigSchema } from '../config-schema';
 import { GlassPanel } from './glass-panel.component';
 import { OptionButton } from './option-button.component';
-import styles from './launcher.scss';
+import styles from './launcher.module.css';
 
 // =============================================================================
 //  LANCEUR D'APPLICATIONS — extension de la TopBar

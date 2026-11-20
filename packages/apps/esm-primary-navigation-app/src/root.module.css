@@ -1,0 +1,5 @@
+.primaryNavContainer {
+  position: relative;
+  z-index: var(--z-index-sticky, 200);
+  width: 100%;
+}

@@ -1,0 +1,4 @@
+.offlineEntitiesTableContainer {
+  border-top: 1px solid var(--colors-border-default, #e0e0e0);
+  padding: 1rem;
+}

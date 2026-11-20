@@ -40,7 +40,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@carbon/react": "1.x",
     "@egen-civitas/esm-api": ">=2.0.0",
     "@egen-civitas/esm-config": ">=2.0.0",
     "@egen-civitas/esm-context": ">=1.0.2",
@@ -77,12 +76,10 @@
     "react-is": "^17.0.2",
     "react-router-dom": "^6.30.6",
     "rxjs": "^7.8.1",
-    "sass": "^1.107.0",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
   },
   "dependencies": {
-    "@carbon/react": "^1.92.1",
     "@egen-civitas/esm-api": "^3.0.1",
     "@egen-civitas/esm-config": "^2.0.0",
     "@egen-civitas/esm-context": "^1.0.3",
@@ -92,7 +89,7 @@
     "@egen-civitas/esm-expression-evaluator": "^1.0.1",
     "@egen-civitas/esm-extensions": "^2.5.0",
     "@egen-civitas/esm-feature-flags": "^1.0.3",
-    "@egen-civitas/esm-framework": "^4.1.0",
+    "@egen-civitas/esm-framework": "^5.0.1",
     "@egen-civitas/esm-globals": "^2.4.0",
     "@egen-civitas/esm-navigation": "^1.1.0",
     "@egen-civitas/esm-offline": "^1.0.4",

@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { MenuToggleButton, StaggeredMenuPanel } from '@egen-civitas/esm-framework';
-import styles from './side-panel.scss';
-import closeStyles from './side-panel-close.scss';
+import styles from './side-panel.module.css';
+import closeStyles from './side-panel-close.module.css';
 
 // =============================================================================
 //  PANNEAU LATÉRAL — extension de la TopBar (StaggeredMenuPanel) + son bouton déclencheur

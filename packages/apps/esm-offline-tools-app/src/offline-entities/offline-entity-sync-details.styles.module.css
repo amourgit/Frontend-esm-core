@@ -1,0 +1,53 @@
+.productiveHeading02 {
+  font-size: var(--ui-heading-compact-02-font-size, 1rem);
+  font-weight: var(--ui-heading-compact-02-font-weight, 600);
+  line-height: var(--ui-heading-compact-02-line-height, 1.375);
+  letter-spacing: var(--ui-heading-compact-02-letter-spacing, 0);
+}
+
+.bodyShort01 {
+  font-size: var(--ui-body-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-compact-01-font-weight, 400);
+  line-height: var(--ui-body-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
+}
+
+.label01 {
+  font-size: var(--ui-label-01-font-size, 0.75rem);
+  font-weight: var(--ui-label-01-font-weight, 400);
+  line-height: var(--ui-label-01-line-height, 1.33333);
+  letter-spacing: var(--ui-label-01-letter-spacing, 0.32px);
+  color: var(--colors-surface-muted-foreground, #525252);
+}
+
+.contentContainer {
+  padding: 0 1rem;
+  max-width: 800px;
+}
+
+.headeredTileSection {
+  margin-bottom: 3rem;
+}
+.headeredTileSection .productiveHeading02 {
+  margin-bottom: 0.5rem;
+}
+
+.syncedTile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.failedTile {
+  margin-bottom: 0.5rem;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  row-gap: 1rem;
+}
+
+.syncedTileIcon {
+  color: var(--colors-success-500, #24a148);
+}

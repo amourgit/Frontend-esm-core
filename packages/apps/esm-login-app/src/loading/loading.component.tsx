@@ -1,10 +1,10 @@
 import React from 'react';
-import { Loading } from '@carbon/react';
-import styles from './loading.scss';
+import { Spinner } from '@egen-civitas/esm-framework';
+import styles from './loading.module.css';
 
 const LoadingIcon: React.FC = () => (
   <div className={styles['centerLoadingSVG']}>
-    <Loading description="Active loading indicator" role="progressbar" withOverlay={false} small />
+    <Spinner aria-label="Active loading indicator" role="progressbar" />
   </div>
 );
 

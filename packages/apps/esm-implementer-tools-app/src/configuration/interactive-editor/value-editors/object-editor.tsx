@@ -1,10 +1,9 @@
 import React from 'react';
-import { StructuredListBody, StructuredListCell, StructuredListRow, StructuredListWrapper, Tile } from '@carbon/react';
 import { ValueEditorField } from './value-editor-field';
 import type { ConfigValueDescriptor } from '../editable-value.component';
-import { Type } from '@egen-civitas/esm-framework';
+import { StructuredList, StructuredListBody, StructuredListCell, StructuredListRow, Tile, Type } from '@egen-civitas/esm-framework';
 import cloneDeep from 'lodash-es/cloneDeep';
-import styles from './object-editor.styles.scss';
+import styles from './object-editor.styles.module.css';
 
 interface ObjectEditorProps {
   element: ConfigValueDescriptor;
@@ -15,7 +14,7 @@ interface ObjectEditorProps {
 export function ObjectEditor({ element, valueObject, setValue }: ObjectEditorProps) {
   return (
     <Tile className={styles.objectEditor}>
-      <StructuredListWrapper>
+      <StructuredList>
         <StructuredListBody>
           {Object.entries(element).map(([key, schema]) =>
             !key.startsWith('_') ? (
@@ -53,7 +52,7 @@ export function ObjectEditor({ element, valueObject, setValue }: ObjectEditorPro
             ) : null,
           )}
         </StructuredListBody>
-      </StructuredListWrapper>
+      </StructuredList>
     </Tile>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './description.styles.scss';
+import styles from './description.styles.module.css';
 import { useStore } from '@egen-civitas/esm-framework';
 import { implementerToolsStore } from '../../store';
 import { useTranslation } from 'react-i18next';

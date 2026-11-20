@@ -1,6 +1,6 @@
 import React, { type ReactNode } from 'react';
-import { SkeletonText } from '@carbon/react';
-import styles from './headered-quick-info.styles.scss';
+import { Skeleton } from '@egen-civitas/esm-framework';
+import styles from './headered-quick-info.styles.module.css';
 
 export interface HeaderedQuickInfoProps {
   header: string;
@@ -12,7 +12,7 @@ const HeaderedQuickInfo: React.FC<HeaderedQuickInfoProps> = ({ header, content, 
   return (
     <div>
       <h4 className={styles.label01}>{header}</h4>
-      {isLoading ? <SkeletonText heading /> : <span className={styles.productiveHeading04}>{content}</span>}
+      {isLoading ? <Skeleton className="h-6 w-24" /> : <span className={styles.productiveHeading04}>{content}</span>}
     </div>
   );
 };

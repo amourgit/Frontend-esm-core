@@ -1,25 +1,18 @@
-import React, { type ChangeEvent, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { RefreshCwIcon } from 'lucide-react';
 import {
   Button,
-  DataTable,
-  DataTableSkeleton,
+  Checkbox,
   Layer,
-  Search,
-  SearchSkeleton,
-  SkeletonText,
+  SearchInput,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableHeader,
   TableRow,
-  TableSelectAll,
-  TableSelectRow,
-} from '@carbon/react';
-import { Renew } from '@carbon/react/icons';
-import {
   deleteSynchronizationItem,
   getDynamicOfflineDataEntries,
   getFullSynchronizationItems,
@@ -34,7 +27,7 @@ import { useOfflineEntitiesWithEntries, useOfflineRegisteredEntities } from '../
 import EmptyState from './empty-state.component';
 import LastUpdatedTableCell from './last-updated-table-cell.component';
 import EntityNameTableCell from './entity-name-table-cell.component';
-import styles from './offline-entity-table.scss';
+import styles from './offline-entity-table.module.css';
 import type { OfflineEntity } from '../types';
 
 export interface OfflineEntityTableProps {
@@ -43,7 +36,6 @@ export interface OfflineEntityTableProps {
 }
 
 const OfflineEntityTable: React.FC<OfflineEntityTableProps> = ({ isInteractive, showHeader }) => {
-  // TODO: Restore @carbon/react type annotations
   const { t } = useTranslation();
   const layout = useLayoutType();
   const offlineEntitiesSwr = useOfflineEntitiesWithEntries();
@@ -52,6 +44,24 @@ const OfflineEntityTable: React.FC<OfflineEntityTableProps> = ({ isInteractive, 
   const [syncingEntityUuids, setSyncingEntityUuids] = useState<Array<string>>([]);
   const headers = useOfflineEntityTableHeaders();
   const rows = useOfflineEntityTableRows(syncingEntityUuids);
+  const [searchValue, setSearchValue] = useState('');
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
+  const visibleRows = useMemo(() => filterTableRows(rows, headers, searchValue), [rows, headers, searchValue]);
+  const selectedRows = useMemo(() => rows.filter((row) => selectedIds.has(row.id)), [rows, selectedIds]);
+  const visibleSelectedCount = visibleRows.filter((row) => selectedIds.has(row.id)).length;
+  const toggleRow = (id: string, checked: boolean) =>
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      if (checked) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  const toggleAllVisible = (checked: boolean) =>
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      visibleRows.forEach((row) => (checked ? next.add(row.id) : next.delete(row.id)));
+      return next;
+    });
 
   const handleUpdateSelectedEntitiesClick = async (selectedRows) => {
     const selectedEntityUuids = selectedRows.map((row) => row.id);
@@ -94,114 +104,114 @@ const OfflineEntityTable: React.FC<OfflineEntityTableProps> = ({ isInteractive, 
   }
 
   return (
-    <>
-      <DataTable rows={rows} headers={headers} filterRows={filterTableRows}>
-        {({
-          rows,
-          headers,
-          getTableProps,
-          getHeaderProps,
-          getRowProps,
-          getTableContainerProps,
-          getSelectionProps,
-          onInputChange,
-          selectedRows,
-        }) => (
-          <TableContainer className={styles.tableContainer} {...getTableContainerProps()}>
-            <div className={styles.tableHeaderContainer}>
-              {showHeader && (
-                <h4 className={styles.tableHeader}>{t('offlineEntitiesTableTitle', 'Offline entities')}</h4>
-              )}
-              {selectedRows.length === 0 && (
-                <Layer>
-                  <Search
-                    className={styles.tableSearch}
-                    labelText={t('offlineEntitiesTableSearchLabel', 'Search this list')}
-                    placeholder={t('offlineEntitiesTableSearchPlaceholder', 'Search this list')}
-                    size={toolbarItemSize}
-                    onChange={(e) => onInputChange(e as ChangeEvent<HTMLInputElement>)}
-                  />
-                </Layer>
-              )}
-              {selectedRows.length > 0 && (
-                <>
-                  <Button
-                    className={styles.tableSecondaryAction}
-                    kind="ghost"
-                    size={toolbarItemSize}
-                    renderIcon={(props) => <Renew size={32} {...props} />}
-                    onClick={() => handleUpdateSelectedEntitiesClick(selectedRows)}
-                  >
-                    {selectedRows.length === 1
-                      ? t('offlineEntitiesTableUpdateEntity', 'Update entity')
-                      : t('offlineEntitiesTableUpdateEntities', 'Update entities')}
-                  </Button>
-                  <Button
-                    className={styles.tablePrimaryAction}
-                    kind="danger"
-                    size={toolbarItemSize}
-                    onClick={() => handleRemoveEntitiesFromOfflineListClick(selectedRows)}
-                  >
-                    {t('offlineEntitiesTableRemoveFromOfflineList', 'Remove from list')}
-                  </Button>
-                </>
-              )}
-            </div>
-            <Table {...getTableProps()} useZebraStyles>
-              <TableHead>
-                <TableRow>
-                  {isInteractive && <TableSelectAll {...getSelectionProps()} />}
-                  {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })} isSortable>
-                      {header.header}
-                    </TableHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow {...getRowProps({ row })}>
-                    {isInteractive && <TableSelectRow {...getSelectionProps({ row })} />}
-                    {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>{cell.value?.value ?? cell.value}</TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+    <div className={styles.tableContainer}>
+      <div className={styles.tableHeaderContainer}>
+        {showHeader && <h4 className={styles.tableHeader}>{t('offlineEntitiesTableTitle', 'Offline entities')}</h4>}
+        {selectedRows.length === 0 && (
+          <Layer className="bg-transparent">
+            <SearchInput
+              containerClassName={styles.tableSearch}
+              label={t('offlineEntitiesTableSearchLabel', 'Search this list')}
+              placeholder={t('offlineEntitiesTableSearchPlaceholder', 'Search this list')}
+              value={searchValue}
+              onValueChange={setSearchValue}
+            />
+          </Layer>
         )}
-      </DataTable>
-    </>
+        {selectedRows.length > 0 && (
+          <>
+            <Button
+              className={styles.tableSecondaryAction}
+              variant="ghost"
+              size={toolbarItemSize}
+              onClick={() => handleUpdateSelectedEntitiesClick(selectedRows)}
+            >
+              <RefreshCwIcon size={16} />
+              {selectedRows.length === 1
+                ? t('offlineEntitiesTableUpdateEntity', 'Update entity')
+                : t('offlineEntitiesTableUpdateEntities', 'Update entities')}
+            </Button>
+            <Button
+              className={styles.tablePrimaryAction}
+              variant="destructive"
+              size={toolbarItemSize}
+              onClick={() => handleRemoveEntitiesFromOfflineListClick(selectedRows)}
+            >
+              {t('offlineEntitiesTableRemoveFromOfflineList', 'Remove from list')}
+            </Button>
+          </>
+        )}
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {isInteractive && (
+              <TableHead className="w-10">
+                <Checkbox
+                  aria-label={t('selectAll', 'Select all')}
+                  checked={
+                    visibleRows.length > 0 && visibleSelectedCount === visibleRows.length
+                      ? true
+                      : visibleSelectedCount > 0
+                        ? 'indeterminate'
+                        : false
+                  }
+                  onCheckedChange={(checked) => toggleAllVisible(checked === true)}
+                />
+              </TableHead>
+            )}
+            {headers.map((header) => (
+              <TableHead key={header.key}>{header.header}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {visibleRows.map((row) => (
+            <TableRow key={row.id} data-state={selectedIds.has(row.id) ? 'selected' : undefined}>
+              {isInteractive && (
+                <TableCell className="w-10">
+                  <Checkbox
+                    aria-label={t('selectRow', 'Select row')}
+                    checked={selectedIds.has(row.id)}
+                    onCheckedChange={(checked) => toggleRow(row.id, checked === true)}
+                  />
+                </TableCell>
+              )}
+              {headers.map(({ key }) => (
+                <TableCell key={key}>{row[key]?.value ?? row[key]}</TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 
 const TableSkeleton: React.FC<{ showHeader: boolean }> = ({ showHeader }) => {
   return (
-    <TableContainer className={styles.tableContainer}>
+    <div className={styles.tableContainer}>
       <div className={styles.tableHeaderContainer}>
-        {showHeader && <SkeletonText heading width="20%" className={styles.tableHeader} />}
-        <SearchSkeleton className={styles.tableSearch} />
+        {showHeader && <Skeleton className={`${styles.tableHeader} h-6 w-1/5`} />}
+        <Skeleton className={`${styles.tableSearch} h-9`} />
       </div>
-      <DataTableSkeleton showToolbar={false} showHeader={false} />
-    </TableContainer>
+      <div className="flex flex-col gap-2 p-2">
+        {Array.from({ length: 5 }, (_, index) => (
+          <Skeleton key={index} className="h-8 w-full" />
+        ))}
+      </div>
+    </div>
   );
 };
 
-function filterTableRows({
-  rowIds,
-  headers,
-  cellsById,
-  inputValue,
-  // @ts-ignore `getCellId` is not in the types, but present in Carbon.
-  getCellId,
-}) {
-  return rowIds.filter((rowId) =>
+function filterTableRows(rows: Array<any>, headers: Array<{ key: string }>, inputValue: string) {
+  const needle = inputValue.replace(/\s/g, '').toLowerCase();
+  if (!needle) return rows;
+  return rows.filter((row) =>
     headers.some(({ key }) => {
-      const cellId = getCellId(rowId, key);
-      const value = cellsById[cellId].value;
+      const value = row[key];
       const filterableValue = value?.filterableValue?.toString() ?? value?.toString() ?? '';
-      return filterableValue.replace(/\s/g, '').toLowerCase().includes(inputValue.replace(/\s/g, '').toLowerCase());
+      return filterableValue.replace(/\s/g, '').toLowerCase().includes(needle);
     }),
   );
 }

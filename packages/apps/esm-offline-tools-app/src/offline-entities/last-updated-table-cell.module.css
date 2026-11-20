@@ -1,0 +1,13 @@
+.errorIcon {
+  color: var(--colors-error-500, #da1e28);
+}
+
+.pendingIcon {
+  color: var(--colors-warning-500, #ff832b);
+}
+
+.cellContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}

@@ -1,10 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from '@carbon/react';
-import { PendingFilled, WarningAltFilled, CheckmarkOutline } from '@carbon/react/icons';
+import { ClockIcon as PendingFilled, TriangleAlertIcon as WarningAltFilled, CircleCheckIcon as CheckmarkOutline } from 'lucide-react';
 import type { DynamicOfflineDataSyncState } from '@egen-civitas/esm-framework';
-import { getDynamicOfflineDataHandlers, navigate } from '@egen-civitas/esm-framework';
-import styles from './last-updated-table-cell.scss';
+import { getDynamicOfflineDataHandlers, navigate, TextLink } from '@egen-civitas/esm-framework';
+import styles from './last-updated-table-cell.module.css';
 
 export interface LastUpdatedTableCellProps {
   entityUuid: string;
@@ -47,7 +46,7 @@ const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ entityUuid,
       return (
         <>
           <WarningAltFilled className={styles.errorIcon} />
-          <Link
+          <TextLink
             onClick={() =>
               navigate({
                 to: `${window.getEgenSpaBase()}offline-tools/entities/${entityUuid}/offline-data`,
@@ -58,7 +57,7 @@ const LastUpdatedTableCell: React.FC<LastUpdatedTableCellProps> = ({ entityUuid,
             {lastSyncState.erroredHandlers.length === 1
               ? t('offlineEntitiesTableLastUpdatedError', 'error')
               : t('offlineEntitiesTableLastUpdatedErrors', 'errors')}
-          </Link>
+          </TextLink>
         </>
       );
     }

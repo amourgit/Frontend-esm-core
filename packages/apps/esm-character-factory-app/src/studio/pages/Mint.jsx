@@ -1,5 +1,5 @@
 import React from "react"
-import styles from "./Mint.module.scss"
+import styles from "./Mint.module.css"
 import { ViewMode, ViewContext } from "../context/ViewContext"
 import { SceneContext } from "../context/SceneContext"
 import CustomButton from "../components/custom-button"

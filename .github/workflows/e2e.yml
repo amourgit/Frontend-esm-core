@@ -39,7 +39,7 @@ jobs:
               - 'packages/**/src/**/*!(.test).tsx'
               - 'packages/**/src/**/*!(.test).js'
               - 'packages/**/src/**/*!(.test).jsx'
-              - 'packages/**/src/**/*.scss'
+              - 'packages/**/src/**/*.css'
               - 'packages/**/src/routes.json'
               - 'package.json'
               - 'playwright.config.ts'

@@ -4,7 +4,7 @@ import { Moon, Sun } from 'lucide-react';
 import { navigate } from '@egen-civitas/esm-framework';
 import { getThemeEngine, getThemeState, toggleThemeMode, type ThemeMode } from '@egen-civitas/esm-theme';
 import { SettingsSection } from './settings-section.component';
-import styles from './settings.scss';
+import styles from './settings.module.css';
 
 // Apparence : choix clair/sombre branché sur le moteur de thème EGEN (`@egen-civitas/esm-theme`).
 const AppearanceSection: React.FC = () => {

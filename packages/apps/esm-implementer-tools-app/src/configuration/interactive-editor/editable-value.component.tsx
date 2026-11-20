@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isEqual, cloneDeep, unset } from 'lodash-es';
-import { Button } from '@carbon/react';
-import { EditIcon, ResetIcon } from '@egen-civitas/esm-framework';
+import { Button, EditIcon, IconButton, ResetIcon } from '@egen-civitas/esm-framework';
 import {
   clearConfigErrors,
   temporaryConfigStore,
@@ -14,7 +13,7 @@ import {
 import { implementerToolsStore, type ImplementerToolsStore } from '../../store';
 import { DisplayValue } from './display-value';
 import { ValueEditor, type CustomValueType } from './value-editor';
-import styles from './editable-value.styles.scss';
+import styles from './editable-value.styles.module.css';
 
 export interface EditableValueProps {
   path: Array<string>;
@@ -107,29 +106,9 @@ export default function EditableValue({ path, element, customType }: EditableVal
         ) : (
           <div className={styles.elementValue}>
             <DisplayValue value={element._value} />
-            <Button
-              kind="ghost"
-              size="sm"
-              iconDescription={t('editValueButtonText', 'Edit')}
-              onClick={() => setEditing(true)}
-              ref={activeConfigRef}
-              renderIcon={(props) => <EditIcon size={16} {...props} />}
-              hasIconOnly
-            />
+            <IconButton icon={<EditIcon size={16} />} label={t('editValueButtonText', 'Edit')} variant="ghost" size="icon-sm" onClick={() => setEditing(true)} ref={activeConfigRef} />
             {element._source == 'temporary config' ? (
-              <Button
-                renderIcon={(props) => <ResetIcon size={16} {...props} />}
-                size="sm"
-                kind="ghost"
-                iconDescription={t('resetToDefaultValueButtonText', 'Reset to default')}
-                hasIconOnly
-                onClick={() => {
-                  clearConfigErrors(path.join('.'));
-                  const state = cloneDeep(temporaryConfigStore.getState());
-                  unset(state, ['config', ...path]);
-                  temporaryConfigStore.setState(state);
-                }}
-              />
+              <IconButton icon={<ResetIcon size={16} />} label={t('resetToDefaultValueButtonText', 'Reset to default')} size="icon-sm" variant="ghost" onClick={() => { clearConfigErrors(path.join('.')); const state = cloneDeep(temporaryConfigStore.getState()); unset(state, ['config', ...path]); temporaryConfigStore.setState(state); }} />
             ) : null}
           </div>
         )}

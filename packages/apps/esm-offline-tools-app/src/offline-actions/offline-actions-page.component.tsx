@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@egen-civitas/esm-framework';
 import {
   getOfflineSynchronizationStore,
   isDesktop,
@@ -7,13 +8,12 @@ import {
   useLayoutType,
   useStore,
 } from '@egen-civitas/esm-framework/src/internal';
-import { Button } from '@carbon/react';
-import { Renew } from '@carbon/react/icons';
+import { RefreshCwIcon as Renew } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { usePendingSyncItems } from '../hooks/offline-actions';
 import OfflineActions from './offline-actions.component';
 import SharedPageLayout from '../components/shared-page-layout.component';
-import styles from './offline-actions-page.styles.scss';
+import styles from './offline-actions-page.styles.module.css';
 
 const OfflineActionsPage: React.FC = () => {
   const { t } = useTranslation();
@@ -26,13 +26,8 @@ const OfflineActionsPage: React.FC = () => {
   const synchronize = () => runSynchronization().finally(() => mutatePendingSyncItems());
 
   const primaryActions = (
-    <Button
-      className={styles.primaryActionButton}
-      size={isDesktop(layout) ? 'sm' : undefined}
-      renderIcon={(props) => isDesktop(layout) && <Renew size={16} {...props} />}
-      disabled={isSynchronizing}
-      onClick={synchronize}
-    >
+    <Button className={styles.primaryActionButton} size={isDesktop(layout) ? 'sm' : undefined} disabled={isSynchronizing} onClick={synchronize}>
+{isDesktop(layout) && <Renew size={16} />}
       {!isDesktop(layout) && <Renew size={16} className={styles.buttonInlineIcon} />}
       {t('offlineActionsUpdateOfflineEntities', 'Update offline entities')}
     </Button>

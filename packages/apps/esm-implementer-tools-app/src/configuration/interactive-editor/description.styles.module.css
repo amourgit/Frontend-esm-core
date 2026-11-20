@@ -1,0 +1,37 @@
+.productiveHeading01 {
+  font-size: var(--ui-heading-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-heading-compact-01-font-weight, 600);
+  line-height: var(--ui-heading-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-heading-compact-01-letter-spacing, 0.16px);
+}
+
+.path {
+  font-size: var(--ui-heading-02-font-size, 1rem);
+  font-weight: var(--ui-heading-02-font-weight, 600);
+  line-height: var(--ui-heading-02-line-height, 1.5);
+  letter-spacing: var(--ui-heading-02-letter-spacing, 0);
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  font-size: var(--ui-body-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-compact-01-font-weight, 400);
+  line-height: var(--ui-body-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
+  margin-bottom: 1rem;
+}
+
+.source {
+  font-size: var(--ui-body-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-compact-01-font-weight, 400);
+  line-height: var(--ui-body-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.value {
+  font-family: monospace;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+}

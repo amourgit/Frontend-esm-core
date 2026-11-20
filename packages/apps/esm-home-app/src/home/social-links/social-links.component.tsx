@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAnimate } from 'framer-motion';
-import styles from './social-links.scss';
+import styles from './social-links.module.css';
 
 // =============================================================================
 //  SOCIAL LINKS — Grille de liens externes, effet "clip-path" au survol

@@ -1,9 +1,0 @@
-@use '@carbon/layout';
-
-// Le logo EGEN est en couleurs : ne lui appliquer aucun filtre (brightness/invert…).
-.logoImg {
-  margin-bottom: layout.$spacing-07;
-  max-width: 10rem;
-  max-height: 3.5rem;
-  object-fit: contain;
-}

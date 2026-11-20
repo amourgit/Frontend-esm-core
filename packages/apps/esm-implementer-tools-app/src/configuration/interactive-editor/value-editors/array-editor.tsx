@@ -1,18 +1,10 @@
 import React, { useMemo } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import uniqueId from 'lodash-es/uniqueId';
-import { AddIcon, TrashCanIcon, Type } from '@egen-civitas/esm-framework';
-import {
-  Button,
-  Tile,
-  StructuredListBody,
-  StructuredListCell,
-  StructuredListRow,
-  StructuredListWrapper,
-} from '@carbon/react';
+import { AddIcon, Button, IconButton, StructuredList, StructuredListBody, StructuredListCell, StructuredListRow, Tile, TrashCanIcon, Type } from '@egen-civitas/esm-framework';
 import { ValueEditorField } from './value-editor-field';
 import type { ConfigValueDescriptor } from '../editable-value.component';
-import styles from './array-editor.styles.scss';
+import styles from './array-editor.styles.module.css';
 
 interface ArrayEditorProps {
   element: ConfigValueDescriptor;
@@ -25,7 +17,7 @@ export function ArrayEditor({ element, valueArray, setValue }: ArrayEditorProps)
   const currentValueArray = valueArray ?? [];
   return (
     <Tile className={styles.arrayEditor}>
-      <StructuredListWrapper>
+      <StructuredList>
         <StructuredListBody>
           {currentValueArray.map((value, i) => (
             <StructuredListRow key={`${arrayKey}-${i}`}>
@@ -46,39 +38,17 @@ export function ArrayEditor({ element, valueArray, setValue }: ArrayEditorProps)
                 />
               </StructuredListCell>
               <StructuredListCell className={styles.buttonCell}>
-                <Button
-                  renderIcon={(props) => <TrashCanIcon {...props} size={16} />}
-                  size="sm"
-                  kind="ghost"
-                  iconDescription="Remove"
-                  hasIconOnly
-                  onClick={() => {
-                    const newValueArray = cloneDeep(currentValueArray);
-                    newValueArray.splice(i, 1);
-                    setValue(newValueArray);
-                  }}
-                />
+                <IconButton icon={<TrashCanIcon size={16} />} label="Remove" size="icon-sm" variant="ghost" onClick={() => { const newValueArray = cloneDeep(currentValueArray); newValueArray.splice(i, 1); setValue(newValueArray); }} />
               </StructuredListCell>
             </StructuredListRow>
           ))}
           <StructuredListRow>
             <StructuredListCell>
-              <Button
-                renderIcon={(props) => <AddIcon {...props} size={16} />}
-                size="sm"
-                iconDescription="Add"
-                hasIconOnly
-                onClick={() => {
-                  const newValueArray = cloneDeep(currentValueArray);
-                  const newValue = (element._elements?._type ?? Type.Object) == Type.Object ? {} : null;
-                  newValueArray.push(newValue);
-                  setValue(newValueArray);
-                }}
-              />
+              <IconButton icon={<AddIcon size={16} />} label="Add" size="icon-sm" onClick={() => { const newValueArray = cloneDeep(currentValueArray); const newValue = (element._elements?._type ?? Type.Object) == Type.Object ? {} : null; newValueArray.push(newValue); setValue(newValueArray); }} />
             </StructuredListCell>
           </StructuredListRow>
         </StructuredListBody>
-      </StructuredListWrapper>
+      </StructuredList>
     </Tile>
   );
 }

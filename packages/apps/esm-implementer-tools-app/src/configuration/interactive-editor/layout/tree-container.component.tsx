@@ -1,6 +1,6 @@
 import React, { type ReactNode } from 'react';
-import { StructuredListBody, StructuredListWrapper } from '@carbon/react';
-import styles from './layout.styles.scss';
+import { StructuredList, StructuredListBody } from '@egen-civitas/esm-framework';
+import styles from './layout.styles.module.css';
 
 export interface TreeContainerProps {
   children: ReactNode;
@@ -8,8 +8,8 @@ export interface TreeContainerProps {
 
 export function TreeContainer({ children }: TreeContainerProps) {
   return (
-    <StructuredListWrapper className={styles.structuredList}>
+    <StructuredList className={styles.structuredList}>
       <StructuredListBody>{children}</StructuredListBody>
-    </StructuredListWrapper>
+    </StructuredList>
   );
 }

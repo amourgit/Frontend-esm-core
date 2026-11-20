@@ -1,15 +1,5 @@
-import React, { useEffect, forwardRef, useReducer, type Dispatch, useState, useRef } from 'react';
-import {
-  Button,
-  Search,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@carbon/react';
+import React, { useEffect, forwardRef, useReducer, type Dispatch, useState } from 'react';
+import { Button, SearchInput, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@egen-civitas/esm-framework';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import fuzzy from 'fuzzy';
@@ -26,7 +16,7 @@ import {
   resetImportMapOverrides,
 } from '@egen-civitas/esm-framework/src/internal';
 import type { Module } from './types';
-import styles from './list.scss';
+import styles from './list.module.css';
 
 interface ImportMapListState {
   notOverriddenMap: ImportMap;
@@ -123,16 +113,12 @@ const ImportMapList = forwardRef<HTMLDivElement>((props, ref) => {
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(reducer, initialImportMapState);
 
-  const inputRef = useRef<HTMLInputElement>();
   const [searchQuery, setSearchQuery] = useState('');
   const searchVal = useDebounce(searchQuery);
 
   useEffect(() => {
     getImportMapDefaultMap().then((notOverriddenMap) => dispatch({ type: 'set_default_map', notOverriddenMap }));
     getCurrentPageMap().then((currentPageMap) => dispatch({ type: 'set_current_map', currentPageMap }));
-
-    // focus on the search box
-    inputRef.current?.focus();
 
     // add our event listener
     const dispatcher = updateToNext(dispatch);
@@ -210,37 +196,35 @@ const ImportMapList = forwardRef<HTMLDivElement>((props, ref) => {
   return (
     <div ref={ref} className={styles.imoListContainer}>
       <div className={styles.imoTableHeaderActions}>
-        <Search
-          ref={inputRef}
-          id="module-search"
-          className={styles.imoSearchBox}
-          aria-label={t('searchModules', 'Search modules')}
+        <SearchInput
+          autoFocus
+          containerClassName={styles.imoSearchBox}
+          label={t('searchModules', 'Search modules')}
           placeholder={t('searchModules', 'Search modules')}
-          onChange={(evt) => setSearchQuery(evt.target.value)}
-          labelText=""
-          size="lg"
+          value={searchQuery}
+          onValueChange={setSearchQuery}
         />
         <div>
-          <Button kind="primary" onClick={() => dispatch({ type: 'show_new_module_dialog' })}>
+          <Button onClick={() => dispatch({ type: 'show_new_module_dialog' })}>
             {t('addNewModule', 'Add new module')}
           </Button>
         </div>
         <div>
-          <Button kind="secondary" onClick={() => dispatch({ type: 'reset_all_overrides' })}>
+          <Button variant="secondary" onClick={() => dispatch({ type: 'reset_all_overrides' })}>
             {t('resetOverrides', 'Reset all overrides')}
           </Button>
         </div>
       </div>
-      <TableContainer title="">
-        <Table size="lg" stickyHeader={true} className={styles.imoTable}>
-          <TableHead>
+      <div className="overflow-auto">
+        <Table className={styles.imoTable}>
+          <TableHeader>
             <TableRow>
-              <TableHeader>{t('moduleStatus', 'Module Status')}</TableHeader>
-              <TableHeader>{t('moduleName', 'Module Name')}</TableHeader>
-              <TableHeader>{t('domain', 'Domain')}</TableHeader>
-              <TableHeader>{t('filename', 'Filename')}</TableHeader>
+              <TableHead>{t('moduleStatus', 'Module Status')}</TableHead>
+              <TableHead>{t('moduleName', 'Module Name')}</TableHead>
+              <TableHead>{t('domain', 'Domain')}</TableHead>
+              <TableHead>{t('filename', 'Filename')}</TableHead>
             </TableRow>
-          </TableHead>
+          </TableHeader>
           <TableBody className={styles.imoTableBody}>
             {nextOverriddenModules.map((mod) => (
               <TableRow
@@ -358,7 +342,7 @@ const ImportMapList = forwardRef<HTMLDivElement>((props, ref) => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </div>
     </div>
   );
 });

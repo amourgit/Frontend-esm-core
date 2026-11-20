@@ -105,20 +105,22 @@ describe('Configuration', () => {
     renderConfiguration();
 
     screen.findByText('hasHat');
-    const rowElement = screen.getByText('hasHat').closest('.cds--structured-list-row');
+    const rowElement = screen.getByText('hasHat').closest('[data-slot="structured-list-row"]');
     expect(rowElement).toBeInTheDocument();
 
     if (rowElement) {
       const row = within(rowElement as HTMLElement);
-      const editButton = row.getByText('Edit').parentElement as any;
+      const editButton = row.getByRole('button', { name: /edit/i });
       await user.click(editButton);
-      const editor = row.getByRole('button', { name: /edit/i });
+      const editor = row.getByRole('checkbox');
+      expect(editor).not.toBeChecked();
 
       await user.click(editor);
+      expect(editor).toBeChecked();
       await user.click(row.getByText('Save'));
 
       expect(temporaryConfigStore.setState).toHaveBeenCalledWith({
-        config: { '@egen/mario': { hasHat: false } },
+        config: { '@egen/mario': { hasHat: true } },
       });
     }
   });
@@ -135,7 +137,7 @@ describe('Configuration', () => {
     renderConfiguration();
 
     screen.findByText('numberFingers');
-    const rowElement = screen.getByText('numberFingers').closest('.cds--structured-list-row');
+    const rowElement = screen.getByText('numberFingers').closest('[data-slot="structured-list-row"]');
     expect(rowElement).toBeInTheDocument();
 
     if (rowElement) {
@@ -173,7 +175,7 @@ describe('Configuration', () => {
     renderConfiguration();
 
     screen.findByText('nemesisName');
-    const rowElement = screen.getByText('nemesisName').closest('.cds--structured-list-row');
+    const rowElement = screen.getByText('nemesisName').closest('[data-slot="structured-list-row"]');
     expect(rowElement).toBeInTheDocument();
 
     if (rowElement) {
@@ -206,7 +208,7 @@ describe('Configuration', () => {
     renderConfiguration();
 
     screen.findByText('mustacheUuid');
-    const rowElement = screen.getByText('mustacheUuid').closest('.cds--structured-list-row');
+    const rowElement = screen.getByText('mustacheUuid').closest('[data-slot="structured-list-row"]');
     expect(rowElement).toBeInTheDocument();
 
     if (rowElement) {
@@ -242,7 +244,7 @@ describe('Configuration', () => {
     renderConfiguration();
 
     screen.findByText('favoriteNumbers');
-    const rowElement = screen.getByText('favoriteNumbers').closest('.cds--structured-list-row');
+    const rowElement = screen.getByText('favoriteNumbers').closest('[data-slot="structured-list-row"]');
     expect(rowElement).toBeInTheDocument();
 
     if (rowElement) {
@@ -259,19 +261,17 @@ describe('Configuration', () => {
       await user.clear(firstValue);
       await user.type(firstValue, '5');
 
-      const secondRowElement = row.getByDisplayValue('12').closest('.cds--structured-list-row');
+      const secondRowElement = row.getByDisplayValue('12').closest('[data-slot="structured-list-row"]');
 
       expect(secondRowElement).toBeInTheDocument();
       // I can't get the add or remove buttons to work in tests.
       if (secondRowElement) {
         await user.click(
-          within(secondRowElement as HTMLElement)
-            .getByText('Remove')
-            .closest('button') as HTMLElement,
+          within(secondRowElement as HTMLElement).getByRole('button', { name: /remove/i }),
         );
         // await waitForElementToBeRemoved(() => row.getByDisplayValue("12"));
       }
-      await user.click(row.getByText('Add'));
+      await user.click(row.getByRole('button', { name: /add/i }));
       // let rows = await row.findAllByRole("spinbutton");
       // let newInput = rows[rows.length - 1];
       // user.type(newInput, "11");

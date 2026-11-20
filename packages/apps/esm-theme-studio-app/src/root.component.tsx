@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
-import { useConfig, useSession, userHasAccess } from '@egen-civitas/esm-framework';
+import { NotificationBanner, useConfig, userHasAccess, useSession } from '@egen-civitas/esm-framework';
 import { useTranslation } from 'react-i18next';
-import { InlineNotification } from '@carbon/react';
 import { canUseStudio } from './access';
 import type { StudioConfig } from './config-schema';
 import { createRuntime } from './core/runtime-factory';
@@ -17,11 +16,8 @@ const Root: React.FC = () => {
 
   if (!allowed || !runtime) {
     return (
-      <InlineNotification
+      <NotificationBanner
         kind="error"
-        lowContrast
-        hideCloseButton
-        role="alert"
         title={t('accessDenied', 'Vous n’avez pas le droit d’utiliser le Theme Studio.')}
       />
     );

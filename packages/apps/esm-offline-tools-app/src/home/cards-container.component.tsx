@@ -1,6 +1,6 @@
 import React from 'react';
 import { ExtensionSlot } from '@egen-civitas/esm-framework';
-import styles from './cards-container.styles.scss';
+import styles from './cards-container.styles.module.css';
 
 /**
  * Renders the quick-info cards of the offline tools dashboard.

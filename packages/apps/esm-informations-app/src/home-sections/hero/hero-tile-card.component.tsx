@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import styles from './hero-mosaic.scss';
+import styles from './hero-mosaic.module.css';
 
 // =============================================================================
 //  HERO TILE CARD — Carte individuelle de la mosaïque "À la Une"

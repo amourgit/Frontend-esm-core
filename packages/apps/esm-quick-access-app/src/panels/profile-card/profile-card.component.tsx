@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Users, UserCheck, Check } from 'lucide-react';
 import { ProfileEditModal, type UserProfile } from './profile-edit-modal.component';
-import styles from './profile-card.scss';
+import styles from './profile-card.module.css';
 
 export type { UserProfile };
 

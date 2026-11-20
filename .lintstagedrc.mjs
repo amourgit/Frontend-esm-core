@@ -7,5 +7,5 @@ export default {
     const linted = files.filter((file) => !file.includes(VENDORED));
     return linted.length ? [`eslint --cache --fix --max-warnings 0 ${linted.map((f) => `"${f}"`).join(' ')}`] : [];
   },
-  '*.{css,scss,ts,tsx}': 'prettier --write --list-different',
+  '*.{css,ts,tsx}': 'prettier --write --list-different',
 };

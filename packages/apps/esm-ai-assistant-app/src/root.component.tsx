@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import styles from './root.scss';
+import styles from './root.module.css';
 
 // Expérience plein écran (robot 3D, WebGL) : chargée à la demande, hors du chemin critique.
 const AssistantExperience = lazy(() => import('./assistant-experience/AssistantExperience'));

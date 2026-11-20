@@ -1,7 +1,7 @@
 import React from 'react';
 import { SectionSlot } from '@egen-civitas/esm-framework';
 import { HomeBackground } from './background/home-background.component';
-import styles from './home.scss';
+import styles from './home.module.css';
 
 // =============================================================================
 //  HOME PAGE — Page d'accueil de l'espace authentifié (colonne unique)

@@ -1,0 +1,55 @@
+.closeFrame {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: clamp(260px, 38vw, 420px);
+  height: 0;
+  z-index: 10001;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+.closeFrame[data-open=true] {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s ease 0.35s, visibility 0s linear 0.35s;
+}
+@media (max-width: 1024px) {
+  .closeFrame {
+    width: 100%;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  border-radius: 999px;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+.closeButton:hover {
+  opacity: 1;
+  background: rgba(15, 23, 42, 0.12);
+}
+.closeButton:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--colors-primary-600, #2563eb);
+  outline-offset: 2px;
+}
+.closeButton svg {
+  width: 1rem;
+  height: 1rem;
+}

@@ -95,6 +95,18 @@ Toute nouvelle fonction de la TopBar est une **app** qui injecte une extension (
 - **`translations/en.json` vide** : le scaffold le crée avec `touch` (0 octet) → le build échoue (« JSON parse error: Unexpected end of JSON »). Toujours y écrire `{}`.
 - **Tests de `GooeyInput`** : replié, le déclencheur est un `div` (pas un `button`) et l'`input` (`type="search"`, rôle `searchbox`) ne reçoit pas les clics ; cliquer son parent avec `fireEvent`. `interpolateUrl` est le vrai (non mocké) : fournir `window.getEgenSpaBase`.
 
+## 5 bis. Retrait de Carbon et de SCSS (terminé dans le core)
+
+Carbon (`@carbon/*`) et SCSS (`sass*`) sont retirés de tout le core. Les composants viennent du module style
+(`@egen-civitas/esm-styleguide`, ré-exporté par `@egen-civitas/esm-framework`) : `Button`, `IconButton`, `TextLink`, `Tile`, `Dialog`,
+`Table`, `Tabs`, `Checkbox`, `RadioGroup`, `SearchInput`, `PasswordInput`, `Accordion`, `NotificationBanner`, `MenuList`,
+`StructuredList`… (correspondances : `docs/MIGRATION-CARBON.md` du dépôt framework). Les 75 `.scss` sont devenus des `.module.css`
+(CSS standard, mêmes noms de classes). Garde-fou : `yarn verify:no-carbon` (`tools/check-no-carbon.mjs`, inclus dans `yarn verify`).
+- **Piège** : sous React 18, un composant fonction ne reçoit pas `ref` : les composants du module style qui sont des cibles de
+  `ref` / `asChild` doivent être en `forwardRef` (c'est le cas de `Button`, `IconButton`, `TextLink`, `Input`, `TextInput`,
+  `PasswordInput`, `SearchInput`, `Badge`).
+- **Reste** : convertir les `.module.css` en classes Tailwind au fil de l'eau (écran par écran) ; contrôle visuel dans le navigateur.
+
 ## 6. Dettes et décisions en attente
 
 - **Mutualiser** `OptionButton` (copié dans `esm-language-app`, `esm-appearance-app`) et le panneau « verre d'eau » (`GlassPanel`

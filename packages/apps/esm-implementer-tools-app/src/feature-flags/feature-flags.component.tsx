@@ -1,19 +1,8 @@
 import React, { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  DataTable,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow,
-  Toggle,
-} from '@carbon/react';
-import { useStore } from '@egen-civitas/esm-framework';
+import { Switch, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, useStore } from '@egen-civitas/esm-framework';
 import { featureFlagsStore, setFeatureFlag } from '@egen-civitas/esm-framework/src/internal';
-import styles from './feature-flags.scss';
+import styles from './feature-flags.module.css';
 
 export function FeatureFlags() {
   const { flags } = useStore(featureFlagsStore);
@@ -52,17 +41,15 @@ export function FeatureFlags() {
 
   return (
     <div className={styles.container}>
-      <DataTable rows={[]} headers={headers}>
-        {({ headers, getTableProps, getHeaderProps }) => (
-          <TableContainer title="">
-            <Table {...getTableProps()}>
-              <TableHead>
+                <div className="overflow-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
                   {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })}>{header.header}</TableHeader>
+                    <TableHead key={header.key}>{header.header}</TableHead>
                   ))}
                 </TableRow>
-              </TableHead>
+              </TableHeader>
               <TableBody>
                 {rows.map((flag) => (
                   <Fragment key={flag.name}>
@@ -77,13 +64,11 @@ export function FeatureFlags() {
                         <span>{flag.description}</span>
                       </TableCell>
                       <TableCell>
-                        <Toggle
+                        <Switch
                           id={`feature-flag-${flag.name}-toggle`}
                           aria-labelledby={`flag-label-${flag.name}`}
-                          labelText="" // using aria-labelledby instead
-                          hideLabel={true}
-                          toggled={flag.enabled}
-                          onToggle={() => setFeatureFlag(flag.name, !flag.enabled)}
+                          checked={flag.enabled}
+                          onCheckedChange={() => setFeatureFlag(flag.name, !flag.enabled)}
                         />
                       </TableCell>
                     </TableRow>
@@ -91,9 +76,7 @@ export function FeatureFlags() {
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>
-        )}
-      </DataTable>
+          </div>
     </div>
   );
 }

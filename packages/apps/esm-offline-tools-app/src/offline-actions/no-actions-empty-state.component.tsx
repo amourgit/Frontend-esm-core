@@ -1,8 +1,8 @@
 import React from 'react';
+import { Layer, Tile } from '@egen-civitas/esm-framework';
 import { useTranslation } from 'react-i18next';
-import { Layer, Tile } from '@carbon/react';
 import successNotification from '../assets/success-notification.svg';
-import styles from './no-actions-empty-state.styles.scss';
+import styles from './no-actions-empty-state.styles.module.css';
 
 const NoActionsEmptyState: React.FC = () => {
   const { t } = useTranslation();

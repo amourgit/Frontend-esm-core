@@ -1,0 +1,45 @@
+.bodyShort01 {
+  font-size: var(--ui-body-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-compact-01-font-weight, 400);
+  line-height: var(--ui-body-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
+}
+
+.activeUuid {
+  font-size: var(--ui-body-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-compact-01-font-weight, 400);
+  line-height: var(--ui-body-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
+  color: var(--colors-surface-foreground, #161616);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--colors-border-default, #e0e0e0);
+}
+
+.autocomplete,
+.autocomplete > [role=combobox] {
+  position: relative;
+  width: 20rem;
+}
+
+.listbox {
+  box-shadow: 0 0 0.5rem;
+}
+
+.smallListCell {
+  padding: 0.5rem;
+}
+
+.loader {
+  margin: 1rem;
+}
+
+.emptyResults {
+  font-size: var(--ui-body-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-compact-01-font-weight, 400);
+  line-height: var(--ui-body-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
+  background-color: var(--colors-surface-card, #ffffff);
+  color: var(--colors-surface-muted-foreground, #525252);
+  min-height: 1rem;
+}

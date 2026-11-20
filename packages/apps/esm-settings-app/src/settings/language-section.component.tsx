@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Languages } from 'lucide-react';
 import { showModal, useSession } from '@egen-civitas/esm-framework';
 import { SettingsSection } from './settings-section.component';
-import styles from './settings.scss';
+import styles from './settings.module.css';
 
 // Langue : ouvre `change-language-modal` (même service que le sélecteur de la TopBar).
 const LanguageSection: React.FC = () => {

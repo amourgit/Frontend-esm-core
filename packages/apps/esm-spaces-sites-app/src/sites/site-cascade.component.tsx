@@ -4,7 +4,7 @@ import { Building2, FolderTree } from 'lucide-react';
 import { Combobox, showSnackbar, useConfig, type ComboboxItemData } from '@egen-civitas/esm-framework';
 import { type ConfigSchema } from '../config-schema';
 import { setActiveSite, useSpacesSites, type SiteNode } from '../store/spaces-sites.store';
-import styles from '../context-selectors/context-selectors.scss';
+import styles from '../context-selectors/context-selectors.module.css';
 import { goTo, goToSite } from './site-route';
 import { getChildren, getSitePath, type SiteTree } from './site-tree';
 

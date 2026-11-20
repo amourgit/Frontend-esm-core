@@ -1,0 +1,22 @@
+.toolbar {
+  display: flex;
+  background-color: var(--ui-layer-accent);
+}
+.toolbar button {
+  background-color: var(--ui-button-primary, #0f62fe);
+}
+.toolbar button:hover {
+  background-color: var(--ui-button-primary-hover, #0050e6);
+}
+
+.alert {
+  color: white;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-left: 2rem;
+}
+
+.errorBackground {
+  background-color: #da1e28;
+}

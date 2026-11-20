@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Wifi, WifiOff } from 'lucide-react';
 import { QuickAccessSection } from './quick-access-section.component';
-import styles from './quick-access.scss';
+import styles from './quick-access.module.css';
 
 // Informations visibles d'un coup d'œil : date/heure (rafraîchies chaque minute) et état de connexion.
 const GlanceSection: React.FC = () => {

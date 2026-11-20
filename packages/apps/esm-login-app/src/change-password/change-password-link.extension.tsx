@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, SwitcherItem } from '@carbon/react';
-import { PasswordIcon, showModal } from '@egen-civitas/esm-framework';
-import styles from './change-password.scss';
+import { Button, PasswordIcon, showModal } from '@egen-civitas/esm-framework';
+import styles from './change-password.module.css';
 
 const ChangePasswordLink: React.FC = () => {
   const { t } = useTranslation();
@@ -15,15 +14,15 @@ const ChangePasswordLink: React.FC = () => {
   }, []);
 
   return (
-    <SwitcherItem aria-label={t('changePassword', 'ChangePassword')} className={styles.panelItemContainer}>
+    <li role="none" aria-label={t('changePassword', 'ChangePassword')} className={`${styles.panelItemContainer} flex items-center justify-between gap-2 px-4 py-1 text-sm`}>
       <div>
         <PasswordIcon size={20} />
         <p>{t('password', 'Password')}</p>
       </div>
-      <Button kind="ghost" onClick={launchChangePasswordModal}>
+      <Button variant="ghost" onClick={launchChangePasswordModal}>
         {t('change', 'Change')}
       </Button>
-    </SwitcherItem>
+    </li>
   );
 };
 

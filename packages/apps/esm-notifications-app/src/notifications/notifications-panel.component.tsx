@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
 import { ExtensionSlot, useAssignedExtensions } from '@egen-civitas/esm-framework';
 import { NOTIFICATIONS_SLOT } from '../constants';
-import styles from './notifications-panel.scss';
+import styles from './notifications-panel.module.css';
 
 // Contenu de la zone droite « Notifications » : les entrées sont injectées par les apps dans
 // `notifications-nav-menu-slot` (contrat inchangé : état `{ expanded }` transmis aux extensions).

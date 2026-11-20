@@ -9,7 +9,7 @@ import {
   showSnackbar,
 } from '@egen-civitas/esm-framework';
 import { setActiveSpace, useSpacesSites } from '../store/spaces-sites.store';
-import styles from '../context-selectors/context-selectors.scss';
+import styles from '../context-selectors/context-selectors.module.css';
 
 /** Choix de l'Espace actif (intranet, extranet…). La liste vient de la configuration du déploiement. */
 export const SpaceSelector: React.FC = () => {

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ConfigurableLink, useConfig, useSession } from '@egen-civitas/esm-framework';
 import { type ConfigSchema, type FooterLink } from '../../config-schema';
 import { DEFAULT_FOOTER_TEXT_COLOR } from '../../constants';
-import styles from './footer.scss';
+import styles from './footer.module.css';
 
 // =============================================================================
 //  FOOTER — Pied de page minimaliste EGEN

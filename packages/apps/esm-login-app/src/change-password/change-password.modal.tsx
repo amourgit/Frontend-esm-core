@@ -3,20 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
-import {
-  Button,
-  Form,
-  InlineLoading,
-  InlineNotification,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  PasswordInput,
-  Stack,
-} from '@carbon/react';
-import { showSnackbar } from '@egen-civitas/esm-framework';
+import { Button, InlineLoading, ModalBody, ModalFooter, ModalHeader, NotificationBanner, PasswordInput, showSnackbar } from '@egen-civitas/esm-framework';
 import { changeUserPassword } from './change-password.resource';
-import styles from './change-password-modal.scss';
+import styles from './change-password-modal.module.css';
 
 interface ChangePasswordModalProps {
   close(): () => void;
@@ -101,19 +90,18 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ close }) => {
   const onError = () => setIsChangingPassword(false);
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
-      <ModalHeader closeModal={close} title={t('changePassword', 'Change password')} />
+    <form onSubmit={handleSubmit(onSubmit, onError)} className="flex min-h-0 flex-1 flex-col">
+      <ModalHeader onClose={close} title={t('changePassword', 'Change password')} />
       <ModalBody>
-        <Stack gap={5} className={styles.languageOptionsContainer}>
+        <div className={`${styles.languageOptionsContainer} flex flex-col gap-4`}>
           <Controller
             name="oldPassword"
             control={control}
             render={({ field: { onChange, value } }) => (
               <PasswordInput
                 id="oldPassword"
-                invalid={!!errors?.oldPassword}
-                invalidText={errors?.oldPassword?.message}
-                labelText={t('oldPassword', 'Old password')}
+                errorText={errors?.oldPassword?.message}
+                label={t('oldPassword', 'Old password')}
                 onChange={onChange}
                 value={value}
               />
@@ -125,9 +113,8 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ close }) => {
             render={({ field: { onChange, value } }) => (
               <PasswordInput
                 id="newPassword"
-                invalid={!!errors?.newPassword}
-                invalidText={errors?.newPassword?.message}
-                labelText={t('newPassword', 'New password')}
+                errorText={errors?.newPassword?.message}
+                label={t('newPassword', 'New password')}
                 onChange={onChange}
                 value={value}
               />
@@ -139,26 +126,25 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ close }) => {
             render={({ field: { onChange, value } }) => (
               <PasswordInput
                 id="passwordConfirmation"
-                invalid={!!errors?.passwordConfirmation}
-                invalidText={errors?.passwordConfirmation?.message}
-                labelText={t('confirmPassword', 'Confirm new password')}
+                errorText={errors?.passwordConfirmation?.message}
+                label={t('confirmPassword', 'Confirm new password')}
                 onChange={onChange}
                 value={value}
               />
             )}
           />
           {errorMessage && (
-            <InlineNotification
+            <NotificationBanner
               kind="error"
               onClick={() => setErrorMessage('')}
               subtitle={errorMessage}
               title={t('errorChangingPassword', 'Error changing password')}
             />
           )}
-        </Stack>
+        </div>
       </ModalBody>
       <ModalFooter>
-        <Button kind="secondary" onClick={close}>
+        <Button variant="secondary" onClick={close}>
           {t('cancel', 'Cancel')}
         </Button>
         <Button className={styles.submitButton} disabled={isChangingPassword} type="submit">
@@ -169,7 +155,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ close }) => {
           )}
         </Button>
       </ModalFooter>
-    </Form>
+    </form>
   );
 };
 

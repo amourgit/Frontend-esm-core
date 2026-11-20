@@ -3,7 +3,7 @@ import { interpolateUrl, useConfig } from '@egen-civitas/esm-framework';
 import { type TFunction } from 'i18next';
 import { egenLogoFull } from './brand';
 import { type ConfigSchema } from './config-schema';
-import styles from './logo.scss';
+import styles from './logo.module.css';
 
 /** Logo de la page « changer le mot de passe » : image configurée (`logo.src`) ou logo EGEN par défaut. */
 const Logo: React.FC<{ t: TFunction }> = ({ t }) => {

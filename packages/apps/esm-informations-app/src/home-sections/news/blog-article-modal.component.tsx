@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Bookmark, Share2, Check } from 'lucide-react';
 import { CardModal } from '@egen-civitas/esm-framework';
 import type { BlogArticle } from './blog-post-card.component';
-import styles from './blog-section.scss';
+import styles from './blog-section.module.css';
 
 export interface BlogArticleModalProps {
   article: BlogArticle | null;

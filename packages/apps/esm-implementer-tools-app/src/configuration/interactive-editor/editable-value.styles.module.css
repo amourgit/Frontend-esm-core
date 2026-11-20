@@ -1,0 +1,26 @@
+.secretButton {
+  background: none;
+  color: var(--colors-surface-muted-foreground, #474b6b);
+  border: none;
+  font: inherit;
+  text-align: left;
+}
+
+.error {
+  margin-left: 1rem;
+  color: var(--colors-warning-500, orange);
+  font-size: 11pt;
+}
+
+.overriddenValue {
+  color: var(--colors-primary-700, #2020a0);
+}
+
+.elementValue {
+  display: flex;
+  align-items: center;
+}
+
+.editValueButton {
+  margin-left: 1rem;
+}

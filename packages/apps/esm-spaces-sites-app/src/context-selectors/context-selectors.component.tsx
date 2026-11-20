@@ -6,7 +6,7 @@ import { useSpacesFromConfig } from '../spaces/use-spaces-config';
 import { SiteCascade } from '../sites/site-cascade.component';
 import { useSiteRegistry } from '../sites/site-registry';
 import { useSiteFromUrl } from '../sites/site-route';
-import styles from './context-selectors.scss';
+import styles from './context-selectors.module.css';
 
 /**
  * Sélecteurs d'Espace et de Site, injectés dans la TopBar comme UNE extension (voir routes.json) : la mise en page

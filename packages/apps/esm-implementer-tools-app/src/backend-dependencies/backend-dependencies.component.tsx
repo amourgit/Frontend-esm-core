@@ -1,17 +1,8 @@
 import React, { Fragment, useMemo } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@egen-civitas/esm-framework';
 import { useTranslation } from 'react-i18next';
-import {
-  DataTable,
-  Table,
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableBody,
-  TableCell,
-  TableContainer,
-} from '@carbon/react';
 import type { ResolvedDependenciesModule } from './egen-backend-dependencies';
-import styles from './backend-dependencies.styles.scss';
+import styles from './backend-dependencies.styles.module.css';
 
 export interface BackendDependencies {
   backendDependencies: Array<ResolvedDependenciesModule>;
@@ -40,17 +31,15 @@ export const BackendDependencies: React.FC<BackendDependencies> = ({ backendDepe
 
   return (
     <div className={styles.container}>
-      <DataTable rows={[]} headers={headers}>
-        {({ headers, getTableProps, getHeaderProps }) => (
-          <TableContainer title="">
-            <Table {...getTableProps()}>
-              <TableHead>
+                <div className="overflow-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
                   {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })}>{header.header}</TableHeader>
+                    <TableHead key={header.key}>{header.header}</TableHead>
                   ))}
                 </TableRow>
-              </TableHead>
+              </TableHeader>
               <TableBody>
                 {backendDependencies.map((esm) => (
                   <Fragment key={esm.name}>
@@ -80,9 +69,7 @@ export const BackendDependencies: React.FC<BackendDependencies> = ({ backendDepe
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>
-        )}
-      </DataTable>
+          </div>
     </div>
   );
 };

@@ -1,0 +1,12 @@
+.menuToggle {
+  flex: 0 0 auto;
+  margin-left: 0.25rem;
+  padding: 0.25rem 0.125rem;
+  font-size: 11px;
+}
+@media (max-width: 639.98px) {
+  .menuToggle {
+    margin-left: 0.125rem;
+    font-size: 10px;
+  }
+}

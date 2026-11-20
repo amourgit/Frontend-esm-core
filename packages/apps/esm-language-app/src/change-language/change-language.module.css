@@ -1,0 +1,35 @@
+.primaryNavContainer {
+  height: var(--egen-topnav-height);
+}
+
+.languageOptionsContainer {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+  max-height: 28rem;
+}
+
+.languageRadioButton {
+  display: flex;
+  height: 3rem;
+  align-items: center;
+  font-size: var(--ui-body-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-compact-01-font-weight, 400);
+  line-height: var(--ui-body-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
+}
+
+.updateDefaultLocaleContainer {
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1.5rem;
+}
+
+.updateDefaultLocaleExplainer {
+  font-size: var(--ui-body-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-compact-01-font-weight, 400);
+  line-height: var(--ui-body-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
+  color: var(--colors-surface-muted-foreground, #525252);
+}

@@ -9,12 +9,14 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  RadioButton,
-  RadioButtonGroup,
-} from '@carbon/react';
-import { showSnackbar, useAbortController, useSession } from '@egen-civitas/esm-framework';
+  RadioGroup,
+  RadioGroupItem,
+  showSnackbar,
+  useAbortController,
+  useSession,
+} from '@egen-civitas/esm-framework';
 import { updateSessionLocale, updateUserProperties } from './change-language.resource';
-import styles from './change-language.scss';
+import styles from './change-language.module.css';
 
 interface ChangeLanguageModalProps {
   close(): void;
@@ -97,41 +99,41 @@ export default function ChangeLanguageModal({ close }: ChangeLanguageModalProps)
 
   return (
     <>
-      <ModalHeader closeModal={close} title={t('changeLanguage', 'Change language')} />
+      <ModalHeader onClose={close} title={t('changeLanguage', 'Change language')} />
       <ModalBody>
         <div className={styles.languageOptionsContainer}>
-          <RadioButtonGroup
-            valueSelected={selectedLocale}
-            orientation="vertical"
-            name="Language options"
-            onChange={(locale) => setSelectedLocale(locale.toString())}
+          <RadioGroup
+            value={selectedLocale}
+            aria-label={t('languageOptions', 'Language options')}
+            onValueChange={(locale) => setSelectedLocale(locale)}
+            className="gap-3"
           >
             {allowedLocales.map((locale, i) => (
-              <RadioButton
-                className={styles.languageRadioButton}
-                key={`locale-option-${locale}-${i}`}
-                id={`locale-option-${locale}-${i}`}
-                name={locale}
-                labelText={languageNames[locale]}
-                value={locale}
-              />
+              <div key={`locale-option-${locale}-${i}`} className={`${styles.languageRadioButton} flex items-center gap-2`}>
+                <RadioGroupItem id={`locale-option-${locale}-${i}`} value={locale} />
+                <label htmlFor={`locale-option-${locale}-${i}`} className="cursor-pointer text-sm">
+                  {languageNames[locale]}
+                </label>
+              </div>
             ))}
-          </RadioButtonGroup>
+          </RadioGroup>
         </div>
       </ModalBody>
-      <div className={classNames('cds--layer-two', styles.updateDefaultLocaleContainer)} role="region">
-        <Checkbox
-          id={`change-default-locale`}
-          labelText={t('changeDefaultLocale', 'Save as my default language')}
-          checked={shouldChangeDefaultLocale}
-          onChange={(_, { checked }) => setShouldChangeDefaultLocale(checked)}
-        />
+      <div className={classNames(styles.updateDefaultLocaleContainer, 'flex flex-col gap-2')} role="region">
+        <label htmlFor="change-default-locale" className="flex items-center gap-2 text-sm">
+          <Checkbox
+            id="change-default-locale"
+            checked={shouldChangeDefaultLocale}
+            onCheckedChange={(checked) => setShouldChangeDefaultLocale(checked === true)}
+          />
+          {t('changeDefaultLocale', 'Save as my default language')}
+        </label>
         <p className={classNames(styles.updateDefaultLocaleExplainer)}>
           {t('changeDefaultLocaleExplanation', 'Leave this unchecked to change language for this session only')}
         </p>
       </div>
       <ModalFooter>
-        <Button kind="secondary" onClick={close}>
+        <Button variant="secondary" onClick={close}>
           {t('cancel', 'Cancel')}
         </Button>
         <Button

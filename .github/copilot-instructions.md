@@ -124,7 +124,7 @@ All workflows are self-contained: no reusable workflow from another repository. 
 ## Pre-commit Hooks (Husky + lint-staged)
 
 On commit, Husky runs:
-1. `yarn lint-staged --no-stash` - ESLint fix + Prettier on staged `*.ts`, `*.tsx`, `*.css`, `*.scss` files
+1. `yarn lint-staged --no-stash` - ESLint fix + Prettier on staged `*.ts`, `*.tsx`, `*.css` files
 2. `yarn turbo run extract-translations` - Updates `en.json` translation files
 3. `yarn turbo run document -- --since main` - Updates API docs
 
@@ -134,11 +134,11 @@ On push: `yarn verify` (full lint + test + typecheck).
 
 Follow the conventions at https://egen.alpha.vercel.com/docs/coding-conventions/introduction. Key rules:
 
-**File naming:** Components use `*.component.tsx`, tests use `*.test.tsx`, styles use `*.module.scss`, data fetching uses `*.resource.ts`. Colocate related files in the same directory.
+**File naming:** Components use `*.component.tsx`, tests use `*.test.tsx`, styles use `*.module.css`, data fetching uses `*.resource.ts`. Colocate related files in the same directory.
 
 **Imports:** Use `import { type Foo }` (inline type imports) - enforced by ESLint rule `@typescript-eslint/consistent-type-imports`. Import Carbon components from `@carbon/react` (not `carbon-components-react`). Import Carbon icons from `@carbon/react/icons` (not `@carbon/icons-react`). Import lodash-es methods individually: `import { map } from 'lodash-es'`.
 
-**Styling:** Use CSS Modules (`.module.scss`). Use Carbon design tokens for colors, spacing, typography. Use the `classnames` library for conditional classes.
+**Styling:** Tailwind CSS first (classes in the JSX, theme tokens `bg-card`, `text-muted-foreground`, `border-input`…), CSS Modules (`.module.css`) only for what Tailwind cannot express. Carbon and SCSS were removed: never import `@carbon/*` or create `.scss` files. UI components come from `@egen-civitas/esm-framework` (module style: `Button`, `Tile`, `Dialog`, `Table`, `Tabs`, `TextInput`…). Use the `classnames` library for conditional classes.
 
 **Data fetching:** Place in `*.resource.ts` files. Use SWR hooks (`useSWR`, `useSWRImmutable`, `useEgenSWR`). Name hooks `use<Resource>`. Always memoize return values and return `{ data, error, isLoading }`.
 

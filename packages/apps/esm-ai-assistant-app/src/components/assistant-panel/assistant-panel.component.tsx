@@ -6,7 +6,7 @@ import { useAIChat } from '../../hooks/use-ai-chat';
 import { useAIChannelState } from '@egen-civitas/esm-ai-framework';
 import MessageList from '../message-list/message-list.component';
 import ChatInput from '../chat-input/chat-input.component';
-import styles from './assistant-panel.scss';
+import styles from './assistant-panel.module.css';
 
 const ResetIcon: React.FC = () => (
   <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">

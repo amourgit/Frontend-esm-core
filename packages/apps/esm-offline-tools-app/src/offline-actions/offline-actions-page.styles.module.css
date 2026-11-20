@@ -1,0 +1,11 @@
+.buttonInlineIcon {
+  margin-right: 1rem;
+}
+
+:global(.egen-breakpoint-lt-small-desktop) .primaryActionButton {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  border-radius: 100vh;
+  padding-right: 1rem;
+}

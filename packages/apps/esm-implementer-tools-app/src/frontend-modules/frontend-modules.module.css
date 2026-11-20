@@ -1,0 +1,18 @@
+.container {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.moduleHeader {
+  font-size: var(--ui-heading-compact-02-font-size, 1rem);
+  font-weight: var(--ui-heading-compact-02-font-weight, 600);
+  line-height: var(--ui-heading-compact-02-line-height, 1.375);
+  letter-spacing: var(--ui-heading-compact-02-letter-spacing, 0);
+}
+
+.moduleComponentHeader {
+  font-size: var(--ui-heading-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-heading-compact-01-font-weight, 600);
+  line-height: var(--ui-heading-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-heading-compact-01-letter-spacing, 0.16px);
+}

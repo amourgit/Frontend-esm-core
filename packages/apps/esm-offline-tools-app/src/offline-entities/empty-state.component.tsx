@@ -1,9 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Layer, Tile } from '@carbon/react';
-import { useLayoutType } from '@egen-civitas/esm-framework';
+import { Layer, Tile, useLayoutType } from '@egen-civitas/esm-framework';
 import { EmptyDataIllustration } from './empty-data-illustration.component';
-import styles from './empty-state.scss';
+import styles from './empty-state.module.css';
 
 type EmptyStateProps = {
   displayText: string;

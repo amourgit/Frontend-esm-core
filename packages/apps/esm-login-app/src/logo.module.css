@@ -1,0 +1,6 @@
+.logoImg {
+  margin-bottom: 2rem;
+  max-width: 10rem;
+  max-height: 3.5rem;
+  object-fit: contain;
+}

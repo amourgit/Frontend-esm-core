@@ -1,0 +1,19 @@
+.labelCell {
+  width: 12rem;
+}
+
+.label {
+  scroll-margin-top: 6rem;
+}
+
+.structuredList {
+  margin-bottom: 1rem;
+}
+
+.structuredListRow {
+  border-left: 2px solid var(--colors-border-default, #c0c0c0);
+}
+
+.subtreeCell {
+  left: -6rem;
+}

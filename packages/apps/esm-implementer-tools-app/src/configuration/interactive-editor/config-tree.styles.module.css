@@ -1,0 +1,9 @@
+.fullWidthAccordion {
+  background-color: var(--ui-background, #ffffff);
+}
+.fullWidthAccordion button {
+  color: var(--ui-text-secondary, #525252);
+}
+.fullWidthAccordion button:hover {
+  color: var(--ui-text-primary, #161616);
+}

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Button } from '@egen-civitas/esm-framework';
 import classNames from 'classnames';
 import AceEditor from 'react-ace';
-import { Button } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
 import { clearConfigErrors, temporaryConfigStore, useStore } from '@egen-civitas/esm-framework/src/internal';
-import styles from './json-editor.scss';
+import styles from './json-editor.module.css';
 
 import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/theme-dracula';
@@ -64,7 +64,7 @@ export default function JsonEditor({ height }: JsonEditorProps) {
         width="100vw"
       />
       <div className={styles.toolbar}>
-        <Button size="md" type="submit" onClick={updateTemporaryConfig}>
+        <Button type="submit" onClick={updateTemporaryConfig}>
           {t('updateConfig', 'Update config')}
         </Button>
         <div

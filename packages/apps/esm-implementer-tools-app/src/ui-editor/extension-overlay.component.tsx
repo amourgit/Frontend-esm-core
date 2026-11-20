@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Portal } from './portal';
-import styles from './styles.scss';
+import styles from './styles.module.css';
 
 interface ContentProps {
   extensionId: string;

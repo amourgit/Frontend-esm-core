@@ -10,7 +10,7 @@ import {
 } from '../../kit';
 import { useConfig } from '@egen-civitas/esm-framework';
 import { type ConfigSchema } from '../../../config-schema';
-import styles from './topbar-skeleton.scss';
+import styles from './topbar-skeleton.module.css';
 
 /** Peau de la première rangée (celle qui porte le logo et la recherche) : rangée pleine, robuste en mobile. */
 const FULL_SKIN: LevelSkin = {

@@ -1,0 +1,76 @@
+.imoListContainer {
+  margin: 0 0.75rem 0 0.75rem;
+  height: 50vh;
+}
+
+.imoTableHeaderActions {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.imoTableHeaderActions > * + * {
+  margin: 0 0.5rem;
+}
+
+.imoSearchBox {
+  width: auto;
+  min-width: 12rem;
+  margin-right: 0.5rem;
+}
+
+.imoTable {
+  max-height: calc(50vh - 3rem - 0.75rem);
+}
+
+.imoStatus {
+  height: 0.75rem;
+  width: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #161616;
+  margin-top: 0.25rem;
+  margin-right: 0.5rem;
+}
+
+.imoNextOverride {
+  background-color: #520408;
+}
+
+.imoNextOverrideText {
+  color: #520408;
+}
+
+.imoNextDefault {
+  background-color: #684e00;
+}
+
+.imoNextDefaultText {
+  color: #684e00;
+}
+
+.imoDisabledOverride {
+  background-color: #82cfff;
+}
+
+.imoDisabledOverrideText {
+  color: #82cfff;
+}
+
+.imoCurrentOverride {
+  background-color: #ff8389;
+}
+
+.imoCurrentOverrideText {
+  color: #c21e25;
+}
+
+.imoExternalOverride {
+  background-color: #eb6200;
+}
+
+.imoExternalOverrideText {
+  color: #eb6200;
+}
+
+.imoDefaultModule {
+  background-color: #b28600;
+}

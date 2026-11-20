@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, SwitcherItem } from '@carbon/react';
 import { capitalize } from 'lodash-es';
-import { TranslateIcon, showModal, useSession } from '@egen-civitas/esm-framework';
-import styles from './change-language-link.scss';
+import { Button, TranslateIcon, showModal, useSession } from '@egen-civitas/esm-framework';
+import styles from './change-language-link.module.css';
 
 /**
  * Normalizes an Egen locale string to a valid BCP 47 language tag.
@@ -39,15 +38,19 @@ function ChangeLanguageLink() {
   }
 
   return (
-    <SwitcherItem className={styles.panelItemContainer} aria-label={t('changeLanguage', 'Change language')}>
+    <li
+      role="none"
+      className={`${styles.panelItemContainer} flex items-center justify-between gap-2 px-4 py-1 text-sm`}
+      aria-label={t('changeLanguage', 'Change language')}
+    >
       <div>
         <TranslateIcon size={20} />
         <p>{displayName}</p>
       </div>
-      <Button kind="ghost" onClick={launchChangeLanguageModal}>
+      <Button variant="ghost" size="sm" onClick={launchChangeLanguageModal}>
         {t('change', 'Change')}
       </Button>
-    </SwitcherItem>
+    </li>
   );
 }
 

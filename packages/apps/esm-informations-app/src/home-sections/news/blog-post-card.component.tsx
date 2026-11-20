@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bookmark } from 'lucide-react';
-import styles from './blog-section.scss';
+import styles from './blog-section.module.css';
 
 export interface BlogArticle {
   id: string;

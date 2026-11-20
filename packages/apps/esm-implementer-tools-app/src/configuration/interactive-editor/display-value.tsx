@@ -1,6 +1,6 @@
 import React from 'react';
-import { StructuredListCell, StructuredListRow } from '@carbon/react';
-import styles from './display-value.scss';
+import { StructuredListCell, StructuredListRow } from '@egen-civitas/esm-framework';
+import styles from './display-value.module.css';
 
 export interface DisplayValueProps {
   value: any;

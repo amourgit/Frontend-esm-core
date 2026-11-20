@@ -54,7 +54,7 @@ import {
   SitesShowcase,
 } from './framework-components-showcase.component';
 import { AssistantShowcase, SelectionsShowcase } from './new-components-showcase.component';
-import styles from './component-showcase.scss';
+import styles from './component-showcase.module.css';
 
 // =============================================================================
 //  Icônes de démo — InteractiveSelector (@egen-civitas/esm-styleguide/selections)

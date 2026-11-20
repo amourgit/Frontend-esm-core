@@ -1,3 +1,9 @@
+> **⚠ Document historique — Carbon et SCSS ont été retirés du projet.** Tailwind CSS est le seul système de style ; les composants
+> de base (`Button`, `Tile`, `Dialog`, `Table`, `Tabs`, `TextInput`, `Checkbox`…) viennent du module style
+> (`@egen-civitas/esm-styleguide`, ré-exporté par `@egen-civitas/esm-framework`). Tout ce qui suit parle de Carbon et de SCSS :
+> à lire seulement pour comprendre l'ancien code. Correspondances et règles actuelles : `docs/MIGRATION-CARBON.md` du dépôt framework
+> et la section « Styling » de `.github/copilot-instructions.md`.
+
 # Guide — Composants & Système de thème EGEN
 
 > Document de référence exhaustif : comment coder une interface (composant) dans ce

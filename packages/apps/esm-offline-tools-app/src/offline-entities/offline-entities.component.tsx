@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import OfflineEntitySyncDetails from './offline-entity-sync-details.component';
 import OfflineEntityTable from './offline-entity-table.component';
 import SharedPageLayout from '../components/shared-page-layout.component';
-import styles from './offline-entities.styles.scss';
+import styles from './offline-entities.styles.module.css';
 
 export interface OfflineEntitiesProps {
   basePath: string;

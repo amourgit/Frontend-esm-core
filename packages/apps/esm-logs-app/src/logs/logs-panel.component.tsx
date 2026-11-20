@@ -12,7 +12,7 @@ import {
   type LogLevel,
   type LogLine,
 } from './log-store';
-import styles from './logs-panel.scss';
+import styles from './logs-panel.module.css';
 
 // =============================================================================
 //  LOGS SYSTÈME — contenu de la zone basse

@@ -296,7 +296,7 @@ Puis :
 
 ---
 
-## 8. Mises à jour système (rspack, Carbon, app-shell…)
+## 8. Mises à jour système (rspack, app-shell…)
 
 Elles viennent du framework **`@egen-civitas/*`**. Elles se font **dans chaque dépôt**, pas par la synchro :
 

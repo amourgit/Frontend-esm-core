@@ -1,0 +1,12 @@
+.overviewCardContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  padding-top: 0;
+  background-color: var(--colors-surface-muted, #ededed);
+}
+
+:global(.egen-breakpoint-gt-tablet) .overviewCardContainer {
+  grid-template-columns: repeat(3, 1fr);
+}

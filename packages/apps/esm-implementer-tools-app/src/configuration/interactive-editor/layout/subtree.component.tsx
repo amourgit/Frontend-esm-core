@@ -1,6 +1,6 @@
 import React from 'react';
-import { StructuredListBody, StructuredListCell, StructuredListRow, StructuredListWrapper } from '@carbon/react';
-import styles from './layout.styles.scss';
+import { StructuredList, StructuredListBody, StructuredListCell, StructuredListRow } from '@egen-civitas/esm-framework';
+import styles from './layout.styles.module.css';
 
 export interface SubtreeProps {
   leaf: boolean;
@@ -34,9 +34,9 @@ export const Subtree = React.forwardRef<HTMLSpanElement, SubtreeProps>(
         <StructuredListRow className={styles.structuredListRow}>
           <StructuredListCell />
           <StructuredListCell className={styles.subtreeCell}>
-            <StructuredListWrapper className={styles.structuredList}>
+            <StructuredList className={styles.structuredList}>
               <StructuredListBody>{children}</StructuredListBody>
-            </StructuredListWrapper>
+            </StructuredList>
           </StructuredListCell>
         </StructuredListRow>
       </>

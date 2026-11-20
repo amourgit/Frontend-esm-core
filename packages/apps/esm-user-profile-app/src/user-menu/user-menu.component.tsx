@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Switcher, SwitcherDivider } from '@carbon/react';
-import { ExtensionSlot, useAssignedExtensions, useSession } from '@egen-civitas/esm-framework';
+import { ExtensionSlot, MenuDivider, MenuList, useAssignedExtensions, useSession } from '@egen-civitas/esm-framework';
 import { GlassPanel } from './glass-panel.component';
-import styles from './user-menu.scss';
+import styles from './user-menu.module.css';
 
 // =============================================================================
 //  MENU UTILISATEUR — extension de la TopBar
@@ -78,11 +77,11 @@ const UserMenu: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpe
             </div>
           }
         >
-          <Switcher className={styles.switcher} aria-label={t('userMenuOptions', 'Options du menu utilisateur')}>
+          <MenuList role="list" className={styles.switcher} aria-label={t('userMenuOptions', 'Options du menu utilisateur')}>
             <ExtensionSlot className={styles.fullWidth} name="user-panel-slot" />
-            <SwitcherDivider className={styles.divider} aria-hidden="true" />
+            <MenuDivider className={styles.divider} aria-hidden="true" />
             <ExtensionSlot className={styles.fullWidth} name="user-panel-bottom-slot" />
-          </Switcher>
+          </MenuList>
         </GlassPanel>
       )}
     </div>

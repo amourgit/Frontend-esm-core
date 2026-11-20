@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './settings.scss';
+import styles from './settings.module.css';
 
 interface SettingsSectionProps {
   title: string;

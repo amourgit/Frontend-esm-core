@@ -27,7 +27,7 @@ import {
   type LiveOrbVariant,
   type XboxSoundType,
 } from '@egen-civitas/esm-framework';
-import styles from './component-showcase.scss';
+import styles from './component-showcase.module.css';
 
 // =============================================================================
 //  Vitrine — composants ajoutés récemment au styleguide

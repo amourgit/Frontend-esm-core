@@ -4,7 +4,7 @@ import { showToast, UserHasAccess, useStore } from '@egen-civitas/esm-framework'
 import { implementerToolsStore, showModuleDiagnostics } from './store';
 import { hasInvalidDependencies } from './backend-dependencies/egen-backend-dependencies';
 import { useBackendDependencies } from './backend-dependencies/useBackendDependencies';
-import styles from './implementer-tools.styles.scss';
+import styles from './implementer-tools.styles.module.css';
 
 const UiEditor = React.lazy(() => import('./ui-editor/ui-editor'));
 

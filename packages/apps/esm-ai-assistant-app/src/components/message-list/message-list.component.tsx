@@ -4,7 +4,7 @@ import { useConfig } from '@egen-civitas/esm-framework';
 import type { ConfigSchema } from '../../config-schema';
 import type { AssistantMessage } from '../../hooks/use-ai-chat';
 import MessageBubble from '../message-bubble/message-bubble.component';
-import styles from './message-list.scss';
+import styles from './message-list.module.css';
 
 interface MessageListProps {
   messages: AssistantMessage[];

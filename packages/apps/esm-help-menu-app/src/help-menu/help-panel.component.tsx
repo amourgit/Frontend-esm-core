@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExtensionSlot } from '@egen-civitas/esm-framework';
-import styles from './help-panel.styles.scss';
+import styles from './help-panel.styles.module.css';
 
 /**
  * Contenu de la zone du bas « Aide » (rail droit, groupe bas).

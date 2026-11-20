@@ -1,0 +1,27 @@
+.productiveHeading01, .overviewCard .heading {
+  font-size: var(--ui-heading-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-heading-compact-01-font-weight, 600);
+  line-height: var(--ui-heading-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-heading-compact-01-letter-spacing, 0.16px);
+}
+
+.overviewCard {
+  border: 1px solid var(--colors-border-default, #e0e0e0);
+}
+.overviewCard .heading {
+  color: var(--colors-surface-muted-foreground, #525252);
+}
+.overviewCard .headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.overviewCard .contentContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+.overviewCard .viewButton {
+  margin-top: -0.25rem;
+  margin-right: -1rem;
+}

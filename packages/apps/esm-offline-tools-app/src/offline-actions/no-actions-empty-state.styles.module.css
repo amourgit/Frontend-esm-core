@@ -1,0 +1,29 @@
+.productiveHeading01, .emptyStateContainer .heading {
+  font-size: var(--ui-heading-compact-01-font-size, 0.875rem);
+  font-weight: var(--ui-heading-compact-01-font-weight, 600);
+  line-height: var(--ui-heading-compact-01-line-height, 1.28572);
+  letter-spacing: var(--ui-heading-compact-01-letter-spacing, 0.16px);
+}
+
+.layer {
+  margin: 1.5rem;
+}
+
+.emptyStateContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.emptyStateContainer .emptyStateDescription {
+  font-size: var(--ui-body-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-01-font-weight, 400);
+  line-height: var(--ui-body-01-line-height, 1.42857);
+  letter-spacing: var(--ui-body-01-letter-spacing, 0.16px);
+  color: var(--colors-surface-muted-foreground, #525252);
+  white-space: pre-line;
+  text-align: center;
+}
+.emptyStateContainer .heading {
+  color: var(--colors-surface-foreground, #161616);
+}

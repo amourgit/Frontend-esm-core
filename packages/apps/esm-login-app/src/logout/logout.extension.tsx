@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, SwitcherItem } from '@carbon/react';
-import { navigate } from '@egen-civitas/esm-framework';
-import styles from './logout.scss';
+import { Button, navigate } from '@egen-civitas/esm-framework';
+import styles from './logout.module.css';
 
 const Logout: React.FC = () => {
   const { t } = useTranslation();
@@ -12,11 +11,11 @@ const Logout: React.FC = () => {
   }, []);
 
   return (
-    <SwitcherItem aria-label={t('logout', 'Logout')}>
-      <Button className={styles.logout} onClick={handleLogout} kind="ghost">
+    <li role="none" aria-label={t('logout', 'Logout')} className="flex items-center justify-between gap-2 px-4 py-1 text-sm">
+      <Button className={styles.logout} onClick={handleLogout} variant="ghost">
         {t('logout', 'Logout')}
       </Button>
-    </SwitcherItem>
+    </li>
   );
 };
 

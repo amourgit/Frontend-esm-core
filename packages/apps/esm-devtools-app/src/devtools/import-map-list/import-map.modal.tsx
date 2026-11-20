@@ -1,6 +1,6 @@
-import React, { type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { type FormEvent, useCallback, useState } from 'react';
+import { Button, ModalBody, ModalFooter, ModalHeader, TextInput } from '@egen-civitas/esm-framework';
 import { useTranslation } from 'react-i18next';
-import { Button, Form, ModalHeader, ModalBody, ModalFooter, Stack, TextInput } from '@carbon/react';
 import {
   addImportMapOverride,
   addRouteMapOverride,
@@ -35,8 +35,7 @@ async function getUrlFromPort(moduleName: string, port: string) {
 const ImportMapModal: React.FC<ImportMapModalProps> = ({ module, isNew, close }) => {
   const { t } = useTranslation();
   const [moduleName, setModuleName] = useState<string | undefined>(module?.moduleName);
-  const moduleNameRef = useRef<HTMLInputElement>();
-  const inputRef = useRef<HTMLInputElement>();
+  const [overrideUrl, setOverrideUrl] = useState('');
 
   const handleSubmit = useCallback(
     async (evt: FormEvent<HTMLElement>) => {
@@ -51,7 +50,7 @@ const ImportMapModal: React.FC<ImportMapModalProps> = ({ module, isNew, close })
       }
 
       if (isNew) {
-        let newUrl = inputRef.current.value || null;
+        let newUrl = overrideUrl || null;
         if (newUrl) {
           if (isPortRegex.test(newUrl)) {
             newUrl = await getUrlFromPort(moduleName, newUrl);
@@ -62,7 +61,7 @@ const ImportMapModal: React.FC<ImportMapModalProps> = ({ module, isNew, close })
           addRouteMapOverride(moduleName, new URL('routes.json', baseUrl));
         }
       } else {
-        let newUrl = inputRef.current.value || null;
+        let newUrl = overrideUrl || null;
         if (newUrl === null) {
           removeImportMapOverride(moduleName);
           removeRouteMapOverride(moduleName);
@@ -82,16 +81,10 @@ const ImportMapModal: React.FC<ImportMapModalProps> = ({ module, isNew, close })
     [moduleName, isNew, close],
   );
 
-  useEffect(
-    () => (isNew ? moduleNameRef.current?.focus() : inputRef.current?.focus()),
-    // Only fired on initial mount
-    [],
-  );
-
   return (
     <>
       <ModalHeader
-        closeModal={close}
+        onClose={close}
         title={
           isNew
             ? t('addModule', 'Add Module')
@@ -100,38 +93,44 @@ const ImportMapModal: React.FC<ImportMapModalProps> = ({ module, isNew, close })
               })
         }
       />
-      <Form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
         <ModalBody>
-          <Stack gap={5}>
+          <div className="flex flex-col gap-4">
             {isNew && (
               <TextInput
                 id="module-name"
-                ref={moduleNameRef}
+                autoFocus
                 onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
                   evt.preventDefault();
                   setModuleName(evt.target.value);
                 }}
-                labelText={t('moduleName', 'Module Name')}
+                label={t('moduleName', 'Module Name')}
               />
             )}
             {!isNew && (
               <TextInput
                 id="default-url"
-                labelText={t('defaultUrl', 'Default URL')}
+                label={t('defaultUrl', 'Default URL')}
                 value={module.defaultUrl}
                 readOnly
               />
             )}
-            <TextInput id="override-url" ref={inputRef} labelText={t('overrideUrl', 'Override URL')} />
-          </Stack>
+            <TextInput
+              id="override-url"
+              autoFocus={!isNew}
+              value={overrideUrl}
+              onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setOverrideUrl(evt.target.value)}
+              label={t('overrideUrl', 'Override URL')}
+            />
+          </div>
         </ModalBody>
         <ModalFooter>
-          <Button kind="secondary" onClick={close}>
+          <Button variant="secondary" onClick={close}>
             {t('cancel', 'Cancel')}
           </Button>
           <Button type="submit">{t('apply', 'Apply')}</Button>
         </ModalFooter>
-      </Form>
+      </form>
     </>
   );
 };

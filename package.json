@@ -9,10 +9,10 @@
   "resolutions": {
     "@types/react": "18.3.25",
     "csstype": "3.2.3",
-    "@egen-civitas/esm-framework": "^4.1.0",
-    "@egen-civitas/esm-styleguide": "^4.1.0",
-    "@egen-civitas/esm-app-shell": "^2.11.1",
-    "@egen-civitas/rspack-config": "^1.2.0"
+    "@egen-civitas/esm-framework": "^5.0.1",
+    "@egen-civitas/esm-styleguide": "^5.2.4",
+    "@egen-civitas/esm-app-shell": "^3.0.6",
+    "@egen-civitas/rspack-config": "^2.0.0"
   },
   "scripts": {
     "run:egen": "egen",
@@ -27,8 +27,9 @@
     "document": "turbo run document",
     "setup": "yarn install && turbo run build",
     "start": "egen develop --sources \"packages/apps/*\"",
-    "verify": "node tools/check-nav-routes.mjs && turbo run lint test typescript",
+    "verify": "node tools/check-nav-routes.mjs && node tools/check-no-carbon.mjs && turbo run lint test typescript",
     "verify:nav": "node tools/check-nav-routes.mjs",
+    "verify:no-carbon": "node tools/check-no-carbon.mjs",
     "deps:egen": "node tools/sync-egen-deps.mjs && yarn up -R '@egen-civitas/*'",
     "deps:egen:check": "node tools/sync-egen-deps.mjs --check",
     "postinstall": "husky install",
@@ -38,9 +39,9 @@
     "storybook": "yarn workspace @egen/storybook storybook"
   },
   "devDependencies": {
-    "@egen-civitas/egen": "^2.3.0",
-    "@egen-civitas/esm-app-shell": "^2.11.1",
-    "@egen-civitas/rspack-config": "^1.2.0",
+    "@egen-civitas/egen": "^3.0.0",
+    "@egen-civitas/esm-app-shell": "^3.0.6",
+    "@egen-civitas/rspack-config": "^2.0.0",
     "@playwright/test": "^1.64.1",
     "@rspack/cli": "2.3.0",
     "@rspack/core": "2.3.0",

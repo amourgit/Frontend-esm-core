@@ -3,12 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FieldError, useForm, type SubmitHandler } from 'react-hook-form';
-import { Button, Form, PasswordInput, InlineLoading, Tile } from '@carbon/react';
-import { showSnackbar } from '@egen-civitas/esm-framework';
+import { Button, InlineLoading, PasswordInput, showSnackbar, Tile } from '@egen-civitas/esm-framework';
 import { useAIActionable } from '@egen-civitas/esm-ai-framework';
 import { changeUserPassword } from './change-password.resource';
 import Logo from '../logo.component';
-import styles from './change-password.scss';
+import styles from './change-password.module.css';
 
 const ChangePassword: React.FC = () => {
   const { t } = useTranslation();
@@ -114,7 +113,7 @@ const ChangePassword: React.FC = () => {
         <div className={styles.alignCenter}>
           <Logo t={t} />
         </div>
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <form onSubmit={handleSubmit(onSubmit, onError)}>
           <Controller
             name="oldPassword"
             control={control}
@@ -122,8 +121,7 @@ const ChangePassword: React.FC = () => {
               <PasswordInput
                 ref={oldPasswordRef}
                 id="oldPassword"
-                invalid={!!errors?.oldPassword}
-                invalidText={
+                errorText={
                   (errors &&
                     errors.oldPassword &&
                     errors.oldPassword.message &&
@@ -131,7 +129,7 @@ const ChangePassword: React.FC = () => {
                     errors.oldPassword.message) ??
                   ''
                 }
-                labelText={t('oldPassword', 'Old password')}
+                label={t('oldPassword', 'Old password')}
                 onChange={onChange}
                 value={value}
               />
@@ -144,8 +142,7 @@ const ChangePassword: React.FC = () => {
               <PasswordInput
                 ref={newPasswordRef}
                 id="newPassword"
-                invalid={!!errors?.newPassword}
-                invalidText={
+                errorText={
                   (errors &&
                     errors.newPassword &&
                     errors.newPassword.message &&
@@ -153,7 +150,7 @@ const ChangePassword: React.FC = () => {
                     errors.newPassword.message) ??
                   ''
                 }
-                labelText={t('newPassword', 'New password')}
+                label={t('newPassword', 'New password')}
                 onChange={onChange}
                 value={value}
               />
@@ -166,8 +163,7 @@ const ChangePassword: React.FC = () => {
               <PasswordInput
                 ref={passwordConfirmationRef}
                 id="passwordConfirmation"
-                invalid={!!errors?.passwordConfirmation}
-                invalidText={
+                errorText={
                   (errors &&
                     errors.passwordConfirmation &&
                     errors.passwordConfirmation.message &&
@@ -175,7 +171,7 @@ const ChangePassword: React.FC = () => {
                     errors.passwordConfirmation.message) ??
                   ''
                 }
-                labelText={t('confirmPassword', 'Confirm new password')}
+                label={t('confirmPassword', 'Confirm new password')}
                 onChange={onChange}
                 value={value}
               />
@@ -188,7 +184,7 @@ const ChangePassword: React.FC = () => {
               <span>{t('change', 'Change Password')}</span>
             )}
           </Button>
-        </Form>
+        </form>
       </Tile>
     </div>
   );

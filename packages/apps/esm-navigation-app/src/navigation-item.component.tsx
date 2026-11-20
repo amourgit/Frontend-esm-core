@@ -5,7 +5,7 @@ import { BreadcrumbNav } from './components/navigation/BreadcrumbNav';
 import { DropdownNavigation, type NavItem } from './components/shell/DropdownNavigation';
 import { WorkspaceProvider, useWorkspace } from './context/WorkspaceContext';
 import { bindNavSelection } from './utils/navSelection';
-import styles from './components/navigation/navigation.scss';
+import styles from './components/navigation/navigation.module.css';
 
 // =============================================================================
 //  NAVIGATION — extension de la TopBar

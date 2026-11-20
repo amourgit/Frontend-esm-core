@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './quick-access.scss';
+import styles from './quick-access.module.css';
 
 interface QuickAccessSectionProps {
   title: string;

@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Button } from '@carbon/react';
-import { CloseIcon, type ConfigSchema, type Config, getCoreTranslation, SaveIcon, Type } from '@egen-civitas/esm-framework';
+import { Button, CloseIcon, getCoreTranslation, SaveIcon, Type, type Config, type ConfigSchema } from '@egen-civitas/esm-framework';
 import type { ConfigValueDescriptor } from './editable-value.component';
 import { ValueEditorField } from './value-editors/value-editor-field';
-import styles from './value-editor.styles.scss';
+import styles from './value-editor.styles.module.css';
 import { validateValue } from './validators.resource';
 
 export type CustomValueType = 'add' | 'remove' | 'order' | 'configure';
@@ -76,10 +75,12 @@ export function ValueEditor({ element, customType, path, handleSaveToConfigurati
           error}
       </div>
       <div className={styles.valueEditorButtons}>
-        <Button renderIcon={(props) => <SaveIcon {...props} size={16} />} kind="primary" onClick={handleSave}>
+        <Button onClick={handleSave}>
+<SaveIcon size={16} />
           {getCoreTranslation('save')}
         </Button>
-        <Button renderIcon={(props) => <CloseIcon {...props} size={16} />} kind="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleClose}>
+<CloseIcon size={16} />
           {getCoreTranslation('cancel')}
         </Button>
       </div>

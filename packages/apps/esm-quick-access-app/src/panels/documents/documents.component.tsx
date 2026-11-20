@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Folder, FileText, Plus, MoreHorizontal, ChevronDown, Upload } from 'lucide-react';
-import styles from './documents.scss';
+import styles from './documents.module.css';
 
 // =============================================================================
 //  DOCUMENTS — Liste de documents récents (panneau latéral)

@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import type { AssistantMessage } from '../../hooks/use-ai-chat';
-import styles from './message-bubble.scss';
+import styles from './message-bubble.module.css';
 
 const NavigateGlyph: React.FC = () => (
   <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">

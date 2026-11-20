@@ -1,11 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TileProps } from '@carbon/react';
-import { Button, Layer, Tile } from '@carbon/react';
-import { ArrowRightIcon, navigate } from '@egen-civitas/esm-framework';
-import styles from './overview-card.styles.scss';
+import { ArrowRightIcon, Button, Layer, navigate, Tile } from '@egen-civitas/esm-framework';
+import styles from './overview-card.styles.module.css';
 
-export interface OverviewCardProps extends TileProps {
+export interface OverviewCardProps {
   header: string;
   viewLink: string;
   children?: React.ReactNode;
@@ -19,13 +17,8 @@ const OverviewCard: React.FC<OverviewCardProps> = ({ header, viewLink, children 
       <Tile className={styles.overviewCard}>
         <div className={styles.headerContainer}>
           <h3 className={styles.heading}>{header}</h3>
-          <Button
-            className={styles.viewButton}
-            kind="ghost"
-            renderIcon={(props) => <ArrowRightIcon size={16} {...props} />}
-            size="sm"
-            onClick={() => navigate({ to: `\${egenSpaBase}/${viewLink}` })}
-          >
+          <Button className={styles.viewButton} variant="ghost" size="sm" onClick={() => navigate({ to: `\${egenSpaBase}/${viewLink}` })}>
+<ArrowRightIcon size={16} />
             {t('homeOverviewCardView', 'View')}
           </Button>
         </div>

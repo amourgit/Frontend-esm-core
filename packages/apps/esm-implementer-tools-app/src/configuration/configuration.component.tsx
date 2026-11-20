@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Button, Column, FlexGrid, Row, TextInput, Toggle } from '@carbon/react';
+import { Button, IconButton, Switch, TextInput } from '@egen-civitas/esm-framework';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep, isEmpty } from 'lodash-es';
 import type { Config } from '@egen-civitas/esm-framework/src/internal';
@@ -18,7 +18,7 @@ import {
 import { ConfigTree } from './interactive-editor/config-tree.component';
 import { Description } from './interactive-editor/description.component';
 import { implementerToolsStore, type ImplementerToolsStore } from '../store';
-import styles from './configuration.styles.scss';
+import styles from './configuration.styles.module.css';
 
 const JsonEditor = React.lazy(() => import('./json-editor/json-editor.component'));
 
@@ -49,15 +49,7 @@ interface OpenOrCloseButtonProps {
 }
 
 const OpenOrCloseButton: React.FC<OpenOrCloseButtonProps> = ({ isConfigToolbarOpen, toggleIsToolbarOpen }) => (
-  <Button
-    hasIconOnly
-    renderIcon={isConfigToolbarOpen ? ChevronUpIcon : ChevronDownIcon}
-    onClick={toggleIsToolbarOpen}
-    kind="ghost"
-    size="sm"
-    tooltipPosition="left"
-    iconDescription={`${isConfigToolbarOpen ? 'Hide' : 'Show'} toolbar`}
-  />
+  <IconButton icon={isConfigToolbarOpen ? <ChevronUpIcon /> : <ChevronDownIcon />} label={`${isConfigToolbarOpen ? 'Hide' : 'Show'} toolbar`} tooltipSide="left" onClick={toggleIsToolbarOpen} variant="ghost" size="icon-sm" />
 );
 
 export const Configuration: React.FC = () => {
@@ -122,53 +114,33 @@ export const Configuration: React.FC = () => {
           <OpenOrCloseButton isConfigToolbarOpen={isConfigToolbarOpen} toggleIsToolbarOpen={toggleIsToolbarOpen} />
         </div>
         {isConfigToolbarOpen ? (
-          <FlexGrid style={{ padding: '0.5em 1.5em' }}>
-            <Row className={styles.row}>
-              <Column>
+          <div style={{ padding: '0.5em 1.5em' }}>
+            <div className={`${styles.row} flex flex-wrap items-center gap-4`}>
+              <div className="min-w-48 flex-1">
                 <TextInput
                   id="extensionSearch"
-                  labelText={t('searchConfiguration', 'Search configuration')}
+                  label={t('searchConfiguration', 'Search configuration')}
                   onChange={(e) => setFilterText(e.target.value)}
                   autoComplete="off"
                 />
-              </Column>
-              <Column className={styles.toggleButtons}>
-                <Toggle
-                  className={styles.toggle}
-                  id="jsonModeSwitch"
-                  labelText={t('jsonEditor', 'JSON editor')}
-                  onToggle={toggleIsJsonModeEnabled}
-                  toggled={isJsonModeEnabled}
-                />
-                <Toggle
-                  className={styles.toggle}
-                  id="uiEditorSwitch"
-                  labelText={t('uiEditor', 'UI editor')}
-                  toggled={isUIEditorEnabled}
-                  onToggle={toggleIsUIEditorEnabled}
-                />
-              </Column>
-              <Column className={styles.actionButtons}>
-                <Button
-                  kind="danger"
-                  iconDescription="Clear local config"
-                  renderIcon={(props) => <TrashCanIcon size={16} {...props} />}
-                  onClick={() => {
-                    clearConfigErrors();
-                    temporaryConfigStore.setState({ config: {} });
-                  }}
-                >
+              </div>
+              <div className={`${styles.toggleButtons} flex items-center gap-4`}>
+                <label className={`${styles.toggle} flex items-center gap-2 text-sm`} htmlFor="jsonModeSwitch">
+                  <Switch id="jsonModeSwitch" checked={isJsonModeEnabled} onCheckedChange={toggleIsJsonModeEnabled} />
+                  {t('jsonEditor', 'JSON editor')}
+                </label>
+                <label className={`${styles.toggle} flex items-center gap-2 text-sm`} htmlFor="uiEditorSwitch">
+                  <Switch id="uiEditorSwitch" checked={isUIEditorEnabled} onCheckedChange={toggleIsUIEditorEnabled} />
+                  {t('uiEditor', 'UI editor')}
+                </label>
+              </div>
+              <div className={`${styles.actionButtons} flex items-center gap-4`}>
+                <Button variant="destructive" onClick={() => { clearConfigErrors(); temporaryConfigStore.setState({ config: {} }); }}>
+<TrashCanIcon size={16} />
                   {t('clearConfig', 'Clear local config')}
                 </Button>
-                <Button
-                  kind="secondary"
-                  iconDescription="Download config"
-                  renderIcon={(props) => <DownloadIcon size={16} {...props} />}
-                  onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                    if ((event.target as HTMLAnchorElement).id != 'downloadConfigBtn')
-                      document.getElementById('downloadConfigBtn')?.click();
-                  }}
-                >
+                <Button variant="secondary" onClick={(event: React.MouseEvent<HTMLButtonElement>) => { if ((event.target as HTMLAnchorElement).id != 'downloadConfigBtn') document.getElementById('downloadConfigBtn')?.click(); }}>
+<DownloadIcon size={16} />
                   <a
                     id="downloadConfigBtn"
                     className={styles.downloadLink}
@@ -178,9 +150,9 @@ export const Configuration: React.FC = () => {
                     {t('downloadConfig', 'Download config')}
                   </a>
                 </Button>
-              </Column>
-            </Row>
-          </FlexGrid>
+              </div>
+            </div>
+          </div>
         ) : null}
       </div>
       <div className={styles.mainContent}>

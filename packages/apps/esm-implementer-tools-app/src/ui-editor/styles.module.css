@@ -1,0 +1,79 @@
+.slotOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.slotOverlay.blueScheme {
+  border: 1px dashed color-mix(in srgb, var(--colors-primary-600, #4589ff) 60%, transparent);
+  background-color: color-mix(in srgb, var(--colors-primary-600, #4589ff) 10%, transparent);
+}
+.slotOverlay.blueScheme.slotOverlayHover {
+  border-color: color-mix(in srgb, var(--colors-primary-600, #4589ff) 90%, transparent);
+  background-color: color-mix(in srgb, var(--colors-primary-600, #4589ff) 15%, transparent);
+}
+.slotOverlay.greenScheme {
+  border: 1px dashed color-mix(in srgb, var(--colors-success-600, #198038) 60%, transparent);
+  background-color: color-mix(in srgb, var(--colors-success-600, #198038) 10%, transparent);
+}
+.slotOverlay.greenScheme.slotOverlayHover {
+  border-color: color-mix(in srgb, var(--colors-success-600, #198038) 90%, transparent);
+  background-color: color-mix(in srgb, var(--colors-success-600, #198038) 15%, transparent);
+}
+
+.slotName {
+  background-color: var(--colors-surface-card, rgba(255, 255, 255, 0.95));
+  border: 1px solid color-mix(in srgb, var(--colors-primary-600, #4589ff) 80%, transparent);
+  color: var(--colors-surface-foreground, #393939);
+  cursor: pointer;
+  position: absolute;
+  padding: 0.5rem;
+  z-index: 99999;
+  font-size: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+.slotName:nth-child(even) {
+  border-color: color-mix(in srgb, var(--colors-success-600, #198038) 80%, transparent);
+}
+
+.extensionOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+}
+
+.extensionOverlay:hover {
+  background-color: rgba(43, 43, 185, 0.1);
+}
+
+.extensionOverlay:focus .extensionTooltip,
+.extensionOverlay:hover .extensionTooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.extensionTooltip {
+  visibility: hidden;
+  width: auto;
+  background-color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  padding: 1rem;
+  border: 1px solid rgba(43, 43, 185, 0.4);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.exitButton {
+  position: fixed !important;
+  top: 4rem;
+  right: 1rem;
+  z-index: 999999;
+}

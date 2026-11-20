@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import uniqueId from 'lodash-es/uniqueId';
-import { Checkbox, NumberInput, TextInput } from '@carbon/react';
-import { Type } from '@egen-civitas/esm-framework';
+import { Checkbox, TextInput, Type } from '@egen-civitas/esm-framework';
 import type { ConfigValueDescriptor } from '../editable-value.component';
 import type { ValueType } from '../value-editor';
 import { ArrayEditor } from './array-editor';
@@ -29,32 +28,34 @@ export function ValueEditorField({ element, path, valueType, value, onChange, er
   return valueType === Type.Array ? (
     <ArrayEditor element={element} valueArray={value} setValue={onChange} />
   ) : valueType === Type.Boolean ? (
-    <Checkbox
-      id={id}
-      checked={value}
-      hideLabel
-      labelText=""
-      onChange={(event, { checked, id }) => onChange(checked)}
-      invalid={Boolean(error)}
-      invalidText={error}
-    />
+    <div className="flex flex-col gap-1">
+      <Checkbox
+        id={id}
+        checked={Boolean(value)}
+        aria-label={element._description ?? id}
+        aria-invalid={Boolean(error) || undefined}
+        onCheckedChange={(checked) => onChange(checked === true)}
+      />
+      {error ? <p className="text-xs text-destructive">{error}</p> : null}
+    </div>
   ) : valueType === Type.Number ? (
-    <NumberInput
+    <TextInput
       id={id}
-      value={value}
-      onChange={(_, { value }) => onChange(value ? (typeof value === 'string' ? parseInt(value) : value) : 0)}
-      hideSteppers
-      invalid={Boolean(error)}
-      invalidText={error}
+      type="number"
+      label={element._description ?? id}
+      hideLabel
+      value={value ?? ''}
+      onChange={(e) => onChange(e.target.value ? parseInt(e.target.value, 10) : 0)}
+      errorText={error ?? undefined}
     />
   ) : valueType === Type.String || valueType === Type.UUID ? (
     <TextInput
       id={id}
       value={value}
-      labelText=""
+      label={element._description ?? id}
+      hideLabel
       onChange={(e) => onChange(e.target.value)}
-      invalid={Boolean(error)}
-      invalidText={error}
+      errorText={error ?? undefined}
     />
   ) : valueType === 'add' ? (
     <ExtensionSlotAdd value={value ?? element._value} setValue={onChange} />

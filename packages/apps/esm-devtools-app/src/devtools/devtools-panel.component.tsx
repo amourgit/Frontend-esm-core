@@ -2,7 +2,7 @@ import React from 'react';
 import { setToolWindowBadge } from '@egen-civitas/esm-framework';
 import ImportMap from './import-map.component';
 import { DEVTOOLS_TOOL_WINDOW, overriddenBadge } from '../constants';
-import styles from './devtools-panel.styles.scss';
+import styles from './devtools-panel.styles.module.css';
 
 /** Contenu de la zone du bas « Devtools » (rail droit, groupe bas) : surcharges de l'import map. */
 export default function DevToolsPanel() {

@@ -1,17 +1,8 @@
 import React, { Fragment, useMemo } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@egen-civitas/esm-framework';
 import { useTranslation } from 'react-i18next';
-import {
-  DataTable,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@carbon/react';
 import type { FrontendModule } from '../types';
-import styles from './frontend-modules.scss';
+import styles from './frontend-modules.module.css';
 
 export interface FrontendModulesProps {
   frontendModules: Array<FrontendModule>;
@@ -36,17 +27,15 @@ export const FrontendModules: React.FC<FrontendModulesProps> = ({ frontendModule
 
   return (
     <div className={styles.container}>
-      <DataTable rows={[]} headers={headers}>
-        {({ headers, getTableProps, getHeaderProps }) => (
-          <TableContainer title="">
-            <Table {...getTableProps()}>
-              <TableHead>
+                <div className="overflow-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
                   {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })}>{header.header}</TableHeader>
+                    <TableHead key={header.key}>{header.header}</TableHead>
                   ))}
                 </TableRow>
-              </TableHead>
+              </TableHeader>
               <TableBody>
                 {frontendModules.map((esm) => (
                   <Fragment key={esm.name}>
@@ -74,9 +63,7 @@ export const FrontendModules: React.FC<FrontendModulesProps> = ({ frontendModule
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>
-        )}
-      </DataTable>
+          </div>
     </div>
   );
 };

@@ -1,0 +1,9 @@
+.errorMessage {
+  color: var(--ui-text-error, #da1e28);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.valueEditorButtons {
+  margin-top: 0.5rem;
+}

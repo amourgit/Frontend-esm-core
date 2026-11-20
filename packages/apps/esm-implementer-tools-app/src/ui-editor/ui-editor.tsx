@@ -2,18 +2,17 @@ import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { type TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@carbon/react';
 import {
   CloseIcon,
   getExtensionInternalStore,
   useStore,
   useStoreWithActions,
 } from '@egen-civitas/esm-framework/src/internal';
-import { openToolWindow } from '@egen-civitas/esm-framework';
+import { Button, IconButton, openToolWindow } from '@egen-civitas/esm-framework';
 import { ExtensionOverlay } from './extension-overlay.component';
 import { Portal } from './portal';
 import { IMPLEMENTER_TOOLS_WINDOW, type ImplementerToolsStore, implementerToolsStore } from '../store';
-import styles from './styles.scss';
+import styles from './styles.module.css';
 
 interface ExitButtonProps {
   t: TFunction;
@@ -182,16 +181,7 @@ export function SlotOverlay({ slotName, moduleName, extensionCount = 0, colorSch
 export function ExitButton({ t }: ExitButtonProps) {
   const { toggleIsUIEditorEnabled } = useStoreWithActions(implementerToolsStore, actions);
   return (
-    <Button
-      className={styles.exitButton}
-      hasIconOnly
-      iconDescription={t('exitUIEditor', 'Exit UI Editor')}
-      kind="danger"
-      onClick={toggleIsUIEditorEnabled}
-      renderIcon={(props) => <CloseIcon {...props} size={16} />}
-      size="sm"
-      tooltipPosition="left"
-    />
+    <IconButton icon={<CloseIcon size={16} />} label={t('exitUIEditor', 'Exit UI Editor')} tooltipSide="left" className={styles.exitButton} variant="destructive" onClick={toggleIsUIEditorEnabled} size="icon-sm" />
   );
 }
 

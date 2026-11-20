@@ -60,7 +60,7 @@ import {
   type SiteSummary,
   type SiteTask,
 } from '@egen-civitas/esm-framework';
-import styles from './component-showcase.scss';
+import styles from './component-showcase.module.css';
 import { ShowcaseBoundary, Variant } from './new-components-showcase.component';
 
 // =============================================================================

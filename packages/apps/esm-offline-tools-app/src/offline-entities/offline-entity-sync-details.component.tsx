@@ -2,12 +2,11 @@ import React from 'react';
 import classNames from 'classnames';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Layer, Tile } from '@carbon/react';
-import { CheckmarkFilled, WarningFilled } from '@carbon/react/icons';
-import { getDynamicOfflineDataHandlers } from '@egen-civitas/esm-framework';
+import { CircleCheckBigIcon as CheckmarkFilled, TriangleAlertIcon as WarningFilled } from 'lucide-react';
+import { getDynamicOfflineDataHandlers, Layer, Tile } from '@egen-civitas/esm-framework';
 import { useLastSyncStateOfEntity } from '../hooks/offline-entity-data-hooks';
 import SharedPageLayout from '../components/shared-page-layout.component';
-import styles from './offline-entity-sync-details.styles.scss';
+import styles from './offline-entity-sync-details.styles.module.css';
 
 const OfflineEntitySyncDetails: React.FC = () => {
   const { t } = useTranslation();

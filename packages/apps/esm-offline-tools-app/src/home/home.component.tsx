@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import CardsContainer from './cards-container.component';
 import OfflineEntityTable from '../offline-entities/offline-entity-table.component';
 import SharedPageLayout from '../components/shared-page-layout.component';
-import styles from './home.styles.scss';
+import styles from './home.styles.module.css';
 
 /**
  * The offline tool's home/dashboard page.

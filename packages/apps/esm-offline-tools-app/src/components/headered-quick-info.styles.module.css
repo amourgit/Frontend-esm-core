@@ -1,0 +1,14 @@
+.productiveHeading04 {
+  font-size: var(--ui-heading-04-font-size, 1.75rem);
+  font-weight: var(--ui-heading-04-font-weight, 400);
+  line-height: var(--ui-heading-04-line-height, 1.28572);
+  letter-spacing: var(--ui-heading-04-letter-spacing, 0);
+}
+
+.label01 {
+  font-size: var(--ui-label-01-font-size, 0.75rem);
+  font-weight: var(--ui-label-01-font-weight, 400);
+  line-height: var(--ui-label-01-line-height, 1.33333);
+  letter-spacing: var(--ui-label-01-letter-spacing, 0.32px);
+  color: var(--colors-surface-muted-foreground, #525252);
+}

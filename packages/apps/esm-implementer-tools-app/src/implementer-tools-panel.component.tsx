@@ -4,7 +4,7 @@ import { useFrontendModules } from './hooks';
 import { useBackendDependencies } from './backend-dependencies/useBackendDependencies';
 import { implementerToolsStore } from './store';
 import Popup from './popup/popup.component';
-import styles from './implementer-tools.styles.scss';
+import styles from './implementer-tools.styles.module.css';
 
 /**
  * Contenu de la zone basse « Implementer Tools » (rail droit, groupe bas).

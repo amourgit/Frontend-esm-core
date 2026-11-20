@@ -1,0 +1,11 @@
+.container {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.moduleHeader {
+  font-size: var(--ui-heading-compact-02-font-size, 1rem);
+  font-weight: var(--ui-heading-compact-02-font-weight, 600);
+  line-height: var(--ui-heading-compact-02-line-height, 1.375);
+  letter-spacing: var(--ui-heading-compact-02-letter-spacing, 0);
+}

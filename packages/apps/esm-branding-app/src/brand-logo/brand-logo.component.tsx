@@ -2,7 +2,7 @@ import React from 'react';
 import { interpolateUrl, navigate, useConfig } from '@egen-civitas/esm-framework';
 import type { ConfigSchema } from '../config-schema';
 import defaultLogo from '../default-logo';
-import styles from './brand-logo.scss';
+import styles from './brand-logo.module.css';
 
 const isExternal = (url: string) => /^[a-z][a-z0-9+.-]*:\/\//i.test(url);
 

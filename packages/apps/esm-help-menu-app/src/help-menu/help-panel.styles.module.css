@@ -1,0 +1,17 @@
+.panel {
+  font-size: var(--ui-body-01-font-size, 0.875rem);
+  font-weight: var(--ui-body-01-font-weight, 400);
+  line-height: var(--ui-body-01-line-height, 1.42857);
+  letter-spacing: var(--ui-body-01-letter-spacing, 0.16px);
+  height: 100%;
+  overflow: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+}

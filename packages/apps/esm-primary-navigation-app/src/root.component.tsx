@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import TopBar from './components/topbar/topbar.component';
-import styles from './root.scss';
+import styles from './root.module.css';
 
 // =============================================================================
 //  ROOT — Composant racine de l'app de navigation primaire

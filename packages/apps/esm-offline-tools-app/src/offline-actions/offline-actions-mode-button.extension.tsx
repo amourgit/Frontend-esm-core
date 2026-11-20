@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { SwitcherItem, Toggle } from '@carbon/react';
-import { Network_3 } from '@carbon/react/icons';
+import { Switch } from '@egen-civitas/esm-framework';
+import { NetworkIcon as Network_3 } from 'lucide-react';
 import { getCurrentOfflineMode, setCurrentOfflineMode } from '@egen-civitas/esm-framework/src/internal';
-import styles from './offline-actions-mode-button.scss';
+import styles from './offline-actions-mode-button.module.css';
 
 function doNotCloseMenu(ev: React.SyntheticEvent) {
   ev.stopPropagation();
@@ -21,15 +21,25 @@ const OfflineActionsModeButton: React.FC = () => {
   }, []);
 
   return (
-    <SwitcherItem className={styles.panelItemContainer} aria-label="Offline mode">
+    <li
+      role="none"
+      className={`${styles.panelItemContainer} flex items-center justify-between gap-2 px-4 py-1 text-sm`}
+      aria-label="Offline mode"
+    >
       <div>
         <Network_3 size={20} />
         <p onClick={doNotCloseMenu} role="none">
           {t('offlineReady', 'Offline Ready')}
         </p>
       </div>
-      <Toggle className={styles.toggle} id="offlineModeSwitch" toggled={active} onToggle={toggle} />
-    </SwitcherItem>
+      <Switch
+        className={styles.toggle}
+        id="offlineModeSwitch"
+        aria-label={t('offlineReady', 'Offline Ready')}
+        checked={active}
+        onCheckedChange={toggle}
+      />
+    </li>
   );
 };
 

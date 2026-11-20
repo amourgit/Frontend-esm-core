@@ -1,22 +1,22 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowUpRight } from '@carbon/react/icons';
-import { Link } from '@carbon/react';
-import styles from './styles.scss';
+import { ArrowUpRightIcon } from 'lucide-react';
+import { TextLink } from '@egen-civitas/esm-framework';
+import styles from './styles.module.css';
 
 const ReleaseNotes = () => {
   const { t } = useTranslation();
 
   return (
-    <Link
+    <TextLink
       className={styles.helpButton}
       href="https://egen.alpha.vercel.com/release-notes"
       rel="noopener noreferrer"
-      renderIcon={ArrowUpRight}
       target="_blank"
     >
       {t('releaseNotes', 'Release notes')}
-    </Link>
+      <ArrowUpRightIcon size={16} aria-hidden="true" />
+    </TextLink>
   );
 };
 

@@ -1,35 +1,7 @@
-import React, { type ChangeEvent, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
-  Layer,
-  Link,
-  Pagination,
-  Search,
-  SearchSkeleton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow,
-  TableSelectAll,
-  TableSelectRow,
-} from '@carbon/react';
-import {
-  beginEditSynchronizationItem,
-  canBeginEditSynchronizationItemsOfType,
-  createErrorHandler,
-  isDesktop,
-  navigate,
-  useLayoutType,
-  usePagination,
-  type SyncItem,
-} from '@egen-civitas/esm-framework';
-import styles from './offline-actions-table.styles.scss';
+import { beginEditSynchronizationItem, Button, canBeginEditSynchronizationItemsOfType, Checkbox, createErrorHandler, isDesktop, Layer, navigate, Pagination, SearchInput, Skeleton, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TextLink, type SyncItem, useLayoutType, usePagination } from '@egen-civitas/esm-framework';
+import styles from './offline-actions-table.styles.module.css';
 import type { OfflineEntity } from '../types';
 
 export interface SyncItemWithEntity {
@@ -87,80 +59,120 @@ const OfflineActionsTable: React.FC<OfflineActionsTableProps> = ({
     };
   });
 
+  const [searchValue, setSearchValue] = useState('');
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
+  const visibleRows = useMemo(() => filterTableRows(rows, headers, searchValue), [rows, headers, searchValue]);
+  const selectedRows = rows.filter((row) => selectedIds.has(row.id));
+  const visibleSelectedCount = visibleRows.filter((row) => selectedIds.has(row.id)).length;
+  const toggleRow = (id: string, checked: boolean) =>
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      if (checked) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  const toggleAllVisible = (checked: boolean) =>
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      visibleRows.forEach((row) => (checked ? next.add(row.id) : next.delete(row.id)));
+      return next;
+    });
+
   if (isLoading) {
     return <TableSkeleton />;
   }
 
   return (
-    <DataTable rows={rows} headers={headers} filterRows={filterTableRows}>
-      {({ rows, headers, getTableProps, getHeaderProps, getRowProps, getTableContainerProps, getSelectionProps, onInputChange, selectedRows }) => (
-        <TableContainer className={styles.tableContainer} {...getTableContainerProps()}>
-          <div className={styles.tableHeaderContainer}>
-            {selectedRows.length === 0 && (
-              <Layer>
-                <Search
-                  className={styles.tableSearch}
-                  labelText={t('offlineEntitiesTableSearchLabel', 'Search this list')}
-                  placeholder={t('offlineEntitiesTableSearchPlaceholder', 'Search this list')}
-                  size={toolbarItemSize}
-                  onChange={(e) => onInputChange(e as ChangeEvent<HTMLInputElement>)}
-                />
-              </Layer>
-            )}
-            {selectedRows.length > 0 && (
-              <Button
-                className={styles.tablePrimaryAction}
-                kind="danger"
-                size={toolbarItemSize}
-                disabled={disableEditing || disableDelete}
-                onClick={() => onDelete(selectedRows.map((row) => +row.id))}
-              >
-                {t('offlineActionsTableDeleteActions', 'Delete {{count}} actions', { count: selectedRows.length })}
-              </Button>
-            )}
-          </div>
-          <Table {...getTableProps()} isSortable useZebraStyles>
-            <TableHead>
-              <TableRow>
-                <TableSelectAll {...getSelectionProps()} disabled={disableEditing} />
-                {headers.map((header) => (
-                  <TableHeader {...getHeaderProps({ header })} isSortable key={header.key}>
-                    {header.header}
-                  </TableHeader>
-                ))}
-              </TableRow>
+    <div className={styles.tableContainer}>
+      <div className={styles.tableHeaderContainer}>
+        {selectedRows.length === 0 && (
+          <Layer className="bg-transparent">
+            <SearchInput
+              containerClassName={styles.tableSearch}
+              label={t('offlineEntitiesTableSearchLabel', 'Search this list')}
+              placeholder={t('offlineEntitiesTableSearchPlaceholder', 'Search this list')}
+              value={searchValue}
+              onValueChange={setSearchValue}
+            />
+          </Layer>
+        )}
+        {selectedRows.length > 0 && (
+          <Button
+            className={styles.tablePrimaryAction}
+            variant="destructive"
+            size={toolbarItemSize}
+            disabled={disableEditing || disableDelete}
+            onClick={() => onDelete(selectedRows.map((row) => +row.id))}
+          >
+            {t('offlineActionsTableDeleteActions', 'Delete {{count}} actions', { count: selectedRows.length })}
+          </Button>
+        )}
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-10">
+              <Checkbox
+                aria-label={t('selectAll', 'Select all')}
+                disabled={disableEditing}
+                checked={
+                  visibleRows.length > 0 && visibleSelectedCount === visibleRows.length
+                    ? true
+                    : visibleSelectedCount > 0
+                      ? 'indeterminate'
+                      : false
+                }
+                onCheckedChange={(checked) => toggleAllVisible(checked === true)}
+              />
             </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow {...getRowProps({ row })} key={row.id}>
-                  <TableSelectRow {...getSelectionProps({ row })} disabled={disableEditing} />
-                  {row.cells.map((cell) => (
-                    <TableCell key={cell.id}>{cell.value?.value ?? cell.value}</TableCell>
-                  ))}
-                </TableRow>
+            {headers.map((header) => (
+              <TableHead key={header.key}>{header.header}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {visibleRows.map((row) => (
+            <TableRow key={row.id} data-state={selectedIds.has(row.id) ? 'selected' : undefined}>
+              <TableCell className="w-10">
+                <Checkbox
+                  aria-label={t('selectRow', 'Select row')}
+                  disabled={disableEditing}
+                  checked={selectedIds.has(row.id)}
+                  onCheckedChange={(checked) => toggleRow(row.id, checked === true)}
+                />
+              </TableCell>
+              {headers.map(({ key }) => (
+                <TableCell key={key}>{row[key]?.value ?? row[key]}</TableCell>
               ))}
-            </TableBody>
-          </Table>
-          <Pagination
-            pageSizes={[10, 20, 30, 40, 50]}
-            page={currentPage}
-            pageSize={pageSize}
-            totalItems={data.length}
-            onChange={({ page, pageSize }) => { goTo(page); setPageSize(pageSize); }}
-          />
-        </TableContainer>
-      )}
-    </DataTable>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <Pagination
+        currentItems={results.length}
+        totalItems={data.length}
+        pageNumber={currentPage}
+        pageSize={pageSize}
+        onPageNumberChange={({ page, pageSize }) => {
+          goTo(page);
+          setPageSize(pageSize);
+        }}
+      />
+    </div>
   );
 };
 
 const TableSkeleton: React.FC = () => (
-  <TableContainer className={styles.tableContainer}>
+  <div className={styles.tableContainer}>
     <div className={styles.tableHeaderContainer}>
-      <SearchSkeleton className={styles.tableSearch} />
+      <Skeleton className={`${styles.tableSearch} h-9`} />
     </div>
-    <DataTableSkeleton showToolbar={false} showHeader={false} />
-  </TableContainer>
+    <div className="flex flex-col gap-2 p-2">
+      {Array.from({ length: 5 }, (_, index) => (
+        <Skeleton key={index} className="h-8 w-full" />
+      ))}
+    </div>
+  </div>
 );
 
 function getEntityName({ item, entity }: SyncItemWithEntity) {
@@ -172,27 +184,28 @@ function ActionNameLink({ syncItem }: { syncItem: SyncItem }) {
   const displayName = syncItem.descriptor.displayName ?? '-';
   if (!canBeginEditSynchronizationItemsOfType(syncItem.type)) return <>{displayName}</>;
   return (
-    <Link onClick={() => beginEditSynchronizationItem(syncItem.id).catch((e) => createErrorHandler()(e))}>
+    <TextLink role="button" tabIndex={0} className="cursor-pointer" onClick={() => beginEditSynchronizationItem(syncItem.id).catch((e) => createErrorHandler()(e))}>
       {displayName}
-    </Link>
+    </TextLink>
   );
 }
 
 function EntityLink({ entityUuid, entityName }: { entityUuid?: string; entityName?: string }) {
   return entityUuid ? (
-    <Link onClick={() => navigate({ to: `${window.getEgenSpaBase()}entity/${entityUuid}/detail` })}>
+    <TextLink role="link" tabIndex={0} className="cursor-pointer" onClick={() => navigate({ to: `${window.getEgenSpaBase()}entity/${entityUuid}/detail` })}>
       {entityName}
-    </Link>
+    </TextLink>
   ) : <>-</>;
 }
 
-function filterTableRows({ rowIds, headers, cellsById, inputValue, getCellId }) {
-  return rowIds.filter((rowId) =>
+function filterTableRows(rows: Array<any>, headers: Array<{ key: string }>, inputValue: string) {
+  const needle = inputValue.toLowerCase();
+  if (!needle) return rows;
+  return rows.filter((row) =>
     headers.some(({ key }) => {
-      const cellId = getCellId(rowId, key);
-      const value = cellsById[cellId].value;
+      const value = row[key];
       const filterableValue = value?.filterableValue?.toString() ?? value?.toString() ?? '';
-      return filterableValue.toLowerCase().includes(inputValue.toLowerCase());
+      return filterableValue.toLowerCase().includes(needle);
     }),
   );
 }

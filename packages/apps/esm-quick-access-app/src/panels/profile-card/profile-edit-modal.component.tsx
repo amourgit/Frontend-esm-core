@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Edit3, Save } from 'lucide-react';
 import { CardModal } from '@egen-civitas/esm-framework';
-import styles from './profile-card.scss';
+import styles from './profile-card.module.css';
 
 export interface UserProfile {
   name: string;

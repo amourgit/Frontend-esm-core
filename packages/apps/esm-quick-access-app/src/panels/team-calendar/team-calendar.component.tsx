@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { RefreshCw, Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, MapPin } from 'lucide-react';
-import styles from './team-calendar.scss';
+import styles from './team-calendar.module.css';
 
 // =============================================================================
 //  TEAM CALENDAR — Onglets À venir/Passés + pagination (panneau latéral)

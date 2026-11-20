@@ -1,6 +1,6 @@
 import React from 'react';
 import { HeroTileCard, type HeroTile } from './hero-tile-card.component';
-import styles from './hero-mosaic.scss';
+import styles from './hero-mosaic.module.css';
 
 // =============================================================================
 //  HERO MOSAIC — Grille "À la Une" (1 tuile principale + 4 secondaires)

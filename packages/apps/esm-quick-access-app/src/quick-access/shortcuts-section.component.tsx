@@ -21,7 +21,7 @@ import {
 import { interpolateUrl, navigate, useConfig } from '@egen-civitas/esm-framework';
 import type { QuickAccessConfig } from '../config-schema';
 import { QuickAccessSection } from './quick-access-section.component';
-import styles from './quick-access.scss';
+import styles from './quick-access.module.css';
 
 // Liste blanche des icônes de raccourcis (un nom inconnu retombe sur `Star`).
 const ICONS: Readonly<Record<string, LucideIcon>> = {
