@@ -69,7 +69,7 @@ yarn start:prod
 - **Statut** : `GET <spa>/external-apps.status.json` → `{ apps:[{ name, kind, version, status, errors, warnings }] }` (`accepted` · `accepted-with-warnings` · `rejected`).
 - **Strict** : `EGEN_EXTERNAL_STRICT=true` fait échouer `serve-prod` au démarrage si une app externe est rejetée (sinon : rejet journalisé, Core opérationnel).
 
-Variables : `EGEN_EXTERNAL_DIR` (défaut `external-apps`), `EGEN_EXTERNAL_APPS` (défaut `external-apps.json`), `EGEN_EXTERNAL_STRICT`, `EGEN_EXTERNAL_ALLOW_HTTP`, `EGEN_BIN` (binaire `egen` alternatif).
+Variables : `EGEN_EXTERNAL_DIR` (défaut `external-apps`), `EGEN_EXTERNAL_APPS` (défaut `external-apps.json`), `EGEN_EXTERNAL_STRICT`, `EGEN_EXTERNAL_ALLOW_HTTP`, `EGEN_BIN` (binaire `egen` alternatif), `EGEN_IMPORTMAP_ALIASES` (`false` : n'émet pas la table d'alias des apps internes, voir 08 E2).
 
 ## 5. Ce que doit fournir l'équipe de l'app externe
 

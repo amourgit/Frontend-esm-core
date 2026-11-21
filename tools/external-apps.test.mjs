@@ -142,6 +142,7 @@ test('serve-prod : publie, héberge et recharge à chaud une app externe', async
     await waitFor(`http://127.0.0.1:${port}/healthz`);
     let im = await (await fetch(`${base}/importmap.json`)).json();
     assert.deepEqual(Object.keys(im.imports), ['@egen/esm-int-app']);
+    assert.deepEqual(im.aliases, { '@egen-civitas/esm-int-app': '@egen/esm-int-app' }, 'alias namespace -> paquet (écart E2)');
 
     // dépôt d'une app externe puis SIGHUP
     const appDir = 'acme-esm-hello-app-1.0.0';

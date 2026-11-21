@@ -19,7 +19,7 @@ Messages **exacts** relevés dans le code (✅). La console du navigateur est le
 | Build : `This app does not define a routes.json…` (code 9819023573289) | `src/routes.json` absent | le créer (`{}` minimal) | `rspack-config` |
 | Build : `TypeError … Object.keys(undefined)` | pas de `peerDependencies` | ajouter `"peerDependencies": {}` | `rspack-config` |
 | `egen develop` : app Vue/Angular sans pages | routes non fournies avec `egen:develop` | `--routes` ou « toucher » `src/routes.json` (05 §4.1) | `importmap.ts` |
-| Textes traduits non appliqués (Core) | suspicion E2 : `moduleName` ≠ `name` | voir 08 | — |
+| Textes traduits non appliqués (Core) | E2 confirmé : `moduleName` ≠ `name` (`Could not find the package @egen-civitas/… defined in the current importmap`) | table `aliases` (08, E2) ou `moduleName` = `name` pour une nouvelle app | `locale.ts`, `dynamic-loading.ts` |
 | Hooks cassés (« Invalid hook call ») | deux copies de React | `react*` seulement en `peerDependencies` | 07 E |
 | Une app « remplace » une autre | même clé dans le registry | noms uniques | `route-maps.ts` |
 | Surcharge `localStorage` sans effet | `spaEnv` ≠ `development` | normal en production | `import-maps.ts` |
