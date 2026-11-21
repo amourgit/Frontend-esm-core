@@ -22,6 +22,7 @@ Elle est volontairement **isolée** du reste de `docs/` : tout ce qui est écrit
 | 12 | [Apps externes en production](12-apps-externes-en-production.md) | Procédure `external:sync`, règles d'alignement, rechargement à chaud (✅ implémenté) |
 | 13 | [Extension multi-technologies](13-extension-multi-technologies.md) | Socle commun, Vue, Angular, Next.js (✅ implémentés et testés) |
 | 14 | [Migration Carbon / SCSS du Core](14-plan-migration-carbon.md) | Mesures avant migration, résultat constaté (✅ réalisée), garde-fou |
+| 15 | [Scénarios d'intégration externe de bout en bout](15-scenarios-integration-externe.md) | Code source GitHub, paquet npm, app déjà déployée (distante, locale, autonome), registre central : acteurs, étapes, résultats, diagnostic |
 
 ## Légende des niveaux de preuve
 

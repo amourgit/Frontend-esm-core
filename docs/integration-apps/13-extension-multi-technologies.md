@@ -33,7 +33,7 @@ Conséquence : il manquait seulement une **couche neutre** décrivant « ce que 
 | Angular | `@egen-civitas/esm-angular-utils` | ✅ implémenté et testé (§5) |
 | Next.js / apps autonomes | `@egen-civitas/esm-nextjs-utils` | ✅ implémenté et testé : iframe + pont `postMessage` (§6) |
 
-Les paquets sont dans le dépôt Framework, branche **`feature/multi-techno-utils`** (commits `76e9dd0`, `1a767a9`, `dcd099d`, `d2065c4` ; changesets inclus ; `yarn.lock` mis à jour). **Non publiés sur npm** tant que la branche n'est pas fusionnée et les changesets publiés (ordre : `esm-integration-utils`, puis `esm-vue-utils`, `esm-angular-utils`, `esm-nextjs-utils` ; `esm-globals`/`esm-dynamic-loading` pour les alias d'import map).
+Les paquets sont dans le dépôt Framework : la branche `feature/multi-techno-utils` a été **fusionnée dans `main`** (2026-11-21) et **publiés sur npm** en version `0.2.0` : `esm-integration-utils`, `esm-vue-utils`, `esm-angular-utils`, `esm-nextjs-utils` ; `esm-globals` `2.5.0` et `esm-dynamic-loading` `2.2.0` portent la table d'alias de l'import map. Parcours complets d'intégration (sources GitHub, paquet, app déjà déployée, registre central) : [15](15-scenarios-integration-externe.md).
 
 ## 3. Correspondance React → socle neutre → Vue
 
@@ -116,7 +116,7 @@ Faits relevés dans `single-spa-angular` : il utilise `props.domElement` sinon `
 1. Créer l'app Vue avec `src/index.ts` (ré-export de la source exposée), `src/routes.json`, et la config de build du §4 (`library var`, `./start`, `publicPath:'auto'`, copie de `routes.json`) ; `moduleName` = `name` du `package.json`.
 2. `npm run build && npm pack` ; `"files": ["dist"]`.
 3. Déclarer dans `external-apps.json` du Core ; `yarn external:sync` ; `kill -HUP` (voir [12](12-apps-externes-en-production.md)).
-4. Tant que les paquets ne sont pas publiés : les consommer depuis le dépôt Framework (`yarn link` / tarball `npm pack`).
+4. Les paquets sont publiés sur npm : les installer normalement (`@egen-civitas/esm-vue-utils`, etc.).
 5. Angular : mêmes étapes ; installer la version de `single-spa-angular` qui correspond à la version majeure d'Angular.
 
 Exemple complet testé : [10 — exemple 3](10-exemples.md).
