@@ -68,7 +68,7 @@ Points qui gouvernent la construction d'une app :
    - **`shared` généré automatiquement depuis `peerDependencies`** : chaque clé de `peerDependencies` devient un partage `singleton: true`, plus `@egen-civitas/esm-framework/src/internal`. **Conséquence directe : tout ce que tu mets en `peerDependencies` est partagé ; tout ce que tu mets en `dependencies` seule est embarqué dans le bundle de l'app.** FullCalendar et zod doivent donc rester **hors** `peerDependencies`.
    - Cas spécial `swr` (partagé avec la clé `swr/`).
    - `splitChunks: { maxAsyncRequests: 3, maxInitialRequests: 1 }` : volontairement peu de chunks par app.
-   - **Règles de style** : `.css` → `style-loader` + `css-loader` **avec `modules` actif sans condition** (noms hachés `${ident}__[name]__[local]___[hash]`) ; `.scss` idem avec `sass-loader` ; **`*.tw.css` → `css-loader` SANS modules + `postcss-loader` + `@tailwindcss/postcss`** (classes globales stables) ; images `asset/resource` ; **`.svg` → `asset/source`** (importé comme chaîne, pas comme URL).
+   - **Règles de style** : `.css` → `style-loader` + `css-loader` **avec `modules` actif sans condition** (noms hachés `${ident}__[name]__[local]___[hash]`)   (plus de SCSS : retiré du projet) ; **`*.tw.css` → `css-loader` SANS modules + `postcss-loader` + `@tailwindcss/postcss`** (classes globales stables) ; images `asset/resource` ; **`.svg` → `asset/source`** (importé comme chaîne, pas comme URL).
    - Variables d'environnement « publiques » : préfixes `EGEN_AI_`, `EGEN_DEV_`, `EGEN_TENANT_` seulement (`PUBLIC_ENV_PREFIXES`). **Une variable `EGEN_AGENDA_…` ne traverserait pas jusqu'au navigateur** sans modifier cette liste. On passera par le **système de configuration runtime** (`defineConfigSchema`) à la place — voir Phase 3.
    - `mode === 'production'` : `version` de `routes.json` = version du `package.json` ; en dev : prerelease `local`.
 
@@ -93,7 +93,7 @@ Points qui gouvernent la construction d'une app :
 
 6. **`esm-config/src/public.ts`** — exporte `defineConfigSchema`, `Type`, `validators`, `getConfig`. Utilisé pour la configuration runtime par app (`useConfig` côté React).
 
-7. **`esm-app-shell/dependencies.json`** — liste des dépendances partagées côté shell : `@carbon/react`, `i18next`, `dayjs`, `react`, `react-dom`, `react-router-dom`, `react-i18next`, `@egen-civitas/esm-framework/src/internal`, `esm-api`, `esm-config`, `esm-react-utils`, `esm-state`, `esm-tenant`, `rxjs`, `single-spa`, `swr`. **Ce que tu peux supposer présent et partagé** dans l'agenda : React 18, react-router-dom 6, i18next/react-i18next, dayjs.
+7. **`esm-app-shell/dependencies.json`** — liste des dépendances partagées côté shell : `i18next`, `dayjs`, `react`, `react-dom`, `react-router-dom`, `react-i18next`, `@egen-civitas/esm-framework/src/internal`, `esm-api`, `esm-config`, `esm-react-utils`, `esm-state`, `esm-tenant`, `rxjs`, `single-spa`, `swr`. **Ce que tu peux supposer présent et partagé** dans l'agenda : React 18, react-router-dom 6, i18next/react-i18next, dayjs.
 
 8. **`tooling/tailwind-preset`** (v1.4.0) — point d'entrée Tailwind v4 partagé (`@egen-civitas/tailwind-preset/tailwind.tw.css`), « preflight » en `@layer base`. À importer **une fois en tête de `root.component.tsx`** si l'app utilise Tailwind.
 
@@ -113,9 +113,9 @@ Apps existantes (13) : `esm-ai-assistant-app`, `esm-annuaire-app`, `esm-devtools
   - ⚠ **Incohérence à connaître** : `package.json` dit `@egen/esm-annuaire-app` mais `index.ts` utilise `moduleName = '@egen-civitas/esm-annuaire-app'`. Le nom Module Federation vient du `package.json` ; le `moduleName` sert à la config/traductions. Pour l'agenda, **choisis une convention et tiens-la** (recommandation : même motif que l'annuaire pour rester homogène, et documenter l'écart) — **⚠ À VÉRIFIER** l'effet exact sur `importTranslation`/`getConfig`.
 - **`src/root.component.tsx`** : `BrowserRouter basename={window.getEgenSpaBase()}` + `Routes`. Import Tailwind en tout premier.
 - **`src/routes.json`** : 1 `pages[]` (`component: "root"`, `route: "annuaire"`, `online: true`, `offline: false`) + `extensions[]` sur le slot **`topbar-nav-slot`** (composant `navEntry`, `order`, `meta: { section, sectionLabel, group, groupLabel, label, description, icon, route }`).
-- **Tests** : `vitest.config.ts` (environnement `happy-dom`, alias `@egen-civitas/esm-framework` → `@egen-civitas/esm-framework/mock`, plugin `scss-identity`), `src/test-utils/{setup.tsx,framework-mock.ts,shell-background.ts}`.
+- **Tests** : `vitest.config.ts` (environnement `happy-dom`, alias `@egen-civitas/esm-framework` → `@egen-civitas/esm-framework/mock`), `src/test-utils/{setup.tsx,framework-mock.ts,shell-background.ts}`.
 - **`tsconfig.json`** : `jsx: react`, `moduleResolution: bundler`, `include: ["src/**/*"]`, `noEmit`.
-- **`src/declarations.d.ts`** : déclare `*.scss`, `*.css`, `*.png/.svg/.jpg/.jpeg`.
+- **`src/declarations.d.ts`** : déclare `*.css`, `*.png/.svg/.jpg/.jpeg`.
 
 **Points de couplage hors de l'app** (pièges classiques quand on ajoute une route) :
 
@@ -835,7 +835,7 @@ Annexe **A.6**. Différences de comportement à connaître :
 node scripts/check-css-scope.mjs packages/apps/esm-agenda-app/src/styles/*.tw.css
 ```
 
-(`check-css-scope.mjs` en annexe A.10.) **Et** contrôle visuel : ouvrir `/home`, `/annuaire`, la TopBar, **avant et après** avoir visité `/agenda` (navigation SPA sans rechargement) ; rien ne doit changer (fond, polices, boutons Carbon, espacements).
+(`check-css-scope.mjs` en annexe A.10.) **Et** contrôle visuel : ouvrir `/home`, `/annuaire`, la TopBar, **avant et après** avoir visité `/agenda` (navigation SPA sans rechargement) ; rien ne doit changer (fond, polices, boutons, espacements).
 
 #### 4.5 Patchs de `calendar-app.component.tsx` (ex-`App.tsx`)
 
@@ -985,7 +985,7 @@ yarn verify:nav            # = node tools/check-nav-routes.mjs
 
 #### 7.1 Frontend (`esm-agenda-app`)
 
-- **Environnement** : copie de l'annuaire (`vitest.config.ts` avec `happy-dom`, alias `@egen-civitas/esm-framework` → `…/mock`, plugin `scss-identity`). Scripts `test` = `cross-env TZ=UTC vitest run --passWithNoTests` (**TZ=UTC** : indispensable pour des dates déterministes).
+- **Environnement** : copie de l'annuaire (`vitest.config.ts` avec `happy-dom`, alias `@egen-civitas/esm-framework` → `…/mock`). Scripts `test` = `cross-env TZ=UTC vitest run --passWithNoTests` (**TZ=UTC** : indispensable pour des dates déterministes).
 - **FullCalendar sous happy-dom** : installer `matchMedia` et `ResizeObserver` (déjà dans `test-utils/setup.tsx` de l'annuaire) et `window.getEgenSpaBase = () => '/'`.
 - **Mock de `egenFetch`** : le `framework-mock.ts` de l'annuaire ne l'inclut pas ; pour l'agenda, **fournis-le explicitement** (A.13). Constat de l'étude : `esm-framework/mock.tsx` définit `showToast = vi.fn()`, mais `egenFetch`, `useConfig`, `useSession` n'y apparaissent pas sous leur nom (grep) — **⚠ À VÉRIFIER** s'ils y sont ré-exportés autrement avant de les redéfinir.
 - **Port des tests DayFront** : `test/api.test.ts` → `api.test.ts` (mock d'`egenFetch` au lieu de `fetch`), `test/App.test.tsx` → `calendar-app.test.tsx` (retirer les cas d'authentification), `test/checkboxes.test.tsx` tel quel (jsdom → happy-dom).
@@ -1671,7 +1671,6 @@ CMD ["node", "dist/server.js"]
   },
   "publishConfig": { "access": "public" },
   "dependencies": {
-    "@carbon/react": "^1.92.1",
     "@egen-civitas/esm-api": "^1.1.2",
     "@egen-civitas/esm-config": "^1.0.2",
     "@egen-civitas/esm-context": "^1.0.1",
@@ -1708,7 +1707,6 @@ CMD ["node", "dist/server.js"]
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@carbon/react": "1.x",
     "@egen-civitas/esm-api": "1.x",
     "@egen-civitas/esm-config": "1.x",
     "@egen-civitas/esm-context": "1.x",
@@ -1755,7 +1753,7 @@ CMD ["node", "dist/server.js"]
 }
 ```
 
-> **Écarts volontaires avec l'annuaire** : retrait de `framer-motion`, `@radix-ui/react-tabs` et `@egen-civitas/tailwind-preset` (non utilisés par l'agenda) ; ajout des 6 `@fullcalendar/*` (versions **exactes**) et de `zod`. Les `@egen-civitas/*` et leurs plages sont **recopiés de l'annuaire au commit `0f967e7`** : lance `yarn deps:egen` après l'ajout si les plages ont bougé. `@carbon/react` reste en peer **uniquement pour homogénéité** (c'est le motif de l'annuaire) — si l'agenda n'importe jamais Carbon, tu peux le retirer des deux sections.
+> **Écarts volontaires avec l'annuaire** : retrait de `framer-motion`, `@radix-ui/react-tabs` et `@egen-civitas/tailwind-preset` (non utilisés par l'agenda) ; ajout des 6 `@fullcalendar/*` (versions **exactes**) et de `zod`. Les `@egen-civitas/*` et leurs plages sont **recopiés de l'annuaire au commit `0f967e7`** : lance `yarn deps:egen` après l'ajout si les plages ont bougé. Carbon est retiré du projet : ne déclare ni `@carbon/*` ni `sass` (voir `yarn verify:no-carbon`).
 
 ### A.6 — `src/agenda/api.ts` (client HTTP via `egenFetch`)
 

@@ -73,7 +73,7 @@ Le correctif direct (copier `public/tenants/` dans `dist/`, corriger l'URL) éta
 #### Fichiers touchés (32 au total)
 
 Réécrits : `esm-tenant/src/{types,setup,index}.ts`, `esm-tenant/src/config/env.ts`, `esm-tenant/src/context/{resolver,store}.ts`, `esm-tenant/src/hooks/{useTenant,TenantProvider}.tsx`, `esm-tenant/src/utils/tenant-utils.ts`, `esm-tenant/src/__tests__/{resolver,setup}.test.ts`, `esm-api/src/tenant.ts`, `esm-tenant-routing-app/src/{config-schema.ts,guard/use-tenant-routing.ts,index.ts,root.component.tsx}`, `esm-primary-navigation-app/src/components/context-switcher/context-switcher.component.tsx`, `esm-login-app/src/login/login.component.tsx`, `esm-ai-assistant-app/src/{root.component.tsx,root.component.test.tsx,base-routes.ts}`, `esm-app-shell/src/run.ts`, `esm-globals/src/types.ts`, `esm-app-shell/rspack.config.js`, `.env.development`, `example.env`.
-Supprimés : `esm-tenant/src/context/registry.ts`, `esm-tenant/src/config/app-config.ts`, `esm-tenant/src/__tests__/registry.test.ts`, `esm-tenant-routing-app/src/screens/suspended.{component.tsx,scss}`, `esm-app-shell/public/tenants/registry.json`.
+Supprimés : `esm-tenant/src/context/registry.ts`, `esm-tenant/src/config/app-config.ts`, `esm-tenant/src/__tests__/registry.test.ts`, `esm-tenant-routing-app/src/screens/suspended.{component.tsx,css}`, `esm-app-shell/public/tenants/registry.json`.
 Nettoyés (retrait de `tenant-suspended` des regex de routes publiques) : `esm-footer-app/src/{root.component.tsx,root.component.test.tsx,routes.json}`, `esm-not-found-app/src/{index.ts,routes.json}`, `esm-primary-navigation-app/src/{root.component.tsx,routes.json}`, `esm-ai-assistant-app/src/routes.json`.
 
 ## 0. État des corrections (17 juillet 2026)
@@ -254,7 +254,7 @@ Et `packages/shell/esm-app-shell/dependencies.json` contient :
 
 ```json
 [
-  "@carbon/react", "i18next", "dayjs", "react", "react-dom",
+  "i18next", "dayjs", "react", "react-dom",
   "react-router-dom", "react-i18next",
   "@egen/esm-framework/src/internal",
   "rxjs", "single-spa", "swr"
