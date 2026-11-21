@@ -1,52 +1,30 @@
-# 14 — Plan de migration Carbon / SCSS du Core (écart E1)
+# 14 — Migration Carbon / SCSS du Core (écart E1) : réalisée
 
-Mesures faites sur `main` (28 apps) par script, comparées à la table officielle du Framework (`fw/docs/MIGRATION-CARBON.md`) et aux exports de `esm-styleguide` 5.x. **Le HEAD du Framework n'a plus ni Carbon ni SCSS** ; le Core consomme encore `esm-framework 4.1.0` / Shell 2.11.1 / `rspack-config 1.2.0` (qui les fournissent). Tant que cette migration n'est pas faite, **ne pas relever les versions majeures** (08, E1).
+**Statut : ✅ réalisée sur `main`** (constaté le 2026-11-21, après la fusion de `feature/ajustement-reforme`). Ce document garde les mesures faites **avant** migration (qui ont servi à la cadrer) et le résultat constaté **après**.
 
-## 1. Ampleur réelle (✅ mesurée)
+## 1. Avant / après (✅ mesuré par script sur `main`)
 
-| Mesure | Valeur |
-| --- | --- |
-| Fichiers important `@carbon/react` | **44**, dans **7 apps seulement** |
-| Composants Carbon distincts utilisés | 50 + 9 noms d'icônes (`@carbon/react/icons`) |
-| Apps déclarant `@carbon/react` dans `package.json` | 27 ; **20 d'entre elles n'importent plus rien** (dépendance obsolète) |
-| Fichiers SCSS | **74**, dont 42 référencent Carbon (variables, `@use '@carbon/…'`) |
-| Apps sans aucun Carbon ni SCSS | 6 (`annuaire`, `appearance`, `not-found`, `search`, `sites`, `tenant-routing`) |
-| Tailwind déjà en place | 2 fichiers `*.tw.css`, 5 apps l'ont dans leur `package.json` |
-
-Répartition (fichiers Carbon / fichiers SCSS) : `implementer-tools` 18/17 · `offline-tools` 12/16 · `login` 5/5 · `help-menu` 3/2 · `language` 2/2 · `devtools` 2/3 · `user-profile` 2/1. Les 21 autres apps : 0 import Carbon ; SCSS seul pour 15 d'entre elles (0 à 5 fichiers chacune).
-
-## 2. Couverture par le styleguide 5.x
-
-| Catégorie | Composants Carbon utilisés | Remplacement |
+| Mesure | Avant (28 apps) | Après |
 | --- | --- | --- |
-| **A. Table officielle / même nom** (31) | `Button`, `Tile`, `Layer`, `InlineLoading`, `Loading`, `Link`, `TextInput`, `Toggle`, `Tag`, `Modal*` (Header/Body/Footer), `InlineNotification`, `StructuredList*`, `DataTable`, `Table*`, `TableContainer`, `Pagination`, `Accordion*`, `Checkbox`, `PasswordInput`, `Switch` | `Button` (`variant`), `Tile`, `Layer`, `InlineLoading`, `Spinner`, `Link`, `TextInput`, `Switch`, `Badge`, `ModalHeader/Body/Footer` ou `Dialog`, `NotificationBanner`/`Alert`, `Table*`, `Pagination`, `Accordion*`, `Checkbox`, `PasswordInput` |
-| **B. Équivalent existant, hors table** (6) ✅ export vérifié | `Search`, `RadioButton`, `RadioButtonGroup`, `SkeletonText`, `DataTableSkeleton`, `SearchSkeleton` | `SearchInput`, `RadioGroup`, `Skeleton` |
-| **C. Écart (pas d'équivalent identifié)** (9) | `Form`, `FilterableMultiSelect`, `NumberInput`, `ContentSwitcher`, `Switcher`, `SwitcherItem`, `SwitcherDivider`, `TableSelectAll`, `TableSelectRow` | à trancher : `Select`/`Combobox` (existent) pour la multi-sélection filtrée ; `<form>` natif ; `Tabs` pour `ContentSwitcher` ; `TableBatchActions` (existe) pour la sélection ; **`NumberInput` et `Switcher` à créer dans le styleguide** |
-| **D. Grille** (4) | `Stack`, `Column`, `Row`, `FlexGrid` | classes Tailwind (`flex`, `grid`, `gap-*`) |
-| **Icônes** (9) | `ArrowUpRight`, `Renew`, `Network_3`, `PendingFilled`, `WarningAltFilled`, `CheckmarkOutline`, `CheckmarkFilled`, `WarningFilled` + type `TileProps` | `lucide-react` ou icônes du styleguide |
+| Fichiers important `@carbon/react` | 44, dans 7 apps (`implementer-tools` 18, `offline-tools` 12, `login` 5, `help-menu` 3, `language` 2, `devtools` 2, `user-profile` 2) | **0** |
+| Apps déclarant `@carbon/react` | 27 (dont 20 sans aucun import : dépendance obsolète) | **0** |
+| Fichiers SCSS | 74 (42 référençant Carbon) | **0** |
+| Fichiers CSS Modules | — | **74** (conversion un pour un) |
+| Dépendance `sass` | 28 apps | **0** |
+| Framework consommé | `esm-framework 4.1.0`, Shell 2.11.1, `egen` 2.3.0, `rspack-config` 1.2.0 | **`esm-framework 5.0.1`, Shell 3.0.6, `egen` 3.0.0, `rspack-config` 2.0.0, `esm-styleguide` 5.2.4** |
+| `node tools/sync-egen-deps.mjs --check` | 72 plages en retard (majeures) | **« Toutes les plages @egen-civitas/* sont à jour »** |
 
-Répartition mesurée des écarts C : `implementer-tools` (`FilterableMultiSelect` ×2, `NumberInput`, `ContentSwitcher`, `SwitcherItem`), `offline-tools` (`TableSelectAll`/`TableSelectRow` ×2, `SwitcherItem`), `user-profile` (`Switcher`, `SwitcherDivider`, `SwitcherItem`), `login` (`Form` ×2, `SwitcherItem` ×2), `language` (`SwitcherItem`), `devtools` (`Form`). Seuls `NumberInput` et `Switcher` supposent de **créer** un composant dans le styleguide ; le reste se remplace par des composants existants ou du HTML natif. Vérifier fichier par fichier avant d'estimer (certains `Form`/`SwitcherItem` peuvent être des noms locaux).
+## 2. Garde-fou
 
-## 3. Plan par lots
+`tools/check-no-carbon.mjs` (lancé par `yarn verify`, ou seul : `yarn verify:no-carbon`) parcourt `packages/` et **échoue** si réapparaît un fichier `.scss`/`.sass`, une mention de `@carbon/`, `carbon-components`, des classes `cds--`, un import `.scss`, ou une dépendance `sass`, `sass-loader`, `sass-embedded`, `@rsbuild/plugin-sass`. Il remplace le contrôle manuel que prévoyait le plan par lots rédigé avant la migration.
 
-Principe : **une app = un lot indépendant, livrable seule**, validé par `yarn verify` et un contrôle visuel. L'ordre suit le risque croissant.
+## 3. Conséquences pour les apps (internes et externes)
 
-| Lot | Contenu | Pourquoi |
-| --- | --- | --- |
-| **0 — Prérequis** | Vérifier E2 en exécution (alias déjà livrés) ; geler les versions du Framework ; figer l'état visuel (captures) | pas de régression silencieuse |
-| **1 — Nettoyage** (20 apps) | retirer `@carbon/react` (dependencies/peerDependencies) des apps qui n'importent plus rien | risque nul ; réduit le partage Module Federation inutile |
-| **2 — SCSS sans Carbon** (≤ 15 apps, 0–5 fichiers) | convertir en CSS Modules/Tailwind (`*.module.css` reste géré par la config) | prépare le retrait de la règle SCSS |
-| **3 — Pilote** : `devtools` (2 fichiers, `Form` natif), puis `language`, `help-menu` ; `user-profile` seulement après création de `Switcher` | premiers remplacements A/B, validation de la méthode | petits périmètres, sans écart C bloquant |
-| **4 — `login`** (5/5) | écran critique : tests renforcés | forte exposition |
-| **5 — `offline-tools`** (12/16) | inclut une part des écarts C | |
-| **6 — `implementer-tools`** (18/17) | le plus gros ; dépend de `NumberInput` (à créer dans le styleguide) ; `user-profile` dépend de `Switcher` | |
-| **7 — Bascule** | `esm-framework` 5.x, Shell 3.x, `rspack-config` 2.x, `egen` 3.x ; retrait de `sass`, `@carbon/react`, `.scss` ; `yarn deps:egen` | à faire **une fois tout migré** |
+- Styles : `*.module.css` (CSS Modules, noms de classes préfixés par l'app par la config EGEN) ou Tailwind (`*.tw.css`) ; plus de règle SCSS dans `rspack-config` 2.x.
+- Le Shell 3.x **ne partage plus** `@carbon/react` : une app externe qui l'embarquerait crée sa propre copie (poids, styles) ; à éviter.
+- Composants d'interface : ceux de `@egen-civitas/esm-styleguide` 5.x (table de correspondance : `fw/docs/MIGRATION-CARBON.md`). Noms à connaître depuis la mesure : `Link` → `TextLink` (renommé dans le styleguide pour éviter un conflit avec le type `Link` d'`esm-api`).
 
-Critères de sortie du lot 7 : `grep -r "@carbon" packages/apps` vide, `find -name '*.scss'` vide, `yarn verify` vert, build et démarrage de production OK avec les nouvelles majeures.
+## 4. Reste à faire lié à cette migration
 
-## 4. Points d'attention
-
-- Le Shell 3.x **ne partage plus `@carbon/react`** : une app qui l'embarquerait encore créerait sa propre copie (poids et styles).
-- Les apps **externes** (05) doivent suivre le même contrat : pas de dépendance à Carbon fournie par le Shell.
-- `peerDependencies` du Core à `>=3.0.0` : à resserrer au moment de la bascule (08, E4), sinon le garde-fou `frameworkRange` reste neutralisé.
-- Les écarts C sont un **besoin côté Framework** (nouveaux composants), à planifier avant le lot 6.
+- Resserrer le peer `@egen-civitas/esm-framework` (`>=3.0.0` aujourd'hui dans les 28 apps) pour que le garde-fou `frameworkRange` redevienne effectif (08, **E4**).
+- Les exemples de ce dossier (10) utilisent désormais `esm-framework ^5.0.1` / `>=5.0.0`.

@@ -81,5 +81,5 @@ Chaque règle est classée **A** obligatoire · **B** acceptable · **C** accept
 | **Hôte de bundle non joignable** | rejet de `importDynamic` | page vide ; pas de repli EGEN |
 
 ## Autres risques identifiés par l'audit
-- `esm-app-shell` partage encore `@carbon/react` (2.11.1) : toute app qui l'embarque crée une 2ᵉ copie ; le HEAD (3.0.x) ne le partage plus (08, E1).
+- Les Shell 2.x partageaient `@carbon/react` (une app qui l'embarquait créait une 2ᵉ copie) ; le Shell 3.x ne le partage plus, et le Core n'en dépend plus.
 - Les apps du Core ajoutent **29 fichiers** posant `addEventListener` : à auditer pour le nettoyage (`useEffect` + retour de fonction).

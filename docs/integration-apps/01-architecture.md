@@ -101,7 +101,7 @@ Chaque dépendance partagée est : `singleton: true`, `strictVersion: false`, `r
 
 ### Côté Shell (`fw/packages/shell/esm-app-shell/dependencies.json`, HEAD `3.0.2`)
 
-`i18next, dayjs, react, react-dom, react-router-dom, react-i18next, @egen-civitas/esm-framework/src/internal, esm-api, esm-config, esm-react-utils, esm-platform, esm-state, esm-tenant, rxjs, single-spa, swr`. La version **2.11.1** (consommée par le Core) ajoute `@carbon/react`.
+`i18next, dayjs, react, react-dom, react-router-dom, react-i18next, @egen-civitas/esm-framework/src/internal, esm-api, esm-config, esm-react-utils, esm-platform, esm-state, esm-tenant, rxjs, single-spa, swr`. Les versions 2.x du Shell partageaient aussi `@carbon/react` ; le Core consomme maintenant le Shell **3.0.6**, qui ne le partage plus.
 
 🟡 Les autres paquets `@egen-civitas/*` listés dans les `peerDependencies` des apps (`esm-extensions`, `esm-data-api`, `esm-navigation`…) ne sont pas dans cette liste du Shell. Le comportement standard de Module Federation est que le premier conteneur qui en a besoin fournit sa copie au share scope et que les suivants la réutilisent (`singleton`). Ce n'est **pas** vérifié par exécution : voir 08.
 

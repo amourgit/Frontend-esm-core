@@ -33,7 +33,7 @@ Le contrat de `LifeCycles` : `bootstrap`, `mount`, `unmount` (Single-SPA 6). `un
 
 ### 2.3 Limites connues
 - `react-router-dom` : le Shell le partage, mais l'app doit créer **son** `BrowserRouter` avec `basename={window.getEgenSpaBase()}` (pratique du Core, ex. `esm-footer-app`). Pas de routeur fourni par EGEN.
-- Carbon/SCSS : disponibles dans les versions consommées par le Core, **retirés** du HEAD du Framework (08, E1).
+- Carbon/SCSS : **retirés** du Framework 5.x et du Core ; styles par CSS Modules (`*.module.css`, préfixés par app) ou Tailwind (`*.tw.css`).
 - React 19 : ⛔ non examiné ; le code utilise l'API React 18.
 
 ## 3. Vue

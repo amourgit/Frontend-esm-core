@@ -4,7 +4,7 @@ Direction retenue : un **socle commun** indépendant de l'interface + **une fine
 
 ## 1. Constat vérifié : le socle existe déjà
 
-Analyse des `package.json` du Framework (HEAD `fe80ed2`) : **20 paquets sur 29 n'ont aucune dépendance à React, Vue, Angular ni Carbon** (api, config, state, context, navigation, feature-flags, globals, platform, theme, dynamic-loading, routes…). Tout l'état est porté par des magasins de type zustand (`getState/subscribe`). **Seul `esm-react-utils` (et `esm-styleguide` pour l'interface du Shell) est lié à React** : il ne fait que transformer ces magasins en hooks, plus un décorateur (erreurs, i18n, SWR) et le composant `ExtensionSlot`.
+Analyse des `package.json` du Framework (HEAD `fe80ed2`) : **20 paquets sur 29 n'ont aucune dépendance à React, Vue, Angular ni Carbon (analyse faite sur le HEAD `fe80ed2`, inchangée sur ces paquets au `main` actuel)** (api, config, state, context, navigation, feature-flags, globals, platform, theme, dynamic-loading, routes…). Tout l'état est porté par des magasins de type zustand (`getState/subscribe`). **Seul `esm-react-utils` (et `esm-styleguide` pour l'interface du Shell) est lié à React** : il ne fait que transformer ces magasins en hooks, plus un décorateur (erreurs, i18n, SWR) et le composant `ExtensionSlot`.
 
 Conséquence : il manquait seulement une **couche neutre** décrivant « ce que fait un hook » sans React.
 

@@ -13,7 +13,7 @@ Une app **interne** vit dans `core/packages/apps/<nom>/`, est un *workspace* Yar
 | `src/index.ts(x)` | **Obligatoire** (valeur de `main`) | Fichier exposé en `./start` : contient les exports | 28/28 |
 | `rspack.config.js` | **Obligatoire en pratique** : les scripts `serve`/`build` appellent `rspack` (CLI de `@rspack/cli`, réexportée par `egen`) qui lit ce fichier dans le dossier de l'app. Seul `egen develop` sait se rabattre sur la config par défaut s'il manque (`runProject`) | 28/28 |
 | `tsconfig.json` | Habituel | contrôle de types (`yarn typescript` = `tsc`, `noEmit`) | 28/28 (4 variantes) |
-| `src/declarations.d.ts` | Habituel | `declare module '*.scss'` pour les imports de styles | 28/28 |
+| `src/declarations.d.ts` | Habituel | déclarations de types pour les imports non TypeScript : `declare module '*.module.css'` (28/28 ; contenu variable : images `*.png`/`*.svg`, `*.css`…, ≈ 9 variantes) | 28/28 |
 | `translations/en.json` | **Quasi obligatoire** | `fallbackLng: 'en'` ; `importTranslation` (§3) lit `./<langue>.json` | 28/28 |
 | `translations/fr.json` | Facultatif | 20/28 | |
 | `vitest.config.ts` | Habituel | tests (`happy-dom`, `mockReset: true`) | 28/28 |
@@ -46,13 +46,13 @@ Une app **interne** vit dans `core/packages/apps/<nom>/`, est un *workspace* Yar
 | `source: true` | convention | présent 28/28 | aucun effet constaté dans le code lu |
 | `peerDependencies` | **oui, même vide `{}`** | **chaque clé devient un `shared` Module Federation** ; `esm-framework` → `frameworkRange` | ⚠️ `Object.keys(peerDependencies)` lève une **TypeError** si la propriété est absente (`rspack-config/src/index.ts`) |
 | `dependencies` | oui | ce qui est **embarqué** dans le bundle | — |
-| `devDependencies` | — | tests, `sass`, `vitest`… | — |
+| `devDependencies` | — | tests (`vitest` 5, `happy-dom` 21, `vite` 8…) ; plus de `sass` | — |
 | `keywords: ["egen","microfrontends"]` | convention | `egen assemble --mode survey` cherche les paquets par mot-clé `egen` + suffixe `-app` | non listée dans le survey |
 | `browserslist: ["extends browserslist-config-egen"]` | convention | cibles de transpilation | cible par défaut de l'outil |
 | `scripts` | voir §7 | | |
 | `publishConfig.access: public`, `repository`, `bugs`, `homepage` | convention | publication npm (`ci:publish`) | — |
 
-**Peers dans le Core** : 22 peers sont **communs aux 28 apps** (`esm-api, esm-config, esm-context, esm-data-api, esm-dynamic-loading, esm-error-handling, esm-extensions, esm-feature-flags, esm-framework, esm-globals, esm-navigation, esm-react-utils, esm-routes, esm-state, esm-tenant, esm-utils, dayjs, react, react-dom, react-i18next, rxjs, swr`). Les autres sont propres à certaines apps : `@carbon/react`, `single-spa`, `react-router-dom`, `i18next`, `esm-styleguide`, `esm-theme`, `esm-ai-framework`, `embla-carousel`, `lucide-react`.
+**Peers dans le Core** : 22 peers sont **communs aux 28 apps** (`esm-api, esm-config, esm-context, esm-data-api, esm-dynamic-loading, esm-error-handling, esm-extensions, esm-feature-flags, esm-framework, esm-globals, esm-navigation, esm-react-utils, esm-routes, esm-state, esm-tenant, esm-utils, dayjs, react, react-dom, react-i18next, rxjs, swr`). Les autres sont propres à certaines apps : `single-spa`, `react-router-dom`, `i18next`, `esm-styleguide`, `esm-theme`, `esm-ai-framework`, `embla-carousel`, `lucide-react`.
 
 **Règle pratique ✅ (déduite du code)** :
 - **Partagé** (dans `peerDependencies`, plage large `>=` ou `18.x`) : tout ce qui est un *singleton* à tenir unique dans la page : `react`, `react-dom`, `react-i18next`, `rxjs`, `swr`, `single-spa`, `dayjs` et les paquets `@egen-civitas/*`.
@@ -62,9 +62,9 @@ Une app **interne** vit dans `core/packages/apps/<nom>/`, est un *workspace* Yar
 ### `rspack.config.js`
 - **27/28** : exactement `module.exports = require('@egen-civitas/egen/default-rspack-config');`.
 - **1/28** : `esm-ai-assistant-app` enveloppe la config par défaut pour forcer l'alias de la build de **production** de `react-reconciler` (moteur de `@react-three/fiber`) : le React du Shell est de production, alors que le code de l'app est compilé en mode du serveur de dev. Exemple d'**exception légitime et documentée** : personnalisation par `createConfig(env, argv)` puis modification de `config.resolve`.
-- Points d'extension de la config par défaut (objets mutables exportés) : `overrides`, `additionalConfig`, `scriptRuleConfig`, `cssRuleConfig`, `tailwindRuleConfig`, `assetRuleConfig`, `watchConfig`, `optimizationConfig` (+ `scssRuleConfig` en 1.2.0).
+- Points d'extension de la config par défaut (objets mutables exportés) : `overrides`, `additionalConfig`, `scriptRuleConfig`, `cssRuleConfig`, `tailwindRuleConfig`, `assetRuleConfig`, `watchConfig`, `optimizationConfig`.
 
-Ce que la config par défaut impose (✅ `rspack-config`) : loader `builtin:swc-loader` (TS/TSX), **CSS Modules par défaut** pour tout `*.css` (et `*.scss` en 1.2.0) avec `localIdentName` préfixé par l'identifiant de l'app, `*.tw.css` = Tailwind **sans** modules, images `asset/resource`, **SVG `asset/source` (importés comme chaîne)**, `TsCheckerRspackPlugin`, `CleanWebpackPlugin`, `StatsWriterPlugin` (`<bundle>.buildmanifest.json`), `devtool` `hidden-nosources-source-map` en production, `.env*` du monorepo lus (`resolvePublicEnv`) et variables `EGEN_AI_*`, `EGEN_DEV_*`, `EGEN_TENANT_*` injectées par `DefinePlugin`.
+Ce que la config par défaut impose (✅ `rspack-config`) : loader `builtin:swc-loader` (TS/TSX), **CSS Modules par défaut** pour tout `*.css` (la règle SCSS n'existe plus depuis `rspack-config` 2.0) avec `localIdentName` préfixé par l'identifiant de l'app, `*.tw.css` = Tailwind **sans** modules, images `asset/resource`, **SVG `asset/source` (importés comme chaîne)**, `TsCheckerRspackPlugin`, `CleanWebpackPlugin`, `StatsWriterPlugin` (`<bundle>.buildmanifest.json`), `devtool` `hidden-nosources-source-map` en production, `.env*` du monorepo lus (`resolvePublicEnv`) et variables `EGEN_AI_*`, `EGEN_DEV_*`, `EGEN_TENANT_*` injectées par `DefinePlugin`.
 
 ### `tsconfig.json`, tests
 - 4 variantes de `tsconfig.json` dans le Core (18/8/1/1 apps) : la config est **locale à l'app**, non imposée par l'outillage. Valeurs courantes : `jsx: react`, `moduleResolution: bundler`, `noEmit: true`.
@@ -123,7 +123,7 @@ Voir [02](02-declarations-routes-json.md). Règle d'or du Core : **le Core n'a p
 - Ne jamais importer `esm-routes`/`esm-dynamic-loading` pour « charger une app » : c'est le rôle du Shell.
 - Aucun appel direct à un mécanisme interne du Shell (`window.installedModules`, conteneurs) : voir 07.
 - **Duplication de runtimes** : ne mettre `react`, `react-dom`, `react-i18next`, `rxjs`, `swr`, `single-spa` que dans `peerDependencies` (singleton). Les mettre en `dependencies` seul revient à les **embarquer** et à créer une 2ᵉ copie (voir 07 B/E).
-- **Carbon / SCSS** : le Core (rspack-config 1.2.0, Shell 2.11.1) les fournit encore ; le HEAD du Framework les a retirés → toute nouvelle app doit tenir compte de la migration (voir 08, écart E1).
+- **Pas de Carbon ni de SCSS** : le Core les a retirés (74 fichiers `*.module.css`, 0 `.scss`) ; `yarn verify` exécute `tools/check-no-carbon.mjs` qui échoue si `@carbon/`, `cds--`, une dépendance `sass*` ou un fichier `.scss` réapparaît (voir [14](14-plan-migration-carbon.md)).
 
 ## 6. Cycle de développement complet (commandes réelles)
 
@@ -148,7 +148,7 @@ Variables de `serve-prod.mjs` : `PORT` (8080), `HOST`, `EGEN_SPA_PATH` (`/egen-c
 
 **Commun à toutes (✅ 28/28)** : `package.json` de même forme (mêmes 17 clés), `main: src/index.ts`, `browser: dist/egen-<nom>.js`, `src/routes.json`, `rspack.config.js`, `vitest.config.ts`, `translations/en.json`, `export importTranslation`, une fabrique `get*Lifecycle`, 12 scripts (`serve`, `debug`, `analyze` : 27/28), peer `esm-framework >=3.0.0`.
 
-**Propre à certaines apps** : `startupApp` (20/28 ; absent de appearance, clock, help-menu, implementer-tools, language, logs, notifications, settings), `config-schema.ts` (16/28), `@carbon/react` en dépendance (27/28), `fr.json` (20/28), `setup-tests.ts` (22/28).
+**Propre à certaines apps** : `startupApp` (20/28 ; absent de appearance, clock, help-menu, implementer-tools, language, logs, notifications, settings), `config-schema.ts` (16/28), `fr.json` (20/28), `setup-tests.ts` (22/28).
 
 **Convention locale / exception** : `esm-ai-assistant-app` (config Rspack enveloppée, voir §2) ; `versions` : 22 apps à `1.0.0`, 6 à `9.0.2` (`devtools, help-menu, implementer-tools, login, offline-tools, primary-navigation`) — **aucun effet sur l'intégration** ; `containerDomId` non par défaut : `esm-footer-app` (`egen-footer-app-container`) et les apps du haut/IA (conteneurs dédiés du Shell).
 

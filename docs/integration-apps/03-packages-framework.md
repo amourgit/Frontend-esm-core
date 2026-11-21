@@ -70,7 +70,7 @@ Voir [13](13-extension-multi-technologies.md).
 
 | Paquet | Responsabilité | Notes |
 | --- | --- | --- |
-| `esm-styleguide` (5.2.0) | Composants d'UI **et rendu des conteneurs du Shell** (toasts, notifications, workbench, modales, workspaces) | Le Shell l'importe (`run.ts`). En 5.x : sans Carbone ni SCSS. |
+| `esm-styleguide` (5.2.4 consommé par le Core) | Composants d'UI **et rendu des conteneurs du Shell** (toasts, notifications, workbench, modales, workspaces) | Le Shell l'importe (`run.ts`). En 5.x : sans Carbone ni SCSS. |
 | `esm-theme` (1.1.0) | Moteur de thème (JSON, clair/sombre, portée par app) | Dépendance du **Shell** uniquement (aucune app ne l'a en peer dans le Framework) |
 | `esm-tenant` (1.1.0) | Capture du tenant (sous-domaine/chemin/requête/JWT) → store global + en-tête `X-Tenant-ID` | Aucune validation côté frontend (commentaire de `run.ts`). Variables `EGEN_TENANT_*`. |
 | `tailwind-preset` (2.0.0) | Point d'entrée Tailwind v4 partagé | Les fichiers `*.tw.css` sont traités par `rspack-config` |

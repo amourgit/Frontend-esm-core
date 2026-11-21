@@ -21,7 +21,7 @@ Elle est volontairement **isolée** du reste de `docs/` : tout ce qui est écrit
 | 11 | [Comparatif interne / externe](11-comparatif-interne-externe.md) | Tableau de synthèse |
 | 12 | [Apps externes en production](12-apps-externes-en-production.md) | Procédure `external:sync`, règles d'alignement, rechargement à chaud (✅ implémenté) |
 | 13 | [Extension multi-technologies](13-extension-multi-technologies.md) | Socle commun, Vue, Angular, Next.js (✅ implémentés et testés) |
-| 14 | [Plan de migration Carbon / SCSS](14-plan-migration-carbon.md) | Mesures réelles, couverture du styleguide, plan par lots |
+| 14 | [Migration Carbon / SCSS du Core](14-plan-migration-carbon.md) | Mesures avant migration, résultat constaté (✅ réalisée), garde-fou |
 
 ## Légende des niveaux de preuve
 
@@ -38,10 +38,10 @@ Elle est volontairement **isolée** du reste de `docs/` : tout ce qui est écrit
 | --- | --- |
 | Core | `Frontend-esm-core`, branche `main` après fusion de `feature/ajustement-reforme` (28 apps) |
 | Framework | `Frontend-esm-framework`, commit `fe80ed2` (HEAD de `main` au moment de l'audit) |
-| Versions **consommées par le Core** (npm) | `esm-framework 4.1.0`, `esm-app-shell 2.11.1`, `@egen-civitas/egen 2.3.0`, `rspack-config 1.2.0` |
+| Versions **consommées par le Core** (`yarn.lock` de `main`, 2026-11-21) | `esm-framework 5.0.1`, `esm-app-shell 3.0.6`, `@egen-civitas/egen 3.0.0`, `rspack-config 2.0.0`, `esm-styleguide 5.2.4` |
 | Versions du **HEAD du Framework** | `esm-framework 5.0.0`, `esm-app-shell 3.0.2`, `egen 3.0.0`, `rspack-config 2.0.0` |
 
-> **Écart important.** Le HEAD du Framework a retiré Carbon et SCSS (majeures 5.0.0 / 3.0.0 / 2.0.0). Le Core, lui, consomme encore les versions publiées antérieures (Carbon partagé par le Shell 2.11.1, règle SCSS dans `rspack-config` 1.2.0). Ce document décrit le **contrat commun** aux deux et signale chaque point où les versions divergent. Les versions publiées ont été téléchargées depuis npm et comparées au code source.
+> **Alignement Core ↔ Framework.** La migration Carbon/SCSS du Core a été **réalisée** pendant cet audit (0 import `@carbon`, 0 fichier `.scss`, 0 dépendance `sass`) et le Core consomme désormais les majeures 5 / 3 / 3 / 2 du Framework. L'audit a d'abord été mené sur les versions 4.x / 2.x (Core d'alors), puis **recalé** sur l'état actuel ; le code des paquets d'intégration audités (`rspack-config`, `egen`, `esm-dynamic-loading`, `esm-routes`, `esm-react-utils`, `esm-extensions`, `esm-globals`) est **identique** entre `fe80ed2` et le `main` actuel du Framework (`d3c4bb5`), à l'exception d'une montée de version du Shell. Les mentions de Carbon/SCSS qui subsistent dans ces documents sont historiques et signalées comme telles.
 
 ## Limites de l'audit (à lire)
 

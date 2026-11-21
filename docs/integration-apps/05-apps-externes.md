@@ -36,7 +36,7 @@ Légende de preuve : voir 00. Chemins `fw/` = Frontend-esm-framework.
 
 **Mode B — contrat + services** :
 - devDependency **`@egen-civitas/egen`** : apporte `rspack` (bin), `@rspack/core`, `@swc/core`, `rspack-config`, le Shell (pour `egen develop`) — pas besoin de les déclarer séparément (✅ `dependencies` de `egen` et `rspack-config`).
-- `@egen-civitas/esm-framework` en `peerDependencies` (plage large, ex. `>=4.0.0`) **et** en `dependencies`.
+- `@egen-civitas/esm-framework` en `peerDependencies` (plage large, ex. `>=5.0.0`) **et** en `dependencies`.
 - Les `peerDependencies` listés deviennent les `shared` Module Federation ; ⚠️ si `swr` est listé, `require('swr/package.json')` est exécuté au build : `swr` doit être installé.
 - `react`/`react-dom` **18** (le décorateur utilise `react-dom/client` : `ReactDOMClient`, `singleSpaReact`).
 
