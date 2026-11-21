@@ -17,7 +17,7 @@ Conséquence : il manquait seulement une **couche neutre** décrivant « ce que 
         contrat : export = () => lifecycles (page) / parcel (extension, modale, workspace)
  ┌──────────────┬────────────────┴───────────┬──────────────────┬───────────────┐
  │ esm-react-   │ esm-vue-utils   ✅ livré    │ esm-angular-utils│ esm-nextjs-… │
- │ utils (exist.)│ (Vue 3, composables, slot) │ 💡 à faire       │ 💡 à cadrer   │
+ │ utils (exist.)│ (Vue 3, composables, slot) │ ✅ livré          │ ✅ livré       │
  └──────┬───────┴────────────────┬───────────┴────────┬─────────┴───────┬───────┘
         └────────────── esm-integration-utils ✅ (socle neutre) ─────────┘
               contrat de lifecycle · config · session · drapeaux · i18n · slots · parcels · erreurs
@@ -30,10 +30,10 @@ Conséquence : il manquait seulement une **couche neutre** décrivant « ce que 
 | Socle commun (contrats, intégration, config, services partagés) | `@egen-civitas/esm-integration-utils` | ✅ implémenté et testé |
 | React | `@egen-civitas/esm-react-utils` | ✅ existant, **non modifié** |
 | Vue 3 | `@egen-civitas/esm-vue-utils` | ✅ implémenté et testé |
-| Angular | `@egen-civitas/esm-angular-utils` | 💡 conçu (§5), non implémenté |
-| Next.js | `@egen-civitas/esm-nextjs-utils` | 💡 faisabilité analysée (§6), décision requise |
+| Angular | `@egen-civitas/esm-angular-utils` | ✅ implémenté et testé (§5) |
+| Next.js / apps autonomes | `@egen-civitas/esm-nextjs-utils` | ✅ implémenté et testé : iframe + pont `postMessage` (§6) |
 
-Les paquets sont dans le dépôt Framework, branche **`feature/multi-techno-utils`** (commit `76e9dd0`, changeset inclus, `yarn.lock` mis à jour). **Non publiés sur npm** tant que la branche n'est pas fusionnée et le changeset publié (ordre : `esm-integration-utils` puis `esm-vue-utils`).
+Les paquets sont dans le dépôt Framework, branche **`feature/multi-techno-utils`** (commits `76e9dd0`, `1a767a9`, `dcd099d`, `d2065c4` ; changesets inclus ; `yarn.lock` mis à jour). **Non publiés sur npm** tant que la branche n'est pas fusionnée et les changesets publiés (ordre : `esm-integration-utils`, puis `esm-vue-utils`, `esm-angular-utils`, `esm-nextjs-utils` ; `esm-globals`/`esm-dynamic-loading` pour les alias d'import map).
 
 ## 3. Correspondance React → socle neutre → Vue
 
@@ -72,34 +72,51 @@ Ce que cet essai **ne couvre pas** (🟡) : le Shell réel (`registerApp`, conte
 - le rendu par défaut de `single-spa-vue` est écrit pour Vue 2 : `esm-vue-utils` fournit sa propre fonction `render` ;
 - la config EGEN n'a ni `entry` ni `output.filename` (le conteneur MF porte le nom du fichier) : reproduire ces deux points évite le conflit « Multiple assets emit different content ».
 
-## 5. Angular — conception (non implémenté)
+## 5. Angular — implémenté et testé
 
-`@egen-civitas/esm-angular-utils`, même contrat :
+`@egen-civitas/esm-angular-utils`, même contrat que React/Vue : `getSyncLifecycle` / `getAsyncLifecycle` / `getLifecycle` (par-dessus **`single-spa-angular`**), `provideEgen`, et des fonctions `injectComponentContext`, `injectEgenProps`, `injectConfig`, `injectSession`, `injectStore`, `injectFeatureFlag`, `injectTranslate`, `injectExtensionSlot`, `injectExtensionMounter` (retournent des *signals*).
 
-- `getLifecycle(bootstrapFn | AppModule, options)` / `getSyncLifecycle` / `getAsyncLifecycle` construits sur **`single-spa-angular`** (adaptateur existant, à réutiliser) ;
-- services injectables (`EgenConfigService`, `EgenSessionService`, `EgenFeatureFlagService`, `EgenTranslationService`) au-dessus de `esm-integration-utils`, exposant des `Observable` (RxJS, déjà partagé par le Shell) et des *signals* ;
-- composants `egen-extension-slot` / `egen-extension` (`connectExtensionSlot`, `mountExtension`) ;
-- fournisseur `provideEgen({ moduleName, featureName })` (contexte + `ErrorHandler`).
+**Choix de conception** (justifiés par l'essai) :
+- **Sans décorateur ni gabarit** dans la bibliothèque (`inject()` et fonctions) : rien à compiler côté paquet ; les composants de slot restent dans l'application (recette dans le README du paquet) ;
+- **Sans zone.js par défaut** (`zone: false`, détection par signals) : zone.js modifie des API globales partagées par toutes les apps de la page, donc le risque d'interférence évoqué en 06 est évité à la racine ; `zone: true` reste possible ;
+- `single-spa-angular` **suit la version majeure d'Angular** (22.0.1 ↔ Angular 22 : une installation avec Angular 19 échoue en `ERESOLVE`) : déclaré en `peerDependencies`.
 
-Contraintes à lever **par prototype** avant d'écrire le paquet (aucune n'est vérifiée dans ce dépôt) : conteneur Module Federation **`var`** avec un builder Webpack (l'esbuild builder d'Angular ne le produit pas) ; isolation de `zone.js` entre apps ; `APP_BASE_HREF` vs `<base href>` posé par le Shell ; montage comme parcel (`domElement`). Critère d'acceptation : rejouer exactement l'essai du §4.
+**Preuves** (✅) : 17 tests avec **Angular 22 et `single-spa-angular` 22 réels** (compilation JIT, sans zone) ; `tsc` propre. **Essai de bout en bout** avec une app Angular compilée par Rspack + Module Federation (conteneur `var`, `./start`), chargée comme le Shell :
 
-## 6. Next.js — faisabilité (décision requise)
+| Étape | Résultat |
+| --- | --- |
+| `<script>` → global `_acme_esm_ng_app` (`init`, `get`) | ✅ |
+| `get('./start')` → exports `root`, `widget` (fonctions) | ✅ |
+| `root()` → `bootstrap/mount/unmount/update` | ✅ |
+| Montage **page** (`#single-spa-application:<nom>`), puis démontage | rendu, puis DOM vide ✅ |
+| Montage **extension** (parcel, `domElement`, `_extensionContext`), puis démontage | rendu, puis DOM vide ✅ |
+| Erreurs JS ; chargement de `zone.js` | aucune ; **non chargé** ✅ |
 
-Next.js est React, mais son modèle (routeur propriétaire de l'URL, rendu serveur, bundler maison) heurte le modèle Single-SPA. Trois voies, du plus au moins intégré :
+Faits relevés dans `single-spa-angular` : il utilise `props.domElement` sinon `#single-spa-application:<nom>` (même convention que Vue et le Shell) ; son `update` est vide par défaut (le paquet le branche sur `EGEN_PROPS`) ; **`bootstrap` doit précéder `mount`** (Single-SPA le garantit).
 
-| Voie | Principe | Limites |
+**Non couvert** (🟡) : Angular CLI en compilation **AOT** (le paquet n'a ni décorateur ni gabarit, mais ce n'est pas exécuté), routeur Angular, Shell réel, cohabitation avec React/Vue dans la même page.
+
+## 6. Next.js et applications autonomes — implémenté et testé (iframe + pont)
+
+`@egen-civitas/esm-nextjs-utils` : l'application (Next.js avec SSR, routeur propre…) reste **autonome** et s'affiche dans une iframe reliée au Shell par un pont `postMessage` (protocole v1). Pas de conteneur Module Federation : le plugin de Next (`@module-federation/nextjs-mf` 8.9) ne couvre que Next 12–15, alors que Next courant est la **16.4** (mesuré sur npm).
+
+| Côté | API | Rôle |
 | --- | --- | --- |
-| **A. Export statique client** | `output: 'export'`, pages côté client, enveloppé par `esm-react-utils` (`getSyncLifecycle`) | pas de SSR/ISR/API routes ; le routeur Next doit être neutralisé ou confiné à un sous-chemin ; conteneur MF `var` à produire (plugin communautaire, webpack seulement) 🟡 |
-| **B. Iframe** | l'app Next reste autonome (SSR possible), le Shell l'affiche | pas de partage de contexte/état, communication par `postMessage`, thème et navigation à synchroniser |
-| **C. Rendu serveur unifié** | hors périmètre Single-SPA | incompatible avec le Shell actuel |
+| Shell | `getEmbedLifecycle` / `getSyncLifecycle` | crée l'iframe (sandbox), envoie langue + session filtrée, reçoit navigation / hauteur / titre |
+| Application | `createEgenBridge` (`/client`) | `ready`, `subscribe`, `navigate`, `setHeight`, `autoResize`, `setTitle` |
 
-💡 Recommandation : cadrer **A** par prototype (même grille de validation que §4) ; si le SSR est indispensable, **B** avec un petit paquet de pont (`esm-nextjs-utils` limité à la communication Shell ↔ iframe). **Un paquet « Next.js Utils » à part entière n'a de sens que pour A.**
+**Sécurité** (✅ testée, 18 tests) : messages acceptés seulement de l'iframe elle-même **et** de l'origine autorisée (jamais `*`) ; envoi avec origine cible explicite ; navigation limitée aux chemins internes (`//hôte`, URL absolues, `javascript:` ignorés) ; **`sessionId` jamais transmis** (liste blanche de champs) ; avertissement si l'app a la même origine que le Shell avec `allow-scripts allow-same-origin` (bac à sable sans effet).
 
-## 7. Utiliser Vue dès maintenant (apps externes en production)
+**Exploitation** (à ne pas oublier) : l'app doit autoriser l'affichage par le Shell (`Content-Security-Policy: frame-ancestors <shell>`, pas de `X-Frame-Options: DENY/SAMEORIGIN`) ; cookies tiers bloqués entre sites distincts (préférer les sous-domaines d'un même domaine) ; inadapté aux cibles natives.
+
+**Non couvert** (🟡) : exécution **inter-fenêtres dans un vrai navigateur** (les tests simulent les deux fenêtres), Shell réel.
+
+## 7. Utiliser Vue / Angular dès maintenant (apps externes en production)
 
 1. Créer l'app Vue avec `src/index.ts` (ré-export de la source exposée), `src/routes.json`, et la config de build du §4 (`library var`, `./start`, `publicPath:'auto'`, copie de `routes.json`) ; `moduleName` = `name` du `package.json`.
 2. `npm run build && npm pack` ; `"files": ["dist"]`.
 3. Déclarer dans `external-apps.json` du Core ; `yarn external:sync` ; `kill -HUP` (voir [12](12-apps-externes-en-production.md)).
-4. Tant que `esm-vue-utils` n'est pas publié : le consommer depuis le dépôt Framework (`yarn link`/tarball `npm pack`).
+4. Tant que les paquets ne sont pas publiés : les consommer depuis le dépôt Framework (`yarn link` / tarball `npm pack`).
+5. Angular : mêmes étapes ; installer la version de `single-spa-angular` qui correspond à la version majeure d'Angular.
 
 Exemple complet testé : [10 — exemple 3](10-exemples.md).

@@ -29,6 +29,26 @@ Documentation de référence : [index](multiplateforme/README.md) · [01 cadrage
 | --- | --- | --- | --- |
 | D0 | Documentation du programme | 8 documents dans `docs/multiplateforme/` + ce suivi ; état des lieux daté ; 26 apps classées ; 66 tâches définies avec critères d'acceptation ; section « Multiplateforme » ajoutée au `README.md` racine | Commit « docs(multiplateforme) » |
 
+## 2 bis. Mise à jour du 2026-11-21 (après fusion de `feature/ajustement-reforme`)
+
+`main` compte désormais **28 apps** (retrait de `esm-theme-studio-app` et `esm-character-factory-app`, toutes deux de catégorie **C** = web uniquement). Chiffres **recalculés** par les commandes de [02](multiplateforme/02-ETAT-DES-LIEUX.md) §13 (les tableaux de 02 et 03 restent à régénérer : R0.2–R0.4) :
+
+| Mesure | Avant (30 apps) | Maintenant (28 apps) |
+| --- | --- | --- |
+| Apps | 30 | **28** |
+| Classification attendue | A 9 / B 14 / C 4 / D 3 | **A 9 / B 14 / C 2 / D 3** (C = `offline-tools`, `tenant-routing`) ; **23 natives** (inchangé : les 2 apps retirées étaient web seules) |
+| `<a target="_blank">` bruts (hors tests) | 14 | **10** |
+| `window.location.href =` (hors tests) | — | 4 |
+| `window.open`, `<iframe>`/`<video>`/`new Audio`, `document.cookie`, `indexedDB` | présents (theme-studio / character-factory) | **0** |
+| Ressources distantes (unsplash 102, picsum 16, 21st.dev 6, spline 1) | 125 | **125** (inchangé : portées par d'autres apps) ; polices Google : 0 |
+| Apps utilisant `localStorage` | — | 5 (`ai-assistant`, `annuaire`, `home`, `implementer-tools`, `login`) |
+| `navigator.clipboard` | 16 (lignes) | 10 |
+| `platforms` dans les `routes.json` ; `getPlatform`/`isNativePlatform` | 0 ; 0 | 0 ; 0 |
+
+**R0.5** : `node tools/sync-egen-deps.mjs --check` signale 72 plages en retard, **toutes dues aux nouvelles majeures du Framework** (`esm-framework 5`, Shell 3, `rspack-config` 2, `egen` 3), qui **retirent Carbon et SCSS**. ⚠️ **T0.1 ne doit pas aligner sur ces majeures** : le Core les utilise encore (voir [integration-apps/14](integration-apps/14-plan-migration-carbon.md), écart E1). Aligner uniquement les planchers de la ligne 4.x tant que la migration Carbon n'est pas faite.
+
+**Nouveau, hors programme multiplateforme mais à connaître** : apps externes en production (`yarn external:sync`), table d'alias d'import map (écart E2), paquets Vue/Angular/Next.js du Framework (branche `feature/multi-techno-utils`). Référence : [integration-apps](integration-apps/00-LISEZ-MOI.md).
+
 ## 3. Reste — tâches par phase
 
 États : **À faire** · **En cours** (branche) · **Fait** (PR #, commit) · **Bloqué** (raison). Tailles : S ≈ 1–2 j, M ≈ 3–5 j, L ≈ 6–10 j.
@@ -38,7 +58,7 @@ Documentation de référence : [index](multiplateforme/README.md) · [01 cadrage
 | ID | Tâche | Taille | État | Notes |
 | --- | --- | --- | --- | --- |
 | R0.1 | Installer et **mesurer** `main` : `yarn install --immutable`, `yarn build`, `yarn test`, `yarn verify` ; consigner durées, nombre de tests, **échecs préexistants** (suivi TopBar §6 : « échecs anciens, hooks ignorés ») | S | À faire | Voir §8 (séquence 0). Sert de base à T0.4 |
-| R0.2 | Relancer les commandes de [02](multiplateforme/02-ETAT-DES-LIEUX.md) §13 sur `main` et **corriger les tableaux de 02** (30 apps, ressources distantes = 125, apps de la TopBar, stockage, navigation), puis retirer le bandeau | M | À faire | Bandeau = liste des écarts déjà connus |
+| R0.2 | **(chiffres recalculés le 2026-11-21, voir §2 bis ; tableaux à régénérer)** Relancer les commandes de [02](multiplateforme/02-ETAT-DES-LIEUX.md) §13 sur `main` et **corriger les tableaux de 02** (30 apps, ressources distantes = 125, apps de la TopBar, stockage, navigation), puis retirer le bandeau | M | À faire | Bandeau = liste des écarts déjà connus |
 | R0.3 | **Régénérer la classification** (03) : 30 apps, A 9 / B 14 / C 4 / D 3, 23 natives ; fiches `launcher`, `navigation`, `search`, `side-panel`, `primary-navigation` (→ A) ; erratum `quick-access` ; matrice §3 | M | À faire | `esm-navigation-app` : souris (glisser), presse-papiers |
 | R0.4 | Propager les nouveaux totaux dans `01`, `04` (vague 4 = `navigation` + `launcher` au lieu de `primary-navigation` ; ExternalLink : `launcher` remplace `primary-navigation`), `07` (E-20 : 23 apps), `08` (R-07 : la réforme TopBar est **terminée**), ce suivi (66 → recompter) | S | À faire | |
 | R0.5 | Vérifier le commit `63dd2ef` : `node tools/sync-egen-deps.mjs --check` ; si OK, **T0.1 est fait** (marquer Fait avec le commit) ; sinon le terminer | S | À faire | Le peer `esm-framework` vaut encore `>=3.0.0` (T0.2) |

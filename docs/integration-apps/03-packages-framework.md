@@ -52,6 +52,8 @@ Légende : **Int.** = intervient dans l'intégration au Shell (chargement, enreg
 | --- | --- | --- |
 | `esm-integration-utils` | Socle neutre : contrat de lifecycle, config, session, drapeaux, i18n, slots et parcels d'extensions, erreurs | `esm-api`, `esm-config`, `esm-extensions`, `esm-feature-flags`, `esm-globals`, `single-spa` |
 | `esm-vue-utils` | Vue 3 : `getSyncLifecycle`/`getAsyncLifecycle`, composables, `ExtensionSlot`/`Extension` | + `vue ^3.3`, dépend de `single-spa-vue` |
+| `esm-angular-utils` | Angular (standalone, signals, sans zone par défaut) : lifecycles, `provideEgen`, fonctions `inject*` | + `@angular/core`, `single-spa-angular` (même majeure qu'Angular) |
+| `esm-nextjs-utils` | Applications autonomes (Next.js) par iframe + pont `postMessage` : `getEmbedLifecycle` (Shell), `createEgenBridge` (`/client`) | `esm-integration-utils`, `single-spa` |
 
 Voir [13](13-extension-multi-technologies.md).
 

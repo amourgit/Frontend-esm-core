@@ -7,7 +7,8 @@ Statut de chaque exemple :
 | 1. React interne | ✅ **calqué sur `esm-footer-app`** (fichiers réels du Core) ; non compilé pendant l'audit (🟡) |
 | 2. React externe | ✅ contrat vérifié dans le code ; **non compilé** (🟡) |
 | 3. Vue externe | ✅ **construit et chargé selon le protocole du Shell** avec `esm-vue-utils` (hors Shell réel) |
-| 4. Angular externe | ⚠️ **non éprouvé** (même réserve, risque plus élevé) |
+| 4. Angular externe | ✅ **construit et chargé selon le protocole du Shell** avec `esm-angular-utils` (sans zone.js ; AOT non vérifié) |
+| 5. Next.js par iframe | ✅ pont `postMessage` testé (fenêtres simulées) |
 
 Convention : `slug(name) = name.replace(/[\/\-@]/g, '_')`.
 
@@ -386,59 +387,108 @@ Développement : `egen:develop` + `--routes` (05 §4.1 : routes non ajoutées au
 
 ---
 
-## Exemple 4 — App Angular **externe** (⚠️ non éprouvé, risque plus élevé)
+## Exemple 4 — App Angular **externe** (✅ construit et chargé selon le protocole du Shell)
+
+Statut : **testé** avec Angular 22, `single-spa-angular` 22.0.1, Rspack 1.7 et `@egen-civitas/esm-angular-utils` (branche `feature/multi-techno-utils`, voir [13](13-extension-multi-technologies.md) §5). Chargement par `<script>`, `init`, `get('./start')`, montage page + extension, démontage, **sans zone.js** : OK. **Non couvert** : Angular CLI en compilation AOT, routeur Angular, Shell réel.
 
 ### Arborescence
 ```
 esm-acme-ng-app/
 ├── package.json
-├── webpack.config.js          # Module Federation (builder Webpack)
-├── tsconfig.json
-├── angular.json               # builder Webpack personnalisé (ÉCO)
+├── rspack.config.js          # identique à l'exemple 3 (conteneur var, ./start, routes.json copié)
 └── src/
-    ├── main.single-spa.ts     # exposé en ./start
-    ├── app/app.component.ts …
+    ├── index.ts              # OBLIGATOIRE : export * from './start'
+    ├── start.ts              # exposé en ./start
     └── routes.json
 ```
 
-### Exigences et squelette
-```js
-// webpack.config.js — les EXIGENCES EGEN sont identiques à celles de l'exemple 3
-const { container } = require('webpack');
-const pkg = require('./package.json');
-const slug = pkg.name.replace(/[\/\-@]/g, '_');
-module.exports = {
-  output: { publicPath: 'auto', library: { type: 'var', name: slug }, uniqueName: slug },
-  plugins: [ new container.ModuleFederationPlugin({
-    name: pkg.name,
-    library: { type: 'var', name: slug },
-    filename: 'acme-esm-ng-app.js',
-    exposes: { './start': './src/main.single-spa.ts' },
-    shared: {},                                    // @angular/* embarqués
-  }) ],
-};
+### `package.json` (extrait)
+```json
+{
+  "name": "@acme/esm-ng-app",
+  "browser": "dist/acme-esm-ng-app.js",
+  "main": "src/start.ts",
+  "files": ["dist"],
+  "dependencies": {
+    "@angular/core": "^22.0.0", "@angular/common": "^22.0.0", "@angular/compiler": "^22.0.0",
+    "@angular/platform-browser": "^22.0.0", "rxjs": "^7.8.0", "single-spa-angular": "^22.0.1",
+    "@egen-civitas/esm-angular-utils": "^0.1.0"
+  }
+}
 ```
+`single-spa-angular` doit avoir **la même version majeure qu'Angular**.
+
+### `src/start.ts`
 ```ts
-// src/main.single-spa.ts  (ÉCO : adaptateur single-spa-angular)
-import { singleSpaAngular, getSingleSpaExtraProviders } from 'single-spa-angular';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from './app/app.module';
+import '@angular/compiler'; // JIT, uniquement parce que cet exemple n'est pas compilé par l'Angular CLI
+import { Component, computed } from '@angular/core';
+import { getSyncLifecycle, injectComponentContext, injectTranslate } from '@egen-civitas/esm-angular-utils';
 
-const lifecycles = singleSpaAngular({
-  bootstrapFunction: (props) => platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppModule),
-  template: '<app-root />',
-  NgZone: 'noop' as any,   // ÉCO : à arbitrer selon la gestion de zone.js
-});
-export const root = () => Promise.resolve(lifecycles);
+class PageCmp {
+  ctx = injectComponentContext();
+  t = injectTranslate();
+  title = computed(() => this.t('title', 'Page Angular'));
+}
+const Page = Component({
+  selector: 'acme-ng-page', // selector d'élément simple obligatoire
+  template: '<section><h1>{{ title() }}</h1><small>{{ ctx.moduleName }}</small></section>',
+})(PageCmp);
+
+class WidgetCmp {}
+const Widget = Component({ selector: 'acme-ng-widget', template: '<div>widget Angular</div>' })(WidgetCmp);
+
+const options = { moduleName: '@acme/esm-ng-app', featureName: 'ng-demo' }; // moduleName = name
+export const root = getSyncLifecycle(Page, options);
+export const widget = getSyncLifecycle(Widget, options);
 ```
-`routes.json` : `{ "pages": [ { "component": "root", "route": "acme-ng" } ] }`.
+Avec l'Angular CLI, écrire les composants avec le décorateur `@Component({...})` habituel (compilation AOT : 🟡 non vérifiée ici).
 
-### Points de vigilance propres à Angular (06 §4)
-- `<base href>` posé par le Shell : définir `APP_BASE_HREF` à `window.getEgenSpaBase()`.
-- `zone.js` : isolation à tester avec une app React présente simultanément.
-- Le builder esbuild d'Angular ne produit pas de conteneur Webpack MF : builder Webpack requis.
-- Dev : `egen:develop` (comme l'exemple 3) + routes fournies.
-- Enregistrement et chargement : identiques aux exemples 2 et 3.
+`src/routes.json` :
+```json
+{ "pages": [ { "component": "root", "route": "acme-ng" } ],
+  "extensions": [ { "name": "acme-ng-widget", "component": "widget", "slot": "home-sections" } ] }
+```
 
-### Statut
-À prototyper avant engagement ; à ne pas présenter comme fonctionnel tant que le montage page + extension + démontage n'est pas démontré.
+### Résultat et enregistrement
+`npm run build` → `dist/acme-esm-ng-app.js` (conteneur), `routes.json`, chunks. Enregistrement : comme l'exemple 3 (`external-apps.json` + `yarn external:sync`). Plus de point de vigilance `zone.js` : le mode sans zone est le défaut ; pour utiliser zone.js : `zone: true`, charger zone.js dans l'app et `provideZoneChangeDetection()` dans `providers`.
+
+---
+
+## Exemple 5 — Application autonome (Next.js) par iframe (✅ pont testé avec fenêtres simulées)
+
+Statut : `@egen-civitas/esm-nextjs-utils` (voir [13](13-extension-multi-technologies.md) §6). L'application Next reste **hors du bundle** : le Core n'embarque qu'une petite app « enveloppe » (un export). Non couvert : exécution inter-fenêtres dans un vrai navigateur.
+
+### App enveloppe (dans le Core ou en externe)
+```ts
+// src/start.ts
+import { getSyncLifecycle } from '@egen-civitas/esm-nextjs-utils';
+export const root = getSyncLifecycle({
+  moduleName: '@acme/esm-mon-next',
+  featureName: 'mon-next',
+  url: 'https://next.exemple.org/app',   // origine autorisée = origine de l'URL
+});
+```
+`routes.json` : `{ "pages": [ { "component": "root", "routeRegex": "^mon-next(/.*)?$" } ] }`
+
+### Côté Next.js (composant client)
+```tsx
+'use client';
+import { useEffect, useState } from 'react';
+import { createEgenBridge } from '@egen-civitas/esm-nextjs-utils/client';
+
+export function EgenSession() {
+  const [state, setState] = useState<any>({});
+  useEffect(() => {
+    const b = createEgenBridge({ moduleName: '@acme/esm-mon-next', allowedHostOrigins: ['https://shell.exemple.org'] });
+    const off = b.subscribe(setState);
+    const stop = b.autoResize();
+    return () => { off(); stop(); b.destroy(); };
+  }, []);
+  return <p>{state.session?.user?.display ?? '…'}</p>;
+}
+```
+
+### Réglages d'hébergement indispensables
+- Next : en-tête `Content-Security-Policy: frame-ancestors https://shell.exemple.org` (sans `X-Frame-Options: DENY/SAMEORIGIN`) ;
+- Shell : `frame-src` vers l'application ; même site (sous-domaines) pour les cookies de session ;
+- Cibles natives : non adapté (contenu distant).
