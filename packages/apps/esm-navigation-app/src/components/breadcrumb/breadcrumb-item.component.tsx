@@ -7,7 +7,7 @@ import { ConfigurableLink, Type, useConfig, validators } from '@egen-civitas/esm
 //
 //  Avant ce composant, le slot existait mais AUCUNE app ne pouvait s'y
 //  brancher sans reconstruire à la main le contrat CSS attendu par
-//  topbar-options.scss (classe globale `.breadcrumb-item`, séparateur `›`
+//  navigation.module.css (classe globale `.breadcrumb-item`, séparateur `›`
 //  automatique entre deux items, style "actif" sur le dernier) : le niveau 2
 //  était donc extensible sur le papier, mais pas réellement opérationnel.
 //
@@ -26,7 +26,7 @@ import { ConfigurableLink, Type, useConfig, validators } from '@egen-civitas/esm
 //
 //  `target` est optionnel : à omettre pour l'item courant (page active, non
 //  cliquable) — il sera alors rendu comme un simple texte, stylé comme
-//  "dernier item" par topbar-options.scss si c'est effectivement le dernier
+//  "dernier item" par navigation.module.css si c'est effectivement le dernier
 //  élément du fil (ordre croissant via "order").
 // =============================================================================
 

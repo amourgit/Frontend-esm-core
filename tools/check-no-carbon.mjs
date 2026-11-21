@@ -7,7 +7,7 @@ import { join, relative } from 'node:path';
 const ROOT = join(import.meta.dirname, '..');
 const SKIP = new Set(['node_modules', 'dist', 'coverage', '.turbo']);
 const TEXT = /\.(ts|tsx|js|jsx|mjs|cjs|css|json|ejs|html)$/;
-const CARBON = /@carbon\/|carbon-components|\bcds-{1,2}[a-z]/;
+const CARBON = /@carbon\/|carbon-components|\bcds-{1,2}[a-z]|\.s[ac]ss(['"?]|\b)/;
 const SASS_DEP = /"(sass|sass-loader|sass-embedded|@rsbuild\/plugin-sass)"\s*:/;
 
 const files = [];
@@ -27,7 +27,7 @@ for (const file of files) {
   if (/\.(scss|sass)$/.test(file)) problems.push(`${rel} : fichier SCSS`);
   else if (TEXT.test(file) && !file.endsWith('CHANGELOG.md')) {
     const text = readFileSync(file, 'utf-8');
-    if (CARBON.test(text)) problems.push(`${rel} : mention de Carbon`);
+    if (CARBON.test(text)) problems.push(`${rel} : mention de Carbon ou d'un import .scss`);
     if (file.endsWith('package.json') && SASS_DEP.test(text)) problems.push(`${rel} : dépendance sass`);
   }
 }
