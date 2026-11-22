@@ -2,6 +2,8 @@
 
 Ce document déroule, étape par étape, **toute la chaîne** qui amène une application développée hors du Core à s'afficher dans EGEN : qui intervient, ce qui est fait, ce qui est produit, comment on constate que ça a marché, ce qui peut échouer.
 
+**Mode d'exploitation retenu : à froid.** Une app externe s'ajoute en trois gestes : la **déclarer** (`external-apps.json`), la **synchroniser** (`yarn external:sync --strict`, au build ou au déploiement), puis **redémarrer ou redéployer** le Core. Le Core lit le verrou au démarrage et revérifie chaque empreinte : rien n'est modifié pendant qu'il tourne. Le rechargement à chaud (`kill -HUP`) existe (doc 12) mais n'est pas utilisé dans ce document.
+
 Quatre points de départ sont couverts :
 
 | Scénario | Point de départ | Statut |
@@ -123,7 +125,7 @@ Exemple fil rouge : dépôt `github.com/acme/esm-hello-app` (React, Vue ou Angul
 
 ### A7 — Précompresser et servir
 - **Qui** : opérateur ; `precompress.mjs`, `serve-prod.mjs`.
-- **Quoi** : `node tools/precompress.mjs` puis `yarn start:prod` (ou `kill -HUP <pid>` si le Core tourne déjà : rechargement à chaud ✅).
+- **Quoi** : `node tools/precompress.mjs`, puis **redémarrer** le Core (`yarn start:prod`) ou le redéployer. Aucune action sur un Core qui tourne.
 - **Ce qui se passe** : `serve-prod` relit le verrou, **revérifie le SHA-256**, fusionne l'app dans l'import map (`@acme/esm-hello-app → <spa>/external/acme-esm-hello-app-1.2.0/acme-esm-hello-app.js`) et dans le registry (`routes.json` de l'app + `version`), et sert le bundle sous `<spa>/external/…`.
 - **Résultat** : `GET <spa>/importmap.json` et `<spa>/routes.registry.json` contiennent l'app.
 
@@ -133,9 +135,20 @@ Exemple fil rouge : dépôt `github.com/acme/esm-hello-app` (React, Vue ou Angul
 - **Contrôle périodique / CI** : `yarn external:check` (fichiers + dérive).
 
 ### A9 — Mettre à jour
-Nouvelle version `1.3.0` publiée (A3–A4) → l'opérateur change l'URL ou la plage dans `external-apps.json` → `yarn external:sync` → `kill -HUP`. **Une seule version par app** à la fois (une clé = une URL).
+Nouvelle version `1.3.0` publiée (A3–A4) → l'opérateur change l'URL ou la plage dans `external-apps.json` → `yarn external:sync --strict` → redémarrage ou redéploiement du Core. **Une seule version par app** à la fois (une clé = une URL).
 
 ---
+
+### A10 — Configurer l'app (si elle est configurable)
+- **Qui** : opérateur du Core.
+- **Pourquoi** : une app externe lit sa configuration par `getConfig(<nom du paquet>)`. En production, le Shell reçoit ses fichiers de configuration par `configUrls` ; **`serve-prod` n'en fournissait aucun** (`configUrls:[]` figé) : une app configurable n'aurait eu que ses valeurs par défaut.
+- **Quoi** : un fichier JSON `{ "<nom de l'app>": { … } }` désigné par `EGEN_CONFIG_FILE` (chemin relatif à la racine du Core), par exemple (modèle : `egen-config.example.json`) :
+  ```json
+  { "@civitas/esm-penpot-app": { "penpotUrl": "https://design.exemple.org" } }
+  ```
+  `EGEN_CONFIG_URLS` ajoute d'autres fichiers (URLs séparées par des virgules, lues par le navigateur).
+- **Ce qui se passe** : au démarrage, `serve-prod` lit et **valide** le fichier (`tools/runtime-config.mjs`), le sert à `<spa>/config.json` (`Cache-Control: no-store`) et le déclare dans `configUrls`. Un fichier illisible ou invalide **empêche le démarrage** avec un message explicite (code 1) : en intégration à froid, une erreur de configuration se voit au déploiement, pas en silence dans le navigateur.
+- **À savoir** : le contenu est **public** (servi au navigateur) : aucun secret. Sans `EGEN_CONFIG_FILE`, le comportement est celui d'avant (✅ testé, 3 tests de `tools/runtime-config.test.mjs`).
 
 ## 4. Scénario B — paquet déjà publié
 
@@ -241,6 +254,26 @@ Décision de conception : le catalogue **n'ajoute pas de nouveau mécanisme de c
 
 ---
 
+## 6 bis. Exemple réel, à froid : Penpot
+
+Penpot (outil de conception) est une application autonome (backend Clojure, frontend ClojureScript, PostgreSQL) : c'est le cas **C3**, avec les moyens du scénario **A** pour diffuser son enveloppe. Le fork est `github.com/amourgit/penpot`, branche `egen` (partie du tag stable 2.19.3, voir `EGEN.md` dans le fork).
+
+| Étape | Qui | Ce qui est fait | Vérifié |
+| --- | --- | --- | --- |
+| 1. Adapter Penpot | équipe app | `PENPOT_FRAME_ANCESTORS` dans l'image frontend : par défaut Penpot interdit tout embarquement (`X-Frame-Options: SAMEORIGIN`, et sa CSP `frame-ancestors` n'est pas appliquée en mode report-only) | ✅ 24 vérifications, dont un vrai nginx |
+| 2. Déployer Penpot | opérateur | `docker/egen/` : images officielles 2.19.3 + deux fichiers nginx montés ; Penpot sur un sous-domaine du même site que le Core | 🟡 compose validé (YAML), **jamais lancé** (pas de Docker disponible ici) |
+| 3. Construire l'enveloppe | CI du fork | tag `egen-app-v1.0.0` → tests, types, build, `npm pack`, release GitHub | ✅ exécuté sur GitHub Actions |
+| 4. Déclarer | opérateur | `external-apps.json` : URL https du tarball de la release | ✅ |
+| 5. Synchroniser | opérateur | `yarn external:sync --strict` : `@civitas/esm-penpot-app@1.0.0 [hosted] : ok` | ✅ avec le tarball téléchargé de la release |
+| 6. Configurer | opérateur | `EGEN_CONFIG_FILE` avec `penpotUrl` (A10) | ✅ |
+| 7. Redémarrer | opérateur | `precompress.mjs` puis `yarn start:prod` ; import map, registry et statut `accepted` ; redémarrage : identique | ✅ |
+| 8. Sécurité à froid | — | bundle altéré après la synchro → **REJETÉE** au démarrage, absent de l'import map (404) ; re-synchro : rétabli | ✅ |
+| 9. Affichage réel | navigateur | iframe Penpot dans le Core, connexion, copier-coller, export | ⛔ **non vérifié** : nécessite Penpot déployé et un navigateur |
+
+Points d'attention constatés : l'iframe n'est utilisable que si Penpot envoie un `frame-ancestors` incluant l'origine du Core (sinon : cadre vide) ; la connexion exige un sous-domaine du même site ou les réglages `cors` + cookies sécurisés (guide `docker/egen/README.md` du fork).
+
+---
+
 ## 7. Choisir son scénario
 
 | Situation | Scénario | Pourquoi |
@@ -271,5 +304,6 @@ Décision de conception : le catalogue **n'ajoute pas de nouveau mécanisme de c
 ## 9. Limites connues et prochaines étapes
 
 - ⛔ Une seule version par app au runtime (G6) ; ⛔ pas de découverte automatique (G2) ; ⛔ pas de source git directe ; ⛔ dépôt privé en tarball `https:` non supporté (utiliser un registre privé, B2).
+- ✅ La configuration runtime en production est désormais possible (A10, `EGEN_CONFIG_FILE`) ; avant, `configUrls` était vide.
 - 💡 À construire pour boucler D : `egen check-app` (G4, dans le Framework), format et résolveur de catalogue dans `sync-external-apps.mjs`, tests associés.
 - 🟡 Jamais exécutés de bout en bout avec un Shell complet : A8, C2, C3 en navigateur réel, B2 sur registre privé.

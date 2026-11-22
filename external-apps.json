@@ -1,0 +1,5 @@
+{
+  "apps": {
+    "@civitas/esm-penpot-app": "https://github.com/amourgit/penpot/releases/download/egen-app-v1.0.0/civitas-esm-penpot-app-1.0.0.tgz"
+  }
+}

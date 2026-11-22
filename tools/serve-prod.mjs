@@ -17,7 +17,8 @@
  * Variables : PORT, HOST, EGEN_SPA_PATH, EGEN_API_URL, EGEN_BACKEND,
  *             EGEN_BRAND_DIR, EGEN_OFFLINE, EGEN_TENANT_* (cf. RUNTIME_BRIDGED_VARS),
  *             EGEN_EXTERNAL_DIR, EGEN_EXTERNAL_STRICT, EGEN_EXTERNAL_ALLOW_HTTP,
- *             EGEN_ROUTES_FROM_SRC, EGEN_IMPORTMAP_ALIASES.
+ *             EGEN_ROUTES_FROM_SRC, EGEN_IMPORTMAP_ALIASES,
+ *             EGEN_CONFIG_FILE, EGEN_CONFIG_URLS (configuration runtime des apps, voir runtime-config.mjs).
  */
 import http from 'node:http';
 import https from 'node:https';
@@ -26,6 +27,7 @@ import { createReadStream, existsSync, readFileSync, readdirSync, statSync } fro
 import { basename, dirname, extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { formatReport, loadExternalApps } from './external-apps.mjs';
+import { RuntimeConfigError, buildConfigUrls, loadRuntimeConfig } from './runtime-config.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const log = (...a) => console.log('[egen-prod]', ...a);
@@ -137,6 +139,22 @@ process.on('SIGHUP', () => {
   publishRegistries();
 });
 
+// ── Configuration runtime des apps (optionnelle, lue une fois au démarrage) ──
+// EGEN_CONFIG_FILE : fichier JSON { "<nom de l'app>": { ... } } servi à <spa>/config.json et donné au Shell
+// (`configUrls`). EGEN_CONFIG_URLS : URLs supplémentaires (séparées par des virgules). Sans ces variables,
+// `configUrls` reste vide, comme avant. Un fichier invalide empêche le démarrage (intégration à froid).
+let runtimeConfigJson = null;
+if (env.EGEN_CONFIG_FILE) {
+  try {
+    runtimeConfigJson = loadRuntimeConfig(resolve(ROOT, env.EGEN_CONFIG_FILE)).json;
+  } catch (e) {
+    if (e instanceof RuntimeConfigError) { console.error(`[egen-prod] ${e.message}`); process.exit(1); }
+    throw e;
+  }
+}
+const CONFIG_URLS = buildConfigUrls({ spa: SPA, hasFile: runtimeConfigJson !== null, extra: env.EGEN_CONFIG_URLS });
+if (CONFIG_URLS.length) log(`configuration runtime : ${CONFIG_URLS.join(', ')}`);
+
 // ── App shell + index.html ──────────────────────────────────────────────────
 const require = createRequire(import.meta.url);
 const SHELL = env.EGEN_SHELL_DIR
@@ -146,7 +164,7 @@ const BRAND = env.EGEN_BRAND_DIR ? resolve(ROOT, env.EGEN_BRAND_DIR) : null;
 const indexHtml = readFileSync(join(SHELL, 'index.html'), 'utf8')
   .replace(
     /<script>initializeSpa\([\s\S\n]*<\/script>/m,
-    `<script>Object.assign(window, ${JSON.stringify(overrides)});initializeSpa({apiUrl:${JSON.stringify(API)},spaPath:${JSON.stringify(SPA)},env:"production",offline:${OFFLINE},configUrls:[]});</script>`,
+    `<script>Object.assign(window, ${JSON.stringify(overrides)});initializeSpa({apiUrl:${JSON.stringify(API)},spaPath:${JSON.stringify(SPA)},env:"production",offline:${OFFLINE},configUrls:${JSON.stringify(CONFIG_URLS)}});</script>`,
   )
   .replace(/(href|src)="\/egen-civitas\/spa/g, `$1="${SPA}`)
   .replace(/(href|src)="\/egen\/spa/g, `$1="${SPA}`);
@@ -222,6 +240,7 @@ const server = http.createServer((req, res) => {
       if (rel === 'importmap.json') return sendBuffer(req, res, TYPES['.json'], importMapJson);
       if (rel === 'routes.registry.json') return sendBuffer(req, res, TYPES['.json'], routesJson);
       if (rel === 'external-apps.status.json') return sendBuffer(req, res, TYPES['.json'], externalStatusJson);
+      if (rel === 'config.json' && runtimeConfigJson !== null) return sendBuffer(req, res, TYPES['.json'], runtimeConfigJson, 'no-store');
 
       let m;
       if ((m = rel.match(/^apps\/([^/]+)\/(.+)$/)) && mounts.has(m[1])) {

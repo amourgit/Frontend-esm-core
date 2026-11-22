@@ -118,7 +118,7 @@ async function waitFor(url, tries = 40) {
 test('serve-prod : publie, héberge et recharge à chaud une app externe', async () => {
   const root = tmp();
   mkdirSync(join(root, 'tools'));
-  for (const f of ['serve-prod.mjs', 'external-apps.mjs']) cpSync(join(HERE, f), join(root, 'tools', f));
+  for (const f of ['serve-prod.mjs', 'external-apps.mjs', 'runtime-config.mjs']) cpSync(join(HERE, f), join(root, 'tools', f));
   // app interne minimale
   mkdirSync(join(root, 'packages/apps/esm-int-app/dist'), { recursive: true });
   mkdirSync(join(root, 'packages/apps/esm-int-app/src'), { recursive: true });
@@ -210,7 +210,7 @@ test('le Core respecte la règle (28 apps)', async () => {
 test('serve-prod publie le frameworkRange de dist/routes.json', async () => {
   const root = tmp();
   mkdirSync(join(root, 'tools'));
-  for (const f of ['serve-prod.mjs', 'external-apps.mjs']) cpSync(join(HERE, f), join(root, 'tools', f));
+  for (const f of ['serve-prod.mjs', 'external-apps.mjs', 'runtime-config.mjs']) cpSync(join(HERE, f), join(root, 'tools', f));
   const app = join(root, 'packages/apps/esm-x-app');
   mkdirSync(join(app, 'dist'), { recursive: true });
   mkdirSync(join(app, 'src'), { recursive: true });
