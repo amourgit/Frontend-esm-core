@@ -53,9 +53,9 @@ Différences réelles avec une app interne (tout le reste est identique) :
 
 | | App interne (`packages/apps/*`) | App externe |
 | --- | --- | --- |
-| Découverte | `serve-prod` scanne `packages/apps/*`, lit `src/routes.json` | `external-apps.json` → verrou → `serve-prod` |
+| Découverte | `serve-prod` scanne `packages/apps/*`, lit `dist/routes.json` (estampillé) | `external-apps.json` → verrou → `serve-prod` |
 | Validation à la publication | aucune | **oui** (`external-apps.mjs`) : refus des apps fautives |
-| `routes.json` utilisé | source (`frameworkRange` non estampillé, écart G3) | **celui du build** (estampillé : le garde-fou de version est actif) |
+| `routes.json` utilisé | celui du build (`dist/routes.json`, `frameworkRange` estampillé ; écart G3 traité) | **celui du build** (estampillé : le garde-fou de version est actif) |
 | Intégrité | — | SHA-256 vérifié à chaque démarrage (hébergée) ou mémorisé (remote) |
 | Nom en conflit avec une app interne | — | l'app interne **prime**, l'externe est rejetée |
 
@@ -225,7 +225,7 @@ Décision de conception : le catalogue **n'ajoute pas de nouveau mécanisme de c
     "technology": "react | vue | angular | embed",
     "description": "…", "owner": "acme",
     "source": { "type": "npm", "registry": "https://npm.acme.org", "range": "^1.2.0" },
-    "conformity": { "checkedWith": "check-app@1", "checkedAt": "2026-11-21", "frameworkRange": ">=5.0.0" },
+    "conformity": { "checkedWith": "check-app@1", "checkedAt": "2026-11-21", "frameworkRange": "^5.0.1" },
     "status": "approved | deprecated | revoked" } ] }
 ```
 `source.type` peut aussi valoir `tarball` (`url` + `sha256` obligatoire) ou `remote` (`bundle`, `routes`).

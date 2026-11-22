@@ -80,5 +80,5 @@ Voir 05 §2–3 et le contrat de 01 §2. En pratique : un paquet npm (ou tarball
 - Une seule version par app (une clé = une URL) ; mise à jour = nouvelle synchronisation.
 - Pas de contrôle de la **forme des exports** : le contrôle du bundle est statique (présence du global et de `./start`). Il ne prouve pas que chaque `component` est exporté ; c'est le rôle d'un test de l'app (06, 09).
 - Le garde-fou `frameworkRange` est évalué **dans le navigateur** par le Shell ; le Core ne le recalcule pas.
-- Les apps **internes** continuent d'être lues depuis `src/routes.json` (écart **G3**, non modifié ici : voir 08).
+- Les apps **internes** sont lues depuis `dist/routes.json` (estampillé, `frameworkRange` actif) avec repli sur `src/routes.json` ; `EGEN_ROUTES_FROM_SRC=true` force la source (écart **G3** traité, voir 08).
 - Les domaines tiers doivent autoriser le chargement (CSP du Core, `Cache-Control`/disponibilité côté partenaire) ; aucun repli si l'hôte distant est indisponible.

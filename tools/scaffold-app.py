@@ -5,7 +5,7 @@ Usage :
     python3 tools/scaffold-app.py esm-foo-app "Description de l'app" "classnames,lucide-react" sous-dossier1,sous-dossier2
 
 Reprend la config de build / TypeScript / déclarations de `esm-user-profile-app` et la config de tests de
-`esm-primary-navigation-app` (plugin .scss, setup) ; le package.json est dérivé de celui de `esm-user-profile-app`
+`esm-primary-navigation-app` (setup) ; le package.json est dérivé de celui de `esm-user-profile-app`
 (donc déjà aligné sur les versions `@egen-civitas/*` courantes). Les dépendances listées en 3e argument sont copiées avec
 la version qu'utilise `esm-primary-navigation-app`.
 

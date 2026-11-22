@@ -13,7 +13,7 @@ Synthèse de 04 et 05. Le **contrat côté Shell est identique** ; seuls diffèr
 | **Enregistrement** | aucun (le dossier suffit) | `spa-build-config.json` (npm/`file:`/`https:`) ou entrées d'URL |
 | **Production avec `serve-prod.mjs`** | ✅ (scan de `packages/apps/*`) | ✅ via `yarn external:sync` + verrou (doc 12) |
 | **Production avec `egen assemble`/`build`** | possible (non utilisé par le Core) | ✅ voie prévue |
-| **`frameworkRange` en production** | ⛔ non estampillé (`serve-prod` lit `src/routes.json`) | ✅ estampillé (`dist/routes.json` de l'assemblage) |
+| **`frameworkRange` en production** | ✅ estampillé (`dist/routes.json` lu par `serve-prod`, `^5.0.1`) | ✅ estampillé (`dist/routes.json` de l'assemblage) |
 | **Dépendances EGEN** | `@egen-civitas/*` en `dependencies` **et** `peerDependencies` | idem (mode B) ; aucune en mode A |
 | **Outil d'installation** | racine du monorepo (`yarn install`) | `@egen-civitas/egen` en devDependency |
 | **Vérifications fournies** | `yarn verify` (`check-nav-routes` + lint + tests + types) | ⛔ aucune ; checklist de 09 §3 |

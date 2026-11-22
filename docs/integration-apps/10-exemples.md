@@ -61,7 +61,7 @@ Génération du squelette : `python3 tools/scaffold-app.py esm-hello-app "Page d
   "browserslist": ["extends browserslist-config-egen"],
   "publishConfig": { "access": "public" },
   "peerDependencies": {
-    "@egen-civitas/esm-framework": ">=5.0.0",
+    "@egen-civitas/esm-framework": "^5.0.1",
     "@egen-civitas/esm-react-utils": ">=3.0.0",
     "@egen-civitas/esm-config": ">=2.0.0",
     "@egen-civitas/esm-globals": ">=2.0.0",
@@ -166,7 +166,7 @@ yarn build:prod && yarn start:prod        # production Core (serve-prod.mjs)
 ```
 dist/egen-esm-hello-app.js                  # conteneur MF "var" _egen_esm_hello_app
 dist/egen-esm-hello-app.js.buildmanifest.json
-dist/routes.json                            # + "version" + "frameworkRange": ">=5.0.0"
+dist/routes.json                            # + "version" + "frameworkRange": "^5.0.1"
 dist/<chunks>.js                            # chunk de helloModal (import())
 ```
 
@@ -213,7 +213,7 @@ esm-acme-hello-app/                 # son propre dépôt
   },
   "keywords": ["egen", "microfrontends"],
   "peerDependencies": {
-    "@egen-civitas/esm-framework": ">=5.0.0",
+    "@egen-civitas/esm-framework": "^5.0.1",
     "react": "18.x",
     "react-dom": "18.x",
     "react-i18next": "16.x",

@@ -44,13 +44,15 @@ Une app **interne** vit dans `core/packages/apps/<nom>/`, est un *workspace* Yar
 | `browser` | oui (en pratique) | chemin du bundle | sans `browser`, `exposes` pointe vers `types` (comportement de `rspack-config`) : **toujours renseigner `browser`** |
 | `main` | oui | source exposée en `./start` | rien n'est exposé |
 | `source: true` | convention | présent 28/28 | aucun effet constaté dans le code lu |
-| `peerDependencies` | **oui, même vide `{}`** | **chaque clé devient un `shared` Module Federation** ; `esm-framework` → `frameworkRange` | ⚠️ `Object.keys(peerDependencies)` lève une **TypeError** si la propriété est absente (`rspack-config/src/index.ts`) |
+| `peerDependencies` | **oui, même vide `{}`** | **chaque clé devient un `shared` Module Federation** ; la plage du peer `esm-framework` devient `frameworkRange` (voir ci-dessous) | ⚠️ `Object.keys(peerDependencies)` lève une **TypeError** si la propriété est absente (`rspack-config/src/index.ts`) |
 | `dependencies` | oui | ce qui est **embarqué** dans le bundle | — |
 | `devDependencies` | — | tests (`vitest` 5, `happy-dom` 21, `vite` 8…) ; plus de `sass` | — |
 | `keywords: ["egen","microfrontends"]` | convention | `egen assemble --mode survey` cherche les paquets par mot-clé `egen` + suffixe `-app` | non listée dans le survey |
 | `browserslist: ["extends browserslist-config-egen"]` | convention | cibles de transpilation | cible par défaut de l'outil |
 | `scripts` | voir §7 | | |
 | `publishConfig.access: public`, `repository`, `bugs`, `homepage` | convention | publication npm (`ci:publish`) | — |
+
+**Plage du peer `@egen-civitas/esm-framework` (✅ resserrée)** : les 28 apps déclarent `^5.0.1`. Raison : (1) `rspack-config` la copie dans `dist/routes.json` (`frameworkRange`) et le Shell écarte l'app si sa propre version du framework ne la satisfait pas ; (2) `5.0.1` est le plancher **garanti** pour ce que les apps importent (`TextLink`, présent dans `esm-styleguide` ≥ 5.2.2, exigé par `esm-framework` ≥ 5.0.1 via `^5.2.4`, alors que 5.0.0 accepte `^5.0.0`) ; (3) les Shells publiés 3.0.6 et 3.0.7 ont `FRAMEWORK_VERSION = "5.0.1"`. Effet vérifié avec la vraie `isVersionSatisfied` : Shell 5.0.1 et 5.3.0 → app chargée ; Shell 4.1.0, 5.0.0 et 6.0.0 → app écartée (avec l'ancien `>=3.0.0`, un Shell 6.0.0 aurait tout chargé). Règle imposée par `tools/check-framework-peer.mjs` (lancé par `yarn verify`) : forme `^M.m.p`, même majeure que `resolutions` du `package.json` racine, satisfaisable par elle. À relever à chaque montée de majeure du framework, en même temps que `resolutions`.
 
 **Peers dans le Core** : 22 peers sont **communs aux 28 apps** (`esm-api, esm-config, esm-context, esm-data-api, esm-dynamic-loading, esm-error-handling, esm-extensions, esm-feature-flags, esm-framework, esm-globals, esm-navigation, esm-react-utils, esm-routes, esm-state, esm-tenant, esm-utils, dayjs, react, react-dom, react-i18next, rxjs, swr`). Les autres sont propres à certaines apps : `single-spa`, `react-router-dom`, `i18next`, `esm-styleguide`, `esm-theme`, `esm-ai-framework`, `embla-carousel`, `lucide-react`.
 
@@ -146,7 +148,7 @@ Variables de `serve-prod.mjs` : `PORT` (8080), `HOST`, `EGEN_SPA_PATH` (`/egen-c
 
 ## 7. Analyse des 28 apps : commun, propre, local
 
-**Commun à toutes (✅ 28/28)** : `package.json` de même forme (mêmes 17 clés), `main: src/index.ts`, `browser: dist/egen-<nom>.js`, `src/routes.json`, `rspack.config.js`, `vitest.config.ts`, `translations/en.json`, `export importTranslation`, une fabrique `get*Lifecycle`, 12 scripts (`serve`, `debug`, `analyze` : 27/28), peer `esm-framework >=3.0.0`.
+**Commun à toutes (✅ 28/28)** : `package.json` de même forme (mêmes 17 clés), `main: src/index.ts`, `browser: dist/egen-<nom>.js`, `src/routes.json`, `rspack.config.js`, `vitest.config.ts`, `translations/en.json`, `export importTranslation`, une fabrique `get*Lifecycle`, 12 scripts (`serve`, `debug`, `analyze` : 27/28), peer `esm-framework ^5.0.1` (plage resserrée le 2026-11-21, garde-fou `yarn verify:framework-peer`).
 
 **Propre à certaines apps** : `startupApp` (20/28 ; absent de appearance, clock, help-menu, implementer-tools, language, logs, notifications, settings), `config-schema.ts` (16/28), `fr.json` (20/28), `setup-tests.ts` (22/28).
 

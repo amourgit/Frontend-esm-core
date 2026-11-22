@@ -178,3 +178,70 @@ test('serve-prod : publie, héberge et recharge à chaud une app externe', async
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+// ── Garde-fou de peer esm-framework ─────────────────────────────────────────
+import { evaluate as evaluatePeers } from './check-framework-peer.mjs';
+
+test('peer esm-framework : ^M.m.p de même majeure, satisfaisable → conforme', () => {
+  assert.deepEqual(evaluatePeers('^5.0.1', { a: '^5.0.1', b: '^5.0.0' }), []);
+});
+
+test('peer esm-framework : plages larges, majeure différente ou non satisfaisable → refusées', () => {
+  const p = evaluatePeers('^5.0.1', { large: '>=3.0.0', etoile: '*', ancienne: '^4.1.0', future: '^5.1.0', absent: undefined, tilde: '~5.0.1' });
+  assert.equal(p.length, 6);
+  assert.match(p.find((x) => x.startsWith('large')), /pas de la forme/);
+  assert.match(p.find((x) => x.startsWith('ancienne')), /majeure 4/);
+  assert.match(p.find((x) => x.startsWith('future')), /pas satisfaite/);
+  assert.match(p.find((x) => x.startsWith('absent')), /absent/);
+});
+
+test('peer esm-framework : plage racine illisible → erreur explicite', () => {
+  assert.match(evaluatePeers('>=5', { a: '^5.0.1' })[0], /illisible/);
+});
+
+test('le Core respecte la règle (28 apps)', async () => {
+  const { spawnSync } = await import('node:child_process');
+  const r = spawnSync(process.execPath, [join(HERE, 'check-framework-peer.mjs')], { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /conforme/);
+});
+
+// ── serve-prod : dist/routes.json (estampillé) prime sur src/routes.json ─────
+test('serve-prod publie le frameworkRange de dist/routes.json', async () => {
+  const root = tmp();
+  mkdirSync(join(root, 'tools'));
+  for (const f of ['serve-prod.mjs', 'external-apps.mjs']) cpSync(join(HERE, f), join(root, 'tools', f));
+  const app = join(root, 'packages/apps/esm-x-app');
+  mkdirSync(join(app, 'dist'), { recursive: true });
+  mkdirSync(join(app, 'src'), { recursive: true });
+  writeFileSync(join(app, 'package.json'), JSON.stringify({ name: '@egen/esm-x-app', version: '2.0.0', browser: 'dist/egen-esm-x-app.js' }));
+  writeFileSync(join(app, 'dist/egen-esm-x-app.js'), 'var _egen_esm_x_app;');
+  writeFileSync(join(app, 'src/routes.json'), JSON.stringify({ pages: [{ component: 'root', route: 'src-version' }] }));
+  writeFileSync(join(app, 'dist/routes.json'), JSON.stringify({ pages: [{ component: 'root', route: 'dist-version' }], frameworkRange: '^5.0.1', version: '2.0.0' }));
+  mkdirSync(join(root, 'shell'));
+  writeFileSync(join(root, 'shell/index.html'), '<html></html>');
+
+  const run = async (extraEnv) => {
+    const port = 19000 + Math.floor(Math.random() * 900);
+    const child = spawn(process.execPath, [join(root, 'tools/serve-prod.mjs')], {
+      env: { ...process.env, PORT: String(port), HOST: '127.0.0.1', EGEN_SHELL_DIR: join(root, 'shell'), ...extraEnv },
+      stdio: 'ignore',
+    });
+    try {
+      await waitFor(`http://127.0.0.1:${port}/healthz`);
+      return await (await fetch(`http://127.0.0.1:${port}${SPA}/routes.registry.json`)).json();
+    } finally {
+      child.kill('SIGTERM');
+    }
+  };
+  try {
+    const built = await run({});
+    assert.equal(built['@egen/esm-x-app'].frameworkRange, '^5.0.1');
+    assert.equal(built['@egen/esm-x-app'].pages[0].route, 'dist-version');
+    const fromSrc = await run({ EGEN_ROUTES_FROM_SRC: 'true' });
+    assert.equal(fromSrc['@egen/esm-x-app'].frameworkRange, undefined);
+    assert.equal(fromSrc['@egen/esm-x-app'].pages[0].route, 'src-version');
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

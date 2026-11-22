@@ -36,7 +36,7 @@ Légende de preuve : voir 00. Chemins `fw/` = Frontend-esm-framework.
 
 **Mode B — contrat + services** :
 - devDependency **`@egen-civitas/egen`** : apporte `rspack` (bin), `@rspack/core`, `@swc/core`, `rspack-config`, le Shell (pour `egen develop`) — pas besoin de les déclarer séparément (✅ `dependencies` de `egen` et `rspack-config`).
-- `@egen-civitas/esm-framework` en `peerDependencies` (plage large, ex. `>=5.0.0`) **et** en `dependencies`.
+- `@egen-civitas/esm-framework` en `peerDependencies` (plage `^M.m.p` de la majeure utilisée, ex. `^5.0.1` : c'est elle qui devient `frameworkRange`) **et** en `dependencies`.
 - Les `peerDependencies` listés deviennent les `shared` Module Federation ; ⚠️ si `swr` est listé, `require('swr/package.json')` est exécuté au build : `swr` doit être installé.
 - `react`/`react-dom` **18** (le décorateur utilise `react-dom/client` : `ReactDOMClient`, `singleSpaReact`).
 
@@ -107,7 +107,7 @@ for (const dir of readdirSync(appsDir)) {
 | --- | --- |
 | Ne scanne que `core/packages/apps/*` | ⛔ une app externe n'est **jamais** vue |
 | Import map et registry **construits en mémoire au démarrage** | ⛔ pas de rechargement à chaud ; un redémarrage est nécessaire pour toute nouvelle app |
-| Lit `src/routes.json` (source), pas `dist/routes.json` | ⛔ le `frameworkRange` n'est **pas** estampillé (le garde-fou de version n'est pas exercé en production Core) ; `platforms` etc. sont ceux de la source |
+| ~~Lit `src/routes.json` (source), pas `dist/routes.json`~~ **corrigé** : lit `dist/routes.json` (estampillé) en priorité, repli sur la source (`EGEN_ROUTES_FROM_SRC=true` pour forcer la source) | ✅ le `frameworkRange` est publié : le garde-fou de version est **actif** en production Core (écart G3 traité) |
 | Sert les bundles sous `${SPA}/apps/<dossier>/` | les URLs sont relatives au Shell : pas de domaine externe |
 | Aucune variable d'environnement pour ajouter des entrées | ⛔ pas de moyen d'injecter une app externe sans modifier `serve-prod.mjs` |
 | Applique CSP/en-têtes ? | 🟡 non examiné en détail |
@@ -155,7 +155,7 @@ for (const dir of readdirSync(appsDir)) {
 | URL du bundle | `http://localhost:<port>/<bundle>` (serveur de dev par app) | `…/apps/<dossier>/<bundle>` (statique) ou URL du registre |
 | Import map / registry | en mémoire, fusion des apps lancées + `--importmap/--routes` | fichiers générés (assemble) ou en mémoire (serve-prod) |
 | Surcharges `localStorage` | actives | **no-op** |
-| `frameworkRange` | non estampillé | estampillé si build par `rspack-config` (mais non si `serve-prod`) |
+| `frameworkRange` | non estampillé | estampillé si build par `rspack-config` ; `serve-prod` le publie (lit `dist/routes.json`) |
 
 Un port de dev n'est **jamais** un mécanisme d'intégration de production : il n'existe que dans l'import map éphémère d'`egen develop`.
 

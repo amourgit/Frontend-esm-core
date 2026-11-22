@@ -53,7 +53,7 @@ Chaque règle est classée **A** obligatoire · **B** acceptable · **C** accept
 | Dupliquer un nom d'extension entre apps | 🟡 comportement du store non examiné ; collisions probables |
 | Utiliser une clé `routes` (pluriel) dans une page | ignorée avec warn ✅ |
 | Compter sur `backendDependencies` de `routes.json` | ⛔ aucun consommateur trouvé |
-| Plages de peers très larges (`>=3.0.0` partout) | `frameworkRange` toujours satisfait : le garde-fou de version est **neutralisé** (28/28 apps du Core) |
+| Plages de peers très larges (`>=x`, `*`) pour `esm-framework` | `frameworkRange` toujours satisfait : le garde-fou de version est **neutralisé**. Corrigé dans le Core (`^5.0.1`, contrôlé par `yarn verify`) ; reste vrai pour toute app externe qui garderait une plage large |
 | `peerDependencies` sans plage cohérente avec ce que le Shell fournit | `strictVersion: false` : aucune alerte en cas d'incompatibilité |
 | Dépendre de `serve-prod.mjs` pour une app externe | ⛔ non supporté (05 §4.2) |
 | Relancer `egen assemble` sans `--manifest` | difficulté à reproduire la distribution |

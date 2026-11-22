@@ -803,7 +803,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -876,7 +876,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -945,7 +945,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1011,7 +1011,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1076,7 +1076,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1190,7 +1190,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1256,7 +1256,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1322,7 +1322,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1394,7 +1394,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1466,7 +1466,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1538,7 +1538,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1606,7 +1606,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1672,7 +1672,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1751,7 +1751,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1819,7 +1819,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1887,7 +1887,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -1954,7 +1954,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2021,7 +2021,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2092,7 +2092,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2163,7 +2163,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.3.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2231,7 +2231,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2299,7 +2299,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2366,7 +2366,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2433,7 +2433,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2503,7 +2503,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2572,7 +2572,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2639,7 +2639,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"
@@ -2707,7 +2707,7 @@ __metadata:
     "@egen-civitas/esm-error-handling": ">=1.0.2"
     "@egen-civitas/esm-extensions": ">=2.1.0"
     "@egen-civitas/esm-feature-flags": ">=1.0.2"
-    "@egen-civitas/esm-framework": ">=3.0.0"
+    "@egen-civitas/esm-framework": ^5.0.1
     "@egen-civitas/esm-globals": ">=2.0.0"
     "@egen-civitas/esm-navigation": ">=1.0.2"
     "@egen-civitas/esm-react-utils": ">=3.0.0"

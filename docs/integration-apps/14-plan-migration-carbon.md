@@ -26,5 +26,5 @@
 
 ## 4. Reste à faire lié à cette migration
 
-- Resserrer le peer `@egen-civitas/esm-framework` (`>=3.0.0` aujourd'hui dans les 28 apps) pour que le garde-fou `frameworkRange` redevienne effectif (08, **E4**).
-- Les exemples de ce dossier (10) utilisent désormais `esm-framework ^5.0.1` / `>=5.0.0`.
+- ✅ Le peer `@egen-civitas/esm-framework` a été resserré à `^5.0.1` dans les 28 apps (08, **E4** traité).
+- Les exemples de ce dossier (10) utilisent `esm-framework ^5.0.1`.

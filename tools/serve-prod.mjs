@@ -16,7 +16,8 @@
  *
  * Variables : PORT, HOST, EGEN_SPA_PATH, EGEN_API_URL, EGEN_BACKEND,
  *             EGEN_BRAND_DIR, EGEN_OFFLINE, EGEN_TENANT_* (cf. RUNTIME_BRIDGED_VARS),
- *             EGEN_EXTERNAL_DIR, EGEN_EXTERNAL_STRICT, EGEN_EXTERNAL_ALLOW_HTTP.
+ *             EGEN_EXTERNAL_DIR, EGEN_EXTERNAL_STRICT, EGEN_EXTERNAL_ALLOW_HTTP,
+ *             EGEN_ROUTES_FROM_SRC, EGEN_IMPORTMAP_ALIASES.
  */
 import http from 'node:http';
 import https from 'node:https';
@@ -50,6 +51,7 @@ const BACKEND = env.EGEN_BACKEND ? new URL(env.EGEN_BACKEND) : null;
 const OFFLINE = env.EGEN_OFFLINE === 'true';
 // Alias d'import map : namespace i18n/config des apps internes (`@egen-civitas/<app>`) -> nom du paquet
 // (`@egen/<app>`), pour que le Shell retrouve les traductions (cf. docs/integration-apps/08, écart E2).
+const ROUTES_FROM_SRC = env.EGEN_ROUTES_FROM_SRC === 'true'; // true : ignorer dist/routes.json (dépannage)
 const IMPORTMAP_ALIASES = env.EGEN_IMPORTMAP_ALIASES !== 'false';
 const EXTERNAL_DIR = resolve(ROOT, env.EGEN_EXTERNAL_DIR || 'external-apps');
 const EXTERNAL_STRICT = env.EGEN_EXTERNAL_STRICT === 'true';
@@ -74,6 +76,7 @@ const appsDir = resolve(ROOT, 'packages/apps');
 const importMap = {};
 const aliases = {};
 const routes = {};
+const withoutRange = [];
 const mounts = new Map(); // dirName -> dossier dist
 for (const dir of readdirSync(appsDir)) {
   const pkgFile = join(appsDir, dir, 'package.json');
@@ -89,9 +92,17 @@ for (const dir of readdirSync(appsDir)) {
   importMap[pkg.name] = `${SPA}/apps/${dir}/${basename(entry)}`;
   const alias = `@egen-civitas/${pkg.name.split('/').pop()}`;
   if (IMPORTMAP_ALIASES && alias !== pkg.name) aliases[alias] = pkg.name;
-  const rf = join(appsDir, dir, 'src', 'routes.json');
-  if (existsSync(rf)) routes[pkg.name] = { ...JSON.parse(readFileSync(rf, 'utf8')), version: pkg.version };
+  // `dist/routes.json` est copié au build par rspack-config et estampillé (`version`, `frameworkRange`) :
+  // c'est lui qui active le garde-fou de compatibilité du Shell (écart G3). Repli sur la source.
+  const built = join(distDir, 'routes.json');
+  const rf = !ROUTES_FROM_SRC && existsSync(built) ? built : join(appsDir, dir, 'src', 'routes.json');
+  if (existsSync(rf)) {
+    const r = JSON.parse(readFileSync(rf, 'utf8'));
+    routes[pkg.name] = { ...r, version: pkg.version };
+    if (!r.frameworkRange) withoutRange.push(pkg.name);
+  }
 }
+if (withoutRange.length) log(`frameworkRange absent (garde-fou de version inactif) : ${withoutRange.join(', ')}`);
 log(`${mounts.size} applications : ${[...mounts.keys()].join(', ')}`);
 if (!mounts.size) { console.error('Aucune app compilée.'); process.exit(1); }
 
