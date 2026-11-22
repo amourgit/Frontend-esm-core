@@ -273,5 +273,10 @@ const server = http.createServer((req, res) => {
   }
 });
 server.keepAliveTimeout = 65_000;
-server.listen(PORT, HOST, () => log(`http://${HOST}:${PORT}${SPA}/  (RSS ${(process.memoryUsage().rss / 1048576) | 0} Mo)`));
+server.listen(PORT, HOST, () => {
+  log(`http://${HOST}:${PORT}${SPA}/  (RSS ${(process.memoryUsage().rss / 1048576) | 0} Mo)`);
+  // 0.0.0.0 / :: = « toutes les interfaces » : adresse d'écoute, PAS d'ouverture. Ouvrir dans un navigateur
+  // via 0.0.0.0 donne une origine à part (iframes, cookies, CORS) : indiquer l'adresse à utiliser.
+  if (HOST === '0.0.0.0' || HOST === '::') log(`ouvrir dans le navigateur : http://localhost:${PORT}${SPA}/`);
+});
 for (const s of ['SIGTERM', 'SIGINT']) process.on(s, () => server.close(() => process.exit(0)));
