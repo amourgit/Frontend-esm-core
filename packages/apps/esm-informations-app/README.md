@@ -12,7 +12,7 @@ pour trois audiences — **interne**, **extranet** et **public**.
 | `/informations/agenda` | Agenda & Calendrier |
 
 Un onglet = une sous-route ; toute autre sous-route retombe sur News & Publications.
-La route `informations` est exclue du `routeRegex` de `esm-not-found-app`.
+La page 404 n'a rien à savoir de cette route : elle est détectée dynamiquement d'après les pages enregistrées.
 
 ## Audiences
 

@@ -3,7 +3,7 @@
   "pages": [
     {
       "component": "root",
-      "routeRegex": "^(?!(?:login|logout|change-password|home|informations|annuaire|sites|offline-tools)/?)(?!^$)",
+      "routeRegex": "^(?!$)",
       "online": true,
       "offline": false
     }

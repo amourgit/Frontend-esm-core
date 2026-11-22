@@ -298,6 +298,7 @@ Points d'attention constatés : l'iframe n'est utilisable que si Penpot envoie u
 | A7 | `empreinte SHA-256 … différente du verrou` | fichier modifié après la synchro : relancer `yarn external:sync` |
 | C1 | `le bundle distant doit être en https` | passer en https (ou `EGEN_EXTERNAL_ALLOW_HTTP=true` en test) |
 | C1 | `dérive : le bundle distant … a changé` | le partenaire a redéployé : relancer la synchro après revue |
+| A8 | la page **404** s'affiche en plein écran par-dessus (ou à la place de) l'app externe | Core antérieur à la détection dynamique de la 404 : `esm-not-found-app` listait les routes connues en dur. Mettre le Core à jour puis `yarn build:prod` (la 404 compare maintenant les pages enregistrées, internes et externes) |
 | A8 | page vide, pas d'erreur | `routes.json` sans `route`/`routeRegex`, ou `frameworkRange` non satisfait (`console.warn` du Shell) |
 | C3 | iframe vide | `frame-ancestors` / `X-Frame-Options` côté app, ou `frame-src` côté Core |
 

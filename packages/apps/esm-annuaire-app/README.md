@@ -13,8 +13,7 @@ organigramme, structures (sites) et fiche détaillée d'un collaborateur.
 | `/annuaire/:collaborateurId[/:tab]` | Fiche collaborateur (`review`, `wishlist`, `purchase-history`, `loyalty`, `support`, `insight`, `activity`) |
 | `/annuaire/:collaborateurId/details[/:tab]` | Idem |
 
-Toute autre sous-route retombe sur l'annuaire. La route `annuaire` est exclue du `routeRegex`
-de `esm-not-found-app`.
+Toute autre sous-route retombe sur l'annuaire. La page 404 n'a rien à savoir de cette route : elle est détectée dynamiquement d'après les pages enregistrées.
 
 ## Origine
 

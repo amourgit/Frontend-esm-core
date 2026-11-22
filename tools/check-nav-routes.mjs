@@ -116,16 +116,20 @@ for (const app of readdirSync(appsDir)) {
   }
 }
 
-// Garde-fou 404 : toute route de page déclarée par une app doit être EXCLUE du routeRegex de esm-not-found-app,
-// sinon la page 404 s'affiche par-dessus l'app.
+// Garde-fou 404 : la page 404 décide à l'EXÉCUTION d'après les pages réellement enregistrées (voir
+// esm-not-found-app/src/is-unknown-route.ts) : elle fonctionne donc pour les apps internes ET externes, sans liste.
+// Son routeRegex doit rester un FOURRE-TOUT : si quelqu'un y réintroduit une liste d'exclusion de routes, les
+// routes exclues ne seraient plus jamais évaluées par la détection dynamique et les apps absentes de la liste
+// (toute app externe) afficheraient de nouveau la 404 par-dessus leur page.
 const notFoundFile = join(appsDir, 'esm-not-found-app', 'src', 'routes.json');
 if (existsSync(notFoundFile)) {
   const nf = JSON.parse(readFileSync(notFoundFile, 'utf8')).pages?.[0]?.routeRegex;
   if (nf) {
     const re = new RegExp(nf);
-    for (const route of new Set(pageRoutes)) {
-      if (route && re.test(route)) {
-        errors.push(`esm-not-found-app: la route de page "${route}" n'est pas exclue de son routeRegex → 404 affichée. Ajouter "${route.split('/')[0]}" à l'alternation.`);
+    const probes = new Set([...pageRoutes.filter(Boolean), 'route-quelconque', 'a/b/c']);
+    for (const route of probes) {
+      if (!re.test(route)) {
+        errors.push(`esm-not-found-app: le routeRegex \"${nf}\" exclut \"${route}\" : il doit rester un fourre-tout (la 404 est détectée dynamiquement, ne pas y lister de routes).`);
       }
     }
   }

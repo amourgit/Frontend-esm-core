@@ -17,8 +17,7 @@ porte que les pages, les routes et les données (`src/data`, à remplacer par l'
 | `/sites/:siteId/activite` | Journal d'activité |
 | `/sites/:siteId/parametres` | Paramètres |
 
-Site inconnu → `/sites` ; onglet inconnu → `applications`. La route `sites` est exclue du `routeRegex`
-de `esm-not-found-app`.
+Site inconnu → `/sites` ; onglet inconnu → `applications`. La page 404 n'a rien à savoir de cette route : elle est détectée dynamiquement d'après les pages enregistrées.
 
 ## Navigation de niveau 2 (TopBar)
 
