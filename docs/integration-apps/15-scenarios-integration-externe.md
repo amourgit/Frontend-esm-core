@@ -2,7 +2,7 @@
 
 Ce document déroule, étape par étape, **toute la chaîne** qui amène une application développée hors du Core à s'afficher dans EGEN : qui intervient, ce qui est fait, ce qui est produit, comment on constate que ça a marché, ce qui peut échouer.
 
-**Mode d'exploitation retenu : à froid.** Une app externe s'ajoute en trois gestes : la **déclarer** (`external-apps.json`), la **synchroniser** (`yarn external:sync --strict`, au build ou au déploiement), puis **redémarrer ou redéployer** le Core. Le Core lit le verrou au démarrage et revérifie chaque empreinte : rien n'est modifié pendant qu'il tourne. Le rechargement à chaud (`kill -HUP`) existe (doc 12) mais n'est pas utilisé dans ce document.
+**Mode d'exploitation retenu : à froid.** Une app externe s'ajoute en trois gestes : la **déclarer** (`external-apps.json`), lancer **`yarn prepare:prod`** (une seule commande entre le build et le démarrage : contrôles, `external:sync --strict`, vérification du verrou, précompression, avec un retour par étape), puis **redémarrer ou redéployer** le Core. Le Core lit le verrou au démarrage et revérifie chaque empreinte : rien n'est modifié pendant qu'il tourne. Le rechargement à chaud (`kill -HUP`) existe (doc 12) mais n'est pas utilisé dans ce document.
 
 Quatre points de départ sont couverts :
 
@@ -125,7 +125,7 @@ Exemple fil rouge : dépôt `github.com/acme/esm-hello-app` (React, Vue ou Angul
 
 ### A7 — Précompresser et servir
 - **Qui** : opérateur ; `precompress.mjs`, `serve-prod.mjs`.
-- **Quoi** : `node tools/precompress.mjs`, puis **redémarrer** le Core (`yarn start:prod`) ou le redéployer. Aucune action sur un Core qui tourne.
+- **Quoi** : tout ce qui précède (A6) et la précompression s'enchaînent en **une commande** : `yarn prepare:prod` (avec `EGEN_CONFIG_FILE=… ` si une configuration runtime est utilisée, voir A10). Elle affiche cinq étapes numérotées (apps compilées · configuration runtime · synchronisation des externes · contrôle du verrou · précompression), s'arrête à la première erreur en nommant l'étape et le remède (code 1 : ne pas démarrer), et termine par la commande de démarrage. Puis **redémarrer** le Core (`yarn start:prod`) ou le redéployer. Aucune action sur un Core qui tourne. `--skip-precompress` pour un essai rapide.
 - **Ce qui se passe** : `serve-prod` relit le verrou, **revérifie le SHA-256**, fusionne l'app dans l'import map (`@acme/esm-hello-app → <spa>/external/acme-esm-hello-app-1.2.0/acme-esm-hello-app.js`) et dans le registry (`routes.json` de l'app + `version`), et sert le bundle sous `<spa>/external/…`.
 - **Résultat** : `GET <spa>/importmap.json` et `<spa>/routes.registry.json` contiennent l'app.
 

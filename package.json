@@ -22,6 +22,7 @@
     "build": "turbo run build",
     "build:apps": "turbo run build --filter='@egen/*-app'",
     "build:prod": "turbo run build --filter=\"@egen/*-app\" --concurrency=2 && node tools/precompress.mjs",
+    "prepare:prod": "node tools/prepare-prod.mjs",
     "start:prod": "node --max-old-space-size=256 tools/serve-prod.mjs",
     "external:sync": "node tools/sync-external-apps.mjs",
     "external:check": "node tools/sync-external-apps.mjs --check",

@@ -71,6 +71,8 @@ yarn start:prod
 
 Variables : `EGEN_EXTERNAL_DIR` (défaut `external-apps`), `EGEN_EXTERNAL_APPS` (défaut `external-apps.json`), `EGEN_EXTERNAL_STRICT`, `EGEN_EXTERNAL_ALLOW_HTTP`, `EGEN_BIN` (binaire `egen` alternatif)
 
+Enchaînement complet entre le build et le démarrage : `yarn prepare:prod` (`tools/prepare-prod.mjs` : apps compilées → configuration runtime → `external:sync --strict` → `external:check` → précompression ; arrêt à la première erreur, code 1). Voir [15](15-scenarios-integration-externe.md), étape A7.
+
 Configuration runtime des apps (`serve-prod`) : `EGEN_CONFIG_FILE` (fichier JSON `{ "<nom de l'app>": { … } }`, lu et validé au démarrage, servi à `<spa>/config.json`) et `EGEN_CONFIG_URLS` (fichiers supplémentaires). Détail et exemple : [15](15-scenarios-integration-externe.md), étape A10., `EGEN_IMPORTMAP_ALIASES` (`false` : n'émet pas la table d'alias des apps internes, voir 08 E2).
 
 ## 5. Ce que doit fournir l'équipe de l'app externe
