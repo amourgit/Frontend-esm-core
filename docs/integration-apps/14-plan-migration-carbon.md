@@ -11,7 +11,7 @@
 | Fichiers SCSS | 74 (42 référençant Carbon) | **0** |
 | Fichiers CSS Modules | — | **74** (conversion un pour un) |
 | Dépendance `sass` | 28 apps | **0** |
-| Framework consommé | `esm-framework 4.1.0`, Shell 2.11.1, `egen` 2.3.0, `rspack-config` 1.2.0 | **`esm-framework 5.0.1`, Shell 3.0.6, `egen` 3.0.0, `rspack-config` 2.0.0, `esm-styleguide` 5.2.4** |
+| Framework consommé | `esm-framework 4.1.0`, Shell 2.11.1, `egen` 2.3.0, `rspack-config` 1.2.0 | **`esm-framework 5.0.1`, Shell 3.0.6 (3.0.8 depuis le 2026-11-22), `egen` 3.0.0, `rspack-config` 2.0.0, `esm-styleguide` 5.2.4** |
 | `node tools/sync-egen-deps.mjs --check` | 72 plages en retard (majeures) | **« Toutes les plages @egen-civitas/* sont à jour »** |
 
 ## 2. Garde-fou

@@ -39,7 +39,7 @@ Elle est volontairement **isolée** du reste de `docs/` : tout ce qui est écrit
 | --- | --- |
 | Core | `Frontend-esm-core`, branche `main` après fusion de `feature/ajustement-reforme` (28 apps) |
 | Framework | `Frontend-esm-framework`, commit `fe80ed2` (HEAD de `main` au moment de l'audit) |
-| Versions **consommées par le Core** (`yarn.lock` de `main`, 2026-11-21) | `esm-framework 5.0.1`, `esm-app-shell 3.0.6`, `@egen-civitas/egen 3.0.0`, `rspack-config 2.0.0`, `esm-styleguide 5.2.4` |
+| Versions **consommées par le Core** (`yarn.lock` de `main`, 2026-11-22) | `esm-framework 5.0.1`, `esm-app-shell 3.0.8`, `esm-dynamic-loading 2.2.0`, `esm-globals 2.5.0`, `@egen-civitas/egen 3.0.0`, `rspack-config 2.0.0`, `esm-styleguide 5.2.4` |
 | Versions du **HEAD du Framework** | `esm-framework 5.0.0`, `esm-app-shell 3.0.2`, `egen 3.0.0`, `rspack-config 2.0.0` |
 
 > **Alignement Core ↔ Framework.** La migration Carbon/SCSS du Core a été **réalisée** pendant cet audit (0 import `@carbon`, 0 fichier `.scss`, 0 dépendance `sass`) et le Core consomme désormais les majeures 5 / 3 / 3 / 2 du Framework. L'audit a d'abord été mené sur les versions 4.x / 2.x (Core d'alors), puis **recalé** sur l'état actuel ; le code des paquets d'intégration audités (`rspack-config`, `egen`, `esm-dynamic-loading`, `esm-routes`, `esm-react-utils`, `esm-extensions`, `esm-globals`) est **identique** entre `fe80ed2` et le `main` actuel du Framework (`d3c4bb5`), à l'exception d'une montée de version du Shell. Les mentions de Carbon/SCSS qui subsistent dans ces documents sont historiques et signalées comme telles.
