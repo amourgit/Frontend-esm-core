@@ -1,6 +1,7 @@
 # Analyse — Séparation `Frontend-esm-framework` / `Frontend-esm-core`
 
 > **Statut : le pont temporaire par chemin relatif décrit ci-dessous a été coupé.** `workspaces` dans `package.json` ne référence plus `Frontend-esm-framework` par chemin relatif ; les apps dépendent des vrais packages `@egen-civitas/*` publiés sur npm (`1.x`). Ce document reste comme trace de l'analyse et du raisonnement qui ont mené à la séparation — pas comme description de l'état actuel du dépôt.
+> **Statut complémentaire (2026-11-23) : ANALYSE DATÉE (12 août 2026).** Les mentions de `@egen-civitas/esm-theme` (§1 et tableau des `peerDependencies`) concernent l'**ancien moteur de thème, OBSOLÈTE** : il sera remplacé par le runtime TokiForge lors de la bascule (`docs/reforme-tokiforge/SUIVI.md`, P2) ; ces dépendances seront retirées des apps (P2.7).
 
 **Date de l'analyse :** 12 août 2026
 **Périmètre :** les deux dépôts `Frontend-esm-core` et `Frontend-esm-framework`, clonés et scannés intégralement (arborescence, `package.json`, lockfiles, historique git).
