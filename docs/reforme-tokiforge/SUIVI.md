@@ -1,7 +1,7 @@
 # SUIVI — réforme du système de design (thèmes, TokiForge, Tweakcn, Penpot)
 
 > **Seul document qui porte un statut.** Mettre à jour **à chaque étape terminée** (statut + preuve), pas à la fin. Une nouvelle session lit **ce fichier d'abord**, puis `PARCOURS-COMPLET.md` (référence validée).
-> Dernière mise à jour : **2026-11-23**. Phase en cours : **P0 — documentation saine, terminée sous réserve de D14/D15** (aucun code) (aucun code).
+> Dernière mise à jour : **2026-11-23**. Phase en cours : **P0 — documentation saine, terminée sous réserve de D14/D15** (aucun code).
 
 ## 1. Reprendre ici
 
