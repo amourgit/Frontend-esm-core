@@ -10,7 +10,7 @@
 
 **État en une phrase.** Le nouveau système existe et est testé dans `egen-tokiforge`, mais **ni le framework ni le Core ne l'utilisent** : ils tournent encore sur l'ancien moteur. P0 est à moitié faite.
 
-**Prochaine action exacte.** Faire **P0.4** (README du core), puis P0.5 → P0.10 dans l'ordre du §4. Après chaque étape : commit, `git fetch` + intégrer `origin/main`, push, **mettre à jour ce fichier**.
+**Prochaine action exacte.** Faire **P0.3b**, puis P0.5 → P0.10 (P0.4 faite) dans l'ordre du §4. Après chaque étape : commit, `git fetch` + intégrer `origin/main`, push, **mettre à jour ce fichier**.
 
 **À ne PAS faire.**
 - Pas de code de bascule (P2) avant la fin de P0 et P1, ni sans la réponse du propriétaire à **D4**.
@@ -60,7 +60,7 @@ Statuts : **FAIT** · **EN COURS** · **À FAIRE** · **BLOQUÉ (raison)**.
 | P0.2 | Docs multiplateforme corrigées (apps retirées, mesures recalculées) | **FAIT** | commit `docs(multiplateforme)` |
 | P0.3a | `docs/reforme-tokiforge/` : `README.md`, `SUIVI.md`, `ANNEXES.md` ; `PLAN.md` supprimé | **FAIT** | ce lot |
 | P0.3b | `docs/reforme-tweakcn/PLAN.md` et `docs/reforme-character/PLAN.md` : les ramener à leur **état final** (Tweakcn : C1/C2 faites, fork F0–F7 faites, déploiement à confirmer ; Character : CH0–CH3 faites, aucun code conservé dans le core, image Docker préparée non construite) ou les supprimer si redondants avec `SUIVI.md` | **À FAIRE** | les deux fichiers ; les phases y sont figées à un état ancien |
-| P0.4 | README du core : encadrés de statut sur le thème par tenant | **À FAIRE** | `README.md` lignes 289-290, 293-294, 407-408, 596 |
+| P0.4 | README du core : encadrés de statut sur le thème par tenant | **FAIT** (2026-11-23) | `README.md` lignes 289-290, 293-294, 407-408, 596 |
 | P0.5 | Supprimer `docs/guide-composants-et-theme.md` (Carbon + ancien thème, obsolète en totalité) et **rediriger** ses renvois vers `.github/copilot-instructions.md` (section Styling) | **À FAIRE** | `docs/guide-agenda-egen-dayfront.md` L129, L216, L976 ; `packages/apps/esm-footer-app/README.md` L45 (+ L48, L52 : mentions de l'ancien moteur) |
 | P0.6 | Analyses datées : statut en tête + passages sur le thème | **À FAIRE** | `docs/analyse-esm-tenant.md` L47, 131, 579 ; `docs/analyse-separation-framework.md` L15, 43, 48-52 |
 | P0.7 | `docs/guide-agenda-egen-dayfront.md` : bandeau « contrat de variables obsolète » + passages | **À FAIRE** | L218, 971, 973, 1213, 1692, 1726 |
@@ -109,6 +109,7 @@ Image du service (`docker build` **jamais exécuté**), compose, intégration pa
 
 ## 5. Journal (du plus récent au plus ancien)
 
+- **2026-11-23** — P0.4 faite : README du core, 3 encadrés de statut (thème par tenant, `themeUrl`/`themeOverride`, checklist) + 2 marqueurs dans l'exemple de code. Preuve : `git grep -n "OBSOLÈTE" README.md`.
 - **2026-11-23 08:56 UTC** — Suivi réécrit pour reprise par une nouvelle session. Lecture du fork Penpot (`EGEN.md`, `docker/egen/README.md`) et du Kernel (`00-etat-et-reprise`, `04-contrats-egen`, `11-ecosystemes-et-integrations`) : Penpot = app externe des concepteurs (indépendante du chemin des tokens) ; le Kernel ne décrit pas encore la pile de design (D12). Commit multiplateforme (dates corrigées au 22/11).
 - **2026-11-22** — Le propriétaire valide `PARCOURS-COMPLET.md` et ordonne de commencer par le nettoyage. Erreur reconnue : le nouveau système avait été construit **avant** le nettoyage, contre l'ordre donné. Recalcul des mesures de `multiplateforme/02` (`target="_blank"` 14→10, presse-papiers 16→10, 2 apps sans test, 28 apps).
 - **Avant** — `egen-tokiforge` : contrat de thème, runtime, correction d'une **injection CSS** (`f131af5`), service, couches, surcharges utilisateur, DTCG, accusés, backend de référence + essai de bout en bout, refus des requêtes de navigateur (`4df594d`). Réformes Tweakcn (fork F0–F7) et Character (archive + image) menées et mergées côté core.
