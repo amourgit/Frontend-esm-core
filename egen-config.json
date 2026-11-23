@@ -3,5 +3,8 @@
     "penpotUrl": "http://localhost:9001",
     "title": "Penpot",
     "heightOffset": 0
+  },
+  "@civitas/esm-tweakcn-app": {
+    "studioUrl": "http://localhost:3000"
   }
 }

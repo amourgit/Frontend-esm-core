@@ -274,6 +274,20 @@ Points d'attention constatés : l'iframe n'est utilisable que si Penpot envoie u
 
 ---
 
+## 6 ter. Exemple réel, à froid et en local : EGEN Theme Studio (tweakcn)
+
+Le fork `github.com/amourgit/Frontend-esm-tweakcn-fork` (branche `feature/civitas-egen`) est une application Next.js autonome (éditeur de thèmes) : cas **C3**, même chaîne que Penpot, plus simple (un seul service, `EGEN.md` dans le fork).
+
+| Étape | Ce qui est fait | Vérifié |
+| --- | --- | --- |
+| 1. Adapter | `EGEN_FRAME_ANCESTORS` (lue à l'exécution, `middleware.ts`) → `Content-Security-Policy: frame-ancestors 'self' <origines>` ; vide = comportement amont | ✅ parseur testé (https / localhost seulement, pas d'identifiants) |
+| 2. Enveloppe | `integrations/egen/esm-tweakcn-app` : `@civitas/esm-tweakcn-app` (route `theme-studio`, rail gauche, navigation) ; 24 tests, types, build | ✅ |
+| 3. Release | tag `egen-app-v1.0.0` → CI → tarball de release | ✅ GitHub Actions |
+| 4. Déclarer | `external-apps.json` : URL du tarball | ✅ |
+| 5. Synchroniser | `yarn external:sync --strict` : `@civitas/esm-tweakcn-app@1.0.0 [hosted] : ok` | ✅ |
+| 6. Configurer | `egen-config.json` : `{ "@civitas/esm-tweakcn-app": { "studioUrl": "http://localhost:3000" } }` | ✅ |
+| 7. Local | tweakcn : `pnpm dev` avec `EGEN_FRAME_ANCESTORS=http://localhost:<port du Core>` ; Core : `yarn prepare:prod` puis `yarn start:prod` | ⛔ affichage navigateur non vérifié |
+
 ## 7. Choisir son scénario
 
 | Situation | Scénario | Pourquoi |
