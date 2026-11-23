@@ -32,6 +32,7 @@ Deux phases, la première sur `window.postMessage`, la seconde sur un `MessagePo
 
 ```
 Hôte (Shell)                                   App (iframe)
+   │◀─ {egen:2, kind:'probe'} ── (facultatif : l'app a chargé après l'événement `load` de l'iframe)
    │── {egen:2, kind:'hello', nonce, protocols:[2,1], hostVersion} ─▶
    │◀─ {egen:2, kind:'connect', nonce, protocol:2, sdk, requested:[{id,version}]} ──
    │   (hôte vérifie : source = iframe, origine exacte, nonce, grants)
@@ -41,6 +42,7 @@ Hôte (Shell)                                   App (iframe)
 
 - Enveloppe de poignée de main : `{ egen: 2, moduleName, message }` (même forme que la v1, `egen` vaut `2`).
 - L'hôte **n'envoie `port` qu'après validation** : `event.source === iframe.contentWindow`, `event.origin === origine autorisée` (jamais `*`), `nonce` identique, `protocol` supporté.
+- `probe` : l'app, qui peut charger **après** l'événement `load` de l'iframe, demande à l'hôte de renvoyer `hello`. Elle l'envoie à chacune de ses `hostOrigins` (origine cible explicite).
 - **Compatibilité** : si l'app ne répond pas `connect` dans le délai (5 s par défaut), l'hôte reste en protocole 1.1 (messages `ready`, `location`, `goto`, `title`, `resize`, `navigate` inchangés). Une app v1 continue donc de fonctionner à l'identique.
 
 ### 3.1 Format RPC sur le port

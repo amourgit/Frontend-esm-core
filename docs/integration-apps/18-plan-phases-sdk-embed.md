@@ -36,13 +36,14 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 - [x] P1.10 README du paquet ; `yarn build` + `tsc` propres ; push + bilan.
 
 ## P2 — Client `@egen-civitas/esm-embed-client` (Framework)
-- [ ] P2.1 Squelette du paquet (dépend de `esm-embed-protocol`).
-- [ ] P2.2 `connect.ts` : `connectToEgen({ moduleName, capabilities, hostOrigins, timeoutMs })` : écoute `hello`, répond `connect`, reçoit `port`, vérifie source (`window.parent`) et origine, retourne le client.
-- [ ] P2.3 Mode dégradé : sans hôte v2 (délai dépassé) → client « autonome » (`client.connected === false`, capacités absentes, aucun appel ne lève).
-- [ ] P2.4 Proxys typés par capacité : `client.session.get()`, `client.theme.get()/on('change')`, `client.events.publish/subscribe`, `client.notifications.show`, `client.dialogs.confirm`, `client.api.fetch`, `client.navigation.*`, `client.flags`, `client.config`, `client.telemetry`, `client.lifecycle`, `client.aiTools`.
-- [ ] P2.5 Ponts utilitaires : synchronisation automatique du thème en variables CSS sur `:root` (option), titre et hauteur automatiques (reprise de `autoResize` du doc 16).
-- [ ] P2.6 Liaison React (sous-chemin `/react`, peer optionnel) : `EgenProvider`, `useEgen()`, `useEgenSession()`, `useEgenTheme()`, `useEgenEvent()`.
-- [ ] P2.7 Tests (hôte factice sur `MessageChannel` + fenêtres simulées) ; README ; build ; push + bilan.
+- [x] P2.1 Squelette du paquet (dépend de `esm-embed-protocol`).
+- [x] P2.2 `connect.ts` : `connectToEgen({ moduleName, capabilities, hostOrigins, timeoutMs })` : écoute `hello`, répond `connect`, reçoit `port`, vérifie source (`window.parent`) et origine, retourne le client.
+- [x] P2.3 Mode dégradé : sans hôte v2 (délai dépassé) → client « autonome » (`client.connected === false`, capacités absentes ; appels rejetés `DENIED`, jamais d'exception synchrone).
+- [x] P2.4 Proxys typés par capacité : `client.session.get()`, `client.theme.get()/on('change')`, `client.events.publish/subscribe`, `client.notifications.show`, `client.dialogs.confirm`, `client.api.fetch`, `client.navigation.*`, `client.flags`, `client.config`, `client.telemetry`, `client.lifecycle`, `client.aiTools`.
+- [x] P2.5 Ponts utilitaires : synchronisation automatique du thème en variables CSS sur `:root` (option), titre et hauteur automatiques (reprise de `autoResize` du doc 16).
+- [x] P2.6 Liaison React (sous-chemin `/react`, peer optionnel) : `EgenProvider`, `useEgen()`, `useEgenSession()`, `useEgenTheme()`, `useEgenEvent()`.
+- [x] P2.7 Tests (`FakeShell` : vrai `MessageChannel` + fenêtres simulées, 16 tests) ; README ; build ; push + bilan.
+- [x] P2.8 (ajout) Message `probe` au protocole (l'app peut charger après `load`) ; correction trouvée par les tests : table de rappels hôte → app prête avant l'ouverture du port.
 
 ## P3 — Hôte `@egen-civitas/esm-embed-host` (Framework)
 - [ ] P3.1 Squelette du paquet (dépend de `esm-embed-protocol`).
