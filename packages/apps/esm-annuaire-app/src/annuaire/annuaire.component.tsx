@@ -1075,7 +1075,11 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
     'shrink-0 rounded-lg p-2 sm:p-1.5 transition-colors active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60';
 
   return (
-    <div lang={lang} className="w-full h-full min-h-full flex-1 flex flex-col bg-transparent relative overflow-hidden">
+    <div
+      lang={lang}
+      ref={(el) => el?.setAttribute('data-egen-fill', '')}
+      className="w-full h-full min-h-full flex-1 flex flex-col bg-transparent relative overflow-hidden"
+    >
       {/* ── ARRIÈRE-PLAN DE L'ANNUAIRE (FLOUTÉ AVEC DOUCEUR, SANS VOILE NOIR) ── */}
       <PageBackground
         imageSrc={annuaireBg}
@@ -1093,7 +1097,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
         activeTab={activeTab}
         onTabChange={(val) => handleTabChange(val as 'directory' | 'org' | 'about')}
         tabs={tabsOptions}
-        containerClassName="h-[calc(100vh-115px)] supports-[height:100dvh]:h-[calc(100dvh-115px)] my-0 px-3 sm:px-6 lg:px-8 py-2 relative z-10"
+        containerClassName="my-0 px-3 sm:px-6 lg:px-8 py-2 relative z-10"
         mainClassName="overflow-hidden flex flex-col h-full min-h-0"
       >
         {/* ── TAB 1 : ANNUAIRE DES COLLABORATEURS ── */}

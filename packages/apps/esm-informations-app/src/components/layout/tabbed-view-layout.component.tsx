@@ -67,8 +67,9 @@ export function TabbedViewLayout<T extends string = string>({
 
   return (
     <div
+      data-egen-fill=""
       className={cn(
-        'w-full h-[calc(100dvh-var(--egen-navbar-height,0px)-var(--egen-footer-height,0px)-1.5rem)] my-2 sm:my-3 text-slate-100 overflow-hidden px-3 sm:px-6 lg:px-8 flex flex-col',
+        'w-full h-full my-0 text-slate-100 overflow-hidden px-3 sm:px-6 lg:px-8 flex flex-col',
         containerClassName,
       )}
     >
