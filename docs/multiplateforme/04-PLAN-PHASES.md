@@ -1032,7 +1032,7 @@ Chaque item a un **critère d'entrée** : on ne le démarre que quand il est rem
 | Notifications push | Capacité `push` native livrée ; backend capable d'émettre | `esm-notifications-app` s'abonne via `getPlatform().push` ; règle N-08 levée pour cette capacité |
 | Déverrouillage biométrique | Capacité `biometric` livrée | Protège l'accès à `secureStorage` après une période d'inactivité |
 | Hors ligne natif | Stratégie hors ligne native décidée (pas de service worker) | Réexaminer `esm-offline-tools-app` (catégorie C) |
-| Apps de catégorie C | Décision produit | Réexaminer `character-factory` ; `theme-studio` restera web |
+| Apps de catégorie C | Décision produit | Réexaminer `tenant-routing` ; `theme-studio` et `character-factory` ont été retirées du core (19/11) |
 
 ---
 

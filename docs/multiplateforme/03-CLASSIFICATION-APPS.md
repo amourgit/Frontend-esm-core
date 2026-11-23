@@ -1,4 +1,4 @@
-# 03 — Classification des 26 applications
+# 03 — Classification des applications du core
 
 Ce document répond, pour **chaque app**, à quatre questions : sur quelles cibles tourne-t-elle ? de quelles capacités
 a-t-elle besoin ? que faut-il changer (fichier et ligne) ? comment le prouver ?
@@ -7,7 +7,7 @@ La classification est une **décision** (`D-01`). Elle est révisable, mais seul
 **et** de la matrice machine-lisible du §3, dans la même PR.
 
 > **⚠️ À réviser (tâche R0, 2026-11-17)** : `main` compte désormais **30 apps** (4 nouvelles : `launcher` → B, `navigation` → B, `search` → A, `side-panel` → A) et
-> `esm-primary-navigation-app` devient **A** (squelette neutre). Totaux attendus : **A 9, B 14, C 4, D 3 = 30 ; 23 natives**. La fiche de `quick-access`
+> `esm-primary-navigation-app` devient **A** (squelette neutre). Totaux attendus : **A 9, B 14, C 2, D 3 = 28 ; 23 natives** (`theme-studio` et `character-factory` ont été retirées du core le 19/11 : réformes Tweakcn et Character). La fiche de `quick-access`
 > (§6.14) est erronée : l'app **n'est pas** en cours de retrait (seul un bouton de la TopBar l'a été). Les fiches §6.2 (primary-navigation) et la matrice §3
 > sont à régénérer ; voir [02](02-ETAT-DES-LIEUX.md) (bandeau de mise à jour) et `docs/SUIVI-MULTIPLATEFORME.md` (R0).
 
@@ -30,9 +30,9 @@ sa vague, [04](04-PLAN-PHASES.md) §P6). Ainsi une app **incomplète n'est jamai
 | --- | --- | --- |
 | A | 6 | branding, clock, notifications, quick-access, settings, spaces-sites |
 | B | 13 | ai-assistant, annuaire, appearance, footer, help-menu, home, informations, language, login, not-found, primary-navigation, sites, user-profile |
-| C | 4 | character-factory, offline-tools, tenant-routing, theme-studio |
+| C | 2 | offline-tools, tenant-routing |
 | D | 3 | devtools, implementer-tools, logs |
-| **Total** | **26** | **19 apps « natives »** (A + B), 4 web seulement, 3 développement |
+| **Total** | **24** (audit du 15/11, hors les 4 apps nouvelles du bandeau) | **19 apps « natives »** (A + B), 2 web seulement, 3 développement |
 
 ## 3. Matrice de référence (spécification de `tools/platform-matrix.json`)
 
@@ -51,7 +51,6 @@ du §1).
     "esm-annuaire-app":           { "category": "B", "platforms": ["web", "android", "ios"], "requiredCapabilities": [] },
     "esm-appearance-app":         { "category": "B", "platforms": ["web", "android", "ios"], "requiredCapabilities": [] },
     "esm-branding-app":           { "category": "A", "platforms": ["web", "android", "ios"], "requiredCapabilities": [] },
-    "esm-character-factory-app":  { "category": "C", "platforms": ["web"],                   "requiredCapabilities": [] },
     "esm-clock-app":              { "category": "A", "platforms": ["web", "android", "ios"], "requiredCapabilities": [] },
     "esm-devtools-app":           { "category": "D", "platforms": ["web"],                   "requiredCapabilities": [] },
     "esm-footer-app":             { "category": "B", "platforms": ["web", "android", "ios"], "requiredCapabilities": [] },
@@ -71,7 +70,6 @@ du §1).
     "esm-sites-app":              { "category": "B", "platforms": ["web", "android", "ios"], "requiredCapabilities": [] },
     "esm-spaces-sites-app":       { "category": "A", "platforms": ["web", "android", "ios"], "requiredCapabilities": [] },
     "esm-tenant-routing-app":     { "category": "C", "platforms": ["web"],                   "requiredCapabilities": [] },
-    "esm-theme-studio-app":       { "category": "C", "platforms": ["web"],                   "requiredCapabilities": [] },
     "esm-user-profile-app":       { "category": "B", "platforms": ["web", "android", "ios"], "requiredCapabilities": [] }
   }
 }
@@ -336,8 +334,6 @@ Aucune incompatibilité trouvée. Pour chacune : (a) déclaration `platforms` (P
 
 | App | Pourquoi pas en natif | À faire dans ce programme | Réexamen |
 | --- | --- | --- | --- |
-| `esm-theme-studio-app` | Éditeur d'administration de bureau : 252 fichiers (TweakCN vendorisé), `document.cookie`, `window.open`, polices `fonts.googleapis.com`, `iframe`, `<video>` | `platforms: ["web"]` | Jamais en natif sans décision produit |
-| `esm-character-factory-app` | IndexedDB volumineuse, lecture de l'URL (`window.location`), 9 extensions, **0 test** | `platforms: ["web"]` ; dette de test consignée | P10 |
 | `esm-offline-tools-app` | S'appuie sur le service worker et le mode hors ligne web ; le service worker **n'existe pas** en natif (framework A4) | `platforms: ["web"]` | P10 (stratégie hors ligne native) |
 | `esm-tenant-routing-app` | Résout le tenant par **sous-domaine** (nom d'hôte) : sans objet en WebView local | `platforms: ["web"]` ; la distribution native fixe `EGEN_TENANT_MODE=single` et `EGEN_TENANT_ID` au **build** (`D-09`) | Si un produit natif est multi-tenant : décision produit |
 

@@ -15,20 +15,21 @@ permet de le re-vérifier. Les **constats** (`F-xx`, §12) en sont tirés ; les 
 >
 > | Sujet | Audit (6138348) | `main` actuel (552feb9) |
 > | --- | --- | --- |
-> | Nombre d'apps | 26 | **30** : nouvelles `esm-launcher-app`, `esm-navigation-app`, `esm-search-app`, `esm-side-panel-app` (extensions du `topbar-slot`) |
+> | Nombre d'apps | 26 | **30** (puis **28**, voir la ligne « Apps retirées ») : nouvelles `esm-launcher-app`, `esm-navigation-app`, `esm-search-app`, `esm-side-panel-app` (extensions du `topbar-slot`) |
 > | `esm-primary-navigation-app` | 75 fichiers, annuaire, sons, lien d'apps, presse-papiers | **34 fichiers** : squelette neutre (kit + hôte) ; **plus** d'avatars `images.unsplash.com`, de `target="_blank"`, de presse-papiers, de `localStorage` (sons supprimés) |
-> | Lien externe du lanceur d'apps | dans `primary-navigation` (`AppsMenuOption.tsx`) | **`esm-launcher-app/src/launcher/launcher.component.tsx:74`** (toujours 14 `target="_blank"` au total ; 7 apps hors `theme-studio` : footer, help-menu, login, home, **launcher**, informations, ai-assistant) |
+> | Lien externe du lanceur d'apps | dans `primary-navigation` (`AppsMenuOption.tsx`) | **`esm-launcher-app/src/launcher/launcher.component.tsx:74`** (**10** `target="_blank"` au total depuis le retrait de `theme-studio`, qui en portait 4 ; mesure du 22/11 ; 7 apps : footer, help-menu, login, home, **launcher**, informations, ai-assistant) |
 > | Presse-papiers (fil d'Ariane) | `primary-navigation/BreadcrumbNav.tsx:122` | **`esm-navigation-app/src/components/navigation/BreadcrumbNav.tsx:97`** |
 > | Images `images.unsplash.com` (apps A/B) | 128 | **102** (annuaire 39, informations 40, home 19, sites 4) ; + `picsum.photos` 16, `cdn.21st.dev` 6, `prod.spline.design` 1 ⇒ **125** ressources à traiter (au lieu de 151) |
 > | Interactions à la souris | non relevées | `esm-navigation-app` : `mousemove`/`mouseup` (glisser), `mousedown`, survol — **à auditer pour le tactile** (P7) |
 > | `esm-quick-access-app` | « en cours de retrait » | **Faux** : seul un **bouton mort de la TopBar** a été supprimé ; l'app du rail droit existe toujours (6 extensions) |
 > | Dépendances `@egen-civitas/*` | écarts avec npm | Commit `63dd2ef` « plages alignées » : **T0.1 probablement déjà fait — À VÉRIFIER** (`yarn deps:egen:check`). Le peer `esm-framework` vaut **toujours `>=3.0.0`** (T0.2 reste à faire) |
 > | Qualité de l'existant | « `yarn verify` vert » supposé | Le suivi de la réforme indique des **échecs de tests/typecheck anciens** (hooks ignorés par choix, `--no-verify`) : **ne pas supposer `yarn verify` vert** ; T0.4 doit mesurer la réalité |
+> | Apps retirées du core (19/11) | `esm-theme-studio-app` (Tweakcn) et `esm-character-factory-app` (Character) présentes | **Retirées** : elles sont devenues des projets autonomes (réformes Tweakcn et Character). **28 apps**. Toute ligne ou mesure les concernant est caduque ; elles sont corrigées ci-dessous quand le fait est mesurable |
 > | Document de vision | — | `docs/architecture-declaration/ajustement-reforme.md` (apps créées par configuration : Penpot, Tweakcn, TokiForge) : **sans effet** sur ce programme, mais toute future app **déclarative** devra aussi déclarer `platforms` |
 > | Dettes de mutualisation | — | `OptionButton`, `GlassPanel`, `WaterGlassModal` copiés dans plusieurs apps (suivi TopBar §6) : **même logique que `D-07`** (copie encadrée, puis promotion au framework) |
 >
 > **Classification provisoire à intégrer par R0** : `esm-launcher-app` → **B** (lien externe, survol) ; `esm-navigation-app` → **B** (presse-papiers, souris, gros volume : 33 fichiers, 11 tests) ;
-> `esm-search-app` → **A** ; `esm-side-panel-app` → **A** ; `esm-primary-navigation-app` → **A** (squelette ; le gros du travail mobile reste en P7). Total attendu : **A 9, B 14, C 4, D 3 = 30** ; **23 apps natives**.
+> `esm-search-app` → **A** ; `esm-side-panel-app` → **A** ; `esm-primary-navigation-app` → **A** (squelette ; le gros du travail mobile reste en P7). Total attendu : **A 9, B 14, C 2, D 3 = 28** (C : offline-tools, tenant-routing) ; **23 apps natives**.
 > Les tableaux des §2 à §12 ci-dessous **n'ont pas encore été corrigés** : se fier à ce bandeau en cas de différence.
 
 ## 1. Structure du dépôt
@@ -48,10 +49,9 @@ permet de le re-vérifier. Les **constats** (`F-xx`, §12) en sont tirés ; les 
 | Publication | `yarn ci:publish` = `yarn workspaces foreach --all --topological --exclude @egen/esm-core --exclude @egen/storybook npm publish --tolerate-republish --access public --tag latest`. **C'est le champ `version` du `package.json` de chaque app qui décide** : une version déjà publiée est ignorée sans erreur (`--tolerate-republish`). Le dossier `.changeset/` contient **24 notes** mais **aucun `config.json` ni script `changeset`** : elles ne sont pas consommées par un outil (certaines visent d'anciens paquets, ex. `@egen/esm-app-shell`) | `package.json` (lignes 19-20), `ls -la .changeset` |
 | Dépôts jumeaux | `civitas-tv-frontend` reçoit les fichiers listés dans `tools/shared-paths.txt` (`serve-prod.mjs`, `precompress.mjs`, `sync-egen-deps.mjs`, `turbo.json`, `.eslintrc`, `.github`…) | `tools/shared-paths.txt`, `docs/SYNC-CORE-TV.md` |
 
-## 2. Les 26 applications
+## 2. Les 24 applications auditées le 15/11 (hors les 2 retirées depuis)
 
-« Fichiers source » compte les `.ts`/`.tsx` de `src/` (tests compris). `theme-studio` inclut le code TweakCN vendorisé
-(exclu du lint, voir `.eslintignore`).
+« Fichiers source » compte les `.ts`/`.tsx` de `src/` (tests compris).
 
 | App (`@egen/<nom>`) | Version | Fichiers source | Fichiers de test | Pages (`route`) | Extensions |
 | --- | --- | --- | --- | --- | --- |
@@ -59,7 +59,6 @@ permet de le re-vérifier. Les **constats** (`F-xx`, §12) en sont tirés ; les 
 | esm-annuaire-app | 1.0.0 | 43 | 5 | `annuaire` | 5 |
 | esm-appearance-app | 1.0.0 | 7 | 2 | — | 2 |
 | esm-branding-app | 1.0.0 | 6 | 1 | — | 1 |
-| esm-character-factory-app | 1.0.0 | 31 | **0** | `character-factory` | 9 |
 | esm-clock-app | 1.0.0 | 4 | 1 | — | 1 |
 | esm-devtools-app | 9.0.2 | 9 | 1 | — (1 modale) | 0 |
 | esm-footer-app | 1.0.0 | 8 | 2 | tout sauf login/logout/change-password | 0 |
@@ -79,13 +78,12 @@ permet de le re-vérifier. Les **constats** (`F-xx`, §12) en sont tirés ; les 
 | esm-sites-app | 1.0.0 | 26 | 2 | `sites` | 10 |
 | esm-spaces-sites-app | 1.0.0 | 20 | 7 | — | 2 |
 | esm-tenant-routing-app | 1.0.0 | 7 | **0** | `.*` (toutes) | 0 |
-| esm-theme-studio-app | 0.1.0 | 252 | 6 | `theme-studio` | 3 |
 | esm-user-profile-app | 1.0.0 | 13 | 5 | tout sauf login…, et la racine | 2 |
 
 Vérification : `for d in packages/apps/*/; do jq -r '[.name,.version]|@tsv' $d/package.json; done`.
 
-**Constats sur cette table** : 3 apps n'ont aucun test (`character-factory`, `help-menu`, `tenant-routing`) ; les versions
-sont hétérogènes (**9.0.2** pour 6 apps, **1.0.0** pour 19, **0.1.0** pour 1) ; **aucune** `routes.json` ne contient les
+**Constats sur cette table** : 2 apps n'ont aucun test (`help-menu`, `tenant-routing`) ; les versions
+sont hétérogènes (**9.0.2** pour 6 apps, **1.0.0** pour 18 ; mesure du 22/11 sur les 28 apps actuelles : 6 en 9.0.2, 22 en 1.0.0) ; **aucune** `routes.json` ne contient les
 champs `platforms` ni `requiredCapabilities` (vérification : `grep -l '"platforms"' packages/apps/*/src/routes.json` ne
 renvoie rien).
 
@@ -150,7 +148,7 @@ ont été abandonnés pour des raisons mesurées (voir `docs/dev-lien-local-fram
 | --- | --- |
 | Noms des apps | `@egen/esm-<nom>-app` (portée `@egen`) |
 | Noms des paquets du framework | `@egen-civitas/*` (portée `@egen-civitas`) |
-| Versions des apps | 9.0.2 (6 apps : devtools, help-menu, implementer-tools, login, offline-tools, primary-navigation), 0.1.0 (theme-studio), 1.0.0 (19 autres) |
+| Versions des apps | 9.0.2 (6 apps : devtools, help-menu, implementer-tools, login, offline-tools, primary-navigation), 1.0.0 (18 autres ; 22 sur les 28 apps actuelles) |
 | Rôle du nom d'une app | C'est son **identifiant** dans l'import map, dans le registre de routes, dans le filtrage de plateforme et dans `frameworkRange` : le renommer casse tous les consommateurs |
 | Rôle de la version d'une app | Publication npm et champ `version` du registre de routes ; **aucun mécanisme n'exige que les versions soient égales entre apps** |
 
@@ -184,9 +182,8 @@ Toutes les écritures/lectures de `localStorage` (hors tests) :
 | esm-ai-assistant-app | clés `STORAGE_KEY_VOICE_OUTPUT`, `…_CONTINUOUS`, `…_VOICE_ACTIVE`, `…_CHANNEL`, `…_SILENCE_TOLERANCE` | préférences vocales | Non |
 | esm-implementer-tools-app | `egen:egenImplementerToolsConfigOpen`, `egen:isUIEditorEnabled`, `egen:getIsJsonModeEnabled` | préférences d'outil de développement | Non |
 | esm-annuaire-app | `LANG_STORAGE_KEY` | préférence de langue | Non |
-| esm-theme-studio-app | `KEY` (liste de thèmes) ; **2 fichiers utilisent `document.cookie`** | thèmes de l'utilisateur ; cookies | À vérifier (web seulement) |
 
-`sessionStorage`, `serviceWorker` : **aucun usage** dans les apps. `indexedDB` : `esm-character-factory-app` seulement.
+`sessionStorage`, `serviceWorker` : **aucun usage** dans les apps. `indexedDB` : **aucun usage** (depuis le retrait de `esm-character-factory-app`).
 Vérification : `grep -rn "localStorage\.\(get\|set\|remove\)Item" packages/apps --include=*.ts --include=*.tsx | grep -v test`.
 
 **Aucune app ne stocke de jeton ni de mot de passe dans le navigateur aujourd'hui** (le mécanisme est le cookie).
@@ -205,13 +202,12 @@ Usages de `window.location` (hors tests) et ce qu'ils deviennent en natif (servi
 | `esm-spaces-sites-app/src/sites/site-route.ts` (32) | lit `pathname` | Idem, à tester |
 | `esm-tenant-routing-app/src/guard/*` | analyse du **hostname** (sous-domaine) et `login` | En natif le nom d'hôte est local : aucune information de tenant |
 | `esm-informations-app` (4 fichiers) | `navigator.clipboard.writeText(window.location.href \| origin + '/informations/agenda?event=…')` | Le lien copié est une URL **locale** non partageable |
-| `esm-theme-studio-app` (shims `next-navigation`, `nuqs`), `esm-character-factory-app` | lecture de `pathname`/`search` | Apps web seulement (voir [03](03-CLASSIFICATION-APPS.md)) |
 
-Liens `<a target="_blank">` bruts (hors tests), **14 occurrences** : `esm-theme-studio-app` (4), `esm-help-menu-app` (3 :
-`release-notes`, `contact-us`, `docs`), `esm-footer-app` (2), `esm-primary-navigation-app` (`AppsMenuOption.tsx`),
+Liens `<a target="_blank">` bruts (hors tests), **10 occurrences** (mesure du 22/11, après le retrait de `esm-theme-studio-app`) : `esm-help-menu-app` (3 :
+`release-notes`, `contact-us`, `docs`), `esm-footer-app` (2), `esm-launcher-app` (lien externe du lanceur),
 `esm-ai-assistant-app` (`assistant-panel.component.tsx:87`), `esm-login-app` (`login-footer.component.tsx:32`),
 `esm-home-app` (`social-links.component.tsx:103`), `esm-informations-app` (`event-details-modal.component.tsx:240`).
-Aucun `window.open` hors `esm-theme-studio-app`.
+Aucun `window.open` (mesure du 22/11).
 
 ## 9. Ressources distantes chargées à l'exécution
 
@@ -225,9 +221,7 @@ La CSP de la cible native (définie par le framework) est :
 | `picsum.photos` | `esm-home-app` (`component-showcase.page.tsx`) | Images de démonstration |
 | `cdn.21st.dev` | `esm-not-found-app` (`not-found-page.component.tsx`, 6 images) | Illustrations de la page 404 |
 | `prod.spline.design` | `esm-home-app` (`new-components-showcase.component.tsx:122`) | Scène 3D distante (le framework neutralise `SplineScene` en natif à l'exécution) |
-| `fonts.googleapis.com` | `esm-theme-studio-app` | Polices distantes |
 | `civitas-africa.vercel.app` | `esm-login-app` (`brand.ts`) | Lien (pas une ressource) |
-| `iframe`, `<video>`, `new Audio(` | `esm-theme-studio-app` seulement | — |
 
 Point d'attention technique : `img-src` **n'autorise pas l'origine de l'API**. Une image servie par le backend serait
 donc bloquée aussi ; et comme l'authentification natif est un jeton `Bearer` (impossible à joindre à un `<img src>`), les
@@ -241,11 +235,10 @@ Vérification : `grep -rlE "images.unsplash.com|picsum.photos|cdn.21st.dev" pack
 | --- | --- | --- |
 | Dictée vocale `SpeechRecognition`/`webkitSpeechRecognition` et micro `getUserMedia` | `esm-ai-assistant-app` : `hooks/use-speech-recognition.ts`, `components/chat-input/chat-input.component.tsx`, `assistant-experience/services/vadService.ts`, `AssistantGlobalVoiceContext.tsx` | Permission micro à obtenir par le Host ; `SpeechRecognition` probablement indisponible dans le WebView iOS (H-07, à vérifier) |
 | API plein écran | `esm-appearance-app/src/appearance/fullscreen-toggle.component.tsx` | Non fiable en WebView iOS ; inutile en natif (l'app est déjà plein écran) |
-| `navigator.clipboard` | 16 usages (lignes) dans `theme-studio`, `primary-navigation`, `annuaire`, `logs`, `informations` | Fonctionne en contexte sécurisé ; à tester sur appareil ; liens copiés non partageables (§8) |
+| `navigator.clipboard` | 10 usages (lignes) dans `navigation`, `annuaire`, `logs`, `informations` (mesure du 22/11) | Fonctionne en contexte sécurisé ; à tester sur appareil ; liens copiés non partageables (§8) |
 | Audio | `esm-primary-navigation-app/src/intranet-topbar/utils/xboxAudio.ts` | Lecture audio soumise à un geste de l'utilisateur dans les WebView |
 | WebSocket | `esm-ai-assistant-app` (via `esm-ai-framework`, canal `EGEN_AI_CHANNEL_URL`, par défaut `${egenBase}/api/ai/ws`) | `connect-src 'self' https://<api>` n'autorise probablement **pas** `wss://<api>` (une source `https:` ne couvre pas le schéma `wss:`) : **à confirmer** par un test en CSP réelle (E-05) |
 | EventSource | `esm-logs-app/src/logs/log-store.ts:207` (flux `${baseUrl}/stream` des logs du terminal `egen develop`) | Fonction de développement : sans objet en production |
-| Cookies | `esm-theme-studio-app` (2 fichiers) | Aucun cookie utile en natif |
 
 ## 11. Documentation existante
 

@@ -38,7 +38,7 @@ du WebView réel (clavier, rotation, presse-papiers, `reload()`), ni la vraie s�
 - **Outils existants conservés** : Vitest, Testing Library, `setup-tests.ts` de chaque app (qui charge le mock `@egen-civitas/esm-framework/mock`), `cleanup` automatique.
 - **Obligation par PR** : voir [06](06-GUIDE-DEVELOPPEUR.md) §8.4 (un test **natif** et un test **Web** pour tout comportement derrière `isNativePlatform()`).
 - **Simulation de la plateforme** : `window.egenTarget = 'android'` pour la cible ; `createMockPlatform` (depuis `@egen-civitas/esm-framework/mock`) pour les capacités ([06](06-GUIDE-DEVELOPPEUR.md) §8.1-8.2).
-- **Apps sans test** : `help-menu`, `tenant-routing`, `character-factory` — **au moins un test de rendu** chacune (`help-menu` : en vague 1 ; les deux autres : dette consignée, pas de gel de la matrice).
+- **Apps sans test** : `help-menu`, `tenant-routing` — **au moins un test de rendu** chacune (`help-menu` : en vague 1 ; `tenant-routing` : dette consignée, pas de gel de la matrice).
 - **Pas de seuil de couverture global imposé** par ce programme ; l'exigence est **le test du changement**. Le seuil éventuel est une décision d'équipe, hors périmètre.
 - **Non-régression Web** : tout test Web ajouté par ce programme porte un titre commençant par `Web :` pour être retrouvable (`yarn test -t "Web :"`).
 

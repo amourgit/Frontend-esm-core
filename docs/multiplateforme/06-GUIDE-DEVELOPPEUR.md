@@ -25,7 +25,7 @@ import {
 
 - **Ne jamais** importer `@capacitor/*` ni toute autre enveloppe native : le core ne connaît pas le Host (règle ESLint N-07).
 - **Ne jamais** détecter la plateforme par `navigator.userAgent` (N-06) ni par la largeur d'écran.
-- Les apps A/B n'appellent l'API **que** par `egenFetch` (vérifié : le seul `fetch(` direct du dépôt est dans `esm-character-factory-app`, app web seulement).
+- Les apps A/B n'appellent l'API **que** par `egenFetch` (vérifié le 22/11 : plus aucun `fetch(` direct dans `packages/apps/*/src` hors tests).
 
 ## 2. Les trois questions avant d'écrire une ligne
 
@@ -357,7 +357,7 @@ expect(setItem.mock.calls.flat().join(' ')).not.toContain('SECRET-ACCESS-TOKEN')
 | Un lien ou une navigation | Le clic appelle `navigate` avec l'URL attendue |
 | Une ressource | Aucune URL distante dans le rendu (E-02 pour l'app) |
 | Du stockage | Test du contenu stocké (clé, valeur) et absence de secret |
-| Une app sans test (`help-menu`, `tenant-routing`, `character-factory`) | Au moins un test de rendu |
+| Une app sans test (`help-menu`, `tenant-routing`) | Au moins un test de rendu |
 
 ### 8.5 Banc natif simulé
 

@@ -240,7 +240,7 @@ Si la tâche est **bloquée** par une dépendance externe : passer la ligne à �
 | HOST-REQ-1 à 4 | Service sous `/app`, capacités, rafraîchissement, jetons | `egen-mobile` n'existe pas |
 | DIST-REQ-1 | Consommation de `list-apps` | `egen-distributions` n'existe pas |
 
-**Dettes connues** : 3 apps sans test (`character-factory`, `help-menu`, `tenant-routing`) ; `esm-quick-access-app` : **elle existe toujours** (seul un bouton mort de la TopBar a été supprimé) ; défaut Web possible du 404 (F-24) ;
+**Dettes connues** : 2 apps sans test (`help-menu`, `tenant-routing` ; `character-factory` a été retirée du core le 19/11) ; `esm-quick-access-app` : **elle existe toujours** (seul un bouton mort de la TopBar a été supprimé) ; défaut Web possible du 404 (F-24) ;
 `.changeset/` : 24 notes anciennes non consommées ; données de démonstration embarquées (F-18, H-05).
 
 **Compteurs à relever en fin de phase** : nombre de tests par niveau ; liste des `test.fail` restants ; nombre d'avertissements N-0x ; nombre de constats `ASSET-001` ; apps `nativePending` restantes (19 au départ).
