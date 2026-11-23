@@ -24,6 +24,8 @@ Elle est volontairement **isolée** du reste de `docs/` : tout ce qui est écrit
 | 14 | [Migration Carbon / SCSS du Core](14-plan-migration-carbon.md) | Mesures avant migration, résultat constaté (✅ réalisée), garde-fou |
 | 15 | [Scénarios d'intégration externe de bout en bout](15-scenarios-integration-externe.md) | Code source GitHub, paquet npm, app déjà déployée (distante, locale, autonome), registre central : acteurs, étapes, résultats, diagnostic |
 | 16 | [Navigation partagée Core ↔ apps externes](16-navigation-partagee-apps-externes.md) | Protocole 1.1 : l'URL du Core reflète la page courante de l'app (actualisation, retour/avance, partage) ; modes, script injectable, sécurité (✅ implémenté et testé ; validation navigateur à faire) |
+| 17 | [SDK d'intégration embarquée et protocole v2](17-sdk-embed-protocole-v2.md) | Décision d'architecture, poignée de main, RPC, catalogue de capacités, manifeste et grants, sécurité (💡 spécification, implémentation par phases) |
+| 18 | [Plan de développement par phases](18-plan-phases-sdk-embed.md) | Phases P0 à P7 et étapes exactes, avec suivi des cases cochées |
 
 ## Légende des niveaux de preuve
 
