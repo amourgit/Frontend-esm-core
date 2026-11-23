@@ -1,7 +1,7 @@
 # SUIVI — réforme du système de design (thèmes, TokiForge, Tweakcn, Penpot)
 
 > **Seul document qui porte un statut.** Mettre à jour **à chaque étape terminée** (statut + preuve), pas à la fin. Une nouvelle session lit **ce fichier d'abord**, puis `PARCOURS-COMPLET.md` (référence validée).
-> Dernière mise à jour : **2026-11-23 08:56 UTC**. Phase en cours : **P0 — documentation saine** (aucun code).
+> Dernière mise à jour : **2026-11-23**. Phase en cours : **P0 — documentation saine, terminée sous réserve de D14/D15** (aucun code) (aucun code).
 
 ## 1. Reprendre ici
 
@@ -10,7 +10,7 @@
 
 **État en une phrase.** Le nouveau système existe et est testé dans `egen-tokiforge`, mais **ni le framework ni le Core ne l'utilisent** : ils tournent encore sur l'ancien moteur. P0 est à moitié faite.
 
-**Prochaine action exacte.** Faire **P0.9** (dépôt framework), puis P0.10 (P0.3b à P0.8 faites) dans l'ordre du §4. Après chaque étape : commit, `git fetch` + intégrer `origin/main`, push, **mettre à jour ce fichier**.
+**Prochaine action exacte.** **P0 est terminée sous réserve des réponses du propriétaire à D14 et D15** (§6). Ensuite : **P1.1** (dépôt `egen-tokiforge`, privé : accès à confirmer). Rien du P2 avant D4 (P0.3b à P0.10 faites) dans l'ordre du §4. Après chaque étape : commit, `git fetch` + intégrer `origin/main`, push, **mettre à jour ce fichier**.
 
 **À ne PAS faire.**
 - Pas de code de bascule (P2) avant la fin de P0 et P1, ni sans la réponse du propriétaire à **D4**.
@@ -39,7 +39,7 @@
 | Dépôt | Branche | Dernier commit connu | État |
 |---|---|---|---|
 | `amourgit/Frontend-esm-core` | `main` | voir `git log` | Réformes Tweakcn et Character **déjà mergées** (`dc8c1de`). Autre session active (Carbon/SCSS, intégration d'apps externes, Penpot) |
-| `amourgit/Frontend-esm-framework` | `main` (**publie sur npm**) | non modifié par cette réforme | Ancien moteur `esm-theme` **actif**. La branche `feature/ajustement-reforme` ne porte que le document de réforme (`5f6d3cf`), **absent de `main`** |
+| `amourgit/Frontend-esm-framework` | `main` (**publie sur npm**) | non modifié par cette réforme | Ancien moteur `esm-theme` **actif**. La branche `feature/ajustement-reforme` porte le document de réforme (`5f6d3cf`), **désormais copié sur `main`** (P0.9) |
 | `amourgit/egen-tokiforge` (privé) | `feature/reforme-tokiforge` | `4df594d` | Nouveau système testé : 182 (noyau) + 6 (react) + 78 (service) + 17 (bout en bout). `main` = instantané MIT amont `70ea8b2` **à remplacer** (P1.2) |
 | `amourgit/Frontend-esm-tweakcn-fork` | `feature/civitas-egen` | `f677ced` | Phases F0–F7 faites. **État de `main` du fork et du déploiement : à confirmer (D13)** |
 | `amourgit/egen-character-factory` | `feature/reforme-character` | `db7b9c1` | Archive + image Docker préparée (jamais construite) |
@@ -65,8 +65,8 @@ Statuts : **FAIT** · **EN COURS** · **À FAIRE** · **BLOQUÉ (raison)**.
 | P0.6 | Analyses datées : statut en tête + passages sur le thème | **FAIT** (2026-11-23) | `docs/analyse-esm-tenant.md` L47, 131, 579 ; `docs/analyse-separation-framework.md` L15, 43, 48-52 |
 | P0.7 | `docs/guide-agenda-egen-dayfront.md` : bandeau « contrat de variables obsolète » + passages | **FAIT** (2026-11-23) | L218, 971, 973, 1213, 1692, 1726 |
 | P0.8 | Statut du moteur de thème dans les tableaux d'intégration | **FAIT** (2026-11-23) | `docs/integration-apps/03-packages-framework.md` L74 ; `docs/integration-apps/04-apps-internes.md` L57 |
-| P0.9 | **Framework `main`** : copier `docs/ajustement-reforme-configuration.md` depuis la branche `feature/ajustement-reforme` (statut `ACTUEL`) ; étiqueter les documents décrivant l'ancien système ; **sans changeset** | **À FAIRE** | `packages/framework/esm-theme/README.md` (17 mentions), `packages/tooling/tailwind-preset/README.md` (1), `README.md` (3), `MIGRATION.md` (3), `docs/EGEN-FRAMEWORK-DEV.md` (3), `docs/PLAN-RETRAIT-CARBON-SCSS.md` (1), `docs/baseline-2026-11.md` (2), `docs/stockage.md` (1), `docs/refonte-systeme-design.md` (vision **sans statut**) |
-| P0.10 | Vérification finale par `git grep` (critère : §7) dans les deux dépôts ; compte rendu dans le journal | **À FAIRE** | |
+| P0.9 | **Framework `main`** : copier `docs/ajustement-reforme-configuration.md` depuis la branche `feature/ajustement-reforme` (statut `ACTUEL`) ; étiqueter les documents décrivant l'ancien système ; **sans changeset** | **FAIT** (2026-11-23, framework `5943fc4`, sans changeset) | `packages/framework/esm-theme/README.md` (17 mentions), `packages/tooling/tailwind-preset/README.md` (1), `README.md` (3), `MIGRATION.md` (3), `docs/EGEN-FRAMEWORK-DEV.md` (3), `docs/PLAN-RETRAIT-CARBON-SCSS.md` (1), `docs/baseline-2026-11.md` (2), `docs/stockage.md` (1), `docs/refonte-systeme-design.md` (vision **sans statut**) |
+| P0.10 | Vérification finale par `git grep` (critère : §7) dans les deux dépôts ; compte rendu dans le journal | **FAIT sous réserve de D14 et D15** (2026-11-23, voir journal) | |
 
 ### P1 — Nettoyage hors bascule
 
@@ -109,6 +109,8 @@ Image du service (`docker build` **jamais exécuté**), compose, intégration pa
 
 ## 5. Journal (du plus récent au plus ancien)
 
+- **2026-11-23** — **P0.10 (vérification `git grep`, critère §7)**. Core : toutes les occurrences de `esm-theme|themeUrl|egenThemeUrls|applyAppThemeOverride|setupThemeEngine|theme.default` sont dans des documents ou sections étiquetés ou annotés en ligne (README, `integration-apps/03`, `04`, analyses, guide agenda, docs de réforme). Framework : idem pour les 9 documents ciblés ; **restent 3 `CHANGELOG.md`** (`esm-theme`, `esm-translations`/`esm-app-shell`/`tailwind-preset`), générés par changesets, historiques : **non modifiés → D14**. Core, 2ᵉ critère (`theme-studio|character-factory|tweakcn` hors `docs/reforme-*`) : 10 documents ; ceux de `integration-apps/15` à `18` décrivent l'intégration réelle des apps externes, pas un retrait → **D15**. Les autres (multiplateforme, architecture-declaration, guide agenda, SUIVI-MULTIPLATEFORME) n'ont pas été relus ligne à ligne dans cette étape.
+- **2026-11-23** — P0.9 faite (framework `main`, `5943fc4`) : `docs/ajustement-reforme-configuration.md` copié depuis `feature/ajustement-reforme` (`5f6d3cf`) avec statut `ACTUEL`, contenu inchangé ; 9 documents étiquetés (`esm-theme/README.md`, `tailwind-preset/README.md`, `README.md`, `MIGRATION.md`, `EGEN-FRAMEWORK-DEV.md`, `PLAN-RETRAIT-CARBON-SCSS.md`, `baseline-2026-11.md`, `stockage.md` : OBSOLÈTE/datés ; `refonte-systeme-design.md` : VISION (non réalisé)). **Aucun changeset.** Vérifié avant push : toutes les versions de `main` sont déjà sur npm ; `origin/main` portait déjà 2 changesets d'une autre session (embed-protocol/client), non touchés.
 - **2026-11-23** — P0.8 faite : `integration-apps/03` (L74) et `04` (L57) : `esm-theme` étiqueté ancien moteur OBSOLÈTE ; 10 apps du core qui le déclarent confirmées par `git grep` (appearance, annuaire, home, informations, login, not-found, primary-navigation, settings, sites, tenant-routing).
 - **2026-11-23** — P0.7 faite : `guide-agenda-egen-dayfront.md` — bandeau « contrat de variables obsolète » en tête (avec le nouveau contrat d'après `ANNEXES.md` B) ; passages L218, 971, 973, 1213 et le `package.json` de l'annexe A.5 (L1692 et L1726) annoté une fois ; texte d'origine conservé.
 - **2026-11-23** — P0.6 faite : statut en tête des deux analyses datées ; 3 passages de `analyse-esm-tenant.md` annotés (L47, L131, L579). `analyse-separation-framework.md` : les mentions de `esm-theme` sont couvertes par le statut en tête.
@@ -137,6 +139,8 @@ Image du service (`docker build` **jamais exécuté**), compose, intégration pa
 | D11 | Tokens de composants, breakpoints, espacements | OUVERTE |
 | **D12** | Comment EGEN Kernel déploie/intègre TokiForge (et Tweakcn/Penpot) : lequel des trois modes d'intégration (Kernel `docs/11`), conformité C1–C6 ? Le Kernel ne décrit pas encore la pile de design | OUVERTE — conditionne P5 |
 | D13 | État de `main` du fork Tweakcn et du déploiement réel | OUVERTE |
+| **D14** | `CHANGELOG.md` du framework qui citent `esm-theme` (`esm-theme`, `esm-translations`, `esm-app-shell`, `tailwind-preset`) : fichiers générés par changesets et historiques. Les laisser tels quels (proposé : exception au critère §7 P0) ou les étiqueter ? | OUVERTE |
+| **D15** | Critère §7 « tweakcn/character-factory/theme-studio : uniquement des notes de retrait » vs `integration-apps/15` à `18`, qui documentent l'intégration **réelle** de ces apps en iframe. Amender le critère (proposé : autoriser ces documents) ou autre chose ? | OUVERTE |
 
 ## 7. Critères de fin (définition de « terminé »)
 
@@ -161,9 +165,10 @@ Image du service (`docker build` **jamais exécuté**), compose, intégration pa
 | E3 | Injection CSS possible via les valeurs de thème | haute | **corrigée** (`egen-tokiforge` `f131af5`, grammaire stricte, 42 thèmes Tweakcn en non-régression) |
 | E4 | Docs multiplateforme décrivant des apps retirées comme présentes et des mesures périmées | moyenne | **corrigée** (P0.2) |
 | E5 | Hypothèse « le Kernel déploie avec compose + `/health` » non confirmée par le Kernel | moyenne | ouverte (D12) |
-| E6 | Document de réforme absent de `main` du framework | moyenne | ouverte (P0.9) |
+| E6 | Document de réforme absent de `main` du framework | moyenne | **corrigée** (P0.9) |
 | E7 | Dates estimées (« 20/11 ») dans des documents | basse | corrigée |
 | E8 | Mesures 816/134/42 datées du 19/11 | basse | à refaire en P2.1 |
+| E9 | Branche `feat/design-system-tokiforge` du framework (112 fichiers, « nouveau cœur esm-theme sur TokiForge », préfixe `--egen-*`, notice **AGPL-3.0**) : approche antérieure, **contraire** à `ANNEXES.md` A (MIT uniquement) et à la décision « aucune cohabitation ». Absente du §3 | moyenne | **ouverte — aucune action prise** ; décision du propriétaire attendue (garder comme référence ou supprimer : règle « pas de branche orphelin ») |
 
 ## 10. Vérifié ici / non vérifié
 
