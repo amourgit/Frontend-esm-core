@@ -301,6 +301,8 @@ Projet autonome `github.com/amourgit/egen-character-factory` (branche `feature/r
 | 5. Configurer | `egen-config.json` : `characterUrl` (`http://localhost:5173` en local ; l'image Docker écoute sur 8080) | ✅ |
 | 6. Local | Character : `npm run dev` ; Core : `yarn prepare:prod` puis `yarn start:prod` | ⛔ affichage navigateur non vérifié (WebGL) |
 
+> **Navigation interne des apps externes** (actualisation, retour/avance, liens partageables) : voir [16 — Navigation partagée](16-navigation-partagee-apps-externes.md).
+
 ## 7. Choisir son scénario
 
 | Situation | Scénario | Pourquoi |

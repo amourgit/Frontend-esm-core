@@ -23,6 +23,7 @@ Elle est volontairement **isolée** du reste de `docs/` : tout ce qui est écrit
 | 13 | [Extension multi-technologies](13-extension-multi-technologies.md) | Socle commun, Vue, Angular, Next.js (✅ implémentés et testés) |
 | 14 | [Migration Carbon / SCSS du Core](14-plan-migration-carbon.md) | Mesures avant migration, résultat constaté (✅ réalisée), garde-fou |
 | 15 | [Scénarios d'intégration externe de bout en bout](15-scenarios-integration-externe.md) | Code source GitHub, paquet npm, app déjà déployée (distante, locale, autonome), registre central : acteurs, étapes, résultats, diagnostic |
+| 16 | [Navigation partagée Core ↔ apps externes](16-navigation-partagee-apps-externes.md) | Protocole 1.1 : l'URL du Core reflète la page courante de l'app (actualisation, retour/avance, partage) ; modes, script injectable, sécurité (✅ implémenté et testé ; validation navigateur à faire) |
 
 ## Légende des niveaux de preuve
 
