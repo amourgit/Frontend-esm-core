@@ -1,7 +1,7 @@
 # SUIVI — réforme du système de design (thèmes, TokiForge, Tweakcn, Penpot)
 
 > **Seul document qui porte un statut.** Mettre à jour **à chaque étape terminée** (statut + preuve), pas à la fin. Une nouvelle session lit **ce fichier d'abord**, puis `PARCOURS-COMPLET.md` (référence validée).
-> Dernière mise à jour : **2026-11-23**. Phase en cours : **P0 — documentation saine, terminée sous réserve de D14/D15** (aucun code).
+> Dernière mise à jour : **2026-11-23**. Phase en cours : **P0 — documentation saine, terminée** (aucun code).
 
 ## 1. Reprendre ici
 
@@ -10,7 +10,7 @@
 
 **État en une phrase.** Le nouveau système existe et est testé dans `egen-tokiforge`, mais **ni le framework ni le Core ne l'utilisent** : ils tournent encore sur l'ancien moteur. P0 est à moitié faite.
 
-**Prochaine action exacte.** **P0 est terminée sous réserve des réponses du propriétaire à D14 et D15** (§6). Ensuite : **P1.1** (dépôt `egen-tokiforge`, privé : accès à confirmer). Rien du P2 avant D4 (P0.3b à P0.10 faites) dans l'ordre du §4. Après chaque étape : commit, `git fetch` + intégrer `origin/main`, push, **mettre à jour ce fichier**.
+**Prochaine action exacte.** **P0 est terminée** (D14, D15 et E9 tranchées). Ensuite : **P1.1** (dépôt `egen-tokiforge`, privé : accès à confirmer). Rien du P2 avant D4 (P0.3b à P0.10 faites) dans l'ordre du §4. Après chaque étape : commit, `git fetch` + intégrer `origin/main`, push, **mettre à jour ce fichier**.
 
 **À ne PAS faire.**
 - Pas de code de bascule (P2) avant la fin de P0 et P1, ni sans la réponse du propriétaire à **D4**.
@@ -66,7 +66,7 @@ Statuts : **FAIT** · **EN COURS** · **À FAIRE** · **BLOQUÉ (raison)**.
 | P0.7 | `docs/guide-agenda-egen-dayfront.md` : bandeau « contrat de variables obsolète » + passages | **FAIT** (2026-11-23) | L218, 971, 973, 1213, 1692, 1726 |
 | P0.8 | Statut du moteur de thème dans les tableaux d'intégration | **FAIT** (2026-11-23) | `docs/integration-apps/03-packages-framework.md` L74 ; `docs/integration-apps/04-apps-internes.md` L57 |
 | P0.9 | **Framework `main`** : copier `docs/ajustement-reforme-configuration.md` depuis la branche `feature/ajustement-reforme` (statut `ACTUEL`) ; étiqueter les documents décrivant l'ancien système ; **sans changeset** | **FAIT** (2026-11-23, framework `5943fc4`, sans changeset) | `packages/framework/esm-theme/README.md` (17 mentions), `packages/tooling/tailwind-preset/README.md` (1), `README.md` (3), `MIGRATION.md` (3), `docs/EGEN-FRAMEWORK-DEV.md` (3), `docs/PLAN-RETRAIT-CARBON-SCSS.md` (1), `docs/baseline-2026-11.md` (2), `docs/stockage.md` (1), `docs/refonte-systeme-design.md` (vision **sans statut**) |
-| P0.10 | Vérification finale par `git grep` (critère : §7) dans les deux dépôts ; compte rendu dans le journal | **FAIT sous réserve de D14 et D15** (2026-11-23, voir journal) | |
+| P0.10 | Vérification finale par `git grep` (critère : §7) dans les deux dépôts ; compte rendu dans le journal | **FAIT** (2026-11-23, voir journal ; D14/D15 tranchées) | |
 
 ### P1 — Nettoyage hors bascule
 
@@ -109,6 +109,7 @@ Image du service (`docker build` **jamais exécuté**), compose, intégration pa
 
 ## 5. Journal (du plus récent au plus ancien)
 
+- **2026-11-23** — Réponses du propriétaire : **D14** nettoyer, **D15** autorisés, **E9** « supprimer seulement si la branche ne respecte pas la nouvelle architecture ». D14 : 4 `CHANGELOG.md` nettoyés (framework `33bca49`, sans changeset). **E9 — analyse** de `feat/design-system-tokiforge` (5 commits depuis `ad4ee68`, tête `0c7ef5415113fbf5af663e8298063bd23364ad39`) : (1) dépendance `@tokiforge/core ^2.4.0` **AGPL-3.0** dans le framework, ADR-001 « accepter l'AGPL » : contraire à `ANNEXES.md` A ; (2) préfixe `--egen-*` : contraire au contrat Tweakcn ; (3) `esm-theme` conservé comme moteur (sources, priorités, surcharges) : cohabitation exclue, la source unique est le backend du Core ; (4) verre et panneaux conservés : supprimés par décision ; (5) changeset *major* : publierait sur npm. Aucune PR ouverte ne la référence. **Non adaptable** (c'est le fondement, pas un détail) → **branche supprimée** ; rien de réutilisable tel quel (les scripts de migration ciblent le préfixe `--egen-`). Restauration possible depuis le SHA ci-dessus tant que GitHub le conserve. Les documents `docs/design-system/` n'ont jamais été sur `main`.
 - **2026-11-23** — **P0.10 (vérification `git grep`, critère §7)**. Core : toutes les occurrences de `esm-theme|themeUrl|egenThemeUrls|applyAppThemeOverride|setupThemeEngine|theme.default` sont dans des documents ou sections étiquetés ou annotés en ligne (README, `integration-apps/03`, `04`, analyses, guide agenda, docs de réforme). Framework : idem pour les 9 documents ciblés ; **restent 3 `CHANGELOG.md`** (`esm-theme`, `esm-translations`/`esm-app-shell`/`tailwind-preset`), générés par changesets, historiques : **non modifiés → D14**. Core, 2ᵉ critère (`theme-studio|character-factory|tweakcn` hors `docs/reforme-*`) : 10 documents ; ceux de `integration-apps/15` à `18` décrivent l'intégration réelle des apps externes, pas un retrait → **D15**. Les autres (multiplateforme, architecture-declaration, guide agenda, SUIVI-MULTIPLATEFORME) n'ont pas été relus ligne à ligne dans cette étape.
 - **2026-11-23** — P0.9 faite (framework `main`, `5943fc4`) : `docs/ajustement-reforme-configuration.md` copié depuis `feature/ajustement-reforme` (`5f6d3cf`) avec statut `ACTUEL`, contenu inchangé ; 9 documents étiquetés (`esm-theme/README.md`, `tailwind-preset/README.md`, `README.md`, `MIGRATION.md`, `EGEN-FRAMEWORK-DEV.md`, `PLAN-RETRAIT-CARBON-SCSS.md`, `baseline-2026-11.md`, `stockage.md` : OBSOLÈTE/datés ; `refonte-systeme-design.md` : VISION (non réalisé)). **Aucun changeset.** Vérifié avant push : toutes les versions de `main` sont déjà sur npm ; `origin/main` portait déjà 2 changesets d'une autre session (embed-protocol/client), non touchés.
 - **2026-11-23** — P0.8 faite : `integration-apps/03` (L74) et `04` (L57) : `esm-theme` étiqueté ancien moteur OBSOLÈTE ; 10 apps du core qui le déclarent confirmées par `git grep` (appearance, annuaire, home, informations, login, not-found, primary-navigation, settings, sites, tenant-routing).
@@ -139,12 +140,12 @@ Image du service (`docker build` **jamais exécuté**), compose, intégration pa
 | D11 | Tokens de composants, breakpoints, espacements | OUVERTE |
 | **D12** | Comment EGEN Kernel déploie/intègre TokiForge (et Tweakcn/Penpot) : lequel des trois modes d'intégration (Kernel `docs/11`), conformité C1–C6 ? Le Kernel ne décrit pas encore la pile de design | OUVERTE — conditionne P5 |
 | D13 | État de `main` du fork Tweakcn et du déploiement réel | OUVERTE |
-| **D14** | `CHANGELOG.md` du framework qui citent `esm-theme` (`esm-theme`, `esm-translations`, `esm-app-shell`, `tailwind-preset`) : fichiers générés par changesets et historiques. Les laisser tels quels (proposé : exception au critère §7 P0) ou les étiqueter ? | OUVERTE |
-| **D15** | Critère §7 « tweakcn/character-factory/theme-studio : uniquement des notes de retrait » vs `integration-apps/15` à `18`, qui documentent l'intégration **réelle** de ces apps en iframe. Amender le critère (proposé : autoriser ces documents) ou autre chose ? | OUVERTE |
+| D14 | `CHANGELOG.md` du framework citant `esm-theme` | **Tranchée (propriétaire, 2026-11-23) : nettoyer.** Fait (framework `33bca49`) ; reste uniquement le titre du `CHANGELOG.md` du paquet `esm-theme`, supprimé avec le paquet en P2.6 |
+| D15 | Critère §7 vs `integration-apps/15` à `18` (intégration réelle d'apps externes) | **Tranchée (propriétaire, 2026-11-23) : ces documents sont autorisés.** Ce sont des apps déployées ailleurs, avec leur architecture propre, simplement affichées dans le Core : pas de couplage avec le Core. Critère §7 amendé en conséquence |
 
 ## 7. Critères de fin (définition de « terminé »)
 
-- **P0** : `git grep -i -E "esm-theme|themeUrl|egenThemeUrls|applyAppThemeOverride|setupThemeEngine|theme\.default" -- '*.md'` dans le core et le framework : chaque occurrence restante est dans un document **étiqueté** ou une section qui renvoie à la réforme. `git grep -i -E "theme-studio|character-factory|tweakcn" -- '*.md'` (hors `docs/reforme-*`) : uniquement des notes de retrait. Aucun document ne décrit l'ancien système comme actuel sans statut.
+- **P0** : `git grep -i -E "esm-theme|themeUrl|egenThemeUrls|applyAppThemeOverride|setupThemeEngine|theme\.default" -- '*.md'` dans le core et le framework : chaque occurrence restante est dans un document **étiqueté** ou une section qui renvoie à la réforme. `git grep -i -E "theme-studio|character-factory|tweakcn" -- '*.md'` (hors `docs/reforme-*`) : uniquement des notes de retrait **ou** des documents d'intégration d'apps externes (`docs/integration-apps/15` à `18` : apps déployées ailleurs, non couplées au Core — D15). Aucun document ne décrit l'ancien système comme actuel sans statut.
 - **`egen-tokiforge`** : `corepack enable && pnpm install --frozen-lockfile && pnpm -r build && pnpm -r typecheck && pnpm -r test` (le service a besoin d'un PostgreSQL : `TEST_DATABASE_URL`, `docs/SERVICE.md`).
 - **Framework (P2)** : build, types, tests, `publint`, `attw` ; plus aucune occurrence de `esm-theme`/`egenThemeUrls` dans le code ; plus de `.scss` ni de `--colors-*` ; **pas de push sur `main` tant que tout n'est pas vert**.
 - **Core (P2)** : `yarn verify`, tests des apps modifiées.
@@ -168,7 +169,7 @@ Image du service (`docker build` **jamais exécuté**), compose, intégration pa
 | E6 | Document de réforme absent de `main` du framework | moyenne | **corrigée** (P0.9) |
 | E7 | Dates estimées (« 20/11 ») dans des documents | basse | corrigée |
 | E8 | Mesures 816/134/42 datées du 19/11 | basse | à refaire en P2.1 |
-| E9 | Branche `feat/design-system-tokiforge` du framework (112 fichiers, « nouveau cœur esm-theme sur TokiForge », préfixe `--egen-*`, notice **AGPL-3.0**) : approche antérieure, **contraire** à `ANNEXES.md` A (MIT uniquement) et à la décision « aucune cohabitation ». Absente du §3 | moyenne | **ouverte — aucune action prise** ; décision du propriétaire attendue (garder comme référence ou supprimer : règle « pas de branche orphelin ») |
+| E9 | Branche `feat/design-system-tokiforge` du framework (approche antérieure) | moyenne | **corrigée** : branche supprimée le 2026-11-23 (voir journal) |
 
 ## 10. Vérifié ici / non vérifié
 
