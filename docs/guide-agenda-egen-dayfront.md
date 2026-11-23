@@ -6,6 +6,9 @@
 > **Date de l'étude** : 5 octobre 2026.
 > **Méthode** : lecture réelle (clonage) de `Frontend-esm-framework` (`cbf344f`), `Frontend-esm-core` (`0f967e7`) et `DayFront` (`8aef796`). Chaque affirmation de la section 2 est tirée d'un fichier précis, cité entre `backticks`. Tout ce qui n'a **pas** pu être vérifié est marqué **⚠ À VÉRIFIER**.
 > **Statut** : aucun dépôt n'a été modifié. Ce document est un plan d'exécution, pas un patch.
+>
+> **Statut du contrat de variables de thème (2026-11-23) : OBSOLÈTE.** Tout ce que ce guide dit de `@egen-civitas/esm-theme` (moteur, `flattenToCssVars`, noms de variables `--colors-*`, `--typography-*`…, attribut `data-theme`) décrit **l'ancien système**, en cours de remplacement par la chaîne Tweakcn → TokiForge → backend du Core (`docs/reforme-tokiforge/SUIVI.md`, `PARCOURS-COMPLET.md`).
+> Nouveau contrat : variables sémantiques Tweakcn (`--background`, `--foreground`, `--card`, `--primary`, `--border`, `--ring`, `--radius`…) lues via les classes Tailwind du preset ; mode sombre = **classe `.dark`** (table de migration : `docs/reforme-tokiforge/ANNEXES.md` B). **N'utiliser aucun nom de variable de l'ancien contrat** pour la Phase 6 ; la section « Styling » de `.github/copilot-instructions.md` fait foi.
 
 ---
 
@@ -215,7 +218,7 @@ Objectif : **ne pas brûler de tokens** sur ce qui est générique. Trois niveau
 | `…/components/navigation/BreadcrumbLevel2Nav.tsx` (lignes 60-190) | Si tu veux un fil d'Ariane propre pour l'agenda |
 | `.github/copilot-instructions.md` (section « Styling ») | Pour aligner les composants sur le design system (Phase 6) |
 | `docs/analyse-esm-tenant.md` | Pour le comportement multi-tenant fin |
-| `packages/framework/esm-theme/src/{engine,flatten,types}.ts` et `src/themes/` | Pour connaître les **noms exacts** des variables CSS du thème (Phase 6) |
+| ~~`packages/framework/esm-theme/src/{engine,flatten,types}.ts` et `src/themes/`~~ | **OBSOLÈTE** (ancien moteur, retrait prévu) : ne pas s'y référer ; voir `docs/reforme-tokiforge/ANNEXES.md` B pour les variables actuelles |
 | `packages/framework/esm-react-utils/src/{getLifecycle,useConfig,useSession}.ts*` | Signatures exactes des hooks |
 | `packages/framework/esm-extensions/src/{extensions,render,nav-entry}.ts` | Phase 9 (extensions) |
 | `packages/tooling/tailwind-preset/tailwind.tw.css` | Si tu utilises Tailwind dans l'agenda |
@@ -968,9 +971,9 @@ yarn verify:nav            # = node tools/check-nav-routes.mjs
 
 **Objectif** : l'agenda suit le thème EGEN (clair/sombre, couleurs, rayons) au lieu de son propre thème.
 
-1. **Lire** `packages/framework/esm-theme/src/{types,flatten,engine}.ts` et `src/themes/` pour **connaître les noms exacts des variables CSS** générées (`flattenToCssVars`). Aucun nom n'a été relevé dans cette étude — **ne les invente pas**.
+1. ~~**Lire** `packages/framework/esm-theme/src/{types,flatten,engine}.ts` et `src/themes/` pour connaître les noms exacts des variables CSS générées (`flattenToCssVars`).~~ **OBSOLÈTE (ancien moteur, voir le bandeau en tête) : utiliser les variables sémantiques Tweakcn via Tailwind (`docs/reforme-tokiforge/ANNEXES.md` B).** Texte d'origine, conservé pour l'historique : Aucun nom n'a été relevé dans cette étude — **ne les invente pas**.
 2. Dans `agenda-base.tw.css`, DayFront définit ses tokens (`--panel`, `--panel-soft`, `--line`, `--muted`, `--accent`, `--today-bg`, `--today-ring`, + ceux de `visual-refresh.css` : `--text`, `--canvas`, `--shadow-sm`, `--shadow-lg`…). **Remplacer leurs valeurs** par des `var(--<token-egen>)` dans le bloc `.agenda-root { … }` — **c'est le seul endroit à modifier** si les composants n'utilisent que ces variables.
-3. `data-theme` : le dériver de l'état de thème d'EGEN (⚠ non identifié : lire `esm-theme/src/singleton.ts` et le sélecteur de thème de la TopBar). Si EGEN n'expose qu'un mode, fixer `data-theme` en conséquence.
+3. `data-theme` : **OBSOLÈTE** — le mode sombre passe à la **classe `.dark`** (runtime TokiForge, `ANNEXES.md` B) ; ne pas dériver `data-theme` de l'ancien moteur. Texte d'origine : le dériver de l'état de thème d'EGEN (⚠ non identifié : lire `esm-theme/src/singleton.ts` et le sélecteur de thème de la TopBar). Si EGEN n'expose qu'un mode, fixer `data-theme` en conséquence.
 4. Remplacer les **couleurs de calendrier** par défaut (`fallbackColors` dans `App.tsx`) par des couleurs conformes à la charte (facultatif).
 
 > Référence design : section « Styling » de `.github/copilot-instructions.md` du Core — **à lire seulement pour cette phase**.
@@ -1210,7 +1213,7 @@ Liste exhaustive, pour ne pas laisser croire à une certitude :
 - Le **comportement réel** de Radicale (création automatique du principal, syntaxe exacte des droits, `http_x_remote_user`) : **aucune instance n'a été lancée**.
 - Le **build** : `yarn install`/`turbo build` n'ont **pas** été exécutés (le document `analyse-separation-framework.md` signale déjà que le Yarn Berry du bac à sable échoue en WASM ; aucun essai ici).
 - Le **rendu visuel** de DayFront dans le shell : aucun navigateur n'a été lancé.
-- `esm-theme` (noms de variables), `esm-extensions` (API exacte), `assemble.ts` (config du SPA), `workspaceMockData.ts` (clés de section), `TopBar` (`z-index`), workflows `pr-*-check.yml`, `bundle-size.yml`.
+- `esm-theme` (noms de variables — **OBSOLÈTE**, ancien moteur), `esm-extensions` (API exacte), `assemble.ts` (config du SPA), `workspaceMockData.ts` (clés de section), `TopBar` (`z-index`), workflows `pr-*-check.yml`, `bundle-size.yml`.
 - L'implémentation DayFront des **fuseaux nommés**, de la **gestion du focus** dans les dialogues, et du **message de conflit** (412).
 - La **forme des `id`/`resourceId`** DayFront (pertinent pour les calendriers collectifs).
 - Le droit gabonais applicable aux données personnelles.
@@ -1638,6 +1641,8 @@ CMD ["node", "dist/server.js"]
 ```
 
 ### A.5 — `packages/apps/esm-agenda-app/package.json`
+
+> **Obsolète :** les deux lignes `@egen-civitas/esm-theme` de ce `package.json` (`dependencies` et `peerDependencies`) déclarent l'ancien moteur de thème ; ne pas les déclarer pour une nouvelle app (retrait prévu, `docs/reforme-tokiforge/SUIVI.md` P2.7).
 
 ```json
 {
