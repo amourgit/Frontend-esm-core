@@ -327,6 +327,7 @@ Projet autonome `github.com/amourgit/egen-character-factory` (branche `feature/r
 | A7 | `empreinte SHA-256 … différente du verrou` | fichier modifié après la synchro : relancer `yarn external:sync` |
 | C1 | `le bundle distant doit être en https` | passer en https (ou `EGEN_EXTERNAL_ALLOW_HTTP=true` en test) |
 | C1 | `dérive : le bundle distant … a changé` | le partenaire a redéployé : relancer la synchro après revue |
+| A8 | TopBar sans composants, panneaux des rails (Accès rapide, Logs…) **vides**, console : `Could not find the package @egen-civitas/…` | Shell antérieur à `esm-app-shell` 3.0.10 : il ne résolvait pas les alias d'import map, puis (3.0.7–3.0.9) les résolvait sans les enregistrer dans le système de configuration, ce qui suspendait indéfiniment le rendu. Mettre à jour : `yarn deps:egen`, puis `yarn build:prod`, `yarn prepare:prod` et redémarrer |
 | A8 | la page **404** s'affiche en plein écran par-dessus (ou à la place de) l'app externe | Core antérieur à la détection dynamique de la 404 : `esm-not-found-app` listait les routes connues en dur. Mettre le Core à jour puis `yarn build:prod` (la 404 compare maintenant les pages enregistrées, internes et externes) |
 | A8 | page vide, pas d'erreur | `routes.json` sans `route`/`routeRegex`, ou `frameworkRange` non satisfait (`console.warn` du Shell) |
 | C3 | iframe vide | `frame-ancestors` / `X-Frame-Options` côté app, ou `frame-src` côté Core |
