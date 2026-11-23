@@ -24,16 +24,16 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 - [x] P0.4 Commit + push sur `main` du Core.
 
 ## P1 — Protocole `@egen-civitas/esm-embed-protocol` (Framework, zéro dépendance)
-- [ ] P1.1 Créer le paquet `packages/framework/esm-embed-protocol` (même squelette que `esm-integration-utils` : `package.json`, `tsconfig*.json`, `vitest.config.ts`, changeset `minor`).
-- [ ] P1.2 `constants.ts` : `EGEN_EMBED_PROTOCOL = 2`, versions supportées, limites par défaut (§3.1), codes d'erreur.
-- [ ] P1.3 `types.ts` : enveloppe de poignée de main (`hello`, `connect`, `port`), messages RPC (`req`, `res`, `sub`, `unsub`, `evt`, `ping`, `pong`, `bye`), `CapabilityId`, `Grant`, `EmbedManifest`.
-- [ ] P1.4 `guards.ts` : validateurs écrits à la main (sans bibliothèque) pour les enveloppes et messages RPC (rejet de tout champ inattendu de type invalide, taille).
-- [ ] P1.5 `negotiate.ts` : négociation de protocole et de versions de capacités (§4) → `{ granted, denied[] }`.
-- [ ] P1.6 `capabilities.ts` : catalogue (§5) : descripteurs, méthodes, événements, grant par défaut, validateurs d'arguments par méthode.
-- [ ] P1.7 `manifest.ts` : validation du manifeste `egen-app.json` et calcul des grants effectifs (demandé ∩ approuvé).
-- [ ] P1.8 `rpc.ts` : moteur RPC symétrique sur un `MessagePort` (table de dispatch fermée, délais, limites, abonnements, fermeture).
-- [ ] P1.9 Tests : gardes, négociation, manifeste, RPC sur **vrai `MessageChannel`** (appel, erreur, délai, abonnement, limite de débit, dispatch inconnu, tentative `constructor`/`__proto__`).
-- [ ] P1.10 README du paquet ; `yarn build` + `tsc` propres ; push + bilan.
+- [x] P1.1 Créer le paquet `packages/framework/esm-embed-protocol` (même squelette que `esm-integration-utils` : `package.json`, `tsconfig*.json`, `vitest.config.ts`, changeset `minor`).
+- [x] P1.2 `constants.ts` : `EGEN_EMBED_PROTOCOL = 2`, versions supportées, limites par défaut (§3.1), codes d'erreur.
+- [x] P1.3 `types.ts` : enveloppe de poignée de main (`hello`, `connect`, `port`), messages RPC (`req`, `res`, `sub`, `unsub`, `evt`, `ping`, `pong`, `bye`), `CapabilityId`, `Grant`, `EmbedManifest`.
+- [x] P1.4 `guards.ts` : validateurs écrits à la main (sans bibliothèque) pour les enveloppes et messages RPC (rejet de tout champ inattendu de type invalide, taille).
+- [x] P1.5 `negotiate.ts` : négociation de protocole et de versions de capacités (§4) → `{ granted, denied[] }`.
+- [x] P1.6 `capabilities.ts` : catalogue (§5) : descripteurs, méthodes, événements, grant par défaut, validateurs d'arguments par méthode.
+- [x] P1.7 `manifest.ts` : validation du manifeste `egen-app.json` et calcul des grants effectifs (demandé ∩ approuvé).
+- [x] P1.8 `rpc.ts` : moteur RPC symétrique sur un `MessagePort` (table de dispatch fermée, délais, limites, abonnements, fermeture).
+- [x] P1.9 Tests : gardes, négociation, manifeste, RPC sur **vrai `MessageChannel`** (appel, erreur, délai, abonnement, limite de débit, dispatch inconnu, tentative `constructor`/`__proto__`).
+- [x] P1.10 README du paquet ; `yarn build` + `tsc` propres ; push + bilan.
 
 ## P2 — Client `@egen-civitas/esm-embed-client` (Framework)
 - [ ] P2.1 Squelette du paquet (dépend de `esm-embed-protocol`).
