@@ -30,7 +30,7 @@ const SiteLayoutPage: React.FC = () => {
   const activeTab: SiteTabId = isSiteTab(segment) ? segment : 'applications';
 
   return (
-    <div className="relative">
+    <div ref={(el) => el?.setAttribute('data-egen-fill', '')} className="relative h-full">
       <SitesBackground />
       <SiteTabbedLayout
         className="relative z-10"

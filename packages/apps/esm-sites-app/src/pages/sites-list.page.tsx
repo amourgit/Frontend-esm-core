@@ -80,7 +80,10 @@ const SitesListPage: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-full min-h-[calc(100vh-120px)] flex flex-col text-slate-100 overflow-x-hidden overflow-y-auto py-3 select-none">
+    <div
+      ref={(el) => el?.setAttribute('data-egen-fill', '')}
+      className="relative w-full h-full min-h-full flex flex-col text-slate-100 overflow-x-hidden overflow-y-auto py-3 select-none"
+    >
       <SitesBackground />
       <div className="w-full max-w-5xl mx-auto mb-1 px-4 sm:px-6 lg:px-8 shrink-0 relative z-30">
         <SiteSearchBar
