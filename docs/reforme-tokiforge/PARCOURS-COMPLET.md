@@ -141,7 +141,7 @@ Inventaire mesuré sur `main`.
 
 - L'ancien `PLAN.md` (supprimé) affirmait que « aucune app du core n'appelle l'API » de l'ancien moteur : **faux** (§7, Core). Le couplage n'est pas « concentré dans le shell et le styleguide ».
 - L'ancien `PLAN.md` annonçait une clé de lecture visible dans le navigateur : **abandonné**, le frontend ne parle qu'au backend.
-- Les plans `reforme-tweakcn/PLAN.md` et `reforme-character/PLAN.md` sont des journaux figés à un état ancien (tâche P0.3b du suivi) ; ils ne font pas foi.
+- Les plans `reforme-tweakcn/PLAN.md` et `reforme-character/PLAN.md` étaient des journaux figés à un état ancien ; ils ont été ramenés à leur état final le 2026-11-23 (P0.3b, faite).
 
 ## 9. Mes doutes — réponses attendues (je ne décide pas à ta place)
 
