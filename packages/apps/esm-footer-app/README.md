@@ -42,15 +42,14 @@ mécanisme générique que le reste du thème/config EGEN.
 
 ## Design
 
-Voir `docs/guide-composants-et-theme.md` à la racine du monorepo. Ce
-composant :
+Règles de style du monorepo : section « Styling » de `.github/copilot-instructions.md` (Tailwind d'abord ; CSS Modules seulement pour ce que Tailwind ne peut pas exprimer).
 
-- N'utilise aucune couleur codée en dur — uniquement `var(--colors-*)` /
-  `var(--typography-*)` / `var(--transitions-*)`.
-- N'est pas une surface "glass" flottante (`--panel-*`) : il vit dans le flux
-  normal du document, en bas de page — d'où l'usage des tokens
-  `--colors-surface-muted*`, sémantiquement adaptés à une zone secondaire.
-- S'empile verticalement et se centre sur mobile (`≤ 672px`).
+> **État à corriger (réforme du système de design).** `src/components/footer/footer.module.css` lit encore des variables de l'**ancien contrat**
+> (`--typography-font-family-sans`, `--typography-font-size-xs-*`, `--typography-font-weight-semibold`) avec des valeurs de repli, plus `--footer-text-color`.
+> Ce contrat est **obsolète** : il sera remplacé lors de la bascule vers TokiForge (`docs/reforme-tokiforge/SUIVI.md`, P2 ; `ANNEXES.md` B : typographie = constantes du preset Tailwind).
+> Ne pas ajouter de nouvelle dépendance à ces variables.
+
+Ce composant vit dans le flux normal du document, en bas de page (ce n'est pas une surface flottante), et s'empile verticalement et se centre sur mobile (`≤ 672px`).
 
 ## Garde d'authentification
 

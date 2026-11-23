@@ -126,7 +126,7 @@ Apps existantes (13) : `esm-ai-assistant-app`, `esm-annuaire-app`, `esm-devtools
 - `tools/check-nav-routes.mjs` (lancé par `yarn verify` et la CI) **échoue** si une entrée `topbar-nav-slot` n'a pas `section`, `group`, `label`, `route`, ou si `route` ne correspond à aucun `pages[].route` (égalité ou sous-route).
 - `tools/sync-egen-deps.mjs` (`yarn deps:egen`) aligne toutes les dépendances `@egen-civitas/*` sur la dernière version npm. La CI le lance en mode `--check` (informatif).
 
-**Docs internes à connaître** (`Frontend-esm-core/docs/`) : `analyse-auth-session.md` (le store de session, `egenFetch`, bypass dev ; **règle importante : `esm-api`, `esm-config`, `esm-react-utils`, `esm-state`, `esm-tenant` doivent être déclarés partagés en singleton dans chaque app** — c'est ce que fait la liste de `peerDependencies` copiée de l'annuaire), `analyse-esm-tenant.md` (54 Ko — multi-tenant), `analyse-separation-framework.md`, `dev-lien-local-framework.md` (**ne pas relier le framework en workspace/portal : essayé deux fois, abandonné** ; utiliser `yarn link` ciblé sur un seul paquet ou publier), `guide-composants-et-theme.md` (31 Ko — composants et thème).
+**Docs internes à connaître** (`Frontend-esm-core/docs/`) : `analyse-auth-session.md` (le store de session, `egenFetch`, bypass dev ; **règle importante : `esm-api`, `esm-config`, `esm-react-utils`, `esm-state`, `esm-tenant` doivent être déclarés partagés en singleton dans chaque app** — c'est ce que fait la liste de `peerDependencies` copiée de l'annuaire), `analyse-esm-tenant.md` (54 Ko — multi-tenant), `analyse-separation-framework.md`, `dev-lien-local-framework.md` (**ne pas relier le framework en workspace/portal : essayé deux fois, abandonné** ; utiliser `yarn link` ciblé sur un seul paquet ou publier), la section « Styling » de `.github/copilot-instructions.md` (composants et style : Tailwind ; l'ancien `guide-composants-et-theme.md` a été supprimé, réforme `docs/reforme-tokiforge/SUIVI.md` P0.5).
 
 **Environnement** (`.env.development`, `example.env`) : `EGEN_DEV_NO_AUTH=true` par défaut en dev (session admin fictive **côté navigateur uniquement** : voir ADR-4 pour l'impact sur l'agenda), `EGEN_TENANT_MODE=multi`, `EGEN_PUBLIC_PATH=/egen/spa`, `EGEN_API_URL=/egen`, `EGEN_PROXY_TARGET=http://localhost:8081/` (« ton backend EGEN local (FastAPI / Keycloak) »).
 
@@ -213,7 +213,7 @@ Objectif : **ne pas brûler de tokens** sur ce qui est générique. Trois niveau
 | `packages/apps/esm-primary-navigation-app/src/intranet-topbar/data/navIcons.ts` | Pour choisir/ajouter une icône de nav |
 | `…/data/workspaceMockData.ts` (lignes 120-220, 500-520, 595-605) | Décider du sort des liens `/informations/agenda` |
 | `…/components/navigation/BreadcrumbLevel2Nav.tsx` (lignes 60-190) | Si tu veux un fil d'Ariane propre pour l'agenda |
-| `docs/guide-composants-et-theme.md` | Pour aligner les composants sur le design system (Phase 6) |
+| `.github/copilot-instructions.md` (section « Styling ») | Pour aligner les composants sur le design system (Phase 6) |
 | `docs/analyse-esm-tenant.md` | Pour le comportement multi-tenant fin |
 | `packages/framework/esm-theme/src/{engine,flatten,types}.ts` et `src/themes/` | Pour connaître les **noms exacts** des variables CSS du thème (Phase 6) |
 | `packages/framework/esm-react-utils/src/{getLifecycle,useConfig,useSession}.ts*` | Signatures exactes des hooks |
@@ -973,7 +973,7 @@ yarn verify:nav            # = node tools/check-nav-routes.mjs
 3. `data-theme` : le dériver de l'état de thème d'EGEN (⚠ non identifié : lire `esm-theme/src/singleton.ts` et le sélecteur de thème de la TopBar). Si EGEN n'expose qu'un mode, fixer `data-theme` en conséquence.
 4. Remplacer les **couleurs de calendrier** par défaut (`fallbackColors` dans `App.tsx`) par des couleurs conformes à la charte (facultatif).
 
-> Référence design : `docs/guide-composants-et-theme.md` du Core (31 Ko) — **à lire seulement pour cette phase**.
+> Référence design : section « Styling » de `.github/copilot-instructions.md` du Core — **à lire seulement pour cette phase**.
 
 #### 6.3 Accessibilité
 
