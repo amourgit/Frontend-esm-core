@@ -288,6 +288,19 @@ Le fork `github.com/amourgit/Frontend-esm-tweakcn-fork` (branche `feature/civita
 | 6. Configurer | `egen-config.json` : `{ "@civitas/esm-tweakcn-app": { "studioUrl": "http://localhost:3000" } }` | ✅ |
 | 7. Local | tweakcn : `pnpm dev` avec `EGEN_FRAME_ANCESTORS=http://localhost:<port du Core>` ; Core : `yarn prepare:prod` puis `yarn start:prod` | ⛔ affichage navigateur non vérifié |
 
+## 6 quater. Exemple réel, à froid et en local : Character Factory
+
+Projet autonome `github.com/amourgit/egen-character-factory` (branche `feature/reforme-character`) : site **statique** (Vite, React, three-vrm), sans backend ni base : cas **C3**, le plus léger. L'ancienne app interne du Core a été retirée (réforme Character) ; le Core ne connaît que l'enveloppe.
+
+| Étape | Ce qui est fait | Vérifié |
+| --- | --- | --- |
+| 1. Adapter | `CHARACTER_FRAME_ANCESTORS` → `Content-Security-Policy: frame-ancestors 'self' <origines>` calculé au démarrage de l'image nginx (`docker/15-egen-frame-ancestors.envsh`, `nginx.conf.template`) ; vide = aucun en-tête ; origine invalide = démarrage refusé | ✅ 6 cas + `nginx -t` + nginx réel (en-tête présent/absent) |
+| 2. Enveloppe | `integrations/egen/esm-character-app` : `@civitas/esm-character-app` (route `character`, rail, navigation) ; 24 tests, types, build | ✅ |
+| 3. Release | tag `egen-app-v1.0.0` → CI → tarball | ✅ GitHub Actions |
+| 4. Déclarer / synchroniser | `external-apps.json`, `yarn external:sync --strict` | ✅ |
+| 5. Configurer | `egen-config.json` : `characterUrl` (`http://localhost:5173` en local ; l'image Docker écoute sur 8080) | ✅ |
+| 6. Local | Character : `npm run dev` ; Core : `yarn prepare:prod` puis `yarn start:prod` | ⛔ affichage navigateur non vérifié (WebGL) |
+
 ## 7. Choisir son scénario
 
 | Situation | Scénario | Pourquoi |

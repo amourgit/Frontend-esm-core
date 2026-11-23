@@ -6,5 +6,8 @@
   },
   "@civitas/esm-tweakcn-app": {
     "studioUrl": "http://localhost:3000"
+  },
+  "@civitas/esm-character-app": {
+    "characterUrl": "http://localhost:5173"
   }
 }
