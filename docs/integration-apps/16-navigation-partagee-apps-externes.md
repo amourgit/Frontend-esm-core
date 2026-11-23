@@ -112,9 +112,11 @@ Autorisation : l'app ne répond qu'à `window.parent`, jamais avant un message v
 
 ## 8. Mise en service (ordre des opérations)
 
-1. **Framework** : la modification est sur `main` avec son changeset ; la CI ouvre la PR « Version Packages » ; la fusionner publie `@egen-civitas/esm-nextjs-utils@0.3.0` sur npm.
+> État au 23/11/2026 : étapes 1 à 3 faites (`esm-nextjs-utils` 0.3.0 et `esm-app-shell` 3.0.10 publiés, tweakcn `egen-app-v1.1.0`, Core aligné). Reste l'étape 4 puis la validation dans le navigateur.
+
+1. **Framework** : la modification est sur `main` avec son changeset ; la CI ouvre la PR « Version Packages » ; la fusionner publie `@egen-civitas/esm-nextjs-utils@0.3.0` sur npm. Le Shell embarque les paquets du Framework : `scripts/ensure-shell-rebuild.mjs` ajoute seul un changeset pour `@egen-civitas/esm-app-shell` (ici 3.0.10), qui est donc republié dans la même release.
 2. **Apps** : les wrappers ≥ 1.1.0 exigent `esm-nextjs-utils ^0.3.0`. Après la publication, créer le tag de release de l'app (`egen-app-v1.1.0`) ; la CI produit le tarball.
-3. **Core** : pointer `external-apps.json` vers le nouveau tarball, `yarn external:sync --strict`, `yarn prepare:prod`, redémarrer.
+3. **Core** : monter `@egen-civitas/esm-app-shell` à la version publiée (`package.json`, `yarn install`), pointer `external-apps.json` vers le nouveau tarball, `yarn external:sync --strict`, `yarn prepare:prod`, redémarrer.
 4. **Service de l'app** : déployer la nouvelle image/version (le script `egen-bridge.js` est servi par l'app).
 5. **Retour arrière** : `"navigation": "none"` dans la configuration du Core désactive la synchro sans rien reconstruire.
 

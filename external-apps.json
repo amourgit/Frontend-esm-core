@@ -1,7 +1,7 @@
 {
   "apps": {
     "@civitas/esm-penpot-app": "https://github.com/amourgit/penpot/releases/download/egen-app-v1.0.1/civitas-esm-penpot-app-1.0.1.tgz",
-    "@civitas/esm-tweakcn-app": "https://github.com/amourgit/Frontend-esm-tweakcn-fork/releases/download/egen-app-v1.0.0/civitas-esm-tweakcn-app-1.0.0.tgz",
+    "@civitas/esm-tweakcn-app": "https://github.com/amourgit/Frontend-esm-tweakcn-fork/releases/download/egen-app-v1.1.0/civitas-esm-tweakcn-app-1.1.0.tgz",
     "@civitas/esm-character-app": "https://github.com/amourgit/egen-character-factory/releases/download/egen-app-v1.0.0/civitas-esm-character-app-1.0.0.tgz"
   }
 }
