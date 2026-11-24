@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   useState,
@@ -9,10 +9,10 @@ import React, {
   useCallback,
   type ChangeEvent,
   type KeyboardEvent,
-} from "react";
-import { motion } from "motion/react";
-import { cn } from "../utils/cn";
-import { X } from "lucide-react";
+} from 'react';
+import { motion } from 'motion/react';
+import { cn } from '../utils/cn';
+import { X } from 'lucide-react';
 
 function GooeyFilter({ filterId, blur }: { filterId: string; blur: number }) {
   return (
@@ -22,17 +22,8 @@ function GooeyFilter({ filterId, blur }: { filterId: string; blur: number }) {
     >
       <defs>
         <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur
-            in="SourceGraphic"
-            stdDeviation={blur}
-            result="blur"
-          />
-          <feColorMatrix
-            in="blur"
-            type="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
-            result="goo"
-          />
+          <feGaussianBlur in="SourceGraphic" stdDeviation={blur} result="blur" />
+          <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
           {/* Bordure fine et délicate qui suit la forme liquide et le pont organique */}
           <feMorphology in="goo" operator="dilate" radius="1" result="dilated" />
           <feComposite in="dilated" in2="goo" operator="out" result="borderMask" />
@@ -76,7 +67,7 @@ function SearchIcon({ layoutId, className }: { layoutId: string; className?: str
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
-      className={cn("size-3.5 sm:size-4 shrink-0", className)}
+      className={cn('size-3.5 sm:size-4 shrink-0', className)}
     >
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.3-4.3" />
@@ -86,7 +77,7 @@ function SearchIcon({ layoutId, className }: { layoutId: string; className?: str
 
 const transition = {
   duration: 0.4,
-  type: "spring" as const,
+  type: 'spring' as const,
   bounce: 0.25,
 };
 
@@ -129,7 +120,7 @@ export interface GooeyInputProps {
 }
 
 export function GooeyInput({
-  placeholder = "Rechercher...",
+  placeholder = 'Rechercher...',
   className,
   classNames,
   collapsedWidth = 115,
@@ -137,7 +128,7 @@ export function GooeyInput({
   expandedOffset = 40,
   gooeyBlur = 4,
   value: valueProp,
-  defaultValue = "",
+  defaultValue = '',
   expanded: expandedProp,
   onValueChange,
   onOpenChange,
@@ -147,7 +138,7 @@ export function GooeyInput({
   disabled = false,
 }: GooeyInputProps) {
   const reactId = useId();
-  const safeId = reactId.replace(/:/g, "");
+  const safeId = reactId.replace(/:/g, '');
   const filterId = `gooey-filter-${safeId}`;
   const iconLayoutId = `gooey-input-icon-${safeId}`;
 
@@ -155,9 +146,7 @@ export function GooeyInput({
   const prevExpandedRef = useRef(false);
   const [internalExpanded, setInternalExpanded] = useState(false);
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1200
-  );
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
@@ -167,8 +156,8 @@ export function GooeyInput({
       setIsSmallScreen(w < 640);
     };
     handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const isControlledExpanded = expandedProp !== undefined;
@@ -201,7 +190,7 @@ export function GooeyInput({
     if (isExpanded) {
       inputRef.current?.focus();
     } else if (prevExpandedRef.current) {
-      setSearchText("");
+      setSearchText('');
     }
     prevExpandedRef.current = isExpanded;
   }, [isExpanded, setSearchText]);
@@ -211,8 +200,8 @@ export function GooeyInput({
   const effectiveExpandedWidth = isSmallScreen
     ? Math.max(120, Math.min(195, windowWidth - 110))
     : isMobileOrTablet
-    ? Math.min(300, windowWidth - 140)
-    : expandedWidth;
+      ? Math.min(300, windowWidth - 140)
+      : expandedWidth;
   const effectiveOffset = isSmallScreen ? 34 : expandedOffset;
 
   const buttonVariants = useMemo(
@@ -243,9 +232,9 @@ export function GooeyInput({
 
   const handleKeyDownInternal = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
+      if (e.key === 'Enter') {
         onSubmit?.(searchText);
-      } else if (e.key === "Escape") {
+      } else if (e.key === 'Escape') {
         setExpanded(false);
       }
       onKeyDown?.(e);
@@ -256,7 +245,7 @@ export function GooeyInput({
   return (
     <div
       className={cn(
-        "relative flex items-center justify-center select-none overflow-visible",
+        'relative flex items-center justify-center select-none overflow-visible',
         className,
         classNames?.root,
       )}
@@ -266,36 +255,28 @@ export function GooeyInput({
       {/* COUCHE 1 : Formes liquides organiques Gooey filtrées (verre transparent effet eau) */}
       <div
         className={cn(
-          "absolute inset-0 pointer-events-none flex items-center overflow-visible",
+          'absolute inset-0 pointer-events-none flex items-center overflow-visible',
           classNames?.filterWrap,
         )}
         style={{ filter: `url(#${filterId})` }}
       >
         {/* Bulle liquide qui se détache */}
         <motion.div
-          className={cn(
-            "absolute top-1/2 left-0 -translate-y-1/2 rounded-full",
-            classNames?.bubble,
-          )}
+          className={cn('absolute top-1/2 left-0 -translate-y-1/2 rounded-full', classNames?.bubble)}
           variants={iconBubbleVariants}
           initial="collapsed"
-          animate={isExpanded ? "expanded" : "collapsed"}
+          animate={isExpanded ? 'expanded' : 'collapsed'}
           transition={transition}
         >
-          <div
-            className={cn(
-              "size-8 sm:size-8.5 rounded-full bg-white",
-              classNames?.bubbleSurface,
-            )}
-          />
+          <div className={cn('size-8 sm:size-8.5 rounded-full bg-white', classNames?.bubbleSurface)} />
         </motion.div>
 
         {/* Capsule liquide principale */}
         <motion.div
-          className={cn("h-8 sm:h-8.5 rounded-full", classNames?.buttonRow)}
+          className={cn('h-8 sm:h-8.5 rounded-full', classNames?.buttonRow)}
           variants={buttonVariants}
           initial="collapsed"
-          animate={isExpanded ? "expanded" : "collapsed"}
+          animate={isExpanded ? 'expanded' : 'collapsed'}
           transition={transition}
         >
           <div className="h-full w-full rounded-full bg-white" />
@@ -307,12 +288,12 @@ export function GooeyInput({
         {/* Bouton de la bulle détachée quand étendu */}
         <motion.div
           className={cn(
-            "absolute top-1/2 left-0 -translate-y-1/2 flex size-8 sm:size-8.5 items-center justify-center cursor-pointer z-10",
+            'absolute top-1/2 left-0 -translate-y-1/2 flex size-8 sm:size-8.5 items-center justify-center cursor-pointer z-10',
             classNames?.bubble,
           )}
           variants={iconBubbleVariants}
           initial="collapsed"
-          animate={isExpanded ? "expanded" : "collapsed"}
+          animate={isExpanded ? 'expanded' : 'collapsed'}
           transition={transition}
           onClick={() => {
             if (searchText.trim()) {
@@ -329,18 +310,19 @@ export function GooeyInput({
         {/* Capsule interactive pour la saisie */}
         <motion.div
           className={cn(
-            "flex h-8 sm:h-8.5 items-center justify-center overflow-hidden rounded-full",
+            'flex h-8 sm:h-8.5 items-center justify-center overflow-hidden rounded-full',
             classNames?.buttonRow,
           )}
           variants={buttonVariants}
           initial="collapsed"
-          animate={isExpanded ? "expanded" : "collapsed"}
+          animate={isExpanded ? 'expanded' : 'collapsed'}
           transition={transition}
         >
           <div
+            data-testid="gooey-input-trigger"
             onClick={handleExpand}
             className={cn(
-              "flex h-full w-full cursor-pointer items-center gap-1.5 rounded-full px-2.5 text-xs font-medium outline-none",
+              'flex h-full w-full cursor-pointer items-center gap-1.5 rounded-full px-2.5 text-xs font-medium outline-none',
               classNames?.trigger,
             )}
           >
@@ -363,11 +345,9 @@ export function GooeyInput({
               disabled={disabled || !isExpanded}
               placeholder={placeholder}
               className={cn(
-                "h-full min-w-0 flex-1 bg-transparent text-xs text-white placeholder-slate-300/80 outline-none font-normal",
-                isExpanded
-                  ? "cursor-text"
-                  : "pointer-events-none select-none cursor-pointer",
-                isSmallScreen && !isExpanded ? "hidden" : "block",
+                'h-full min-w-0 flex-1 bg-transparent text-xs text-white placeholder-slate-300/80 outline-none font-normal',
+                isExpanded ? 'cursor-text' : 'pointer-events-none select-none cursor-pointer',
+                isSmallScreen && !isExpanded ? 'hidden' : 'block',
                 classNames?.input,
               )}
             />
@@ -378,14 +358,14 @@ export function GooeyInput({
                 onClick={(e) => {
                   e.stopPropagation();
                   if (searchText) {
-                    setSearchText("");
+                    setSearchText('');
                     inputRef.current?.focus();
                   } else {
                     setExpanded(false);
                   }
                 }}
                 className="p-0.5 text-slate-300 hover:text-white transition-colors cursor-pointer shrink-0 rounded-full hover:bg-white/10"
-                title={searchText ? "Effacer" : "Fermer la recherche"}
+                title={searchText ? 'Effacer' : 'Fermer la recherche'}
               >
                 <X className="size-3.5" />
               </button>
