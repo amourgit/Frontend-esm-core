@@ -96,3 +96,5 @@ e2e/storageState.json
 
 # Apps externes récupérées par `yarn external:sync` (généré)
 /external-apps/
+external-apps.json
+egen-config.json

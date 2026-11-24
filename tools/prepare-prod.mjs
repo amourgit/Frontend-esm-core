@@ -25,6 +25,21 @@ import { RuntimeConfigError, loadRuntimeConfig } from './runtime-config.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const TOOLS = join(ROOT, 'tools');
+
+// ── .env (optionnel) : même chargement que serve-prod.mjs, process.env prioritaire ──
+// Sans cela, EGEN_CONFIG_FILE & co. déclarés dans .env sont invisibles ici alors que
+// start:prod les lit : la validation de la configuration runtime serait silencieusement
+// sautée au lieu d'échouer vite.
+function loadDotenv(file) {
+  if (!existsSync(file)) return;
+  for (const line of readFileSync(file, 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/i);
+    if (m && !(m[1] in process.env)) process.env[m[1]] = m[2].replace(/^(['"])(.*)\1$/, '$2');
+  }
+}
+loadDotenv(resolve(ROOT, '.env.production'));
+loadDotenv(resolve(ROOT, '.env'));
+
 const env = process.env;
 const args = new Set(process.argv.slice(2));
 const SKIP_PRECOMPRESS = args.has('--skip-precompress');

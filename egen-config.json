@@ -5,9 +5,13 @@
     "heightOffset": 0
   },
   "@civitas/esm-tweakcn-app": {
-    "studioUrl": "http://localhost:3200"
+    "studioUrl": "http://localhost:3200",
+    "title": "Theme Studio",
+    "heightOffset": 0
   },
   "@civitas/esm-character-app": {
-    "characterUrl": "http://localhost:9080"
+    "characterUrl": "http://localhost:9080",
+    "title": "Character Factory",
+    "heightOffset": 0
   }
 }
