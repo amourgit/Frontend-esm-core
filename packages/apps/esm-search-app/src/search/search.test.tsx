@@ -10,7 +10,7 @@ import Search, { buildSearchUrl } from './search.component';
 const mockNavigate = vi.mocked(navigate);
 
 /** Le déclencheur du champ replié est le conteneur de l'input (qui, replié, ne reçoit pas les clics). */
-const clickTrigger = () => fireEvent.click(screen.getByPlaceholderText('Rechercher...').parentElement as HTMLElement);
+const clickTrigger = () => fireEvent.click(screen.getByTestId('gooey-input-trigger'));
 
 describe('Search', () => {
   beforeEach(() => {
@@ -45,7 +45,7 @@ describe('Search', () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
-  it("propose « Annuler » sous le desktop quand la recherche est ouverte, et la referme", async () => {
+  it('propose « Annuler » sous le desktop quand la recherche est ouverte, et la referme', async () => {
     const setSearchOpen = vi.fn();
     render(<Search searchOpen setSearchOpen={setSearchOpen} isDesktop={false} isMobile />);
 

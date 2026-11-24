@@ -49,5 +49,7 @@
   "offlineEntitySyncDetailsFallbackErrorMessage": "Unknown error.",
   "offlineEntitySyncDetailsHeader": "Offline entity details",
   "offlineReady": "Offline Ready",
-  "offlineToolsAppMenuLink": "Offline tools"
+  "offlineToolsAppMenuLink": "Offline tools",
+  "selectAll": "Select all",
+  "selectRow": "Select row"
 }
