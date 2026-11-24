@@ -58,17 +58,19 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 - [x] P3.10 (ajout) Refus `UNAVAILABLE` (capacité accordée sans fournisseur), `pickFields` partagé dans le protocole, réponse trop volumineuse signalée à l'appelant (`TOO_LARGE`) au lieu d'un délai ; 34 tests dont un bout en bout avec le vrai client (goto, report).
 
 ## P4 — `@egen-civitas/esm-embed-testing` (Framework)
-- [ ] P4.1 Simulateur d'hôte autonome (page HTML + script) : lance l'app dans une iframe, fournit des données de session/thème/événements configurables, journal des échanges.
-- [ ] P4.2 Suite de conformité : scénarios exécutables (poignée de main, négociation, refus, lecture session, événements, erreurs, dégradation) contre un client donné.
-- [ ] P4.3 Commande `egen-embed-sim` (bin) et documentation d'usage.
-- [ ] P4.4 Tests de la suite sur le client P2 ; build ; push + bilan.
+- [x] P4.1 Simulateur d'hôte autonome (serveur Node + page HTML qui charge l'hôte réel sans bundler, par import map) : lance l'app dans une iframe, fournit des données de session/thème/événements configurables, journal des échanges.
+- [x] P4.2 Suite de conformité : scénarios exécutables (poignée de main, négociation, refus, lecture session, événements, erreurs, dégradation) contre un client donné.
+- [x] P4.3 Commande `egen-embed-sim` (bin) et documentation d'usage.
+- [x] P4.4 Tests de la suite sur le client P2 ; build ; push + bilan.
+- [x] P4.5 (ajout) `createTestHost` : hôte de test en mémoire pour les tests unitaires d'une app (vrai `HostConnection`, journal des appels, `emit.*`, `invokeTool`).
+- ⚠ Limite connue : la page du simulateur est servie et son code chargé est vérifié côté serveur (15 tests) mais **son rendu et ses boutons n'ont pas été exécutés dans un navigateur réel** (aucun navigateur disponible dans l'environnement de développement) : couvert par P7.1.
 
 ## P5 — Intégration Core : `kind: embed` (Core + Framework)
 - [ ] P5.1 Lire et reprendre les points d'ancrage : `tools/external-apps.mjs`, `tools/sync-external-apps.mjs`, `tools/serve-prod.mjs`, `tools/runtime-config.mjs`, enregistrement des pages (Shell).
 - [ ] P5.2 Schéma `external-apps.json` : entrée `embed` (manifeste URL ou chemin, grants, limites) ; validation (manifeste valide, grants ⊆ demandé, https, route libre).
 - [ ] P5.3 Synchro : téléchargement du manifeste, SHA-256, **grants effectifs écrits dans le verrou** ; `external:check` détecte la dérive.
 - [ ] P5.4 `serve-prod` : revérifie le manifeste au démarrage (rejet en cas d'écart), synthétise les pages du registry pour l'app générique, expose la configuration d'instance.
-- [ ] P5.5a Adaptateurs de fournisseurs adossés aux services du Core : session/tenant/langue (`watchSession`, `watchTranslations`), thème (variables CSS), événements (bus du Core), notifications, dialogues, drapeaux, permissions, configuration, `esm-ai-tools`, télémétrie, `api` (`createFetchApiProvider` + en-têtes d'auth/tenant du Core).
+- [ ] P5.5a Adaptateurs de fournisseurs adossés aux services du Core : session/tenant/langue (`watchSession`, `watchTranslations`), thème (aligné sur le système de thème retenu par la réforme en cours — TokiForge / jetons ; le contrat `theme` `{ mode, tokens }` est indépendant du moteur), événements (bus du Core), notifications, dialogues, drapeaux, permissions, configuration, `esm-ai-tools`, télémétrie, `api` (`createFetchApiProvider` + en-têtes d'auth/tenant du Core).
 - [ ] P5.5 App générique `packages/apps/esm-embed-app` : une page par entrée `embed`, montage via `esm-embed-host`, placement rail/zone selon `placement`, route de préfixe.
 - [ ] P5.6 Statut (`external-apps.status.json`) : `kind: embed`, grants effectifs, avertissements.
 - [ ] P5.7 Tests d'outils (`yarn test:tools`) et tests de l'app ; docs 12, 15 mises à jour ; push + bilan.
