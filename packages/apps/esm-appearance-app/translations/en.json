@@ -1,1 +1,6 @@
-{}
+{
+  "enterFullscreen": "Plein écran",
+  "exitFullscreen": "Quitter le plein écran",
+  "switchToDarkMode": "Passer en mode sombre",
+  "switchToLightMode": "Passer en mode clair"
+}

@@ -1,5 +1,4 @@
 {
-  "assistant": "Assistant",
   "assistantActions": "Actions performed by the assistant",
   "assistantClose": "Close assistant",
   "assistantDisabled": "The AI assistant is not enabled on this environment.",
@@ -9,7 +8,6 @@
   "assistantMessageInput": "Message to send to the assistant",
   "assistantNewConversation": "New conversation",
   "assistantOffline": "Assistant offline — reconnecting…",
-  "assistantOpen": "Open assistant — {{name}}",
   "assistantPoweredBy": "Powered by {{company}}",
   "assistantSend": "Send",
   "assistantStartListening": "Dictate a message",
