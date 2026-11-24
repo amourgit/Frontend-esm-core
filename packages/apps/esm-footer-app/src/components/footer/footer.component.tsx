@@ -20,7 +20,7 @@ const FooterContent: React.FC = () => {
   }, []);
 
   return (
-    <footer className="relative z-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-border/40 bg-card/60 px-4 py-3 text-xs text-muted-foreground backdrop-blur-md">
+    <footer className="relative z-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 px-3 py-2 text-[11px] text-muted-foreground">
       <div className="flex flex-wrap items-center justify-center gap-2">
         <span>{t('builtBy', 'Built by')}</span>
         <a
@@ -30,7 +30,7 @@ const FooterContent: React.FC = () => {
           rel="noopener noreferrer"
           target="_blank"
         >
-          <img alt={t('civitasLogo', 'CIVITAS logo')} className="h-8 w-auto object-contain" src={civitasLogoFull} />
+          <img alt={t('civitasLogo', 'CIVITAS logo')} className="h-6 w-auto object-contain" src={civitasLogoFull} />
         </a>
         <span className="hidden sm:inline">
           {t('poweredBySubtext', 'Solutions numériques et IA pour entreprises et particuliers')}
