@@ -144,7 +144,7 @@ Déclaration par l'opérateur dans `external-apps.json` (nouveau `kind: "embed"`
 | --- | --- | --- | --- |
 | `@egen-civitas/esm-embed-protocol` | Framework | types, enveloppes, catalogue de capacités, validateurs, codes d'erreur, négociation, moteur RPC pur | aucune |
 | `@egen-civitas/esm-embed-client` | Framework | côté app : `connectToEgen()`, proxys typés par capacité, reconnexion, mode dégradé, liaisons `/react` | protocole |
-| `@egen-civitas/esm-embed-host` | Framework | côté Core : iframe, poignée de main, application des grants, fournisseurs de capacités adossés aux services EGEN, compatibilité v1.1 | protocole |
+| `@egen-civitas/esm-embed-host` | Framework | côté Core : iframe, poignée de main, application des grants, interfaces de fournisseurs (`HostProviders`) et `createFetchApiProvider`, navigation partagée, compatibilité v1.1 ; les adaptateurs adossés aux services du Core sont dans `esm-embed-app` | protocole |
 | `@egen-civitas/esm-embed-testing` | Framework | simulateur d'hôte pour développer l'app seule, suite de conformité | protocole, client, host |
 | `esm-embed-app` | Core | app générique : lit les entrées `embed`, monte l'hôte | host |
 
