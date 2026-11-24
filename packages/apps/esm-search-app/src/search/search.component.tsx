@@ -34,8 +34,7 @@ const Search: React.FC<SearchProps> = ({ searchOpen, setSearchOpen, closePanels,
 
   return (
     <div
-      className="relative overflow-visible flex items-center justify-start gap-2"
-      style={takeRoom ? { flex: '1 1 auto' } : undefined}
+      className={`relative overflow-visible flex items-center gap-2 ${takeRoom ? 'w-full justify-between' : 'justify-start'}`}
     >
       <GooeyInput
         placeholder={t('search', 'Rechercher...')}

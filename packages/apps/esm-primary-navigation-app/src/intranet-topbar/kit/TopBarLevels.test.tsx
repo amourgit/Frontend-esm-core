@@ -364,5 +364,37 @@ describe('TopBarLevels — niveaux déclarés par les apps', () => {
       expect(regionOf(container, 'un', 'right')).toHaveClass('full');
       expect(regionOf(container, 'deux', 'left')).not.toHaveClass('hidden');
     });
+
+    it('recherche ouverte en mobile : le slot « search » de la région droite prend toute la largeur', () => {
+      const mobile: TopBarUi = { ...ui, searchOpen: true, isMobile: true, isDesktop: false };
+      declare('search', { level: 'un', rank: 1, region: 'right' });
+      declare('horloge', { level: 'un', region: 'right' });
+      const yielding = { ...fullSkin, yieldLeftToSearch: true, rightFull: 'full' };
+      const { container } = render(
+        <TopBarUiProvider value={mobile}>
+          <TopBarLevels skinFor={() => yielding} />
+        </TopBarUiProvider>,
+      );
+      const slots = Array.from(regionOf(container, 'un', 'right').children) as HTMLElement[];
+      const byText = (text: string) => slots.find((s) => s.textContent === text)!;
+      expect(byText('search')).toHaveClass('flex-1');
+      expect(byText('search')).not.toHaveClass('shrink-0');
+      // Les autres slots sont masqués (`hidden`) : plus de `gap` résiduel à droite du slot search.
+      expect(byText('horloge')).toHaveClass('hidden');
+      expect(byText('horloge')).not.toHaveClass('flex');
+    });
+
+    it('recherche fermée : le slot « search » garde sa classe compacte', () => {
+      declare('search', { level: 'un', rank: 1, region: 'right' });
+      const yielding = { ...fullSkin, yieldLeftToSearch: true, rightFull: 'full' };
+      const { container } = render(
+        <TopBarUiProvider value={ui}>
+          <TopBarLevels skinFor={() => yielding} />
+        </TopBarUiProvider>,
+      );
+      const slot = regionOf(container, 'un', 'right').children[0] as HTMLElement;
+      expect(slot).toHaveClass('shrink-0');
+      expect(slot).not.toHaveClass('flex-1');
+    });
   });
 });

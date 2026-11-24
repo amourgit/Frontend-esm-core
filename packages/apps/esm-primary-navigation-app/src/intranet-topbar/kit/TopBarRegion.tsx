@@ -13,6 +13,11 @@ import { TOPBAR_SLOT, type TopBarRegion as Region } from './regions';
 // =============================================================================
 
 const SLOT_CLASS = 'flex shrink-0 items-center gap-1 empty:hidden';
+// Recherche ouverte en mobile : le slot de l'extension « search » occupe toute la largeur de la région
+// (bloc : ses enfants s'étirent naturellement). Les autres slots passent en `hidden` : leurs extensions
+// rendent `null` mais leur enveloppe reste un item flex qui créerait des `gap` résiduels à droite.
+const FILL_SLOT_CLASS = 'min-w-0 flex-1 empty:hidden';
+const HIDDEN_SLOT_CLASS = 'hidden';
 const BACKGROUND_SLOT_CLASS = 'absolute inset-0 empty:hidden';
 
 /** Ce que porte une entrée de région : une extension d'app, et le niveau où elle est DÉCLARÉE. */
@@ -36,11 +41,12 @@ export const TopBarSlotRegistrar: React.FC<{ state: Record<string, unknown> }> =
 );
 
 /** Une extension précise du slot (le slot en porte d'autres, rendues ailleurs : chacune à sa place). */
-const ExtensionEntry: React.FC<{ extension: TopBarExtension; state: Record<string, unknown>; background: boolean }> = ({
-  extension,
-  state,
-  background,
-}) => {
+const ExtensionEntry: React.FC<{
+  extension: TopBarExtension;
+  state: Record<string, unknown>;
+  background: boolean;
+  slotClassName?: string;
+}> = ({ extension, state, background, slotClassName = SLOT_CLASS }) => {
   const { id } = extension;
   const select = useCallback((all: AssignedExtension[]) => all.filter((e) => e.id === id), [id]);
   return (
@@ -48,7 +54,7 @@ const ExtensionEntry: React.FC<{ extension: TopBarExtension; state: Record<strin
       name={TOPBAR_SLOT}
       state={state}
       select={select}
-      className={background ? BACKGROUND_SLOT_CLASS : SLOT_CLASS}
+      className={background ? BACKGROUND_SLOT_CLASS : slotClassName}
     />
   );
 };
@@ -59,18 +65,27 @@ interface Props {
   region: Region;
   entries: readonly RegionEntry[];
   className?: string;
+  /** La recherche occupe la rangée en mobile : le slot « search » de la région droite prend toute la largeur. */
+  searchTakeover?: boolean;
 }
 
-export const TopBarRegion: React.FC<Props> = ({ level, region, entries, className = '' }) => {
+export const TopBarRegion: React.FC<Props> = ({ level, region, entries, className = '', searchTakeover = false }) => {
   const ui = useTopBarUi();
   // `state` stable : un nouvel objet à chaque rendu relancerait `updateExtensionSlotState` du slot en boucle.
   const state = useMemo(() => ({ ...ui, level, region }), [ui, level, region]);
   const background = region === 'background';
+  const takeover = searchTakeover && region === 'right';
 
   return (
     <div data-region={region} className={className}>
       {entries.map(({ payload: { extension } }) => (
-        <ExtensionEntry key={extension.id} extension={extension} state={state} background={background} />
+        <ExtensionEntry
+          key={extension.id}
+          extension={extension}
+          state={state}
+          background={background}
+          slotClassName={takeover ? (extension.name === 'search' ? FILL_SLOT_CLASS : HIDDEN_SLOT_CLASS) : undefined}
+        />
       ))}
     </div>
   );

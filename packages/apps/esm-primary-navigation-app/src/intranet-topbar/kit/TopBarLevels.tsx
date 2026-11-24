@@ -106,6 +106,7 @@ const TopBarLevel: React.FC<LevelProps> = ({ position, skin, regions, background
         region="right"
         entries={regions.right}
         className={yieldLeft && skin.rightFull ? `${skin.right} ${skin.rightFull}` : skin.right}
+        searchTakeover={yieldLeft}
       />
     </div>
   );

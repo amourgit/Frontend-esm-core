@@ -33,7 +33,7 @@ const LanguageSwitcher: React.FC<TopBarState> = ({ searchOpen, isDesktop }) => {
   if (searchOpen && isDesktop === false) return null;
 
   return (
-    <div className="relative flex items-center overflow-visible">
+    <div className="relative items-center overflow-visible hidden md:flex">
       <OptionButton
         label={t('changeLanguage', 'Changer de langue')}
         onClick={launchChangeLanguageModal}

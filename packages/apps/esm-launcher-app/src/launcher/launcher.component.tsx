@@ -51,7 +51,7 @@ const Launcher: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpe
   if (total === 0) return null;
 
   return (
-    <div className="relative overflow-visible items-center flex">
+    <div className="relative overflow-visible items-center hidden md:flex">
       <OptionButton
         label={t('AppMenuTooltip', 'Applications')}
         active={open}
@@ -64,7 +64,9 @@ const Launcher: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpe
         <GlassPanel
           className={`${PANEL_CLASS} w-[calc(100vw-16px)] sm:w-80`}
           contentClassName="p-3"
-          header={<span className="font-semibold text-sm text-white tracking-tight">{t('applications', 'Applications')}</span>}
+          header={
+            <span className="font-semibold text-sm text-white tracking-tight">{t('applications', 'Applications')}</span>
+          }
         >
           <div className={styles.grid} role="menu" aria-label={t('applications', 'Applications')}>
             <ExtensionSlot className={styles.gridSlot} name="app-menu-slot" />
