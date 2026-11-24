@@ -29,7 +29,7 @@ describe('esm-not-found-app Root', () => {
     unknown.mockReturnValue(false);
     const { container } = render(<Root />);
     expect(container).toBeEmptyDOMElement();
-    expect(screen.queryByTestId('not-found-page')).toBeNull();
+    expect(screen.queryByTestId('not-found-page')).not.toBeInTheDocument();
     expect(document.documentElement).not.toHaveAttribute('data-public-route');
   });
 
@@ -39,7 +39,7 @@ describe('esm-not-found-app Root', () => {
 
     unknown.mockReturnValue(false);
     routingEvent();
-    expect(screen.queryByTestId('not-found-page')).toBeNull();
+    expect(screen.queryByTestId('not-found-page')).not.toBeInTheDocument();
     expect(document.documentElement).not.toHaveAttribute('data-public-route');
 
     unknown.mockReturnValue(true);

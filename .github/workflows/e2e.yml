@@ -49,9 +49,20 @@ jobs:
               - 'example.env'
               - '.github/workflows/e2e.yml'
 
+  # ⚠️ E2E DÉSACTIVÉ (2026-11) — `if: false` ci-dessous. À réactiver quand
+  # un backend de test existera. Motifs :
+  #   1. run-e2e-docker-env.sh copie packages/{tooling,shell,framework},
+  #      supprimés du dépôt : le pipeline `egen assemble` est obsolète
+  #      (le SPA est servi par tools/serve-prod.mjs, apps buildées par turbo).
+  #   2. Les images backend Docker Hub egen/egen-reference-application-3-*
+  #      sont inaccessibles (401) : plus de fixture backend pour les specs
+  #      (/ws/rest/v1/session, login admin seedé).
+  # En attendant, les tests unitaires (turbo run test) couvrent les apps
+  # dans le workflow Egen CI. Pour réactiver : remettre la condition
+  # `needs.changes.outputs.test-changes == 'true'` et adapter le script.
   run-e2e-on-esm-core:
     needs: changes
-    if: ${{ needs.changes.outputs.test-changes == 'true' }}
+    if: ${{ false }}
 
     runs-on: ubuntu-latest
     timeout-minutes: 25
