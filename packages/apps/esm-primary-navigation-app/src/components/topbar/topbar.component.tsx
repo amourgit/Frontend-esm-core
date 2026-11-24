@@ -19,12 +19,33 @@ function useTopNavHeightVariable(ref: React.RefObject<HTMLDivElement>) {
   useEffect(() => {
     const element = ref.current;
     if (!element || typeof ResizeObserver === 'undefined') return;
-    const publish = () =>
-      document.documentElement.style.setProperty('--egen-topnav-height', `${element.getBoundingClientRect().height}px`);
+    const root = document.documentElement;
+    let last = -1;
+    let pending = -1;
+    let raf = 0;
+
+    // Écriture différée à la frame suivante : modifier une variable CSS dans le
+    // callback ResizeObserver peut redéclencher une notification dans la même
+    // frame (« ResizeObserver loop completed with undelivered notifications »).
+    const flush = () => {
+      raf = 0;
+      if (pending !== last) {
+        last = pending;
+        root.style.setProperty('--egen-topnav-height', `${pending}px`);
+      }
+    };
+    const publish = () => {
+      pending = Math.round(element.getBoundingClientRect().height);
+      if (!raf) raf = requestAnimationFrame(flush);
+    };
     publish();
     const observer = new ResizeObserver(publish);
     observer.observe(element);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (raf) cancelAnimationFrame(raf);
+      root.style.removeProperty('--egen-topnav-height');
+    };
   }, [ref]);
 }
 
