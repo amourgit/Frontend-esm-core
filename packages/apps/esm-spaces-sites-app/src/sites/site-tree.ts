@@ -61,19 +61,26 @@ export function buildSiteTree(sites: SiteNode[]): SiteTree {
     }
   }
 
-  // Boucles (A → B → A) : on remonte depuis chaque site ; au premier site revu dans la même remontée, on coupe le lien.
+  // Boucles (A → B → A) : on remonte depuis chaque site. Marquage d'état global
+  // (1 = en cours de remontée, 2 = chaîne prouvée sans boucle) : chaque site n'est
+  // parcouru qu'une fois au total — O(n) même sur une chaîne de 100 000 niveaux.
+  // Au premier site revu dans la même remontée, on coupe le lien.
+  const walkState = new Map<string, 1 | 2>();
   for (const start of byId.keys()) {
-    const walked = new Set<string>();
+    if (walkState.get(start) === 2) continue;
+    const path: string[] = [];
     let current: string | null = start;
-    while (current !== null) {
-      if (walked.has(current)) {
+    while (current !== null && walkState.get(current) !== 2) {
+      if (walkState.get(current) === 1) {
         warnings.push(`boucle dans les sites au niveau de « ${current} » : il devient une racine`);
         parentOf.set(current, null);
         break;
       }
-      walked.add(current);
+      walkState.set(current, 1);
+      path.push(current);
       current = parentOf.get(current) ?? null;
     }
+    for (const id of path) walkState.set(id, 2);
   }
 
   const childrenOf = new Map<string | null, SiteNode[]>();
