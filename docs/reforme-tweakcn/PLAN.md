@@ -16,7 +16,7 @@ le document de vision, qui le cite comme produit de l'écosystème, et l'**envel
 
 ## Partie B — Fork `amourgit/Frontend-esm-tweakcn-fork` (base : amont `jnsahaj/tweakcn`, Apache-2.0)
 
-Branche `feature/civitas-egen`. Les phases F0 à F7 (licence et attribution, retrait de la vitrine commerciale, redirection vers l'éditeur, décision auth/BDD,
+Branche `main` (ancienne branche de travail `feature/civitas-egen`, fusionnée par fast-forward puis supprimée le 2026-11-24). Les phases F0 à F7 (licence et attribution, retrait de la vitrine commerciale, redirection vers l'éditeur, décision auth/BDD,
 identité CIVITAS EGEN, image Docker, contrat de sortie vers TokiForge, documentation de déploiement) sont **faites selon `SUIVI.md` §3** ;
 leur détail et leurs critères de validation sont dans le dépôt du fork, qui en est la source de vérité.
 

@@ -10,7 +10,7 @@ de modèles 3D, ni dépendance à M3-org (§22).
 | Phase | Contenu | Statut |
 |-------|---------|--------|
 | CH0 | Inventaire ; étiquette `archive/character-factory-avant-reforme` (état exact du core avant retrait) | **FAIT** |
-| CH1 | Préservation dans le projet : branche `feature/reforme-character` de `egen-character-factory`, dossier `egen/` (couche EGEN, tests, config, patch des 12 fichiers adaptés vérifié octet pour octet) ; docs `docs/egen/` déjà identiques | **FAIT** |
+| CH1 | Préservation dans le projet : branche `main` de `egen-character-factory` (ancienne branche de travail `feature/reforme-character`, fusionnée par fast-forward puis supprimée le 2026-11-24), dossier `egen/` (couche EGEN, tests, config, patch des 12 fichiers adaptés vérifié octet pour octet) ; docs `docs/egen/` déjà identiques | **FAIT** |
 | CH2 | Retrait du Core : package `esm-character-factory-app`, `docs/character-factory`, `docs/ajout-info.md`, exclusion `character-factory` du 404, `yarn.lock` | **FAIT** |
 | CH3 | Framework : aucune référence au projet Character (vérifié) | **FAIT** (rien à supprimer) |
 | CH4 | Point d'usage côté EGEN : application externe `@civitas/esm-character-app` (iframe), voir `docs/integration-apps/15` §6 quater | **FAIT** |

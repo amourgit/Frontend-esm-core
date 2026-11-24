@@ -276,7 +276,7 @@ Points d'attention constatés : l'iframe n'est utilisable que si Penpot envoie u
 
 ## 6 ter. Exemple réel, à froid et en local : EGEN Theme Studio (tweakcn)
 
-Le fork `github.com/amourgit/Frontend-esm-tweakcn-fork` (branche `feature/civitas-egen`) est une application Next.js autonome (éditeur de thèmes) : cas **C3**, même chaîne que Penpot, plus simple (un seul service, `EGEN.md` dans le fork).
+Le fork `github.com/amourgit/Frontend-esm-tweakcn-fork` (branche `main`) est une application Next.js autonome (éditeur de thèmes) : cas **C3**, même chaîne que Penpot, plus simple (un seul service, `EGEN.md` dans le fork).
 
 | Étape | Ce qui est fait | Vérifié |
 | --- | --- | --- |
@@ -290,7 +290,7 @@ Le fork `github.com/amourgit/Frontend-esm-tweakcn-fork` (branche `feature/civita
 
 ## 6 quater. Exemple réel, à froid et en local : Character Factory
 
-Projet autonome `github.com/amourgit/egen-character-factory` (branche `feature/reforme-character`) : site **statique** (Vite, React, three-vrm), sans backend ni base : cas **C3**, le plus léger. L'ancienne app interne du Core a été retirée (réforme Character) ; le Core ne connaît que l'enveloppe.
+Projet autonome `github.com/amourgit/egen-character-factory` (branche `main`) : site **statique** (Vite, React, three-vrm), sans backend ni base : cas **C3**, le plus léger. L'ancienne app interne du Core a été retirée (réforme Character) ; le Core ne connaît que l'enveloppe.
 
 | Étape | Ce qui est fait | Vérifié |
 | --- | --- | --- |
