@@ -18,6 +18,25 @@ const isCssColor = (value: unknown): boolean => {
 // =============================================================================
 
 export const configSchema = {
+  civitas: {
+    logoUrl: {
+      _type: Type.String,
+      _default: '',
+      _description: 'URL du logo CIVITAS complet pour le footer (logo + nom + signature).',
+      _validators: [validators.isUrl],
+    },
+    websiteUrl: {
+      _type: Type.String,
+      _default: 'https://civitas-africa.vercel.app/',
+      _description: 'URL du site web de CIVITAS.',
+      _validators: [validators.isUrl],
+    },
+    tagline: {
+      _type: Type.String,
+      _default: 'La plateforme éducative nationale du Gabon',
+      _description: 'Sous-titre affiché à côté du logo CIVITAS.',
+    },
+  },
   company: {
     name: {
       _type: Type.String,
@@ -42,7 +61,7 @@ export const configSchema = {
       _type: Type.String,
       _default: DEFAULT_FOOTER_TEXT_COLOR,
       _description:
-        "Couleur des textes du footer (nom, accroche, liens, copyright). Toute couleur CSS valide (ex. « #000000 », « rgb(0, 0, 0) », « navy »). Le fond du footer est toujours blanc.",
+        'Couleur des textes du footer (nom, accroche, liens, copyright). Toute couleur CSS valide (ex. « #000000 », « rgb(0, 0, 0) », « navy »). Le fond du footer est toujours blanc.',
       _validators: [validator(isCssColor, 'Doit être une couleur CSS valide (ex. #000000).')],
     },
   },
@@ -75,6 +94,25 @@ export const configSchema = {
     _default: [],
     _description: 'Liens secondaires optionnels affichés dans le footer (mentions légales, contact, etc.).',
   },
+  additionalLogos: {
+    _type: Type.Array,
+    _elements: {
+      _type: Type.Object,
+      src: {
+        _type: Type.String,
+        _required: true,
+        _description: 'The source URL of the logo image',
+        _validators: [validators.isUrl],
+      },
+      alt: {
+        _type: Type.String,
+        _required: true,
+        _description: 'The alternative text for the logo image',
+      },
+    },
+    _default: [],
+    _description: 'An array of logos to be displayed in the footer next to the CIVITAS logo.',
+  },
 };
 
 export type FooterLink = {
@@ -83,6 +121,11 @@ export type FooterLink = {
 };
 
 export type ConfigSchema = {
+  civitas: {
+    logoUrl: string;
+    websiteUrl: string;
+    tagline: string;
+  };
   company: {
     name: string;
     tagline: string;
@@ -96,4 +139,8 @@ export type ConfigSchema = {
     text: string;
   };
   links: Array<FooterLink>;
+  additionalLogos: Array<{
+    src: string;
+    alt: string;
+  }>;
 };

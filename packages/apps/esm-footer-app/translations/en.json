@@ -1,5 +1,7 @@
 {
-  "appFooter": "Application footer",
-  "footerCopyright": "© {{year}} {{company}}",
-  "footerLinks": "Footer links"
+  "builtBy": "Built by",
+  "civitasLinkLabel": "Visit the CIVITAS website (opens in a new tab)",
+  "civitasLogo": "CIVITAS logo",
+  "footerlogo": "Footer Logo",
+  "poweredBySubtext": "La plateforme éducative nationale du Gabon"
 }

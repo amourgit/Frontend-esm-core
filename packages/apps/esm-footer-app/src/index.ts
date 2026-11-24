@@ -14,5 +14,5 @@ export function startupApp() {
   defineConfigSchema(moduleName, configSchema);
 }
 
-// ─── Page : le Footer (garde sa propre logique de garde d'authentification) ──
+// ─── Page : le Footer (accessible partout, sans garde d'authentification) ──
 export const root = getSyncLifecycle(footerRootComponent, options);

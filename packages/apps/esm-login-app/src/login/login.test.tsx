@@ -64,10 +64,8 @@ describe('Login', () => {
       },
     );
 
-    // En-tête : logo du produit (EGEN). Pied de page : crédit de l'éditeur (CIVITAS), plus le logo EGEN.
+    // En-tête : logo du produit (EGEN). Le footer est maintenant global et ne fait plus partie du login component.
     expect(screen.getAllByRole('img', { name: /Egen logo/i })).toHaveLength(1);
-    expect(screen.getByRole('link', { name: /CIVITAS/i })).toHaveAttribute('href', 'https://civitas-africa.vercel.app/');
-    expect(screen.queryByAltText(/^logo$/i)).not.toBeInTheDocument();
     screen.getByRole('textbox', { name: /Username/i });
     screen.getByRole('button', { name: /Continue/i });
   });

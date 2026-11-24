@@ -3,7 +3,7 @@
   "pages": [
     {
       "component": "root",
-      "routeRegex": "^(?!(?:login|logout|change-password)/?)",
+      "routeRegex": ".*",
       "online": true,
       "offline": true,
       "containerDomId": "egen-footer-app-container"

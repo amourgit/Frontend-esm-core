@@ -7,10 +7,6 @@ import Root from './root.component';
 vi.mock('react-router-dom', () => ({
   BrowserRouter: ({ children }: any) => <>{children}</>,
   Route: ({ children, element, path }: any) => {
-    const publicPaths = ['login/*', 'logout/*', 'change-password/*'];
-    if (publicPaths.includes(path)) {
-      return null;
-    }
     return element ?? children;
   },
   Routes: ({ children }: any) => <>{children}</>,
@@ -21,7 +17,7 @@ vi.mock('./components/footer/footer.component', () => ({
 }));
 
 describe('Root', () => {
-  it('renders the footer on authenticated routes', () => {
+  it('renders the footer on all routes', () => {
     render(<Root />);
     expect(screen.getByTestId('footer')).toBeInTheDocument();
   });

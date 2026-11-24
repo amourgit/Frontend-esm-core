@@ -22,7 +22,6 @@ import { Confetti, type ConfettiRef } from './ui/confetti.component';
 import { GlassButton } from './ui/glass-button.component';
 import { GradientBackground } from './ui/gradient-background.component';
 import { LoginAnnouncements } from './login-announcements.component';
-import { LoginFooter } from './login-footer.component';
 import { LoginLogo } from './login-logo.component';
 import { LoginStatusModal, type LoginModalStatus } from './login-status-modal.component';
 
@@ -519,8 +518,6 @@ const Login: React.FC = () => {
           </form>
         </fieldset>
       </main>
-
-      <LoginFooter />
     </div>
   );
 };

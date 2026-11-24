@@ -17,9 +17,6 @@ export const mockConfig: ConfigSchema = {
   links: {
     loginSuccess: '${egenSpaBase}/home',
   },
-  footer: {
-    additionalLogos: [],
-  },
   carousel: {
     intervalMs: 5500,
     slides: [],

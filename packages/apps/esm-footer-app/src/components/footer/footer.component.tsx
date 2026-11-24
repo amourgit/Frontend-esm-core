@@ -1,119 +1,55 @@
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ConfigurableLink, useConfig, useSession } from '@egen-civitas/esm-framework';
-import { type ConfigSchema, type FooterLink } from '../../config-schema';
-import { DEFAULT_FOOTER_TEXT_COLOR } from '../../constants';
-import styles from './footer.module.css';
+import { useConfig } from '@egen-civitas/esm-framework';
+import civitasLogoFull from '../../../../../../branding/civitas-logo-full.png';
+import { type ConfigSchema } from '../../config-schema';
 
-// =============================================================================
-//  FOOTER — Pied de page minimaliste EGEN
-//
-//  Rôle unique : afficher les informations de l'entreprise à l'origine du
-//  projet (nom, accroche, copyright, liens secondaires optionnels).
-//
-//  Présence : mêmes pages authentifiées que la TopBar (voir root.component.tsx
-//  — même liste de routes publiques exclues). Aucune logique de session ici,
-//  la garde d'authentification vit dans `FooterGuard` ci-dessous, à l'identique
-//  du patron déjà établi par `TopBar` dans esm-primary-navigation-app.
-// =============================================================================
-
-const isExternalLink = (url: string): boolean => /^https?:\/\//i.test(url);
-
-const FooterExternalLink: React.FC<{ link: FooterLink }> = ({ link }) => (
-  <a href={link.url} target="_blank" rel="noopener noreferrer" className={styles.footerLink}>
-    {link.title}
-  </a>
-);
-
-const FooterInternalLink: React.FC<{ link: FooterLink }> = ({ link }) => (
-  <ConfigurableLink to={link.url} className={styles.footerLink}>
-    {link.title}
-  </ConfigurableLink>
-);
-
+/**
+ * Pied de page global : utilise le même design que le LoginFooter
+ * Ce footer est affiché partout (login, logout, pages authentifiées)
+ */
 const FooterContent: React.FC = () => {
   const { t } = useTranslation();
   const config = useConfig<ConfigSchema>();
-  const currentYear = useMemo(() => new Date().getFullYear(), []);
+  const { civitas } = config;
+  const additionalLogos = config.additionalLogos ?? [];
+  const civitasWebsite = 'https://civitas-africa.vercel.app/';
 
-  const { company, copyright, links } = config;
-  // Couleur des textes : pilotée par la config, noire par défaut. Passée au SCSS via une variable CSS.
-  const textColor = config.appearance?.textColor || DEFAULT_FOOTER_TEXT_COLOR;
-  const wrapperStyle = { '--footer-text-color': textColor } as React.CSSProperties;
-  const hasCompanyUrl = Boolean(company.url);
-  const hasLinks = links.length > 0;
+  const handleImageLoadError = useCallback((error: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.error('Failed to load image', error);
+  }, []);
 
   return (
-    <footer
-      className={styles.footerWrapper}
-      style={wrapperStyle}
-      aria-label={t('appFooter', 'Pied de page de l’application')}
-    >
-      <div className={styles.footerInner}>
-        {/* ── GAUCHE — Identité de l'entreprise ── */}
-        <div className={styles.companySection}>
-          {hasCompanyUrl ? (
-            <a href={company.url} target="_blank" rel="noopener noreferrer" className={styles.companyName}>
-              {company.name}
-            </a>
-          ) : (
-            <span className={styles.companyName}>{company.name}</span>
-          )}
-
-          {company.tagline && (
-            <>
-              <span className={styles.dot} aria-hidden="true">
-                ·
-              </span>
-              <span className={styles.tagline}>{company.tagline}</span>
-            </>
-          )}
-        </div>
-
-        {/* ── DROITE — Liens secondaires + copyright ── */}
-        <div className={styles.metaSection}>
-          {hasLinks && (
-            <nav className={styles.linksNav} aria-label={t('footerLinks', 'Liens du pied de page')}>
-              {links.map((link) =>
-                isExternalLink(link.url) ? (
-                  <FooterExternalLink key={`${link.title}-${link.url}`} link={link} />
-                ) : (
-                  <FooterInternalLink key={`${link.title}-${link.url}`} link={link} />
-                ),
-              )}
-            </nav>
-          )}
-
-          <span className={styles.copyright}>
-            {copyright.showYear ? t('footerCopyright', '© {{year}} {{company}}', {
-              year: currentYear,
-              company: company.name,
-            }) : company.name}
-            {copyright.text ? ` — ${copyright.text}` : ''}
-          </span>
-        </div>
+    <footer className="relative z-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-border/40 bg-card/60 px-4 py-3 text-xs text-muted-foreground backdrop-blur-md">
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        <span>{t('builtBy', 'Built by')}</span>
+        <a
+          aria-label={t('civitasLinkLabel', 'Visit the CIVITAS website (opens in a new tab)')}
+          className="inline-flex items-center rounded-md transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          href={civitasWebsite}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <img alt={t('civitasLogo', 'CIVITAS logo')} className="h-8 w-auto object-contain" src={civitasLogoFull} />
+        </a>
+        <span className="hidden sm:inline">{t('poweredBySubtext', 'La plateforme éducative nationale du Gabon')}</span>
       </div>
+
+      {additionalLogos.length > 0 && (
+        <div className="flex items-center gap-4">
+          {additionalLogos.map((logo) => (
+            <img
+              alt={logo.alt ? t(logo.alt) : t('footerlogo', 'Footer Logo')}
+              className="h-6 w-auto object-contain"
+              key={logo.src}
+              onError={handleImageLoadError}
+              src={logo.src}
+            />
+          ))}
+        </div>
+      )}
     </footer>
   );
 };
 
-// =============================================================================
-//  FOOTER — Garde d'authentification (même règle que TopBar)
-//
-//  RESPONSABILITÉ :
-//    • N'affiche rien tant que l'utilisateur n'est pas connecté.
-//    • Aucune redirection ici : ce rôle appartient déjà à TopBar / aux guards
-//      de tenant. Le footer reste un composant purement passif, jamais un
-//      point de décision de navigation — défense en profondeur uniquement.
-// =============================================================================
-const Footer: React.FC = () => {
-  const session = useSession();
-
-  if (session?.authenticated && session?.user?.person) {
-    return <FooterContent />;
-  }
-
-  return null;
-};
-
-export default Footer;
+export default FooterContent;

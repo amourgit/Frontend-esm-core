@@ -2,102 +2,48 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { useConfig, useSession, type Session } from '@egen-civitas/esm-framework';
-import { mockSession, mockUnauthenticatedSession } from '../../../__mocks__/mock-session';
+import { useConfig } from '@egen-civitas/esm-framework';
 import Footer from './footer.component';
 
 vi.mock('@egen-civitas/esm-framework', () => ({
   useConfig: vi.fn(),
-  useSession: vi.fn(),
   ConfigurableLink: ({ children, to }: any) => <a href={to}>{children}</a>,
 }));
 
 const mockUseConfig = vi.mocked(useConfig);
-const mockUseSession = vi.mocked(useSession);
 
 const baseConfig = {
+  civitas: {
+    logoUrl: '',
+    websiteUrl: 'https://civitas-africa.vercel.app/',
+    tagline: 'La plateforme éducative nationale du Gabon',
+  },
   company: { name: 'CIVITAS', tagline: "Solutions d'intégration IA", url: '' },
   appearance: { textColor: '#000000' },
   copyright: { showYear: true, text: '' },
   links: [],
+  additionalLogos: [],
 };
 
 describe('Footer', () => {
-  it('renders nothing when the user is not authenticated', () => {
-    mockUseSession.mockReturnValue(mockUnauthenticatedSession as unknown as Session);
-    mockUseConfig.mockReturnValue(baseConfig);
-
-    const { container } = render(<Footer />);
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it('renders the company name and tagline when authenticated', () => {
-    mockUseSession.mockReturnValue(mockSession as unknown as Session);
+  it('renders the footer content', () => {
     mockUseConfig.mockReturnValue(baseConfig);
 
     render(<Footer />);
 
-    expect(screen.getByText('CIVITAS')).toBeInTheDocument();
-    expect(screen.getByText("Solutions d'intégration IA")).toBeInTheDocument();
+    expect(screen.getByText('Built by')).toBeInTheDocument();
+    expect(screen.getByAltText('CIVITAS logo')).toBeInTheDocument();
+    expect(screen.getByText('La plateforme éducative nationale du Gabon')).toBeInTheDocument();
   });
 
-  it('renders the company name as a link when a company URL is configured', () => {
-    mockUseSession.mockReturnValue(mockSession as unknown as Session);
+  it('renders additional logos when configured', () => {
     mockUseConfig.mockReturnValue({
       ...baseConfig,
-      company: { ...baseConfig.company, url: 'https://civitas.example' },
+      additionalLogos: [{ src: 'https://example.com/logo.png', alt: 'Example Logo' }],
     });
 
     render(<Footer />);
 
-    expect(screen.getByRole('link', { name: 'CIVITAS' })).toHaveAttribute('href', 'https://civitas.example');
-  });
-
-  it('renders configured secondary links', () => {
-    mockUseSession.mockReturnValue(mockSession as unknown as Session);
-    mockUseConfig.mockReturnValue({
-      ...baseConfig,
-      links: [{ title: 'Contact', url: 'https://civitas.example/contact' }],
-    });
-
-    render(<Footer />);
-
-    expect(screen.getByRole('link', { name: 'Contact' })).toHaveAttribute('href', 'https://civitas.example/contact');
-  });
-
-  describe('couleur des textes', () => {
-    const footerEl = () => screen.getByRole('contentinfo');
-
-    it('est noire par défaut', () => {
-      mockUseSession.mockReturnValue(mockSession as unknown as Session);
-      mockUseConfig.mockReturnValue(baseConfig);
-
-      render(<Footer />);
-
-      expect(footerEl().style.getPropertyValue('--footer-text-color')).toBe('#000000');
-    });
-
-    it('suit la couleur configurée', () => {
-      mockUseSession.mockReturnValue(mockSession as unknown as Session);
-      mockUseConfig.mockReturnValue({ ...baseConfig, appearance: { textColor: 'rgb(10, 20, 30)' } });
-
-      render(<Footer />);
-
-      expect(footerEl().style.getPropertyValue('--footer-text-color')).toBe('rgb(10, 20, 30)');
-    });
-
-    it('retombe sur le noir si la config ne fournit pas la couleur (vide ou absente)', () => {
-      mockUseSession.mockReturnValue(mockSession as unknown as Session);
-
-      mockUseConfig.mockReturnValue({ ...baseConfig, appearance: { textColor: '' } });
-      const { unmount } = render(<Footer />);
-      expect(footerEl().style.getPropertyValue('--footer-text-color')).toBe('#000000');
-      unmount();
-
-      const { appearance: _omitted, ...withoutAppearance } = baseConfig;
-      mockUseConfig.mockReturnValue(withoutAppearance as typeof baseConfig);
-      render(<Footer />);
-      expect(footerEl().style.getPropertyValue('--footer-text-color')).toBe('#000000');
-    });
+    expect(screen.getByAltText('Example Logo')).toBeInTheDocument();
   });
 });
