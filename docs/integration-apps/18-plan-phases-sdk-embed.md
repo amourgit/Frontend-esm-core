@@ -66,14 +66,16 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 - ⚠ Limite connue : la page du simulateur est servie et son code chargé est vérifié côté serveur (15 tests) mais **son rendu et ses boutons n'ont pas été exécutés dans un navigateur réel** (aucun navigateur disponible dans l'environnement de développement) : couvert par P7.1.
 
 ## P5 — Intégration Core : `kind: embed` (Core + Framework)
-- [ ] P5.1 Lire et reprendre les points d'ancrage : `tools/external-apps.mjs`, `tools/sync-external-apps.mjs`, `tools/serve-prod.mjs`, `tools/runtime-config.mjs`, enregistrement des pages (Shell).
-- [ ] P5.2 Schéma `external-apps.json` : entrée `embed` (manifeste URL ou chemin, grants, limites) ; validation (manifeste valide, grants ⊆ demandé, https, route libre).
-- [ ] P5.3 Synchro : téléchargement du manifeste, SHA-256, **grants effectifs écrits dans le verrou** ; `external:check` détecte la dérive.
-- [ ] P5.4 `serve-prod` : revérifie le manifeste au démarrage (rejet en cas d'écart), synthétise les pages du registry pour l'app générique, expose la configuration d'instance.
+- [x] P5.1 Lire et reprendre les points d'ancrage : `tools/external-apps.mjs`, `tools/sync-external-apps.mjs`, `tools/serve-prod.mjs`, `tools/runtime-config.mjs`, enregistrement des pages (Shell).
+- [x] P5.2 Schéma `external-apps.json` : entrée `embed` (manifeste URL ou chemin, grants, limites) ; validation (manifeste valide, grants ⊆ demandé, https, route libre).
+- [x] P5.3 Synchro : lecture du manifeste (URL https ou chemin local), validation, SHA-256 (source et figé), **plafond approuvé écrit dans le verrou** ; `external:check` détecte la dérive. *Décision : les grants **effectifs** ne sont pas calculés par les outils (sans dépendance) mais dans le navigateur par `effectiveGrants` du protocole : une seule implémentation (voir 17 §7).*
+- [x] P5.4 `serve-prod` : revérifie le manifeste au démarrage (rejet en cas d'écart), synthétise les pages du registry pour l'app générique, expose la configuration d'instance.
 - [ ] P5.5a Adaptateurs de fournisseurs adossés aux services du Core : session/tenant/langue (`watchSession`, `watchTranslations`), thème (aligné sur le système de thème retenu par la réforme en cours — TokiForge / jetons ; le contrat `theme` `{ mode, tokens }` est indépendant du moteur), événements (bus du Core), notifications, dialogues, drapeaux, permissions, configuration, `esm-ai-tools`, télémétrie, `api` (`createFetchApiProvider` + en-têtes d'auth/tenant du Core).
-- [ ] P5.5 App générique `packages/apps/esm-embed-app` : une page par entrée `embed`, montage via `esm-embed-host`, placement rail/zone selon `placement`, route de préfixe.
-- [ ] P5.6 Statut (`external-apps.status.json`) : `kind: embed`, grants effectifs, avertissements.
+- [ ] P5.5 ⏳ App générique `packages/apps/esm-embed-app` : une page par entrée `embed`, montage via `esm-embed-host`, placement rail/zone selon `placement`, route de préfixe.
+- [x] P5.6 Statut (`external-apps.status.json`) : `kind: embed`, grants effectifs, avertissements.
 - [ ] P5.7 Tests d'outils (`yarn test:tools`) et tests de l'app ; docs 12, 15 mises à jour ; push + bilan.
+- [x] P5.8 (ajout) Tests d'outils : 12 nouveaux (`embed-apps.test.mjs`) ; suite `yarn test:tools` 54/54. Régression évitée : trois tests existants copient les outils par liste de fichiers, `embed-apps.mjs` y a été ajouté.
+- ⏳ **Bloqué par la publication npm** : P5.5, P5.5a et P5.7 (app, adaptateurs, doc 15) importent `@egen-civitas/esm-embed-*`, non publiés tant que la PR de release du Framework (#152 « chore: release packages ») n'est pas fusionnée. Décision de publication laissée à l'équipe ; reprise immédiate ensuite.
 
 ## P6 — Migration des apps et compatibilité
 - [ ] P6.1 **tweakcn (pilote)** : ajouter `egen-app.json`, adopter `esm-embed-client` (thème synchronisé, session, événements), retirer le wrapper `esm-tweakcn-app` du Core au profit de l'entrée `embed`.

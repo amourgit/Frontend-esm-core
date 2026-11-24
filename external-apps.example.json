@@ -4,5 +4,6 @@
   "apps": {
     "@acme/esm-hello-app": "1.0.0"
   },
-  "remote": []
+  "remote": [],
+  "embed": []
 }

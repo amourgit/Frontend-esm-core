@@ -24,9 +24,11 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { EMBED_APP_NAME, buildEmbedRegistry, checkApproved, checkEmbedManifest, checkLimits, embedWarnings } from './embed-apps.mjs';
 
 export const LOCK_FILE = 'external-apps.lock.json';
 export const LOCK_VERSION = 1;
+export { EMBED_APP_NAME };
 
 /** Conteneurs réellement présents dans le HTML du Shell (fw/packages/shell/esm-app-shell/src/index.ejs). */
 export const KNOWN_CONTAINERS = new Set([
@@ -50,6 +52,7 @@ export const sha256 = (buf) => createHash('sha256').update(buf).digest('hex');
 
 const NAME_RE = /^(@[a-z0-9~][a-z0-9._~-]*\/)?[a-z0-9~][a-z0-9._~-]*$/;
 const SEGMENT_RE = /^[A-Za-z0-9][A-Za-z0-9._@~+-]*$/;
+const EMBED_SNAPSHOT_RE = /^embed\/manifests\/[A-Za-z0-9][A-Za-z0-9._@~+-]*\.json$/;
 const SNAPSHOT_RE = /^remote\/routes\/[A-Za-z0-9][A-Za-z0-9._@~+-]*\.json$/;
 const MAX_SCAN_BYTES = 64 * 1024 * 1024;
 
@@ -144,10 +147,12 @@ function readJson(file) {
  * @param {string} o.spaPath        ex. '/egen-civitas/spa'
  * @param {Set<string>} [o.internalNames] noms des apps internes (priorité absolue)
  * @param {boolean} [o.allowHttp]   autorise les bundles distants en http (hors production)
+ * @param {Set<string>} [o.reservedRoutes] routes déjà prises par d'autres pages (une app embarquée ne peut pas les réutiliser)
  * @returns {{importMap:Object, routes:Object, mounts:Map<string,string>, apps:Array}}
  */
-export function loadExternalApps({ dir, spaPath, internalNames = new Set(), allowHttp = false }) {
-  const out = { importMap: {}, routes: {}, mounts: new Map(), apps: [] };
+export function loadExternalApps({ dir, spaPath, internalNames = new Set(), allowHttp = false, reservedRoutes = new Set() }) {
+  const out = { importMap: {}, routes: {}, mounts: new Map(), apps: [], embed: [], embedRegistry: { pages: [], extensions: [] } };
+  const embedRoutes = new Set();
   const lockFile = join(dir, LOCK_FILE);
   if (!existsSync(lockFile)) return out;
 
@@ -215,11 +220,38 @@ export function loadExternalApps({ dir, spaPath, internalNames = new Set(), allo
           try { routes = JSON.parse(raw.toString('utf8')); } catch (e) { issues.push(err(`snapshot de routes illisible : ${e.message}`)); }
         }
       }
+    } else if (entry?.kind === 'embed') {
+      // App embarquée (iframe) : aucun bundle ; le manifeste figé + le plafond approuvé alimentent l'app générique.
+      let manifest = null;
+      if (!EMBED_SNAPSHOT_RE.test(String(entry.manifestFile ?? ''))) {
+        issues.push(err('chemin du manifeste invalide dans le verrou'));
+      } else {
+        const mf = join(dir, entry.manifestFile);
+        if (!existsSync(mf)) issues.push(err('manifeste introuvable (relancer yarn external:sync)'));
+        else {
+          const raw = readFileSync(mf);
+          if (entry.manifestSha256 && sha256(raw) !== entry.manifestSha256) issues.push(err('manifeste modifié depuis la synchronisation (empreinte SHA-256 différente du verrou)'));
+          try { manifest = JSON.parse(raw.toString('utf8')); } catch (e) { issues.push(err(`manifeste illisible : ${e.message}`)); }
+        }
+      }
+      if (manifest) {
+        for (const m of [...checkEmbedManifest(manifest, { allowHttp }), ...checkApproved(entry.approved), ...checkLimits(entry.limits)]) issues.push(err(m));
+        if (manifest.name !== name) issues.push(err(`le nom du manifeste (${manifest.name}) diffère du nom du verrou`));
+        if (reservedRoutes.has(manifest.route)) issues.push(err(`route « ${manifest.route} » déjà utilisée par une autre page du Core`));
+        else if (embedRoutes.has(manifest.route)) issues.push(err(`route « ${manifest.route} » déjà utilisée par une autre app embarquée`));
+        if (!issues.some((i) => i.level === 'error')) {
+          embedRoutes.add(manifest.route);
+          for (const m of embedWarnings(manifest, entry.approved)) issues.push(warn(m));
+          rec.embedRoute = manifest.route;
+          rec.version = manifest.version;
+          out.embed.push({ name, version: manifest.version, manifest, approved: entry.approved ?? {}, limits: entry.limits ?? {} });
+        }
+      }
     } else {
       issues.push(err(`type d'entrée inconnu : ${String(entry?.kind)}`));
     }
 
-    issues.push(...checkRoutes(routes));
+    if (entry?.kind !== 'embed') issues.push(...checkRoutes(routes));
 
     if (routes && Array.isArray(routes.extensions)) {
       for (const e of routes.extensions) {
@@ -243,6 +275,7 @@ export function loadExternalApps({ dir, spaPath, internalNames = new Set(), allo
     }
     out.apps.push(rec);
   }
+  out.embedRegistry = buildEmbedRegistry(out.embed);
   return out;
 }
 

@@ -27,6 +27,7 @@ import { createReadStream, existsSync, readFileSync, readdirSync, statSync } fro
 import { basename, dirname, extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { formatReport, loadExternalApps } from './external-apps.mjs';
+import { EMBED_APP_NAME, buildEmbedConfig } from './embed-apps.mjs';
 import { RuntimeConfigError, buildConfigUrls, loadRuntimeConfig } from './runtime-config.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -115,15 +116,36 @@ let importMapJson = '';
 let routesJson = '';
 let externalMounts = new Map();
 let externalStatusJson = '[]';
+let embedConfigJson = JSON.stringify({ version: 1, apps: [] });
 
 function publishRegistries() {
-  const ext = loadExternalApps({ dir: EXTERNAL_DIR, spaPath: SPA, internalNames, allowHttp: EXTERNAL_ALLOW_HTTP });
+  // Routes déjà prises par les pages des apps internes : une app embarquée ne peut pas les réutiliser.
+  const reservedRoutes = new Set();
+  for (const r of Object.values(routes)) for (const p of r.pages ?? []) if (typeof p.route === 'string') reservedRoutes.add(p.route);
+  const ext = loadExternalApps({ dir: EXTERNAL_DIR, spaPath: SPA, internalNames, allowHttp: EXTERNAL_ALLOW_HTTP, reservedRoutes });
   externalMounts = ext.mounts;
   const imports = { ...importMap, ...ext.importMap };
   // un nom présent dans `imports` (ex. app externe homonyme) n'est jamais remplacé par un alias
   const effectiveAliases = Object.fromEntries(Object.entries(aliases).filter(([k, v]) => !(k in imports) && v in imports));
   importMapJson = JSON.stringify(Object.keys(effectiveAliases).length ? { imports, aliases: effectiveAliases } : { imports });
-  routesJson = JSON.stringify({ ...routes, ...ext.routes });
+  const merged = { ...routes, ...ext.routes };
+  embedConfigJson = JSON.stringify({ version: 1, apps: [] });
+  if (ext.embed.length) {
+    if (!(EMBED_APP_NAME in importMap)) {
+      // L'app générique n'est pas compilée : on le dit clairement plutôt que d'exposer des routes qui n'affichent rien.
+      log(`externes : ${ext.embed.length} app(s) embarquée(s) ignorée(s) : ${EMBED_APP_NAME} non compilée (lancer "yarn build:apps")`);
+      for (const a of ext.apps) if (a.kind === 'embed' && a.status !== 'rejected') { a.status = 'rejected'; a.errors.push(`${EMBED_APP_NAME} non compilée`); }
+    } else {
+      const base = merged[EMBED_APP_NAME] ?? {};
+      merged[EMBED_APP_NAME] = {
+        ...base,
+        pages: [...(base.pages ?? []), ...ext.embedRegistry.pages],
+        extensions: [...(base.extensions ?? []), ...ext.embedRegistry.extensions],
+      };
+      embedConfigJson = JSON.stringify(buildEmbedConfig(ext.embed));
+    }
+  }
+  routesJson = JSON.stringify(merged);
   externalStatusJson = JSON.stringify({
     apps: ext.apps.map(({ name, kind, version, status, errors, warnings }) => ({ name, kind, version, status, errors, warnings })),
   });
@@ -239,6 +261,7 @@ const server = http.createServer((req, res) => {
       const rel = pathname.slice(SPA.length).replace(/^\/+/, '');
       if (rel === 'importmap.json') return sendBuffer(req, res, TYPES['.json'], importMapJson);
       if (rel === 'routes.registry.json') return sendBuffer(req, res, TYPES['.json'], routesJson);
+      if (rel === 'embed-apps.json') return sendBuffer(req, res, TYPES['.json'], embedConfigJson, 'no-store');
       if (rel === 'external-apps.status.json') return sendBuffer(req, res, TYPES['.json'], externalStatusJson);
       if (rel === 'config.json' && runtimeConfigJson !== null) return sendBuffer(req, res, TYPES['.json'], runtimeConfigJson, 'no-store');
 

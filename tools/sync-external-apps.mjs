@@ -14,6 +14,11 @@
  *       "@acme/esm-local-app": "file:../x/acme-local-1.0.0.tgz",   // tarball local
  *       "@acme/esm-url-app":   "https://exemple.org/esm-url-app-1.0.0.tgz"  // tarball https
  *     },
+ *     "embed": [                                            // APPS EMBARQUÉES (iframe, protocole v2 : docs 17)
+ *       { "manifest": "https://studio.exemple.org/egen-app.json",   //   URL https ou chemin local du manifeste
+ *         "grants": { "theme": {}, "notifications": {}, "events": { "publish": ["app.studio.*"] } },  // plafond approuvé
+ *         "limits": { "requestsPerSecond": 50 } }              //   optionnel
+ *     ],
  *     "remote": [                                           // HÉBERGÉES AILLEURS (référencées par URL)
  *       { "name": "@partner/esm-x-app",
  *         "bundle": "https://cdn.partner.org/x/1.0.0/partner-esm-x-app.js",
@@ -31,6 +36,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkApproved, checkEmbedManifest, checkLimits } from './embed-apps.mjs';
 import { LOCK_FILE, LOCK_VERSION, formatReport, isSafeSegment, loadExternalApps, sha256 } from './external-apps.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -66,7 +72,14 @@ function readConfig() {
     if (seen.has(r.name)) fail(`application déclarée deux fois : ${r.name}`);
     seen.add(r.name);
   }
-  return { registry: cfg.registry, apps, remote };
+  const embed = cfg.embed ?? [];
+  if (!Array.isArray(embed)) fail('« embed » doit être un tableau');
+  for (const [i, e] of embed.entries()) {
+    if (!e || typeof e.manifest !== 'string' || !e.manifest) fail(`embed[${i}] : « manifest » requis (URL https ou chemin)`);
+    const bad = [...checkApproved(e.grants), ...checkLimits(e.limits)];
+    if (bad.length) fail(`embed[${i}] : ${bad.join(' ; ')}`);
+  }
+  return { registry: cfg.registry, apps, remote, embed };
 }
 
 // ── récupération réseau (apps distantes) ────────────────────────────────────
@@ -76,6 +89,14 @@ async function download(url, what) {
   const buf = Buffer.from(await res.arrayBuffer());
   if (buf.length > 64 * 1024 * 1024) throw new Error(`${what} : fichier trop volumineux`);
   return buf;
+}
+/** Source d'un manifeste : URL https(s) → réseau ; sinon chemin local (relatif au fichier de configuration). */
+const isUrl = (src) => /^https?:\/\//i.test(src);
+async function readManifestSource(src) {
+  if (isUrl(src)) return download(src, `manifeste ${src}`);
+  const file = resolve(dirname(CONFIG), src.replace(/^file:/, ''));
+  if (!existsSync(file)) throw new Error(`manifeste local introuvable : ${file}`);
+  return readFileSync(file);
 }
 const snapshotName = (name) => `${name.replace(/^@/, '').replace(/\//, '-')}.json`;
 
@@ -87,6 +108,13 @@ async function check() {
   if (existsSync(lockFile)) {
     const lock = JSON.parse(readFileSync(lockFile, 'utf8'));
     for (const [name, e] of Object.entries(lock.apps ?? {})) {
+      if (e.kind === 'embed') {
+        try {
+          const cur = await readManifestSource(e.manifestSource);
+          if (e.manifestSourceSha256 && sha256(cur) !== e.manifestSourceSha256) { console.error(`  ✗ dérive : le manifeste de ${name} a changé depuis la synchronisation`); drift++; }
+        } catch (ex) { console.error(`  ✗ ${ex.message}`); drift++; }
+        continue;
+      }
       if (e.kind !== 'remote') continue;
       try {
         const bundle = await download(e.bundle, `bundle de ${name}`);
@@ -165,6 +193,31 @@ async function sync() {
       routesSourceSha256: sha256(routesBuf),
       routesFile: file,
       routesSha256: sha256(frozen),
+    };
+  }
+
+  // 3) Apps embarquées : manifeste validé et figé, plafond approuvé par l'opérateur
+  for (const e of cfg.embed) {
+    log(`embarquée : ${e.manifest}`);
+    let raw, manifest;
+    try { raw = await readManifestSource(e.manifest); } catch (ex) { fail(ex.message); }
+    try { manifest = JSON.parse(raw.toString('utf8')); } catch (ex) { fail(`manifeste ${e.manifest} : JSON invalide (${ex.message})`); }
+    const errors = checkEmbedManifest(manifest, { allowHttp: ALLOW_HTTP });
+    if (errors.length) fail(`manifeste ${e.manifest} invalide :\n  - ${errors.join('\n  - ')}`);
+    if (lock.apps[manifest.name]) fail(`application déclarée deux fois : ${manifest.name}`);
+    const file = `embed/manifests/${snapshotName(manifest.name)}`;
+    mkdirSync(join(OUT, 'embed', 'manifests'), { recursive: true });
+    const frozen = Buffer.from(JSON.stringify(manifest));
+    writeFileSync(join(OUT, file), frozen);
+    lock.apps[manifest.name] = {
+      kind: 'embed',
+      version: manifest.version,
+      manifestSource: e.manifest,
+      manifestSourceSha256: sha256(raw),
+      manifestFile: file,
+      manifestSha256: sha256(frozen),
+      approved: e.grants ?? {},
+      ...(e.limits ? { limits: e.limits } : {}),
     };
   }
 

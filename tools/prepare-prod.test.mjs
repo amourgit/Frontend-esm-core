@@ -12,7 +12,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 function root({ built = true } = {}) {
   const r = mkdtempSync(join(tmpdir(), 'egen-prep-'));
   mkdirSync(join(r, 'tools'));
-  for (const f of ['prepare-prod.mjs', 'runtime-config.mjs', 'sync-external-apps.mjs', 'external-apps.mjs', 'precompress.mjs']) {
+  for (const f of ['prepare-prod.mjs', 'runtime-config.mjs', 'sync-external-apps.mjs', 'external-apps.mjs', 'embed-apps.mjs', 'precompress.mjs']) {
     cpSync(join(HERE, f), join(r, 'tools', f));
   }
   const app = join(r, 'packages/apps/esm-int-app');

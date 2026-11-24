@@ -77,7 +77,7 @@ const SPA = '/egen-civitas/spa';
 function serverRoot() {
   const root = mkdtempSync(join(tmpdir(), 'egen-sp-'));
   mkdirSync(join(root, 'tools'));
-  for (const f of ['serve-prod.mjs', 'external-apps.mjs', 'runtime-config.mjs']) cpSync(join(HERE, f), join(root, 'tools', f));
+  for (const f of ['serve-prod.mjs', 'external-apps.mjs', 'embed-apps.mjs', 'runtime-config.mjs']) cpSync(join(HERE, f), join(root, 'tools', f));
   // app interne minimale (serve-prod refuse de démarrer sans aucune app compilée)
   const app = join(root, 'packages/apps/esm-int-app');
   mkdirSync(join(app, 'dist'), { recursive: true });
