@@ -297,9 +297,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-app-shell@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@egen-civitas/esm-app-shell@npm:3.1.0"
+"@egen-civitas/esm-app-shell@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@egen-civitas/esm-app-shell@npm:3.1.1"
   dependencies:
     "@egen-civitas/esm-api": "npm:^3.0.1"
     "@egen-civitas/esm-config": "npm:^2.0.0"
@@ -333,7 +333,7 @@ __metadata:
     swc-loader: "npm:0.2.7"
     swr: "npm:2.2.5"
     webpack-pwa-manifest: "npm:4.3.0"
-  checksum: 10/dcc43ce437a503aab2de29c56bd70ea0c94a300008fbd5581b2f40e7f1e68a004c10bbcb6029e85f4f50c0c920bf679513f913b96a0cfdd23959c8267e568174
+  checksum: 10/491da26b77f7c0e937af35e63c303e6e4cfa5115c7294c8517b699651d1a341e245d184b7813ee9e3ac0b5f424575afc67e1f4760ed4ceefc46672c8beda6ca4
   languageName: node
   linkType: hard
 
@@ -1100,7 +1100,7 @@ __metadata:
   resolution: "@egen/esm-core@workspace:."
   dependencies:
     "@egen-civitas/egen": "npm:^3.0.0"
-    "@egen-civitas/esm-app-shell": "npm:^3.1.0"
+    "@egen-civitas/esm-app-shell": "npm:^3.1.1"
     "@egen-civitas/rspack-config": "npm:^2.0.0"
     "@playwright/test": "npm:^1.65.1"
     "@rspack/cli": "npm:2.3.3"

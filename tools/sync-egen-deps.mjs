@@ -112,15 +112,26 @@ console.log(
   staleLock ? `${staleLock} entrée(s) de yarn.lock à rafraîchir (yarn up -R).` : 'yarn.lock à jour.',
 );
 
-// Si pas en mode --check et qu'il y a des mises à jour, lancer yarn up -R
-// en excluant les packages ignorés
-if (!check && stale > 0) {
+// Si pas en mode --check et qu'il y a des mises à jour (plages ou yarn.lock),
+// lancer yarn up -R en listant explicitement les packages à mettre à jour (sauf les ignorés)
+if (!check && (stale > 0 || staleLock > 0)) {
   const { execSync } = await import('node:child_process');
-  let cmd = "yarn up -R '@egen-civitas/*'";
-  if (ignorePackages.size > 0) {
-    const ignoreFlags = [...ignorePackages].map((p) => `--ignore-pattern=${p}`).join(' ');
-    cmd = `yarn up -R '@egen-civitas/*' ${ignoreFlags}`;
+  // Collecter tous les packages @egen-civitas/* qui ne sont pas ignorés
+  const allNames = new Set();
+  for (const raw of docs.values()) {
+    const d = JSON.parse(raw);
+    for (const s of [...SECTIONS, 'peerDependencies']) {
+      for (const k of Object.keys(d[s] ?? {})) {
+        if (k.startsWith('@egen-civitas/') && !ignorePackages.has(k)) allNames.add(k);
+      }
+    }
   }
+  for (const m of lockText.matchAll(/"?(@egen-civitas\/[^@"\s,]+)@/g)) {
+    if (!ignorePackages.has(m[1])) allNames.add(m[1]);
+  }
+
+  const packagesToUpdate = [...allNames].map((p) => `'${p}'`).join(' ');
+  const cmd = `yarn up -R ${packagesToUpdate}`;
   console.log(`\nExécution : ${cmd}`);
   try {
     execSync(cmd, { stdio: 'inherit' });
