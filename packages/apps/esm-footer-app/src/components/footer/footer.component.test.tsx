@@ -16,7 +16,7 @@ const baseConfig = {
   civitas: {
     logoUrl: '',
     websiteUrl: 'https://civitas-africa.vercel.app/',
-    tagline: 'La plateforme éducative nationale du Gabon',
+    tagline: 'Solutions numériques et IA pour entreprises et particuliers',
   },
   company: { name: 'CIVITAS', tagline: "Solutions d'intégration IA", url: '' },
   appearance: { textColor: '#000000' },
@@ -33,7 +33,7 @@ describe('Footer', () => {
 
     expect(screen.getByText('Built by')).toBeInTheDocument();
     expect(screen.getByAltText('CIVITAS logo')).toBeInTheDocument();
-    expect(screen.getByText('La plateforme éducative nationale du Gabon')).toBeInTheDocument();
+    expect(screen.getByText('Solutions numériques et IA pour entreprises et particuliers')).toBeInTheDocument();
   });
 
   it('renders additional logos when configured', () => {

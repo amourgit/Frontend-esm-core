@@ -32,7 +32,9 @@ const FooterContent: React.FC = () => {
         >
           <img alt={t('civitasLogo', 'CIVITAS logo')} className="h-8 w-auto object-contain" src={civitasLogoFull} />
         </a>
-        <span className="hidden sm:inline">{t('poweredBySubtext', 'La plateforme éducative nationale du Gabon')}</span>
+        <span className="hidden sm:inline">
+          {t('poweredBySubtext', 'Solutions numériques et IA pour entreprises et particuliers')}
+        </span>
       </div>
 
       {additionalLogos.length > 0 && (

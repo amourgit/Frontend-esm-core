@@ -33,7 +33,7 @@ export const configSchema = {
     },
     tagline: {
       _type: Type.String,
-      _default: 'La plateforme éducative nationale du Gabon',
+      _default: 'Solutions numériques et IA pour entreprises et particuliers',
       _description: 'Sous-titre affiché à côté du logo CIVITAS.',
     },
   },
