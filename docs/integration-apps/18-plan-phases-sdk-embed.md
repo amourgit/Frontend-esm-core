@@ -46,15 +46,16 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 - [x] P2.8 (ajout) Message `probe` au protocole (l'app peut charger après `load`) ; correction trouvée par les tests : table de rappels hôte → app prête avant l'ouverture du port.
 
 ## P3 — Hôte `@egen-civitas/esm-embed-host` (Framework)
-- [ ] P3.1 Squelette du paquet (dépend de `esm-embed-protocol`).
-- [ ] P3.2 `host.ts` : `createEmbedHost({ moduleName, src, manifest, grants, providers, sandbox, onTitle })` → `mount(container)`, `destroy()`, création de l'iframe sécurisée (reprise des règles `esm-nextjs-utils`).
-- [ ] P3.3 Poignée de main : `hello`, validation `connect` (source, origine, nonce, protocole), `port` + transfert, délai et repli 1.1.
-- [ ] P3.4 Application des grants : dispatch fermé construit **uniquement** avec les capacités accordées ; filtrage des champs de session, des sujets d'événements, des hôtes d'API.
-- [ ] P3.5 Fournisseurs : `session`, `tenant`, `locale`, `theme`, `config`, `flags`, `permissions`, `navigation` (reprend `navigation.ts` du doc 16, anti-boucle, plafond de débit), `lifecycle`, `telemetry`.
-- [ ] P3.6 Fournisseurs à effets : `events` (bus avec contrôle des espaces de noms), `notifications`, `dialogs`, `api` (fetch côté Core, en-têtes autorisés, taille, délai, hôtes), `ai-tools` (enregistrement auprès de `esm-ai-tools`, invocation hôte → app).
-- [ ] P3.7 Compatibilité 1.1 : adaptateur qui traduit `ready/location/goto/title/resize/navigate` vers les fournisseurs (une app v1 reste fonctionnelle).
-- [ ] P3.8 Tests : grants (refus par défaut), usurpation d'origine/source, double `connect`, débit, fuite de `sessionId` impossible, `api` hors liste, événements hors espace de noms.
-- [ ] P3.9 README ; build ; push + bilan.
+- [x] P3.1 Squelette du paquet (dépend de `esm-embed-protocol`).
+- [x] P3.2 `host.ts` : `createEmbedHost({ moduleName, src, manifest, grants, providers, sandbox, onTitle })` → `mount(container)`, `destroy()`, création de l'iframe sécurisée (reprise des règles `esm-nextjs-utils`).
+- [x] P3.3 Poignée de main : `hello`, validation `connect` (source, origine, nonce, protocole), `port` + transfert, délai et repli 1.1.
+- [x] P3.4 Application des grants : dispatch fermé construit **uniquement** avec les capacités accordées ; filtrage des champs de session, des sujets d'événements, des hôtes d'API.
+- [x] P3.5 Capacités à lecture : `session` (filtrée), `tenant`, `locale`, `theme`, `config`, `flags` (noms sondables), `permissions` (sondes), `navigation` (reprend `navigation.ts` du doc 16 : chemins sûrs, paramètres sensibles, anti-boucle, plafond de débit), `lifecycle` (visibilité, focus, `canLeave`), `telemetry`. L'hôte définit les **interfaces** de fournisseurs (`HostProviders`) ; les **adaptateurs adossés aux services du Core** sont livrés en P5.5.
+- [x] P3.6 Capacités à effets : `events` (espaces de noms par grant), `notifications`, `dialogs`, `api` (`createFetchApiProvider` : exécution côté Core, hôtes et en-têtes autorisés, taille, délai, sans cookies ni redirection vers l'externe), `ai-tools` (espaces de noms par grant, invocation hôte → app, désenregistrement à la fermeture). Branchement sur `esm-ai-tools` : P5.5.
+- [x] P3.7 Compatibilité 1.1 : adaptateur qui traduit `ready/location/goto/title/resize/navigate` vers les fournisseurs (une app v1 reste fonctionnelle).
+- [x] P3.8 Tests : grants (refus par défaut), usurpation d'origine/source, double `connect`, débit, fuite de `sessionId` impossible, `api` hors liste, événements hors espace de noms.
+- [x] P3.9 README ; build ; push + bilan.
+- [x] P3.10 (ajout) Refus `UNAVAILABLE` (capacité accordée sans fournisseur), `pickFields` partagé dans le protocole, réponse trop volumineuse signalée à l'appelant (`TOO_LARGE`) au lieu d'un délai ; 34 tests dont un bout en bout avec le vrai client (goto, report).
 
 ## P4 — `@egen-civitas/esm-embed-testing` (Framework)
 - [ ] P4.1 Simulateur d'hôte autonome (page HTML + script) : lance l'app dans une iframe, fournit des données de session/thème/événements configurables, journal des échanges.
@@ -67,6 +68,7 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 - [ ] P5.2 Schéma `external-apps.json` : entrée `embed` (manifeste URL ou chemin, grants, limites) ; validation (manifeste valide, grants ⊆ demandé, https, route libre).
 - [ ] P5.3 Synchro : téléchargement du manifeste, SHA-256, **grants effectifs écrits dans le verrou** ; `external:check` détecte la dérive.
 - [ ] P5.4 `serve-prod` : revérifie le manifeste au démarrage (rejet en cas d'écart), synthétise les pages du registry pour l'app générique, expose la configuration d'instance.
+- [ ] P5.5a Adaptateurs de fournisseurs adossés aux services du Core : session/tenant/langue (`watchSession`, `watchTranslations`), thème (variables CSS), événements (bus du Core), notifications, dialogues, drapeaux, permissions, configuration, `esm-ai-tools`, télémétrie, `api` (`createFetchApiProvider` + en-têtes d'auth/tenant du Core).
 - [ ] P5.5 App générique `packages/apps/esm-embed-app` : une page par entrée `embed`, montage via `esm-embed-host`, placement rail/zone selon `placement`, route de préfixe.
 - [ ] P5.6 Statut (`external-apps.status.json`) : `kind: embed`, grants effectifs, avertissements.
 - [ ] P5.7 Tests d'outils (`yarn test:tools`) et tests de l'app ; docs 12, 15 mises à jour ; push + bilan.
