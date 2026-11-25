@@ -65,7 +65,9 @@ typings/
 # next.js build output
 .next
 
+# sorties de build "lib/" (hors code source : un dossier src/lib/ est du CODE et doit rester suivi)
 lib
+!**/src/lib/
 dist
 .tmp
 .DS_Store
