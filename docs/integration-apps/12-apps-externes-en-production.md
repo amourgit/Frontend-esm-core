@@ -36,7 +36,7 @@ external-apps.json ──► yarn external:sync ──► external-apps/        
 
 ## 2 bis. Troisième sorte : apps embarquées (`embed`, protocole v2)
 
-> Spécification : [17](17-sdk-embed-protocole-v2.md) · plan : [18](18-plan-phases-sdk-embed.md). **Outillage livré (phase P5) ; l'app générique `esm-embed-app` qui les affiche est livrée après la publication des paquets `esm-embed-*` (voir 18, P5.5).**
+> Spécification : [17](17-sdk-embed-protocole-v2.md) · plan : [18](18-plan-phases-sdk-embed.md). **Livré (phase P5) : outillage + app générique `packages/apps/esm-embed-app` (`@egen/esm-embed-app`).**
 
 Une app embarquée est une application **autonome dans une iframe** (Next.js, Penpot, tweakcn…). Elle n'a **aucun bundle** et **aucun paquet « wrapper »** : on déclare son manifeste et ce que l'opérateur lui autorise.
 
@@ -55,10 +55,10 @@ Une app embarquée est une application **autonome dans une iframe** (Next.js, Pe
 | `yarn external:sync` | Récupère le manifeste (URL https ou chemin local), le **valide**, l'écrit figé dans `external-apps/embed/manifests/`, inscrit dans le verrou : version, empreintes SHA-256 (figé et source), plafond approuvé, limites |
 | `yarn external:check` | Détecte la **dérive** : le manifeste publié a changé depuis la synchronisation → code 1 |
 | démarrage de `serve-prod` | Revérifie l'empreinte du manifeste figé, valide manifeste + plafond, refuse une **route déjà prise** (page du Core ou autre app embarquée) ou un nom déjà pris |
-| registry | **Fusionne** une page par app (et un panneau de rail si `placement.rail`) dans le registry de l'app générique `@egen-civitas/esm-embed-app` ; publie `<spa>/embed-apps.json` (manifestes + plafonds, `no-store`) |
-| navigateur | L'app générique calcule les **grants effectifs** (`effectiveGrants` du protocole : demandé ∩ approuvé) et monte l'hôte `esm-embed-host` |
+| registry | **Fusionne** une page par app et une entrée de navigation `navEntry` (TopBar) dans le registry de l'app générique `@egen/esm-embed-app` ; publie `<spa>/embed-apps.json` (manifestes + plafonds, `no-store`) |
+| navigateur | L'app générique (`esm-embed-app`) retrouve l'entrée par la route, calcule les **grants effectifs** (`effectiveGrants` du protocole : demandé ∩ approuvé) et monte l'hôte `esm-embed-host` |
 
-Règles : par défaut, seules les capacités de lecture sans risque sont accordées (`session` filtrée, `tenant`, `locale`, `theme`, `navigation`, `config`, `telemetry`, `lifecycle`) ; toute autre capacité exige **à la fois** une demande du manifeste et une approbation de l'opérateur. Une capacité demandée mais non approuvée (ou l'inverse) est signalée comme réserve dans `external-apps.status.json`. Si l'app générique n'est pas compilée, les apps embarquées sont **rejetées** (statut visible) au lieu d'exposer des routes vides.
+Règles : par défaut, seules les capacités de lecture sans risque sont accordées (`session` filtrée, `tenant`, `locale`, `theme`, `navigation`, `config`, `telemetry`, `lifecycle`) ; toute autre capacité exige **à la fois** une demande du manifeste et une approbation de l'opérateur. Une capacité demandée mais non approuvée (ou l'inverse) est signalée comme réserve dans `external-apps.status.json`. `placement.rail` (panneau de rail) n'est pas synthétisé : le `railPanel` d'une app interne est lié à une section figée, contrat incompatible avec une app générique (accès par la TopBar). Si l'app générique n'est pas compilée, les apps embarquées sont **rejetées** (statut visible) au lieu d'exposer des routes vides.
 
 ## 3. Règles d'alignement appliquées
 

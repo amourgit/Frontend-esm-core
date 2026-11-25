@@ -146,7 +146,7 @@ Déclaration par l'opérateur dans `external-apps.json` (nouveau `kind: "embed"`
 | `@egen-civitas/esm-embed-client` | Framework | côté app : `connectToEgen()`, proxys typés par capacité, reconnexion, mode dégradé, liaisons `/react` | protocole |
 | `@egen-civitas/esm-embed-host` | Framework | côté Core : iframe, poignée de main, application des grants, interfaces de fournisseurs (`HostProviders`) et `createFetchApiProvider`, navigation partagée, compatibilité v1.1 ; les adaptateurs adossés aux services du Core sont dans `esm-embed-app` | protocole |
 | `@egen-civitas/esm-embed-testing` | Framework | simulateur d'hôte pour développer l'app seule, suite de conformité | protocole, client, host |
-| `esm-embed-app` | Core | app générique : lit les entrées `embed`, monte l'hôte | host |
+| `@egen/esm-embed-app` | Core | app générique : lit `<spa>/embed-apps.json`, calcule les grants effectifs, monte l'hôte ; fournisseurs adossés aux services du Core | host, protocole |
 
 `esm-nextjs-utils` reste publié (compatibilité) et devient un alias déprécié du couple host/client après la phase 6.
 

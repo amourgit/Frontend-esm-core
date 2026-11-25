@@ -80,13 +80,15 @@ test('chargeur : une app embarquée est acceptée, sans entrée d’import map n
   assert.deepEqual(r.embed[0].approved, { notifications: {}, events: { publish: ['app.*'] } });
 });
 
-test('registry synthétique : une page par app et un panneau de rail', () => {
+test('registry synthétique : une page par app et une entrée de navigation déclarative', () => {
   const r = load(fixture([{}]));
   assert.deepEqual(r.embedRegistry.pages, [{ component: 'root', route: 'studio', online: true, offline: false }]);
   assert.equal(r.embedRegistry.extensions.length, 1);
-  assert.equal(r.embedRegistry.extensions[0].slot, 'shell-rail-left-slot');
-  assert.equal(r.embedRegistry.extensions[0].meta.route, 'studio');
-  assert.equal(buildEmbedRegistry([{ name: '@a/b', manifest: manifest({ placement: undefined }) }]).extensions.length, 0);
+  const ext = r.embedRegistry.extensions[0];
+  assert.equal(ext.slot, 'topbar-nav-slot');
+  assert.equal(ext.component, 'navEntry');
+  assert.deepEqual({ section: ext.meta.section, label: ext.meta.label, route: ext.meta.route, icon: ext.meta.icon }, { section: 'studio', label: 'Theme Studio', route: 'studio', icon: 'Palette' });
+  assert.equal(buildEmbedRegistry([{ name: '@a/b', manifest: manifest({ placement: undefined }) }]).extensions[0].meta.icon, 'AppWindow');
   assert.deepEqual(buildEmbedConfig(r.embed).apps[0].route, 'studio');
 });
 
@@ -203,7 +205,7 @@ test('serve-prod : fusionne les pages embarquées dans le registry de l’app g�
   await withServer({ embedAppBuilt: true }, async (base) => {
     const reg = await (await fetch(`${base}/routes.registry.json`)).json();
     assert.deepEqual(reg[EMBED_APP_NAME].pages, [{ component: 'root', route: 'studio', online: true, offline: false }]);
-    assert.equal(reg[EMBED_APP_NAME].extensions[0].name, 'embed-civitas-esm-studio-app-rail');
+    assert.equal(reg[EMBED_APP_NAME].extensions[0].name, 'embed-civitas-esm-studio-app-nav');
     assert.deepEqual(reg['@egen/esm-int-app'].pages.map((p) => p.route), ['int']);
     const cfgRes = await fetch(`${base}/embed-apps.json`);
     assert.equal(cfgRes.headers.get('cache-control'), 'no-store');

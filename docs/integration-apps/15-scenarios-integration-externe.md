@@ -194,6 +194,8 @@ Le paquet doit contenir **`dist/` complet** (bundle + `routes.json`). Un paquet 
 - 🟡 La combinaison `--importmap` + app locale + Core démarré par `yarn start` n'a pas été exécutée ici.
 
 ### C3 — Application autonome (Next.js, SSR, routeur propre) déployée à une adresse connue
+
+> **Nouvelle voie (2026-11) : `kind: "embed"`, protocole v2.** Une app autonome en iframe peut désormais s'intégrer **sans paquet wrapper** : un manifeste `egen-app.json`, un plafond de droits approuvé par l'opérateur, et l'app générique `@egen/esm-embed-app`. Elle accède aux services du Core par des capacités typées (session filtrée, langue, tenant, drapeaux, permissions, événements, notifications…) au lieu du seul pont 1.1. Voir [12 §2 bis](12-apps-externes-en-production.md), [17](17-sdk-embed-protocole-v2.md) et le plan [18](18-plan-phases-sdk-embed.md). Le wrapper décrit ci-dessous reste valable et supporté (pont 1.1) pendant la migration (phase P6).
 Cas typique : l'app tourne déjà sur `https://next.exemple.org/app` et ne produira jamais de conteneur Module Federation.
 - **Qui** : équipe de l'app (côté app) + équipe d'intégration (une « enveloppe » minuscule).
 - **Étape 1 — enveloppe côté Shell** (paquet `@acme/esm-mon-next`, voir scénario A pour le construire) :

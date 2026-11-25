@@ -12,7 +12,7 @@
  */
 
 /** Nom de l'app générique (packages/apps/esm-embed-app) qui monte toutes les apps embarquées. */
-export const EMBED_APP_NAME = '@egen-civitas/esm-embed-app';
+export const EMBED_APP_NAME = '@egen/esm-embed-app';
 
 export const CAPABILITY_IDS = [
   'session', 'tenant', 'locale', 'theme', 'permissions', 'navigation', 'events', 'notifications',
@@ -112,26 +112,37 @@ export function embedWarnings(manifest, approved = {}) {
 const slug = (s) => s.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
 
 /**
- * Registry synthétique de l'app générique : une page par app embarquée (+ un panneau de rail si `placement.rail`).
- * Même format que les routes.json des apps (docs/integration-apps/02).
+ * Registry synthétique de l'app générique : une page par app embarquée + une entrée de navigation déclarative
+ * (extension `navEntry` du slot `topbar-nav-slot`, même contrat que les apps internes : seule sa `meta` est lue par la TopBar).
+ * Format des routes.json : docs/integration-apps/02.
+ *
+ * `placement.rail` (panneau de rail) n'est PAS synthétisé : le composant `railPanel` d'une app interne est lié à une section
+ * figée (`<SectionNavPanel section="…"/>`), contrat incompatible avec une app générique ; l'accès passe par la TopBar.
  */
 export function buildEmbedRegistry(embeds) {
   const pages = [];
   const extensions = [];
   embeds.forEach((e, i) => {
-    pages.push({ component: 'root', route: e.manifest.route, online: true, offline: false });
-    const rail = e.manifest.placement?.rail;
-    if (rail === 'left' || rail === 'right') {
-      extensions.push({
-        name: `embed-${slug(e.name)}-rail`,
-        slot: rail === 'left' ? 'shell-rail-left-slot' : 'shell-rail-right-slot',
-        component: 'railPanel',
-        online: true,
-        offline: false,
-        order: 100 + i,
-        meta: { title: e.manifest.title, icon: e.manifest.placement?.icon ?? 'AppWindow', order: 100 + i, global: true, route: e.manifest.route },
-      });
-    }
+    const m = e.manifest;
+    pages.push({ component: 'root', route: m.route, online: true, offline: false });
+    extensions.push({
+      name: `embed-${slug(e.name)}-nav`,
+      slot: 'topbar-nav-slot',
+      component: 'navEntry',
+      online: true,
+      offline: false,
+      order: 900 + i,
+      meta: {
+        section: slug(m.route),
+        sectionLabel: m.title,
+        group: slug(m.placement?.group ?? 'apps'),
+        groupLabel: m.placement?.group ?? 'Applications',
+        label: m.title,
+        description: m.title,
+        icon: m.placement?.icon ?? 'AppWindow',
+        route: m.route,
+      },
+    });
   });
   return { pages, extensions };
 }

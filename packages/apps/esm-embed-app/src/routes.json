@@ -1,0 +1,6 @@
+{
+  "$schema": "https://egen.alpha.vercel.com/routes.schema.json",
+  "$comment": "Volontairement sans page ni extension : serve-prod fusionne ici, au démarrage, une page et une entrée de navigation par app embarquée déclarée dans external-apps.json (kind: embed). Voir docs/integration-apps/12 et 17.",
+  "pages": [],
+  "extensions": []
+}
