@@ -14,12 +14,17 @@ export function formatClock(now: Date = new Date()) {
   return { timeStr, dateLongStr: date.charAt(0).toUpperCase() + date.slice(1) };
 }
 
-const Clock: React.FC = () => {
+interface TopBarState {
+  isDesktop?: boolean;
+}
+
+const Clock: React.FC<TopBarState> = ({ isDesktop }) => {
   const [{ timeStr, dateLongStr }, setClock] = useState(() => formatClock());
   useEffect(() => {
     const id = setInterval(() => setClock(formatClock()), 15000);
     return () => clearInterval(id);
   }, []);
+  if (isDesktop === false) return null;
   return (
     <div className={styles.clock} aria-live="off">
       <span className={styles.clockTime}>{timeStr}</span>

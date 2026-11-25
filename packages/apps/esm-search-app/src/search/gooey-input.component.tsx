@@ -268,12 +268,12 @@ export function GooeyInput({
           animate={isExpanded ? 'expanded' : 'collapsed'}
           transition={transition}
         >
-          <div className={cn('size-8 sm:size-8.5 rounded-full bg-white', classNames?.bubbleSurface)} />
+          <div className={cn('size-7 sm:size-8.5 rounded-full bg-white', classNames?.bubbleSurface)} />
         </motion.div>
 
         {/* Capsule liquide principale */}
         <motion.div
-          className={cn('h-8 sm:h-8.5 rounded-full', classNames?.buttonRow)}
+          className={cn('h-7 sm:h-8.5 rounded-full', classNames?.buttonRow)}
           variants={buttonVariants}
           initial="collapsed"
           animate={isExpanded ? 'expanded' : 'collapsed'}
@@ -284,11 +284,11 @@ export function GooeyInput({
       </div>
 
       {/* COUCHE 2 : Contenu interactif net (icônes, texte, saisie) sans distorsion */}
-      <div className="relative flex h-8 sm:h-8.5 items-center overflow-visible">
+      <div className="relative flex h-7 sm:h-8.5 items-center overflow-visible">
         {/* Bouton de la bulle détachée quand étendu */}
         <motion.div
           className={cn(
-            'absolute top-1/2 left-0 -translate-y-1/2 flex size-8 sm:size-8.5 items-center justify-center cursor-pointer z-10',
+            'absolute top-1/2 left-0 -translate-y-1/2 flex size-7 sm:size-8.5 items-center justify-center cursor-pointer z-10',
             classNames?.bubble,
           )}
           variants={iconBubbleVariants}
@@ -310,7 +310,7 @@ export function GooeyInput({
         {/* Capsule interactive pour la saisie */}
         <motion.div
           className={cn(
-            'flex h-8 sm:h-8.5 items-center justify-center overflow-hidden rounded-full',
+            'flex h-7 sm:h-8.5 items-center justify-center overflow-hidden rounded-full',
             classNames?.buttonRow,
           )}
           variants={buttonVariants}

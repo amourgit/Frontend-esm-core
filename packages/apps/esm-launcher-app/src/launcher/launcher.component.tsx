@@ -25,6 +25,7 @@ interface TopBarState {
   togglePanel?: (panelId: string) => void;
   searchOpen?: boolean;
   isDesktop?: boolean;
+  isMobile?: boolean;
 }
 
 const GridGlyph: React.FC = () => (
@@ -35,7 +36,7 @@ const GridGlyph: React.FC = () => (
   </div>
 );
 
-const Launcher: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpen, isDesktop }) => {
+const Launcher: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpen, isDesktop, isMobile }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigSchema>();
   const appMenuItems = useAssignedExtensions('app-menu-slot');
@@ -46,12 +47,13 @@ const Launcher: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpe
   const open = isActivePanel ? isActivePanel(PANEL_ID) : localOpen;
   const toggle = () => (togglePanel ? togglePanel(PANEL_ID) : setLocalOpen((value) => !value));
 
-  // Recherche ouverte sur un écran tactile : la place revient à la recherche.
+  // Mobile : pas de lanceur ; recherche ouverte sur tactile : la place revient à la recherche.
+  if (isMobile) return null;
   if (searchOpen && isDesktop === false) return null;
   if (total === 0) return null;
 
   return (
-    <div className="relative overflow-visible items-center hidden md:flex">
+    <div className="relative overflow-visible items-center flex">
       <OptionButton
         label={t('AppMenuTooltip', 'Applications')}
         active={open}

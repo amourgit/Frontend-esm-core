@@ -12,7 +12,9 @@ import { TOPBAR_SLOT, type TopBarRegion as Region } from './regions';
 //  Ne sait RIEN du métier.
 // =============================================================================
 
-const SLOT_CLASS = 'flex shrink-0 items-center gap-1 empty:hidden';
+// `has-[>div:empty]:hidden` : l'extension a rendu `null` → son enveloppe `data-extension-id` est vide
+// et le slot sort du flex (sinon il reste un item invisible qui crée des `gap` avec ses voisins).
+const SLOT_CLASS = 'flex shrink-0 items-center gap-1 empty:hidden has-[>div:empty]:hidden';
 // Recherche ouverte en mobile : le slot de l'extension « search » occupe toute la largeur de la région
 // (bloc : ses enfants s'étirent naturellement). Les autres slots passent en `hidden` : leurs extensions
 // rendent `null` mais leur enveloppe reste un item flex qui créerait des `gap` résiduels à droite.

@@ -15,9 +15,10 @@ import { OptionButton } from './option-button.component';
 interface TopBarState {
   searchOpen?: boolean;
   isDesktop?: boolean;
+  isMobile?: boolean;
 }
 
-const LanguageSwitcher: React.FC<TopBarState> = ({ searchOpen, isDesktop }) => {
+const LanguageSwitcher: React.FC<TopBarState> = ({ searchOpen, isDesktop, isMobile }) => {
   const { t } = useTranslation();
   const session = useSession();
   const locale = session?.locale ?? 'en';
@@ -30,10 +31,11 @@ const LanguageSwitcher: React.FC<TopBarState> = ({ searchOpen, isDesktop }) => {
     });
   }, []);
 
+  if (isMobile) return null;
   if (searchOpen && isDesktop === false) return null;
 
   return (
-    <div className="relative items-center overflow-visible hidden md:flex">
+    <div className="relative flex items-center overflow-visible">
       <OptionButton
         label={t('changeLanguage', 'Changer de langue')}
         onClick={launchChangeLanguageModal}
