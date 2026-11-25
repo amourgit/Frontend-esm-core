@@ -11,7 +11,7 @@
 }
 
 .structuredListRow {
-  border-left: 2px solid var(--colors-border-default, #c0c0c0);
+  border-left: 2px solid var(--border);
 }
 
 .subtreeCell {

@@ -15,9 +15,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem 1.5rem;
-  font-family: var(--typography-font-family-sans, inherit);
-  font-size: var(--typography-font-size-xs-size, 0.75rem);
-  line-height: var(--typography-font-size-xs-line-height, 1.2);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  line-height: var(--text-xs--line-height);
   color: var(--footer-text-color, rgb(255, 255, 255));
 }
 
@@ -30,13 +30,13 @@
 }
 
 .companyName {
-  font-weight: var(--typography-font-weight-semibold, 600);
+  font-weight: var(--font-weight-semibold);
   color: var(--footer-text-color, rgb(255, 255, 255));
   text-decoration: none;
   white-space: nowrap;
 }
 .companyName[href] {
-  transition: var(--transitions-colors, color 200ms);
+  transition: var(--transition-colors);
 }
 .companyName[href]:hover {
   text-decoration: underline;
@@ -45,7 +45,7 @@
 .companyName[href]:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.7);
   outline-offset: 2px;
-  border-radius: var(--border-radius-xs, 2px);
+  border-radius: var(--radius-xs);
 }
 
 .dot {
@@ -76,7 +76,7 @@
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   white-space: nowrap;
-  transition: var(--transitions-colors, color 200ms, opacity 200ms);
+  transition: var(--transition-colors);
 }
 .footerLink:hover {
   color: rgb(255, 255, 255);
@@ -85,7 +85,7 @@
 .footerLink:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.7);
   outline-offset: 2px;
-  border-radius: var(--border-radius-xs, 2px);
+  border-radius: var(--radius-xs);
 }
 
 .copyright {

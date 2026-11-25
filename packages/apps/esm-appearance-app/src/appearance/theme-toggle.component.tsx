@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Moon, Sun } from 'lucide-react';
-import { getThemeEngine, getThemeState, toggleThemeMode, type ThemeMode } from '@egen-civitas/esm-theme';
+import { getTheme, getThemeMode, toggleThemeMode, type ThemeMode } from '@egen-civitas/esm-theme';
 import { OptionButton } from './option-button.component';
 
 /**
- * Bascule clair/sombre branchée sur le moteur de thème EGEN
- * (`@egen-civitas/esm-theme`). Réactive via `ThemeEngine.subscribe`.
+ * Bascule clair/sombre branchée sur le runtime de thème EGEN
+ * (`@egen-civitas/esm-theme`). Réactive via `getTheme().subscribe`.
  */
 /** Props transmises par la TopBar à ses extensions : en dessous du desktop, la place est laissée à la recherche. */
 interface TopBarState {
@@ -15,14 +15,16 @@ interface TopBarState {
 
 const ThemeToggle: React.FC<TopBarState> = ({ isDesktop }) => {
   const { t } = useTranslation();
-  const [mode, setMode] = useState<ThemeMode>(() => getThemeState()?.mode ?? 'dark');
+  const [mode, setMode] = useState<ThemeMode>(() => getThemeMode() ?? 'dark');
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
     try {
-      unsubscribe = getThemeEngine().subscribe((state) => setMode(state.mode));
+      unsubscribe = getTheme().subscribe((e) => {
+        if (e.type === 'mode') setMode(e.mode);
+      });
     } catch {
-      // Moteur pas encore initialisé (ex. rendu isolé en test) — état initial conservé.
+      // Thème pas encore initialisé (ex. rendu isolé en test) — état initial conservé.
     }
     return () => unsubscribe?.();
   }, []);

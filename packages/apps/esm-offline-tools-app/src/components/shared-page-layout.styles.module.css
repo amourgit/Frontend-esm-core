@@ -1,4 +1,5 @@
-.productiveHeading03, .pageHeaderContainer .pageHeader {
+.productiveHeading03,
+.pageHeaderContainer .pageHeader {
   font-size: var(--ui-heading-03-font-size, 1.25rem);
   font-weight: var(--ui-heading-03-font-weight, 400);
   line-height: var(--ui-heading-03-line-height, 1.4);
@@ -10,7 +11,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: var(--colors-surface-muted, #ededed);
+  background-color: var(--muted);
 }
 .pageHeaderContainer .pageHeader {
   text-overflow: ellipsis;

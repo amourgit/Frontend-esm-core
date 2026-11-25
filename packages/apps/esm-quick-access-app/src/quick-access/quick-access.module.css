@@ -1,6 +1,6 @@
 .panel {
   padding: 0.75rem;
-  color: var(--colors-surface-foreground, #e2e8f0);
+  color: var(--foreground);
 }
 
 .sections {
@@ -21,7 +21,7 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--colors-surface-muted-foreground, #9ca3af);
+  color: var(--muted-foreground);
 }
 
 .grid {
@@ -38,7 +38,7 @@
   padding: 0.75rem 0.5rem;
   border: 0;
   border-radius: 0.625rem;
-  background: var(--colors-surface-translucent-hover, rgba(255, 255, 255, 0.08));
+  background: var(--muted);
   color: inherit;
   font: inherit;
   font-size: 0.75rem;
@@ -46,7 +46,7 @@
   transition: background-color 120ms ease;
 }
 .tile:hover {
-  background: var(--colors-surface-translucent-hover, rgba(255, 255, 255, 0.14));
+  background: var(--muted);
 }
 .tile:focus-visible {
   outline: 2px solid #2dd4bf;
@@ -59,7 +59,7 @@
   gap: 0.25rem;
   padding: 0.75rem;
   border-radius: 0.625rem;
-  background: var(--colors-surface-translucent-hover, rgba(255, 255, 255, 0.08));
+  background: var(--muted);
 }
 
 .time {
@@ -71,7 +71,7 @@
 .date {
   font-size: 0.75rem;
   text-transform: capitalize;
-  color: var(--colors-surface-muted-foreground, #9ca3af);
+  color: var(--muted-foreground);
 }
 
 .status {
@@ -82,12 +82,12 @@
   font-size: 0.75rem;
   color: #2dd4bf;
 }
-.status[data-online=false] {
+.status[data-online='false'] {
   color: #f59e0b;
 }
 
 .empty {
   margin: 0;
   font-size: 0.75rem;
-  color: var(--colors-surface-muted-foreground, #9ca3af);
+  color: var(--muted-foreground);
 }

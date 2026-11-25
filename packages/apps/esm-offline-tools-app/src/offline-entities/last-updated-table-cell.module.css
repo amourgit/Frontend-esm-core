@@ -1,9 +1,9 @@
 .errorIcon {
-  color: var(--colors-error-500, #da1e28);
+  color: var(--destructive);
 }
 
 .pendingIcon {
-  color: var(--colors-warning-500, #ff832b);
+  color: var(--warning-500);
 }
 
 .cellContainer {

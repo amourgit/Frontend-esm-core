@@ -39,8 +39,8 @@
 }
 
 .login-root {
-  --login-fg: var(--colors-surface-foreground, #0f172a);
-  --login-bg: var(--colors-surface-background, #f8fafc);
+  --login-fg: var(--foreground);
+  --login-bg: var(--background);
 
   --fg-5: color-mix(in srgb, var(--login-fg) 5%, transparent);
   --fg-10: color-mix(in srgb, var(--login-fg) 10%, transparent);
@@ -56,14 +56,14 @@
   --bg-75: color-mix(in srgb, var(--login-bg) 75%, transparent);
 
   /* Palette du fond dégradé animé */
-  --login-grad-1a: var(--colors-primary-500, #6366f1);
-  --login-grad-1b: var(--colors-info-500, #0ea5e9);
-  --login-grad-2a: var(--colors-secondary-400, #a78bfa);
-  --login-grad-2b: var(--colors-primary-400, #818cf8);
-  --login-grad-2c: var(--colors-info-400, #38bdf8);
-  --login-grad-3a: var(--colors-error-500, #ef4444);
-  --login-grad-3b: var(--colors-warning-500, #f59e0b);
-  --login-grad-accent: var(--colors-surface-accent, #eef2ff);
+  --login-grad-1a: var(--primary);
+  --login-grad-1b: var(--info-500);
+  --login-grad-2a: var(--secondary-400);
+  --login-grad-2b: var(--primary-400);
+  --login-grad-2c: var(--info-400);
+  --login-grad-3a: var(--destructive);
+  --login-grad-3b: var(--warning-500);
+  --login-grad-accent: var(--accent);
 }
 
 @keyframes login-float-1 {

@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Moon, Sun } from 'lucide-react';
-import { getThemeEngine, getThemeState, toggleThemeMode, type ThemeMode } from '@egen-civitas/esm-theme';
+import { getTheme, getThemeMode, toggleThemeMode, type ThemeMode } from '@egen-civitas/esm-theme';
 import { SettingsSection } from './settings-section.component';
 import styles from './settings.module.css';
 
-// Apparence : choix clair/sombre branché sur le moteur de thème EGEN (`@egen-civitas/esm-theme`).
+// Apparence : choix clair/sombre branché sur le runtime de thème EGEN (`@egen-civitas/esm-theme`).
 const AppearanceSection: React.FC = () => {
   const { t } = useTranslation();
-  const [mode, setMode] = useState<ThemeMode>(() => getThemeState()?.mode ?? 'dark');
+  const [mode, setMode] = useState<ThemeMode>(() => getThemeMode() ?? 'dark');
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
     try {
-      unsubscribe = getThemeEngine().subscribe((state) => setMode(state.mode));
+      unsubscribe = getTheme().subscribe((e) => {
+        if (e.type === 'mode') setMode(e.mode);
+      });
     } catch {
-      // Moteur pas encore initialisé (rendu isolé) : état initial conservé.
+      // Thème pas encore initialisé (rendu isolé) : état initial conservé.
     }
     return () => unsubscribe?.();
   }, []);

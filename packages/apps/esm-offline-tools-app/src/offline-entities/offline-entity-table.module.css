@@ -12,10 +12,10 @@
   font-weight: var(--ui-heading-compact-02-font-weight, 600);
   line-height: var(--ui-heading-compact-02-line-height, 1.375);
   letter-spacing: var(--ui-heading-compact-02-letter-spacing, 0);
-  color: var(--colors-surface-muted-foreground, #525252);
+  color: var(--muted-foreground);
   padding: 0.75rem 0 0.75rem 0.75rem;
   grid-row: 1;
-  grid-column: 1/span 4;
+  grid-column: 1 / span 4;
 }
 .tableHeaderContainer .tableSearch {
   grid-row: 2;

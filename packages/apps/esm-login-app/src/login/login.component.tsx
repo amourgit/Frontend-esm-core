@@ -14,7 +14,7 @@ import {
   useSession,
 } from '@egen-civitas/esm-framework';
 import { getTenantStoreState, storeHeaderTenantId, useTenant, useTenantMode } from '@egen-civitas/esm-tenant';
-import { getThemeState } from '@egen-civitas/esm-theme';
+import { getThemeMode } from '@egen-civitas/esm-theme';
 import { type ConfigSchema } from '../config-schema';
 import { cn } from '../utils/cn';
 import { BlurFade } from './ui/blur-fade.component';
@@ -92,17 +92,17 @@ const Login: React.FC = () => {
   // La page de login force le mode sombre pour son propre branding, quel
   // que soit le mode choisi par l'utilisateur ailleurs dans l'app.
   //
-  // Au démontage, on NE DOIT PAS simplement retirer l'attribut `data-theme` :
-  // `<html>` resterait sans mode après la navigation login → home (UI
-  // « claire/transparente » jusqu'à un rafraîchissement manuel). On restaure
-  // le mode RÉEL résolu par le moteur de thème (source de vérité unique).
+  // Au démontage, on NE DOIT PAS simplement retirer la classe `dark` :
+  // `<html>` passerait en clair après la navigation login → home, même si
+  // l'utilisateur est en sombre, jusqu'à un rafraîchissement manuel. On restaure
+  // le mode RÉEL du runtime de thème (source de vérité unique).
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-public-route', 'true');
-    root.setAttribute('data-theme', 'dark');
+    root.classList.add('dark');
     return () => {
       root.removeAttribute('data-public-route');
-      root.setAttribute('data-theme', getThemeState()?.mode ?? 'dark');
+      root.classList.toggle('dark', (getThemeMode() ?? 'dark') === 'dark');
     };
   }, []);
 

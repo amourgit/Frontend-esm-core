@@ -10,14 +10,14 @@
   font-weight: var(--ui-body-compact-01-font-weight, 400);
   line-height: var(--ui-body-compact-01-line-height, 1.28572);
   letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
-  color: var(--colors-surface-foreground, #161616);
+  color: var(--foreground);
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--colors-border-default, #e0e0e0);
+  border-bottom: 1px solid var(--border);
 }
 
 .autocomplete,
-.autocomplete > [role=combobox] {
+.autocomplete > [role='combobox'] {
   position: relative;
   width: 20rem;
 }
@@ -39,7 +39,7 @@
   font-weight: var(--ui-body-compact-01-font-weight, 400);
   line-height: var(--ui-body-compact-01-line-height, 1.28572);
   letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
-  background-color: var(--colors-surface-card, #ffffff);
-  color: var(--colors-surface-muted-foreground, #525252);
+  background-color: var(--card);
+  color: var(--muted-foreground);
   min-height: 1rem;
 }

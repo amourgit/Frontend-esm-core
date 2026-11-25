@@ -71,7 +71,7 @@ Voir [13](13-extension-multi-technologies.md).
 | Paquet | Responsabilité | Notes |
 | --- | --- | --- |
 | `esm-styleguide` (5.2.4 consommé par le Core) | Composants d'UI **et rendu des conteneurs du Shell** (toasts, notifications, workbench, modales, workspaces) | Le Shell l'importe (`run.ts`). En 5.x : sans Carbone ni SCSS. |
-| `esm-theme` (1.1.0) | **ANCIEN moteur de thème — OBSOLÈTE, retrait prévu** (JSON, clair/sombre, portée par app). Remplacé par le runtime TokiForge lors de la bascule (`docs/reforme-tokiforge/SUIVI.md`, P2.2 et P2.6) | Dépendance du **Shell** dans le Framework (aucune app ne l'a en peer dans le Framework) ; **le Core, lui, l'a en peer dans 10 apps** (P2.7) |
+| `esm-theme` | Runtime de thème : contrat Tweakcn (variables CSS sémantiques), mode clair/sombre par la classe `.dark`, client du backend du Core (`GET /api/theme`, même origine), instance partagée (`setupTheme`, `getTheme`, `toggleThemeMode`…) | Dépendance du **Shell** dans le Framework (aucune app ne l'a en peer dans le Framework) ; **le Core, lui, l'a en peer dans 10 apps** |
 | `esm-tenant` (1.1.0) | Capture du tenant (sous-domaine/chemin/requête/JWT) → store global + en-tête `X-Tenant-ID` | Aucune validation côté frontend (commentaire de `run.ts`). Variables `EGEN_TENANT_*`. |
 | `tailwind-preset` (2.0.0) | Point d'entrée Tailwind v4 partagé | Les fichiers `*.tw.css` sont traités par `rspack-config` |
 
