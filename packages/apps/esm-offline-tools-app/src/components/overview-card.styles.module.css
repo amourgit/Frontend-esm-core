@@ -1,4 +1,5 @@
-.productiveHeading01, .overviewCard .heading {
+.productiveHeading01,
+.overviewCard .heading {
   font-size: var(--ui-heading-compact-01-font-size, 0.875rem);
   font-weight: var(--ui-heading-compact-01-font-weight, 600);
   line-height: var(--ui-heading-compact-01-line-height, 1.28572);
@@ -6,10 +7,10 @@
 }
 
 .overviewCard {
-  border: 1px solid var(--colors-border-default, #e0e0e0);
+  border: 1px solid var(--border);
 }
 .overviewCard .heading {
-  color: var(--colors-surface-muted-foreground, #525252);
+  color: var(--muted-foreground);
 }
 .overviewCard .headerContainer {
   display: flex;

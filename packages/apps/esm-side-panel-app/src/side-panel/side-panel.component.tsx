@@ -27,14 +27,19 @@ const TOGGLE_COLOR = '#f1f5f9';
  * Couches de couleur qui s'animent derrière le panneau à l'ouverture, avant que le panneau blanc n'apparaisse.
  * Mêmes teintes que la vitrine des composants (esm-home-app) : sans `colors`, le panneau s'ouvre sans l'animation.
  */
-const PANEL_LAYER_COLORS = ['var(--colors-secondary-300)', 'var(--colors-primary-600)'];
+const PANEL_LAYER_COLORS = ['var(--secondary-300)', 'var(--primary-600)'];
 
 /** Bouton de fermeture, dans le coin haut-droite du panneau, au-dessus de lui. */
 function PanelCloseButton({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { t } = useTranslation();
   return (
     <div className={closeStyles.closeFrame} data-testid="menu-panel-close-frame" data-open={isOpen ? 'true' : 'false'}>
-      <button type="button" className={closeStyles.closeButton} aria-label={t('closeMenu', 'Fermer le menu')} onClick={onClose}>
+      <button
+        type="button"
+        className={closeStyles.closeButton}
+        aria-label={t('closeMenu', 'Fermer le menu')}
+        onClick={onClose}
+      >
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -92,7 +97,7 @@ export function SidePanel({ className, searchOpen, isDesktop }: SidePanelProps) 
             onClose={close}
             position="right"
             colors={PANEL_LAYER_COLORS}
-            accentColor="var(--colors-primary-600)"
+            accentColor="var(--primary-600)"
             closeOnClickAway
             showCloseButton={false}
           />

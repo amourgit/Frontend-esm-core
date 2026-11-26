@@ -7,26 +7,26 @@
   pointer-events: none;
 }
 .slotOverlay.blueScheme {
-  border: 1px dashed color-mix(in srgb, var(--colors-primary-600, #4589ff) 60%, transparent);
-  background-color: color-mix(in srgb, var(--colors-primary-600, #4589ff) 10%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--primary-600) 60%, transparent);
+  background-color: color-mix(in srgb, var(--primary-600) 10%, transparent);
 }
 .slotOverlay.blueScheme.slotOverlayHover {
-  border-color: color-mix(in srgb, var(--colors-primary-600, #4589ff) 90%, transparent);
-  background-color: color-mix(in srgb, var(--colors-primary-600, #4589ff) 15%, transparent);
+  border-color: color-mix(in srgb, var(--primary-600) 90%, transparent);
+  background-color: color-mix(in srgb, var(--primary-600) 15%, transparent);
 }
 .slotOverlay.greenScheme {
-  border: 1px dashed color-mix(in srgb, var(--colors-success-600, #198038) 60%, transparent);
-  background-color: color-mix(in srgb, var(--colors-success-600, #198038) 10%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--success-600) 60%, transparent);
+  background-color: color-mix(in srgb, var(--success-600) 10%, transparent);
 }
 .slotOverlay.greenScheme.slotOverlayHover {
-  border-color: color-mix(in srgb, var(--colors-success-600, #198038) 90%, transparent);
-  background-color: color-mix(in srgb, var(--colors-success-600, #198038) 15%, transparent);
+  border-color: color-mix(in srgb, var(--success-600) 90%, transparent);
+  background-color: color-mix(in srgb, var(--success-600) 15%, transparent);
 }
 
 .slotName {
-  background-color: var(--colors-surface-card, rgba(255, 255, 255, 0.95));
-  border: 1px solid color-mix(in srgb, var(--colors-primary-600, #4589ff) 80%, transparent);
-  color: var(--colors-surface-foreground, #393939);
+  background-color: var(--card);
+  border: 1px solid color-mix(in srgb, var(--primary-600) 80%, transparent);
+  color: var(--foreground);
   cursor: pointer;
   position: absolute;
   padding: 0.5rem;
@@ -36,7 +36,7 @@
   transition: all 0.2s ease;
 }
 .slotName:nth-child(even) {
-  border-color: color-mix(in srgb, var(--colors-success-600, #198038) 80%, transparent);
+  border-color: color-mix(in srgb, var(--success-600) 80%, transparent);
 }
 
 .extensionOverlay {

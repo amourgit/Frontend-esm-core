@@ -1,6 +1,6 @@
 .secretButton {
   background: none;
-  color: var(--colors-surface-muted-foreground, #474b6b);
+  color: var(--muted-foreground);
   border: none;
   font: inherit;
   text-align: left;
@@ -8,12 +8,12 @@
 
 .error {
   margin-left: 1rem;
-  color: var(--colors-warning-500, orange);
+  color: var(--warning-500);
   font-size: 11pt;
 }
 
 .overriddenValue {
-  color: var(--colors-primary-700, #2020a0);
+  color: var(--primary-700);
 }
 
 .elementValue {

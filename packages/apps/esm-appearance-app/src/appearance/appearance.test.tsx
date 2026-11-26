@@ -2,23 +2,23 @@ import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { getThemeEngine, getThemeState, toggleThemeMode } from '@egen-civitas/esm-theme';
+import { getTheme, getThemeMode, toggleThemeMode } from '@egen-civitas/esm-theme';
 import FullscreenToggle from './fullscreen-toggle.component';
 import ThemeToggle from './theme-toggle.component';
 
 vi.mock('@egen-civitas/esm-theme', () => ({
-  getThemeEngine: vi.fn(),
-  getThemeState: vi.fn(),
+  getTheme: vi.fn(),
+  getThemeMode: vi.fn(),
   toggleThemeMode: vi.fn(),
 }));
 
 describe('ThemeToggle', () => {
   beforeEach(() => {
-    vi.mocked(getThemeState).mockReturnValue({ mode: 'dark' } as never);
-    vi.mocked(getThemeEngine).mockReturnValue({ subscribe: vi.fn(() => () => {}) } as never);
+    vi.mocked(getThemeMode).mockReturnValue('dark');
+    vi.mocked(getTheme).mockReturnValue({ subscribe: vi.fn(() => () => {}) } as never);
   });
 
-  it("propose de passer en mode clair quand le thème est sombre, et bascule au clic", async () => {
+  it('propose de passer en mode clair quand le thème est sombre, et bascule au clic', async () => {
     render(<ThemeToggle />);
 
     await userEvent.click(screen.getByRole('button', { name: /mode clair/i }));
@@ -26,9 +26,9 @@ describe('ThemeToggle', () => {
     expect(toggleThemeMode).toHaveBeenCalledTimes(1);
   });
 
-  it("suit le moteur de thème : le libellé change quand le mode change", () => {
-    let listener: (state: { mode: string }) => void = () => {};
-    vi.mocked(getThemeEngine).mockReturnValue({
+  it('suit le runtime de thème : le libellé change quand le mode change', () => {
+    let listener: (event: { type: string; mode?: string }) => void = () => {};
+    vi.mocked(getTheme).mockReturnValue({
       subscribe: vi.fn((fn) => {
         listener = fn;
         return () => {};
@@ -37,15 +37,15 @@ describe('ThemeToggle', () => {
     render(<ThemeToggle />);
     expect(screen.getByRole('button', { name: /mode clair/i })).toBeInTheDocument();
 
-    act(() => listener({ mode: 'light' }));
+    act(() => listener({ type: 'mode', mode: 'light' }));
 
     expect(screen.getByRole('button', { name: /mode sombre/i })).toBeInTheDocument();
   });
 
-  it("démarre en mode sombre quand le moteur n'est pas initialisé, sans planter", () => {
-    vi.mocked(getThemeState).mockReturnValue(undefined as never);
-    vi.mocked(getThemeEngine).mockImplementation(() => {
-      throw new Error('moteur absent');
+  it("démarre en mode sombre quand le thème n'est pas initialisé, sans planter", () => {
+    vi.mocked(getThemeMode).mockReturnValue(null);
+    vi.mocked(getTheme).mockImplementation(() => {
+      throw new Error('thème non initialisé');
     });
     render(<ThemeToggle />);
 

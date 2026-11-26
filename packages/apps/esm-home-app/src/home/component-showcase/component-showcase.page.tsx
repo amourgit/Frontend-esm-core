@@ -464,10 +464,10 @@ const ComponentShowcasePage: React.FC = () => {
   const [selectedModalCardVariant, setSelectedModalCardVariant] = useState<CardVariant>('glass');
   const [selectedModalAnimation, setSelectedModalAnimation] = useState<CardModalAnimationPreset>('scale');
   const warpColors: Array<{ label: string; value: string }> = [
-    { label: 'error', value: 'var(--colors-error-500)' },
-    { label: 'primary', value: 'var(--colors-primary-500)' },
-    { label: 'success', value: 'var(--colors-success-500)' },
-    { label: 'warning', value: 'var(--colors-warning-500)' },
+    { label: 'error', value: 'var(--destructive)' },
+    { label: 'primary', value: 'var(--primary)' },
+    { label: 'success', value: 'var(--success-500)' },
+    { label: 'warning', value: 'var(--warning-500)' },
   ];
   const [modalWarpColor, setModalWarpColor] = useState(warpColors[0].value);
   const [modalWarpGlow, setModalWarpGlow] = useState(true);
@@ -564,8 +564,8 @@ const ComponentShowcasePage: React.FC = () => {
             <MenuToggleButton
               isOpen={staggeredMenuOpen}
               onToggle={() => setStaggeredMenuOpen((prev) => !prev)}
-              menuButtonColor="var(--colors-surface-foreground)"
-              openMenuButtonColor="var(--colors-surface-foreground)"
+              menuButtonColor="var(--foreground)"
+              openMenuButtonColor="var(--foreground)"
               changeMenuColorOnOpen
             />
           </div>
@@ -725,7 +725,7 @@ const ComponentShowcasePage: React.FC = () => {
             blurIntensity="lg"
             shadowIntensity="md"
             glowIntensity="md"
-            borderRadius="var(--border-radius-lg)"
+            borderRadius="var(--radius-lg)"
             className={styles.glassCardDemo}
           >
             <p className={styles.glassCardDemoText}>Contenu affiché à travers le verre.</p>
@@ -1096,8 +1096,8 @@ const ComponentShowcasePage: React.FC = () => {
         socialItems={demoStaggeredSocials}
         displaySocials
         displayItemNumbering
-        colors={['var(--colors-secondary-300)', 'var(--colors-primary-600)']}
-        accentColor="var(--colors-primary-600)"
+        colors={['var(--secondary-300)', 'var(--primary-600)']}
+        accentColor="var(--primary-600)"
         closeOnClickAway
       />
     </div>

@@ -55,8 +55,8 @@ describe('SidePanel', () => {
 
   it("restaure l'animation de couleurs d'ouverture, comme la vitrine des composants", () => {
     render(<SidePanel />);
-    expect(panelProps.last.colors).toEqual(['var(--colors-secondary-300)', 'var(--colors-primary-600)']);
-    expect(panelProps.last.accentColor).toBe('var(--colors-primary-600)');
+    expect(panelProps.last.colors).toEqual(['var(--secondary-300)', 'var(--primary-600)']);
+    expect(panelProps.last.accentColor).toBe('var(--primary-600)');
   });
 
   it('a son propre bouton de fermeture, accessible, qui ferme le panneau', () => {

@@ -284,26 +284,15 @@ Le système tenant est configurable à **trois niveaux**, par ordre de priorité
 
 C'est le point d'entrée principal. La configuration passée ici écrase tout le reste.
 
-> **Statut : OBSOLÈTE — en cours de remplacement (réforme du système de design).**
-> Le thème par tenant décrit ci-dessous (`registerTenantThemeApplier`, `applyAppThemeOverride`, moteur `@egen-civitas/esm-theme`) est **l'ancien système**, encore actif tant que la bascule (P2) n'est pas faite.
-> Cible validée : les thèmes de tenants deviennent des affectations `tenant:<id>` dans TokiForge ; le système de tenants ne porte plus aucune URL de thème. Voir `docs/reforme-tokiforge/SUIVI.md` (décision D5) et `PARCOURS-COMPLET.md`.
-
 ```ts
 // packages/shell/esm-app-shell/src/run.ts
-import { setupTenantSystem, registerTenantThemeApplier } from '@egen-civitas/esm-tenant';
-import { applyAppThemeOverride } from '@egen-civitas/esm-theme';
-
-// Optionnel : brancher le thème tenant sur le moteur de thème EGEN
-registerTenantThemeApplier(async (tenantId, schema, themeUrl) => {
-  if (schema) applyAppThemeOverride(`tenant-${tenantId}`, schema, { priority: 10 });
-});
+import { setupTenantSystem } from '@egen-civitas/esm-tenant';
 
 // Mode single — tenant unique fixe, chargé depuis une URL JSON
 await setupTenantSystem({
   mode: 'single',
   defaultTenantId: 'civitas',
   registryUrl: '/public/tenants/registry.json',
-  applyTheme: true,
 });
 
 // Mode multi — résolution depuis le sous-domaine ou le JWT
@@ -344,9 +333,6 @@ VITE_TENANT_PATH_PREFIX=/t/
 # Claim JWT portant l'ID tenant
 VITE_TENANT_JWT_CLAIM=tenantId
 
-# Thème automatique
-VITE_TENANT_THEME_APPLY=true
-
 # Persistance localStorage
 VITE_TENANT_PERSIST=true
 ```
@@ -363,7 +349,6 @@ Le serveur peut injecter ces variables dans `index.html` sans rebuild. Utile pou
   window.egenTenantMode = 'multi';
   window.egenTenantId = 'acme';
   window.egenTenantRegistryUrl = '/api/tenants';
-  window.egenTenantApplyTheme = 'true';
   window.egenTenantPersist = 'true';
   window.egenTenantResolutionOrder = 'subdomain,jwt,localStorage';
   window.egenTenantPathPrefix = '/t/';
@@ -395,8 +380,7 @@ registerAppTenantConfig('@egen/esm-academique-app', {
 
 Un tenant est défini par `TenantDefinition`. Seuls `id` et `name` sont obligatoires :
 
-> **Statut : `themeUrl` et `themeOverride` sont OBSOLÈTES (ancien système, en cours de retrait).**
-> Ils seront supprimés de la configuration d'un tenant lors de la bascule (D5, `docs/reforme-tokiforge/SUIVI.md`, étape P2.7) : le thème d'un tenant sera une affectation `tenant:<id>` dans TokiForge. Ne pas les utiliser pour un nouveau développement.
+Le thème n'appartient pas à la définition d'un tenant : il est résolu côté serveur pour la session (tenant et utilisateur compris) par le backend du Core (`GET /api/theme`, même origine) et appliqué par `@egen-civitas/esm-theme`.
 
 ```ts
 // Exemple minimal
@@ -411,10 +395,6 @@ Un tenant est défini par `TenantDefinition`. Seuls `id` et `name` sont obligato
   locale: 'fr-GA',
   timezone: 'Africa/Libreville',
   apiBaseUrl: 'https://api.uob.egen.ga', // Backend dédié
-  themeUrl: '/themes/uob.json',           // OBSOLÈTE — ancien moteur esm-theme (retrait prévu, D5)
-  themeOverride: {                        // OBSOLÈTE — retrait prévu (D5)
-    colors: { primary: '#003087' }
-  },
   importMapUrls: ['/uob/importmap.json'], // MFEs spécifiques à ce tenant
   featureFlags: {
     'module-notes': true,
@@ -600,7 +580,6 @@ window.addEventListener('esm:tenant-activated', (e: CustomEvent) => {
 
 - [ ] Copier `.env.example` → `.env` et configurer `VITE_TENANT_MODE`
 - [ ] Appeler `setupTenantSystem()` dans `run.ts` avec la config souhaitée
-- [ ] ~~Si thème par tenant : appeler `registerTenantThemeApplier()` avant `setupTenantSystem()`~~ — **OBSOLÈTE** (ancien système, retrait prévu : `docs/reforme-tokiforge/SUIVI.md`, P2.7 ; ne pas l'appliquer à un nouveau projet)
 - [ ] Définir les tenants (soit `staticTenants`, soit `registryUrl`)
 - [ ] Ajouter `@egen-civitas/esm-tenant: { singleton: true }` dans la config Module Federation
 - [ ] Optionnel : appeler `registerAppTenantConfig()` dans chaque app qui a des exigences spécifiques

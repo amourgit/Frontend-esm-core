@@ -31,5 +31,5 @@
   font-weight: var(--ui-body-compact-01-font-weight, 400);
   line-height: var(--ui-body-compact-01-line-height, 1.28572);
   letter-spacing: var(--ui-body-compact-01-letter-spacing, 0.16px);
-  color: var(--colors-surface-muted-foreground, #525252);
+  color: var(--muted-foreground);
 }

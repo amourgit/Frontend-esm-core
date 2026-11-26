@@ -14,8 +14,8 @@ vi.mock('@egen-civitas/esm-framework', () => ({
   useSession: () => ({ locale: 'fr' }),
 }));
 vi.mock('@egen-civitas/esm-theme', () => ({
-  getThemeState: () => ({ mode: 'dark' }),
-  getThemeEngine: () => ({ subscribe: () => () => undefined }),
+  getThemeMode: () => 'dark',
+  getTheme: () => ({ subscribe: () => () => undefined }),
   toggleThemeMode: vi.fn(),
 }));
 vi.mock('react-i18next', () => ({

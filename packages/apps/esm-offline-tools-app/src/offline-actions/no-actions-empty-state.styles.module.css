@@ -1,4 +1,5 @@
-.productiveHeading01, .emptyStateContainer .heading {
+.productiveHeading01,
+.emptyStateContainer .heading {
   font-size: var(--ui-heading-compact-01-font-size, 0.875rem);
   font-weight: var(--ui-heading-compact-01-font-weight, 600);
   line-height: var(--ui-heading-compact-01-line-height, 1.28572);
@@ -20,10 +21,10 @@
   font-weight: var(--ui-body-01-font-weight, 400);
   line-height: var(--ui-body-01-line-height, 1.42857);
   letter-spacing: var(--ui-body-01-letter-spacing, 0.16px);
-  color: var(--colors-surface-muted-foreground, #525252);
+  color: var(--muted-foreground);
   white-space: pre-line;
   text-align: center;
 }
 .emptyStateContainer .heading {
-  color: var(--colors-surface-foreground, #161616);
+  color: var(--foreground);
 }

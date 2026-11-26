@@ -1,8 +1,6 @@
 # Analyse complète — Système Multi-Tenant (`@egen/esm-tenant`)
 
-> **Statut : ANALYSE DATÉE (16 juillet 2026, complétée le 8 août 2026) — non mise à jour depuis.** Document historique, pas une référence de l'état actuel.
-> Les passages sur le **thème par tenant** (`registerTenantThemeApplier`, `applyGlobalThemeOverride` / `applyAppThemeOverride`, `themeUrl`, `themeOverride`, moteur `@egen-civitas/esm-theme`) décrivent **l'ancien système, OBSOLÈTE** :
-> la cible validée est une affectation `tenant:<id>` dans TokiForge, sans URL de thème dans le système de tenants. Voir `docs/reforme-tokiforge/SUIVI.md` (D5, P2.7) et `PARCOURS-COMPLET.md`.
+> **Statut : ANALYSE DATÉE (16 juillet 2026, complétée le 8 août 2026) — non mise à jour depuis.** Document historique, pas une référence de l'état actuel. Les passages sur le **thème par tenant** décrivent un état antérieur à la réforme du système de design : le thème n'est plus piloté par le système de tenants ni par le frontend ; il est résolu par le backend du Core (`GET /api/theme`, même origine) — voir `README.md` et `docs/reforme-tokiforge/SUIVI.md`.
 
 **Date de l'analyse :** 16 juillet 2026
 **Périmètre :** `@egen/esm-tenant`, `@egen/esm-tenant-routing-app`, et l'ensemble des packages consommateurs (`esm-app-shell`, `esm-login-app`, `esm-primary-navigation-app`, `esm-api`, `esm-framework`, `esm-react-utils`), ainsi que les fichiers d'environnement et de build (`.env.development`, `rspack.config.js`, `dependencies.json`, `index.ejs`).
@@ -48,7 +46,7 @@ Le correctif direct (copier `public/tenants/` dans `dist/`, corriger l'URL) éta
 | Page + route `/tenant-suspended` | `esm-tenant-routing-app/src/screens/suspended.component.tsx` + toutes les regex de routes publiques (`esm-ai-assistant-app`, `esm-footer-app`, `esm-not-found-app`, `esm-primary-navigation-app`) | Le statut "suspendu" n'existe plus côté frontend |
 | `unknownTenantBehavior`, `tenantSuspendedUrl`, `validateSubdomainWithBackend`, `backendValidationEndpoint` | `esm-tenant-routing-app/src/config-schema.ts` | Config de vérification devenue sans objet |
 | `EGEN_TENANT_REGISTRY_URL`, `EGEN_TENANT_THEME_APPLY` (+ `window.egenTenant*` correspondants) | `.env.development`, `example.env`, `rspack.config.js`, `esm-globals/src/types.ts` | Plus de registry à charger, plus de thème piloté par tenant côté frontend |
-| `registerTenantThemeApplier` + branchement `applyGlobalThemeOverride` par tenant | `esm-app-shell/src/run.ts` | Sans registry, plus de source de données (`themeOverride`/`themeUrl`) pour ce mécanisme *(ancien système de thème : OBSOLÈTE, voir le statut en tête)* |
+| `registerTenantThemeApplier` + branchement `applyGlobalThemeOverride` par tenant | `esm-app-shell/src/run.ts` | Sans registry, plus de source de données (`themeOverride`/`themeUrl`) pour ce mécanisme |
 | `public/tenants/registry.json` | `esm-app-shell/public/` | Fichier de démonstration devenu inutile |
 | Liste déroulante "mes établissements" (`useAvailableTenants`) | `esm-primary-navigation-app` — `context-switcher.component.tsx` | Nécessitait une liste de tenants connus côté frontend, qui n'existe plus. **Remplacé par un simple indicateur du tenant courant** (pas de sélection). Note : un vrai sélecteur multi-espaces nécessiterait un endpoint backend dédié (ex: `GET /api/me/tenants`) — hors périmètre de cette refonte. |
 
@@ -132,7 +130,7 @@ Recherche exhaustive des imports réels (`from '@egen/esm-tenant'`, pas les comm
 | Fichier | Ce qu'il importe |
 |---|---|
 | `esm-framework/src/index.ts` | `export * from '@egen/esm-tenant'` (barrel) |
-| `esm-app-shell/src/run.ts` | `setupTenantSystem`, `registerTenantThemeApplier` (ce dernier : ancien système, OBSOLÈTE) — **le point de boot** |
+| `esm-app-shell/src/run.ts` | `setupTenantSystem`, `registerTenantThemeApplier` — **le point de boot** |
 | `esm-primary-navigation-app/.../topbar.component.tsx` | `useTenantMode` |
 | `esm-primary-navigation-app/.../context-switcher.component.tsx` | `useTenant`, `useTenantMode`, `useAvailableTenants` |
 | `esm-login-app/.../login.component.tsx` | `useTenant`, `useTenantMode`, `storeHeaderTenantId`, `getTenantStoreState` |
@@ -580,7 +578,7 @@ Cette troisième version ne lit **jamais** la config `rootDomain` d'`esm-tenant-
 |---|---|---|---|
 | 9.1 | Config déclarée mais jamais lue | `esm-tenant-routing-app/src/config-schema.ts` | `validateSubdomainWithBackend` et `backendValidationEndpoint` sont documentés (validation d'un sous-domaine côté backend) mais ne sont référencés nulle part dans `use-tenant-routing.ts` : la validation reste toujours purement locale (registry en mémoire), quelle que soit la config. |
 | 9.2 | Code mort | `esm-tenant-routing-app/src/guard/subdomain-utils.ts` | `buildTenantSubdomainUrl()` est exportée mais n'a aucun appelant dans le monorepo. |
-| 9.3 | Dépendance fantôme | `esm-app-shell/package.json` | `run.ts` importe directement `@egen/esm-tenant` (`setupTenantSystem`, `registerTenantThemeApplier` — ce dernier : ancien système, OBSOLÈTE), mais le package n'apparaît dans aucune section du `package.json` du shell (`dependencies`/`peerDependencies`/`devDependencies`). Ne fonctionne aujourd'hui que grâce au hoisting du workspace — fragile, et à corriger de toute façon en même temps que le point §4 (Module Federation). |
+| 9.3 | Dépendance fantôme | `esm-app-shell/package.json` | `run.ts` importe directement `@egen/esm-tenant` (`setupTenantSystem`, `registerTenantThemeApplier`), mais le package n'apparaît dans aucune section du `package.json` du shell (`dependencies`/`peerDependencies`/`devDependencies`). Ne fonctionne aujourd'hui que grâce au hoisting du workspace — fragile, et à corriger de toute façon en même temps que le point §4 (Module Federation). |
 | 9.4 | Types non ré-exportés | `esm-tenant/src/index.ts` | `TenantResolutionStrategy`, `TenantPathConfig`, `TenantJwtConfig` sont définis dans `types.ts` mais absents du barrel public — un consommateur ne peut pas typer explicitement `const order: TenantResolutionStrategy[] = [...]` sans un import profond dans les internes du package. |
 | 9.5 | `VITE_ROOT_DOMAIN` mort | `.env.development` | Variable déclarée dans l'env mais jamais lue par aucun code (`esm-tenant-routing-app` attend `rootDomain` via le système de config EGEN, pas via une variable d'environnement). |
 | 9.6 | Ambiguïté ID/slug mineure | `esm-tenant/src/context/registry.ts` — `getTenantById()` | Recherche d'abord par ID exact, puis par `slug` sur l'ensemble du registre : si le `slug` d'un tenant B est identique à l'`id` d'un tenant A, le comportement dépend de l'ordre d'itération de la `Map`. Cas limite, mais à valider si les tenants sont un jour créés dynamiquement par des utilisateurs. |

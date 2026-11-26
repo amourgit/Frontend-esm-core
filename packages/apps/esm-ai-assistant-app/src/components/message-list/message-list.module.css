@@ -18,9 +18,9 @@
 
 .welcomeText {
   margin: 0;
-  color: var(--colors-surface-foreground, #161616);
-  font-size: var(--typography-font-size-sm-size, 0.875rem);
-  line-height: var(--typography-font-size-sm-line-height, 1.4);
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
 }
 
 .suggestions {
@@ -30,20 +30,20 @@
 }
 
 .suggestionChip {
-  border: 1px solid var(--colors-border-default, #e0e0e0);
-  background: var(--colors-surface-card, #ffffff);
-  color: var(--colors-surface-card-foreground, #161616);
-  border-radius: var(--border-radius-full, 999px);
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--card-foreground);
+  border-radius: var(--radius-full);
   padding: 0.375rem 0.75rem;
-  font-size: var(--typography-font-size-xs-size, 0.75rem);
+  font-size: var(--text-xs);
   cursor: pointer;
-  transition: var(--transitions-default, all 200ms);
+  transition: var(--transition-default);
 }
 .suggestionChip:hover {
-  background: var(--colors-surface-accent, #f4f4f4);
-  border-color: var(--colors-primary-500, #0f62fe);
+  background: var(--accent);
+  border-color: var(--primary);
 }
 .suggestionChip:focus-visible {
-  outline: 2px solid var(--colors-border-ring, #0f62fe);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }

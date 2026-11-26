@@ -8,12 +8,16 @@
   pointer-events: none;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  transition:
+    opacity 0.2s ease,
+    visibility 0s linear 0.2s;
 }
-.closeFrame[data-open=true] {
+.closeFrame[data-open='true'] {
   visibility: visible;
   opacity: 1;
-  transition: opacity 0.3s ease 0.35s, visibility 0s linear 0.35s;
+  transition:
+    opacity 0.3s ease 0.35s,
+    visibility 0s linear 0.35s;
 }
 @media (max-width: 1024px) {
   .closeFrame {
@@ -38,7 +42,9 @@
   cursor: pointer;
   pointer-events: auto;
   opacity: 0.8;
-  transition: opacity 0.2s ease, background 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    background 0.2s ease;
 }
 .closeButton:hover {
   opacity: 1;
@@ -46,7 +52,7 @@
 }
 .closeButton:focus-visible {
   opacity: 1;
-  outline: 2px solid var(--colors-primary-600, #2563eb);
+  outline: 2px solid var(--primary-600);
   outline-offset: 2px;
 }
 .closeButton svg {

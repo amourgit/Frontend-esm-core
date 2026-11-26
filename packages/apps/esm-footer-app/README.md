@@ -44,10 +44,7 @@ mécanisme générique que le reste du thème/config EGEN.
 
 Règles de style du monorepo : section « Styling » de `.github/copilot-instructions.md` (Tailwind d'abord ; CSS Modules seulement pour ce que Tailwind ne peut pas exprimer).
 
-> **État à corriger (réforme du système de design).** `src/components/footer/footer.module.css` lit encore des variables de l'**ancien contrat**
-> (`--typography-font-family-sans`, `--typography-font-size-xs-*`, `--typography-font-weight-semibold`) avec des valeurs de repli, plus `--footer-text-color`.
-> Ce contrat est **obsolète** : il sera remplacé lors de la bascule vers TokiForge (`docs/reforme-tokiforge/SUIVI.md`, P2 ; `ANNEXES.md` B : typographie = constantes du preset Tailwind).
-> Ne pas ajouter de nouvelle dépendance à ces variables.
+Les couleurs, polices et rayons viennent du thème (variables sémantiques `--font-sans`, `--radius`… écrites par `@egen-civitas/esm-theme`) et des constantes du styleguide (`--text-xs`, `--font-weight-semibold`, `--transition-colors`…) ; la couleur du texte est ajustable par `--footer-text-color`.
 
 Ce composant vit dans le flux normal du document, en bas de page (ce n'est pas une surface flottante), et s'empile verticalement et se centre sur mobile (`≤ 672px`).
 
