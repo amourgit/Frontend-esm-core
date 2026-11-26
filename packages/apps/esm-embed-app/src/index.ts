@@ -10,5 +10,11 @@ const options = { featureName: 'embed', moduleName };
 // depuis external-apps.json (kind: "embed") : routes.json reste donc vide à dessein.
 export const root = getAsyncLifecycle(() => import('./root.component'), options);
 
-// Entrée de navigation (slot `topbar-nav-slot`) : ne rend rien, seule sa `meta` (générée par serve-prod) est lue par la TopBar.
+// Vue d'extension : une page de l'app embarquée affichée DANS un slot du Core (contribution `view` du manifeste).
+export const extensionView = getAsyncLifecycle(() => import('./extension-view.component'), { ...options, featureName: 'embed-extension-view' });
+
+// Panneau de rail : sous-options de la section de l'app (comme les apps internes) ; la section vient de la `meta` de l'extension.
+export const railPanel = getAsyncLifecycle(() => import('./rail-panel.component'), { ...options, featureName: 'embed-rail-panel' });
+
+// Contribution déclarative (ex. entrée de TopBar) : ne rend rien, seule sa `meta` (générée par serve-prod) est lue par le slot.
 export const navEntry = getSyncLifecycle(() => null, { ...options, featureName: 'embed-nav-entry' });

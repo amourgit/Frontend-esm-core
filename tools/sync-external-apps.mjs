@@ -16,8 +16,10 @@
  *     },
  *     "embed": [                                            // APPS EMBARQUÉES (iframe, protocole v2 : docs 17)
  *       { "manifest": "https://studio.exemple.org/egen-app.json",   //   URL https ou chemin local du manifeste
- *         "grants": { "theme": {}, "notifications": {}, "events": { "publish": ["app.studio.*"] } },  // plafond approuvé
- *         "limits": { "requestsPerSecond": 50 } }              //   optionnel
+ *         "grants": { "notifications": {}, "events": { "publish": ["app.studio.*"] },
+ *                     "extensions": { "contribute": ["topbar-nav-slot"] } },   // plafond approuvé (dont les slots où l'app peut contribuer)
+ *         "limits": { "requestsPerSecond": 50 },               //   optionnel
+ *         "config": { "studioApi": "https://api.exemple.org" } }    //   optionnel : configuration publique servie par la capacité `config`
  *     ],
  *     "remote": [                                           // HÉBERGÉES AILLEURS (référencées par URL)
  *       { "name": "@partner/esm-x-app",
@@ -36,7 +38,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { checkApproved, checkEmbedManifest, checkLimits } from './embed-apps.mjs';
+import { checkApproved, checkConfig, checkEmbedManifest, checkLimits } from './embed-apps.mjs';
 import { LOCK_FILE, LOCK_VERSION, formatReport, isSafeSegment, loadExternalApps, sha256 } from './external-apps.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -76,7 +78,7 @@ function readConfig() {
   if (!Array.isArray(embed)) fail('« embed » doit être un tableau');
   for (const [i, e] of embed.entries()) {
     if (!e || typeof e.manifest !== 'string' || !e.manifest) fail(`embed[${i}] : « manifest » requis (URL https ou chemin)`);
-    const bad = [...checkApproved(e.grants), ...checkLimits(e.limits)];
+    const bad = [...checkApproved(e.grants), ...checkLimits(e.limits), ...checkConfig(e.config)];
     if (bad.length) fail(`embed[${i}] : ${bad.join(' ; ')}`);
   }
   return { registry: cfg.registry, apps, remote, embed };
@@ -218,6 +220,7 @@ async function sync() {
       manifestSha256: sha256(frozen),
       approved: e.grants ?? {},
       ...(e.limits ? { limits: e.limits } : {}),
+      ...(e.config ? { config: e.config } : {}),
     };
   }
 

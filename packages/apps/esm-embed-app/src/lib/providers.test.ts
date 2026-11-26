@@ -1,61 +1,73 @@
 import { describe, expect, it, vi } from 'vitest';
 import { availableCapabilities } from '@egen-civitas/esm-embed-host';
+import { CAPABILITY_IDS } from '@egen-civitas/esm-embed-protocol';
 import { createCoreProviders, createEventBridge, EGEN_EVENT, type CoreServices } from './providers';
 
-function fakeCore(over: Partial<CoreServices> = {}): CoreServices & { sessionCbs: Array<(s: any) => void> } {
-  const sessionCbs: Array<(s: any) => void> = [];
+function fakeCore(over: Partial<CoreServices> = {}): CoreServices {
   return {
-    sessionCbs,
-    getSession: () => ({ authenticated: true, user: { display: 'Sam' }, sessionId: 'SECRET' }),
-    subscribeSession: (cb) => (sessionCbs.push(cb), () => void sessionCbs.splice(sessionCbs.indexOf(cb), 1)),
     getLocale: () => 'fr',
     getTenantId: () => 'tenant-1',
     isFeatureEnabled: (n) => n === 'beta',
-    userHasAccess: (p) => p === 'admin',
     notify: vi.fn(),
+    confirm: vi.fn(async () => true),
     log: vi.fn(),
+    listExtensions: vi.fn(() => [{ name: 'nav-x', moduleName: '@egen/esm-x-app', meta: { label: 'X' } }]),
+    subscribeExtensions: vi.fn(() => () => undefined),
+    registerAiTools: vi.fn(),
+    unregisterAiTools: vi.fn(),
     ...over,
   };
 }
 
-describe('createCoreProviders', () => {
-  it('sert session, langue, tenant, drapeaux, permissions, notifications', async () => {
+describe('createCoreProviders (seulement ce dont le Core est la source)', () => {
+  it('langue, tenant, configuration de l’app, drapeaux, notifications, dialogues', async () => {
     const core = fakeCore();
-    const p = createCoreProviders(core);
-    expect(await p.session!.get()).toMatchObject({ authenticated: true });
+    const p = createCoreProviders(core, { config: { studioApi: 'https://api.exemple.org' } });
     expect(await p.locale!.get()).toBe('fr');
     expect(await p.tenant!.get()).toEqual({ id: 'tenant-1' });
+    expect(await p.config!.get()).toEqual({ studioApi: 'https://api.exemple.org' });
     expect(await p.flags!.isEnabled('beta')).toBe(true);
     expect(await p.flags!.isEnabled('autre')).toBe(false);
-    expect(await p.permissions!.can('admin')).toBe(true);
     await p.notifications!.show({ kind: 'success', title: 'OK' }, { moduleName: 'm' });
     expect(core.notify).toHaveBeenCalledWith({ kind: 'success', title: 'OK' });
+    await expect(p.dialogs!.confirm({ title: 't', message: 'm' }, { moduleName: 'm' })).resolves.toBe(true);
   });
 
-  it('session non chargée : undefined ; changements relayés', async () => {
-    const core = fakeCore({ getSession: () => null, getTenantId: () => undefined });
-    const p = createCoreProviders(core);
-    expect(await p.session!.get()).toBeUndefined();
+  it('tenant absent : id null ; configuration absente : objet vide', async () => {
+    const p = createCoreProviders(fakeCore({ getTenantId: () => undefined }));
     expect(await p.tenant!.get()).toEqual({ id: null });
-    const got: unknown[] = [];
-    const off = p.session!.subscribe!((s) => got.push(s));
-    core.sessionCbs[0]({ authenticated: true });
-    core.sessionCbs[0](null);
-    expect(got).toEqual([{ authenticated: true }, undefined]);
-    off();
-    expect(core.sessionCbs).toHaveLength(0);
+    expect(await p.config!.get()).toEqual({});
   });
 
-  it('télémétrie : journalise avec le module émetteur', () => {
+  it('extensions : liste et abonnement qui relivre la liste courante', () => {
+    let notify: (() => void) | undefined;
+    const core = fakeCore({ subscribeExtensions: vi.fn((_slot, cb) => ((notify = cb), () => undefined)) });
+    const p = createCoreProviders(core);
+    expect(p.extensions!.list('topbar-nav-slot')).toHaveLength(1);
+    const got: unknown[] = [];
+    p.extensions!.subscribe!('topbar-nav-slot', (l) => got.push(l.length));
+    notify!();
+    expect(got).toEqual([1]);
+  });
+
+  it('outils IA et télémétrie relayés avec le module émetteur', () => {
     const core = fakeCore();
-    createCoreProviders(core).telemetry!.log('warn', 'msg', { a: 1 }, { moduleName: '@a/b' });
+    const p = createCoreProviders(core);
+    const invoke = async () => 1;
+    p.aiTools!.register('@a/b', [{ name: 't', description: 'd' }], invoke);
+    expect(core.registerAiTools).toHaveBeenCalledWith('@a/b', [{ name: 't', description: 'd' }], invoke);
+    p.aiTools!.unregister('@a/b', ['t']);
+    expect(core.unregisterAiTools).toHaveBeenCalledWith('@a/b', ['t']);
+    p.telemetry!.log('warn', 'msg', { a: 1 }, { moduleName: '@a/b' });
     expect(core.log).toHaveBeenCalledWith('warn', 'msg', { a: 1 }, '@a/b');
   });
 
-  it('capacités annoncées : celles servies, et seulement celles-là (pas de promesse non tenue)', () => {
+  it('les 12 capacités du SDK sont servies, et seulement elles (aucune promesse non tenue, aucune capacité retirée)', () => {
     const avail = availableCapabilities(createCoreProviders(fakeCore()));
-    for (const served of ['session', 'locale', 'tenant', 'flags', 'permissions', 'events', 'notifications', 'telemetry', 'navigation', 'lifecycle']) expect(avail.has(served as any)).toBe(true);
-    for (const missing of ['theme', 'api', 'dialogs', 'ai-tools', 'config']) expect(avail.has(missing as any)).toBe(false);
+    expect([...avail].sort()).toEqual([...CAPABILITY_IDS].sort());
+    expect(CAPABILITY_IDS).toHaveLength(12);
+    const providers = createCoreProviders(fakeCore()) as Record<string, unknown>;
+    for (const removed of ['session', 'permissions', 'theme', 'api']) expect(providers[removed]).toBeUndefined();
   });
 });
 

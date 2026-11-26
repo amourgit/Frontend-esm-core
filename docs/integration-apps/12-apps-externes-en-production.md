@@ -44,21 +44,23 @@ Une app embarquée est une application **autonome dans une iframe** (Next.js, Pe
 {
   "embed": [
     { "manifest": "https://studio.exemple.org/egen-app.json",
-      "grants": { "theme": {}, "notifications": {}, "events": { "publish": ["app.studio.*"] } },
-      "limits": { "requestsPerSecond": 50 } }
+      "grants": { "notifications": {}, "events": { "publish": ["app.studio.*"] },
+                  "extensions": { "contribute": ["topbar-nav-slot", "shell-rail-left-slot"] } },
+      "limits": { "requestsPerSecond": 50 },
+      "config": { "studioApi": "https://api.exemple.org" } }
   ]
 }
 ```
 
 | Étape | Ce qui se passe |
 | --- | --- |
-| `yarn external:sync` | Récupère le manifeste (URL https ou chemin local), le **valide**, l'écrit figé dans `external-apps/embed/manifests/`, inscrit dans le verrou : version, empreintes SHA-256 (figé et source), plafond approuvé, limites |
+| `yarn external:sync` | Récupère le manifeste (URL https ou chemin local), le **valide**, l'écrit figé dans `external-apps/embed/manifests/`, inscrit dans le verrou : version, empreintes SHA-256 (figé et source), plafond approuvé, limites, `config` |
 | `yarn external:check` | Détecte la **dérive** : le manifeste publié a changé depuis la synchronisation → code 1 |
 | démarrage de `serve-prod` | Revérifie l'empreinte du manifeste figé, valide manifeste + plafond, refuse une **route déjà prise** (page du Core ou autre app embarquée) ou un nom déjà pris |
-| registry | **Fusionne** une page par app et une entrée de navigation `navEntry` (TopBar) dans le registry de l'app générique `@egen/esm-embed-app` ; publie `<spa>/embed-apps.json` (manifestes + plafonds, `no-store`) |
+| registry | **Fusionne** une page par app et une extension par contribution **approuvée** (`extensionView`, `railPanel` ou `navEntry`, doc 17 §5 bis) dans le registry de l'app générique `@egen/esm-embed-app` ; publie `<spa>/embed-apps.json` (manifestes, plafonds, `config`, contributions ; `no-store`) |
 | navigateur | L'app générique (`esm-embed-app`) retrouve l'entrée par la route, calcule les **grants effectifs** (`effectiveGrants` du protocole : demandé ∩ approuvé) et monte l'hôte `esm-embed-host` |
 
-Règles : par défaut, seules les capacités de lecture sans risque sont accordées (`session` filtrée, `tenant`, `locale`, `theme`, `navigation`, `config`, `telemetry`, `lifecycle`) ; toute autre capacité exige **à la fois** une demande du manifeste et une approbation de l'opérateur. Une capacité demandée mais non approuvée (ou l'inverse) est signalée comme réserve dans `external-apps.status.json`. `placement.rail` (panneau de rail) n'est pas synthétisé : le `railPanel` d'une app interne est lié à une section figée, contrat incompatible avec une app générique (accès par la TopBar). Si l'app générique n'est pas compilée, les apps embarquées sont **rejetées** (statut visible) au lieu d'exposer des routes vides.
+Règles : par défaut, seules les capacités d'état d'interface en lecture sont accordées (`tenant`, `locale`, `navigation`, `config`, `telemetry`, `lifecycle`) ; toute autre capacité exige **à la fois** une demande du manifeste et une approbation de l'opérateur. **Règle d'or** : identité/session, droits, thème et appels API ne font pas partie du SDK (l'app les obtient auprès de Keycloak, de ses backends, du service de thèmes) : les demander est une **erreur de validation explicite**. Ajouter un composant à un slot du Core exige l'approbation du slot (`extensions.contribute`) ; sans elle la contribution est écartée avec une réserve visible dans `external-apps.status.json`. Si l'app générique n'est pas compilée, les apps embarquées sont **rejetées** (statut visible) au lieu d'exposer des routes vides.
 
 ## 3. Règles d'alignement appliquées
 

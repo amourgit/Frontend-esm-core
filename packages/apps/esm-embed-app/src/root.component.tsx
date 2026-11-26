@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import EmbedFrame from './embed-frame.component';
 import { coreServices } from './lib/core-services';
-import { findEntry, loadEmbedConfig, type EmbedEntry } from './lib/entries';
+import { findEntry, getEmbedConfig, type EmbedEntry } from './lib/entries';
 
 type State = { status: 'loading' } | { status: 'ready'; entry: EmbedEntry } | { status: 'error'; message: string };
 
@@ -14,7 +14,7 @@ const Root: React.FC = () => {
   useEffect(() => {
     let cancelled = false;
     const base = window.getEgenSpaBase();
-    loadEmbedConfig(base)
+    getEmbedConfig(base)
       .then((config) => {
         const entry = findEntry(config, window.location.pathname, base);
         if (cancelled) return;

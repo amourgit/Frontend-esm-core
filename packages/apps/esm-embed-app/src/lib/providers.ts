@@ -1,20 +1,33 @@
-import type { HostProviders, Unsub } from '@egen-civitas/esm-embed-host';
+import type { ExtensionInfo, HostProviders, Unsub } from '@egen-civitas/esm-embed-host';
+
+export type { ExtensionInfo };
+
+/** Outil IA déclaré par une app embarquée (le Core le rend appelable par l'agent ; le backend garde l'autorité et la validation). */
+export interface AiToolDescriptor {
+  name: string;
+  description: string;
+  inputSchema?: Record<string, unknown>;
+}
 
 /**
- * Services du Core dont les apps embarquées ont besoin. Injectés (testables sans le Shell) ;
- * l'implémentation réelle est dans `core-services.ts`.
+ * Services dont LE CORE EST LA SOURCE, injectés (testables sans le Shell) ; l'implémentation réelle est dans `core-services.ts`.
+ * Règle d'or (docs/integration-apps/17 §2) : ni identité/session, ni droits, ni thème, ni appels API relayés : l'app embarquée
+ * les obtient auprès de leurs sources (Keycloak, backends, service de thèmes).
  */
 export interface CoreServices {
-  /** Session courante, ou `null` tant qu'elle n'est pas chargée. Le filtrage par champs est fait par l'hôte (grant `session.fields`). */
-  getSession(): Record<string, unknown> | null;
-  subscribeSession(cb: (session: Record<string, unknown> | null) => void): Unsub;
   getLocale(): string;
   subscribeLocale?(cb: (locale: string) => void): Unsub;
   getTenantId(): string | undefined;
   isFeatureEnabled(name: string): boolean;
-  userHasAccess(privilege: string): boolean;
   notify(n: { kind: 'info' | 'success' | 'warning' | 'error'; title: string; subtitle?: string; timeoutMs?: number }): void;
+  /** Dialogue de confirmation du Core (le Core garde la maîtrise de l'interface). */
+  confirm(d: { title: string; message: string; danger?: boolean }): Promise<boolean>;
   log(level: 'debug' | 'info' | 'warn' | 'error', message: string, ctx: Record<string, unknown> | undefined, from: string): void;
+  /** Extensions attachées à un slot (déjà filtrées par privilèges et drapeaux côté Core). */
+  listExtensions(slot: string): ExtensionInfo[];
+  subscribeExtensions(slot: string, cb: () => void): Unsub;
+  registerAiTools(moduleName: string, tools: AiToolDescriptor[], invoke: (name: string, args: Record<string, unknown>) => Promise<unknown>): void;
+  unregisterAiTools(moduleName: string, names: string[]): void;
 }
 
 /** Nom de l'événement DOM qui porte le bus : le Core et les apps internes peuvent y publier/écouter sans dépendre de ce paquet. */
@@ -49,21 +62,20 @@ export function createEventBridge(win: Window = window): NonNullable<HostProvide
 }
 
 /**
- * Fournisseurs servis aujourd'hui : session, langue, tenant, drapeaux, permissions, événements, notifications, télémétrie.
- * Volontairement absents (donc refusés `UNAVAILABLE` à la négociation, jamais promis puis cassés) :
- *  - `theme`      : en attente du moteur de thème retenu par la réforme (contrat `{ mode, tokens }` indépendant du moteur) ;
- *  - `api`        : en attente du contrat d'authentification/tenant de `egenFetch` côté Core ;
- *  - `dialogs`, `ai-tools`, `config` : pas de contrat générique côté Core pour l'instant.
+ * Les 12 capacités du SDK sont servies : langue, tenant, drapeaux, événements, notifications, dialogues, configuration publique
+ * de l'app, extensions (découverte), outils IA, télémétrie, navigation et cycle de vie (ces deux dernières par l'hôte).
  */
-export function createCoreProviders(core: CoreServices, win: Window = window): HostProviders {
+export function createCoreProviders(core: CoreServices, entry: { config?: Record<string, unknown> } = {}, win: Window = window): HostProviders {
   return {
-    session: { get: () => core.getSession() ?? undefined, subscribe: (cb) => core.subscribeSession((s) => cb(s ?? undefined)) },
     locale: { get: () => core.getLocale(), subscribe: core.subscribeLocale ? (cb) => core.subscribeLocale!(cb) : undefined },
     tenant: { get: () => ({ id: core.getTenantId() ?? null }) },
+    config: { get: () => entry.config ?? {} },
     flags: { isEnabled: (name) => core.isFeatureEnabled(name) },
-    permissions: { can: (p) => core.userHasAccess(p) },
     events: createEventBridge(win),
     notifications: { show: (n) => core.notify(n) },
+    dialogs: { confirm: (d) => core.confirm(d) },
+    extensions: { list: (slot) => core.listExtensions(slot), subscribe: (slot, cb) => core.subscribeExtensions(slot, () => cb(core.listExtensions(slot))) },
+    aiTools: { register: (m, tools, invoke) => core.registerAiTools(m, tools, invoke), unregister: (m, names) => core.unregisterAiTools(m, names) },
     telemetry: { log: (level, message, ctx, from) => core.log(level, message, ctx, from.moduleName), metric: () => undefined },
   };
 }

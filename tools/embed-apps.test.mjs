@@ -6,7 +6,7 @@ import { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { EMBED_APP_NAME, buildEmbedConfig, buildEmbedRegistry, checkApproved, checkEmbedManifest, checkLimits, embedWarnings } from './embed-apps.mjs';
+import { EMBED_APP_NAME, REMOVED_CAPABILITIES, allowedContributions, buildEmbedConfig, buildEmbedRegistry, checkApproved, checkConfig, checkEmbedManifest, checkExtensionDecls, checkLimits, contributionsOf, embedWarnings, slotCovers } from './embed-apps.mjs';
 import { LOCK_FILE, LOCK_VERSION, loadExternalApps, sha256 } from './external-apps.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -23,9 +23,11 @@ const manifest = (over = {}) => ({
   technology: 'nextjs',
   navigation: { mode: 'history', basePath: '/' },
   placement: { rail: 'left', icon: 'Palette' },
-  capabilities: { theme: {}, notifications: {}, events: { publish: ['app.studio.*'] } },
+  capabilities: { locale: {}, notifications: {}, events: { publish: ['app.studio.*'] } },
+  extensions: [{ name: 'chip', slot: 'topbar-actions-slot', view: '/_egen/chip', order: 5, height: 48, privileges: ['Voir Studio'], featureFlag: 'studio' }],
   ...over,
 });
+const APPROVED = { notifications: {}, events: { publish: ['app.*'] }, extensions: { contribute: ['topbar-nav-slot', 'shell-rail-left-slot', 'topbar-actions-slot'] } };
 
 /** Dossier externe + verrou contenant une ou plusieurs apps embarquées. */
 function fixture(entries) {
@@ -37,7 +39,7 @@ function fixture(entries) {
     const raw = Buffer.from(JSON.stringify(m));
     const file = `embed/manifests/m${i}.json`;
     writeFileSync(join(dir, file), e.rawOverride ?? raw);
-    apps[e.lockName ?? m.name] = { kind: 'embed', version: m.version, manifestFile: file, manifestSha256: e.sha ?? sha256(raw), approved: e.approved ?? { notifications: {}, events: { publish: ['app.*'] } }, ...(e.limits ? { limits: e.limits } : {}) };
+    apps[e.lockName ?? m.name] = { kind: 'embed', version: m.version, manifestFile: file, manifestSha256: e.sha ?? sha256(raw), approved: e.approved ?? APPROVED, ...(e.limits ? { limits: e.limits } : {}), ...(e.config ? { config: e.config } : {}) };
   });
   writeFileSync(join(dir, LOCK_FILE), JSON.stringify({ lockVersion: LOCK_VERSION, apps }));
   return dir;
@@ -53,43 +55,110 @@ test('manifeste : cas nominal et erreurs', () => {
   assert.ok(checkEmbedManifest(null).length);
 });
 
-test('plafond approuvé et limites', () => {
-  assert.deepEqual(checkApproved({ api: { hosts: ['https://a.org'] }, flags: false }), []);
+test('règle d’or : session, thème, droits, api et auth sont absents du SDK, avec la voie à suivre', () => {
+  for (const id of Object.keys(REMOVED_CAPABILITIES)) {
+    const e = checkEmbedManifest(manifest({ capabilities: { [id]: {} } }));
+    assert.match(e.join(' '), /absente du SDK/, id);
+    assert.match(checkApproved({ [id]: {} }).join(' '), /absente du SDK/, id);
+  }
+  assert.match(checkEmbedManifest(manifest({ capabilities: { session: {} } })).join(' '), /Keycloak/);
+});
+
+test('contributions déclarées : validation', () => {
+  const ok = { name: 'nav', slot: 'topbar-nav-slot', meta: { iconUrl: 'https://studio.exemple.org/i.svg' } };
+  assert.deepEqual(checkExtensionDecls([ok], 'https://studio.exemple.org'), []);
+  const bad = checkExtensionDecls([{ ...ok, name: 'A B' }, ok, ok, { ...ok, name: 'v', view: '//evil' }, { ...ok, name: 'x', slot: 'X Y' }, { ...ok, name: 'i', meta: { iconUrl: 'https://tracker.exemple.net/i.svg' } }, { ...ok, name: 'h', height: 99999 }], 'https://studio.exemple.org');
+  assert.ok(bad.length >= 6, bad.join('|'));
+  assert.deepEqual(checkExtensionDecls('x'), ['extensions : tableau attendu']);
+  assert.match(checkExtensionDecls([{ ...ok, meta: { x: 'a'.repeat(5000) } }]).join(), /4 Ko/);
+});
+
+test('plafond approuvé, limites et configuration', () => {
+  assert.deepEqual(checkApproved({ flags: { names: ['beta'] }, dialogs: false, extensions: { discover: ['topbar-nav-slot'] } }), []);
   assert.ok(checkApproved({ nope: {} }).length);
-  assert.ok(checkApproved({ api: 'oui' }).length);
+  assert.ok(checkApproved({ events: 'oui' }).length);
   assert.deepEqual(checkLimits({ requestsPerSecond: 50 }), []);
   assert.ok(checkLimits({ inconnue: 1 }).length);
   assert.ok(checkLimits({ requestsPerSecond: -1 }).length);
+  assert.deepEqual(checkConfig({ a: 1 }), []);
+  assert.ok(checkConfig([]).length);
+  assert.match(checkConfig({ x: 'a'.repeat(9000) }).join(), /8 Ko/);
 });
 
-test('réserves : demandée non approuvée / approuvée non demandée', () => {
-  const w = embedWarnings(manifest(), { events: {}, flags: {} });
+test('slots : exact ou préfixe avec * final ; * seul refusé', () => {
+  assert.ok(slotCovers('topbar-nav-slot', 'topbar-nav-slot'));
+  assert.ok(slotCovers('annuaire-*', 'annuaire-detail-slot'));
+  assert.ok(!slotCovers('annuaire-*', 'sites-x'));
+  assert.ok(!slotCovers('*', 'anything'));
+});
+
+test('contributions : raccourcis placement + déclarations, approbation par slot', () => {
+  const decls = contributionsOf(manifest());
+  assert.deepEqual(decls.map((d) => [d.name, d.slot]), [['chip', 'topbar-actions-slot'], ['nav', 'topbar-nav-slot'], ['rail', 'shell-rail-left-slot']]);
+  // une déclaration explicite sur un slot supprime le raccourci correspondant
+  const explicit = contributionsOf(manifest({ extensions: [{ name: 'mon-nav', slot: 'topbar-nav-slot', meta: { label: 'X' } }] }));
+  assert.deepEqual(explicit.map((d) => d.name), ['mon-nav', 'rail']);
+  // sans approbation : rien ; avec : seulement les slots couverts
+  assert.deepEqual(allowedContributions(manifest(), {}), []);
+  assert.deepEqual(allowedContributions(manifest(), { extensions: { contribute: ['topbar-nav-slot'] } }).map((d) => d.name), ['nav']);
+  assert.deepEqual(allowedContributions(manifest(), APPROVED).length, 3);
+  assert.deepEqual(allowedContributions(manifest(), { extensions: false }), []);
+});
+
+test('réserves : demandée non approuvée, approuvée non demandée, contribution non approuvée', () => {
+  const w = embedWarnings(manifest(), { events: {}, flags: {}, extensions: { contribute: ['topbar-nav-slot'] } });
   assert.ok(w.some((x) => x.includes('notifications') && x.includes('refusée')));
   assert.ok(w.some((x) => x.includes('flags') && x.includes('sans effet')));
-  assert.deepEqual(embedWarnings(manifest({ capabilities: { theme: {} } }), {}), []);
+  assert.ok(w.some((x) => x.includes('contribution « chip »') && x.includes('non approuvée')));
+  assert.deepEqual(embedWarnings(manifest({ capabilities: { locale: {} }, extensions: undefined, placement: undefined }), {}), []);
 });
 
-test('chargeur : une app embarquée est acceptée, sans entrée d’import map ni routes propres', () => {
-  const r = load(fixture([{}]));
+test('chargeur : acceptée, sans entrée d’import map ni routes propres ; contributions et config publiées', () => {
+  const r = load(fixture([{ config: { studioApi: 'https://api.exemple.org' } }]));
   assert.equal(r.apps[0].status, 'accepted');
   assert.equal(r.apps[0].kind, 'embed');
   assert.deepEqual(r.importMap, {});
   assert.deepEqual(r.routes, {});
   assert.equal(r.embed.length, 1);
   assert.equal(r.embed[0].manifest.route, 'studio');
-  assert.deepEqual(r.embed[0].approved, { notifications: {}, events: { publish: ['app.*'] } });
+  assert.deepEqual(r.embed[0].approved, APPROVED);
+  assert.deepEqual(r.embed[0].config, { studioApi: 'https://api.exemple.org' });
+  assert.deepEqual(r.embed[0].contributions.map((d) => d.name), ['chip', 'nav', 'rail']);
 });
 
-test('registry synthétique : une page par app et une entrée de navigation déclarative', () => {
+test('registry synthétique : page + une extension par contribution APPROUVÉE, bon composant, meta.embed', () => {
   const r = load(fixture([{}]));
   assert.deepEqual(r.embedRegistry.pages, [{ component: 'root', route: 'studio', online: true, offline: false }]);
-  assert.equal(r.embedRegistry.extensions.length, 1);
-  const ext = r.embedRegistry.extensions[0];
-  assert.equal(ext.slot, 'topbar-nav-slot');
-  assert.equal(ext.component, 'navEntry');
-  assert.deepEqual({ section: ext.meta.section, label: ext.meta.label, route: ext.meta.route, icon: ext.meta.icon }, { section: 'studio', label: 'Theme Studio', route: 'studio', icon: 'Palette' });
-  assert.equal(buildEmbedRegistry([{ name: '@a/b', manifest: manifest({ placement: undefined }) }]).extensions[0].meta.icon, 'AppWindow');
-  assert.deepEqual(buildEmbedConfig(r.embed).apps[0].route, 'studio');
+  const byName = Object.fromEntries(r.embedRegistry.extensions.map((e) => [e.name, e]));
+  assert.deepEqual(Object.keys(byName).sort(), ['embed-civitas-esm-studio-app-chip', 'embed-civitas-esm-studio-app-nav', 'embed-civitas-esm-studio-app-rail']);
+  const chip = byName['embed-civitas-esm-studio-app-chip'];
+  assert.equal(chip.component, 'extensionView');
+  assert.equal(chip.slot, 'topbar-actions-slot');
+  assert.deepEqual(chip.privileges, ['Voir Studio']);
+  assert.equal(chip.featureFlag, 'studio');
+  assert.equal(chip.order, 5);
+  assert.deepEqual(chip.meta.embed, { app: '@civitas/esm-studio-app', ext: 'chip' });
+  const nav = byName['embed-civitas-esm-studio-app-nav'];
+  assert.equal(nav.component, 'navEntry');
+  assert.equal(nav.slot, 'topbar-nav-slot');
+  assert.deepEqual({ section: nav.meta.section, label: nav.meta.label, route: nav.meta.route, icon: nav.meta.icon }, { section: 'studio', label: 'Theme Studio', route: 'studio', icon: 'Palette' });
+  const rail = byName['embed-civitas-esm-studio-app-rail'];
+  assert.equal(rail.component, 'railPanel');
+  assert.equal(rail.slot, 'shell-rail-left-slot');
+  assert.deepEqual({ title: rail.meta.title, section: rail.meta.section, global: rail.meta.global }, { title: 'Theme Studio', section: 'studio', global: true });
+  assert.equal(buildEmbedRegistry([{ name: '@a/b', manifest: manifest({ placement: undefined, extensions: undefined }), contributions: [] }]).extensions.length, 0);
+  const cfg = buildEmbedConfig(r.embed).apps[0];
+  assert.equal(cfg.route, 'studio');
+  assert.equal(cfg.contributions.length, 3);
+  assert.deepEqual(cfg.config, {});
+});
+
+test('sans approbation de slot, aucune extension n’est injectée dans le Core', () => {
+  const r = load(fixture([{ approved: { notifications: {}, events: { publish: ['app.*'] } } }]));
+  assert.equal(r.apps[0].status, 'accepted-with-warnings');
+  assert.deepEqual(r.embedRegistry.extensions, []);
+  assert.deepEqual(r.embedRegistry.pages.length, 1);
+  assert.ok(r.apps[0].warnings.some((w) => w.includes('non approuvée')));
 });
 
 test('chargeur : réserves sur l’écart demande / approbation', () => {
@@ -98,7 +167,7 @@ test('chargeur : réserves sur l’écart demande / approbation', () => {
   assert.ok(r.apps[0].warnings.some((w) => w.includes('notifications')));
 });
 
-test('chargeur : rejets (empreinte, nom, route prise, route en double, capacité inconnue, plafond invalide)', () => {
+test('chargeur : rejets (empreinte, nom, route prise, route en double, capacité retirée/inconnue, plafond, config)', () => {
   assert.match(load(fixture([{ sha: 'a'.repeat(64) }])).apps[0].errors.join(' '), /modifié depuis la synchronisation/);
   assert.match(load(fixture([{ lockName: '@autre/nom' }])).apps[0].errors.join(' '), /diffère du nom du verrou/);
   assert.match(load(fixture([{}]), { reservedRoutes: new Set(['studio']) }).apps[0].errors.join(' '), /déjà utilisée par une autre page/);
@@ -106,13 +175,16 @@ test('chargeur : rejets (empreinte, nom, route prise, route en double, capacité
   assert.deepEqual(two.apps.map((a) => a.status), ['accepted', 'rejected']);
   assert.match(two.apps[1].errors.join(' '), /autre app embarquée/);
   assert.equal(two.embed.length, 1);
+  assert.match(load(fixture([{ manifest: manifest({ capabilities: { session: {} } }) }])).apps[0].errors.join(' '), /absente du SDK/);
   assert.equal(load(fixture([{ manifest: manifest({ capabilities: { zzz: {} } }) }])).apps[0].status, 'rejected');
   assert.equal(load(fixture([{ approved: { nope: {} } }])).apps[0].status, 'rejected');
+  assert.equal(load(fixture([{ approved: { theme: {} } }])).apps[0].status, 'rejected');
+  assert.equal(load(fixture([{ config: [] }])).apps[0].status, 'rejected');
   assert.equal(load(fixture([{}]), { internalNames: new Set(['@civitas/esm-studio-app']) }).apps[0].status, 'rejected');
 });
 
 test('chargeur : une entrée embed n’émet pas l’avertissement « aucun routes.json »', () => {
-  const r = load(fixture([{ approved: { notifications: {}, events: { publish: ['app.*'] } } }]));
+  const r = load(fixture([{}]));
   assert.ok(!r.apps[0].warnings.some((w) => w.includes('routes.json')));
 });
 
@@ -128,7 +200,7 @@ function syncRoot(cfg, m = manifest()) {
 const runSync = (root, ...args) => spawnSync(process.execPath, [join(root, 'tools/sync-external-apps.mjs'), ...args], { cwd: root, encoding: 'utf8', env: { ...process.env, EGEN_EXTERNAL_DIR: '', EGEN_EXTERNAL_APPS: '' } });
 
 test('sync : écrit le manifeste figé et le verrou ; check conforme puis dérive détectée', () => {
-  const root = syncRoot({ embed: [{ manifest: './egen-app.json', grants: { notifications: {} }, limits: { requestsPerSecond: 50 } }] });
+  const root = syncRoot({ embed: [{ manifest: './egen-app.json', grants: { notifications: {} }, limits: { requestsPerSecond: 50 }, config: { studioApi: 'https://api.exemple.org' } }] });
   const r = runSync(root);
   assert.equal(r.status, 0, r.stdout + r.stderr);
   const lock = JSON.parse(readFileSync(join(root, 'external-apps', LOCK_FILE), 'utf8'));
@@ -137,6 +209,7 @@ test('sync : écrit le manifeste figé et le verrou ; check conforme puis dériv
   assert.equal(e.version, '1.2.0');
   assert.deepEqual(e.approved, { notifications: {} });
   assert.deepEqual(e.limits, { requestsPerSecond: 50 });
+  assert.deepEqual(e.config, { studioApi: 'https://api.exemple.org' });
   assert.match(e.manifestFile, /^embed\/manifests\/civitas-esm-studio-app\.json$/);
   assert.equal(sha256(readFileSync(join(root, 'external-apps', e.manifestFile))), e.manifestSha256);
   assert.equal(runSync(root, '--check').status, 0);
@@ -156,6 +229,10 @@ test('sync : manifeste invalide, doublon et plafond invalide refusés', () => {
   assert.equal(r.status, 1);
   assert.match(r.stdout + r.stderr, /déclarée deux fois/);
   root = syncRoot({ embed: [{ manifest: './egen-app.json', grants: { nope: {} } }] });
+  assert.equal(runSync(root).status, 1);
+  root = syncRoot({ embed: [{ manifest: './egen-app.json', grants: { theme: {} } }] });
+  assert.match(runSync(root).stdout + runSync(root).stderr, /absente du SDK/);
+  root = syncRoot({ embed: [{ manifest: './egen-app.json', config: [] }] });
   assert.equal(runSync(root).status, 1);
   root = syncRoot({ embed: [{ manifest: './absent.json' }] });
   assert.match(runSync(root).stdout + runSync(root).stderr, /introuvable/);
@@ -190,7 +267,7 @@ async function withServer({ embedAppBuilt }, fn) {
   const m = manifest();
   const raw = Buffer.from(JSON.stringify(m));
   writeFileSync(join(ext, 'embed/manifests/m.json'), raw);
-  writeFileSync(join(ext, LOCK_FILE), JSON.stringify({ lockVersion: LOCK_VERSION, apps: { [m.name]: { kind: 'embed', version: m.version, manifestFile: 'embed/manifests/m.json', manifestSha256: sha256(raw), approved: { notifications: {}, events: { publish: ['app.*'] } } } } }));
+  writeFileSync(join(ext, LOCK_FILE), JSON.stringify({ lockVersion: LOCK_VERSION, apps: { [m.name]: { kind: 'embed', version: m.version, manifestFile: 'embed/manifests/m.json', manifestSha256: sha256(raw), approved: APPROVED } } }));
   const port = 18000 + Math.floor(Math.random() * 1000);
   const child = spawn(process.execPath, [join(root, 'tools/serve-prod.mjs')], { env: { ...process.env, PORT: String(port), HOST: '127.0.0.1', EGEN_SHELL_DIR: join(root, 'shell') }, stdio: 'ignore' });
   try {
@@ -205,7 +282,7 @@ test('serve-prod : fusionne les pages embarquées dans le registry de l’app g�
   await withServer({ embedAppBuilt: true }, async (base) => {
     const reg = await (await fetch(`${base}/routes.registry.json`)).json();
     assert.deepEqual(reg[EMBED_APP_NAME].pages, [{ component: 'root', route: 'studio', online: true, offline: false }]);
-    assert.equal(reg[EMBED_APP_NAME].extensions[0].name, 'embed-civitas-esm-studio-app-nav');
+    assert.deepEqual(reg[EMBED_APP_NAME].extensions.map((e) => e.component).sort(), ['extensionView', 'navEntry', 'railPanel']);
     assert.deepEqual(reg['@egen/esm-int-app'].pages.map((p) => p.route), ['int']);
     const cfgRes = await fetch(`${base}/embed-apps.json`);
     assert.equal(cfgRes.headers.get('cache-control'), 'no-store');
@@ -213,6 +290,7 @@ test('serve-prod : fusionne les pages embarquées dans le registry de l’app g�
     assert.equal(cfg.apps.length, 1);
     assert.equal(cfg.apps[0].manifest.url, 'https://studio.exemple.org');
     assert.deepEqual(cfg.apps[0].approved.events, { publish: ['app.*'] });
+    assert.equal(cfg.apps[0].contributions.length, 3);
     const status = await (await fetch(`${base}/external-apps.status.json`)).json();
     assert.equal(status.apps[0].kind, 'embed');
   });

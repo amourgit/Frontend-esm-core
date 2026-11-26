@@ -12,6 +12,7 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 | P3 | Hôte | F | `esm-embed-host` |
 | P4 | Test et simulateur | F | `esm-embed-testing` |
 | P5 | Intégration Core (`kind: embed`) | C (+F) | `esm-embed-app`, outils `external-apps`, `serve-prod`, verrou |
+| P5b | Recentrage du SDK (règle d'or) et extensions | F, C | 12 capacités, contributions de slots, rail, outils IA, dialogues, config |
 | P6 | Migration des apps et compatibilité v1.1 | C, apps | tweakcn (pilote), Character, Penpot |
 | P7 | Sécurité, SSO, E2E navigateur, vérificateur | C, F | Playwright, `egen check-app`, capacité `auth` (cadrage) |
 
@@ -70,7 +71,7 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 - [x] P5.2 Schéma `external-apps.json` : entrée `embed` (manifeste URL ou chemin, grants, limites) ; validation (manifeste valide, grants ⊆ demandé, https, route libre).
 - [x] P5.3 Synchro : lecture du manifeste (URL https ou chemin local), validation, SHA-256 (source et figé), **plafond approuvé écrit dans le verrou** ; `external:check` détecte la dérive. *Décision : les grants **effectifs** ne sont pas calculés par les outils (sans dépendance) mais dans le navigateur par `effectiveGrants` du protocole : une seule implémentation (voir 17 §7).*
 - [x] P5.4 `serve-prod` : revérifie le manifeste au démarrage (rejet en cas d'écart), synthétise les pages du registry pour l'app générique, expose la configuration d'instance.
-- [x] P5.5a Adaptateurs de fournisseurs adossés aux services du Core (**livrés : session, langue, tenant, drapeaux, permissions, événements, notifications, télémétrie** ; **volontairement absents, donc refusés `UNAVAILABLE` : `theme` (réforme du thème en cours), `api` (contrat d'authentification/tenant de `egenFetch` à fixer), `dialogs`, `ai-tools`, `config`**) : session/tenant/langue (`watchSession`, `watchTranslations`), thème (aligné sur le système de thème retenu par la réforme en cours — TokiForge / jetons ; le contrat `theme` `{ mode, tokens }` est indépendant du moteur), événements (bus du Core), notifications, dialogues, drapeaux, permissions, configuration, `esm-ai-tools`, télémétrie, `api` (`createFetchApiProvider` + en-têtes d'auth/tenant du Core).
+- [x] P5.5a Adaptateurs de fournisseurs adossés aux services du Core : **tous livrés pour les 12 capacités** (langue, tenant, drapeaux, événements, notifications, dialogues, configuration publique, extensions, outils IA, télémétrie ; navigation et cycle de vie par l'hôte). Voir P5b pour le périmètre recentré.
 - [x] P5.5 App générique `packages/apps/esm-embed-app` (`@egen/esm-embed-app`) : lit `<spa>/embed-apps.json`, retrouve l'entrée par la route (`coreSubpath`), calcule les grants effectifs (`effectiveGrants`), monte `esm-embed-host`, démonte proprement. Entrée de navigation déclarative `navEntry` (TopBar) ; `placement.rail` **non supporté** (le `railPanel` interne est lié à une section figée).
 - [x] P5.6 Statut (`external-apps.status.json`) : `kind: embed`, grants effectifs, avertissements.
 - [x] P5.7 Tests d'outils (`yarn test:tools`) et tests de l'app ; docs 12, 15 mises à jour ; push + bilan.
@@ -78,8 +79,26 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 - [x] P5.9 Paquets publiés (protocole/hôte/testing 0.2.0, client 0.1.1, incluant `api.paths` deny-by-default) ; dépendances `@egen-civitas/*` du Core à jour hors `esm-theme` (figé) ; la CI `yarn verify` du Core (lint, types, tests, contrôles de routes) passe sur l'app.
 - [x] P5.10 Tests : app 16 (entrées, fournisseurs, bus d'événements, page racine), outils 54 ; eslint propre.
 
+## P5b — Recentrage du SDK (règle d'or) et extensions
+
+Décision du 2026-11-26 : **le SDK ne transporte que ce dont le Core est lui-même la source** (doc 17 §2.0). Identité/session, droits, thème et appels API relayés sortent du SDK : l'app les obtient directement (Keycloak, backends, service de thèmes) ; cela supprime une classe entière de failles et lève les « écarts » précédents (`theme`, `api` absents) par la suppression plutôt que par un contournement. Les capacités que le Core doit fournir lui-même sont toutes servies ; l'architecture du Core n'a **pas** eu besoin d'évoluer.
+
+**Framework**
+- [x] P5b.1 Protocole : retrait de `session`, `permissions`, `theme`, `api` (+ `pickFields`, chemins d'API, champs de session) ; `REMOVED_CAPABILITIES` (rejet explicite avec la raison et la voie à suivre) ; 12 capacités.
+- [x] P5b.2 Capacité `extensions` (`discover`/`contribute` par slot, motifs `annuaire-*`), contributions `extensions[]` du manifeste (validation : nom, slot, vue, `meta` ≤ 4 Ko, `iconUrl` même origine, 20 max), `allowedContributions`.
+- [x] P5b.3 Client : retrait des façades, façade `extensions`, hooks `useEgenLocale`, `useEgenTenant`, `useEgenExtensions`.
+- [x] P5b.4 Hôte : fournisseur `extensions`, retrait de `createFetchApiProvider` ; **pont 1.1 sans session**.
+- [x] P5b.5 Testing : `createTestHost` (extensions), conformité (règle d'or), simulateur, `egen-embed-check` (contributions, vues, capacités retirées).
+- [x] P5b.6 Publiés : protocole/hôte/testing 0.3.0, client 0.2.0 ; 120 tests Framework.
+
+**Core**
+- [x] P5b.7 Outillage : catalogue recentré, `REMOVED_CAPABILITIES`, validation des contributions, approbation par slot (`approved.extensions.contribute`), `embed[].config`, registry : page + une extension par contribution **approuvée** (`extensionView` / `railPanel` / `navEntry`, `meta.embed`), `embed-apps.json` (`contributions`, `config`) ; 59 tests d'outils.
+- [x] P5b.8 `esm-embed-app` : vue d'extension (iframe dans un slot), panneau de rail (`SectionNavPanel` via la `meta` de sa propre extension), dialogue de confirmation natif, outils IA (`registerTool`/`removeTool`, id `embed.<module>.<outil>`), découverte d'extensions (filtrée par privilèges et drapeaux du Core, notification dédoublonnée), configuration partagée ; 40 tests, eslint propre.
+- [x] P5b.9 `.gitignore` : `src/lib/` n'est plus ignoré (le motif `lib` masquait du code source) ; dépendances `@egen-civitas/*` mises à jour (`deps:egen`).
+- [x] P5b.10 Docs 12, 17, 18 mises à jour.
+
 ## P6 — Migration des apps et compatibilité
-- [ ] P6.1 **tweakcn (pilote)** : ajouter `egen-app.json`, adopter `esm-embed-client` (thème synchronisé, session, événements), retirer le wrapper `esm-tweakcn-app` du Core au profit de l'entrée `embed`.
+- [ ] P6.1 **tweakcn (pilote)** : ajouter `egen-app.json`, adopter `esm-embed-client` (langue, événements, notifications, extensions) ; thème, session et API : directement auprès de leurs sources (Keycloak, service de thèmes), pas par le SDK ; retirer le wrapper `esm-tweakcn-app` du Core au profit de l'entrée `embed`.
 - [ ] P6.2 Character Factory : manifeste + client (navigation `none`).
 - [ ] P6.3 Penpal : manifeste + injection du script v1.1 ou client selon le routage constaté (`hash` ou `history`), sans toucher au dépôt Penpal (référence en lecture seule : fournir les fichiers à y ajouter côté opérateur).
 - [ ] P6.4 Dépréciation de `esm-nextjs-utils` (réexport + avertissement), changesets.
@@ -88,6 +107,6 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 ## P7 — Sécurité, SSO, navigateur réel, outillage
 - [ ] P7.1 Playwright : poignée de main, thème, événements, navigation (clic, F5, retour, lien partagé) sur tweakcn.
 - [ ] P7.2 `egen check-app` (écart G4) étendu aux apps embarquées (manifeste, SDK, `frame-ancestors`).
-- [ ] P7.3 Capacité `auth` (cadrage et interface côté front ; branchement IAM dépendant du backend).
+- [x] P7.3 ~~Capacité `auth`~~ **supprimée** (règle d'or) ; remplacée par le guide d'obtention de l'identité, des droits et du thème auprès de leurs sources (doc 17 §9). À valider avec la configuration réelle du realm Keycloak (même domaine enregistrable pour le SSO en iframe).
 - [ ] P7.4 Revue de sécurité (liste de contrôle §6 du doc 17), fuzzing léger des gardes, rapport.
 - [ ] P7.5 Doc de clôture et retour d'expérience ; push + bilan.

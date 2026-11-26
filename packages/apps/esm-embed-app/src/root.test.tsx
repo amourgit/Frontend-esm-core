@@ -16,19 +16,23 @@ vi.mock('./lib/core-services', () => ({
 }));
 
 import Root from './root.component';
+import { resetEmbedConfigCache } from './lib/entries';
 
 const manifest = (over: Record<string, unknown> = {}) => ({
   manifestVersion: 1, name: '@civitas/esm-studio-app', version: '1.0.0', title: 'Studio', url: 'https://studio.exemple.org', route: 'studio', technology: 'nextjs',
-  navigation: { mode: 'history' }, capabilities: { theme: {}, notifications: {} }, ...over,
+  navigation: { mode: 'history' }, capabilities: { locale: {}, notifications: {} }, ...over,
 });
 const config = (apps: unknown[]) => ({ version: 1, apps });
-const entry = (over: Record<string, unknown> = {}) => ({ name: '@civitas/esm-studio-app', version: '1.0.0', route: 'studio', manifest: manifest(), approved: { notifications: {} }, limits: {}, ...over });
+const entry = (over: Record<string, unknown> = {}) => ({ name: '@civitas/esm-studio-app', version: '1.0.0', route: 'studio', manifest: manifest(), approved: { notifications: {} }, limits: {}, config: {}, contributions: [], ...over });
 
 function mockFetch(body: unknown, status = 200) {
   vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(body), { status })));
 }
 
-beforeEach(() => void window.history.pushState({}, '', '/egen/spa/studio'));
+beforeEach(() => {
+  resetEmbedConfigCache();
+  window.history.pushState({}, '', '/egen/spa/studio');
+});
 afterEach(() => void vi.unstubAllGlobals());
 
 describe('Root (app générique)', () => {
