@@ -9,10 +9,10 @@
   "resolutions": {
     "@types/react": "18.3.25",
     "csstype": "3.2.3",
-    "@egen-civitas/esm-framework": "^5.0.1",
+    "@egen-civitas/esm-framework": "^5.0.2",
     "@egen-civitas/esm-styleguide": "^5.2.7",
-    "@egen-civitas/esm-app-shell": "^3.1.1",
-    "@egen-civitas/esm-theme": "^1.1.0",
+    "@egen-civitas/esm-app-shell": "^3.1.2",
+    "@egen-civitas/esm-theme": "^2.0.0",
     "@egen-civitas/rspack-config": "^2.0.0"
   },
   "scripts": {
@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@egen-civitas/egen": "^3.0.0",
-    "@egen-civitas/esm-app-shell": "^3.1.1",
+    "@egen-civitas/esm-app-shell": "^3.1.2",
     "@egen-civitas/rspack-config": "^2.0.0",
     "@playwright/test": "^1.65.1",
     "@rspack/cli": "2.3.3",

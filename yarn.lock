@@ -162,24 +162,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-channel@npm:^2.2.3":
-  version: 2.2.3
-  resolution: "@egen-civitas/esm-ai-channel@npm:2.2.3"
+"@egen-civitas/esm-ai-channel@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "@egen-civitas/esm-ai-channel@npm:2.2.4"
   dependencies:
     "@egen-civitas/esm-ai-config": "npm:^1.4.0"
     "@egen-civitas/esm-ai-context": "npm:^1.0.3"
     "@egen-civitas/esm-ai-events": "npm:^1.2.0"
-    "@egen-civitas/esm-ai-tools": "npm:^2.0.0"
+    "@egen-civitas/esm-ai-tools": "npm:^3.0.0"
     "@egen-civitas/esm-api": "npm:^3.0.0"
     jose: "npm:^6.2.0"
   peerDependencies:
     "@egen-civitas/esm-ai-config": ^1.4.0
     "@egen-civitas/esm-ai-context": ^1.0.3
     "@egen-civitas/esm-ai-events": ^1.2.0
-    "@egen-civitas/esm-ai-tools": ^2.0.0
+    "@egen-civitas/esm-ai-tools": ^3.0.0
     "@egen-civitas/esm-api": ^3.0.0
     react: 18.x
-  checksum: 10/43791397e45ea5108a95fc45a311643f318bd61c57e668f1a896bbd7a588d198c09235394781507f2d090ec633cba57ca7191028d233f82f974661e4d5114495
+  checksum: 10/a1496a370652c7b4ac40269651bb38501770d8f7508d1d41eda9db625a91e351cadc8f9663dcb58d0113a551f72d505ec21918de46784edf13b6d27b75e118dd
   languageName: node
   linkType: hard
 
@@ -225,28 +225,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-extensions@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@egen-civitas/esm-ai-extensions@npm:1.0.3"
+"@egen-civitas/esm-ai-extensions@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@egen-civitas/esm-ai-extensions@npm:1.0.4"
   dependencies:
     "@egen-civitas/esm-ai-config": "npm:^1.3.0"
     "@egen-civitas/esm-ai-context": "npm:^1.0.0"
     "@egen-civitas/esm-ai-events": "npm:^1.2.0"
-    "@egen-civitas/esm-ai-tools": "npm:^2.0.0"
-  checksum: 10/f041a72a21cd96f0175aebd3c3955a1b2f28e8ba888e2f5c095c653338fd8661d5d60854a295df18f3c1dce8276304309d7b5c69cc7c3499acf2e5476b7f6590
+    "@egen-civitas/esm-ai-tools": "npm:^3.0.0"
+  checksum: 10/f1ae820a9b705c0c07dfb1e348a0ee4104ab406afecdd600c6432a038a5bd9cf4bbb110e6213800ca058ce6102cf9d37e9ce31a364bd587c3efb976bbd1a3fec
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-framework@npm:^1.3.5":
-  version: 1.3.5
-  resolution: "@egen-civitas/esm-ai-framework@npm:1.3.5"
+"@egen-civitas/esm-ai-framework@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "@egen-civitas/esm-ai-framework@npm:1.3.6"
   dependencies:
-    "@egen-civitas/esm-ai-channel": "npm:^2.2.3"
+    "@egen-civitas/esm-ai-channel": "npm:^2.2.4"
     "@egen-civitas/esm-ai-config": "npm:^1.4.0"
     "@egen-civitas/esm-ai-context": "npm:^1.0.3"
     "@egen-civitas/esm-ai-events": "npm:^1.2.0"
-    "@egen-civitas/esm-ai-extensions": "npm:^1.0.3"
-    "@egen-civitas/esm-ai-tools": "npm:^2.0.0"
+    "@egen-civitas/esm-ai-extensions": "npm:^1.0.4"
+    "@egen-civitas/esm-ai-tools": "npm:^3.0.0"
     "@egen-civitas/esm-api": "npm:^3.0.0"
     "@egen-civitas/esm-state": "npm:^1.0.3"
     rxjs: "npm:^7.8.0"
@@ -255,13 +255,13 @@ __metadata:
     "@egen-civitas/esm-state": ^1.0.3
     react: 18.x
     rxjs: 7.x
-  checksum: 10/5dc54609654e0e21d236eac1232cef13eb131694bc9b65102e1956813c234be62c4d312adda3a8499686fb09fb9774064ef32ceba6b3e91b2e3601bab3764f9e
+  checksum: 10/dd1d0b2ee5b8142231c7bc43da34515769b43ca9df74904df45850c7faf82790e3df619c681c42c551f0c3b10e3ab94d74428df4476f34b28fc5fc0462c90b1c
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-ai-tools@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@egen-civitas/esm-ai-tools@npm:2.0.0"
+"@egen-civitas/esm-ai-tools@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@egen-civitas/esm-ai-tools@npm:3.0.0"
   dependencies:
     "@egen-civitas/esm-ai-config": "npm:^1.3.1"
     "@egen-civitas/esm-ai-context": "npm:^1.0.3"
@@ -269,7 +269,7 @@ __metadata:
     "@egen-civitas/esm-api": "npm:^3.0.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-state": "npm:^1.0.3"
-    "@egen-civitas/esm-styleguide": "npm:^5.0.0"
+    "@egen-civitas/esm-styleguide": "npm:^6.0.0"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
   peerDependencies:
     "@egen-civitas/esm-api": ^3.0.0
@@ -277,7 +277,7 @@ __metadata:
     "@egen-civitas/esm-state": ^1.0.3
     rxjs: 7.x
     swr: 2.x
-  checksum: 10/ddadeee3ae581b1434dec2afd3cfbbb1e4aa368b9763c9b58ff33a30ab355c666dd588ad486069d6ff137e6cccfc150bd1b0f34f3b81b9fc5171679ca6db6134
+  checksum: 10/2d463fdb0403d179f8f2cb06c40b963d55fd04746dd3c91b475c444c1527fe115c5335c8a88f727b474d0a0384fb790ffd772c89600ac4f1698cbbd80deaffc2
   languageName: node
   linkType: hard
 
@@ -297,19 +297,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-app-shell@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "@egen-civitas/esm-app-shell@npm:3.1.1"
+"@egen-civitas/esm-app-shell@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "@egen-civitas/esm-app-shell@npm:3.1.2"
   dependencies:
     "@egen-civitas/esm-api": "npm:^3.0.1"
     "@egen-civitas/esm-config": "npm:^2.0.0"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
     "@egen-civitas/esm-platform": "npm:^1.3.1"
     "@egen-civitas/esm-react-utils": "npm:^3.0.1"
     "@egen-civitas/esm-state": "npm:^1.0.3"
-    "@egen-civitas/esm-styleguide": "npm:^5.2.7"
+    "@egen-civitas/esm-styleguide": "npm:^6.0.0"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
     "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
@@ -333,7 +333,7 @@ __metadata:
     swc-loader: "npm:0.2.7"
     swr: "npm:2.2.5"
     webpack-pwa-manifest: "npm:4.3.0"
-  checksum: 10/491da26b77f7c0e937af35e63c303e6e4cfa5115c7294c8517b699651d1a341e245d184b7813ee9e3ac0b5f424575afc67e1f4760ed4ceefc46672c8beda6ca4
+  checksum: 10/7d566969e6b18dfa7e5261d9eea796f83a2a393c82be4f89dd749d8d0a84a0b68b39c349082868aad7f586a89e4948491f2537324e24b4df9d53a5b4f04e341d
   languageName: node
   linkType: hard
 
@@ -456,11 +456,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-framework@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "@egen-civitas/esm-framework@npm:5.0.1"
+"@egen-civitas/esm-framework@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@egen-civitas/esm-framework@npm:5.0.2"
   dependencies:
-    "@egen-civitas/esm-ai-framework": "npm:^1.3.5"
+    "@egen-civitas/esm-ai-framework": "npm:^1.3.6"
     "@egen-civitas/esm-api": "npm:^3.0.0"
     "@egen-civitas/esm-config": "npm:^2.0.0"
     "@egen-civitas/esm-context": "npm:^1.0.2"
@@ -477,7 +477,7 @@ __metadata:
     "@egen-civitas/esm-react-utils": "npm:^3.0.1"
     "@egen-civitas/esm-routes": "npm:^1.2.0"
     "@egen-civitas/esm-state": "npm:^1.0.3"
-    "@egen-civitas/esm-styleguide": "npm:^5.2.4"
+    "@egen-civitas/esm-styleguide": "npm:^6.0.0"
     "@egen-civitas/esm-tenant": "npm:^1.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.4"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
@@ -490,7 +490,7 @@ __metadata:
     rxjs: 7.x
     single-spa: 6.x
     swr: 2.x
-  checksum: 10/fc7b9655245f62eb843a7bbf2cd8ddf126136a53a5c54540a4238b66f002eb48533355e0c76edd221176bf320b2b9c65a5008c19b8c50c2426b76da4c567a268
+  checksum: 10/449326f514c802fe78f335398200bcc5f5d7caba7706e69e6c96d215ac5565b9838cc9ff420539fd73d9272563c493168523ca887dbd7c4f07ecd5a8c76fd466
   languageName: node
   linkType: hard
 
@@ -668,14 +668,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-theme@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@egen-civitas/esm-theme@npm:1.1.0"
+"@egen-civitas/esm-theme@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@egen-civitas/esm-theme@npm:2.0.0"
   dependencies:
-    zod: "npm:^3.23.8"
-  peerDependencies:
-    rxjs: 7.x
-  checksum: 10/25c46ab4da673ba1f6a17e201eb6496b6f4daf866453c25da7e435392543f146cda457e383b178d800b08a3799726b9cb577bfc4610de42e5d93f8b4df4d3344
+    culori: "npm:4.0.1"
+  checksum: 10/15e9dc495e87c1574dd7d46600bb61a54087f3e45935ade14aa5ad62540c43b7d281bbadb52370e224e18a1ae3fe322e1a97dadd60b7e4807af198505833a489
   languageName: node
   linkType: hard
 
@@ -734,12 +732,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/tailwind-preset@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@egen-civitas/tailwind-preset@npm:2.0.0"
+"@egen-civitas/tailwind-preset@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@egen-civitas/tailwind-preset@npm:3.0.0"
   dependencies:
     tw-animate-css: "npm:^1.4.0"
-  checksum: 10/809d7617c62bc94130a4e1d77e3ba8f502a5169ddb98d4a16413c23e07fc5a34bb185e9d12a7fca6b0c1a58f2c3653c89062c3149e95324477324e0042622555
+  checksum: 10/ae26f14985b98069040b643a1af1205eb247d21af5a6bf23908e9707e79c00093a87f16f276864dedac73cf6704da40ca2147472ac919ec08343d2bf19df0b61
   languageName: node
   linkType: hard
 
@@ -767,7 +765,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@egen/esm-ai-assistant-app@workspace:packages/apps/esm-ai-assistant-app"
   dependencies:
-    "@egen-civitas/esm-ai-framework": "npm:^1.3.5"
+    "@egen-civitas/esm-ai-framework": "npm:^1.3.6"
     "@egen-civitas/esm-api": "npm:^3.0.1"
     "@egen-civitas/esm-config": "npm:^2.0.0"
     "@egen-civitas/esm-context": "npm:^1.0.3"
@@ -777,7 +775,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -852,7 +850,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -861,10 +859,10 @@ __metadata:
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-styleguide": "npm:^5.2.7"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
-    "@egen-civitas/tailwind-preset": "npm:^2.0.0"
+    "@egen-civitas/tailwind-preset": "npm:^3.0.0"
     "@radix-ui/react-tabs": "npm:^1.2.1"
     "@vitest/coverage-v8": "npm:^5.1.1"
     cross-env: "npm:^10.1.0"
@@ -926,7 +924,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -935,7 +933,7 @@ __metadata:
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-styleguide": "npm:^5.2.7"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
     cross-env: "npm:^10.1.0"
@@ -994,7 +992,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1059,7 +1057,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1116,7 +1114,7 @@ __metadata:
   resolution: "@egen/esm-core@workspace:."
   dependencies:
     "@egen-civitas/egen": "npm:^3.0.0"
-    "@egen-civitas/esm-app-shell": "npm:^3.1.1"
+    "@egen-civitas/esm-app-shell": "npm:^3.1.2"
     "@egen-civitas/rspack-config": "npm:^2.0.0"
     "@playwright/test": "npm:^1.65.1"
     "@rspack/cli": "npm:2.3.3"
@@ -1172,7 +1170,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1240,7 +1238,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1304,7 +1302,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1370,7 +1368,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1436,7 +1434,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1445,7 +1443,7 @@ __metadata:
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-styleguide": "npm:^5.2.7"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
     "@vitest/coverage-v8": "npm:^5.1.1"
@@ -1511,7 +1509,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1580,7 +1578,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1589,10 +1587,10 @@ __metadata:
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-styleguide": "npm:^5.2.7"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
-    "@egen-civitas/tailwind-preset": "npm:^2.0.0"
+    "@egen-civitas/tailwind-preset": "npm:^3.0.0"
     "@radix-ui/react-tabs": "npm:^1.2.1"
     "@vitest/coverage-v8": "npm:^5.1.1"
     cross-env: "npm:^10.1.0"
@@ -1654,7 +1652,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1720,7 +1718,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1777,7 +1775,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@egen/esm-login-app@workspace:packages/apps/esm-login-app"
   dependencies:
-    "@egen-civitas/esm-ai-framework": "npm:^1.3.5"
+    "@egen-civitas/esm-ai-framework": "npm:^1.3.6"
     "@egen-civitas/esm-api": "npm:^3.0.1"
     "@egen-civitas/esm-config": "npm:^2.0.0"
     "@egen-civitas/esm-context": "npm:^1.0.3"
@@ -1787,7 +1785,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1796,10 +1794,10 @@ __metadata:
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-styleguide": "npm:^5.2.7"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
-    "@egen-civitas/tailwind-preset": "npm:^2.0.0"
+    "@egen-civitas/tailwind-preset": "npm:^3.0.0"
     "@hookform/resolvers": "npm:^7.0.7"
     "@types/canvas-confetti": "npm:^1.9.0"
     "@vitest/coverage-v8": "npm:^5.1.1"
@@ -1867,7 +1865,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -1934,7 +1932,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2001,7 +1999,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2009,7 +2007,7 @@ __metadata:
     "@egen-civitas/esm-routes": "npm:^1.3.1"
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
     "@vitest/coverage-v8": "npm:^5.1.1"
@@ -2069,7 +2067,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2136,7 +2134,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2207,7 +2205,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2216,10 +2214,10 @@ __metadata:
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-styleguide": "npm:^5.2.7"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
-    "@egen-civitas/tailwind-preset": "npm:^2.0.0"
+    "@egen-civitas/tailwind-preset": "npm:^3.0.0"
     "@radix-ui/react-slot": "npm:^1.5.0"
     "@vitest/coverage-v8": "npm:^5.1.1"
     dayjs: "npm:^1.11.10"
@@ -2279,7 +2277,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2346,7 +2344,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2413,7 +2411,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2422,7 +2420,7 @@ __metadata:
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-styleguide": "npm:^5.2.7"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
     cross-env: "npm:^10.1.0"
@@ -2482,7 +2480,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2547,7 +2545,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2556,10 +2554,10 @@ __metadata:
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-styleguide": "npm:^5.2.7"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
-    "@egen-civitas/tailwind-preset": "npm:^2.0.0"
+    "@egen-civitas/tailwind-preset": "npm:^3.0.0"
     "@vitest/coverage-v8": "npm:^5.1.1"
     cross-env: "npm:^10.1.0"
     dayjs: "npm:^1.11.10"
@@ -2619,7 +2617,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2686,7 +2684,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -2694,7 +2692,7 @@ __metadata:
     "@egen-civitas/esm-routes": "npm:^1.3.1"
     "@egen-civitas/esm-state": "npm:^1.0.3"
     "@egen-civitas/esm-tenant": "npm:^1.1.0"
-    "@egen-civitas/esm-theme": "npm:^1.1.0"
+    "@egen-civitas/esm-theme": "npm:^2.0.0"
     "@egen-civitas/esm-translations": "npm:^1.0.5"
     "@egen-civitas/esm-utils": "npm:^2.0.0"
     "@vitest/coverage-v8": "npm:^5.1.1"
@@ -2755,7 +2753,7 @@ __metadata:
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
     "@egen-civitas/esm-feature-flags": "npm:^1.0.3"
-    "@egen-civitas/esm-framework": "npm:^5.0.1"
+    "@egen-civitas/esm-framework": "npm:^5.0.2"
     "@egen-civitas/esm-globals": "npm:^2.5.0"
     "@egen-civitas/esm-navigation": "npm:^1.1.0"
     "@egen-civitas/esm-offline": "npm:^1.0.4"
@@ -11496,6 +11494,13 @@ __metadata:
   version: 3.2.3
   resolution: "csstype@npm:3.2.3"
   checksum: 10/ad41baf7e2ffac65ab544d79107bf7cd1a4bb9bab9ac3302f59ab4ba655d5e30942a8ae46e10ba160c6f4ecea464cc95b975ca2fefbdeeacd6ac63f12f99fe1f
+  languageName: node
+  linkType: hard
+
+"culori@npm:4.0.1":
+  version: 4.0.1
+  resolution: "culori@npm:4.0.1"
+  checksum: 10/8751ea969bfa7d89fdd7dbc67d6bb37a10c459416574b26853b099f7a0c068d0d29942b3c034f60092f4593faa4e7008e0aca743a418f815fac19939332c4bea
   languageName: node
   linkType: hard
 
@@ -21121,13 +21126,6 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: 10/f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
-  languageName: node
-  linkType: hard
-
-"zod@npm:^3.23.8":
-  version: 3.23.8
-  resolution: "zod@npm:3.23.8"
-  checksum: 10/846fd73e1af0def79c19d510ea9e4a795544a67d5b34b7e1c4d0425bf6bfd1c719446d94cdfa1721c1987d891321d61f779e8236fde517dc0e524aa851a6eff1
   languageName: node
   linkType: hard
 
