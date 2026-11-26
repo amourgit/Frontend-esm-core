@@ -85,6 +85,15 @@ test('plafond approuvé, limites et configuration', () => {
   assert.match(checkConfig({ x: 'a'.repeat(9000) }).join(), /8 Ko/);
 });
 
+test('toasts : politique de l’opérateur validée (exclusive, rate)', () => {
+  assert.deepEqual(checkApproved({ notifications: {} }), []);
+  assert.deepEqual(checkApproved({ notifications: { exclusive: false, rate: { max: 5, perSeconds: 30 } } }), []);
+  assert.match(checkApproved({ notifications: { exclusive: 'non' } }).join(), /grants\.notifications\.exclusive/);
+  assert.equal(checkApproved({ notifications: { rate: { max: 0, perSeconds: 5000 } } }).length, 2);
+  assert.equal(checkApproved({ notifications: { rate: 'x' } }).length, 1);
+  assert.equal(load(fixture([{ approved: { ...APPROVED, notifications: { rate: { max: 999 } } } }])).apps[0].status, 'rejected');
+});
+
 test('slots : exact ou préfixe avec * final ; * seul refusé', () => {
   assert.ok(slotCovers('topbar-nav-slot', 'topbar-nav-slot'));
   assert.ok(slotCovers('annuaire-*', 'annuaire-detail-slot'));

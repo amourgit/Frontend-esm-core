@@ -84,6 +84,21 @@ export function checkEmbedManifest(m, { allowHttp = false } = {}) {
   return errors;
 }
 
+/** Politique des toasts (`exclusive`, `rate`) : mêmes règles que `validateNotificationConfig` du protocole. */
+export function checkNotificationPolicy(c) {
+  const errors = [];
+  const int = (v, min, max) => Number.isInteger(v) && v >= min && v <= max;
+  if (c.exclusive !== undefined && typeof c.exclusive !== 'boolean') errors.push('notifications.exclusive : booléen attendu');
+  if (c.rate !== undefined) {
+    if (!isObj(c.rate)) errors.push('notifications.rate : objet { max, perSeconds } attendu');
+    else {
+      if (!int(c.rate.max, 1, 100)) errors.push('notifications.rate.max : entier de 1 à 100');
+      if (!int(c.rate.perSeconds, 1, 3600)) errors.push('notifications.rate.perSeconds : entier de 1 à 3600');
+    }
+  }
+  return errors;
+}
+
 /** Valide le plafond approuvé par l'opérateur : `{ capacité: false | { … } }`. */
 export function checkApproved(approved) {
   if (approved === undefined) return [];
@@ -93,6 +108,7 @@ export function checkApproved(approved) {
     if (Object.hasOwn(REMOVED_CAPABILITIES, id)) errors.push(removedMsg('grants', id));
     else if (!CAPABILITY_IDS.includes(id)) errors.push(`grants.${id} : capacité inconnue`);
     else if (cfg !== false && !isObj(cfg)) errors.push(`grants.${id} : false ou objet attendu`);
+    else if (id === 'notifications' && isObj(cfg)) errors.push(...checkNotificationPolicy(cfg).map((m) => `grants.${m}`));
   }
   return errors;
 }

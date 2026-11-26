@@ -97,6 +97,16 @@ Décision du 2026-11-26 : **le SDK ne transporte que ce dont le Core est lui-mê
 - [x] P5b.9 `.gitignore` : `src/lib/` n'est plus ignoré (le motif `lib` masquait du code source) ; dépendances `@egen-civitas/*` mises à jour (`deps:egen`).
 - [x] P5b.10 Docs 12, 17, 18 mises à jour.
 
+## P5c — Toasts partagés (2026-11-26)
+
+Demande : les apps externes transmettent leurs toasts au Core en temps réel, et ne les affichent pas elles-mêmes (pas de doublon).
+- [x] P5c.1 Protocole : `notificationPolicy` (`exclusive`, `rate`), validation, `createSlidingLimiter`, `id` de dédoublonnage, sous-titre ≤ 500 ; 50 tests.
+- [x] P5c.2 Hôte : anti-spam `RATE_LIMITED` par grant, réponse `{ displayed }`, le fournisseur peut répondre `false` ; 38 tests dont bout en bout.
+- [x] P5c.3 Client : `egen.notify(toast, local?)` (point d'entrée unique, repli local), `coreDisplaysNotifications`, `useEgenNotify` ; 23 tests.
+- [x] P5c.4 Testing : hôte de test (dédoublonnage), 3 scénarios de conformité, vérificateur (rappel du modèle), simulateur.
+- [x] P5c.5 Core : adaptateur `esm-embed-app` (attribution à l'app, dédoublonnage 5 s par app+id, `id` non transmis à l'affichage), validation de la politique dans l'outillage (`grants.notifications`) ; docs 17 §5 ter ; 44 tests app, 60 tests outils.
+- [ ] P5c.6 Dépendances Core (`deps:egen`) une fois la release Framework publiée, puis push (l'adaptateur retourne un booléen, type introduit par la nouvelle version de l'hôte).
+
 ## P6 — Migration des apps et compatibilité
 - [ ] P6.1 **tweakcn (pilote)** : ajouter `egen-app.json`, adopter `esm-embed-client` (langue, événements, notifications, extensions) ; thème, session et API : directement auprès de leurs sources (Keycloak, service de thèmes), pas par le SDK ; retirer le wrapper `esm-tweakcn-app` du Core au profit de l'entrée `embed`.
 - [ ] P6.2 Character Factory : manifeste + client (navigation `none`).

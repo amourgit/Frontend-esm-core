@@ -1,7 +1,12 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+afterEach(() => {
+  resetToastDedupe();
+  vi.useRealTimers();
+});
 import { availableCapabilities } from '@egen-civitas/esm-embed-host';
 import { CAPABILITY_IDS } from '@egen-civitas/esm-embed-protocol';
-import { createCoreProviders, createEventBridge, EGEN_EVENT, type CoreServices } from './providers';
+import { createCoreProviders, createEventBridge, EGEN_EVENT, resetToastDedupe, TOAST_DEDUPE_MS, type CoreServices } from './providers';
 
 function fakeCore(over: Partial<CoreServices> = {}): CoreServices {
   return {
@@ -29,7 +34,7 @@ describe('createCoreProviders (seulement ce dont le Core est la source)', () => 
     expect(await p.flags!.isEnabled('beta')).toBe(true);
     expect(await p.flags!.isEnabled('autre')).toBe(false);
     await p.notifications!.show({ kind: 'success', title: 'OK' }, { moduleName: 'm' });
-    expect(core.notify).toHaveBeenCalledWith({ kind: 'success', title: 'OK' });
+    expect(core.notify).toHaveBeenCalledWith({ kind: 'success', title: 'OK', subtitle: undefined });
     await expect(p.dialogs!.confirm({ title: 't', message: 'm' }, { moduleName: 'm' })).resolves.toBe(true);
   });
 
@@ -68,6 +73,48 @@ describe('createCoreProviders (seulement ce dont le Core est la source)', () => 
     expect(CAPABILITY_IDS).toHaveLength(12);
     const providers = createCoreProviders(fakeCore()) as Record<string, unknown>;
     for (const removed of ['session', 'permissions', 'theme', 'api']) expect(providers[removed]).toBeUndefined();
+  });
+});
+
+describe('toasts : le Core est l’afficheur (attribution, dédoublonnage)', () => {
+  const ctx = { moduleName: '@civitas/esm-studio-app' };
+
+  it('attribue le toast à son app d’origine (anti-usurpation) sans écraser le sous-titre', async () => {
+    const core = fakeCore();
+    const p = createCoreProviders(core, { title: 'Theme Studio' });
+    await p.notifications!.show({ kind: 'success', title: 'Enregistré' }, ctx);
+    await p.notifications!.show({ kind: 'error', title: 'Échec', subtitle: 'Réseau indisponible' }, ctx);
+    expect(core.notify).toHaveBeenNthCalledWith(1, { kind: 'success', title: 'Enregistré', subtitle: 'Theme Studio' });
+    expect(core.notify).toHaveBeenNthCalledWith(2, { kind: 'error', title: 'Échec', subtitle: 'Theme Studio · Réseau indisponible' });
+  });
+
+  it('le même id n’est pas réaffiché dans la fenêtre de dédoublonnage ; l’app est informée (false)', async () => {
+    vi.useFakeTimers();
+    const core = fakeCore();
+    const p = createCoreProviders(core, { title: 'Studio' });
+    expect(await p.notifications!.show({ kind: 'info', title: 'a', id: 'saved' }, ctx)).toBe(true);
+    expect(await p.notifications!.show({ kind: 'info', title: 'a', id: 'saved' }, ctx)).toBe(false);
+    expect(core.notify).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(TOAST_DEDUPE_MS + 1);
+    expect(await p.notifications!.show({ kind: 'info', title: 'a', id: 'saved' }, ctx)).toBe(true);
+    expect(core.notify).toHaveBeenCalledTimes(2);
+  });
+
+  it('sans id : jamais dédoublonné ; l’id est propre à chaque app', async () => {
+    const core = fakeCore();
+    const p = createCoreProviders(core);
+    await p.notifications!.show({ kind: 'info', title: 'x' }, ctx);
+    await p.notifications!.show({ kind: 'info', title: 'x' }, ctx);
+    expect(core.notify).toHaveBeenCalledTimes(2);
+    await p.notifications!.show({ kind: 'info', title: 'y', id: 'same' }, ctx);
+    expect(await p.notifications!.show({ kind: 'info', title: 'y', id: 'same' }, { moduleName: '@autre/app' })).toBe(true);
+    expect(core.notify).toHaveBeenCalledTimes(4);
+  });
+
+  it('l’id n’est pas transmis à l’affichage du Core', async () => {
+    const core = fakeCore();
+    await createCoreProviders(core).notifications!.show({ kind: 'info', title: 'x', id: 'k' }, ctx);
+    expect(JSON.stringify(vi.mocked(core.notify).mock.calls[0][0])).not.toContain('"id"');
   });
 });
 

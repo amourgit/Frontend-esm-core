@@ -60,6 +60,8 @@ Une app embarquée est une application **autonome dans une iframe** (Next.js, Pe
 | registry | **Fusionne** une page par app et une extension par contribution **approuvée** (`extensionView`, `railPanel` ou `navEntry`, doc 17 §5 bis) dans le registry de l'app générique `@egen/esm-embed-app` ; publie `<spa>/embed-apps.json` (manifestes, plafonds, `config`, contributions ; `no-store`) |
 | navigateur | L'app générique (`esm-embed-app`) retrouve l'entrée par la route, calcule les **grants effectifs** (`effectiveGrants` du protocole : demandé ∩ approuvé) et monte l'hôte `esm-embed-host` |
 
+**Toasts** : le Core affiche les notifications des apps embarquées (attribuées à l'app, dédoublonnées par `id`, plafonnées) ; politique par app dans le grant `notifications` : `exclusive` (défaut : le Core affiche seul, l'app n'affiche pas les siens) et `rate` (doc 17 §5 ter).
+
 Règles : par défaut, seules les capacités d'état d'interface en lecture sont accordées (`tenant`, `locale`, `navigation`, `config`, `telemetry`, `lifecycle`) ; toute autre capacité exige **à la fois** une demande du manifeste et une approbation de l'opérateur. **Règle d'or** : identité/session, droits, thème et appels API ne font pas partie du SDK (l'app les obtient auprès de Keycloak, de ses backends, du service de thèmes) : les demander est une **erreur de validation explicite**. Ajouter un composant à un slot du Core exige l'approbation du slot (`extensions.contribute`) ; sans elle la contribution est écartée avec une réserve visible dans `external-apps.status.json`. Si l'app générique n'est pas compilée, les apps embarquées sont **rejetées** (statut visible) au lieu d'exposer des routes vides.
 
 ## 3. Règles d'alignement appliquées
