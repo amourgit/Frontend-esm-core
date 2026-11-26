@@ -83,7 +83,10 @@ const TopBarLevel: React.FC<LevelProps> = ({ position, skin, regions, background
       data-level={level}
       {...(isFirst ? { 'data-level-first': '' } : {})}
       {...(skin.toolbar ? { role: 'toolbar', 'aria-label': `Barre d'outils, niveau ${index + 1}` } : {})}
-      style={background ? { background } : undefined}
+      // Z-index décroissant selon la position : chaque rangée est `isolate` (contexte d'empilement propre),
+      // donc un dropdown qui déborde vers le bas (sélecteurs, menus) restait piégé sous les rangées suivantes.
+      // La rangée du haut doit primer : count - index donne la première rangée le plus grand z.
+      style={{ ...(background ? { background } : {}), zIndex: position.count - position.index }}
     >
       {/* Calque d'arrière-plan : derrière le contenu (`isolate` + `-z-10`), sans capter la souris. */}
       <TopBarRegion

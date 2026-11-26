@@ -1,1 +1,5 @@
-{}
+{
+  "embedLoadError": "Impossible de charger la configuration des applications embarquées.",
+  "embedLoading": "Chargement…",
+  "embedNotFound": "Cette application embarquée n'est pas déclarée."
+}

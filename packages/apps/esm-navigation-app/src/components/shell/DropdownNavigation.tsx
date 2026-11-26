@@ -323,7 +323,10 @@ export function DropdownNavigation({ navItems }: Props) {
               position: "fixed",
               top: `${menuCoords.top}px`,
               left: `${menuCoords.left}px`,
-              zIndex: 99999,
+              // Portal vers document.body : sans borne, ce dropdown passait au-dessus de toute la TopBar
+              // (barres du shell à --egen-shell-bar-z-index). On reste sous elles pour laisser les
+              // popups de la TopBar (sélecteurs espace/site, menus…) primer, mais au-dessus du contenu.
+              zIndex: "calc(var(--egen-shell-bar-z-index, 8100) - 1)",
             }}
             onMouseEnter={handleMenuMouseEnter}
             onMouseLeave={handleMenuMouseLeave}
