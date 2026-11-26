@@ -263,17 +263,16 @@ describe('TopBarLevels — niveaux déclarés par les apps', () => {
       const mainRow = view.container.querySelector<HTMLElement>('[data-level="main"]')!;
       const promoRow = view.container.querySelector<HTMLElement>('[data-level="promo"]')!;
       // Pas de fond par défaut ; z-index décroissant : la rangée du haut prime sur le débordement des suivantes.
-      expect(mainRow.style.background).toBe('');
-      expect(promoRow.style.background).toBe('');
-      expect(Number(mainRow.style.zIndex)).toBeGreaterThan(Number(promoRow.style.zIndex));
+      expect(mainRow.getAttribute('style')).not.toContain('background');
+      expect(promoRow.getAttribute('style')).not.toContain('background');
+      expect(mainRow).toHaveStyle('z-index: 2');
+      expect(promoRow).toHaveStyle('z-index: 1');
       view.unmount();
 
       state.claims = { [APP]: { levels: { background: { main: 'rgb(1, 2, 3)' } } } };
       const { container } = renderBar();
       expect(container.querySelector('[data-level="main"]')).toHaveStyle({ background: 'rgb(1, 2, 3)' });
-      expect(
-        (container.querySelector('[data-level="promo"]') as HTMLElement).style.background,
-      ).toBe('');
+      expect(container.querySelector('[data-level="promo"]')?.getAttribute('style')).not.toContain('background');
     });
   });
 
