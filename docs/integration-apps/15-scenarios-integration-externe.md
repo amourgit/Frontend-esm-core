@@ -146,7 +146,7 @@ Nouvelle version `1.3.0` publiée (A3–A4) → l'opérateur change l'URL ou la 
 - **Pourquoi** : une app externe lit sa configuration par `getConfig(<nom du paquet>)`. En production, le Shell reçoit ses fichiers de configuration par `configUrls` ; **`serve-prod` n'en fournissait aucun** (`configUrls:[]` figé) : une app configurable n'aurait eu que ses valeurs par défaut.
 - **Quoi** : un fichier JSON `{ "<nom de l'app>": { … } }` désigné par `EGEN_CONFIG_FILE` (chemin relatif à la racine du Core), par exemple (modèle : `egen-config.example.json`) :
   ```json
-  { "@civitas/esm-penpot-app": { "penpotUrl": "https://design.exemple.org" } }
+  { "@acme/esm-hello-app": { "apiUrl": "https://api.exemple.org" } }
   ```
   `EGEN_CONFIG_URLS` ajoute d'autres fichiers (URLs séparées par des virgules, lues par le navigateur).
 - **Ce qui se passe** : au démarrage, `serve-prod` lit et **valide** le fichier (`tools/runtime-config.mjs`), le sert à `<spa>/config.json` (`Cache-Control: no-store`) et le déclare dans `configUrls`. Un fichier illisible ou invalide **empêche le démarrage** avec un message explicite (code 1) : en intégration à froid, une erreur de configuration se voit au déploiement, pas en silence dans le navigateur.
@@ -196,6 +196,9 @@ Le paquet doit contenir **`dist/` complet** (bundle + `routes.json`). Un paquet 
 - 🟡 La combinaison `--importmap` + app locale + Core démarré par `yarn start` n'a pas été exécutée ici.
 
 ### C3 — Application autonome (Next.js, SSR, routeur propre) déployée à une adresse connue
+
+> 🗄️ **HISTORIQUE / LEGACY (retiré du Core le 2026-11-27, plan [18](18-plan-phases-sdk-embed.md) P8).** Ce scénario décrit l'ancien pipeline « enveloppe par app (`@civitas/esm-*-app`, tarball) + pont 1.1 ». Il n'est plus déclaré dans `external-apps.json` (désormais des entrées `embed` : l'app publie son `egen-config.json`, droits `sandbox`/`allow` approuvés par l'opérateur — [17](17-sdk-embed-protocole-v2.md) §7 et §7 bis). Conservé pour mémoire du retour d'expérience uniquement.
+
 
 > **Voie actuelle (2026-11-26) : `kind: "embed"`, protocole v2 — voie unique.** Une app autonome en iframe s'intègre **sans paquet wrapper** : elle publie elle-même `egen-config.json` à la racine de son URL (manifeste + configuration + droits `sandbox`/`allow` demandés), l'opérateur approuve les droits dans `external-apps.json` (second recours si l'app n'a rien publié), et l'app générique `@egen/esm-embed-app` la monte. L'app parle au Core par `esm-embed-client`/`connectToEgen` et les 12 capacités typées (langue, navigation, événements, notifications/toasts, dialogues, configuration, télémétrie, extensions, cycle de vie — **ni session, ni droits, ni thème, ni API** : l'app les obtient auprès de leurs sources). Voir [12 §2 bis](12-apps-externes-en-production.md), [17](17-sdk-embed-protocole-v2.md) et le plan [18](18-plan-phases-sdk-embed.md). L'enveloppe + pont 1.1 décrits ci-dessous sont l'**ancien** pipeline, en cours de retrait (P6–P8).
 Cas typique : l'app tourne déjà sur `https://next.exemple.org/app` et ne produira jamais de conteneur Module Federation.
@@ -260,6 +263,9 @@ Décision de conception : le catalogue **n'ajoute pas de nouveau mécanisme de c
 
 ## 6 bis. Exemple réel, à froid : Penpot
 
+> 🗄️ **HISTORIQUE / LEGACY (retiré du Core le 2026-11-27, plan [18](18-plan-phases-sdk-embed.md) P8).** Cet exemple décrit l'ancien pipeline « enveloppe par app (`@civitas/esm-*-app`, tarball) + pont 1.1 ». Il n'est plus déclaré dans `external-apps.json` (désormais des entrées `embed` : l'app publie son `egen-config.json`, droits `sandbox`/`allow` approuvés par l'opérateur — [17](17-sdk-embed-protocole-v2.md) §7 et §7 bis). Conservé pour mémoire du retour d'expérience uniquement.
+
+
 Penpot (outil de conception) est une application autonome (backend Clojure, frontend ClojureScript, PostgreSQL) : c'est le cas **C3**, avec les moyens du scénario **A** pour diffuser son enveloppe. Le fork est `github.com/amourgit/penpot`, branche `egen` (partie du tag stable 2.19.3, voir `EGEN.md` dans le fork).
 
 | Étape | Qui | Ce qui est fait | Vérifié |
@@ -280,6 +286,9 @@ Points d'attention constatés : l'iframe n'est utilisable que si Penpot envoie u
 
 ## 6 ter. Exemple réel, à froid et en local : EGEN Theme Studio (tweakcn)
 
+> 🗄️ **HISTORIQUE / LEGACY (retiré du Core le 2026-11-27, plan [18](18-plan-phases-sdk-embed.md) P8).** Cet exemple décrit l'ancien pipeline « enveloppe par app (`@civitas/esm-*-app`, tarball) + pont 1.1 ». Il n'est plus déclaré dans `external-apps.json` (désormais des entrées `embed` : l'app publie son `egen-config.json`, droits `sandbox`/`allow` approuvés par l'opérateur — [17](17-sdk-embed-protocole-v2.md) §7 et §7 bis). Conservé pour mémoire du retour d'expérience uniquement.
+
+
 Le fork `github.com/amourgit/Frontend-esm-tweakcn-fork` (branche `main`) est une application Next.js autonome (éditeur de thèmes) : cas **C3**, même chaîne que Penpot, plus simple (un seul service, `EGEN.md` dans le fork).
 
 | Étape | Ce qui est fait | Vérifié |
@@ -293,6 +302,9 @@ Le fork `github.com/amourgit/Frontend-esm-tweakcn-fork` (branche `main`) est une
 | 7. Local | tweakcn : `pnpm dev` avec `EGEN_FRAME_ANCESTORS=http://localhost:<port du Core>` ; Core : `yarn prepare:prod` puis `yarn start:prod` | ⛔ affichage navigateur non vérifié |
 
 ## 6 quater. Exemple réel, à froid et en local : Character Factory
+
+> 🗄️ **HISTORIQUE / LEGACY (retiré du Core le 2026-11-27, plan [18](18-plan-phases-sdk-embed.md) P8).** Cet exemple décrit l'ancien pipeline « enveloppe par app (`@civitas/esm-*-app`, tarball) + pont 1.1 ». Il n'est plus déclaré dans `external-apps.json` (désormais des entrées `embed` : l'app publie son `egen-config.json`, droits `sandbox`/`allow` approuvés par l'opérateur — [17](17-sdk-embed-protocole-v2.md) §7 et §7 bis). Conservé pour mémoire du retour d'expérience uniquement.
+
 
 Projet autonome `github.com/amourgit/egen-character-factory` (branche `main`) : site **statique** (Vite, React, three-vrm), sans backend ni base : cas **C3**, le plus léger. L'ancienne app interne du Core a été retirée (réforme Character) ; le Core ne connaît que l'enveloppe.
 

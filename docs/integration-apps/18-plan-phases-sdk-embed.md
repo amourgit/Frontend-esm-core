@@ -162,4 +162,4 @@ Demande : les apps externes transmettent leurs toasts au Core en temps réel, et
 
 **Vérification finale**
 - [ ] P8.9 E2E : les trois apps fonctionnent en `kind: embed` (page, rail, TopBar, navigation partagée, notifications) ; `external-apps.status.json` ne contient plus que `kind: embed` ; `yarn external:check` propre ; tests Framework + Core + outils verts.
-- [ ] P8.10 Documentation : docs 15 (C3), 16 passés en « historique/legacy » ; 05, 11, 12, 00 à jour ; suppression des références aux enveloppes ; push + bilan.
+- [ ] P8.10 (partiel — fait le 2026-11-27 : doc 15 §C3 et §6 bis/ter/quater en historique/legacy, exemple A10 générique ; 16 déjà bandeau ; **reste** : 05, 11, 12, 00 après P6/P8.4–P8.9) Documentation : docs 15 (C3), 16 passés en « historique/legacy » ; 05, 11, 12, 00 à jour ; suppression des références aux enveloppes ; push + bilan.
