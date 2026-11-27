@@ -114,6 +114,17 @@ Décision du 2026-11-26 : **le SDK ne transporte que ce dont le Core est lui-mê
 - [ ] P5c.8 `egen-config.json` : l'app publie son propre fichier de déclaration à la racine de son URL (manifeste + `config` publique + `iframe` demandé) ; `external:sync`/`serve-prod` le lisent comme source par défaut, la déclaration `embed` de `external-apps.json` restant le **second recours** et le lieu de l'approbation. Tests d'outils.
 - [ ] P5c.9 Docs 12, 17, 18 ; push + bilan.
 
+## P5c — Toasts partagés (2026-11-26)
+
+Demande : les apps externes transmettent leurs toasts au Core en temps réel, et ne les affichent pas elles-mêmes (pas de doublon).
+- [x] P5c.1 Protocole : `notificationPolicy` (`exclusive`, `rate`), validation, `createSlidingLimiter`, `id` de dédoublonnage, sous-titre ≤ 500 ; 50 tests.
+- [x] P5c.2 Hôte : anti-spam `RATE_LIMITED` par grant, réponse `{ displayed }`, le fournisseur peut répondre `false` ; 38 tests dont bout en bout.
+- [x] P5c.3 Client : `egen.notify(toast, local?)` (point d'entrée unique, repli local), `coreDisplaysNotifications`, `useEgenNotify` ; 23 tests.
+- [x] P5c.4 Testing : hôte de test (dédoublonnage), 3 scénarios de conformité, vérificateur (rappel du modèle), simulateur.
+- [x] P5c.5 Core : adaptateur `esm-embed-app` (attribution à l'app, dédoublonnage 5 s par app+id, `id` non transmis à l'affichage), validation de la politique dans l'outillage (`grants.notifications`) ; docs 17 §5 ter ; 44 tests app, 60 tests outils.
+- [x] P5c.6 Poussé compatible avec `esm-embed-host` 0.3.0 publié (cast commenté sur le retour de `show`).
+- [ ] P5c.7 Après publication de la release Framework (PR #158) : `deps:egen`, retirer le cast de `providers.ts`, vérifier le bout en bout `{ displayed }`.
+
 ## P6 — Migration des apps et compatibilité
 - [ ] P6.1 **tweakcn (pilote)** : publier `egen-config.json` à la racine (route `theme-studio`, `placement.rail`, `navigation`, `iframe` demandé : downloads/modals/popups-to-escape + clipboard/fullscreen, `config` publique), adopter `esm-embed-client` (langue, événements, **notifications via `egen.notify`/`useEgenNotify` — jamais de doublon de toast**, extensions) ; thème, session et API : directement auprès de leurs sources (Keycloak, service de thèmes), pas par le SDK ; **supprimer** `integrations/egen/esm-tweakcn-app/` et son workflow de release tarball ; basculer `external-apps.json` sur `embed`.
 - [ ] P6.2 Character Factory : `egen-config.json` + client (navigation `none`) ; suppression de `integrations/egen/esm-character-app/`.

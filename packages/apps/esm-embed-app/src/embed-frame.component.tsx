@@ -22,7 +22,7 @@ const EmbedFrame: React.FC<Props> = ({ entry, core, view }) => {
       src: view ? new URL(view.path, m.url).href : m.url,
       // Grants effectifs = demandé (manifeste) ∩ approuvé (opérateur) : une seule implémentation, celle du protocole.
       grants: effectiveGrants(m.capabilities, entry.approved),
-      providers: createCoreProviders(core, entry),
+      providers: createCoreProviders(core, { config: entry.config, title: m.title }),
       navigation: view ? undefined : { route: m.route, mode: m.navigation.mode, sensitiveParams: m.navigation.sensitiveParams },
       ...(view ? { minHeight: view.height ?? 48 } : {}),
       limits: entry.limits,

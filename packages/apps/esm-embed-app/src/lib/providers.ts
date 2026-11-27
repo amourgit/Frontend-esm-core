@@ -61,18 +61,49 @@ export function createEventBridge(win: Window = window): NonNullable<HostProvide
   };
 }
 
+/** Fenêtre de dédoublonnage des toasts d'une même app portant le même `id` (ms). */
+export const TOAST_DEDUPE_MS = 5000;
+const recentToasts = new Map<string, number>();
+
+/** `true` si ce toast (app + id) est nouveau ; mémorise sa date. Les toasts sans `id` ne sont jamais dédoublonnés. */
+function isFreshToast(moduleName: string, id: string | undefined, now: number = Date.now()): boolean {
+  if (!id) return true;
+  for (const [k, t] of recentToasts) if (now - t >= TOAST_DEDUPE_MS) recentToasts.delete(k);
+  const key = `${moduleName}:${id}`;
+  if (recentToasts.has(key)) return false;
+  recentToasts.set(key, now);
+  return true;
+}
+
+/** Vide la mémoire de dédoublonnage (tests). */
+export function resetToastDedupe(): void {
+  recentToasts.clear();
+}
+
 /**
  * Les 12 capacités du SDK sont servies : langue, tenant, drapeaux, événements, notifications, dialogues, configuration publique
  * de l'app, extensions (découverte), outils IA, télémétrie, navigation et cycle de vie (ces deux dernières par l'hôte).
  */
-export function createCoreProviders(core: CoreServices, entry: { config?: Record<string, unknown> } = {}, win: Window = window): HostProviders {
+export function createCoreProviders(core: CoreServices, entry: { config?: Record<string, unknown>; title?: string } = {}, win: Window = window): HostProviders {
   return {
     locale: { get: () => core.getLocale(), subscribe: core.subscribeLocale ? (cb) => core.subscribeLocale!(cb) : undefined },
     tenant: { get: () => ({ id: core.getTenantId() ?? null }) },
     config: { get: () => entry.config ?? {} },
     flags: { isEnabled: (name) => core.isFeatureEnabled(name) },
     events: createEventBridge(win),
-    notifications: { show: (n) => core.notify(n) },
+    // Le Core est l'afficheur : toast attribué à son app d'origine (anti-usurpation : une iframe ne peut pas se faire passer pour le Core)
+    // et dédoublonné par `id`. `false` = non affiché (doublon) : l'app en est informée.
+    notifications: {
+      // Le booléen retourné est lu par l'hôte ≥ 0.4 (`{ displayed }`) ; le type des versions précédentes (`void`) l'ignore : cast à retirer
+      // une fois `esm-embed-host` ≥ 0.4 en dépendance (docs/integration-apps/18, P5c.6).
+      show: ((n, ctx) => {
+        if (!isFreshToast(ctx.moduleName, n.id)) return false;
+        const { id: _id, ...toast } = n;
+        const source = entry.title?.trim();
+        core.notify({ ...toast, subtitle: source ? (toast.subtitle ? `${source} · ${toast.subtitle}` : source) : toast.subtitle });
+        return true;
+      }) as unknown as NonNullable<HostProviders['notifications']>['show'],
+    },
     dialogs: { confirm: (d) => core.confirm(d) },
     extensions: { list: (slot) => core.listExtensions(slot), subscribe: (slot, cb) => core.subscribeExtensions(slot, () => cb(core.listExtensions(slot))) },
     aiTools: { register: (m, tools, invoke) => core.registerAiTools(m, tools, invoke), unregister: (m, names) => core.unregisterAiTools(m, names) },

@@ -100,7 +100,7 @@ Limites par défaut (surchargeables par l'opérateur) : message ≤ 256 Kio · 1
 | `telemetry` | `log(level, message, ctx?)` · `metric(name, value, tags?)` | — | accordé (débit plafonné) |
 | `lifecycle` | `ready()` · (hôte → app) `canLeave()` | `visibility`, `focus` | accordé |
 | `events` | `publish(topic, payload)` · abonnement par sujet | événements des sujets autorisés | refusé (publication limitée à `app.<slug>.*`, abonnement par motifs approuvés) |
-| `notifications` | `show({ id?, kind, title, subtitle?, timeoutMs? })` | — | refusé |
+| `notifications` | `show({ kind, title, subtitle?, timeoutMs? })` | — | refusé |
 | `dialogs` | `confirm({ title, message, danger? })` → booléen (dialogue natif du Core) | — | refusé |
 | `flags` | `isEnabled(name)` (noms listés par le grant) | `change` | refusé |
 | `extensions` | `list(slot)` → métadonnées des extensions du slot (grant `discover`) | par slot : liste à jour | refusé |
@@ -153,6 +153,21 @@ Raccourcis du manifeste : `placement` (titre, icône, groupe, `rail: left|right`
 **Limites assumées.** Un composant React du Core ne s'affiche pas dans l'iframe d'une app (ni l'inverse) : l'équivalent est la **métadonnée** (découverte) et la **vue iframe** (contribution). Pour injecter du code dans le processus du Core, il faut un module Federation (scénarios A/B).
 
 **Sécurité des contributions.** `meta` ≤ 4 Ko, `iconUrl` en https **de la même origine que l'app** (pas de pistage par image externe), ≤ 20 contributions, privilèges et drapeaux **appliqués par le Core** (jamais par l'app), chaque vue est une connexion hôte distincte avec les mêmes grants que l'app.
+
+## 5 ter. Toasts partagés : le Core est l'afficheur, jamais de doublon
+
+Une app en iframe qui affiche son toast pendant que le Core affiche le même donne deux messages identiques. Le SDK règle cela **à un seul endroit** :
+
+| Élément | Rôle |
+| --- | --- |
+| `notifications.show(toast)` | envoie le toast au Core **en temps réel** (même canal que les autres appels, ordre conservé) ; réponse `{ displayed }` |
+| `egen.notify(toast, local?)` | **point d'entrée unique de l'app** : Core affiche seul → envoyé au Core, `local` **non appelé** ; capacité non accordée, fermée ou client autonome → `local` ; `exclusive: false` → Core **et** `local` ; trop de toasts → abandonné |
+| `egen.coreDisplaysNotifications` | l'app ne rend son propre composant de toasts que si c'est `false` |
+| `useEgenNotify(local)` (React) | `{ notify, coreDisplays }` |
+
+**Politique de l'opérateur** (grant `notifications`) : `exclusive` (défaut `true` : le Core affiche seul) et `rate` (`{ max, perSeconds }`, défaut 10 par 10 s ; au-delà `RATE_LIMITED`). L'app la lit dans le grant négocié : aucune configuration à dupliquer côté app.
+
+**Garanties côté Core** : le toast est **attribué à l'app d'origine** (sous-titre préfixé par le titre de l'app : une iframe ne peut pas se faire passer pour un message système) ; un même `id` n'est pas réaffiché pendant 5 s (réponse `displayed: false`) ; titre ≤ 200, sous-titre ≤ 500, types `info|success|warning|error` ; plafond de débit.
 
 ## 6. Sécurité
 
