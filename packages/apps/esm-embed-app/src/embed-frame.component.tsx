@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { createEmbedHost } from '@egen-civitas/esm-embed-host';
-import { effectiveGrants } from '@egen-civitas/esm-embed-protocol';
+import { effectiveGrants, effectiveIframe } from '@egen-civitas/esm-embed-protocol';
 import { createCoreProviders, type CoreServices } from './lib/providers';
 import type { EmbedEntry } from './lib/entries';
 
@@ -22,6 +22,8 @@ const EmbedFrame: React.FC<Props> = ({ entry, core, view }) => {
       src: view ? new URL(view.path, m.url).href : m.url,
       // Grants effectifs = demandé (manifeste) ∩ approuvé (opérateur) : une seule implémentation, celle du protocole.
       grants: effectiveGrants(m.capabilities, entry.approved),
+      // Droits d'iframe (sandbox/allow) : même règle, même implémentation (demande de l'app ∩ plafond de l'opérateur).
+      iframe: effectiveIframe(m.iframe, entry.approved.iframe),
       providers: createCoreProviders(core, { config: entry.config, title: m.title }),
       navigation: view ? undefined : { route: m.route, mode: m.navigation.mode, sensitiveParams: m.navigation.sensitiveParams },
       ...(view ? { minHeight: view.height ?? 48 } : {}),

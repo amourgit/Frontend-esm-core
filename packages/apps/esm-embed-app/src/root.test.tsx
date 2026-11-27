@@ -47,6 +47,23 @@ describe('Root (app générique)', () => {
     expect(fetch).toHaveBeenCalledWith('/egen/spa/embed-apps.json', expect.objectContaining({ cache: 'no-store' }));
   });
 
+  it('droits d’iframe : demande ∩ plafond de l’opérateur, jamais plus que le plafond', async () => {
+    const asked = { sandbox: ['allow-downloads', 'allow-modals'], allow: ['clipboard-write', 'camera'] };
+    mockFetch(config([entry({ manifest: manifest({ iframe: asked }), approved: { notifications: {}, iframe: { sandbox: ['allow-downloads'], allow: ['clipboard-write', 'fullscreen'] } } })]));
+    render(<Root />);
+    const iframe = await screen.findByTitle('Studio');
+    expect(iframe).toHaveAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups allow-downloads');
+    expect(iframe).toHaveAttribute('allow', 'clipboard-write');
+  });
+
+  it('droits d’iframe demandés mais non approuvés : socle seul, aucun attribut allow', async () => {
+    mockFetch(config([entry({ manifest: manifest({ iframe: { sandbox: ['allow-modals'], allow: ['fullscreen'] } }) })]));
+    render(<Root />);
+    const iframe = await screen.findByTitle('Studio');
+    expect(iframe).toHaveAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups');
+    expect(iframe).not.toHaveAttribute('allow');
+  });
+
   it('route non déclarée : message explicite, aucune iframe', async () => {
     window.history.pushState({}, '', '/egen/spa/inconnue');
     mockFetch(config([entry()]));

@@ -219,7 +219,7 @@ Règles de forme (validées par `validateManifest`, doc 17 §7 historique) : `ma
 } ] }
 ```
 
-- Les **droits effectifs** (capacités et iframe) = demandé ∩ approuvé, calculés dans le navigateur par `effectiveGrants` du protocole (une seule implémentation). Le verrou `external-apps.lock.json` fige : déclaration (SHA-256), plafond approuvé, limites, `config`.
+- Les **droits effectifs** (capacités et iframe) = demandé ∩ approuvé, calculés dans le navigateur par le protocole (une seule implémentation : `effectiveGrants` pour les capacités, `effectiveIframe` pour l'iframe). Le verrou `external-apps.lock.json` fige : déclaration (SHA-256), plafond approuvé, limites, `config`.
 - Une déclaration modifiée sans nouvelle synchro → **rejet au démarrage** (même logique que les bundles hébergés, doc 15 A7).
 - Plus de paquet wrapper : l'app générique `@egen/esm-embed-app` fabrique la page et monte l'hôte ; `serve-prod` fusionne pages et extensions dans le registry et publie `<spa>/embed-apps.json`.
 
@@ -231,7 +231,7 @@ Une iframe est enfermée par deux attributs posés par le parent : `sandbox` (ce
 | --- | --- | --- |
 | Demande | `egen-config.json` → `iframe.sandbox[]`, `iframe.allow[]` | jetons demandés par l'app |
 | Approbation | `external-apps.json` → `grants.iframe.sandbox[]`, `grants.iframe.allow[]` | plafond de l'opérateur (`false` = rien d'accordé) |
-| Calcul | navigateur, `effectiveGrants` | effectif = demande ∩ plafond, chaque jeton validé par **liste blanche** |
+| Calcul | navigateur, `effectiveIframe` (protocole ≥ 0.5.0) | effectif = demande ∩ plafond, chaque jeton validé par **liste blanche** |
 | Application | `esm-embed-host` → attributs de l'iframe | `sandbox="…"`, `allow="…"` |
 
 Règles :
