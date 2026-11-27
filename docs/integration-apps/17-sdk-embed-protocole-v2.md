@@ -110,22 +110,7 @@ Toute capacité hors catalogue est refusée (`UNKNOWN`). Le catalogue vit dans `
 
 ### 5.1 Notifications : un seul point d'entrée, jamais de doublon
 
-Le Core est la source d'affichage des toasts. Une app embarquée ne doit **jamais** rendre son propre composant de notifications quand le Core s'en charge — deux toasts identiques pour un même événement est le bug à éviter par construction.
-
-Le SDK impose **un point d'entrée unique** : `egen.notify(toast, local)` (React : `useEgenNotify(local)` → `{ notify, coreDisplays }`).
-
-| Situation | Comportement de `notify` |
-| --- | --- |
-| Capacité accordée, politique `exclusive` (défaut) | Toast envoyé au Core, affiché **par le Core seul**, attribué à l'app ; `local` **n'est pas appelé** |
-| Capacité accordée, politique `exclusive: false` (choix de l'opérateur) | Toast envoyé au Core **et** `local` appelé (l'app affiche aussi) |
-| Capacité refusée, connexion fermée, client autonome | `local` appelé (affichage propre à l'app) |
-| Trop de toasts (`RATE_LIMITED`) | Abandonné : ni Core ni local (contourner la limite par l'affichage local recréerait le doublon) |
-
-Règles pour l'app :
-
-- `id` optionnel = clé de dédoublonnage : un même `id` rapproché ne produit pas deux toasts.
-- Ne rendre son propre `<Toaster>` que si `!egen.coreDisplaysNotifications` (ou `!coreDisplays` côté hook).
-- `kind`, `title` (≤ 200), `subtitle` (≤ 500), `timeoutMs` (0–60 000) validés côté protocole ; le Core applique en plus un plafond anti-spam (`RATE_LIMITED`).
+Le Core est la source d'affichage des toasts : une app embarquée ne doit **jamais** rendre son propre composant de notifications quand le Core s'en charge — deux toasts identiques pour un même événement est le bug à éviter par construction. Le contrat complet (`egen.notify`, politique `exclusive`/`rate`, dédoublonnage, garanties Core) est détaillé en [§5 ter](#5-ter-toasts-partagés--le-core-est-lafficheur-jamais-de-doublon).
 
 ## 5 bis. Extensions : contribuer aux slots du Core et découvrir ses extensions
 
