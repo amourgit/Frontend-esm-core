@@ -94,13 +94,15 @@ export function createCoreProviders(core: CoreServices, entry: { config?: Record
     // Le Core est l'afficheur : toast attribué à son app d'origine (anti-usurpation : une iframe ne peut pas se faire passer pour le Core)
     // et dédoublonné par `id`. `false` = non affiché (doublon) : l'app en est informée.
     notifications: {
-      show: (n, ctx) => {
+      // Le booléen retourné est lu par l'hôte ≥ 0.4 (`{ displayed }`) ; le type des versions précédentes (`void`) l'ignore : cast à retirer
+      // une fois `esm-embed-host` ≥ 0.4 en dépendance (docs/integration-apps/18, P5c.6).
+      show: ((n, ctx) => {
         if (!isFreshToast(ctx.moduleName, n.id)) return false;
         const { id: _id, ...toast } = n;
         const source = entry.title?.trim();
         core.notify({ ...toast, subtitle: source ? (toast.subtitle ? `${source} · ${toast.subtitle}` : source) : toast.subtitle });
         return true;
-      },
+      }) as unknown as NonNullable<HostProviders['notifications']>['show'],
     },
     dialogs: { confirm: (d) => core.confirm(d) },
     extensions: { list: (slot) => core.listExtensions(slot), subscribe: (slot, cb) => core.subscribeExtensions(slot, () => cb(core.listExtensions(slot))) },

@@ -105,7 +105,8 @@ Demande : les apps externes transmettent leurs toasts au Core en temps réel, et
 - [x] P5c.3 Client : `egen.notify(toast, local?)` (point d'entrée unique, repli local), `coreDisplaysNotifications`, `useEgenNotify` ; 23 tests.
 - [x] P5c.4 Testing : hôte de test (dédoublonnage), 3 scénarios de conformité, vérificateur (rappel du modèle), simulateur.
 - [x] P5c.5 Core : adaptateur `esm-embed-app` (attribution à l'app, dédoublonnage 5 s par app+id, `id` non transmis à l'affichage), validation de la politique dans l'outillage (`grants.notifications`) ; docs 17 §5 ter ; 44 tests app, 60 tests outils.
-- [ ] P5c.6 Dépendances Core (`deps:egen`) une fois la release Framework publiée, puis push (l'adaptateur retourne un booléen, type introduit par la nouvelle version de l'hôte).
+- [x] P5c.6 Poussé compatible avec `esm-embed-host` 0.3.0 publié (cast commenté sur le retour de `show`).
+- [ ] P5c.7 Après publication de la release Framework (PR #158) : `deps:egen`, retirer le cast de `providers.ts`, vérifier le bout en bout `{ displayed }`.
 
 ## P6 — Migration des apps et compatibilité
 - [ ] P6.1 **tweakcn (pilote)** : ajouter `egen-app.json`, adopter `esm-embed-client` (langue, événements, notifications, extensions) ; thème, session et API : directement auprès de leurs sources (Keycloak, service de thèmes), pas par le SDK ; retirer le wrapper `esm-tweakcn-app` du Core au profit de l'entrée `embed`.
