@@ -6,7 +6,7 @@ import { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { EMBED_APP_NAME, REMOVED_CAPABILITIES, allowedContributions, buildEmbedConfig, buildEmbedRegistry, checkApproved, checkConfig, checkEmbedManifest, checkExtensionDecls, checkLimits, contributionsOf, embedWarnings, slotCovers } from './embed-apps.mjs';
+import { EMBED_APP_NAME, REMOVED_CAPABILITIES, allowedContributions, buildEmbedConfig, buildEmbedRegistry, checkApproved, checkConfig, checkEmbedManifest, checkExtensionDecls, checkIframe, IFRAME_ALLOW_TOKENS, IFRAME_SANDBOX_TOKENS, iframeReport, checkLimits, contributionsOf, embedWarnings, slotCovers } from './embed-apps.mjs';
 import { LOCK_FILE, LOCK_VERSION, loadExternalApps, sha256 } from './external-apps.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -202,14 +202,14 @@ function syncRoot(cfg, m = manifest()) {
   const root = tmp();
   mkdirSync(join(root, 'tools'));
   for (const f of ['sync-external-apps.mjs', 'external-apps.mjs', 'embed-apps.mjs']) cpSync(join(HERE, f), join(root, 'tools', f));
-  writeFileSync(join(root, 'egen-app.json'), JSON.stringify(m));
+  writeFileSync(join(root, 'egen-config.json'), JSON.stringify(m));
   writeFileSync(join(root, 'external-apps.json'), JSON.stringify(cfg));
   return root;
 }
 const runSync = (root, ...args) => spawnSync(process.execPath, [join(root, 'tools/sync-external-apps.mjs'), ...args], { cwd: root, encoding: 'utf8', env: { ...process.env, EGEN_EXTERNAL_DIR: '', EGEN_EXTERNAL_APPS: '' } });
 
 test('sync : écrit le manifeste figé et le verrou ; check conforme puis dérive détectée', () => {
-  const root = syncRoot({ embed: [{ manifest: './egen-app.json', grants: { notifications: {} }, limits: { requestsPerSecond: 50 }, config: { studioApi: 'https://api.exemple.org' } }] });
+  const root = syncRoot({ embed: [{ manifest: './egen-config.json', grants: { notifications: {} }, limits: { requestsPerSecond: 50 }, config: { studioApi: 'https://api.exemple.org' } }] });
   const r = runSync(root);
   assert.equal(r.status, 0, r.stdout + r.stderr);
   const lock = JSON.parse(readFileSync(join(root, 'external-apps', LOCK_FILE), 'utf8'));
@@ -222,29 +222,94 @@ test('sync : écrit le manifeste figé et le verrou ; check conforme puis dériv
   assert.match(e.manifestFile, /^embed\/manifests\/civitas-esm-studio-app\.json$/);
   assert.equal(sha256(readFileSync(join(root, 'external-apps', e.manifestFile))), e.manifestSha256);
   assert.equal(runSync(root, '--check').status, 0);
-  writeFileSync(join(root, 'egen-app.json'), JSON.stringify(manifest({ version: '9.9.9' })));
+  writeFileSync(join(root, 'egen-config.json'), JSON.stringify(manifest({ version: '9.9.9' })));
   const drift = runSync(root, '--check');
   assert.equal(drift.status, 1);
   assert.match(drift.stdout + drift.stderr, /dérive : le manifeste/);
 });
 
 test('sync : manifeste invalide, doublon et plafond invalide refusés', () => {
-  let root = syncRoot({ embed: [{ manifest: './egen-app.json' }] }, { nope: 1 });
+  let root = syncRoot({ embed: [{ manifest: './egen-config.json' }] }, { nope: 1 });
   let r = runSync(root);
   assert.equal(r.status, 1);
   assert.match(r.stdout + r.stderr, /invalide/);
-  root = syncRoot({ embed: [{ manifest: './egen-app.json' }, { manifest: './egen-app.json' }] });
+  root = syncRoot({ embed: [{ manifest: './egen-config.json' }, { manifest: './egen-config.json' }] });
   r = runSync(root);
   assert.equal(r.status, 1);
   assert.match(r.stdout + r.stderr, /déclarée deux fois/);
-  root = syncRoot({ embed: [{ manifest: './egen-app.json', grants: { nope: {} } }] });
+  root = syncRoot({ embed: [{ manifest: './egen-config.json', grants: { nope: {} } }] });
   assert.equal(runSync(root).status, 1);
-  root = syncRoot({ embed: [{ manifest: './egen-app.json', grants: { theme: {} } }] });
+  root = syncRoot({ embed: [{ manifest: './egen-config.json', grants: { theme: {} } }] });
   assert.match(runSync(root).stdout + runSync(root).stderr, /absente du SDK/);
-  root = syncRoot({ embed: [{ manifest: './egen-app.json', config: [] }] });
+  root = syncRoot({ embed: [{ manifest: './egen-config.json', config: [] }] });
   assert.equal(runSync(root).status, 1);
   root = syncRoot({ embed: [{ manifest: './absent.json' }] });
   assert.match(runSync(root).stdout + runSync(root).stderr, /introuvable/);
+});
+
+// ── droits d'iframe négociés (plan 18, P5c.6 à P5c.8) ───────────────────────
+const IFRAME_REQ = { sandbox: ['allow-downloads', 'allow-modals', 'allow-popups-to-escape-sandbox'], allow: ['clipboard-read', 'clipboard-write', 'fullscreen'] };
+
+test('iframe : liste blanche stricte du manifeste et du plafond (jamais de top-navigation, jeton inconnu rejeté)', () => {
+  assert.deepEqual(checkEmbedManifest(manifest({ iframe: IFRAME_REQ })), []);
+  assert.deepEqual(checkApproved({ iframe: IFRAME_REQ }), []);
+  assert.deepEqual(checkApproved({ iframe: false }), [], 'false = rien d’accordé');
+  assert.match(checkEmbedManifest(manifest({ iframe: { sandbox: ['allow-top-navigation'] } })).join(), /hors liste blanche/);
+  assert.match(checkEmbedManifest(manifest({ iframe: { allow: ['usb'] } })).join(), /iframe\.allow/);
+  assert.match(checkApproved({ iframe: { sandbox: ['allow-top-navigation-by-user-activation'] } }).join(), /grants\.iframe\.sandbox/);
+  assert.ok(checkIframe({ sandbox: ['allow-downloads', 'allow-downloads'] }).join().includes('en double'));
+  assert.ok(checkIframe({ sandbox: 'allow-downloads' }).length);
+  assert.ok(checkIframe({ autre: [] }).length);
+  assert.ok(checkIframe([]).length);
+  assert.ok(!IFRAME_SANDBOX_TOKENS.some((t) => t.includes('top-navigation')));
+  assert.ok(IFRAME_ALLOW_TOKENS.includes('clipboard-write'));
+});
+
+test('iframe : réserves demandé ≠ approuvé et journal demandé vs approuvé', () => {
+  const m = manifest({ iframe: IFRAME_REQ });
+  const w = embedWarnings(m, { ...APPROVED, iframe: { sandbox: ['allow-downloads'], allow: ['fullscreen'] } });
+  assert.ok(w.some((x) => x.includes('sandbox: allow-modals') && x.includes('non approuvé')));
+  assert.ok(w.some((x) => x.includes('allow: clipboard-read')));
+  assert.ok(!w.some((x) => x.includes('allow-downloads')));
+  assert.ok(!w.some((x) => x.includes('capacité « iframe »')), 'iframe n’est pas une capacité');
+  assert.deepEqual(iframeReport(m, { iframe: { sandbox: ['allow-downloads'] } }), { requested: IFRAME_REQ, approved: { sandbox: ['allow-downloads'], allow: [] } });
+  assert.deepEqual(iframeReport(manifest(), {}), { requested: { sandbox: [], allow: [] }, approved: { sandbox: [], allow: [] } });
+});
+
+test('iframe : le verrou fige la demande et le plafond ; le statut journalise demandé vs approuvé', () => {
+  const r = load(fixture([{ manifest: manifest({ iframe: IFRAME_REQ }), approved: { ...APPROVED, iframe: { sandbox: ['allow-downloads'] } } }]));
+  assert.equal(r.apps[0].status, 'accepted-with-warnings');
+  assert.deepEqual(r.apps[0].iframe.approved, { sandbox: ['allow-downloads'], allow: [] });
+  assert.deepEqual(r.embed[0].manifest.iframe, IFRAME_REQ);
+  assert.deepEqual(r.embed[0].approved.iframe, { sandbox: ['allow-downloads'] });
+  const bad = load(fixture([{ manifest: manifest({ iframe: { sandbox: ['allow-top-navigation'] } }) }]));
+  assert.equal(bad.apps[0].status, 'rejected');
+});
+
+test('egen-config.json : la config publique de l’app est servie, celle de l’opérateur la surcharge', () => {
+  const r = load(fixture([{ manifest: manifest({ config: { studioApi: 'https://app.exemple.org', lang: 'fr' } }), config: { studioApi: 'https://api.exemple.org' } }]));
+  assert.deepEqual(r.embed[0].config, { studioApi: 'https://api.exemple.org', lang: 'fr' });
+  assert.ok(checkEmbedManifest(manifest({ config: [] })).length);
+  assert.ok(checkEmbedManifest(manifest({ config: { big: 'x'.repeat(9000) } })).length);
+});
+
+test('sync : source par défaut = egen-config.json de l’app (url) ; déclaration côté Core = second recours', () => {
+  // `url` : on remplace le réseau par un serveur local servant /egen-config.json
+  const root = syncRoot({ embed: [{ url: 'http://127.0.0.1:1', grants: { iframe: IFRAME_REQ } }] });
+  const r = runSync(root);
+  assert.equal(r.status, 1);
+  assert.match(r.stdout + r.stderr, /egen-config\.json/, 'la source dérivée de l’url est <url>/egen-config.json');
+  const inline = syncRoot({ embed: [{ declaration: manifest({ iframe: IFRAME_REQ }), grants: { iframe: IFRAME_REQ } }] });
+  const ok = runSync(inline);
+  assert.equal(ok.status, 0, ok.stdout + ok.stderr);
+  const lock = JSON.parse(readFileSync(join(inline, 'external-apps', LOCK_FILE), 'utf8'));
+  const e = lock.apps['@civitas/esm-studio-app'];
+  assert.equal(e.manifestSource, 'inline');
+  assert.deepEqual(e.approved.iframe, IFRAME_REQ);
+  assert.equal(runSync(inline, '--check').status, 0, 'inline : aucune dérive distante à surveiller');
+  assert.equal(runSync(syncRoot({ embed: [{ url: 'https://a.org', manifest: './x.json' }] })).status, 1, 'une seule source');
+  assert.equal(runSync(syncRoot({ embed: [{ grants: {} }] })).status, 1, 'au moins une source');
+  assert.equal(runSync(syncRoot({ embed: [{ declaration: manifest(), grants: { iframe: { allow: ['usb'] } } }] })).status, 1, 'plafond iframe invalide');
 });
 
 // ── serve-prod : registry fusionné et embed-apps.json ───────────────────────

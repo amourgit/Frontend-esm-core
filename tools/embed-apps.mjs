@@ -1,5 +1,5 @@
 /**
- * Apps EMBARQUÉES (`kind: "embed"`) : manifeste `egen-app.json`, grants approuvés, registry synthétique.
+ * Apps EMBARQUÉES (`kind: "embed"`) : déclaration `egen-config.json` publiée par l'app, grants approuvés, registry synthétique.
  *
  * Module sans dépendance (Node >= 18), utilisé par external-apps.mjs (chargement), sync-external-apps.mjs
  * (récupération du manifeste) et serve-prod.mjs (publication). Spécification : docs/integration-apps/17.
@@ -7,7 +7,7 @@
  * ⚠ Les constantes ci-dessous DOIVENT rester alignées sur le catalogue de `@egen-civitas/esm-embed-protocol`
  *   (CAPABILITY_IDS, `defaultGrant`, règles de `validateManifest`). Le Core ne peut pas importer ce paquet ici
  *   (outils sans dépendance, exécutés avant toute installation) : un test de parité l'impose dès que le paquet est
- *   installé (voir plan 18, P6.6). Les grants EFFECTIFS ne sont PAS calculés ici : le navigateur les calcule avec
+ *   installé (voir plan 18, P5c.6). Les grants EFFECTIFS ne sont PAS calculés ici : le navigateur les calcule avec
  *   `effectiveGrants` du protocole (une seule implémentation), à partir du manifeste et du plafond approuvé.
  */
 
@@ -32,6 +32,17 @@ export const REMOVED_CAPABILITIES = {
   api: "l'app appelle ses backends avec son propre jeton Keycloak ; le Core ne relaie pas d'appels authentifiés",
 };
 const removedMsg = (where, id) => `${where}.${id} : capacité absente du SDK — ${REMOVED_CAPABILITIES[id]} (docs/integration-apps/17 §2)`;
+
+/**
+ * Droits d'iframe négociés (docs/integration-apps/17 §7 bis) : listes blanches STRICTES, alignées sur le protocole.
+ * `allow-top-navigation*` est volontairement absent : une app embarquée ne pilote jamais la fenêtre du Core.
+ */
+export const IFRAME_SANDBOX_TOKENS = [
+  'allow-downloads', 'allow-forms', 'allow-modals', 'allow-pointer-lock', 'allow-popups', 'allow-popups-to-escape-sandbox', 'allow-presentation', 'allow-same-origin', 'allow-scripts',
+];
+export const IFRAME_ALLOW_TOKENS = [
+  'autoplay', 'camera', 'clipboard-read', 'clipboard-write', 'display-capture', 'fullscreen', 'geolocation', 'microphone', 'picture-in-picture', 'web-share',
+];
 
 const NAME_RE = /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/;
 const ROUTE_RE = /^[a-z0-9][a-z0-9-]{0,63}$/;
@@ -80,6 +91,7 @@ export function checkEmbedManifest(m, { allowHttp = false } = {}) {
       else if (!isObj(cfg)) errors.push(`capabilities.${id} : objet attendu`);
     }
   }
+  errors.push(...checkIframe(m.iframe, 'iframe'), ...checkConfig(m.config));
   if (m.extensions !== undefined) errors.push(...checkExtensionDecls(m.extensions, typeof m.url === 'string' ? m.url : undefined));
   return errors;
 }
@@ -99,12 +111,33 @@ export function checkNotificationPolicy(c) {
   return errors;
 }
 
+/** Valide un bloc `iframe` (`{ sandbox?: string[], allow?: string[] }`) : jetons connus uniquement, sans doublon. */
+export function checkIframe(iframe, where = 'iframe') {
+  if (iframe === undefined) return [];
+  if (!isObj(iframe)) return [`${where} : objet { sandbox, allow } attendu`];
+  const errors = [];
+  for (const [k, known] of [['sandbox', IFRAME_SANDBOX_TOKENS], ['allow', IFRAME_ALLOW_TOKENS]]) {
+    const v = iframe[k];
+    if (v === undefined) continue;
+    if (!Array.isArray(v) || v.length > 20) { errors.push(`${where}.${k} : tableau (≤ 20) de jetons attendu`); continue; }
+    const seen = new Set();
+    for (const t of v) {
+      if (typeof t !== 'string' || !known.includes(t)) errors.push(`${where}.${k} : jeton « ${String(t)} » hors liste blanche (${known.join(', ')})`);
+      else if (seen.has(t)) errors.push(`${where}.${k} : jeton « ${t} » en double`);
+      else seen.add(t);
+    }
+  }
+  for (const k of Object.keys(iframe)) if (k !== 'sandbox' && k !== 'allow') errors.push(`${where}.${k} : clé inconnue (sandbox | allow)`);
+  return errors;
+}
+
 /** Valide le plafond approuvé par l'opérateur : `{ capacité: false | { … } }`. */
 export function checkApproved(approved) {
   if (approved === undefined) return [];
   if (!isObj(approved)) return ['grants : objet attendu'];
   const errors = [];
   for (const [id, cfg] of Object.entries(approved)) {
+    if (id === 'iframe') { if (cfg !== false) errors.push(...checkIframe(cfg, 'grants.iframe')); continue; }
     if (Object.hasOwn(REMOVED_CAPABILITIES, id)) errors.push(removedMsg('grants', id));
     else if (!CAPABILITY_IDS.includes(id)) errors.push(`grants.${id} : capacité inconnue`);
     else if (cfg !== false && !isObj(cfg)) errors.push(`grants.${id} : false ou objet attendu`);
@@ -139,10 +172,15 @@ export function embedWarnings(manifest, approved = {}) {
       w.push(`capacité « ${id} » demandée par l'app mais non approuvée : elle sera refusée`);
     }
   }
+  for (const [k, requested] of Object.entries(manifest.iframe ?? {})) {
+    const ceiling = isObj(approved.iframe) && Array.isArray(approved.iframe[k]) ? approved.iframe[k] : [];
+    for (const t of requested) if (!ceiling.includes(t)) w.push(`droit d'iframe « ${k}: ${t} » demandé par l'app mais non approuvé (grants.iframe) : il sera refusé`);
+  }
   for (const d of unapprovedContributions(manifest, approved)) {
     w.push(`contribution « ${d.name} » au slot « ${d.slot} » non approuvée (extensions.contribute) : elle n'apparaîtra pas`);
   }
   for (const id of Object.keys(approved)) {
+    if (id === 'iframe') continue; // droit d'iframe : traité ci-dessus (demandé vs approuvé), ce n'est pas une capacité
     // `extensions.contribute` s'applique aux contributions déclarées (`extensions[]`) sans demande de capacité : seule la découverte (`discover`) en exige une.
     const needsRequest = id === 'extensions' ? isObj(approved.extensions) && Array.isArray(approved.extensions.discover) && approved.extensions.discover.length > 0 : true;
     if (approved[id] !== false && needsRequest && !DEFAULT_GRANT_CAPABILITIES.has(id) && manifest.capabilities?.[id] === undefined) {
@@ -267,4 +305,11 @@ export function buildEmbedConfig(embeds) {
     version: 1,
     apps: embeds.map((e) => ({ name: e.name, version: e.version, route: e.manifest.route, manifest: e.manifest, approved: e.approved, limits: e.limits, config: e.config, contributions: e.contributions })),
   };
+}
+
+/** Droits d'iframe demandés vs approuvés (journal opérateur, `external-apps.status.json`) ; l'effectif est calculé dans le navigateur. */
+export function iframeReport(manifest, approved = {}) {
+  const req = manifest.iframe ?? {};
+  const ap = isObj(approved.iframe) ? approved.iframe : {};
+  return { requested: { sandbox: req.sandbox ?? [], allow: req.allow ?? [] }, approved: { sandbox: ap.sandbox ?? [], allow: ap.allow ?? [] } };
 }

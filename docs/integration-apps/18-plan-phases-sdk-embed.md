@@ -110,9 +110,10 @@ Décision du 2026-11-26 : **le SDK ne transporte que ce dont le Core est lui-mê
 - [ ] P5c.5 Publié (changesets) ; tests Framework verts.
 
 **Core**
-- [ ] P5c.6 Outillage : `checkEmbedManifest`/`checkApproved` acceptent et valident `iframe` (mêmes listes blanches que le protocole — parité testée) ; le verrou fige la demande et le plafond.
-- [ ] P5c.7 `embed-apps.json` + `EmbedFrame` : transport des droits effectifs `iframe` jusqu'à `createEmbedHost` ; `external-apps.status.json` journalise demandé vs approuvé.
-- [ ] P5c.8 `egen-config.json` : l'app publie son propre fichier de déclaration à la racine de son URL (manifeste + `config` publique + `iframe` demandé) ; `external:sync`/`serve-prod` le lisent comme source par défaut, la déclaration `embed` de `external-apps.json` restant le **second recours** et le lieu de l'approbation. Tests d'outils.
+- [x] P5c.6 Outillage : `checkEmbedManifest`/`checkApproved` acceptent et valident `iframe` (mêmes listes blanches que le protocole — parité testée) ; le verrou fige la demande et le plafond.
+- [ ] P5c.7 (partiel : `embed-apps.json` transporte déjà `manifest.iframe` + `approved.iframe`, et `external-apps.status.json` journalise demandé vs approuvé — fait le 2026-11-27 ; **reste** : `EmbedFrame` → `createEmbedHost`, bloqué par Framework P5c.1–P5c.2 : `effectiveGrants` et l'option `iframe` de l'hôte ne sont pas encore publiés) transport des droits effectifs `iframe` jusqu'à `createEmbedHost` ; `external-apps.status.json` journalise demandé vs approuvé.
+- [x] P5c.8 `egen-config.json` : l'app publie son propre fichier de déclaration à la racine de son URL (manifeste + `config` publique + `iframe` demandé) ; `external:sync`/`serve-prod` le lisent comme source par défaut, la déclaration `embed` de `external-apps.json` restant le **second recours** et le lieu de l'approbation. Tests d'outils.
+  - ℹ Fait : `external-apps.json` → `embed[]` accepte `url` (voie normale : `<url>/egen-config.json`), `manifest` (URL/chemin) ou `declaration` (second recours, figée dans le verrou, `manifestSource: "inline"`) — une seule source par entrée ; la `config` publique du manifeste est fusionnée avec `embed[].config` (l'opérateur prime). 65 tests d'outils.
 - [ ] P5c.9 Docs 12, 17, 18 ; push + bilan.
 
 ## P5d — Toasts partagés (2026-11-26)

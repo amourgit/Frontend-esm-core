@@ -24,7 +24,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { EMBED_APP_NAME, allowedContributions, buildEmbedRegistry, checkApproved, checkConfig, checkEmbedManifest, checkLimits, embedWarnings } from './embed-apps.mjs';
+import { EMBED_APP_NAME, allowedContributions, buildEmbedRegistry, checkApproved, checkConfig, checkEmbedManifest, checkLimits, embedWarnings, iframeReport } from './embed-apps.mjs';
 
 export const LOCK_FILE = 'external-apps.lock.json';
 export const LOCK_VERSION = 1;
@@ -243,8 +243,9 @@ export function loadExternalApps({ dir, spaPath, internalNames = new Set(), allo
           embedRoutes.add(manifest.route);
           for (const m of embedWarnings(manifest, entry.approved)) issues.push(warn(m));
           rec.embedRoute = manifest.route;
+          rec.iframe = iframeReport(manifest, entry.approved);
           rec.version = manifest.version;
-          out.embed.push({ name, version: manifest.version, manifest, approved: entry.approved ?? {}, limits: entry.limits ?? {}, config: entry.config ?? {}, contributions: allowedContributions(manifest, entry.approved ?? {}) });
+          out.embed.push({ name, version: manifest.version, manifest, approved: entry.approved ?? {}, limits: entry.limits ?? {}, config: { ...(manifest.config ?? {}), ...(entry.config ?? {}) }, contributions: allowedContributions(manifest, entry.approved ?? {}) });
         }
       }
     } else {

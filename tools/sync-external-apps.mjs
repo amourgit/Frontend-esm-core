@@ -15,9 +15,12 @@
  *       "@acme/esm-url-app":   "https://exemple.org/esm-url-app-1.0.0.tgz"  // tarball https
  *     },
  *     "embed": [                                            // APPS EMBARQUÉES (iframe, protocole v2 : docs 17)
- *       { "manifest": "https://studio.exemple.org/egen-app.json",   //   URL https ou chemin local du manifeste
+ *       { "url": "https://studio.exemple.org",              //   VOIE NORMALE : l'app publie `<url>/egen-config.json` (déclaration)
+ *         // ou "manifest": "https://…/egen-config.json"     //   URL https ou chemin local d'une déclaration
+ *         // ou "declaration": { … }                         //   SECOND RECOURS : déclaration écrite par l'opérateur (figée ici)
  *         "grants": { "notifications": {}, "events": { "publish": ["app.studio.*"] },
- *                     "extensions": { "contribute": ["topbar-nav-slot"] } },   // plafond approuvé (dont les slots où l'app peut contribuer)
+ *                     "extensions": { "contribute": ["topbar-nav-slot"] },
+ *                     "iframe": { "sandbox": ["allow-downloads"], "allow": ["clipboard-write"] } },   // plafond approuvé (slots, droits d'iframe `sandbox`/`allow`)
  *         "limits": { "requestsPerSecond": 50 },               //   optionnel
  *         "config": { "studioApi": "https://api.exemple.org" } }    //   optionnel : configuration publique servie par la capacité `config`
  *     ],
@@ -77,7 +80,11 @@ function readConfig() {
   const embed = cfg.embed ?? [];
   if (!Array.isArray(embed)) fail('« embed » doit être un tableau');
   for (const [i, e] of embed.entries()) {
-    if (!e || typeof e.manifest !== 'string' || !e.manifest) fail(`embed[${i}] : « manifest » requis (URL https ou chemin)`);
+    const sources = ['url', 'manifest', 'declaration'].filter((k) => e?.[k] !== undefined);
+    if (!e || sources.length !== 1) fail(`embed[${i}] : exactement une source de déclaration requise parmi « url » (voie normale), « manifest » ou « declaration » (second recours)`);
+    if (e.url !== undefined && !(typeof e.url === 'string' && isUrl(e.url))) fail(`embed[${i}] : « url » doit être une URL http(s)`);
+    if (e.manifest !== undefined && !(typeof e.manifest === 'string' && e.manifest)) fail(`embed[${i}] : « manifest » : URL https ou chemin`);
+    if (e.declaration !== undefined && (typeof e.declaration !== 'object' || e.declaration === null || Array.isArray(e.declaration))) fail(`embed[${i}] : « declaration » : objet attendu`);
     const bad = [...checkApproved(e.grants), ...checkLimits(e.limits), ...checkConfig(e.config)];
     if (bad.length) fail(`embed[${i}] : ${bad.join(' ; ')}`);
   }
@@ -100,6 +107,8 @@ async function readManifestSource(src) {
   if (!existsSync(file)) throw new Error(`manifeste local introuvable : ${file}`);
   return readFileSync(file);
 }
+/** Source effective de la déclaration d'une app embarquée : son propre `egen-config.json` (voie normale) ou le recours côté Core. */
+const embedSource = (e) => (e.url !== undefined ? `${e.url.replace(/\/+$/, '')}/egen-config.json` : e.manifest !== undefined ? e.manifest : 'inline');
 const snapshotName = (name) => `${name.replace(/^@/, '').replace(/\//, '-')}.json`;
 
 // ── mode vérification ───────────────────────────────────────────────────────
@@ -111,6 +120,7 @@ async function check() {
     const lock = JSON.parse(readFileSync(lockFile, 'utf8'));
     for (const [name, e] of Object.entries(lock.apps ?? {})) {
       if (e.kind === 'embed') {
+        if (e.manifestSource === 'inline') continue; // déclaration écrite côté Core : pas de source distante à surveiller
         try {
           const cur = await readManifestSource(e.manifestSource);
           if (e.manifestSourceSha256 && sha256(cur) !== e.manifestSourceSha256) { console.error(`  ✗ dérive : le manifeste de ${name} a changé depuis la synchronisation`); drift++; }
@@ -200,12 +210,14 @@ async function sync() {
 
   // 3) Apps embarquées : manifeste validé et figé, plafond approuvé par l'opérateur
   for (const e of cfg.embed) {
-    log(`embarquée : ${e.manifest}`);
+    const source = embedSource(e);
+    log(`embarquée : ${source}`);
     let raw, manifest;
-    try { raw = await readManifestSource(e.manifest); } catch (ex) { fail(ex.message); }
-    try { manifest = JSON.parse(raw.toString('utf8')); } catch (ex) { fail(`manifeste ${e.manifest} : JSON invalide (${ex.message})`); }
+    if (e.declaration !== undefined) raw = Buffer.from(JSON.stringify(e.declaration));
+    else try { raw = await readManifestSource(source); } catch (ex) { fail(ex.message); }
+    try { manifest = JSON.parse(raw.toString('utf8')); } catch (ex) { fail(`déclaration ${source} : JSON invalide (${ex.message})`); }
     const errors = checkEmbedManifest(manifest, { allowHttp: ALLOW_HTTP });
-    if (errors.length) fail(`manifeste ${e.manifest} invalide :\n  - ${errors.join('\n  - ')}`);
+    if (errors.length) fail(`déclaration ${source} invalide :\n  - ${errors.join('\n  - ')}`);
     if (lock.apps[manifest.name]) fail(`application déclarée deux fois : ${manifest.name}`);
     const file = `embed/manifests/${snapshotName(manifest.name)}`;
     mkdirSync(join(OUT, 'embed', 'manifests'), { recursive: true });
@@ -214,7 +226,7 @@ async function sync() {
     lock.apps[manifest.name] = {
       kind: 'embed',
       version: manifest.version,
-      manifestSource: e.manifest,
+      manifestSource: source,
       manifestSourceSha256: sha256(raw),
       manifestFile: file,
       manifestSha256: sha256(frozen),

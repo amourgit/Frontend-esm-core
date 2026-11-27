@@ -147,7 +147,7 @@ function publishRegistries() {
   }
   routesJson = JSON.stringify(merged);
   externalStatusJson = JSON.stringify({
-    apps: ext.apps.map(({ name, kind, version, status, errors, warnings }) => ({ name, kind, version, status, errors, warnings })),
+    apps: ext.apps.map(({ name, kind, version, status, errors, warnings, iframe }) => ({ name, kind, version, status, errors, warnings, ...(iframe ? { iframe } : {}) })),
   });
   formatReport(ext.apps).forEach((l) => log(`externes : ${l}`));
   return ext.apps.some((a) => a.status === 'rejected');
