@@ -13,9 +13,9 @@ const write = (name, content) => {
 };
 
 test('un fichier valide est chargé et resérialisé', () => {
-  const f = write('ok.json', { '@civitas/esm-penpot-app': { penpotUrl: 'https://design.exemple.org' } });
+  const f = write('ok.json', { '@acme/esm-hello-app': { apiUrl: 'https://design.exemple.org' } });
   const { config, json } = loadRuntimeConfig(f);
-  assert.equal(config['@civitas/esm-penpot-app'].penpotUrl, 'https://design.exemple.org');
+  assert.equal(config['@acme/esm-hello-app'].apiUrl, 'https://design.exemple.org');
   assert.deepEqual(JSON.parse(json), config);
 });
 
@@ -119,7 +119,7 @@ test('serve-prod : sans EGEN_CONFIG_FILE, configUrls reste vide et config.json a
 
 test('serve-prod : EGEN_CONFIG_FILE est servi (no-store) et déclaré dans configUrls', async () => {
   const root = serverRoot();
-  const conf = { '@civitas/esm-penpot-app': { penpotUrl: 'https://design.exemple.org' } };
+  const conf = { '@acme/esm-hello-app': { apiUrl: 'https://design.exemple.org' } };
   const file = join(root, 'egen-config.json');
   writeFileSync(file, JSON.stringify(conf));
   const port = 19000 + Math.floor(Math.random() * 900);

@@ -2,9 +2,9 @@
 //
 // Le Shell charge les `configUrls` et fusionne chaque fichier : un objet dont chaque clé est le `name`
 // d'une app (`moduleName`) et chaque valeur sa configuration, ex. :
-//   { "@civitas/esm-penpot-app": { "penpotUrl": "https://design.exemple.org" } }
+//   { "@civitas/esm-hello-app": { "apiUrl": "https://design.exemple.org" } }
 // Sans fichier, le Shell n'a aucune source de configuration en production : les apps externes configurables
-// (comme esm-penpot-app) n'auraient que leurs valeurs par défaut.
+// (apps Module Federation) n'auraient que leurs valeurs par défaut.
 //
 // Intégration À FROID : le fichier est lu et validé une fois au démarrage ; une erreur EMPÊCHE le démarrage
 // (message explicite) au lieu de servir en silence des valeurs par défaut — le Shell, lui, ignore un fichier

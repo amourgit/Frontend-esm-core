@@ -145,9 +145,10 @@ Demande : les apps externes transmettent leurs toasts au Core en temps réel, et
 > Décision du 2026-11-26 : **une seule voie propre (SDK embed)**. L'ancien pipeline « enveloppe par app + pont 1.1 » est retiré une fois les trois apps migrées et vérifiées en production. Les kinds `hosted`/`remote` (vraies apps Module Federation) **ne sont pas** concernées : elles restent la voie pour les apps externes rendues dans le Core.
 
 **Core**
-- [ ] P8.1 `external-apps.json` : retirer les entrées `apps` des trois enveloppes (`@civitas/esm-penpot-app`, `@civitas/esm-tweakcn-app`, `@civitas/esm-character-app`) ; ne garder que les entrées `embed`.
-- [ ] P8.2 `egen-config.json` du Core : retirer les clés des enveloppes (`penpotUrl`, `studioUrl`, `characterUrl`, `title`, `heightOffset`) ; la configuration publique vit dans `egen-config.json` de chaque app / `embed[].config`.
-- [ ] P8.3 `external-apps/` : purge des bundles d'enveloppes obsolètes (`yarn external:sync` régénère le verrou sans eux).
+- [x] P8.1 `external-apps.json` : retirer les entrées `apps` des trois enveloppes (`@civitas/esm-penpot-app`, `@civitas/esm-tweakcn-app`, `@civitas/esm-character-app`) ; ne garder que les entrées `embed`.
+- [x] P8.2 `egen-config.json` du Core : retirer les clés des enveloppes (`penpotUrl`, `studioUrl`, `characterUrl`, `title`, `heightOffset`) ; la configuration publique vit dans `egen-config.json` de chaque app / `embed[].config`.
+- [x] P8.3 `external-apps/` : purge des bundles d'enveloppes obsolètes (`yarn external:sync` régénère le verrou sans eux ; le dossier est ignoré par git, rien à purger dans le dépôt).
+- ℹ Fait le 2026-11-27 : `external-apps.json` ne contient plus que trois entrées `embed` (manifestes `<URL>/egen-config.json`, plafond approuvé dont `iframe`) ; `egen-config.json` du Core vidé ; exemples et tests sans référence aux enveloppes. **Prérequis côté apps** : chaque app doit publier son `egen-config.json` (P6.1–P6.3) avant `yarn external:sync`.
 
 **Dépôts d'apps**
 - [ ] P8.4 Supprimer `integrations/egen/esm-*-app/` dans tweakcn, Character Factory et penpot (fork) ; workflows de release tarball (`egen-*-app.yml`) ; dépendances `esm-nextjs-utils`/`esm-integration-utils` devenues inutiles.

@@ -1,7 +1,104 @@
 {
-  "apps": {
-    "@civitas/esm-penpot-app": "https://github.com/amourgit/penpot/releases/download/egen-app-v1.0.2/civitas-esm-penpot-app-1.0.2.tgz",
-    "@civitas/esm-tweakcn-app": "https://github.com/amourgit/Frontend-esm-tweakcn-fork/releases/download/egen-app-v1.1.0/civitas-esm-tweakcn-app-1.1.0.tgz",
-    "@civitas/esm-character-app": "https://github.com/amourgit/egen-character-factory/releases/download/egen-app-v1.0.0/civitas-esm-character-app-1.0.0.tgz"
-  }
+  "$comment": "Voie unique : SDK embed (docs/integration-apps/17 et 18). Chaque app publie egen-config.json à la racine de son URL ; ce fichier n'est que le lieu d'approbation des droits.",
+  "embed": [
+    {
+      "manifest": "http://localhost:9001/egen-config.json",
+      "grants": {
+        "notifications": {},
+        "events": {
+          "publish": [
+            "app.penpot.*"
+          ],
+          "subscribe": [
+            "core.*"
+          ]
+        },
+        "extensions": {
+          "contribute": [
+            "topbar-nav-slot",
+            "shell-rail-left-slot"
+          ]
+        },
+        "iframe": {
+          "sandbox": [
+            "allow-downloads",
+            "allow-modals",
+            "allow-popups-to-escape-sandbox"
+          ],
+          "allow": [
+            "clipboard-read",
+            "clipboard-write",
+            "fullscreen"
+          ]
+        }
+      },
+      "config": {}
+    },
+    {
+      "manifest": "http://localhost:3200/egen-config.json",
+      "grants": {
+        "notifications": {},
+        "events": {
+          "publish": [
+            "app.tweakcn.*"
+          ],
+          "subscribe": [
+            "core.*"
+          ]
+        },
+        "extensions": {
+          "contribute": [
+            "topbar-nav-slot",
+            "shell-rail-left-slot"
+          ]
+        },
+        "iframe": {
+          "sandbox": [
+            "allow-downloads",
+            "allow-modals",
+            "allow-popups-to-escape-sandbox"
+          ],
+          "allow": [
+            "clipboard-read",
+            "clipboard-write",
+            "fullscreen"
+          ]
+        }
+      },
+      "config": {}
+    },
+    {
+      "manifest": "http://localhost:9080/egen-config.json",
+      "grants": {
+        "notifications": {},
+        "events": {
+          "publish": [
+            "app.character.*"
+          ],
+          "subscribe": [
+            "core.*"
+          ]
+        },
+        "extensions": {
+          "contribute": [
+            "topbar-nav-slot",
+            "shell-rail-left-slot"
+          ]
+        },
+        "iframe": {
+          "sandbox": [
+            "allow-downloads",
+            "allow-modals",
+            "allow-popups-to-escape-sandbox"
+          ],
+          "allow": [
+            "clipboard-read",
+            "clipboard-write",
+            "fullscreen"
+          ]
+        }
+      },
+      "config": {}
+    }
+  ]
 }

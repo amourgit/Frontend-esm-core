@@ -1,7 +1,5 @@
 {
-  "@civitas/esm-penpot-app": {
-    "penpotUrl": "https://design.exemple.org",
-    "title": "Penpot",
-    "heightOffset": 0
+  "@acme/esm-hello-app": {
+    "apiUrl": "https://api.exemple.org"
   }
 }

@@ -22,7 +22,7 @@ describe('isUnknownRoute (single-spa réel)', () => {
     register('home', pathToActiveWhen(`${BASE}home`));
     register('annuaire', pathToActiveWhen(`${BASE}annuaire`));
     // App EXTERNE ajoutée à l'exécution : jamais dans une liste de ce composant (le cas du bug).
-    register('@civitas/esm-penpot-app', pathToActiveWhen(`${BASE}penpot`));
+    register('@acme/esm-hello-app', pathToActiveWhen(`${BASE}hello`));
     // Apps toujours actives (sauf login) : pied de page, assistant — actives aussi sur la sonde.
     register('footer', regexPage(/^(?!(?:login|logout|change-password)\/?)/));
     // La 404 elle-même : fourre-tout hors racine vide.
@@ -31,18 +31,18 @@ describe('isUnknownRoute (single-spa réel)', () => {
 
   afterEach(() => undefined);
 
-  it.each(['home', 'home/sous-page', 'annuaire', 'penpot', 'penpot/projet/42'])(
+  it.each(['home', 'home/sous-page', 'annuaire', 'hello', 'hello/projet/42'])(
     'route connue « %s » : pas de 404',
     (path) => {
       expect(isUnknownRoute(at(path))).toBe(false);
     },
   );
 
-  it('REPRODUIT LE BUG CORRIGÉ : une app externe (penpot) absente de toute liste n’est plus prise pour une 404', () => {
-    expect(isUnknownRoute(at('penpot'))).toBe(false);
+  it('REPRODUIT LE BUG CORRIGÉ : une app externe (hello) absente de toute liste n’est plus prise pour une 404', () => {
+    expect(isUnknownRoute(at('hello'))).toBe(false);
   });
 
-  it.each(['nimporte-quoi', 'a/b/c', 'penpotx-ou-presque', 'hom'])('route inconnue « %s » : 404', (path) => {
+  it.each(['nimporte-quoi', 'a/b/c', 'hellox-ou-presque', 'hom'])('route inconnue « %s » : 404', (path) => {
     expect(isUnknownRoute(at(path))).toBe(true);
   });
 

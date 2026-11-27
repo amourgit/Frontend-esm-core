@@ -65,10 +65,10 @@ test('aucune app compilée : échec à l\'étape 1 avec le conseil « yarn build
 
 test('EGEN_CONFIG_FILE valide : l\'app configurée est nommée, la commande de démarrage le reprend', () => {
   const r = root();
-  writeFileSync(join(r, 'conf.json'), JSON.stringify({ '@civitas/esm-penpot-app': { penpotUrl: 'https://d.exemple.org' } }));
+  writeFileSync(join(r, 'conf.json'), JSON.stringify({ '@acme/esm-hello-app': { apiUrl: 'https://d.exemple.org' } }));
   const { code, out } = prepare(r, { env: { EGEN_CONFIG_FILE: 'conf.json' } });
   assert.equal(code, 0, out);
-  assert.match(out, /conf\.json valide — 1 app\(s\) configurée\(s\) : @civitas\/esm-penpot-app/);
+  assert.match(out, /conf\.json valide — 1 app\(s\) configurée\(s\) : @acme\/esm-hello-app/);
   assert.match(out, /EGEN_CONFIG_FILE=conf\.json yarn start:prod/);
 });
 
