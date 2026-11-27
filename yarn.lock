@@ -385,19 +385,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-embed-host@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@egen-civitas/esm-embed-host@npm:0.3.0"
+"@egen-civitas/esm-embed-host@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@egen-civitas/esm-embed-host@npm:0.5.0"
   dependencies:
-    "@egen-civitas/esm-embed-protocol": "npm:^0.3.0"
-  checksum: 10/c3cfb78e1ddbab28ed50c118e7d98015d30c75dc255eaf9cf5c6081992114986a802c2cfb3d8a5f56957f707895c5f41b3a267fd4fa777b7455aac457c661a7f
+    "@egen-civitas/esm-embed-protocol": "npm:^0.5.0"
+  checksum: 10/135627e4c1b89bdf15708fc743bce421bdea9d198ee86a9af6be1c44524917e0f6668232ed3f5cee9dfd628664aeba4e76cdd1829d50e1e4b0471d1727ec757c
   languageName: node
   linkType: hard
 
-"@egen-civitas/esm-embed-protocol@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@egen-civitas/esm-embed-protocol@npm:0.3.0"
-  checksum: 10/ca33637f20d0c253fcf1ab4665080bd16b6f0eb572ed67c63661f661d9811e92f628bac85d040cd5cf8f46368989edcfd5a2578a2f7dee3c390e63232c7d97ec
+"@egen-civitas/esm-embed-protocol@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@egen-civitas/esm-embed-protocol@npm:0.5.0"
+  checksum: 10/beb02ca967d94abfb16dc3d88db3f39149d2ed326114676530ce060bf33096827351f6422f4a7bb46ee78c77687d967a483fe5c8317dcb9105912e894cd73fbd
   languageName: node
   linkType: hard
 
@@ -1233,8 +1233,8 @@ __metadata:
     "@egen-civitas/esm-context": "npm:^1.0.3"
     "@egen-civitas/esm-data-api": "npm:^3.0.0"
     "@egen-civitas/esm-dynamic-loading": "npm:^2.2.0"
-    "@egen-civitas/esm-embed-host": "npm:^0.3.0"
-    "@egen-civitas/esm-embed-protocol": "npm:^0.3.0"
+    "@egen-civitas/esm-embed-host": "npm:^0.5.0"
+    "@egen-civitas/esm-embed-protocol": "npm:^0.5.0"
     "@egen-civitas/esm-error-handling": "npm:^1.0.2"
     "@egen-civitas/esm-expression-evaluator": "npm:^1.0.1"
     "@egen-civitas/esm-extensions": "npm:^2.5.0"
