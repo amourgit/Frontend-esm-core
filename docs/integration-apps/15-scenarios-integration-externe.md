@@ -2,6 +2,8 @@
 
 Ce document déroule, étape par étape, **toute la chaîne** qui amène une application développée hors du Core à s'afficher dans EGEN : qui intervient, ce qui est fait, ce qui est produit, comment on constate que ça a marché, ce qui peut échouer.
 
+> ⚠️ **Voie unique SDK (décision du 2026-11-26).** Le scénario **C3** (application autonome en iframe via une enveloppe « wrapper » + pont 1.1) décrit l'**ancien** pipeline, en cours de retrait (plan [18](18-plan-phases-sdk-embed.md), P6–P8). La voie actuelle pour une app autonome est le **SDK embed** : `egen-config.json` publié par l'app + protocole v2 — voir [17](17-sdk-embed-protocole-v2.md). Les scénarios A/B (apps Module Federation) restent valides.
+
 **Mode d'exploitation retenu : à froid.** Une app externe s'ajoute en trois gestes : la **déclarer** (`external-apps.json`), lancer **`yarn prepare:prod`** (une seule commande entre le build et le démarrage : contrôles, `external:sync --strict`, vérification du verrou, précompression, avec un retour par étape), puis **redémarrer ou redéployer** le Core. Le Core lit le verrou au démarrage et revérifie chaque empreinte : rien n'est modifié pendant qu'il tourne. Le rechargement à chaud (`kill -HUP`) existe (doc 12) mais n'est pas utilisé dans ce document.
 
 Quatre points de départ sont couverts :
@@ -195,7 +197,7 @@ Le paquet doit contenir **`dist/` complet** (bundle + `routes.json`). Un paquet 
 
 ### C3 — Application autonome (Next.js, SSR, routeur propre) déployée à une adresse connue
 
-> **Nouvelle voie (2026-11) : `kind: "embed"`, protocole v2.** Une app autonome en iframe peut désormais s'intégrer **sans paquet wrapper** : un manifeste `egen-app.json`, un plafond de droits approuvé par l'opérateur, et l'app générique `@egen/esm-embed-app`. Elle accède aux services du Core par des capacités typées (session filtrée, langue, tenant, drapeaux, permissions, événements, notifications…) au lieu du seul pont 1.1. Voir [12 §2 bis](12-apps-externes-en-production.md), [17](17-sdk-embed-protocole-v2.md) et le plan [18](18-plan-phases-sdk-embed.md). Le wrapper décrit ci-dessous reste valable et supporté (pont 1.1) pendant la migration (phase P6).
+> **Voie actuelle (2026-11-26) : `kind: "embed"`, protocole v2 — voie unique.** Une app autonome en iframe s'intègre **sans paquet wrapper** : elle publie elle-même `egen-config.json` à la racine de son URL (manifeste + configuration + droits `sandbox`/`allow` demandés), l'opérateur approuve les droits dans `external-apps.json` (second recours si l'app n'a rien publié), et l'app générique `@egen/esm-embed-app` la monte. L'app parle au Core par `esm-embed-client`/`connectToEgen` et les 12 capacités typées (langue, navigation, événements, notifications/toasts, dialogues, configuration, télémétrie, extensions, cycle de vie — **ni session, ni droits, ni thème, ni API** : l'app les obtient auprès de leurs sources). Voir [12 §2 bis](12-apps-externes-en-production.md), [17](17-sdk-embed-protocole-v2.md) et le plan [18](18-plan-phases-sdk-embed.md). L'enveloppe + pont 1.1 décrits ci-dessous sont l'**ancien** pipeline, en cours de retrait (P6–P8).
 Cas typique : l'app tourne déjà sur `https://next.exemple.org/app` et ne produira jamais de conteneur Module Federation.
 - **Qui** : équipe de l'app (côté app) + équipe d'intégration (une « enveloppe » minuscule).
 - **Étape 1 — enveloppe côté Shell** (paquet `@acme/esm-mon-next`, voir scénario A pour le construire) :

@@ -23,7 +23,7 @@ external-apps.json ──► yarn external:sync ──► external-apps/        
 | Publication | `tools/serve-prod.mjs` | fusionne import map + registry, sert `<spa>/external/…`, `SIGHUP`, statut |
 | Tests | `tools/external-apps.test.mjs` | `yarn test:tools` |
 
-## 2. Deux sortes d'apps externes
+## 2. Apps externes « code dans le Core » : hosted et remote
 
 | | **hosted** (hébergée par le Core) | **remote** (hébergée ailleurs) |
 | --- | --- | --- |
@@ -36,21 +36,25 @@ external-apps.json ──► yarn external:sync ──► external-apps/        
 
 ## 2 bis. Troisième sorte : apps embarquées (`embed`, protocole v2)
 
-> Spécification : [17](17-sdk-embed-protocole-v2.md) · plan : [18](18-plan-phases-sdk-embed.md). **Livré (phase P5) : outillage + app générique `packages/apps/esm-embed-app` (`@egen/esm-embed-app`).**
+> Spécification : [17](17-sdk-embed-protocole-v2.md) · plan : [18](18-plan-phases-sdk-embed.md). **Voie unique pour les apps en iframe** (décision du 2026-11-26) : les enveloppes « wrapper » par app et le pont 1.1 sont en voie de retrait (plan P8). **Livré (phase P5) : outillage + app générique `packages/apps/esm-embed-app` (`@egen/esm-embed-app`).**
 
-Une app embarquée est une application **autonome dans une iframe** (Next.js, Penpot, tweakcn…). Elle n'a **aucun bundle** et **aucun paquet « wrapper »** : on déclare son manifeste et ce que l'opérateur lui autorise.
+Une app embarquée est une application **autonome dans une iframe** (Next.js, Penpot, tweakcn…). Elle n'a **aucun bundle** et **aucun paquet « wrapper »** : elle **publie elle-même sa déclaration** `egen-config.json` à la racine de son URL (manifeste + configuration publique + droits d'iframe demandés), et l'opérateur approuve les droits dans `external-apps.json` — qui reste le **second recours** si l'app n'a pas publié son fichier (doc 17 §7).
 
 ```json
 {
   "embed": [
-    { "manifest": "https://studio.exemple.org/egen-app.json",
+    { "manifest": "https://studio.exemple.org/egen-config.json",
       "grants": { "notifications": {}, "events": { "publish": ["app.studio.*"] },
-                  "extensions": { "contribute": ["topbar-nav-slot", "shell-rail-left-slot"] } },
+                  "extensions": { "contribute": ["topbar-nav-slot", "shell-rail-left-slot"] },
+                  "iframe": { "sandbox": ["downloads", "modals", "popups-to-escape-sandbox"],
+                              "allow": ["clipboard-read", "clipboard-write", "fullscreen"] } },
       "limits": { "requestsPerSecond": 50 },
       "config": { "studioApi": "https://api.exemple.org" } }
   ]
 }
 ```
+
+Le bloc `iframe` des grants est le **plafond** des droits `sandbox`/`allow` de l'iframe : l'app les demande dans son `egen-config.json` (`iframe.sandbox[]`, `iframe.allow[]`), l'opérateur les approuve ici, les droits effectifs sont l'**intersection** des deux — liste blanche stricte de jetons, jamais de droits figés ni auto-accordés (doc 17 §7 bis ; implémentation : plan P5c).
 
 | Étape | Ce qui se passe |
 | --- | --- |

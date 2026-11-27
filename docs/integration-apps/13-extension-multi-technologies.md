@@ -31,7 +31,7 @@ Conséquence : il manquait seulement une **couche neutre** décrivant « ce que 
 | React | `@egen-civitas/esm-react-utils` | ✅ existant, **non modifié** |
 | Vue 3 | `@egen-civitas/esm-vue-utils` | ✅ implémenté et testé |
 | Angular | `@egen-civitas/esm-angular-utils` | ✅ implémenté et testé (§5) |
-| Next.js / apps autonomes | `@egen-civitas/esm-nextjs-utils` | ✅ implémenté et testé : iframe + pont `postMessage` (§6) |
+| Next.js / apps autonomes | `@egen-civitas/esm-nextjs-utils` | ✅ implémenté et testé : iframe + pont `postMessage` (§6). **Déprécié** : voie unique SDK embed (doc 17) |
 
 Les paquets sont dans le dépôt Framework : la branche `feature/multi-techno-utils` a été **fusionnée dans `main`** (2026-11-21) et **publiés sur npm** en version `0.2.0` : `esm-integration-utils`, `esm-vue-utils`, `esm-angular-utils`, `esm-nextjs-utils` ; `esm-globals` `2.5.0` et `esm-dynamic-loading` `2.2.0` portent la table d'alias de l'import map. Parcours complets d'intégration (sources GitHub, paquet, app déjà déployée, registre central) : [15](15-scenarios-integration-externe.md).
 
@@ -97,6 +97,8 @@ Faits relevés dans `single-spa-angular` : il utilise `props.domElement` sinon `
 **Non couvert** (🟡) : Angular CLI en compilation **AOT** (le paquet n'a ni décorateur ni gabarit, mais ce n'est pas exécuté), routeur Angular, Shell réel, cohabitation avec React/Vue dans la même page.
 
 ## 6. Next.js et applications autonomes — implémenté et testé (iframe + pont)
+
+> ⚠️ **Déprécié (décision du 2026-11-26).** Ce pont 1.1 + enveloppe « wrapper » est remplacé par le SDK embed (`egen-config.json` + protocole v2, doc 17) ; retrait planifié (doc 18 P6.4, P8). Section conservée pour les apps qui l'utilisent encore.
 
 `@egen-civitas/esm-nextjs-utils` : l'application (Next.js avec SSR, routeur propre…) reste **autonome** et s'affiche dans une iframe reliée au Shell par un pont `postMessage` (protocole v1). Pas de conteneur Module Federation : le plugin de Next (`@module-federation/nextjs-mf` 8.9) ne couvre que Next 12–15, alors que Next courant est la **16.4** (mesuré sur npm).
 

@@ -456,6 +456,8 @@ Avec l'Angular CLI, écrire les composants avec le décorateur `@Component({...}
 
 ## Exemple 5 — Application autonome (Next.js) par iframe (✅ pont testé avec fenêtres simulées)
 
+> ⚠️ **Ancien pipeline, en voie de retrait** (décision du 2026-11-26). L'exemple ci-dessous utilise `esm-nextjs-utils` (pont 1.1) + une enveloppe « wrapper ». La voie actuelle est le SDK embed : `egen-config.json` + `connectToEgen` — voir [17](17-sdk-embed-protocole-v2.md). Conservé comme référence historique.
+
 Statut : `@egen-civitas/esm-nextjs-utils` (voir [13](13-extension-multi-technologies.md) §6). L'application Next reste **hors du bundle** : le Core n'embarque qu'une petite app « enveloppe » (un export). Non couvert : exécution inter-fenêtres dans un vrai navigateur.
 
 ### App enveloppe (dans le Core ou en externe)

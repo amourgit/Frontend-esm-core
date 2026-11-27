@@ -13,10 +13,10 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 | P4 | Test et simulateur | F | `esm-embed-testing` |
 | P5 | Intégration Core (`kind: embed`) | C (+F) | `esm-embed-app`, outils `external-apps`, `serve-prod`, verrou |
 | P5b | Recentrage du SDK (règle d'or) et extensions | F, C | 12 capacités, contributions de slots, rail, outils IA, dialogues, config |
-| P6 | Migration des apps et compatibilité v1.1 | C, apps | tweakcn (pilote), Character, Penpot |
-| P7 | Sécurité, SSO, E2E navigateur, vérificateur | C, F | Playwright, `egen check-app`, capacité `auth` (cadrage) |
-
----
+| P5c | Droits d'iframe négociés + `egen-config.json` | F, C | `sandbox`/`allow` demandés par l'app, approuvés par l'opérateur ; déclaration publiée par l'app |
+| P6 | Migration des apps et compatibilité v1.1 | C, apps | tweakcn (pilote), Character, Penpot ; suppression des enveloppes |
+| P7 | Sécurité, SSO, E2E navigateur, vérificateur | C, F | Playwright, `egen check-app`, revue de sécurité |
+| P8 | Voie unique : retrait de l'ancien pipeline | F, C, apps | suppression `esm-nextjs-utils`, pont 1.1, enveloppes, docs |
 
 ## P0 — Documentation et plan (Core)
 - [x] P0.1 Écrire le doc 17 (spécification, décisions, sécurité, manifeste).
@@ -31,7 +31,7 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 - [x] P1.4 `guards.ts` : validateurs écrits à la main (sans bibliothèque) pour les enveloppes et messages RPC (rejet de tout champ inattendu de type invalide, taille).
 - [x] P1.5 `negotiate.ts` : négociation de protocole et de versions de capacités (§4) → `{ granted, denied[] }`.
 - [x] P1.6 `capabilities.ts` : catalogue (§5) : descripteurs, méthodes, événements, grant par défaut, validateurs d'arguments par méthode.
-- [x] P1.7 `manifest.ts` : validation du manifeste `egen-app.json` et calcul des grants effectifs (demandé ∩ approuvé).
+- [x] P1.7 `manifest.ts` : validation du manifeste (servi par l'app sous le nom `egen-config.json`, décision du 2026-11-26) et calcul des grants effectifs (demandé ∩ approuvé).
 - [x] P1.8 `rpc.ts` : moteur RPC symétrique sur un `MessagePort` (table de dispatch fermée, délais, limites, abonnements, fermeture).
 - [x] P1.9 Tests : gardes, négociation, manifeste, RPC sur **vrai `MessageChannel`** (appel, erreur, délai, abonnement, limite de débit, dispatch inconnu, tentative `constructor`/`__proto__`).
 - [x] P1.10 README du paquet ; `yarn build` + `tsc` propres ; push + bilan.
@@ -97,16 +97,55 @@ Décision du 2026-11-26 : **le SDK ne transporte que ce dont le Core est lui-mê
 - [x] P5b.9 `.gitignore` : `src/lib/` n'est plus ignoré (le motif `lib` masquait du code source) ; dépendances `@egen-civitas/*` mises à jour (`deps:egen`).
 - [x] P5b.10 Docs 12, 17, 18 mises à jour.
 
+## P5c — Droits d'iframe négociés (`sandbox`/`allow`) et `egen-config.json` (décision du 2026-11-26)
+
+> Sans cette phase, la migration P6 casse les trois apps : elles ont besoin de `allow-downloads`, `allow-modals`, `allow-popups-to-escape-sandbox` et `allow="clipboard-read; clipboard-write; fullscreen"`, impossibles avec le sandbox par défaut de `esm-embed-host`. Les droits doivent être **négociés** (l'app demande, l'opérateur approuve) — jamais figés dans le code (doc 17 §7 bis).
+
+**Framework**
+- [ ] P5c.1 Protocole : bloc `iframe` dans le manifeste (`iframe.sandbox[]`, `iframe.allow[]` — demande) et dans les grants approuvés (plafond) ; listes blanches strictes de jetons `sandbox` et `allow` ; `effectiveGrants` calcule l'intersection ; rejet explicite des jetons hors liste.
+- [ ] P5c.2 Hôte : `createEmbedHost` accepte les droits effectifs `iframe` et pose `sandbox` + `allow` sur l'iframe ; avertissement `allow-same-origin` + `allow-scripts` sur origine non Core (existant, à conserver).
+- [ ] P5c.3 Client : rien à exposer (droits invisibles pour l'app une fois accordés) ; documenter dans le README que les droits se demandent dans `egen-config.json`.
+- [ ] P5c.4 Testing : `createTestHost`/`egen-embed-check` valident la forme `iframe` (jetons connus, plafonds) ; tests des listes blanches.
+- [ ] P5c.5 Publié (changesets) ; tests Framework verts.
+
+**Core**
+- [ ] P5c.6 Outillage : `checkEmbedManifest`/`checkApproved` acceptent et valident `iframe` (mêmes listes blanches que le protocole — parité testée) ; le verrou fige la demande et le plafond.
+- [ ] P5c.7 `embed-apps.json` + `EmbedFrame` : transport des droits effectifs `iframe` jusqu'à `createEmbedHost` ; `external-apps.status.json` journalise demandé vs approuvé.
+- [ ] P5c.8 `egen-config.json` : l'app publie son propre fichier de déclaration à la racine de son URL (manifeste + `config` publique + `iframe` demandé) ; `external:sync`/`serve-prod` le lisent comme source par défaut, la déclaration `embed` de `external-apps.json` restant le **second recours** et le lieu de l'approbation. Tests d'outils.
+- [ ] P5c.9 Docs 12, 17, 18 ; push + bilan.
+
 ## P6 — Migration des apps et compatibilité
-- [ ] P6.1 **tweakcn (pilote)** : ajouter `egen-app.json`, adopter `esm-embed-client` (langue, événements, notifications, extensions) ; thème, session et API : directement auprès de leurs sources (Keycloak, service de thèmes), pas par le SDK ; retirer le wrapper `esm-tweakcn-app` du Core au profit de l'entrée `embed`.
-- [ ] P6.2 Character Factory : manifeste + client (navigation `none`).
-- [ ] P6.3 Penpal : manifeste + injection du script v1.1 ou client selon le routage constaté (`hash` ou `history`), sans toucher au dépôt Penpal (référence en lecture seule : fournir les fichiers à y ajouter côté opérateur).
+- [ ] P6.1 **tweakcn (pilote)** : publier `egen-config.json` à la racine (route `theme-studio`, `placement.rail`, `navigation`, `iframe` demandé : downloads/modals/popups-to-escape + clipboard/fullscreen, `config` publique), adopter `esm-embed-client` (langue, événements, **notifications via `egen.notify`/`useEgenNotify` — jamais de doublon de toast**, extensions) ; thème, session et API : directement auprès de leurs sources (Keycloak, service de thèmes), pas par le SDK ; **supprimer** `integrations/egen/esm-tweakcn-app/` et son workflow de release tarball ; basculer `external-apps.json` sur `embed`.
+- [ ] P6.2 Character Factory : `egen-config.json` + client (navigation `none`) ; suppression de `integrations/egen/esm-character-app/`.
+- [ ] P6.3 Penpot : `egen-config.json` + client si le fork peut être modifié ; sinon injection du script v1.1 (`egen-bridge.js`) en attendant P8, sans toucher au dépôt Penpot amont (référence en lecture seule : fournir les fichiers à y ajouter côté opérateur).
 - [ ] P6.4 Dépréciation de `esm-nextjs-utils` (réexport + avertissement), changesets.
 - [ ] P6.5 Mise à jour des docs 15 (scénario C3), 16, 11 ; push + bilan.
 
 ## P7 — Sécurité, SSO, navigateur réel, outillage
-- [ ] P7.1 Playwright : poignée de main, thème, événements, navigation (clic, F5, retour, lien partagé) sur tweakcn.
-- [ ] P7.2 `egen check-app` (écart G4) étendu aux apps embarquées (manifeste, SDK, `frame-ancestors`).
+- [ ] P7.1 Playwright : poignée de main, thème, événements, navigation (clic, F5, retour, lien partagé), droits iframe effectifs sur les trois apps migrées.
+- [ ] P7.2 `egen check-app` (écart G4) étendu aux apps embarquées (`egen-config.json`, SDK, `frame-ancestors`, droits iframe demandés).
 - [x] P7.3 ~~Capacité `auth`~~ **supprimée** (règle d'or) ; remplacée par le guide d'obtention de l'identité, des droits et du thème auprès de leurs sources (doc 17 §9). À valider avec la configuration réelle du realm Keycloak (même domaine enregistrable pour le SSO en iframe).
-- [ ] P7.4 Revue de sécurité (liste de contrôle §6 du doc 17), fuzzing léger des gardes, rapport.
+- [ ] P7.4 Revue de sécurité (liste de contrôle §6 du doc 17, dont droits iframe négociés et notifications sans doublon), fuzzing léger des gardes, rapport.
 - [ ] P7.5 Doc de clôture et retour d'expérience ; push + bilan.
+
+## P8 — Voie unique : retrait de l'ancien pipeline
+
+> Décision du 2026-11-26 : **une seule voie propre (SDK embed)**. L'ancien pipeline « enveloppe par app + pont 1.1 » est retiré une fois les trois apps migrées et vérifiées en production. Les kinds `hosted`/`remote` (vraies apps Module Federation) **ne sont pas** concernées : elles restent la voie pour les apps externes rendues dans le Core.
+
+**Core**
+- [ ] P8.1 `external-apps.json` : retirer les entrées `apps` des trois enveloppes (`@civitas/esm-penpot-app`, `@civitas/esm-tweakcn-app`, `@civitas/esm-character-app`) ; ne garder que les entrées `embed`.
+- [ ] P8.2 `egen-config.json` du Core : retirer les clés des enveloppes (`penpotUrl`, `studioUrl`, `characterUrl`, `title`, `heightOffset`) ; la configuration publique vit dans `egen-config.json` de chaque app / `embed[].config`.
+- [ ] P8.3 `external-apps/` : purge des bundles d'enveloppes obsolètes (`yarn external:sync` régénère le verrou sans eux).
+
+**Dépôts d'apps**
+- [ ] P8.4 Supprimer `integrations/egen/esm-*-app/` dans tweakcn, Character Factory et penpot (fork) ; workflows de release tarball (`egen-*-app.yml`) ; dépendances `esm-nextjs-utils`/`esm-integration-utils` devenues inutiles.
+- [ ] P8.5 Chaque app sert `egen-config.json` à la racine de son URL déployée et `frame-ancestors` limité à l'origine du Shell.
+
+**Framework**
+- [ ] P8.6 `esm-nextjs-utils` : supprimer le paquet (après la dépréciation P6.4) ; déplacer ou retirer `assets/egen-bridge.js` selon qu'une app déployée l'injecte encore.
+- [ ] P8.7 `esm-embed-host` : retirer le pont 1.1 (`handleLegacy`, `legacySend`, options `legacy`) quand plus aucune app ne parle `{ egen: 1 }` ; `esm-embed-protocol` : retirer `SUPPORTED_PROTOCOLS` 1 et les types legacy.
+- [ ] P8.8 `esm-integration-utils` : **conservé** (apps Module Federation) — vérifier qu'aucun doc ne le présente comme voie iframe.
+
+**Vérification finale**
+- [ ] P8.9 E2E : les trois apps fonctionnent en `kind: embed` (page, rail, TopBar, navigation partagée, notifications) ; `external-apps.status.json` ne contient plus que `kind: embed` ; `yarn external:check` propre ; tests Framework + Core + outils verts.
+- [ ] P8.10 Documentation : docs 15 (C3), 16 passés en « historique/legacy » ; 05, 11, 12, 00 à jour ; suppression des références aux enveloppes ; push + bilan.

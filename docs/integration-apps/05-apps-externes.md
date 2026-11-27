@@ -2,6 +2,8 @@
 
 Une app **externe** est développée dans son propre dépôt, avec son propre cycle de build/déploiement. EGEN ne la distingue d'une app interne que par **le moyen par lequel son bundle et son `routes.json` parviennent au Shell**. Le contrat côté Shell est **identique** (voir 01 §2) ; ce qui change, c'est la *découverte*.
 
+> Ce document couvre les apps externes « code dans le Core » (Module Federation). Pour une application **autonome en iframe** (Next.js, Penpot, tweakcn…), la voie unique est le **SDK embed** (`egen-config.json` + protocole v2) : voir [17](17-sdk-embed-protocole-v2.md) et [12 §2 bis](12-apps-externes-en-production.md).
+
 Légende de preuve : voir 00. Chemins `fw/` = Frontend-esm-framework.
 
 ## 1. Trois formes d'« externe » réellement prises en charge

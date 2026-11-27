@@ -1,6 +1,11 @@
 # 17 — SDK d'intégration embarquée et protocole v2
 
 > **Statut : implémenté (✅) — protocole, client, hôte, testing publiés ; app générique et outillage dans le Core. Plan et reste à faire : [18](18-plan-phases-sdk-embed.md).**
+> **Décisions du 2026-11-26 (actées)** :
+> - **Voie unique.** Le SDK embed (protocole v2) est LA voie d'intégration des apps externes en iframe. L'ancien pipeline « enveloppe par app + pont 1.1 » est en cours de retrait (phases de nettoyage : doc 18, P8).
+> - **`egen-config.json` publié par l'app.** L'app externe sert son propre fichier de déclaration à la racine de son URL (`https://<app>/egen-config.json`) : manifeste + configuration publique. La déclaration `embed` dans `external-apps.json` du Core reste le **second recours** (app qui n'a pas publié son fichier) et le lieu de l'**approbation** des droits.
+> - **Droits de l'iframe négociés.** Les attributs `sandbox` et `allow` de l'iframe ne sont plus figés : l'app les **demande** dans `egen-config.json`, l'opérateur les **approuve** dans `external-apps.json` ; les droits effectifs sont l'intersection, validée par liste blanche stricte (§7 bis).
+> - **Notifications : un seul point d'entrée.** `egen.notify(toast, local)` — le Core affiche par défaut et seul ; l'app ne rend son propre composant de toasts que si le Core ne s'en charge pas (§5).
 > **Origine** : audit du 2026-11-23 sur l'intégration des apps externes (Penpal, tweakcn, Character Factory) et décision de passer à un niveau industriel.
 
 ## 1. Constat qui motive la réforme
@@ -95,13 +100,32 @@ Limites par défaut (surchargeables par l'opérateur) : message ≤ 256 Kio · 1
 | `telemetry` | `log(level, message, ctx?)` · `metric(name, value, tags?)` | — | accordé (débit plafonné) |
 | `lifecycle` | `ready()` · (hôte → app) `canLeave()` | `visibility`, `focus` | accordé |
 | `events` | `publish(topic, payload)` · abonnement par sujet | événements des sujets autorisés | refusé (publication limitée à `app.<slug>.*`, abonnement par motifs approuvés) |
-| `notifications` | `show({ kind, title, subtitle?, timeoutMs? })` | — | refusé |
+| `notifications` | `show({ id?, kind, title, subtitle?, timeoutMs? })` | — | refusé |
 | `dialogs` | `confirm({ title, message, danger? })` → booléen (dialogue natif du Core) | — | refusé |
 | `flags` | `isEnabled(name)` (noms listés par le grant) | `change` | refusé |
 | `extensions` | `list(slot)` → métadonnées des extensions du slot (grant `discover`) | par slot : liste à jour | refusé |
 | `ai-tools` | `register(descripteurs[])` · `unregister(noms[])` ; (hôte → app) `invoke(nom, args)` | — | refusé (noms d'outils limités par motifs approuvés ; le backend IA garde l'autorité) |
 
 Toute capacité hors catalogue est refusée (`UNKNOWN`). Le catalogue vit dans `@egen-civitas/esm-embed-protocol`.
+
+### 5.1 Notifications : un seul point d'entrée, jamais de doublon
+
+Le Core est la source d'affichage des toasts. Une app embarquée ne doit **jamais** rendre son propre composant de notifications quand le Core s'en charge — deux toasts identiques pour un même événement est le bug à éviter par construction.
+
+Le SDK impose **un point d'entrée unique** : `egen.notify(toast, local)` (React : `useEgenNotify(local)` → `{ notify, coreDisplays }`).
+
+| Situation | Comportement de `notify` |
+| --- | --- |
+| Capacité accordée, politique `exclusive` (défaut) | Toast envoyé au Core, affiché **par le Core seul**, attribué à l'app ; `local` **n'est pas appelé** |
+| Capacité accordée, politique `exclusive: false` (choix de l'opérateur) | Toast envoyé au Core **et** `local` appelé (l'app affiche aussi) |
+| Capacité refusée, connexion fermée, client autonome | `local` appelé (affichage propre à l'app) |
+| Trop de toasts (`RATE_LIMITED`) | Abandonné : ni Core ni local (contourner la limite par l'affichage local recréerait le doublon) |
+
+Règles pour l'app :
+
+- `id` optionnel = clé de dédoublonnage : un même `id` rapproché ne produit pas deux toasts.
+- Ne rendre son propre `<Toaster>` que si `!egen.coreDisplaysNotifications` (ou `!coreDisplays` côté hook).
+- `kind`, `title` (≤ 200), `subtitle` (≤ 500), `timeoutMs` (0–60 000) validés côté protocole ; le Core applique en plus un plafond anti-spam (`RATE_LIMITED`).
 
 ## 5 bis. Extensions : contribuer aux slots du Core et découvrir ses extensions
 
@@ -139,12 +163,15 @@ Raccourcis du manifeste : `placement` (titre, icône, groupe, `rail: left|right`
 5. **Anti-abus** : limites §3.1, déconnexion après dépassement répété.
 6. **Contributions** : approbation par slot, `meta` bornée, `iconUrl` même origine (§5 bis).
 7. **Paramètres sensibles** : la règle `sensitiveParams` du doc 16 §5 reste en vigueur pour la navigation.
-8. **Sandbox et CSP** (doc 15 C3) : `frame-ancestors` côté app, `frame-src` côté Core ; `egen-embed-check --probe` le vérifie.
-9. **Backends** : un backend d'app ne fait jamais confiance à l'iframe ; il valide le jeton Keycloak de l'utilisateur (§9).
+8. **Droits de l'iframe négociés** : `sandbox` et `allow` sont demandés par l'app et approuvés par l'opérateur (§7 bis) — jamais de droits figés dans le code, jamais d'auto-attribution.
+9. **Sandbox et CSP** (doc 15 C3) : `frame-ancestors` côté app, `frame-src` côté Core ; `egen-embed-check --probe` le vérifie.
+10. **Backends** : un backend d'app ne fait jamais confiance à l'iframe ; il valide le jeton Keycloak de l'utilisateur (§9).
 
-## 7. Manifeste d'app embarquée et grants
+## 7. `egen-config.json` : la déclaration publiée par l'app
 
-Fichier `egen-app.json`, publié par l'app (URL stable) ou fourni par l'opérateur :
+> ⚠️ **Ne pas confondre** avec le `egen-config.json` du Core (`EGEN_CONFIG_FILE`, doc 15 A10) : celui-ci configure les apps **Module Federation** au runtime (`{ "<app>": { … } }`, servi à `<spa>/config.json`). Ici, `egen-config.json` est le fichier de **déclaration d'intégration** qu'une app **embarquée** publie à la racine de **sa propre** URL — deux fichiers, deux rôles, deux endroits.
+
+**Voie normale : l'app sert elle-même son fichier de déclaration.** À la racine de son URL, l'app expose `egen-config.json` — un seul fichier qui rassemble tout ce que le Core doit savoir pour l'intégrer : identité, route, navigation, capacités demandées, contributions d'extensions, configuration publique et droits d'iframe demandés.
 
 ```json
 {
@@ -164,28 +191,55 @@ Fichier `egen-app.json`, publié par l'app (URL stable) ou fourni par l'opérate
   },
   "extensions": [
     { "name": "chip", "slot": "topbar-actions-slot", "view": "/_egen/chip", "height": 48 }
-  ]
+  ],
+  "iframe": {
+    "sandbox": ["allow-downloads", "allow-modals", "allow-popups-to-escape-sandbox"],
+    "allow": ["clipboard-read", "clipboard-write", "fullscreen"]
+  },
+  "config": { "studioApi": "https://api.exemple.org" }
 }
 ```
 
-Déclaration par l'opérateur dans `external-apps.json` (`kind: "embed"`, remplace le wrapper par app) :
+Règles de forme (validées par `validateManifest`, doc 17 §7 historique) : `manifestVersion: 1` ; `name` = nom de paquet ; `version` semver ; `title` ≤ 100 ; `url` https sans identifiants ; `route` minuscules/chiffres/tirets (≤ 64) ; `technology` ∈ `nextjs|react|vue|angular|static|other` ; `navigation.mode` ∈ `none|history|hash` ; `extensions[]` ≤ 20 contributions (`meta` ≤ 4 Ko, `iconUrl` https même origine) ; `config` ≤ 8 Ko, rien de secret.
+
+**Second recours : la déclaration côté Core.** Si l'app n'a pas publié `egen-config.json` (ou pour la figer avant mise en production), l'opérateur peut déclarer l'app dans `external-apps.json` — c'est aussi **le seul endroit où les droits sont approuvés** :
 
 ```json
 { "embed": [ {
-    "manifest": "https://studio.exemple.org/egen-app.json",
+    "manifest": "https://studio.exemple.org/egen-config.json",
     "grants": {
       "notifications": {},
       "events": { "publish": ["app.studio.*"], "subscribe": ["core.*"] },
-      "extensions": { "discover": ["topbar-nav-slot"], "contribute": ["topbar-nav-slot", "shell-rail-left-slot", "topbar-actions-slot"] }
+      "extensions": { "discover": ["topbar-nav-slot"], "contribute": ["topbar-nav-slot", "shell-rail-left-slot", "topbar-actions-slot"] },
+      "iframe": { "sandbox": ["allow-downloads", "allow-modals", "allow-popups-to-escape-sandbox"],
+                  "allow": ["clipboard-read", "clipboard-write", "fullscreen"] }
     },
     "limits": { "requestsPerSecond": 50 },
     "config": { "studioApi": "https://api.exemple.org" }
 } ] }
 ```
 
-- Les **grants effectifs** = demandé ∩ approuvé, calculés dans le navigateur par `effectiveGrants` du protocole (une seule implémentation). Le verrou `external-apps.lock.json` fige : manifeste (SHA-256), plafond approuvé, limites, `config`.
-- Un manifeste modifié sans nouvelle synchro → **rejet au démarrage** (même logique que les bundles hébergés, doc 15 A7).
+- Les **droits effectifs** (capacités et iframe) = demandé ∩ approuvé, calculés dans le navigateur par `effectiveGrants` du protocole (une seule implémentation). Le verrou `external-apps.lock.json` fige : déclaration (SHA-256), plafond approuvé, limites, `config`.
+- Une déclaration modifiée sans nouvelle synchro → **rejet au démarrage** (même logique que les bundles hébergés, doc 15 A7).
 - Plus de paquet wrapper : l'app générique `@egen/esm-embed-app` fabrique la page et monte l'hôte ; `serve-prod` fusionne pages et extensions dans le registry et publie `<spa>/embed-apps.json`.
+
+### 7 bis. Droits de l'iframe : `sandbox` et `allow` négociés
+
+Une iframe est enfermée par deux attributs posés par le parent : `sandbox` (ce que l'app peut faire : scripts, téléchargements, dialogues, popups…) et `allow` (permissions riches : presse-papiers, plein écran, caméra…). **Ces droits ne sont pas figés dans le code** : ils se négocient comme les capacités — l'app **demande**, l'opérateur **approuve**, le Core **applique** l'intersection.
+
+| Étape | Où | Contenu |
+| --- | --- | --- |
+| Demande | `egen-config.json` → `iframe.sandbox[]`, `iframe.allow[]` | jetons demandés par l'app |
+| Approbation | `external-apps.json` → `grants.iframe.sandbox[]`, `grants.iframe.allow[]` | plafond de l'opérateur (`false` = rien d'accordé) |
+| Calcul | navigateur, `effectiveGrants` | effectif = demande ∩ plafond, chaque jeton validé par **liste blanche** |
+| Application | `esm-embed-host` → attributs de l'iframe | `sandbox="…"`, `allow="…"` |
+
+Règles :
+
+- **Liste blanche stricte** des jetons `sandbox` et `allow` (validée côté protocole et outillage) : une app ne peut jamais s'auto-accorder un droit, ni une permission `allow` non prévue — ce qui casserait l'isolation. Le socle par défaut (`allow-scripts allow-same-origin allow-forms allow-popups`) s'applique à toute app ; les droits négociés peuvent l'**étendre** (`allow-downloads`, `allow-modals`, `allow-popups-to-escape-sandbox`, `clipboard-*`, `fullscreen`…) **uniquement** si l'opérateur les a approuvés.
+- `allow-same-origin` + `allow-scripts` ensemble neutralisent le sandbox : ce couple n'est jamais accordé à une app d'une origine différente du Shell sans revue explicite de l'opérateur (le protocole journalise l'avertissement existant de `esm-embed-host`).
+- Chaque jetion est journalisée dans `external-apps.status.json` (demandé vs approuvé) pour revue opérateur.
+- Cas réel : Penpot, tweakcn et Character Factory demandent `allow-downloads`, `allow-modals`, `allow-popups-to-escape-sandbox` et `allow="clipboard-read; clipboard-write; fullscreen"` — impossibles avec le sandbox par défaut.
 
 ## 8. Paquets
 
@@ -197,7 +251,7 @@ Déclaration par l'opérateur dans `external-apps.json` (`kind: "embed"`, rempla
 | `@egen-civitas/esm-embed-testing` | Framework | hôte de test en mémoire, suite de conformité, simulateur (`egen-embed-sim`), vérificateur (`egen-embed-check`) | protocole, client, host |
 | `@egen/esm-embed-app` | Core | app générique : page, vues d'extension, panneau de rail, entrée de navigation ; adaptateurs sur les services du Core | host, protocole |
 
-`esm-nextjs-utils` reste publié (compatibilité) et devient un alias déprécié après la phase P6. L'hôte est embarqué dans `esm-embed-app` (Core), pas dans le Shell : la chaîne de release d'une nouvelle capacité se réduit à Framework → Core.
+`esm-nextjs-utils` est déprécié (P6.4) puis supprimé (P8) avec le pont 1.1 de l'hôte, une fois aucune app déployée ne l'utilisant ; `esm-integration-utils` reste (apps Module Federation). L'hôte est embarqué dans `esm-embed-app` (Core), pas dans le Shell : la chaîne de release d'une nouvelle capacité se réduit à Framework → Core.
 
 ## 9. Identité, droits et thème : les obtenir sans le SDK
 
@@ -222,5 +276,5 @@ Ces éléments ne viennent pas du Core ; une app embarquée les obtient **à leu
 ## 11. Ce qui ne change pas
 
 - Mode Module Federation (docs 05, 13), `external:sync`, verrou, validation des bundles.
-- Protocole 1.1 et script `egen-bridge.js` : conservés tant que des apps les utilisent.
+- Protocole 1.1 et script `egen-bridge.js` : **en voie de retrait** (décision du 2026-11-26, voie unique SDK). Le pont 1.1 dans `esm-embed-host` est conservé tant qu'une app déployée l'utilise encore ; sa suppression est planifiée (doc 18, P8).
 - Règle de release du doc 16 §8 (Framework → Core) : simplifiée, pas supprimée.

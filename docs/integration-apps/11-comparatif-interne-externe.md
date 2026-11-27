@@ -2,6 +2,8 @@
 
 Synthèse de 04 et 05. Le **contrat côté Shell est identique** ; seuls diffèrent l'emplacement du code, la façon dont le bundle est produit/servi, et la **découverte**.
 
+> Ce comparatif couvre les apps externes « code dans le Core » (Module Federation, kinds `hosted`/`remote`). Pour les **apps autonomes en iframe** (Next.js, Penpot, tweakcn…), la voie unique est le SDK embed : `egen-config.json` + protocole v2 — voir [17](17-sdk-embed-protocole-v2.md).
+
 | Sujet | Interne (Core) | Externe (dépôt indépendant) |
 | --- | --- | --- |
 | **Emplacement** | `core/packages/apps/esm-<nom>-app/` (workspace Yarn) | dépôt propre |

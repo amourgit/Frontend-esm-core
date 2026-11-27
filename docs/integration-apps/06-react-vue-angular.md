@@ -38,7 +38,7 @@ Le contrat de `LifeCycles` : `bootstrap`, `mount`, `unmount` (Single-SPA 6). `un
 
 ## 3. Vue
 
-> **Mise à jour :** un adaptateur Vue 3 existe désormais (`@egen-civitas/esm-vue-utils`, branche `feature/multi-techno-utils` du Framework, non publié) et a été validé de bout en bout hors Shell : voir [13](13-extension-multi-technologies.md). Les constats ci-dessous décrivent l'état **avant** cet ajout ; Angular a désormais aussi son adaptateur (`@egen-civitas/esm-angular-utils`, validé de la même façon, sans zone.js par défaut) ; pour les applications autonomes (Next.js, SSR) : `@egen-civitas/esm-nextjs-utils` (iframe + pont).
+> **Mise à jour :** un adaptateur Vue 3 existe désormais (`@egen-civitas/esm-vue-utils`, branche `feature/multi-techno-utils` du Framework, non publié) et a été validé de bout en bout hors Shell : voir [13](13-extension-multi-technologies.md). Les constats ci-dessous décrivent l'état **avant** cet ajout ; Angular a désormais aussi son adaptateur (`@egen-civitas/esm-angular-utils`, validé de la même façon, sans zone.js par défaut) ; pour les applications autonomes (Next.js, SSR) : `@egen-civitas/esm-nextjs-utils` (iframe + pont) — **déprécié**, voie unique SDK embed (doc 17).
 
 ### 3.1 État dans EGEN
 - ⛔ **Aucun adaptateur Vue** : recherche de `single-spa-vue`, `vue` dans `fw/` et `core/` (`package.json`, `.ts`, `.tsx`, `.md`, hors `node_modules`) : **aucune occurrence**.

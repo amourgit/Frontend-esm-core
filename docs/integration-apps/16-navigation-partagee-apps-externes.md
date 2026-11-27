@@ -1,5 +1,7 @@
 # 16 — Navigation partagée Core ↔ applications externes (protocole 1.1)
 
+> ⚠️ **En voie de retrait (décision du 2026-11-26).** Ce document décrit le pont 1.1 (`esm-nextjs-utils`, script `egen-bridge.js`), remplacé par la capacité `navigation` du protocole v2 et le SDK embed : voir [17](17-sdk-embed-protocole-v2.md) et le plan de retrait [18](18-plan-phases-sdk-embed.md) (P6–P8). Conservé comme référence pour les apps qui l'utilisent encore.
+
 > Problème résolu : une app externe affichée en iframe (Penpot, tweakcn…) avait sa propre navigation, mais l'URL du Core restait figée sur `…/penpot`. Impossible d'actualiser la page, de revenir en arrière ou de partager un lien vers la bonne page de l'app.
 > Cible : se comporter comme une app interne, dont l'URL du Core **est** l'état de navigation.
 
