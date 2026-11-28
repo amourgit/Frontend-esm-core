@@ -72,7 +72,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-testing-library": "^7.16.2",
     "fake-indexeddb": "^6.2.8",
-    "fork-ts-checker-webpack-plugin": "^9.1.0",
+    "fork-ts-checker-webpack-plugin": "^9.2.0",
     "husky": "^8.0.3",
     "i18next-parser": "^9.4.0",
     "identity-obj-proxy": "^3.0.0",
@@ -85,6 +85,6 @@
     "timezone-mock": "^1.4.3",
     "turbo": "^2.11.13",
     "typescript": "^5.8.3",
-    "webpack": "^5.112.0"
+    "webpack": "^5.113.0"
   }
 }
