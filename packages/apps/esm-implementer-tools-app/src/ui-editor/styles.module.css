@@ -32,7 +32,7 @@
   padding: 0.5rem;
   z-index: 99999;
   font-size: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px color-mix(in oklab, var(--shadow-color, #000) 20%, transparent);
   transition: all 0.2s ease;
 }
 .slotName:nth-child(even) {
@@ -50,7 +50,7 @@
 }
 
 .extensionOverlay:hover {
-  background-color: rgba(43, 43, 185, 0.1);
+  background-color: color-mix(in oklab, var(--primary) 10%, transparent);
 }
 
 .extensionOverlay:focus .extensionTooltip,
@@ -62,10 +62,10 @@
 .extensionTooltip {
   visibility: hidden;
   width: auto;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: color-mix(in oklab, var(--background) 85%, transparent);
   text-align: center;
   padding: 1rem;
-  border: 1px solid rgba(43, 43, 185, 0.4);
+  border: 1px solid color-mix(in oklab, var(--primary) 40%, transparent);
   position: absolute;
   top: 0;
   left: 0;

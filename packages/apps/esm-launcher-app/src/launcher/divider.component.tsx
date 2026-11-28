@@ -10,7 +10,7 @@ interface TopBarState {
 const Divider: React.FC<TopBarState> = ({ searchOpen, isDesktop, isMobile }) => {
   if (isMobile) return null;
   if (searchOpen && isDesktop === false) return null;
-  return <div aria-hidden="true" className="h-4 w-px bg-white/20 mx-0.5 hidden sm:block" />;
+  return <div aria-hidden="true" className="h-4 w-px bg-(--border) mx-0.5 hidden sm:block" />;
 };
 
 export default Divider;

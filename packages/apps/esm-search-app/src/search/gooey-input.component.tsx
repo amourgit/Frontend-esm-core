@@ -304,7 +304,10 @@ export function GooeyInput({
           }}
           title="Rechercher"
         >
-          <SearchIcon layoutId={iconLayoutId} className="text-teal-400 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
+          <SearchIcon
+            layoutId={iconLayoutId}
+            className="text-(--primary-400) drop-shadow-[0_1px_2px_var(--shadow-color)]"
+          />
         </motion.div>
 
         {/* Capsule interactive pour la saisie */}
@@ -329,7 +332,7 @@ export function GooeyInput({
             {!isExpanded && (
               <SearchIcon
                 layoutId={iconLayoutId}
-                className="text-teal-400 shrink-0 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
+                className="text-(--primary-400) shrink-0 drop-shadow-[0_1px_2px_var(--shadow-color)]"
               />
             )}
 
@@ -345,7 +348,7 @@ export function GooeyInput({
               disabled={disabled || !isExpanded}
               placeholder={placeholder}
               className={cn(
-                'h-full min-w-0 flex-1 bg-transparent text-xs text-white placeholder-slate-300/80 outline-none font-normal',
+                'h-full min-w-0 flex-1 bg-transparent text-xs text-(--foreground) placeholder-(--muted-foreground)/80 outline-none font-normal',
                 isExpanded ? 'cursor-text' : 'pointer-events-none select-none cursor-pointer',
                 isSmallScreen && !isExpanded ? 'hidden' : 'block',
                 classNames?.input,
@@ -364,7 +367,7 @@ export function GooeyInput({
                     setExpanded(false);
                   }
                 }}
-                className="p-0.5 text-slate-300 hover:text-white transition-colors cursor-pointer shrink-0 rounded-full hover:bg-white/10"
+                className="p-0.5 text-(--muted-foreground) hover:text-(--foreground) transition-colors cursor-pointer shrink-0 rounded-full hover:bg-(--foreground)/10"
                 title={searchText ? 'Effacer' : 'Fermer la recherche'}
               >
                 <X className="size-3.5" />

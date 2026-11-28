@@ -1,84 +1,84 @@
-import * as React from "react"
-import { motion, useReducedMotion } from "framer-motion"
-import { ChevronDown } from "lucide-react"
+import * as React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────────
 // Types publics
 // ─────────────────────────────────────────────────────────────
 
-export type ClickExpandId = string | number
+export type ClickExpandId = string | number;
 
 /** Couleur sémantique d'une pastille (statut, badge...). */
-export type ClickExpandTone = "neutral" | "accent" | "success" | "warning" | "danger" | "info"
+export type ClickExpandTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger' | 'info';
 
 /** Classes Tailwind d'une teinte : `dot` pour le point de statut, `chip` pour la pastille. */
-export type ClickExpandToneClasses = { dot: string; chip: string }
+export type ClickExpandToneClasses = { dot: string; chip: string };
 
 export type ClickExpandChip = {
-  label: string
-  tone?: ClickExpandTone
-  icon?: React.ReactNode
-}
+  label: string;
+  tone?: ClickExpandTone;
+  icon?: React.ReactNode;
+};
 
 export type ClickExpandDetail = {
   /** Identifiant unique dans la fiche. */
-  id: string
-  label: string
+  id: string;
+  label: string;
   /** Valeur affichée. Une valeur vide (undefined, null, "", false) masque la ligne. */
-  value?: React.ReactNode
-  icon?: React.ReactNode
+  value?: React.ReactNode;
+  icon?: React.ReactNode;
   /** Rend la valeur cliquable : `tel:`, `mailto:`, `https://...` */
-  href?: string
-}
+  href?: string;
+};
 
 export type ClickExpandAction = {
-  id: string
-  label: string
-  icon?: React.ReactNode
-  onClick?: (event: React.MouseEvent<HTMLElement>) => void
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   /** Si fourni, l'action est rendue comme un lien <a> au lieu d'un <button>. */
-  href?: string
-  target?: string
+  href?: string;
+  target?: string;
   /** "primary" = bouton plein, "secondary" = bouton discret. Défaut : "secondary". */
-  variant?: "primary" | "secondary"
-  disabled?: boolean
-}
+  variant?: 'primary' | 'secondary';
+  disabled?: boolean;
+};
 
 export type ClickExpandItem<T = unknown> = {
   /** Unique dans la liste. Sert de clé React et d'identifiant d'ouverture. */
-  id: ClickExpandId
+  id: ClickExpandId;
   /** Nom — visible au repos ET à l'ouverture. */
-  title: string
+  title: string;
   /** Poste / rôle — visible au repos ET à l'ouverture. */
-  subtitle?: string
+  subtitle?: string;
   /** Photo — visible au repos ET à l'ouverture (grandit à l'ouverture). */
-  image?: string
+  image?: string;
   /** Texte alternatif. Vide par défaut, car le nom est déjà affiché à côté. */
-  imageAlt?: string
+  imageAlt?: string;
   /** Fond CSS de la photo (dégradé, couleur). Utilisé sans image, ou si elle échoue. */
-  accent?: string
+  accent?: string;
   /** Point coloré sur la photo au repos + pastille dans le contenu ouvert. */
-  status?: { label: string; tone?: ClickExpandTone }
+  status?: { label: string; tone?: ClickExpandTone };
   /** Pastilles supplémentaires (badge, distinction...) — contenu ouvert. */
-  chips?: ClickExpandChip[]
+  chips?: ClickExpandChip[];
   /** Lignes d'informations (site, téléphone, email...) — contenu ouvert. */
-  details?: ClickExpandDetail[]
+  details?: ClickExpandDetail[];
   /** Étiquettes (compétences...) — contenu ouvert. */
-  tags?: readonly string[]
+  tags?: readonly string[];
   /** Boutons d'action — contenu ouvert. */
-  actions?: ClickExpandAction[]
+  actions?: ClickExpandAction[];
   /** Contenu libre ajouté en bas du contenu ouvert. */
-  content?: React.ReactNode
+  content?: React.ReactNode;
   /** Empêche l'ouverture de cette fiche. */
-  disabled?: boolean
+  disabled?: boolean;
   /** Votre objet d'origine, restitué tel quel dans `onOpenChange` et les render props. */
-  data?: T
-}
+  data?: T;
+};
 
 /** État transmis aux render props. */
-export type ClickExpandState = { isOpen: boolean; index: number }
+export type ClickExpandState = { isOpen: boolean; index: number };
 
-export type ClickExpandAvatarShape = "circle" | "rounded" | "morph"
+export type ClickExpandAvatarShape = 'circle' | 'rounded' | 'morph';
 
 /**
  * Habillage visuel. Chaque clé REMPLACE la classe par défaut correspondante ;
@@ -86,168 +86,165 @@ export type ClickExpandAvatarShape = "circle" | "rounded" | "morph"
  */
 export type ClickExpandClassNames = {
   /** Carte au repos. */
-  item?: string
+  item?: string;
   /** Carte ouverte. */
-  itemOpen?: string
+  itemOpen?: string;
   /** Classes ajoutées au bouton d'en-tête (zone cliquable). */
-  header?: string
+  header?: string;
   /** Anneau de focus clavier (en-tête et actions). */
-  focus?: string
+  focus?: string;
   /** Cadre de la photo. */
-  avatar?: string
-  title?: string
-  subtitle?: string
-  chevron?: string
+  avatar?: string;
+  title?: string;
+  subtitle?: string;
+  chevron?: string;
   /** Conteneur du contenu ouvert (séparateur, fond...). */
-  panel?: string
-  detailIcon?: string
-  detailLabel?: string
-  detailValue?: string
-  detailLink?: string
-  tagsTitle?: string
-  tag?: string
-  actionPrimary?: string
-  actionSecondary?: string
-}
+  panel?: string;
+  detailIcon?: string;
+  detailLabel?: string;
+  detailValue?: string;
+  detailLink?: string;
+  tagsTitle?: string;
+  tag?: string;
+  actionPrimary?: string;
+  actionSecondary?: string;
+};
 
 export type ClickExpandLabels<T = unknown> = {
   /** aria-label de la liste. */
-  list?: string
+  list?: string;
   /** Infobulle de l'en-tête quand la fiche est fermée. */
-  open?: (item: ClickExpandItem<T>) => string
+  open?: (item: ClickExpandItem<T>) => string;
   /** Infobulle de l'en-tête quand la fiche est ouverte. */
-  close?: (item: ClickExpandItem<T>) => string
+  close?: (item: ClickExpandItem<T>) => string;
   /** Titre au-dessus des étiquettes (ex. « Compétences »). Masqué si absent. */
-  tags?: string
-}
+  tags?: string;
+};
 
 export type ClickExpandGalleryProps<T = unknown> = {
-  items: readonly ClickExpandItem<T>[]
+  items: readonly ClickExpandItem<T>[];
 
   /** Mode contrôlé : ids ouverts. À associer à `onOpenChange`. */
-  openIds?: ClickExpandId[]
+  openIds?: ClickExpandId[];
   /** Mode non contrôlé : ids ouverts au départ. Défaut : aucun (tout est fermé). */
-  defaultOpenIds?: ClickExpandId[]
+  defaultOpenIds?: ClickExpandId[];
   /** Appelée à chaque clic d'ouverture / fermeture, avec la nouvelle liste d'ids ouverts. */
-  onOpenChange?: (
-    openIds: ClickExpandId[],
-    change: { item: ClickExpandItem<T>; open: boolean }
-  ) => void
+  onOpenChange?: (openIds: ClickExpandId[], change: { item: ClickExpandItem<T>; open: boolean }) => void;
   /** Autorise plusieurs fiches ouvertes en même temps. Défaut : false (une seule). */
-  multiple?: boolean
+  multiple?: boolean;
 
   /** Largeur minimale d'une carte, en px. Sert à calculer le nombre de colonnes. Défaut : 272. */
-  minItemWidth?: number
+  minItemWidth?: number;
   /** Espace entre les cartes, en px. Défaut : 14. */
-  gap?: number
+  gap?: number;
   /** Taille de la photo au repos, en px. Défaut : 56. */
-  restImageSize?: number
+  restImageSize?: number;
   /** Taille de la photo à l'ouverture, en px. Défaut : 80. */
-  openImageSize?: number
+  openImageSize?: number;
   /** Forme de la photo : "circle", "rounded", ou "morph" (cercle → carré arrondi à l'ouverture). Défaut : "morph". */
-  avatarShape?: ClickExpandAvatarShape
+  avatarShape?: ClickExpandAvatarShape;
   /** Durée d'ouverture / fermeture, en ms. Défaut : 520. */
-  duration?: number
+  duration?: number;
   /** Fait défiler la fiche dans la zone visible après ouverture. Défaut : true. */
-  scrollIntoView?: boolean
+  scrollIntoView?: boolean;
   /** Apparition échelonnée des cartes au montage. Défaut : true. */
-  animateEntrance?: boolean
+  animateEntrance?: boolean;
   /** Politique de referrer des photos. Défaut : "no-referrer". */
-  imageReferrerPolicy?: React.HTMLAttributeReferrerPolicy
+  imageReferrerPolicy?: React.HTMLAttributeReferrerPolicy;
 
-  labels?: ClickExpandLabels<T>
-  classNames?: ClickExpandClassNames
+  labels?: ClickExpandLabels<T>;
+  classNames?: ClickExpandClassNames;
   /** Remplace tout ou partie des teintes (success, warning...). */
-  tones?: Partial<Record<ClickExpandTone, ClickExpandToneClasses>>
+  tones?: Partial<Record<ClickExpandTone, ClickExpandToneClasses>>;
 
   /** Remplace le bloc nom + poste de l'en-tête. Contenu inline uniquement (<span>...), il est dans un <button>. */
-  renderHeader?: (item: ClickExpandItem<T>, state: ClickExpandState) => React.ReactNode
+  renderHeader?: (item: ClickExpandItem<T>, state: ClickExpandState) => React.ReactNode;
   /** Remplace tout le contenu par défaut de la zone ouverte. */
-  renderContent?: (item: ClickExpandItem<T>, state: ClickExpandState) => React.ReactNode
+  renderContent?: (item: ClickExpandItem<T>, state: ClickExpandState) => React.ReactNode;
   /** Affiché à la place de la liste quand `items` est vide. */
-  empty?: React.ReactNode
+  empty?: React.ReactNode;
   /** Classes ajoutées à la liste racine (<ul>). */
-  className?: string
-}
+  className?: string;
+};
 
 // ─────────────────────────────────────────────────────────────
 // Valeurs par défaut (habillage aligné sur la page Annuaire : slate + teal)
 // ─────────────────────────────────────────────────────────────
 
 const DEFAULT_CLASSNAMES: Required<ClickExpandClassNames> = {
-  item: "rounded-2xl border border-white/10 bg-slate-900/60 shadow-lg backdrop-blur-md hover:border-white/20 hover:bg-slate-900/75",
-  itemOpen:
-    "rounded-2xl border border-teal-400/40 bg-slate-900/80 shadow-xl shadow-teal-500/10 backdrop-blur-md",
-  header: "",
-  focus: "focus-visible:ring-teal-400/60",
-  avatar: "bg-slate-800 ring-1 ring-white/15",
-  title: "text-sm font-bold text-white",
-  subtitle: "text-xs text-slate-400",
-  chevron: "text-slate-400 group-hover:text-white",
-  panel: "border-t border-white/10",
-  detailIcon: "bg-white/5 text-teal-400",
-  detailLabel: "text-slate-500",
-  detailValue: "text-slate-200",
-  detailLink: "hover:text-teal-300",
-  tagsTitle: "text-slate-500",
-  tag: "border border-white/10 bg-white/5 text-slate-300",
-  actionPrimary: "bg-teal-500 text-slate-950 shadow-lg hover:bg-teal-400",
-  actionSecondary: "border border-white/15 bg-white/5 text-slate-200 hover:bg-white/10 hover:text-white",
-}
+  item: 'rounded-2xl border border-foreground/10 bg-muted-foreground/60 shadow-lg backdrop-blur-md hover:border-foreground/20 hover:bg-muted-foreground/75',
+  itemOpen: 'rounded-2xl border border-primary-400/40 bg-popover/80 shadow-xl shadow-primary-500/10 backdrop-blur-md',
+  header: '',
+  focus: 'focus-visible:ring-primary-400/60',
+  avatar: 'bg-muted-foreground ring-1 ring-foreground/15',
+  title: 'text-sm font-bold text-foreground',
+  subtitle: 'text-xs text-muted-foreground',
+  chevron: 'text-muted-foreground group-hover:text-foreground',
+  panel: 'border-t border-foreground/10',
+  detailIcon: 'bg-foreground/5 text-primary-400',
+  detailLabel: 'text-muted-foreground',
+  detailValue: 'text-muted-foreground',
+  detailLink: 'hover:text-primary-300',
+  tagsTitle: 'text-muted-foreground',
+  tag: 'border border-foreground/10 bg-foreground/5 text-muted-foreground',
+  actionPrimary: 'bg-primary-500 text-primary-foreground shadow-lg hover:bg-primary-400',
+  actionSecondary:
+    'border border-foreground/15 bg-foreground/5 text-muted-foreground hover:bg-foreground/10 hover:text-foreground',
+};
 
 const DEFAULT_TONES: Record<ClickExpandTone, ClickExpandToneClasses> = {
-  neutral: { dot: "bg-slate-400", chip: "border-white/15 bg-white/5 text-slate-200" },
-  accent: { dot: "bg-teal-400", chip: "border-teal-400/40 bg-teal-500/15 text-teal-200" },
-  success: { dot: "bg-emerald-400", chip: "border-emerald-400/30 bg-emerald-500/10 text-emerald-300" },
-  warning: { dot: "bg-amber-400", chip: "border-amber-400/30 bg-amber-500/10 text-amber-300" },
-  danger: { dot: "bg-rose-400", chip: "border-rose-400/30 bg-rose-500/10 text-rose-300" },
-  info: { dot: "bg-sky-400", chip: "border-sky-400/30 bg-sky-500/10 text-sky-300" },
-}
+  neutral: { dot: 'bg-muted-foreground', chip: 'border-foreground/15 bg-foreground/5 text-muted-foreground' },
+  accent: { dot: 'bg-primary-400', chip: 'border-primary-400/40 bg-primary-500/15 text-primary-200' },
+  success: { dot: 'bg-success-400', chip: 'border-success-400/30 bg-success-500/10 text-success-300' },
+  warning: { dot: 'bg-warning-400', chip: 'border-warning-400/30 bg-warning-500/10 text-warning-300' },
+  danger: { dot: 'bg-error-400', chip: 'border-error-400/30 bg-error-500/10 text-error-300' },
+  info: { dot: 'bg-info-400', chip: 'border-info-400/30 bg-info-500/10 text-info-300' },
+};
 
 /** Rayon de la photo [repos, ouvert], en % (50% = cercle). */
 const AVATAR_RADIUS: Record<ClickExpandAvatarShape, [string, string]> = {
-  circle: ["50%", "50%"],
-  rounded: ["24%", "24%"],
-  morph: ["50%", "24%"],
-}
+  circle: ['50%', '50%'],
+  rounded: ['24%', '24%'],
+  morph: ['50%', '24%'],
+};
 
 /** Fusionne `custom` dans `base` en ignorant les valeurs undefined. */
 function mergeDefined<V extends object>(base: V, custom?: Partial<V>): V {
-  if (!custom) return base
-  const merged = { ...base }
+  if (!custom) return base;
+  const merged = { ...base };
   for (const key of Object.keys(custom) as (keyof V)[]) {
-    const value = custom[key]
-    if (value !== undefined) merged[key] = value as V[keyof V]
+    const value = custom[key];
+    if (value !== undefined) merged[key] = value as V[keyof V];
   }
-  return merged
+  return merged;
 }
 
 const initialsOf = (title: string): string => {
-  const parts = title.trim().split(/\s+/).filter(Boolean)
-  if (parts.length === 0) return "?"
-  const first = parts[0].charAt(0)
-  const last = parts.length > 1 ? parts[parts.length - 1].charAt(0) : ""
-  return (first + last).toUpperCase()
-}
+  const parts = title.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return '?';
+  const first = parts[0].charAt(0);
+  const last = parts.length > 1 ? parts[parts.length - 1].charAt(0) : '';
+  return (first + last).toUpperCase();
+};
 
 // ─────────────────────────────────────────────────────────────
 // Photo (image, ou initiales si absente / en échec)
 // ─────────────────────────────────────────────────────────────
 
 interface PhotoProps {
-  src?: string
-  alt: string
-  initials: string
-  fontSize: number
-  referrerPolicy: React.HTMLAttributeReferrerPolicy
+  src?: string;
+  alt: string;
+  initials: string;
+  fontSize: number;
+  referrerPolicy: React.HTMLAttributeReferrerPolicy;
 }
 
 function Photo({ src, alt, initials, fontSize, referrerPolicy }: PhotoProps) {
-  const [failed, setFailed] = React.useState(false)
+  const [failed, setFailed] = React.useState(false);
 
   React.useEffect(() => {
-    setFailed(false)
-  }, [src])
+    setFailed(false);
+  }, [src]);
 
   if (src && !failed) {
     return (
@@ -260,20 +257,20 @@ function Photo({ src, alt, initials, fontSize, referrerPolicy }: PhotoProps) {
         referrerPolicy={referrerPolicy}
         onError={() => setFailed(true)}
         className="block h-full w-full object-cover"
-        style={{ maxWidth: "none" }}
+        style={{ maxWidth: 'none' }}
       />
-    )
+    );
   }
 
   return (
     <span
       aria-hidden
-      className="flex h-full w-full select-none items-center justify-center font-bold text-white/90 transition-[font-size] duration-[var(--cx-t)] ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none"
+      className="flex h-full w-full select-none items-center justify-center font-bold text-foreground/90 transition-[font-size] duration-[var(--cx-t)] ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none"
       style={{ fontSize }}
     >
       {initials}
     </span>
-  )
+  );
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -281,30 +278,30 @@ function Photo({ src, alt, initials, fontSize, referrerPolicy }: PhotoProps) {
 // ─────────────────────────────────────────────────────────────
 
 interface ItemSettings {
-  restImageSize: number
-  openImageSize: number
-  avatarShape: ClickExpandAvatarShape
-  duration: number
-  scrollIntoView: boolean
-  animateEntrance: boolean
-  referrerPolicy: React.HTMLAttributeReferrerPolicy
+  restImageSize: number;
+  openImageSize: number;
+  avatarShape: ClickExpandAvatarShape;
+  duration: number;
+  scrollIntoView: boolean;
+  animateEntrance: boolean;
+  referrerPolicy: React.HTMLAttributeReferrerPolicy;
 }
 
 interface ExpandItemProps<T> {
-  key?: React.Key
-  item: ClickExpandItem<T>
-  index: number
-  isOpen: boolean
-  onToggle: () => void
-  baseId: string
-  reduceMotion: boolean
-  settings: ItemSettings
-  classes: Required<ClickExpandClassNames>
-  tones: Record<ClickExpandTone, ClickExpandToneClasses>
-  toggleTitle: string
-  tagsTitle?: string
-  renderHeader?: (item: ClickExpandItem<T>, state: ClickExpandState) => React.ReactNode
-  renderContent?: (item: ClickExpandItem<T>, state: ClickExpandState) => React.ReactNode
+  key?: React.Key;
+  item: ClickExpandItem<T>;
+  index: number;
+  isOpen: boolean;
+  onToggle: () => void;
+  baseId: string;
+  reduceMotion: boolean;
+  settings: ItemSettings;
+  classes: Required<ClickExpandClassNames>;
+  tones: Record<ClickExpandTone, ClickExpandToneClasses>;
+  toggleTitle: string;
+  tagsTitle?: string;
+  renderHeader?: (item: ClickExpandItem<T>, state: ClickExpandState) => React.ReactNode;
+  renderContent?: (item: ClickExpandItem<T>, state: ClickExpandState) => React.ReactNode;
 }
 
 function ExpandItem<T>({
@@ -322,25 +319,25 @@ function ExpandItem<T>({
   renderHeader,
   renderContent,
 }: ExpandItemProps<T>) {
-  const itemRef = React.useRef<HTMLLIElement>(null)
-  const headerRef = React.useRef<HTMLButtonElement>(null)
-  const wasOpen = React.useRef(isOpen)
+  const itemRef = React.useRef<HTMLLIElement>(null);
+  const headerRef = React.useRef<HTMLButtonElement>(null);
+  const wasOpen = React.useRef(isOpen);
 
-  const domId = `${baseId}-${String(item.id).replace(/\s+/g, "-")}`
-  const panelId = `${domId}-panel`
-  const state: ClickExpandState = { isOpen, index }
+  const domId = `${baseId}-${String(item.id).replace(/\s+/g, '-')}`;
+  const panelId = `${domId}-panel`;
+  const state: ClickExpandState = { isOpen, index };
 
   // Après ouverture, ramène la fiche dans la zone visible (le scroll est celui du parent).
-  const { scrollIntoView, duration } = settings
+  const { scrollIntoView, duration } = settings;
   React.useEffect(() => {
-    const justOpened = isOpen && !wasOpen.current
-    wasOpen.current = isOpen
-    if (!justOpened || !scrollIntoView) return undefined
+    const justOpened = isOpen && !wasOpen.current;
+    wasOpen.current = isOpen;
+    if (!justOpened || !scrollIntoView) return undefined;
     const timer = window.setTimeout(() => {
-      itemRef.current?.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" })
-    }, duration * 0.7)
-    return () => window.clearTimeout(timer)
-  }, [isOpen, scrollIntoView, duration, reduceMotion])
+      itemRef.current?.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+    }, duration * 0.7);
+    return () => window.clearTimeout(timer);
+  }, [isOpen, scrollIntoView, duration, reduceMotion]);
 
   const entrance =
     settings.animateEntrance && !reduceMotion
@@ -350,24 +347,22 @@ function ExpandItem<T>({
             opacity: 1,
             y: 0,
             scale: 1,
-            transition: { duration: 0.28, ease: "easeOut" as const, delay: Math.min(index, 12) * 0.03 },
+            transition: { duration: 0.28, ease: 'easeOut' as const, delay: Math.min(index, 12) * 0.03 },
           },
         }
-      : {}
+      : {};
 
-  const [radiusRest, radiusOpen] = AVATAR_RADIUS[settings.avatarShape]
-  const size = isOpen ? settings.openImageSize : settings.restImageSize
+  const [radiusRest, radiusOpen] = AVATAR_RADIUS[settings.avatarShape];
+  const size = isOpen ? settings.openImageSize : settings.restImageSize;
 
   const details = (item.details ?? []).filter(
-    (detail) =>
-      detail.value !== undefined && detail.value !== null && detail.value !== "" && detail.value !== false
-  )
-  const hasChips = Boolean(item.status) || (item.chips?.length ?? 0) > 0
-  const hasTags = (item.tags?.length ?? 0) > 0
-  const hasActions = (item.actions?.length ?? 0) > 0
+    (detail) => detail.value !== undefined && detail.value !== null && detail.value !== '' && detail.value !== false,
+  );
+  const hasChips = Boolean(item.status) || (item.chips?.length ?? 0) > 0;
+  const hasTags = (item.tags?.length ?? 0) > 0;
+  const hasActions = (item.actions?.length ?? 0) > 0;
 
-  const easeClasses =
-    "duration-[var(--cx-t)] ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none"
+  const easeClasses = 'duration-[var(--cx-t)] ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none';
 
   return (
     <motion.li
@@ -375,16 +370,16 @@ function ExpandItem<T>({
       {...entrance}
       onKeyDown={(event) => {
         // Échap referme la fiche et rend le focus à son en-tête.
-        if (event.key === "Escape" && isOpen) {
-          event.stopPropagation()
-          onToggle()
-          headerRef.current?.focus()
+        if (event.key === 'Escape' && isOpen) {
+          event.stopPropagation();
+          onToggle();
+          headerRef.current?.focus();
         }
       }}
       className="min-w-0 scroll-my-2 list-none"
     >
       <div
-        data-state={isOpen ? "open" : "closed"}
+        data-state={isOpen ? 'open' : 'closed'}
         className={`overflow-hidden transition-[border-color,background-color,box-shadow] duration-200 motion-reduce:transition-none ${
           isOpen ? classes.itemOpen : classes.item
         }`}
@@ -400,7 +395,7 @@ function ExpandItem<T>({
           title={toggleTitle}
           onClick={onToggle}
           className={`group flex w-full cursor-pointer items-center gap-3 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-60 ${
-            isOpen ? "rounded-t-[inherit]" : "rounded-[inherit]"
+            isOpen ? 'rounded-t-[inherit]' : 'rounded-[inherit]'
           } ${classes.focus} ${classes.header}`}
         >
           <span
@@ -413,7 +408,7 @@ function ExpandItem<T>({
             >
               <Photo
                 src={item.image}
-                alt={item.imageAlt ?? ""}
+                alt={item.imageAlt ?? ''}
                 initials={initialsOf(item.title)}
                 fontSize={Math.round(size * 0.34)}
                 referrerPolicy={settings.referrerPolicy}
@@ -424,8 +419,8 @@ function ExpandItem<T>({
                 role="img"
                 aria-label={item.status.label}
                 title={item.status.label}
-                className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full ring-2 ring-slate-900 ${
-                  tones[item.status.tone ?? "neutral"].dot
+                className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full ring-2 ring-900 ${
+                  tones[item.status.tone ?? 'neutral'].dot
                 }`}
               />
             ) : null}
@@ -436,11 +431,9 @@ function ExpandItem<T>({
               renderHeader(item, state)
             ) : (
               <>
-                <span className={`block ${isOpen ? "break-words" : "truncate"} ${classes.title}`}>
-                  {item.title}
-                </span>
+                <span className={`block ${isOpen ? 'break-words' : 'truncate'} ${classes.title}`}>{item.title}</span>
                 {item.subtitle ? (
-                  <span className={`mt-0.5 block ${isOpen ? "break-words" : "truncate"} ${classes.subtitle}`}>
+                  <span className={`mt-0.5 block ${isOpen ? 'break-words' : 'truncate'} ${classes.subtitle}`}>
                     {item.subtitle}
                   </span>
                 ) : null}
@@ -450,7 +443,7 @@ function ExpandItem<T>({
 
           <ChevronDown
             aria-hidden
-            className={`h-4 w-4 shrink-0 transition-transform ${easeClasses} ${isOpen ? "rotate-180" : ""} ${classes.chevron}`}
+            className={`h-4 w-4 shrink-0 transition-transform ${easeClasses} ${isOpen ? 'rotate-180' : ''} ${classes.chevron}`}
           />
         </button>
 
@@ -459,9 +452,9 @@ function ExpandItem<T>({
           id={panelId}
           role="region"
           aria-labelledby={domId}
-          style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
+          style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
           className={`grid transition-[grid-template-rows,opacity,visibility] ${easeClasses} ${
-            isOpen ? "visible opacity-100" : "invisible opacity-0"
+            isOpen ? 'visible opacity-100' : 'invisible opacity-0'
           }`}
         >
           <div className="min-h-0 overflow-hidden">
@@ -475,12 +468,12 @@ function ExpandItem<T>({
                       {item.status ? (
                         <span
                           className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${
-                            tones[item.status.tone ?? "neutral"].chip
+                            tones[item.status.tone ?? 'neutral'].chip
                           }`}
                         >
                           <span
                             aria-hidden
-                            className={`h-1.5 w-1.5 rounded-full ${tones[item.status.tone ?? "neutral"].dot}`}
+                            className={`h-1.5 w-1.5 rounded-full ${tones[item.status.tone ?? 'neutral'].dot}`}
                           />
                           {item.status.label}
                         </span>
@@ -489,7 +482,7 @@ function ExpandItem<T>({
                         <span
                           key={`${chip.label}-${i}`}
                           className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${
-                            tones[chip.tone ?? "neutral"].chip
+                            tones[chip.tone ?? 'neutral'].chip
                           }`}
                         >
                           {chip.icon}
@@ -502,7 +495,7 @@ function ExpandItem<T>({
                   {details.length > 0 ? (
                     <dl
                       className="m-0 grid gap-2.5"
-                      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 11rem), 1fr))" }}
+                      style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 11rem), 1fr))' }}
                     >
                       {details.map((detail) => (
                         <div key={detail.id} className="flex min-w-0 items-start gap-2.5">
@@ -555,20 +548,20 @@ function ExpandItem<T>({
                   {hasActions ? (
                     <div className="flex flex-wrap gap-2 pt-0.5">
                       {item.actions?.map((action) => {
-                        const skin = action.variant === "primary" ? classes.actionPrimary : classes.actionSecondary
-                        const actionClass = `inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 ${classes.focus} ${skin}`
+                        const skin = action.variant === 'primary' ? classes.actionPrimary : classes.actionSecondary;
+                        const actionClass = `inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 ${classes.focus} ${skin}`;
                         const inner = (
                           <>
                             {action.icon}
                             <span>{action.label}</span>
                           </>
-                        )
+                        );
                         return action.href && !action.disabled ? (
                           <a
                             key={action.id}
                             href={action.href}
                             target={action.target}
-                            rel={action.target === "_blank" ? "noopener noreferrer" : undefined}
+                            rel={action.target === '_blank' ? 'noopener noreferrer' : undefined}
                             onClick={action.onClick}
                             className={actionClass}
                           >
@@ -584,7 +577,7 @@ function ExpandItem<T>({
                           >
                             {inner}
                           </button>
-                        )
+                        );
                       })}
                     </div>
                   ) : null}
@@ -597,7 +590,7 @@ function ExpandItem<T>({
         </div>
       </div>
     </motion.li>
-  )
+  );
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -614,47 +607,43 @@ export function ClickExpandGallery<T = unknown>({
   gap = 14,
   restImageSize = 56,
   openImageSize = 80,
-  avatarShape = "morph",
+  avatarShape = 'morph',
   duration = 520,
   scrollIntoView = true,
   animateEntrance = true,
-  imageReferrerPolicy = "no-referrer",
+  imageReferrerPolicy = 'no-referrer',
   labels,
   classNames,
   tones,
   renderHeader,
   renderContent,
   empty,
-  className = "",
+  className = '',
 }: ClickExpandGalleryProps<T>) {
-  const reduceMotion = useReducedMotion() ?? false
-  const baseId = React.useId()
+  const reduceMotion = useReducedMotion() ?? false;
+  const baseId = React.useId();
 
   const [innerOpenIds, setInnerOpenIds] = React.useState<ClickExpandId[]>(() =>
-    multiple ? [...(defaultOpenIds ?? [])] : (defaultOpenIds ?? []).slice(0, 1)
-  )
-  const isControlled = openIdsProp !== undefined
-  const openIds = openIdsProp ?? innerOpenIds
+    multiple ? [...(defaultOpenIds ?? [])] : (defaultOpenIds ?? []).slice(0, 1),
+  );
+  const isControlled = openIdsProp !== undefined;
+  const openIds = openIdsProp ?? innerOpenIds;
 
-  const classes = React.useMemo(() => mergeDefined(DEFAULT_CLASSNAMES, classNames), [classNames])
-  const toneClasses = React.useMemo(() => mergeDefined(DEFAULT_TONES, tones), [tones])
+  const classes = React.useMemo(() => mergeDefined(DEFAULT_CLASSNAMES, classNames), [classNames]);
+  const toneClasses = React.useMemo(() => mergeDefined(DEFAULT_TONES, tones), [tones]);
 
-  if (items.length === 0) return <>{empty ?? null}</>
+  if (items.length === 0) return <>{empty ?? null}</>;
 
   // Ouverture / fermeture : uniquement déclenchée par le clic sur l'en-tête d'une fiche.
   const toggle = (item: ClickExpandItem<T>) => {
-    const wasOpen = openIds.includes(item.id)
-    const next = wasOpen
-      ? openIds.filter((id) => id !== item.id)
-      : multiple
-        ? [...openIds, item.id]
-        : [item.id]
-    if (!isControlled) setInnerOpenIds(next)
-    onOpenChange?.(next, { item, open: !wasOpen })
-  }
+    const wasOpen = openIds.includes(item.id);
+    const next = wasOpen ? openIds.filter((id) => id !== item.id) : multiple ? [...openIds, item.id] : [item.id];
+    if (!isControlled) setInnerOpenIds(next);
+    onOpenChange?.(next, { item, open: !wasOpen });
+  };
 
-  const openLabel = labels?.open ?? ((item: ClickExpandItem<T>) => `Déplier ${item.title}`)
-  const closeLabel = labels?.close ?? ((item: ClickExpandItem<T>) => `Replier ${item.title}`)
+  const openLabel = labels?.open ?? ((item: ClickExpandItem<T>) => `Déplier ${item.title}`);
+  const closeLabel = labels?.close ?? ((item: ClickExpandItem<T>) => `Replier ${item.title}`);
 
   const settings: ItemSettings = {
     restImageSize,
@@ -664,18 +653,18 @@ export function ClickExpandGallery<T = unknown>({
     scrollIntoView,
     animateEntrance,
     referrerPolicy: imageReferrerPolicy,
-  }
+  };
 
   const rootStyle = {
-    "--cx-t": `${duration}ms`,
+    '--cx-t': `${duration}ms`,
     gridTemplateColumns: `repeat(auto-fill, minmax(min(100%, ${minItemWidth}px), 1fr))`,
     gap,
-  } as React.CSSProperties
+  } as React.CSSProperties;
 
   return (
     <ul aria-label={labels?.list} style={rootStyle} className={`m-0 grid list-none items-start p-0 ${className}`}>
       {items.map((item, index) => {
-        const isOpen = openIds.includes(item.id)
+        const isOpen = openIds.includes(item.id);
         return (
           <ExpandItem
             key={item.id}
@@ -693,13 +682,13 @@ export function ClickExpandGallery<T = unknown>({
             renderHeader={renderHeader}
             renderContent={renderContent}
           />
-        )
+        );
       })}
     </ul>
-  )
+  );
 }
 
-export default ClickExpandGallery
+export default ClickExpandGallery;
 
 // ═════════════════════════════════════════════════════════════
 // GUIDE D'UTILISATION — à suivre tel quel
@@ -782,11 +771,11 @@ export default ClickExpandGallery
 //    <ClickExpandGallery
 //      items={items}
 //      classNames={{
-//        item: 'rounded-xl border border-slate-700 bg-slate-900',
-//        itemOpen: 'rounded-xl border border-indigo-400 bg-slate-900',
-//        title: 'text-base font-semibold text-white',
-//        actionPrimary: 'bg-indigo-500 text-white hover:bg-indigo-400',
-//        focus: 'focus-visible:ring-indigo-400/60',
+//        item: 'rounded-xl border border-700 bg-muted-foreground',
+//        itemOpen: 'rounded-xl border border-secondary-400 bg-muted-foreground',
+//        title: 'text-base font-semibold text-foreground',
+//        actionPrimary: 'bg-secondary-500 text-foreground hover:bg-secondary-400',
+//        focus: 'focus-visible:ring-secondary-400/60',
 //      }}
 //    />
 //
@@ -799,7 +788,7 @@ export default ClickExpandGallery
 // 7) REMPLACER UNE ZONE ENTIÈRE
 //
 //    renderHeader={(item, { isOpen }) => (        // remplace le bloc nom + poste
-//      <span className="block truncate text-sm text-white">{item.title}</span>
+//      <span className="block truncate text-sm text-foreground">{item.title}</span>
 //    )}                                            // ⚠ contenu inline uniquement (<span>) : il est dans un <button>
 //
 //    renderContent={(item, { isOpen }) => (       // remplace tout le contenu ouvert

@@ -48,19 +48,19 @@ export interface DirectorySectionProps {
 }
 
 const STATUS_DOT: Record<DirectoryStatus, string> = {
-  available: 'bg-emerald-400 ring-emerald-500/40',
-  busy: 'bg-rose-500 ring-rose-500/40',
-  meeting: 'bg-amber-400 ring-amber-500/40',
-  away: 'bg-amber-300 ring-amber-400/40',
-  offline: 'bg-slate-500 ring-slate-500/40',
+  available: 'bg-success-400 ring-success-500/40',
+  busy: 'bg-error-500 ring-error-500/40',
+  meeting: 'bg-warning-400 ring-warning-500/40',
+  away: 'bg-warning-300 ring-warning-400/40',
+  offline: 'bg-muted-foreground ring-500/40',
 };
 
 const BADGE_STYLE: Record<string, string> = {
-  MVP: 'border-amber-400/40 bg-amber-500/20 text-amber-300',
-  'Business Lead': 'border-emerald-400/40 bg-emerald-500/20 text-emerald-300',
-  Admin: 'border-indigo-400/40 bg-indigo-500/20 text-indigo-300',
+  MVP: 'border-warning-400/40 bg-warning-500/20 text-warning-300',
+  'Business Lead': 'border-success-400/40 bg-success-500/20 text-success-300',
+  Admin: 'border-secondary-400/40 bg-secondary-500/20 text-secondary-300',
 };
-const BADGE_DEFAULT = 'border-teal-400/40 bg-teal-500/20 text-teal-300';
+const BADGE_DEFAULT = 'border-primary-400/40 bg-primary-500/20 text-primary-300';
 
 function initials(fullName: string): string {
   return fullName
@@ -74,10 +74,11 @@ function initials(fullName: string): string {
 /** Avatar rond ; retombe sur les initiales si l'image ne charge pas (hors-ligne, lien mort). */
 function Avatar({ member }: { member: DirectoryMember }) {
   const [failed, setFailed] = useState(false);
-  const base = 'size-16 rounded-full ring-2 ring-white/10 shadow-lg transition-all group-hover:ring-teal-400/60';
+  const base =
+    'size-16 rounded-full ring-2 ring-foreground/10 shadow-lg transition-all group-hover:ring-primary-400/60';
   return failed || !member.avatar ? (
     <span
-      className={cx(base, 'flex items-center justify-center bg-teal-500/20 text-lg font-bold text-teal-200')}
+      className={cx(base, 'flex items-center justify-center bg-primary-500/20 text-lg font-bold text-primary-200')}
       aria-hidden="true"
     >
       {initials(member.fullName)}
@@ -95,7 +96,7 @@ function Avatar({ member }: { member: DirectoryMember }) {
 }
 
 const CONTACT_BTN =
-  'inline-flex size-8 items-center justify-center rounded-md bg-white/10 text-slate-200 outline-none transition-all hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-emerald-400 active:scale-95';
+  'inline-flex size-8 items-center justify-center rounded-md bg-foreground/10 text-muted-foreground outline-none transition-all hover:bg-foreground/20 focus-visible:ring-2 focus-visible:ring-success-400 active:scale-95';
 
 function MemberCard({
   member,
@@ -124,7 +125,7 @@ function MemberCard({
         <span
           title={member.statusLabel}
           className={cx(
-            'absolute bottom-0 right-0 size-4 rounded-full border-2 border-slate-900 ring-2',
+            'absolute bottom-0 right-0 size-4 rounded-full border-2 border-900 ring-2',
             STATUS_DOT[member.status],
           )}
         />
@@ -132,21 +133,21 @@ function MemberCard({
       </div>
 
       <div className="min-w-0 max-w-full">
-        <h3 className="m-0 text-sm font-bold tracking-tight text-white transition-colors group-hover:text-teal-300">
+        <h3 className="m-0 text-sm font-bold tracking-tight text-foreground transition-colors group-hover:text-primary-300">
           <SectionCardTitleButton onClick={() => onSelect?.(member)} className="truncate">
             {member.fullName}
           </SectionCardTitleButton>
         </h3>
-        <p className="m-0 mt-0.5 line-clamp-2 min-h-8 text-[11px] font-medium leading-snug text-slate-400">
+        <p className="m-0 mt-0.5 line-clamp-2 min-h-8 text-[11px] font-medium leading-snug text-muted-foreground">
           {member.role}
         </p>
-        <p className="m-0 mt-1.5 flex items-center justify-center gap-1 text-[11px] text-teal-300">
+        <p className="m-0 mt-1.5 flex items-center justify-center gap-1 text-[11px] text-primary-300">
           <MapPin className="size-3 shrink-0" />
           <span className="truncate">{member.site}</span>
         </p>
       </div>
 
-      <div className="relative mt-auto flex w-full items-center justify-center gap-2 border-t border-white/10 pt-3">
+      <div className="relative mt-auto flex w-full items-center justify-center gap-2 border-t border-foreground/10 pt-3">
         <a
           href={`mailto:${member.email}`}
           title={`Écrire à ${member.fullName}`}
@@ -169,7 +170,7 @@ function MemberCard({
             onClick={() => onOpenProfile(member)}
             title={`Ouvrir la fiche de ${member.fullName}`}
             aria-label={`Ouvrir la fiche de ${member.fullName}`}
-            className={cx(CONTACT_BTN, 'cursor-pointer border-0 p-0 hover:bg-teal-500/20 hover:text-teal-300')}
+            className={cx(CONTACT_BTN, 'cursor-pointer border-0 p-0 hover:bg-primary-500/20 hover:text-primary-300')}
           >
             <ExternalLink className="size-3.5" />
           </button>
@@ -221,7 +222,7 @@ export function DirectorySection({
           ))}
         </SectionGrid>
       ) : (
-        <p className="m-0 py-8 text-center text-sm text-white/40">Aucun collaborateur dans ce département.</p>
+        <p className="m-0 py-8 text-center text-sm text-foreground/40">Aucun collaborateur dans ce département.</p>
       )}
     </Section>
   );

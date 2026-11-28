@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Check, ChevronDown, ChevronRight, Copy } from "lucide-react";
-import { Breadcrumb, BreadcrumbList, BreadcrumbSeparator } from "../ui/breadcrumb";
-import { WaterGlassModal } from "../ui/WaterGlassModal";
-import { useWorkspace } from "../../context/WorkspaceContext";
-import { bindNavSelection } from "../../utils/navSelection";
-import { buildBreadcrumbModel, type Crumb, type CrumbOption } from "../../utils/buildBreadcrumbModel";
-import { computeBreadcrumbCollapse } from "../../utils/computeBreadcrumbCollapse";
-import { useSpacesSitesState } from "../../hooks/useSpacesSitesState";
-import { findSiteChain } from "../../utils/findSiteChain";
-import { useBreadcrumbContext } from "../../breadcrumb-context";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Check, ChevronDown, ChevronRight, Copy } from 'lucide-react';
+import { Breadcrumb, BreadcrumbList, BreadcrumbSeparator } from '../ui/breadcrumb';
+import { WaterGlassModal } from '../ui/WaterGlassModal';
+import { useWorkspace } from '../../context/WorkspaceContext';
+import { bindNavSelection } from '../../utils/navSelection';
+import { buildBreadcrumbModel, type Crumb, type CrumbOption } from '../../utils/buildBreadcrumbModel';
+import { computeBreadcrumbCollapse } from '../../utils/computeBreadcrumbCollapse';
+import { useSpacesSitesState } from '../../hooks/useSpacesSitesState';
+import { findSiteChain } from '../../utils/findSiteChain';
+import { useBreadcrumbContext } from '../../breadcrumb-context';
 
 // =============================================================================
 //  FIL D'ARIANE DE LA TOPBAR
@@ -47,7 +47,7 @@ interface ChainItem {
   custom?: React.ReactNode;
 }
 
-const TEXT = "text-[11px] sm:text-xs md:text-sm";
+const TEXT = 'text-[11px] sm:text-xs md:text-sm';
 
 export function BreadcrumbNav({ onToggleFullMenu }: Props) {
   const location = useLocation();
@@ -73,7 +73,7 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
   );
 
   const goHome = useCallback(() => {
-    navigate("/home");
+    navigate('/home');
   }, [navigate]);
 
   const model = useMemo(
@@ -113,19 +113,23 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
         label,
         custom: isLast ? (
           <span className="inline-flex min-w-0 max-w-full items-center gap-1">
-            <span className={`truncate font-bold text-white ${TEXT}`}>{label}</span>
+            <span className={`truncate font-bold text-(--foreground) ${TEXT}`}>{label}</span>
             <button
               type="button"
               onClick={(e) => copy(site.id, `site-${site.id}`, e)}
-              className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded bg-teal-500/10 px-1.5 py-0.5 font-mono text-[9px] text-teal-300 transition-colors hover:bg-teal-500/20"
+              className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded bg-(--primary-500)/10 px-1.5 py-0.5 font-mono text-[9px] text-(--primary-300) transition-colors hover:bg-(--primary-500)/20"
               title="Cliquer pour copier l'identifiant du site"
             >
               <span>({site.id})</span>
-              {copied === `site-${site.id}` ? <Check className="h-2.5 w-2.5 text-emerald-400" /> : <Copy className="h-2.5 w-2.5 text-teal-400" />}
+              {copied === `site-${site.id}` ? (
+                <Check className="h-2.5 w-2.5 text-(--success-400)" />
+              ) : (
+                <Copy className="h-2.5 w-2.5 text-(--primary-400)" />
+              )}
             </button>
           </span>
         ) : (
-          <span className={`truncate font-semibold text-slate-200 ${TEXT}`}>{label}</span>
+          <span className={`truncate font-semibold text-(--foreground) ${TEXT}`}>{label}</span>
         ),
       });
     });
@@ -140,21 +144,25 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
               <img
                 src={crumb.imageUrl}
                 alt={crumb.label}
-                className="h-4 w-4 shrink-0 rounded-full border border-white/20 object-cover sm:h-5 sm:w-5"
+                className="h-4 w-4 shrink-0 rounded-full border border-(--border) object-cover sm:h-5 sm:w-5"
               />
             )}
             {crumb.copyText && (
               <button
                 type="button"
                 onClick={(e) => copy(crumb.copyText as string, crumb.key, e)}
-                className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-md border border-amber-400/30 bg-amber-400/15 px-1.5 py-0.5 font-mono text-[10px] font-bold text-amber-300 transition-all hover:bg-amber-400/25 sm:text-xs"
+                className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-md border border-(--warning-400)/30 bg-(--warning-400)/15 px-1.5 py-0.5 font-mono text-[10px] font-bold text-(--warning-300) transition-all hover:bg-(--warning-400)/25 sm:text-xs"
                 title={crumb.copyTitle ?? "Cliquer pour copier l'identifiant"}
               >
                 <span>#{crumb.copyText}</span>
-                {copied === crumb.key ? <Check className="h-2.5 w-2.5 text-emerald-400" /> : <Copy className="h-2.5 w-2.5 text-amber-300/70" />}
+                {copied === crumb.key ? (
+                  <Check className="h-2.5 w-2.5 text-(--success-400)" />
+                ) : (
+                  <Copy className="h-2.5 w-2.5 text-(--warning-300)/70" />
+                )}
               </button>
             )}
-            <span className={`truncate font-bold text-white ${TEXT}`}>{crumb.label}</span>
+            <span className={`truncate font-bold text-(--foreground) ${TEXT}`}>{crumb.label}</span>
           </span>
         ),
       });
@@ -166,7 +174,7 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
       chain.push({
         key: `fallback-${fallbackEntryTitle}`,
         label: fallbackEntryTitle,
-        custom: <span className={`truncate font-bold text-teal-300 ${TEXT}`}>{fallbackEntryTitle}</span>,
+        custom: <span className={`truncate font-bold text-(--primary-300) ${TEXT}`}>{fallbackEntryTitle}</span>,
       });
     } else if (model.next && model.atSectionRoot && contextCrumbs.length === 0) {
       chain.push({ key: model.next.key, label: model.next.label, crumb: model.next });
@@ -176,15 +184,15 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
   }, [model, siteChain, contextCrumbs, fallbackEntryTitle, copied]);
 
   // ── 4. Repli sous « … » quand le fil ne tient pas ────────────────────────────────────────
-  const itemsSignature = items.map((i) => `${i.key}:${i.label}`).join("|");
+  const itemsSignature = items.map((i) => `${i.key}:${i.label}`).join('|');
 
   const recompute = useCallback(() => {
     const nav = navRef.current;
     const meter = measureRef.current;
     if (!nav || !meter) return;
-    const widths = Array.from(meter.querySelectorAll<HTMLElement>("[data-crumb]")).map((el) => el.offsetWidth);
-    const sepEl = meter.querySelector<HTMLElement>("[data-sep]");
-    const ellEl = meter.querySelector<HTMLElement>("[data-ellipsis]");
+    const widths = Array.from(meter.querySelectorAll<HTMLElement>('[data-crumb]')).map((el) => el.offsetWidth);
+    const sepEl = meter.querySelector<HTMLElement>('[data-sep]');
+    const ellEl = meter.querySelector<HTMLElement>('[data-ellipsis]');
     const gap = parseFloat(getComputedStyle(meter).columnGap) || 0;
     const between = (sepEl?.offsetWidth ?? 12) + 2 * gap;
     setCollapsed(computeBreadcrumbCollapse(widths, between, ellEl?.offsetWidth ?? 24, nav.clientWidth));
@@ -196,7 +204,7 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
 
   useEffect(() => {
     const nav = navRef.current;
-    if (!nav || typeof ResizeObserver === "undefined") return;
+    if (!nav || typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(recompute);
     observer.observe(nav);
     return () => observer.disconnect();
@@ -208,12 +216,12 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
     const onDown = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) setOpenKey(null);
     };
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenKey(null);
-    document.addEventListener("mousedown", onDown);
-    document.addEventListener("keydown", onKey);
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpenKey(null);
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
     return () => {
-      document.removeEventListener("mousedown", onDown);
-      document.removeEventListener("keydown", onKey);
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
     };
   }, [openKey]);
 
@@ -239,7 +247,9 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
           return (
             <React.Fragment key={opt.key}>
               {heading && (
-                <div className="mt-1 px-2 text-[9px] font-bold uppercase tracking-wider text-slate-400">{heading}</div>
+                <div className="mt-1 px-2 text-[9px] font-bold uppercase tracking-wider text-(--muted-foreground)">
+                  {heading}
+                </div>
               )}
               <button
                 type="button"
@@ -248,19 +258,23 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
                   setOpenKey(null);
                   opt.onSelect?.();
                 }}
-                aria-current={opt.current ? "page" : undefined}
+                aria-current={opt.current ? 'page' : undefined}
                 className={`flex w-full cursor-pointer items-center gap-2 rounded-xl border-none px-3 py-1.5 text-left text-xs transition-all disabled:cursor-default disabled:opacity-40 ${
                   opt.current
-                    ? "bg-white/[0.10] font-bold text-teal-300"
-                    : "font-medium text-slate-200/90 hover:bg-white/[0.06] hover:text-white"
+                    ? 'bg-(--foreground)/10 font-bold text-(--primary-300)'
+                    : 'font-medium text-(--foreground)/90 hover:bg-(--foreground)/6 hover:text-(--foreground)'
                 }`}
               >
                 {Icon && <Icon className="h-3.5 w-3.5 shrink-0 opacity-80" />}
                 <span className="flex min-w-0 flex-1 flex-col">
                   <span className="truncate">{opt.label}</span>
-                  {opt.description && <span className="truncate text-[10px] font-normal text-slate-400">{opt.description}</span>}
+                  {opt.description && (
+                    <span className="truncate text-[10px] font-normal text-(--muted-foreground)">
+                      {opt.description}
+                    </span>
+                  )}
                 </span>
-                {opt.current && <Check className="h-3 w-3 shrink-0 text-teal-300" />}
+                {opt.current && <Check className="h-3 w-3 shrink-0 text-(--primary-300)" />}
               </button>
             </React.Fragment>
           );
@@ -275,7 +289,9 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
     const crumb = item.crumb as Crumb;
     const isLast = index === lastIndex;
     const hasMenu = crumb.options.length > 1;
-    const colour = isLast ? "font-bold text-teal-300" : "font-medium text-slate-300 hover:text-white";
+    const colour = isLast
+      ? 'font-bold text-(--primary-300)'
+      : 'font-medium text-(--foreground) hover:text-(--foreground)';
     const label = <span className="truncate">{crumb.label}</span>;
 
     if (hasMenu) {
@@ -293,14 +309,16 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
             className={`inline-flex min-w-0 max-w-[16rem] cursor-pointer items-center gap-0.5 transition-colors ${TEXT} ${colour}`}
           >
             {label}
-            <ChevronDown className={`h-3 w-3 shrink-0 opacity-70 transition-transform ${interactive && openKey === crumb.key ? "rotate-180" : ""}`} />
+            <ChevronDown
+              className={`h-3 w-3 shrink-0 opacity-70 transition-transform ${interactive && openKey === crumb.key ? 'rotate-180' : ''}`}
+            />
           </button>
           {interactive && openKey === crumb.key && (
             <WaterGlassModal
               align="left"
               width="w-auto min-w-[220px] max-w-[18rem]"
               header={
-                <span className="text-[10px] font-bold uppercase tracking-wider text-teal-300">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-(--primary-300)">
                   {crumb.menuTitle ?? crumb.label}
                 </span>
               }
@@ -314,8 +332,8 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
     if (isLast || !crumb.onSelect) {
       return (
         <span
-          aria-current={isLast ? "page" : undefined}
-          className={`max-w-[16rem] truncate ${TEXT} ${isLast ? "font-bold text-teal-300" : "font-medium text-slate-300"}`}
+          aria-current={isLast ? 'page' : undefined}
+          className={`max-w-[16rem] truncate ${TEXT} ${isLast ? 'font-bold text-(--primary-300)' : 'font-medium text-(--foreground)'}`}
           title={crumb.label}
         >
           {crumb.label}
@@ -327,8 +345,8 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
         type="button"
         tabIndex={interactive ? 0 : -1}
         onClick={crumb.onSelect}
-        title={crumb.kind === "home" ? "Retour à l'Accueil" : crumb.label}
-        className={`max-w-[16rem] cursor-pointer truncate transition-colors ${TEXT} ${crumb.kind === "home" ? "font-medium text-slate-200 hover:text-white" : colour}`}
+        title={crumb.kind === 'home' ? "Retour à l'Accueil" : crumb.label}
+        className={`max-w-[16rem] cursor-pointer truncate transition-colors ${TEXT} ${crumb.kind === 'home' ? 'font-medium text-(--foreground) hover:text-(--foreground)' : colour}`}
       >
         {crumb.label}
       </button>
@@ -338,8 +356,8 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
   const separator = <BreadcrumbSeparator className="shrink-0 scale-75 sm:scale-100" />;
   // Espacement et non-retour-à-la-ligne en style inline : déterministes (la mesure du repli en dépend)
   // et immunisés contre les classes par défaut de `BreadcrumbList` (flex-wrap, gap-1.5…).
-  const listClass = "flex items-center text-slate-300";
-  const listStyle: React.CSSProperties = { flexWrap: "nowrap", columnGap: 6, rowGap: 0 };
+  const listClass = 'flex items-center text-(--foreground)';
+  const listStyle: React.CSSProperties = { flexWrap: 'nowrap', columnGap: 6, rowGap: 0 };
 
   return (
     <div className="flex w-full select-none items-center justify-between overflow-visible py-0.5 sm:py-1">
@@ -356,21 +374,25 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
                     <button
                       type="button"
                       aria-haspopup="menu"
-                      aria-expanded={openKey === "ellipsis"}
+                      aria-expanded={openKey === 'ellipsis'}
                       onClick={() => {
-                        setOpenKey((prev) => (prev === "ellipsis" ? null : "ellipsis"));
+                        setOpenKey((prev) => (prev === 'ellipsis' ? null : 'ellipsis'));
                       }}
-                      className={`cursor-pointer px-0.5 font-bold text-slate-300 transition-colors hover:text-white ${TEXT}`}
+                      className={`cursor-pointer px-0.5 font-bold text-(--foreground) transition-colors hover:text-(--foreground) ${TEXT}`}
                       title="Afficher les niveaux masqués"
                       aria-label="Niveaux masqués du fil d'Ariane"
                     >
                       …
                     </button>
-                    {openKey === "ellipsis" && (
+                    {openKey === 'ellipsis' && (
                       <WaterGlassModal
                         align="left"
                         width="w-auto min-w-[200px] max-w-[18rem]"
-                        header={<span className="text-[10px] font-bold uppercase tracking-wider text-teal-300">Niveaux masqués</span>}
+                        header={
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-(--primary-300)">
+                            Niveaux masqués
+                          </span>
+                        }
                         optionsComponent={
                           <div className="space-y-0.5">
                             {hidden.map((h, depth) => {
@@ -385,7 +407,7 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
                                     action?.();
                                   }}
                                   style={{ paddingLeft: `${0.75 + depth * 0.75}rem` }}
-                                  className="flex w-full cursor-pointer items-center gap-1 rounded-xl border-none py-1.5 pr-3 text-left text-xs font-medium text-slate-200/90 transition-all hover:bg-white/[0.06] hover:text-white disabled:cursor-default disabled:opacity-60"
+                                  className="flex w-full cursor-pointer items-center gap-1 rounded-xl border-none py-1.5 pr-3 text-left text-xs font-medium text-(--foreground)/90 transition-all hover:bg-(--foreground)/6 hover:text-(--foreground) disabled:cursor-default disabled:opacity-60"
                                 >
                                   {depth > 0 && <ChevronRight className="h-3 w-3 shrink-0 opacity-60" />}
                                   <span className="truncate">{h.label}</span>
@@ -403,7 +425,7 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
 
               <li
                 className="relative inline-flex items-center"
-                style={index === lastIndex ? { minWidth: 0, flex: "0 1 auto" } : { flex: "0 0 auto" }}
+                style={index === lastIndex ? { minWidth: 0, flex: '0 1 auto' } : { flex: '0 0 auto' }}
               >
                 {renderCrumb(item, index, true)}
               </li>
@@ -418,15 +440,15 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
           className={listClass}
           style={{
             ...listStyle,
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
-            visibility: "hidden",
-            pointerEvents: "none",
+            visibility: 'hidden',
+            pointerEvents: 'none',
             height: 0,
-            overflow: "hidden",
-            width: "max-content",
-            whiteSpace: "nowrap",
+            overflow: 'hidden',
+            width: 'max-content',
+            whiteSpace: 'nowrap',
           }}
         >
           {items.map((item, index) => (
@@ -449,14 +471,16 @@ export function BreadcrumbNav({ onToggleFullMenu }: Props) {
           type="button"
           onClick={() => {
             if (onToggleFullMenu) onToggleFullMenu();
-            else navigate("/home");
+            else navigate('/home');
           }}
-          className="hidden cursor-pointer text-xs font-medium text-slate-300 transition-colors hover:text-white sm:inline-block"
+          className="hidden cursor-pointer text-xs font-medium text-(--foreground) transition-colors hover:text-(--foreground) sm:inline-block"
           title="Afficher la barre complète du menu"
         >
           Menu complet
         </button>
-        <span className="hidden text-xs font-medium text-slate-400 md:inline-block">{currentWorkspace.name}</span>
+        <span className="hidden text-xs font-medium text-(--muted-foreground) md:inline-block">
+          {currentWorkspace.name}
+        </span>
       </div>
     </div>
   );

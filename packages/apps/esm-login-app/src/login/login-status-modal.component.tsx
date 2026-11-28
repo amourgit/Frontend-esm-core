@@ -90,7 +90,7 @@ export const LoginStatusModal: React.FC<LoginStatusModalProps> = ({ status, erro
 
             {status === 'success' && (
               <div className="flex flex-col items-center gap-4">
-                <PartyPopper className="h-12 w-12 text-green-500" />
+                <PartyPopper className="h-12 w-12 text-(--success-500)" />
                 <p className="text-lg font-medium text-foreground">{t('loginSuccess', 'Welcome aboard!')}</p>
               </div>
             )}

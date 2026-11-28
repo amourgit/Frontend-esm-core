@@ -20,11 +20,11 @@ export default function HomeAppToolbar() {
       type="button"
       title={name}
       onClick={() => navigate({ to: '${egenSpaBase}/home' })}
-      className="flex h-8 items-center gap-2 rounded-lg py-0 pl-1.5 pr-2.5 text-sm font-medium text-slate-100 transition-colors hover:bg-white/10"
+      className="flex h-8 items-center gap-2 rounded-lg py-0 pl-1.5 pr-2.5 text-sm font-medium text-(--foreground) transition-colors hover:bg-(--foreground)/10"
     >
       <span
         aria-hidden="true"
-        className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-emerald-400 to-teal-600 text-[11px] font-bold text-white"
+        className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-(--primary-400) to-(--primary-600) text-[11px] font-bold text-(--primary-foreground)"
       >
         AC
       </span>

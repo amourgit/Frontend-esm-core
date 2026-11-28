@@ -7,8 +7,8 @@
 
 .tools {
   width: 100%;
-  border-bottom: 1px solid var(--ui-border-subtle-00, #e0e0e0);
-  border-top: 1px solid var(--ui-border-subtle-00, #e0e0e0);
+  border-bottom: 1px solid var(--ui-border-subtle-00, var(--border));
+  border-top: 1px solid var(--ui-border-subtle-00, var(--border));
   z-index: 2;
   position: sticky;
   top: 0;
@@ -46,13 +46,13 @@
   width: 65%;
   overflow-x: auto;
   overflow-y: auto;
-  background: var(--ui-background, #ffffff);
+  background: var(--ui-background, var(--background));
 }
 
 .descriptionPane {
   width: 35%;
-  background-color: var(--ui-background, #ffffff);
-  color: var(--ui-text-secondary, #525252);
+  background-color: var(--ui-background, var(--background));
+  color: var(--ui-text-secondary, var(--muted-foreground));
   padding: 1rem 2rem;
   font-size: 12pt;
   overflow-wrap: break-word;

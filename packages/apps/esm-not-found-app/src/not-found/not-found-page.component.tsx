@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
 // Combined component for 404 page
 export default function NotFoundPage() {
@@ -29,11 +29,11 @@ function MessageDisplay() {
     if (window.history.length > 1) {
       // Attache un listener ponctuel sur popstate pour forcer l'actualisation complète de la page précédente
       window.addEventListener(
-        "popstate",
+        'popstate',
         () => {
           window.location.reload();
         },
-        { once: true }
+        { once: true },
       );
       window.history.back();
 
@@ -42,28 +42,24 @@ function MessageDisplay() {
         window.location.reload();
       }, 150);
     } else {
-      window.location.href = "/";
+      window.location.href = '/';
     }
   };
 
   const handleGoHome = () => {
     // Redirige vers la racine et force l'actualisation complète
-    window.location.href = "/";
+    window.location.href = '/';
   };
 
   return (
     <div className="absolute flex flex-col justify-center items-center w-[90%] h-[90%] z-[100]">
-      <div 
+      <div
         className={`flex flex-col items-center transition-opacity duration-500 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <div className="text-[35px] font-semibold text-black m-[1%]">
-          Page Not Found
-        </div>
-        <div className="text-[80px] font-bold text-black m-[1%]">
-          404
-        </div>
+        <div className="text-[35px] font-semibold text-black m-[1%]">Page Not Found</div>
+        <div className="text-[80px] font-bold text-black m-[1%]">404</div>
         <div className="text-[15px] w-1/2 min-w-[40%] text-center text-black m-[1%]">
           The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
         </div>
@@ -84,14 +80,14 @@ function MessageDisplay() {
               strokeLinejoin="round"
               className="transition-transform group-hover:translate-x-1"
             >
-              <path d="m12 19-7-7 7-7"/>
-              <path d="M19 12H5"/>
+              <path d="m12 19-7-7 7-7" />
+              <path d="M19 12H5" />
             </svg>
             Go Back
           </button>
           <button
             onClick={handleGoHome}
-            className="bg-black text-white hover:bg-gray-900 transition-all duration-300 ease-in-out px-6 py-2 h-auto text-base font-medium flex items-center gap-2 hover:scale-105 cursor-pointer"
+            className="bg-(--primary) text-(--primary-foreground) hover:bg-(--primary-hover, var(--primary-600)) transition-all duration-300 ease-in-out px-6 py-2 h-auto text-base font-medium flex items-center gap-2 hover:scale-105 cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -105,8 +101,8 @@ function MessageDisplay() {
               strokeLinejoin="round"
               className="transition-transform group-hover:translate-x-1"
             >
-              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
             Go Home
           </button>
@@ -184,10 +180,10 @@ function CharactersAnimation() {
         // Set position
         if (figure.top) stick.style.top = figure.top;
         if (figure.bottom) stick.style.bottom = figure.bottom;
-        
+
         // Set image source
         stick.src = figure.src;
-        
+
         // Set initial transform if specified
         if (figure.transform) stick.style.transform = figure.transform;
 
@@ -198,20 +194,22 @@ function CharactersAnimation() {
         if (index === 5) return;
 
         // Horizontal movement animation
-        stick.animate(
-          [{ left: '100%' }, { left: '-20%' }],
-          { duration: figure.speedX, easing: 'linear', fill: 'forwards' }
-        );
+        stick.animate([{ left: '100%' }, { left: '-20%' }], {
+          duration: figure.speedX,
+          easing: 'linear',
+          fill: 'forwards',
+        });
 
         // Skip rotation for the first figure (index 0)
         if (index === 0) return;
 
         // Rotation animation
         if (figure.speedRotation) {
-          stick.animate(
-            [{ transform: 'rotate(0deg)' }, { transform: 'rotate(-360deg)' }],
-            { duration: figure.speedRotation, iterations: Infinity, easing: 'linear' }
-          );
+          stick.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(-360deg)' }], {
+            duration: figure.speedRotation,
+            iterations: Infinity,
+            easing: 'linear',
+          });
         }
       });
     };
@@ -232,12 +230,7 @@ function CharactersAnimation() {
     };
   }, []);
 
-  return (
-    <div
-      ref={charactersRef}
-      className="absolute w-[99%] h-[95%]"
-    />
-  );
+  return <div ref={charactersRef} className="absolute w-[99%] h-[95%]" />;
 }
 
 // 3. Circle Animation Component
@@ -257,20 +250,16 @@ function CircleAnimation() {
   const initArr = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     circulosRef.current = [];
-    
+
     for (let index = 0; index < 300; index++) {
-      const randomX = Math.floor(
-        Math.random() * ((canvas.width * 3) - (canvas.width * 1.2) + 1)
-      ) + (canvas.width * 1.2);
-      
-      const randomY = Math.floor(
-        Math.random() * ((canvas.height) - (canvas.height * (-0.2) + 1))
-      ) + (canvas.height * (-0.2));
-      
+      const randomX = Math.floor(Math.random() * (canvas.width * 3 - canvas.width * 1.2 + 1)) + canvas.width * 1.2;
+
+      const randomY = Math.floor(Math.random() * (canvas.height - (canvas.height * -0.2 + 1))) + canvas.height * -0.2;
+
       const size = canvas.width / 1000;
-      
+
       circulosRef.current.push({ x: randomX, y: randomY, size });
     }
   };
@@ -279,43 +268,43 @@ function CircleAnimation() {
   const draw = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const context = canvas.getContext('2d');
     if (!context) return;
-    
+
     timerRef.current++;
     context.setTransform(1, 0, 0, 1, 0, 0);
-    
+
     const distanceX = canvas.width / 80;
     const growthRate = canvas.width / 1000;
-    
+
     context.fillStyle = 'white';
     context.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     circulosRef.current.forEach((circulo) => {
       context.beginPath();
-      
+
       if (timerRef.current < 65) {
         circulo.x = circulo.x - distanceX;
         circulo.size = circulo.size + growthRate;
       }
-      
+
       if (timerRef.current > 65 && timerRef.current < 500) {
-        circulo.x = circulo.x - (distanceX * 0.02);
-        circulo.size = circulo.size + (growthRate * 0.2);
+        circulo.x = circulo.x - distanceX * 0.02;
+        circulo.size = circulo.size + growthRate * 0.2;
       }
-      
+
       context.arc(circulo.x, circulo.y, circulo.size, 0, Math.PI * 2);
       context.fill();
     });
-    
+
     if (timerRef.current > 500) {
       if (requestIdRef.current) {
         cancelAnimationFrame(requestIdRef.current);
       }
       return;
     }
-    
+
     requestIdRef.current = requestAnimationFrame(draw);
   };
 
@@ -323,28 +312,28 @@ function CircleAnimation() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     // Set canvas dimensions
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    
+
     // Initialize and start animation
     timerRef.current = 0;
     initArr();
     draw();
-    
+
     // Handle window resize
     const handleResize = () => {
       if (!canvas) return;
-      
+
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      
+
       timerRef.current = 0;
       if (requestIdRef.current) {
         cancelAnimationFrame(requestIdRef.current);
       }
-      
+
       const context = canvas.getContext('2d');
       if (context) {
         if ('reset' in context && typeof (context as { reset?: () => void }).reset === 'function') {
@@ -354,13 +343,13 @@ function CircleAnimation() {
           context.clearRect(0, 0, canvas.width, canvas.height);
         }
       }
-      
+
       initArr();
       draw();
     };
-    
+
     window.addEventListener('resize', handleResize);
-    
+
     // Clean up
     return () => {
       window.removeEventListener('resize', handleResize);

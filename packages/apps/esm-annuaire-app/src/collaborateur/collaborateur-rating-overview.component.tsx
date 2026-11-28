@@ -30,17 +30,12 @@ export function CollaborateurRatingOverview({
 }: CollaborateurRatingOverviewProps) {
   return (
     <div className="w-full flex flex-col gap-3 py-3 select-none">
-      <h3 className="text-sm font-semibold text-slate-300 tracking-wide">
-        Rating
-      </h3>
+      <h3 className="text-sm font-semibold text-muted-foreground tracking-wide">Rating</h3>
 
       <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-10">
-        
         {/* Left Column: Big 4.8 + 5 Stars + 82 reviews */}
         <div className="flex items-center gap-4 shrink-0">
-          <span className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
-            {score.toFixed(1)}
-          </span>
+          <span className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight">{score.toFixed(1)}</span>
 
           <div className="flex flex-col gap-1">
             {/* Stars row */}
@@ -53,10 +48,10 @@ export function CollaborateurRatingOverview({
                     <Star
                       className={`w-4 h-4 sm:w-5 sm:h-5 ${
                         filled
-                          ? 'fill-amber-400 text-amber-400'
+                          ? 'fill-warning-400 text-warning-400'
                           : isPartial
-                          ? 'fill-amber-400/60 text-amber-400'
-                          : 'fill-white/10 text-white/20'
+                            ? 'fill-warning-400/60 text-warning-400'
+                            : 'fill-foreground/10 text-foreground/20'
                       }`}
                     />
                   </div>
@@ -65,9 +60,7 @@ export function CollaborateurRatingOverview({
             </div>
 
             {/* Total reviews count */}
-            <span className="text-xs sm:text-sm text-slate-400">
-              {totalReviews} reviews
-            </span>
+            <span className="text-xs sm:text-sm text-muted-foreground">{totalReviews} reviews</span>
           </div>
         </div>
 
@@ -76,28 +69,25 @@ export function CollaborateurRatingOverview({
           {breakdown.slice(0, 3).map((item) => (
             <div key={item.stars} className="flex items-center gap-3 text-xs">
               {/* Star label */}
-              <span className="w-24 sm:w-28 text-slate-300 font-medium shrink-0">
-                {item.label}
-              </span>
+              <span className="w-24 sm:w-28 text-muted-foreground font-medium shrink-0">{item.label}</span>
 
               {/* Progress bar (black/dark track with filled indicator) */}
-              <div className="flex-1 h-2 rounded-full bg-white/10 overflow-hidden relative">
+              <div className="flex-1 h-2 rounded-full bg-foreground/10 overflow-hidden relative">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${item.percentage}%` }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="h-full bg-slate-900 border-r border-white/20 rounded-full"
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  className="h-full bg-muted-foreground border-r border-foreground/20 rounded-full"
                 />
               </div>
 
               {/* Count */}
-              <span className="w-12 text-right text-slate-400 font-mono shrink-0">
+              <span className="w-12 text-right text-muted-foreground font-mono shrink-0">
                 {item.count.toLocaleString()}
               </span>
             </div>
           ))}
         </div>
-
       </div>
     </div>
   );

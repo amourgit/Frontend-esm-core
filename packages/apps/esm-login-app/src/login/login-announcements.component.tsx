@@ -9,9 +9,9 @@ type Announcement = ConfigSchema['announcements'][number];
 const KIND_STYLES: Record<string, { box: string; Icon: React.ElementType }> = {
   info: { box: 'border-primary-500/40 bg-primary-500/15', Icon: Info },
   'info-square': { box: 'border-primary-500/40 bg-primary-500/15', Icon: Info },
-  success: { box: 'border-green-500/40 bg-green-500/15', Icon: CheckCircle2 },
-  warning: { box: 'border-amber-500/40 bg-amber-500/15', Icon: AlertTriangle },
-  'warning-alt': { box: 'border-amber-500/40 bg-amber-500/15', Icon: AlertTriangle },
+  success: { box: 'border-(--success-500)/40 bg-(--success-500)/15', Icon: CheckCircle2 },
+  warning: { box: 'border-(--warning-500)/40 bg-(--warning-500)/15', Icon: AlertTriangle },
+  'warning-alt': { box: 'border-(--warning-500)/40 bg-(--warning-500)/15', Icon: AlertTriangle },
   error: { box: 'border-error-500/40 bg-error-500/15', Icon: XCircle },
 };
 

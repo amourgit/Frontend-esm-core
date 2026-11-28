@@ -98,18 +98,18 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
       className="w-full max-w-2xl"
       cardProps={{ contentClassName: '!p-0 overflow-hidden' }}
     >
-      <div className="flex flex-col max-h-[90vh] overflow-y-auto no-scrollbar text-white">
+      <div className="flex flex-col max-h-[90vh] overflow-y-auto no-scrollbar text-foreground">
         {/* Top Banner Image with Date Badge */}
         <div className="relative aspect-[16/8] sm:aspect-[16/7] w-full overflow-hidden shrink-0">
           <img src={event.image} alt={event.title} className="w-full h-full object-cover object-center" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-foreground/30" />
 
           {/* Overlaid Date Badge */}
           <div className="absolute bottom-4 left-6 flex flex-col items-start leading-none drop-shadow-lg">
-            <span className="text-xs font-bold tracking-widest uppercase text-emerald-300 font-mono">
+            <span className="text-xs font-bold tracking-widest uppercase text-success-300 font-mono">
               {event.month}
             </span>
-            <span className="text-4xl sm:text-5xl font-extrabold text-white mt-1">{event.day}</span>
+            <span className="text-4xl sm:text-5xl font-extrabold text-foreground mt-1">{event.day}</span>
           </div>
         </div>
 
@@ -118,81 +118,85 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
           {/* Header info */}
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400 font-mono">
+              <span className="text-xs font-semibold uppercase tracking-wider text-success-400 font-mono">
                 {event.category}
               </span>
               <AudienceBadge audience={event.audience} />
               {event.isOnline && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-950/80 text-sky-300 border border-sky-400/30">
-                  <Video className="w-3 h-3 text-sky-400" />
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-info-950/80 text-info-300 border border-info-400/30">
+                  <Video className="w-3 h-3 text-info-400" />
                   <span>Format Hybride / Teams</span>
                 </span>
               )}
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-2 leading-tight">{event.title}</h2>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground mt-2 leading-tight">{event.title}</h2>
           </div>
 
           {/* Meta Grid (Date, Time, Location, Capacity) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 p-4 rounded-2xl bg-white/[0.03] border border-white/10 text-xs">
-            <div className="flex items-center gap-3 text-slate-300">
-              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 p-4 rounded-2xl bg-foreground/[0.03] border border-foreground/10 text-xs">
+            <div className="flex items-center gap-3 text-foreground">
+              <div className="p-2 rounded-xl bg-success-500/10 text-success-400">
                 <Clock className="w-4 h-4" />
               </div>
               <div>
-                <div className="font-semibold text-white">{event.dateLabel}</div>
-                <div className="text-slate-400 text-[11px]">
+                <div className="font-semibold text-foreground">{event.dateLabel}</div>
+                <div className="text-muted-foreground text-[11px]">
                   {event.startTime} - {event.endTime || '17:00'}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 text-slate-300">
-              <div className="p-2 rounded-xl bg-rose-500/10 text-rose-400">
+            <div className="flex items-center gap-3 text-foreground">
+              <div className="p-2 rounded-xl bg-error-500/10 text-error-400">
                 <MapPin className="w-4 h-4" />
               </div>
               <div>
-                <div className="font-semibold text-white">{event.location}</div>
-                <div className="text-slate-400 text-[11px]">
+                <div className="font-semibold text-foreground">{event.location}</div>
+                <div className="text-muted-foreground text-[11px]">
                   {event.isOnline ? 'Accessible en présentiel et distanciel' : 'Présentiel uniquement'}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 text-slate-300">
-              <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
+            <div className="flex items-center gap-3 text-foreground">
+              <div className="p-2 rounded-xl bg-warning-500/10 text-warning-400">
                 <Users className="w-4 h-4" />
               </div>
               <div>
-                <div className="font-semibold text-white">{event.attendeesCount + (isRegistered ? 1 : 0)} inscrits</div>
-                <div className="text-slate-400 text-[11px]">
+                <div className="font-semibold text-foreground">
+                  {event.attendeesCount + (isRegistered ? 1 : 0)} inscrits
+                </div>
+                <div className="text-muted-foreground text-[11px]">
                   {event.maxAttendees ? `Capacité maximale : ${event.maxAttendees} personnes` : 'Accès libre'}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 text-slate-300">
+            <div className="flex items-center gap-3 text-foreground">
               {event.organizer.avatar ? (
                 <img
                   src={event.organizer.avatar}
                   alt={event.organizer.name}
-                  className="w-8 h-8 rounded-xl object-cover border border-white/10"
+                  className="w-8 h-8 rounded-xl object-cover border border-foreground/10"
                 />
               ) : (
-                <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-xl bg-secondary-500/10 text-secondary-400 flex items-center justify-center font-bold">
                   {event.organizer.name.charAt(0)}
                 </div>
               )}
               <div>
-                <div className="font-semibold text-white">{event.organizer.name}</div>
-                <div className="text-slate-400 text-[11px]">{event.organizer.role || 'Organisateur'}</div>
+                <div className="font-semibold text-foreground">{event.organizer.name}</div>
+                <div className="text-muted-foreground text-[11px]">{event.organizer.role || 'Organisateur'}</div>
               </div>
             </div>
           </div>
 
           {/* Description */}
           <div className="space-y-2">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">À propos de l'événement</h3>
-            <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">{event.description}</p>
+            <h3 className="text-sm font-bold text-foreground uppercase tracking-wider font-mono">
+              À propos de l'événement
+            </h3>
+            <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">{event.description}</p>
           </div>
 
           {/* Tags */}
@@ -201,7 +205,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
               {event.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 rounded-lg text-xs bg-white/5 text-slate-300 border border-white/10"
+                  className="px-2.5 py-1 rounded-lg text-xs bg-foreground/5 text-foreground border border-foreground/10"
                 >
                   #{tag}
                 </span>
@@ -210,25 +214,25 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
           )}
 
           {/* Actions Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-white/10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-foreground/10">
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={handleDownloadICS}
-                className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-xl bg-foreground/10 hover:bg-foreground/15 text-foreground font-medium text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
                 title="Télécharger l'événement pour Outlook / Google Calendar"
               >
-                <Download className="w-4 h-4 text-emerald-400" />
+                <Download className="w-4 h-4 text-success-400" />
                 <span>Exporter (.ics)</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleCopyLink}
-                className="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                className="px-3.5 py-2.5 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-foreground hover:text-foreground font-medium text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
                 title="Partager"
               >
-                {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-success-400" /> : <Share2 className="w-4 h-4" />}
                 <span>{copied ? 'Copié' : 'Partager'}</span>
               </button>
             </div>
@@ -239,7 +243,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
                   href={event.meetingUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-4 py-2.5 rounded-xl bg-sky-600/80 hover:bg-sky-600 text-white font-semibold text-xs flex items-center justify-center gap-2 transition-all"
+                  className="px-4 py-2.5 rounded-xl bg-info-600/80 hover:bg-info-600 text-foreground font-semibold text-xs flex items-center justify-center gap-2 transition-all"
                 >
                   <Video className="w-4 h-4" />
                   <span>Lien Teams</span>
@@ -251,8 +255,8 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
                 onClick={handleRegister}
                 className={`flex-1 sm:flex-initial px-5 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg ${
                   isRegistered
-                    ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30'
-                    : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20'
+                    ? 'bg-error-500/20 text-error-300 border border-error-500/40 hover:bg-error-500/30'
+                    : 'bg-success-500 hover:bg-success-400 text-primary-foreground shadow-success-500/20'
                 }`}
               >
                 {isRegistered ? (

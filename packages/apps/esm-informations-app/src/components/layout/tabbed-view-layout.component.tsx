@@ -69,7 +69,7 @@ export function TabbedViewLayout<T extends string = string>({
     <div
       data-egen-fill=""
       className={cn(
-        'w-full h-full my-0 text-slate-100 overflow-hidden px-3 sm:px-6 lg:px-8 flex flex-col',
+        'w-full h-full my-0 text-foreground overflow-hidden px-3 sm:px-6 lg:px-8 flex flex-col',
         containerClassName,
       )}
     >
@@ -120,7 +120,7 @@ export function TabbedViewLayout<T extends string = string>({
         {/* RIGHT MAIN CONTENT AREA */}
         <main
           className={cn(
-            'w-full md:w-[80%] h-full flex-1 min-h-0 flex flex-col overflow-y-auto bg-transparent p-0 scrollbar-thin scrollbar-thumb-teal-500/20',
+            'w-full md:w-[80%] h-full flex-1 min-h-0 flex flex-col overflow-y-auto bg-transparent p-0 scrollbar-thin scrollbar-thumb-primary-500/20',
             mainClassName,
           )}
         >

@@ -3,18 +3,18 @@
   display: flex;
   align-items: center;
   font-size: 0.75rem;
-  color: rgba(226, 232, 240, 0.6);
+  color: color-mix(in oklab, var(--foreground) 60%, transparent);
 }
 .breadcrumbSlot:empty {
   display: none;
 }
 .breadcrumbSlot :global(.breadcrumb-item + .breadcrumb-item)::before {
-  content: "›";
+  content: '›';
   margin: 0 0.375rem;
   opacity: 0.4;
 }
 .breadcrumbSlot :global(.breadcrumb-item:last-child) {
-  color: #fff;
+  color: var(--foreground);
   font-weight: 500;
 }
 .breadcrumbSlot :global(.breadcrumb-item a),
@@ -31,5 +31,5 @@
 }
 .breadcrumbSlot :global(.breadcrumb-item a):hover,
 .breadcrumbSlot :global(.breadcrumb-item button):hover {
-  color: #5eead4;
+  color: var(--primary-300);
 }

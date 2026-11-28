@@ -24,7 +24,11 @@ const EntityNameTableCell: React.FC<EntityNameTableCellProps> = ({ entity, isNew
       >
         {name}
       </TextLink>
-      {isNewlyRegistered && <Badge variant="secondary" className="bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-950 dark:text-fuchsia-200">{t('offlineEntitiesTableNameNewlyRegistered', 'New')}</Badge>}
+      {isNewlyRegistered && (
+        <Badge variant="secondary" className="bg-(--primary)/10 text-(--primary)">
+          {t('offlineEntitiesTableNameNewlyRegistered', 'New')}
+        </Badge>
+      )}
     </div>
   );
 };

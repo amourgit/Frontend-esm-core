@@ -20,15 +20,15 @@
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #0f172a;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 10%, transparent);
+  background: var(--card);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
 }
 .tile:focus-visible {
-  outline: 2px solid #14b8a6;
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
@@ -52,7 +52,7 @@
   grid-column: span 3;
   grid-row: span 1;
   min-height: 160px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-md);
 }
 @media (max-width: 1023px) {
   .tileMedium {
@@ -76,10 +76,20 @@
 .tileGradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.35), transparent);
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--shadow-color) 90%, transparent),
+    color-mix(in oklab, var(--shadow-color) 35%, transparent),
+    transparent
+  );
 }
 .tileMedium .tileGradient {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4), transparent);
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--shadow-color) 90%, transparent),
+    color-mix(in oklab, var(--shadow-color) 40%, transparent),
+    transparent
+  );
 }
 
 .tileContent {
@@ -96,11 +106,11 @@
 
 .tileTitleLarge {
   margin: 0;
-  color: #fff;
+  color: var(--surface-inverse-foreground, var(--primary-foreground));
   font-weight: 700;
   line-height: 1.2;
   font-size: 1.25rem;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 4px color-mix(in oklab, var(--shadow-color) 40%, transparent);
 }
 @media (min-width: 1024px) {
   .tileTitleLarge {
@@ -110,11 +120,11 @@
 
 .tileTitleMedium {
   margin: 0;
-  color: #fff;
+  color: var(--surface-inverse-foreground, var(--primary-foreground));
   font-weight: 700;
   line-height: 1.35;
   font-size: 0.8125rem;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 4px color-mix(in oklab, var(--shadow-color) 40%, transparent);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -124,5 +134,5 @@
 .tileLink {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #5eead4;
+  color: var(--primary-300);
 }

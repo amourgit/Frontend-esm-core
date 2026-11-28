@@ -24,13 +24,13 @@ export const OptionButton = forwardRef<HTMLButtonElement, OptionButtonProps>(fun
       aria-label={label}
       aria-pressed={active || undefined}
       className={`relative p-1 transition-colors cursor-pointer bg-transparent border-none flex items-center justify-center overflow-visible ${
-        active ? 'text-teal-400' : 'text-slate-300 hover:text-teal-400'
+        active ? 'text-(--primary-400)' : 'text-(--muted-foreground) hover:text-(--primary-400)'
       } ${className}`}
       {...rest}
     >
       {icon}
       {showBadge ? (
-        <span className="absolute -top-1.5 -right-2 bg-[#E41E3F] text-white text-[9px] sm:text-[10px] font-bold min-w-[16px] sm:min-w-[17px] h-[16px] sm:h-[17px] px-1 rounded-full flex items-center justify-center shadow-md ring-2 ring-slate-900 leading-none pointer-events-none z-30">
+        <span className="absolute -top-1.5 -right-2 bg-(--destructive) text-(--primary-foreground) text-[9px] sm:text-[10px] font-bold min-w-[16px] sm:min-w-[17px] h-[16px] sm:h-[17px] px-1 rounded-full flex items-center justify-center shadow-md ring-2 ring-(--background) leading-none pointer-events-none z-30">
           {badge}
         </span>
       ) : null}

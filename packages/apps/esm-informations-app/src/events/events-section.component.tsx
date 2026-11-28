@@ -199,18 +199,18 @@ export function EventsSection({
       {/* ── 1. Section Header ── */}
       {showTitle && (
         <div className="w-full flex flex-col items-start text-left mb-6">
-          <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-semibold uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-xs font-mono text-success-400 font-semibold uppercase tracking-wider">
             <CalendarDays className="w-4 h-4" />
             <span>Événements &amp; Agenda d’Entreprise</span>
           </div>
-          <h2 className="font-mono font-bold tracking-tight text-3xl sm:text-4xl text-white leading-tight mt-1">
+          <h2 className="font-mono font-bold tracking-tight text-3xl sm:text-4xl text-foreground leading-tight mt-1">
             Événements à Venir
           </h2>
-          <p className="text-slate-300 font-normal text-sm sm:text-base mt-2 max-w-3xl leading-relaxed">
+          <p className="text-foreground font-normal text-sm sm:text-base mt-2 max-w-3xl leading-relaxed">
             Participez aux séminaires, sessions de formation continue, ateliers d'innovation et réunions
             institutionnelles.
           </p>
-          <div className="w-full border-b border-dashed border-white/15 mt-5 mb-2" />
+          <div className="w-full border-b border-dashed border-foreground/15 mt-5 mb-2" />
         </div>
       )}
 
@@ -218,7 +218,7 @@ export function EventsSection({
       <div className="w-full flex flex-col space-y-3 pt-1 pb-6">
         {/* Full-width Search Bar */}
         <div className="w-full relative group">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-400 transition-colors">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground group-focus-within:text-success-400 transition-colors">
             <Search className="w-5 h-5" />
           </div>
           <input
@@ -226,7 +226,7 @@ export function EventsSection({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Rechercher un événement, un lieu, un intervenant, un mot-clé..."
-            className="w-full pl-12 pr-12 py-3 rounded-full bg-slate-900/50 hover:bg-slate-900/80 focus:bg-slate-900 border border-white/15 focus:border-emerald-400/80 text-white placeholder-slate-400 text-sm shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all"
+            className="w-full pl-12 pr-12 py-3 rounded-full bg-card/50 hover:bg-card/80 focus:bg-card border border-foreground/15 focus:border-success-400/80 text-foreground placeholder-muted-foreground text-sm shadow-lg focus:outline-none focus:ring-2 focus:ring-success-400/20 transition-all"
           />
           {searchQuery && (
             <button
@@ -234,7 +234,7 @@ export function EventsSection({
                 playXboxSound('select');
                 setSearchQuery('');
               }}
-              className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="absolute inset-y-0 right-0 pr-4 flex items-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               title="Effacer la recherche"
             >
               <X className="w-4 h-4" />
@@ -269,13 +269,15 @@ export function EventsSection({
           ))}
         </div>
       ) : (
-        <div className="w-full py-16 text-center space-y-3 rounded-2xl bg-slate-900/40 border border-white/10">
-          <Calendar className="w-10 h-10 text-slate-500 mx-auto" />
-          <div className="text-base font-bold text-slate-300">Aucun événement ne correspond à vos critères</div>
-          <p className="text-xs text-slate-400">Essayez de modifier votre recherche ou de réinitialiser vos filtres.</p>
+        <div className="w-full py-16 text-center space-y-3 rounded-2xl bg-card/40 border border-foreground/10">
+          <Calendar className="w-10 h-10 text-muted-foreground mx-auto" />
+          <div className="text-base font-bold text-foreground">Aucun événement ne correspond à vos critères</div>
+          <p className="text-xs text-muted-foreground">
+            Essayez de modifier votre recherche ou de réinitialiser vos filtres.
+          </p>
           <button
             onClick={handleResetFilters}
-            className="mt-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs cursor-pointer transition-colors"
+            className="mt-2 px-4 py-2 rounded-xl bg-success-600 hover:bg-success-500 text-foreground font-semibold text-xs cursor-pointer transition-colors"
           >
             Réinitialiser les filtres
           </button>

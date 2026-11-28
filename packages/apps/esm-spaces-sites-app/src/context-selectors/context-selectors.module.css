@@ -2,11 +2,11 @@
   --sel-h: 26px;
   --sel-px: 0.5rem;
   --sel-fs: 12px;
-  --glass-bg: rgba(15, 23, 42, 0.55);
-  --glass-border: rgba(255, 255, 255, 0.22);
-  --glass-hover: rgba(255, 255, 255, 0.12);
-  --glass-text: #f1f5f9;
-  --glass-muted: rgba(226, 232, 240, 0.62);
+  --glass-bg: color-mix(in oklab, var(--popover) 72%, transparent);
+  --glass-border: var(--border);
+  --glass-hover: color-mix(in oklab, var(--foreground) 12%, transparent);
+  --glass-text: var(--foreground);
+  --glass-muted: var(--muted-foreground);
   --trg-h: var(--sel-h);
   --trg-px: var(--sel-px);
   --trg-fs: var(--sel-fs);
@@ -57,7 +57,7 @@
     --trg-px: 0.45rem;
     --trg-fs: 11px;
     --trg-icon: 0.7rem;
-    --trg-border: rgba(255, 255, 255, 0.18);
+    --trg-border: var(--border);
     row-gap: 0.1875rem;
   }
 }
@@ -68,7 +68,7 @@
     --trg-fs: 10.5px;
     --trg-icon: 0.65rem;
     --trg-bw: 0.75px;
-    --trg-border: rgba(255, 255, 255, 0.14);
+    --trg-border: color-mix(in oklab, var(--border) 80%, transparent);
     row-gap: 0.125rem;
     width: 7.75rem;
   }
@@ -79,7 +79,7 @@
     --trg-px: 0.3rem;
     --trg-fs: 10px;
     --trg-icon: 0.6rem;
-    --trg-border: rgba(255, 255, 255, 0.11);
+    --trg-border: color-mix(in oklab, var(--border) 65%, transparent);
     width: 7rem;
   }
 }
@@ -90,7 +90,7 @@
     --trg-fs: 9px;
     --trg-icon: 0.55rem;
     --trg-bw: 0.5px;
-    --trg-border: rgba(255, 255, 255, 0.09);
+    --trg-border: color-mix(in oklab, var(--border) 55%, transparent);
     row-gap: 0.0625rem;
     width: 6.25rem;
   }
@@ -145,7 +145,7 @@
 }
 .selector > button:hover {
   background: var(--glass-hover);
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: var(--border-strong, var(--border));
 }
 
 .selector > [role='listbox'] {
@@ -155,8 +155,8 @@
   border-color: var(--glass-border);
   color: var(--glass-text);
   box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    0 12px 40px color-mix(in oklab, var(--shadow-color, #000) 35%, transparent),
+    inset 0 1px 0 color-mix(in oklab, var(--foreground) 18%, transparent);
 }
 .selector > [role='listbox'] > button {
   height: var(--trg-h);
@@ -172,7 +172,7 @@
   color: var(--glass-muted);
 }
 .selector > [role='listbox'] > div {
-  background: rgba(255, 255, 255, 0.15);
+  background: color-mix(in oklab, var(--foreground) 15%, transparent);
 }
 .selector > [role='listbox'] [role='option'] {
   padding: 0.25rem 0.5rem;
@@ -183,11 +183,11 @@
 .selector > [role='listbox'] [role='option']:hover,
 .selector > [role='listbox'] [role='option']:focus-visible {
   background: var(--glass-hover);
-  color: #fff;
+  color: var(--foreground);
 }
 .selector > [role='listbox'] [role='option'][aria-selected='true'] {
-  background: rgba(45, 212, 191, 0.2);
-  color: #fff;
+  background: color-mix(in oklab, var(--primary) 20%, transparent);
+  color: var(--foreground);
 }
 
 .selectorSite > button[role='combobox'] {
@@ -207,8 +207,8 @@
 }
 .selectorSite > button[role='combobox']:hover {
   background: var(--glass-hover);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.4);
+  color: var(--foreground);
+  border-color: var(--border-strong, var(--border));
 }
 
 .selectorSite :global(.egen-combobox-content) {
@@ -218,8 +218,8 @@
   border-color: var(--glass-border);
   color: var(--glass-text);
   box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    0 12px 40px color-mix(in oklab, var(--shadow-color, #000) 35%, transparent),
+    inset 0 1px 0 color-mix(in oklab, var(--foreground) 18%, transparent);
   width: 16rem;
   font-size: var(--sel-fs);
 }
@@ -246,10 +246,10 @@
 }
 .selectorSite :global(.egen-combobox-content) [role='option'][data-selected='true'] {
   background: var(--glass-hover);
-  color: #fff;
+  color: var(--foreground);
 }
 .selectorSite :global(.egen-combobox-content) > div > div:first-child {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: color-mix(in oklab, var(--border) 70%, transparent);
 }
 
 @media (min-width: 1024px) {

@@ -567,16 +567,16 @@ function SitePill({ active, onClick, reduceMotion, children }: SitePillProps) {
       onClick={onClick}
       aria-pressed={active}
       whileTap={reduceMotion ? undefined : { scale: 0.95 }}
-      className={`relative shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60 ${
+      className={`relative shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60 ${
         active
-          ? 'border-transparent font-bold text-slate-950'
-          : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/10'
+          ? 'border-transparent font-bold text-primary-foreground'
+          : 'border-foreground/10 bg-foreground/5 text-foreground hover:bg-foreground/10'
       }`}
     >
       {active && (
         <motion.span
           layoutId="directory-site-pill"
-          className="absolute inset-0 rounded-full bg-teal-500 shadow-md shadow-teal-500/20"
+          className="absolute inset-0 rounded-full bg-primary-500 shadow-md shadow-primary-500/20"
           transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 460, damping: 34 }}
         />
       )}
@@ -799,7 +799,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
   const filteredEmployees = useMemo(() => {
     const tokens = normalizeText(searchQuery).split(/\s+/).filter(Boolean);
     const activeSite =
-      selectedSitePill === 'all' ? null : DIRECTORY_SITES.find((s) => s.id === selectedSitePill) ?? null;
+      selectedSitePill === 'all' ? null : (DIRECTORY_SITES.find((s) => s.id === selectedSitePill) ?? null);
 
     return index
       .filter(({ emp, haystack, initials }) => {
@@ -1072,7 +1072,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
         };
 
   const toolBtn =
-    'shrink-0 rounded-lg p-2 sm:p-1.5 transition-colors active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60';
+    'shrink-0 rounded-lg p-2 sm:p-1.5 transition-colors active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60';
 
   return (
     <div
@@ -1101,21 +1101,21 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
         mainClassName="overflow-hidden flex flex-col h-full min-h-0"
       >
         {/* ── TAB 1 : ANNUAIRE DES COLLABORATEURS ── */}
-        <TabsContent value="directory" className="flex-1 min-h-0 h-full flex flex-col overflow-hidden text-slate-100">
+        <TabsContent value="directory" className="flex-1 min-h-0 h-full flex flex-col overflow-hidden text-foreground">
           {/* ── PARTIE HAUTE FIXE (TITRE, RECHERCHE, FILTERBAR, PILULES SITES) ── */}
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25 }}
             ref={setHeaderRef}
-            className="relative z-20 shrink-0 flex flex-col gap-2 sm:gap-2.5 pb-2.5 border-b border-white/10 select-none"
+            className="relative z-20 shrink-0 flex flex-col gap-2 sm:gap-2.5 pb-2.5 border-b border-foreground/10 select-none"
           >
             {/* Ligne 1 : Recherche (déplacée à la place du titre) avec largeur réduite + Outils d'action rapides */}
             <div className="w-full flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               {/* Côté Gauche : Champ de recherche compact + bouton Filtres (mobile) */}
               <div className="flex items-center gap-2 w-full sm:w-auto min-w-0">
                 <div className="relative group w-full sm:w-64 md:w-80 lg:w-96 max-w-md shrink-0">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-teal-400 transition-colors">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground group-focus-within:text-primary-400 transition-colors">
                     <Search className="w-3.5 h-3.5" />
                   </div>
                   <input
@@ -1127,7 +1127,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     }}
                     aria-label={t.searchAria}
                     placeholder={t.searchPlaceholder}
-                    className="w-full pl-9 pr-9 py-1.5 sm:py-2 rounded-full bg-slate-900/60 hover:bg-slate-900/80 focus:bg-slate-900/90 border border-white/15 focus:border-teal-400/80 text-white placeholder-slate-400 text-xs sm:text-sm shadow-md focus:outline-none focus:ring-2 focus:ring-teal-400/20 backdrop-blur-md transition-all truncate"
+                    className="w-full pl-9 pr-9 py-1.5 sm:py-2 rounded-full bg-card/60 hover:bg-card/80 focus:bg-card/90 border border-foreground/15 focus:border-primary-400/80 text-foreground placeholder-muted-foreground text-xs sm:text-sm shadow-md focus:outline-none focus:ring-2 focus:ring-primary-400/20 backdrop-blur-md transition-all truncate"
                   />
                   <AnimatePresence>
                     {searchQuery && (
@@ -1142,7 +1142,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                           playXboxSound('select');
                           setSearchQuery('');
                         }}
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white transition-colors cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                         title={t.clearSearch}
                         aria-label={t.clearSearch}
                       >
@@ -1161,16 +1161,16 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                   }}
                   aria-expanded={showFilters}
                   aria-controls="directory-filterbar"
-                  className={`md:hidden shrink-0 flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60 ${
+                  className={`md:hidden shrink-0 flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60 ${
                     showFilters || filters.length > 0
-                      ? 'border-teal-400/60 bg-teal-500/20 text-teal-200'
-                      : 'border-white/15 bg-slate-900/60 text-slate-300'
+                      ? 'border-primary-400/60 bg-primary-500/20 text-primary-200'
+                      : 'border-foreground/15 bg-card/60 text-foreground'
                   }`}
                 >
                   <SlidersHorizontal className="w-3.5 h-3.5" />
                   <span>{t.filtersBtn}</span>
                   {filters.length > 0 && (
-                    <span className="min-w-[1.1rem] rounded-full bg-teal-500 px-1 text-center text-[10px] font-black leading-[1.1rem] text-slate-950">
+                    <span className="min-w-[1.1rem] rounded-full bg-primary-500 px-1 text-center text-[10px] font-black leading-[1.1rem] text-primary-foreground">
                       {filters.length}
                     </span>
                   )}
@@ -1185,7 +1185,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.2 }}
                   aria-live="polite"
-                  className="shrink-0 text-xs font-mono font-bold text-teal-300 bg-teal-500/10 px-2.5 py-1 rounded-lg border border-teal-500/20"
+                  className="shrink-0 text-xs font-mono font-bold text-primary-300 bg-primary-500/10 px-2.5 py-1 rounded-lg border border-primary-500/20"
                 >
                   {filteredEmployees.length} / {employees.length}
                 </motion.span>
@@ -1194,7 +1194,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                   type="button"
                   onClick={handleRefresh}
                   disabled={isRefreshing}
-                  className={`${toolBtn} text-slate-300 hover:text-white hover:bg-white/10 disabled:opacity-60`}
+                  className={`${toolBtn} text-foreground hover:text-foreground hover:bg-foreground/10 disabled:opacity-60`}
                   title={t.refresh}
                   aria-label={t.refresh}
                 >
@@ -1204,7 +1204,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                 <button
                   type="button"
                   onClick={handleToggleLang}
-                  className={`${toolBtn} flex items-center gap-1 text-slate-300 hover:text-white hover:bg-white/10`}
+                  className={`${toolBtn} flex items-center gap-1 text-foreground hover:text-foreground hover:bg-foreground/10`}
                   title={`${t.language} (${lang.toUpperCase()})`}
                   aria-label={`${t.language} (${lang.toUpperCase()})`}
                 >
@@ -1215,7 +1215,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className={`${toolBtn} text-slate-400 hover:text-white hover:bg-white/10`}
+                  className={`${toolBtn} text-muted-foreground hover:text-foreground hover:bg-foreground/10`}
                   title={t.print}
                   aria-label={t.print}
                 >
@@ -1225,7 +1225,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                 <button
                   type="button"
                   onClick={handleExportCSV}
-                  className={`${toolBtn} text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10`}
+                  className={`${toolBtn} text-muted-foreground hover:text-success-400 hover:bg-success-500/10`}
                   title={t.exportCsv}
                   aria-label={t.exportCsv}
                 >
@@ -1235,7 +1235,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                 <button
                   type="button"
                   onClick={handleResetFilters}
-                  className={`${toolBtn} text-slate-400 hover:text-rose-400 hover:bg-rose-500/10`}
+                  className={`${toolBtn} text-muted-foreground hover:text-error-400 hover:bg-error-500/10`}
                   title={t.resetFilters}
                   aria-label={t.resetFilters}
                 >
@@ -1243,7 +1243,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                 </button>
 
                 {/* Bascule Grille / Liste / Dépliable (Galerie) */}
-                <div className="shrink-0 flex items-center rounded-lg border border-white/10 bg-white/5 p-0.5 ml-1">
+                <div className="shrink-0 flex items-center rounded-lg border border-foreground/10 bg-foreground/5 p-0.5 ml-1">
                   <button
                     type="button"
                     onClick={() => {
@@ -1253,8 +1253,8 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     aria-pressed={viewMode === 'grid'}
                     className={`rounded p-1.5 sm:p-1 transition-colors ${
                       viewMode === 'grid'
-                        ? 'bg-teal-500 text-slate-950 font-bold shadow-sm'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-primary-500 text-primary-foreground font-bold shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
                     title={t.viewGrid}
                     aria-label={t.viewGrid}
@@ -1270,8 +1270,8 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     aria-pressed={viewMode === 'list'}
                     className={`rounded p-1.5 sm:p-1 transition-colors ${
                       viewMode === 'list'
-                        ? 'bg-teal-500 text-slate-950 font-bold shadow-sm'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-primary-500 text-primary-foreground font-bold shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
                     title={t.viewList}
                     aria-label={t.viewList}
@@ -1287,8 +1287,8 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     aria-pressed={viewMode === 'expand'}
                     className={`rounded p-1.5 sm:p-1 transition-colors ${
                       viewMode === 'expand'
-                        ? 'bg-teal-500 text-slate-950 font-bold shadow-sm'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-primary-500 text-primary-foreground font-bold shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
                     title={t.viewExpand}
                     aria-label={t.viewExpand}
@@ -1321,7 +1321,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
 
             {/* Ligne 4 : Pilules rapides par Site (Location) */}
             <div className="w-full min-w-0 flex items-center gap-2">
-              <div className="flex shrink-0 items-center gap-1 px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] font-bold text-teal-400 backdrop-blur-md">
+              <div className="flex shrink-0 items-center gap-1 px-2.5 py-1 rounded-lg bg-foreground/5 border border-foreground/10 text-[11px] font-bold text-primary-400 backdrop-blur-md">
                 <MapPin className="w-3 h-3" />
                 <span className="hidden sm:inline">{t.sitesLabel}</span>
               </div>
@@ -1358,11 +1358,13 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                         setSelectedSitePill(site.id);
                       }}
                     >
-                      <MapPin className={`w-3 h-3 ${isSelected ? 'text-slate-950' : 'text-teal-400'}`} />
+                      <MapPin className={`w-3 h-3 ${isSelected ? 'text-primary-foreground' : 'text-primary-400'}`} />
                       <span>{site.name}</span>
                       <span
                         className={`text-[10px] px-1.5 py-px rounded-full font-bold ${
-                          isSelected ? 'bg-black/20 text-slate-950' : 'bg-white/10 text-slate-300'
+                          isSelected
+                            ? 'bg-primary-foreground/20 text-primary-foreground'
+                            : 'bg-foreground/10 text-muted-foreground'
                         }`}
                       >
                         {siteCounts[site.id] ?? 0}
@@ -1382,7 +1384,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
             {/* Zone principale : scroll indépendant (grille de cartes ou liste) */}
             <div
               ref={scrollRef}
-              className="flex-1 min-w-0 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain scroll-smooth pr-1.5 sm:pr-2 scrollbar-thin scrollbar-thumb-teal-500/30 hover:scrollbar-thumb-teal-400/50"
+              className="flex-1 min-w-0 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain scroll-smooth pr-1.5 sm:pr-2 scrollbar-thin scrollbar-thumb-primary-500/30 hover:scrollbar-thumb-primary-400/50"
             >
               <AnimatePresence mode="wait">
                 {filteredEmployees.length === 0 ? (
@@ -1391,15 +1393,15 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     {...viewAnim}
                     className="w-full py-12 sm:py-16 flex flex-col items-center justify-center text-center p-6 sm:p-8"
                   >
-                    <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-slate-400 mb-3 border border-white/10">
+                    <div className="w-14 h-14 rounded-full bg-foreground/5 flex items-center justify-center text-muted-foreground mb-3 border border-foreground/10">
                       <FilterX className="w-7 h-7" />
                     </div>
-                    <h3 className="text-base font-bold text-white">{t.emptyTitle}</h3>
-                    <p className="text-xs text-slate-400 max-w-md mt-1 mb-4">{t.emptyText}</p>
+                    <h3 className="text-base font-bold text-foreground">{t.emptyTitle}</h3>
+                    <p className="text-xs text-muted-foreground max-w-md mt-1 mb-4">{t.emptyText}</p>
                     <button
                       type="button"
                       onClick={handleResetFilters}
-                      className="px-4 py-2 rounded-xl text-xs font-semibold bg-teal-500 hover:bg-teal-400 text-slate-950 flex items-center gap-2 shadow-lg transition-all active:scale-95"
+                      className="px-4 py-2 rounded-xl text-xs font-semibold bg-primary-500 hover:bg-primary-400 text-primary-foreground flex items-center gap-2 shadow-lg transition-all active:scale-95"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>{t.emptyReset}</span>
@@ -1450,7 +1452,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                         else playXboxSound('toggle');
                       }}
                       empty={
-                        <div className="w-full py-12 flex flex-col items-center justify-center text-center p-6 text-slate-400">
+                        <div className="w-full py-12 flex flex-col items-center justify-center text-center p-6 text-muted-foreground">
                           <p className="text-sm">{t.emptyTitle}</p>
                         </div>
                       }
@@ -1466,9 +1468,9 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
               initial={reduceMotion ? false : { opacity: 0, x: 12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="shrink-0 w-10 sm:w-11 h-full max-h-full min-h-0 flex flex-col rounded-2xl border border-white/10 bg-slate-900/50 backdrop-blur-md shadow-xl overflow-hidden select-none z-10"
+              className="shrink-0 w-10 sm:w-11 h-full max-h-full min-h-0 flex flex-col rounded-2xl border border-foreground/10 bg-card/50 backdrop-blur-md shadow-xl overflow-hidden select-none z-10"
             >
-              <div className="flex-1 min-h-0 flex flex-col items-stretch justify-start content-start gap-0.5 sm:gap-1 px-1 py-1.5 overflow-y-auto overflow-x-hidden overscroll-contain scrollbar-thin scrollbar-thumb-teal-500/30 hover:scrollbar-thumb-teal-400/50">
+              <div className="flex-1 min-h-0 flex flex-col items-stretch justify-start content-start gap-0.5 sm:gap-1 px-1 py-1.5 overflow-y-auto overflow-x-hidden overscroll-contain scrollbar-thin scrollbar-thumb-primary-500/30 hover:scrollbar-thumb-primary-400/50">
                 {ALPHABET.map((letter) => {
                   const isAll = letter === 'All';
                   const isSelected = selectedLetter === letter;
@@ -1486,21 +1488,21 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                         // Re-cliquer sur la lettre active revient à « Tous »
                         setSelectedLetter((prev) => (prev === letter && !isAll ? 'All' : letter));
                       }}
-                      className={`relative flex w-full flex-1 min-h-[22px] max-h-[30px] items-center justify-center rounded-lg font-bold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60 ${
+                      className={`relative flex w-full flex-1 min-h-[22px] max-h-[30px] items-center justify-center rounded-lg font-bold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60 ${
                         isAll ? 'text-[9px] tracking-tight' : 'text-[10px] sm:text-[11px]'
                       } ${
                         isSelected
-                          ? 'font-black text-slate-950'
+                          ? 'font-black text-primary-foreground'
                           : isAvailable
-                            ? 'cursor-pointer text-slate-400 hover:bg-white/10 hover:text-white'
-                            : 'cursor-not-allowed text-slate-600 opacity-40'
+                            ? 'cursor-pointer text-muted-foreground hover:bg-foreground/10 hover:text-foreground'
+                            : 'cursor-not-allowed text-muted-foreground opacity-40'
                       }`}
                       title={isAll ? t.letterAllTitle : t.letterTitle(letter)}
                     >
                       {isSelected && (
                         <motion.span
                           layoutId="directory-letter-active"
-                          className="absolute inset-0 rounded-lg bg-teal-500 shadow-md shadow-teal-500/40 ring-1 ring-white/30"
+                          className="absolute inset-0 rounded-lg bg-primary-500 shadow-md shadow-primary-500/40 ring-1 ring-foreground/30"
                           transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 500, damping: 36 }}
                         />
                       )}
@@ -1514,24 +1516,24 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
         </TabsContent>
 
         {/* ── TAB 2 : ORGANIGRAMME INSTITUTIONNEL ── */}
-        <TabsContent value="org" className="flex-1 min-h-0 flex flex-col overflow-hidden text-slate-100">
+        <TabsContent value="org" className="flex-1 min-h-0 flex flex-col overflow-hidden text-foreground">
           <div
             ref={orgFill.ref}
-            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 scrollbar-thin scrollbar-thumb-teal-500/20"
+            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 scrollbar-thin scrollbar-thumb-primary-500/20"
           >
             <div className="w-full space-y-6 pt-2 pb-8">
               <motion.div
                 initial={reduceMotion ? false : { opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
-                className="flex items-center justify-between pb-3 border-b border-white/10"
+                className="flex items-center justify-between pb-3 border-b border-foreground/10"
               >
                 <div className="min-w-0">
-                  <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <Network className="w-5 h-5 shrink-0 text-indigo-400" />
+                  <h2 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2">
+                    <Network className="w-5 h-5 shrink-0 text-secondary-400" />
                     <span className="truncate">{t.orgTitle}</span>
                   </h2>
-                  <p className="text-xs text-slate-400 mt-0.5">{t.orgSubtitle}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{t.orgSubtitle}</p>
                 </div>
               </motion.div>
 
@@ -1542,18 +1544,18 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.05 }}
-                    className="p-4 rounded-2xl bg-slate-900/80 border border-white/15 text-white shadow-xl text-center max-w-sm w-full backdrop-blur-md"
+                    className="p-4 rounded-2xl bg-card/80 border border-foreground/15 text-foreground shadow-xl text-center max-w-sm w-full backdrop-blur-md"
                   >
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-teal-400">{t.orgTop}</span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-primary-400">{t.orgTop}</span>
                     <h4 className="font-bold text-sm mt-0.5">{t.orgDG}</h4>
-                    <p className="text-xs text-slate-400">{t.orgDGSub}</p>
+                    <p className="text-xs text-muted-foreground">{t.orgDGSub}</p>
                   </motion.div>
                   <motion.div
                     initial={reduceMotion ? false : { scaleY: 0 }}
                     animate={{ scaleY: 1 }}
                     transition={{ duration: 0.25, delay: 0.2 }}
                     style={{ originY: 0 }}
-                    className="w-0.5 h-6 bg-white/20 my-1"
+                    className="w-0.5 h-6 bg-foreground/20 my-1"
                   />
                 </div>
 
@@ -1567,22 +1569,22 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                         initial={reduceMotion ? false : { opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: 0.25 + Math.min(i, 8) * 0.06 }}
-                        className="min-w-0 p-4 rounded-2xl bg-slate-900/60 border border-white/10 shadow-lg flex flex-col justify-between backdrop-blur-md"
+                        className="min-w-0 p-4 rounded-2xl bg-card/60 border border-foreground/10 shadow-lg flex flex-col justify-between backdrop-blur-md"
                       >
                         <div>
-                          <div className="flex items-center gap-1.5 text-teal-400 mb-1">
+                          <div className="flex items-center gap-1.5 text-primary-400 mb-1">
                             <MapPin className="w-3.5 h-3.5 shrink-0" />
                             <span className="text-[11px] font-bold uppercase truncate">{site.name}</span>
                           </div>
-                          <p className="text-xs text-slate-400">{t.orgMembers(members.length)}</p>
+                          <p className="text-xs text-muted-foreground">{t.orgMembers(members.length)}</p>
                         </div>
-                        <div className="mt-3 pt-2 border-t border-white/10 space-y-1">
+                        <div className="mt-3 pt-2 border-t border-foreground/10 space-y-1">
                           {members.slice(0, 3).map((m) => (
                             <button
                               type="button"
                               key={m.id}
                               onClick={() => openEmployee(m, false)}
-                              className="flex w-full items-center gap-2 rounded-lg px-1 py-1 text-left text-xs text-slate-300 transition-colors hover:text-teal-300 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60"
+                              className="flex w-full items-center gap-2 rounded-lg px-1 py-1 text-left text-xs text-foreground transition-colors hover:text-primary-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60"
                             >
                               <img
                                 src={m.avatar}
@@ -1598,7 +1600,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                             <button
                               type="button"
                               onClick={() => goToSite(site)}
-                              className="mt-1 flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1 text-left text-xs font-semibold text-teal-400 transition-colors hover:text-teal-300 hover:bg-teal-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/60"
+                              className="mt-1 flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1 text-left text-xs font-semibold text-primary-400 transition-colors hover:text-primary-300 hover:bg-primary-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60"
                             >
                               <span className="truncate">{t.orgViewAll(members.length)}</span>
                               <ArrowRight className="w-3.5 h-3.5 shrink-0" />
@@ -1615,10 +1617,10 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
         </TabsContent>
 
         {/* ── TAB 3 : À PROPOS ── */}
-        <TabsContent value="about" className="flex-1 min-h-0 flex flex-col overflow-hidden text-slate-100">
+        <TabsContent value="about" className="flex-1 min-h-0 flex flex-col overflow-hidden text-foreground">
           <div
             ref={aboutFill.ref}
-            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 scrollbar-thin scrollbar-thumb-teal-500/20"
+            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 scrollbar-thin scrollbar-thumb-primary-500/20"
           >
             <motion.div
               initial={reduceMotion ? false : { opacity: 0, y: 12 }}
@@ -1626,14 +1628,14 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
               transition={{ duration: 0.3 }}
               className="w-full max-w-3xl pt-2 pb-8 space-y-4"
             >
-              <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                <Info className="w-5 h-5 shrink-0 text-teal-400" />
+              <h2 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2">
+                <Info className="w-5 h-5 shrink-0 text-primary-400" />
                 <span>{t.aboutTitle}</span>
               </h2>
-              <div className="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
+              <div className="space-y-3 text-xs sm:text-sm text-foreground leading-relaxed">
                 <p>{t.aboutP1}</p>
-                <div className="p-4 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-teal-200">
-                  <h4 className="font-bold text-sm mb-1 text-white">{t.aboutSyncTitle}</h4>
+                <div className="p-4 rounded-2xl bg-primary-500/10 border border-primary-500/30 text-primary-200">
+                  <h4 className="font-bold text-sm mb-1 text-foreground">{t.aboutSyncTitle}</h4>
                   <p>{t.aboutSyncText}</p>
                 </div>
                 <p>{t.aboutP3}</p>

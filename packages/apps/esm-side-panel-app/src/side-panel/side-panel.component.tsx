@@ -21,8 +21,8 @@ import backdropStyles from './side-panel-backdrop.module.css';
 //  qui deviendrait le repère de son `position: fixed` et le ferait sortir de l'écran.
 // =============================================================================
 
-/** Couleur du bouton, calée sur le texte des options de la TopBar (slate-100). */
-const TOGGLE_COLOR = '#f1f5f9';
+/** Couleur du bouton, calée sur le texte des options de la TopBar (foreground). */
+const TOGGLE_COLOR = 'var(--foreground, #f1f5f9)';
 
 /**
  * Couches de couleur qui s'animent derrière le panneau à l'ouverture, avant que le panneau blanc n'apparaisse.

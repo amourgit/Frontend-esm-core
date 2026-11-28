@@ -59,7 +59,7 @@ export function NewsArticleCard({
       className="group w-full py-4 transition-all duration-300 flex flex-col md:flex-row gap-5 md:gap-6 items-stretch cursor-pointer relative"
     >
       {/* Left Media Thumbnail: Conforms automatically to height driven by right content on desktop */}
-      <div className="relative w-full md:w-72 lg:w-80 min-h-[180px] md:min-h-0 md:self-stretch rounded-2xl overflow-hidden shrink-0 bg-black/40 border border-white/10 shadow-lg">
+      <div className="relative w-full md:w-72 lg:w-80 min-h-[180px] md:min-h-0 md:self-stretch rounded-2xl overflow-hidden shrink-0 bg-foreground/40 border border-foreground/10 shadow-lg">
         <img
           src={article.image}
           alt={article.title}
@@ -69,12 +69,12 @@ export function NewsArticleCard({
         />
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-foreground/20 pointer-events-none" />
 
         {/* Category Badge */}
         <div className="absolute top-3 left-3 z-10 flex flex-col items-start">
-          <span className="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold tracking-wide uppercase bg-emerald-500/90 text-white border border-emerald-400/40 backdrop-blur-md shadow-md flex items-center gap-1.5">
-            <Sparkles className="w-3 h-3 text-emerald-100" />
+          <span className="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold tracking-wide uppercase bg-success-500/90 text-foreground border border-success-400/40 backdrop-blur-md shadow-md flex items-center gap-1.5">
+            <Sparkles className="w-3 h-3 text-success-100" />
             {article.category}
           </span>
           <AudienceBadge audience={article.audience} className="mt-1.5" />
@@ -87,8 +87,8 @@ export function NewsArticleCard({
           title={isBookmarked ? 'Retirer des favoris' : "Enregistrer l'article"}
           className={`absolute top-3 right-3 z-10 p-2 rounded-xl transition-all duration-200 shadow-lg ${
             isBookmarked
-              ? 'bg-emerald-500 text-white scale-100'
-              : 'bg-black/60 text-slate-200 hover:text-white border border-white/20 backdrop-blur-md opacity-90 group-hover:opacity-100 hover:bg-black/80'
+              ? 'bg-success-500 text-foreground scale-100'
+              : 'bg-foreground/60 text-foreground hover:text-foreground border border-foreground/20 backdrop-blur-md opacity-90 group-hover:opacity-100 hover:bg-foreground/80'
           }`}
         >
           <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
@@ -97,7 +97,7 @@ export function NewsArticleCard({
         {/* Optional Featured Indicator */}
         {article.featured && (
           <div className="absolute bottom-3 left-3 z-10">
-            <span className="px-2 py-0.5 rounded bg-amber-500/90 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider shadow">
+            <span className="px-2 py-0.5 rounded bg-warning-500/90 text-primary-foreground text-[10px] font-extrabold uppercase tracking-wider shadow">
               À la une
             </span>
           </div>
@@ -108,9 +108,9 @@ export function NewsArticleCard({
       <div className="flex-1 min-w-0 flex flex-col justify-between space-y-3">
         <div className="space-y-2">
           {/* Metadata Header line: Author & Date */}
-          <div className="flex items-center justify-between flex-wrap gap-2 text-xs text-slate-400 font-medium">
+          <div className="flex items-center justify-between flex-wrap gap-2 text-xs text-muted-foreground font-medium">
             <div className="flex items-center gap-2 truncate">
-              <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center justify-center font-bold text-[9px] shrink-0">
+              <div className="w-5 h-5 rounded-full bg-success-500/20 text-success-300 border border-success-500/30 flex items-center justify-center font-bold text-[9px] shrink-0">
                 {article.authorAvatar ? (
                   <img
                     src={article.authorAvatar}
@@ -124,34 +124,36 @@ export function NewsArticleCard({
                     .join('')
                 )}
               </div>
-              <span className="text-slate-200 font-semibold group-hover:text-emerald-300 transition-colors truncate">
+              <span className="text-foreground font-semibold group-hover:text-success-300 transition-colors truncate">
                 {article.author}
               </span>
               {article.authorRole && (
                 <>
-                  <span className="text-slate-600">•</span>
-                  <span className="text-slate-400 text-[11px] hidden sm:inline truncate">{article.authorRole}</span>
+                  <span className="text-muted-foreground">•</span>
+                  <span className="text-muted-foreground text-[11px] hidden sm:inline truncate">
+                    {article.authorRole}
+                  </span>
                 </>
               )}
             </div>
 
-            <div className="flex items-center gap-2 text-[11px] text-slate-400 shrink-0">
+            <div className="flex items-center gap-2 text-[11px] text-muted-foreground shrink-0">
               <span>{article.date}</span>
-              <span className="text-slate-600">•</span>
+              <span className="text-muted-foreground">•</span>
               <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-slate-400" />
+                <Clock className="w-3 h-3 text-muted-foreground" />
                 {article.readTime}
               </span>
             </div>
           </div>
 
           {/* Title */}
-          <h3 className="text-base sm:text-lg md:text-xl font-bold text-white tracking-tight leading-snug group-hover:text-emerald-300 transition-colors">
+          <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground tracking-tight leading-snug group-hover:text-success-300 transition-colors">
             {article.title}
           </h3>
 
           {/* Summary / Description: Truncated cleanly with ellipsis (...) */}
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light line-clamp-2 sm:line-clamp-3">
+          <p className="text-xs sm:text-sm text-foreground leading-relaxed font-light line-clamp-2 sm:line-clamp-3">
             {formattedSummary}
           </p>
 
@@ -161,9 +163,9 @@ export function NewsArticleCard({
               {article.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-white/5 text-slate-300 border border-white/10 flex items-center gap-1 shrink-0"
+                  className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-foreground/5 text-foreground border border-foreground/10 flex items-center gap-1 shrink-0"
                 >
-                  <Tag className="w-2.5 h-2.5 text-emerald-400" />
+                  <Tag className="w-2.5 h-2.5 text-success-400" />
                   {tag}
                 </span>
               ))}
@@ -172,18 +174,18 @@ export function NewsArticleCard({
         </div>
 
         {/* Footer Actions & Stats Bar */}
-        <div className="pt-2.5 border-t border-white/10 flex items-center justify-between gap-3 text-xs shrink-0">
+        <div className="pt-2.5 border-t border-foreground/10 flex items-center justify-between gap-3 text-xs shrink-0">
           {/* Stats */}
-          <div className="flex items-center gap-3.5 text-slate-400 text-[11px]">
+          <div className="flex items-center gap-3.5 text-muted-foreground text-[11px]">
             {article.viewsCount !== undefined && (
               <span className="flex items-center gap-1">
-                <Eye className="w-3.5 h-3.5 text-slate-500" />
+                <Eye className="w-3.5 h-3.5 text-muted-foreground" />
                 {article.viewsCount} vues
               </span>
             )}
             {article.likesCount !== undefined && (
               <span className="flex items-center gap-1">
-                <Heart className="w-3.5 h-3.5 text-rose-400/80" />
+                <Heart className="w-3.5 h-3.5 text-error-400/80" />
                 {article.likesCount}
               </span>
             )}
@@ -194,13 +196,13 @@ export function NewsArticleCard({
             <button
               type="button"
               onClick={(e) => onShare(article, e)}
-              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-slate-300 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer"
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-foreground/5 hover:bg-foreground/15 border border-foreground/10 text-foreground hover:text-foreground transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer"
               title="Partager le lien"
             >
               {isCopied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-emerald-400 text-[11px] hidden sm:inline">Copié</span>
+                  <Check className="w-3.5 h-3.5 text-success-400" />
+                  <span className="text-success-400 text-[11px] hidden sm:inline">Copié</span>
                 </>
               ) : (
                 <>
@@ -216,7 +218,7 @@ export function NewsArticleCard({
                 playXboxSound('select');
                 onArticleClick(article);
               }}
-              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-md"
+              className="px-3 py-1.5 rounded-lg bg-success-600 hover:bg-success-500 text-foreground font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-md"
             >
               <span>Consulter</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />

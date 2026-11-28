@@ -16,7 +16,7 @@ const Home: React.FC = () => {
 
   return (
     <SharedPageLayout header={t('homeHeader', 'Offline home')}>
-      <div style={{ backgroundColor: '#ededed' }}>
+      <div style={{ backgroundColor: 'var(--muted)' }}>
         <CardsContainer />
       </div>
 

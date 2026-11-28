@@ -8,7 +8,7 @@
   margin: 0;
   font-size: 1.125rem;
   font-weight: 300;
-  color: #fff;
+  color: var(--foreground);
   letter-spacing: -0.01em;
 }
 
@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid color-mix(in oklab, var(--border-subtle, var(--border)) 100%, transparent);
   padding-bottom: 0.25rem;
 }
 
@@ -30,7 +30,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   padding-bottom: 0.375rem;
-  color: #94a3b8;
+  color: var(--muted-foreground);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
@@ -38,28 +38,28 @@
   transition: color 0.15s;
 }
 .tab:hover {
-  color: #e2e8f0;
+  color: var(--foreground);
 }
 
 .tabActive {
-  color: #2dd4bf;
-  border-bottom-color: #2dd4bf;
+  color: var(--primary-400);
+  border-bottom-color: var(--primary-400);
 }
 .tabActive:hover {
-  color: #2dd4bf;
+  color: var(--primary-400);
 }
 
 .refreshBtn {
   padding: 0.25rem;
   border-radius: 0.5rem;
-  color: #94a3b8;
+  color: var(--muted-foreground);
   background: none;
   border: none;
   cursor: pointer;
 }
 .refreshBtn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--foreground);
+  background: color-mix(in oklab, var(--foreground) 10%, transparent);
 }
 
 .refreshIcon {
@@ -73,13 +73,13 @@
   min-height: 190px;
 }
 .list > * + * {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid color-mix(in oklab, var(--border-subtle, var(--border)) 100%, transparent);
 }
 
 .empty {
   padding: 1rem 0.5rem;
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: color-mix(in oklab, var(--foreground) 40%, transparent);
   text-align: center;
 }
 
@@ -93,15 +93,15 @@
   transition: background-color 0.15s;
 }
 .eventRow:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
 }
 
 .dateBlock {
   width: 2.75rem;
   height: 3rem;
   border-radius: 0.5rem;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: color-mix(in oklab, var(--shadow-color) 40%, transparent);
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,13 +110,13 @@
   transition: border-color 0.15s;
 }
 .eventRow:hover .dateBlock {
-  border-color: rgba(45, 212, 191, 0.4);
+  border-color: color-mix(in oklab, var(--primary) 40%, transparent);
 }
 
 .dateMonth {
   font-size: 0.625rem;
   font-weight: 600;
-  color: #2dd4bf;
+  color: var(--primary-400);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   line-height: 1;
@@ -125,13 +125,13 @@
 .dateDay {
   font-size: 1rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--foreground);
   line-height: 1.2;
 }
 
 .dateWeekday {
   font-size: 0.5625rem;
-  color: #94a3b8;
+  color: var(--muted-foreground);
   font-weight: 500;
   line-height: 1;
 }
@@ -145,13 +145,13 @@
   margin: 0;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--foreground);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .eventRow:hover .eventTitle {
-  color: #5eead4;
+  color: var(--primary-300);
 }
 
 .eventMetaRow {
@@ -159,7 +159,7 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 0.6875rem;
-  color: #94a3b8;
+  color: var(--muted-foreground);
   margin-top: 0.25rem;
 }
 
@@ -172,13 +172,13 @@
 .eventMetaIcon {
   width: 0.75rem;
   height: 0.75rem;
-  color: rgba(45, 212, 191, 0.8);
+  color: color-mix(in oklab, var(--primary) 80%, transparent);
 }
 
 .eventMetaIconMuted {
   width: 0.75rem;
   height: 0.75rem;
-  color: #64748b;
+  color: var(--muted-foreground);
 }
 
 .eventLocation {
@@ -190,10 +190,10 @@
 .eventCalIcon {
   align-self: center;
   padding: 0.25rem;
-  color: #94a3b8;
+  color: var(--muted-foreground);
 }
 .eventRow:hover .eventCalIcon {
-  color: #2dd4bf;
+  color: var(--primary-400);
 }
 .eventCalIcon svg {
   width: 1rem;
@@ -205,9 +205,9 @@
   align-items: center;
   justify-content: space-between;
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--muted-foreground);
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid color-mix(in oklab, var(--border-subtle, var(--border)) 100%, transparent);
 }
 
 .pageBtn {
@@ -220,7 +220,7 @@
   cursor: pointer;
 }
 .pageBtn:hover:not(:disabled) {
-  color: #fff;
+  color: var(--foreground);
 }
 .pageBtn:disabled {
   opacity: 0.35;

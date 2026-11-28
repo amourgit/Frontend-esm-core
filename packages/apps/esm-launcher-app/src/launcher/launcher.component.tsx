@@ -60,7 +60,7 @@ const Launcher: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpe
         badge={total > 9 ? '9+' : total}
         onClick={toggle}
         icon={<GridGlyph />}
-        className="text-teal-400 hover:text-teal-300"
+        className="text-(--primary-400) hover:text-(--primary-300)"
       />
       {open && (
         <GlassPanel

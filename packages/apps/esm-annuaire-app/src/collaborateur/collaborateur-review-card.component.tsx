@@ -50,7 +50,7 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
   };
 
   return (
-    <div className="w-full flex flex-col gap-3 p-4 sm:p-5 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-md transition-all shadow-sm">
+    <div className="w-full flex flex-col gap-3 p-4 sm:p-5 rounded-2xl border border-foreground/10 bg-foreground/[0.03] hover:bg-foreground/[0.06] backdrop-blur-md transition-all shadow-sm">
       {/* ── Line 1: Order/Item ID + Stars + Status Pill ── */}
       <div className="w-full flex flex-wrap items-center justify-between gap-3">
         {/* Order ID & Star Rating */}
@@ -58,11 +58,11 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
           <button
             type="button"
             onClick={handleCopyOrderId}
-            className="flex items-center gap-1.5 text-sm sm:text-base font-bold text-white hover:text-teal-300 transition-colors group"
+            className="flex items-center gap-1.5 text-sm sm:text-base font-bold text-foreground hover:text-primary-300 transition-colors group"
             title="Copier la référence"
           >
             <span>{review.orderNumber}</span>
-            <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-teal-300" />
+            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary-300" />
           </button>
 
           {/* Stars */}
@@ -71,7 +71,7 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
               <Star
                 key={idx}
                 className={`w-3.5 h-3.5 ${
-                  idx <= review.rating ? 'fill-amber-400 text-amber-400' : 'fill-white/10 text-white/20'
+                  idx <= review.rating ? 'fill-warning-400 text-warning-400' : 'fill-foreground/10 text-foreground/20'
                 }`}
               />
             ))}
@@ -83,26 +83,26 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
           <span
             className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
               isPublished
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30'
-                : 'bg-slate-500/20 text-slate-300 border border-white/15'
+                ? 'bg-success-500/20 text-success-300 border border-success-400/30'
+                : 'bg-muted-foreground/20 text-muted-foreground border border-foreground/15'
             }`}
           >
-            <span className={`w-1.5 h-1.5 rounded-full ${isPublished ? 'bg-emerald-400' : 'bg-slate-400'}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${isPublished ? 'bg-success-400' : 'bg-muted-foreground'}`} />
             <span>{review.status}</span>
           </span>
         </div>
       </div>
 
       {/* ── Line 2: Item Name ── */}
-      <div className="text-xs sm:text-sm text-slate-300">
-        <span className="text-slate-400">Item: </span>
-        <span className="text-white/90 font-medium underline-offset-2 hover:underline cursor-pointer">
+      <div className="text-xs sm:text-sm text-muted-foreground">
+        <span className="text-muted-foreground">Item: </span>
+        <span className="text-foreground/90 font-medium underline-offset-2 hover:underline cursor-pointer">
           {review.itemName}
         </span>
       </div>
 
       {/* ── Line 3: Review Comment Text ── */}
-      <div className="text-xs sm:text-sm text-slate-200/90 leading-relaxed">
+      <div className="text-xs sm:text-sm text-muted-foreground/90 leading-relaxed">
         <p className="inline">
           {isExpanded || review.content.length <= 150 ? review.content : `${review.content.slice(0, 150)}... `}
         </p>
@@ -110,7 +110,7 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
           <button
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-amber-400 hover:text-amber-300 font-medium ml-1 underline transition-colors"
+            className="text-warning-400 hover:text-warning-300 font-medium ml-1 underline transition-colors"
           >
             {isExpanded ? 'Show less' : 'Read more'}
           </button>
@@ -127,15 +127,15 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
                 playXboxSound('select');
                 setSelectedImage(img);
               }}
-              className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-white/15 bg-black/40 group cursor-pointer hover:border-white/35 transition-all shadow-sm"
+              className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-foreground/15 bg-foreground/40 group cursor-pointer hover:border-foreground/35 transition-all shadow-sm"
             >
               <img
                 src={img}
                 alt={`Photo ${i + 1}`}
                 className="w-full h-full object-cover transition-transform group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                <Maximize2 className="w-4 h-4 text-white" />
+              <div className="absolute inset-0 bg-foreground/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <Maximize2 className="w-4 h-4 text-foreground" />
               </div>
             </div>
           ))}
@@ -143,7 +143,7 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
       )}
 
       {/* ── Line 5: Footer (Posted date, Archive, Share, Options) ── */}
-      <div className="w-full flex items-center justify-between pt-2 border-t border-white/10 text-xs text-slate-400">
+      <div className="w-full flex items-center justify-between pt-2 border-t border-foreground/10 text-xs text-muted-foreground">
         {/* Date */}
         <span>Posted on {review.postedDate}</span>
 
@@ -156,7 +156,7 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
               onArchive?.(review.id);
               onShowToast?.(`Élément ${review.orderNumber} archivé`, 'info');
             }}
-            className="hover:text-white transition-colors"
+            className="hover:text-foreground transition-colors"
           >
             Archive
           </button>
@@ -168,7 +168,7 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
               onShare?.(review);
               onShowToast?.(`Lien de ${review.orderNumber} partagé`, 'success');
             }}
-            className="hover:text-white transition-colors p-1"
+            className="hover:text-foreground transition-colors p-1"
             title="Partager"
           >
             <Share2 className="w-3.5 h-3.5" />
@@ -177,7 +177,7 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
           <button
             type="button"
             onClick={() => onShowToast?.(`Options pour ${review.orderNumber}`, 'info')}
-            className="hover:text-white transition-colors p-1"
+            className="hover:text-foreground transition-colors p-1"
             title="Plus d'actions"
           >
             <MoreHorizontal className="w-4 h-4" />

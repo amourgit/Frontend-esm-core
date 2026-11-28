@@ -26,7 +26,7 @@ export const OptionButton = forwardRef<HTMLButtonElement, OptionButtonProps>(fun
       aria-pressed={active || undefined}
       className={classNames(
         'relative p-1 transition-colors cursor-pointer bg-transparent border-none flex items-center justify-center overflow-visible',
-        active ? 'text-teal-400' : 'text-slate-300 hover:text-teal-400',
+        active ? 'text-(--primary-400)' : 'text-(--muted-foreground) hover:text-(--primary-400)',
         className,
       )}
       {...rest}

@@ -105,7 +105,7 @@ export function BlogSection({
             ))}
           </SectionGrid>
         ) : (
-          <p className="m-0 py-8 text-center text-sm text-white/40">Aucun article dans vos favoris.</p>
+          <p className="m-0 py-8 text-center text-sm text-foreground/40">Aucun article dans vos favoris.</p>
         )}
       </Section>
 

@@ -2,78 +2,12 @@
   "$comment": "Voie unique : SDK embed (docs/integration-apps/17 et 18). Chaque app publie egen-config.json à la racine de son URL ; ce fichier n'est que le lieu d'approbation des droits.",
   "embed": [
     {
-      "manifest": "http://localhost:9001/egen-config.json",
-      "grants": {
-        "notifications": {},
-        "events": {
-          "publish": [
-            "app.penpot.*"
-          ],
-          "subscribe": [
-            "core.*"
-          ]
-        },
-        "extensions": {
-          "contribute": [
-            "topbar-nav-slot",
-            "shell-rail-left-slot"
-          ]
-        },
-        "iframe": {
-          "sandbox": [
-            "allow-downloads",
-            "allow-modals",
-            "allow-popups-to-escape-sandbox"
-          ],
-          "allow": [
-            "clipboard-read",
-            "clipboard-write",
-            "fullscreen"
-          ]
-        }
-      },
-      "config": {}
-    },
-    {
       "manifest": "http://localhost:3200/egen-config.json",
       "grants": {
         "notifications": {},
         "events": {
           "publish": [
-            "app.tweakcn.*"
-          ],
-          "subscribe": [
-            "core.*"
-          ]
-        },
-        "extensions": {
-          "contribute": [
-            "topbar-nav-slot",
-            "shell-rail-left-slot"
-          ]
-        },
-        "iframe": {
-          "sandbox": [
-            "allow-downloads",
-            "allow-modals",
-            "allow-popups-to-escape-sandbox"
-          ],
-          "allow": [
-            "clipboard-read",
-            "clipboard-write",
-            "fullscreen"
-          ]
-        }
-      },
-      "config": {}
-    },
-    {
-      "manifest": "http://localhost:9080/egen-config.json",
-      "grants": {
-        "notifications": {},
-        "events": {
-          "publish": [
-            "app.character.*"
+            "app.theme-studio.*"
           ],
           "subscribe": [
             "core.*"

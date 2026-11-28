@@ -28,7 +28,7 @@ export function AudienceSwitch({ value, onChange, counts, className }: AudienceS
       aria-label={t('audienceLabel', 'Audience')}
       className={cn('flex flex-wrap items-center gap-1.5', className)}
     >
-      <Layers className="w-4 h-4 text-slate-400 mr-0.5" aria-hidden />
+      <Layers className="w-4 h-4 text-muted-foreground mr-0.5" aria-hidden />
       {options.map((opt) => {
         const active = value === opt.id;
         return (
@@ -44,8 +44,8 @@ export function AudienceSwitch({ value, onChange, counts, className }: AudienceS
             className={cn(
               'px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors cursor-pointer',
               active
-                ? 'bg-teal-500/20 text-teal-100 border-teal-400/50'
-                : 'bg-white/5 text-slate-300 border-white/10 hover:border-white/25 hover:text-white',
+                ? 'bg-primary-500/20 text-primary-100 border-primary-400/50'
+                : 'bg-foreground/5 text-foreground border-foreground/10 hover:border-foreground/25 hover:text-foreground',
             )}
           >
             {opt.label}

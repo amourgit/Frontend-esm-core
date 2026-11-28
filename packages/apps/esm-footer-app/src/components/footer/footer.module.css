@@ -1,7 +1,7 @@
 .footerWrapper {
   width: 100%;
   background: transparent;
-  color: var(--footer-text-color, rgb(255, 255, 255));
+  color: var(--footer-text-color, var(--primary-foreground, #fff));
   padding: 0.75rem 1.5rem;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -18,7 +18,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-xs);
   line-height: var(--text-xs--line-height);
-  color: var(--footer-text-color, rgb(255, 255, 255));
+  color: var(--footer-text-color, var(--primary-foreground, #fff));
 }
 
 .companySection {
@@ -31,7 +31,7 @@
 
 .companyName {
   font-weight: var(--font-weight-semibold);
-  color: var(--footer-text-color, rgb(255, 255, 255));
+  color: var(--footer-text-color, var(--primary-foreground, #fff));
   text-decoration: none;
   white-space: nowrap;
 }
@@ -43,17 +43,17 @@
   opacity: 0.85;
 }
 .companyName[href]:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline: 2px solid color-mix(in oklab, var(--footer-text-color, var(--primary-foreground, #fff)) 70%, transparent);
   outline-offset: 2px;
   border-radius: var(--radius-xs);
 }
 
 .dot {
-  color: rgba(255, 255, 255, 0.6);
+  color: color-mix(in oklab, var(--footer-text-color, var(--primary-foreground, #fff)) 60%, transparent);
 }
 
 .tagline {
-  color: rgba(255, 255, 255, 0.8);
+  color: color-mix(in oklab, var(--footer-text-color, var(--primary-foreground, #fff)) 80%, transparent);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -73,24 +73,24 @@
 }
 
 .footerLink {
-  color: rgba(255, 255, 255, 0.8);
+  color: color-mix(in oklab, var(--footer-text-color, var(--primary-foreground, #fff)) 80%, transparent);
   text-decoration: none;
   white-space: nowrap;
   transition: var(--transition-colors);
 }
 .footerLink:hover {
-  color: rgb(255, 255, 255);
+  color: var(--primary-foreground, #fff);
   text-decoration: underline;
 }
 .footerLink:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline: 2px solid color-mix(in oklab, var(--footer-text-color, var(--primary-foreground, #fff)) 70%, transparent);
   outline-offset: 2px;
   border-radius: var(--radius-xs);
 }
 
 .copyright {
   white-space: nowrap;
-  color: rgba(255, 255, 255, 0.6);
+  color: color-mix(in oklab, var(--footer-text-color, var(--primary-foreground, #fff)) 60%, transparent);
 }
 
 @media (max-width: 672px) {

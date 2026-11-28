@@ -48,15 +48,15 @@ const SiteLayoutPage: React.FC = () => {
               navigate('/sites');
             }}
             title="Revenir au choix du site"
-            className="self-start text-xs text-slate-400 hover:text-teal-300 transition-colors cursor-pointer flex items-center gap-1.5 pb-2 border-b border-white/10 w-full"
+            className="self-start text-xs text-(--muted-foreground) hover:text-(--primary-300) transition-colors cursor-pointer flex items-center gap-1.5 pb-2 border-b border-(--border) w-full"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Changer de site</span>
           </button>
         }
         mainHeader={
-          <div className="pb-1.5 mb-2 border-b border-white/10 shrink-0">
-            <h1 className="text-base sm:text-xl font-bold text-white">{site.name}</h1>
+          <div className="pb-1.5 mb-2 border-b border-(--border) shrink-0">
+            <h1 className="text-base sm:text-xl font-bold text-(--foreground)">{site.name}</h1>
           </div>
         }
       >

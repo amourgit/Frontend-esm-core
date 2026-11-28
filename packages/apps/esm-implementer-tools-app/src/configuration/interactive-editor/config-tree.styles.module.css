@@ -1,9 +1,9 @@
 .fullWidthAccordion {
-  background-color: var(--ui-background, #ffffff);
+  background-color: var(--ui-background, var(--background));
 }
 .fullWidthAccordion button {
-  color: var(--ui-text-secondary, #525252);
+  color: var(--ui-text-secondary, var(--muted-foreground));
 }
 .fullWidthAccordion button:hover {
-  color: var(--ui-text-primary, #161616);
+  color: var(--ui-text-primary, var(--foreground));
 }

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "motion/react";
-import { ChevronDown } from "lucide-react";
-import { RandomLetterSwap } from "../ui/random-letter-swap";
-import { WaterGlassModal } from "../ui/WaterGlassModal";
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'motion/react';
+import { ChevronDown } from 'lucide-react';
+import { RandomLetterSwap } from '../ui/random-letter-swap';
+import { WaterGlassModal } from '../ui/WaterGlassModal';
 
 export type NavSubMenuItem = {
   label: string;
@@ -138,12 +138,12 @@ export function DropdownNavigation({ navItems }: Props) {
       }, 60);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging, openMenu]);
 
@@ -157,9 +157,9 @@ export function DropdownNavigation({ navItems }: Props) {
       }
     };
 
-    el.addEventListener("scroll", handleScroll, { passive: true });
+    el.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      el.removeEventListener("scroll", handleScroll);
+      el.removeEventListener('scroll', handleScroll);
     };
   }, [openMenu, activeNavItem, updateMenuPosition]);
 
@@ -216,9 +216,9 @@ export function DropdownNavigation({ navItems }: Props) {
       setActiveNavItem(null);
     };
 
-    document.addEventListener("pointerdown", handlePointerDownOutside);
+    document.addEventListener('pointerdown', handlePointerDownOutside);
     return () => {
-      document.removeEventListener("pointerdown", handlePointerDownOutside);
+      document.removeEventListener('pointerdown', handlePointerDownOutside);
     };
   }, [openMenu]);
 
@@ -230,12 +230,12 @@ export function DropdownNavigation({ navItems }: Props) {
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         className={`w-full flex items-center space-x-1 sm:space-x-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 touch-pan-x ${
-          isDragging ? "cursor-grabbing" : "cursor-grab"
+          isDragging ? 'cursor-grabbing' : 'cursor-grab'
         }`}
         style={{
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-          WebkitOverflowScrolling: "touch",
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch',
         }}
       >
         <motion.ul layout className="relative flex items-center space-x-1 sm:space-x-1.5 shrink-0">
@@ -251,7 +251,7 @@ export function DropdownNavigation({ navItems }: Props) {
                   initial={{ opacity: 0, y: -3, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 3, scale: 0.97 }}
-                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  transition={{ duration: 0.18, ease: 'easeOut' }}
                   className="relative shrink-0"
                   onMouseEnter={() => handleItemMouseEnter(navItem)}
                   onMouseLeave={handleItemMouseLeave}
@@ -261,7 +261,7 @@ export function DropdownNavigation({ navItems }: Props) {
                       buttonRefs.current[navItem.label] = el;
                     }}
                     type="button"
-                    className="text-xs sm:text-sm py-1 sm:py-1.5 px-2.5 sm:px-3 flex cursor-pointer group transition-colors duration-200 items-center justify-center gap-1.5 text-slate-200 hover:text-white relative font-medium select-none rounded-lg whitespace-nowrap shrink-0"
+                    className="text-xs sm:text-sm py-1 sm:py-1.5 px-2.5 sm:px-3 flex cursor-pointer group transition-colors duration-200 items-center justify-center gap-1.5 text-(--foreground) hover:text-(--foreground) relative font-medium select-none rounded-lg whitespace-nowrap shrink-0"
                     onClick={(e) => {
                       if (hasDraggedFar) {
                         e.preventDefault();
@@ -284,21 +284,21 @@ export function DropdownNavigation({ navItems }: Props) {
                       label={navItem.label}
                       forceHover={isItemHovered}
                       disableDefaultNavigation={true}
-                      className="relative z-10 whitespace-nowrap text-slate-200 group-hover:text-white font-medium text-xs sm:text-sm tracking-tight"
+                      className="relative z-10 whitespace-nowrap text-(--foreground) group-hover:text-(--foreground) font-medium text-xs sm:text-sm tracking-tight"
                       staggerDuration={0.02}
-                      transition={{ duration: 0.5, type: "spring" }}
+                      transition={{ duration: 0.5, type: 'spring' }}
                     />
                     {hasSubMenus && (
                       <ChevronDown
-                        className={`h-3.5 w-3.5 text-slate-400 group-hover:text-white duration-200 transition-transform relative z-10 shrink-0 ${
-                          openMenu === navItem.label ? "rotate-180 text-teal-400" : ""
+                        className={`h-3.5 w-3.5 text-(--muted-foreground) group-hover:text-(--foreground) duration-200 transition-transform relative z-10 shrink-0 ${
+                          openMenu === navItem.label ? 'rotate-180 text-(--primary-400)' : ''
                         }`}
                       />
                     )}
                     {isItemHovered && (
                       <motion.div
                         layoutId="hover-bg-intranet"
-                        className="absolute inset-0 size-full bg-white/10 rounded-lg"
+                        className="absolute inset-0 size-full bg-(--foreground)/10 rounded-lg"
                         transition={{ duration: 0.15 }}
                       />
                     )}
@@ -311,7 +311,7 @@ export function DropdownNavigation({ navItems }: Props) {
       </div>
 
       {/* Floating SubMenu rendered via Portal in pure Glassmorphism, ultra-compact */}
-      {typeof document !== "undefined" &&
+      {typeof document !== 'undefined' &&
         activeNavItem &&
         activeNavItem.subMenus &&
         openMenu &&
@@ -320,13 +320,13 @@ export function DropdownNavigation({ navItems }: Props) {
           <div
             ref={dropdownRef}
             style={{
-              position: "fixed",
+              position: 'fixed',
               top: `${menuCoords.top}px`,
               left: `${menuCoords.left}px`,
               // Portal vers document.body : sans borne, ce dropdown passait au-dessus de toute la TopBar
               // (barres du shell à --egen-shell-bar-z-index). On reste sous elles pour laisser les
               // popups de la TopBar (sélecteurs espace/site, menus…) primer, mais au-dessus du contenu.
-              zIndex: "calc(var(--egen-shell-bar-z-index, 8100) - 1)",
+              zIndex: 'calc(var(--egen-shell-bar-z-index, 8100) - 1)',
             }}
             onMouseEnter={handleMenuMouseEnter}
             onMouseLeave={handleMenuMouseLeave}
@@ -337,14 +337,14 @@ export function DropdownNavigation({ navItems }: Props) {
               align="none"
               className="mt-0"
               optionsComponent={
-                <div className="flex items-start gap-2.5 sm:gap-3.5 divide-x divide-white/10">
+                <div className="flex items-start gap-2.5 sm:gap-3.5 divide-x divide-(--border)">
                   {activeNavItem.subMenus.map((sub, idx) => (
-                    <div 
-                      className={`w-auto min-w-[130px] max-w-[185px] ${idx > 0 ? 'pl-2.5 sm:pl-3.5' : ''}`} 
+                    <div
+                      className={`w-auto min-w-[130px] max-w-[185px] ${idx > 0 ? 'pl-2.5 sm:pl-3.5' : ''}`}
                       key={`${idx}-${sub.title}`}
                     >
                       {sub.title ? (
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-teal-300 pb-1 mb-1 border-b border-white/10 flex items-center justify-between">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-(--primary-300) pb-1 mb-1 border-b border-(--border) flex items-center justify-between">
                           <span className="truncate">{sub.title}</span>
                         </div>
                       ) : null}
@@ -354,20 +354,20 @@ export function DropdownNavigation({ navItems }: Props) {
                           return (
                             <li key={`${item.entryName ?? item.label}-${itemIdx}`}>
                               <a
-                                href={item.link || "#"}
+                                href={item.link || '#'}
                                 onClick={(e) => {
                                   e.preventDefault();
                                   if (item.onClick) item.onClick();
                                   setOpenMenu(null);
                                   setActiveNavItem(null);
                                 }}
-                                className="flex items-center gap-1.5 py-1 px-1.5 rounded-xl hover:bg-white/[0.08] text-white hover:text-teal-200 transition-colors group/subitem cursor-pointer"
+                                className="flex items-center gap-1.5 py-1 px-1.5 rounded-xl hover:bg-(--foreground)/8 text-(--foreground) hover:text-(--primary-200) transition-colors group/subitem cursor-pointer"
                                 title={item.description || item.label}
                               >
-                                <div className="size-5 rounded-lg flex items-center justify-center bg-teal-400/15 border border-teal-300/30 text-teal-200 shrink-0 group-hover/subitem:bg-teal-400/25 group-hover/subitem:text-teal-100 transition-colors">
+                                <div className="size-5 rounded-lg flex items-center justify-center bg-(--primary-400)/15 border border-(--primary-300)/30 text-(--primary-200) shrink-0 group-hover/subitem:bg-(--primary-400)/25 group-hover/subitem:text-(--primary-100) transition-colors">
                                   <Icon className="h-3 w-3 flex-none" />
                                 </div>
-                                <span className="text-[11px] font-medium text-white group-hover/subitem:text-teal-100 transition-colors truncate">
+                                <span className="text-[11px] font-medium text-(--foreground) group-hover/subitem:text-(--primary-100) transition-colors truncate">
                                   {item.label}
                                 </span>
                               </a>
@@ -381,7 +381,7 @@ export function DropdownNavigation({ navItems }: Props) {
               }
             />
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );

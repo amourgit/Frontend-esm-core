@@ -8,7 +8,7 @@
 }
 .popup tr th,
 .popup tr td {
-  color: var(--ui-text-secondary, #525252);
+  color: var(--ui-text-secondary, var(--muted-foreground));
 }
 
 .content {
@@ -34,7 +34,7 @@
 }
 
 .closeButton svg {
-  fill: var(--ui-icon-primary, #161616);
+  fill: var(--ui-icon-primary, var(--foreground));
 }
 
 .contentSwitcher {

@@ -185,7 +185,7 @@
 
 .layoutGridContentText {
   margin: 0;
-  color: var(--neutral-300);
+  color: var(--muted-foreground);
   font-size: var(--text-sm);
 }
 
@@ -273,7 +273,7 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-md);
-  background: #0a0908;
+  background: var(--popover);
 }
 
 .controls {
@@ -346,7 +346,7 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-md);
-  background: #0a0908;
+  background: var(--popover);
   transform: translateZ(0);
 }
 

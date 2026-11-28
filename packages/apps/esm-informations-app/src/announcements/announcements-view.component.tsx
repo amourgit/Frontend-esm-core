@@ -9,9 +9,9 @@ import { AudienceBadge } from '../audience/audience-badge.component';
 import { ALL_ANNOUNCEMENTS, type AnnouncementLevel } from './announcements-data';
 
 const LEVEL_STYLES: Record<AnnouncementLevel, string> = {
-  Alerte: 'text-rose-300',
-  Officiel: 'text-amber-300',
-  Info: 'text-teal-300',
+  Alerte: 'text-error-300',
+  Officiel: 'text-warning-300',
+  Info: 'text-primary-300',
 };
 
 interface AnnouncementsViewProps {
@@ -35,20 +35,20 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
   }, [audience, query]);
 
   return (
-    <div className="space-y-5 text-slate-100 py-1">
-      <div className="pb-4 border-b border-white/10">
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-          <BellRing className="w-5 h-5 text-amber-300" aria-hidden />
+    <div className="space-y-5 text-foreground py-1">
+      <div className="pb-4 border-b border-foreground/10">
+        <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+          <BellRing className="w-5 h-5 text-warning-300" aria-hidden />
           {t('announcementsTitle', 'Announcements & Flash News')}
         </h2>
-        <p className="text-xs text-slate-300 mt-1">
+        <p className="text-xs text-foreground mt-1">
           {t('announcementsSubtitle', 'Official communiqués and service alerts.')}
         </p>
       </div>
 
       <div className="relative">
         <Search
-          className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+          className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
           aria-hidden
         />
         <input
@@ -57,14 +57,14 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
           onChange={(e) => setQuery(e.target.value)}
           placeholder={t('announcementsSearch', 'Search announcements…')}
           aria-label={t('announcementsSearch', 'Search announcements…')}
-          className="w-full pl-9 pr-9 py-2.5 rounded-xl bg-slate-900/60 border border-white/10 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-400/50"
+          className="w-full pl-9 pr-9 py-2.5 rounded-xl bg-card/60 border border-foreground/10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary-400/50"
         />
         {query && (
           <button
             type="button"
             onClick={() => setQuery('')}
             aria-label={t('clear', 'Clear')}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -72,7 +72,7 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
       </div>
 
       {items.length === 0 ? (
-        <p className="text-sm text-slate-400 py-10 text-center">
+        <p className="text-sm text-muted-foreground py-10 text-center">
           {t('announcementsEmpty', 'No announcements for this selection.')}
         </p>
       ) : (
@@ -88,7 +88,7 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
                     playXboxSound('select');
                     setOpenId(open ? null : ann.id);
                   }}
-                  className="w-full text-left p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-teal-400/40 transition-colors cursor-pointer space-y-2"
+                  className="w-full text-left p-4 rounded-xl bg-card/60 border border-foreground/10 hover:border-primary-400/40 transition-colors cursor-pointer space-y-2"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className={cn('text-xs font-bold', LEVEL_STYLES[ann.level])}>
@@ -97,15 +97,15 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
                     <span className="flex items-center gap-2">
                       <AudienceBadge audience={ann.audience} />
                       <ChevronDown
-                        className={cn('w-4 h-4 text-slate-400 transition-transform', open && 'rotate-180')}
+                        className={cn('w-4 h-4 text-muted-foreground transition-transform', open && 'rotate-180')}
                         aria-hidden
                       />
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-white">{ann.title}</h3>
+                  <h3 className="text-base font-bold text-foreground">{ann.title}</h3>
                   <div className="flex items-center justify-between gap-3 text-[11px]">
-                    <span className="text-teal-300 font-medium">{ann.date}</span>
-                    <span className="text-slate-400">{ann.author}</span>
+                    <span className="text-primary-300 font-medium">{ann.date}</span>
+                    <span className="text-muted-foreground">{ann.author}</span>
                   </div>
                   <AnimatePresence initial={false}>
                     {open && (
@@ -113,7 +113,7 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="text-sm text-slate-300 overflow-hidden"
+                        className="text-sm text-foreground overflow-hidden"
                       >
                         {ann.body}
                       </motion.p>

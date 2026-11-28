@@ -54,7 +54,8 @@ const FILTER_SCHEMA: FilterSchema = {
   ],
 };
 
-const getFieldValue = (site: SiteSummary, fieldId: string): unknown => (site as unknown as Record<string, unknown>)[fieldId];
+const getFieldValue = (site: SiteSummary, fieldId: string): unknown =>
+  (site as unknown as Record<string, unknown>)[fieldId];
 
 /** Page `/sites` — choix d'un site : recherche, filtres avancés et carrousel. */
 const SitesListPage: React.FC = () => {
@@ -69,7 +70,9 @@ const SitesListPage: React.FC = () => {
     return SITES.filter((site) => {
       if (filters.length > 0 && !matchesFilters(site, filters, FILTER_SCHEMA, getFieldValue)) return false;
       if (!q) return true;
-      return [site.name, site.shortName, site.description, site.head, site.category, site.uuid].some((v) => v.toLowerCase().includes(q));
+      return [site.name, site.shortName, site.description, site.head, site.category, site.uuid].some((v) =>
+        v.toLowerCase().includes(q),
+      );
     }).map((site, index) => ({ ...site, imageUrl: SITE_IMAGES[index % SITE_IMAGES.length] }));
   }, [query, filters]);
 
@@ -82,7 +85,7 @@ const SitesListPage: React.FC = () => {
   return (
     <div
       ref={(el) => el?.setAttribute('data-egen-fill', '')}
-      className="relative w-full h-full min-h-full flex flex-col text-slate-100 overflow-x-hidden overflow-y-auto py-3 select-none"
+      className="relative w-full h-full min-h-full flex flex-col text-(--foreground) overflow-x-hidden overflow-y-auto py-3 select-none"
     >
       <SitesBackground />
       <div className="w-full max-w-5xl mx-auto mb-1 px-4 sm:px-6 lg:px-8 shrink-0 relative z-30">
@@ -114,13 +117,15 @@ const SitesListPage: React.FC = () => {
 
       <div className="w-full flex-1 flex flex-col items-center justify-center relative z-10">
         {visible.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-8 sm:p-12 text-center rounded-2xl border border-white/10 text-slate-400 my-auto mx-4">
-            <h3 className="text-base font-bold text-white mb-1">Aucun site ne correspond à ces critères</h3>
-            <p className="text-xs max-w-sm mb-4">Essayez d'ajuster votre recherche ou réinitialisez les filtres actifs.</p>
+          <div className="flex flex-col items-center justify-center p-8 sm:p-12 text-center rounded-2xl border border-(--border) text-(--muted-foreground) my-auto mx-4">
+            <h3 className="text-base font-bold text-(--foreground) mb-1">Aucun site ne correspond à ces critères</h3>
+            <p className="text-xs max-w-sm mb-4">
+              Essayez d'ajuster votre recherche ou réinitialisez les filtres actifs.
+            </p>
             <button
               type="button"
               onClick={reset}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-teal-500 hover:bg-teal-400 text-slate-950 shadow-lg transition-all active:scale-95 cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-semibold bg-(--primary-500) hover:bg-(--primary-400) text-(--primary-foreground) shadow-(--shadow-lg) transition-all active:scale-95 cursor-pointer"
             >
               Réinitialiser les filtres
             </button>

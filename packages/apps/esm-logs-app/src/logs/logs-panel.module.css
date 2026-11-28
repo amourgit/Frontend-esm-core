@@ -1,10 +1,10 @@
 .panel,
 .tools {
-  --logs-error: #f87171;
-  --logs-warn: #fbbf24;
-  --logs-success: #4ade80;
-  --logs-info: #60a5fa;
-  --logs-debug: #94a3b8;
+  --logs-error: var(--destructive-400, var(--destructive));
+  --logs-warn: var(--warning-400, var(--warning));
+  --logs-success: var(--success-400, var(--success));
+  --logs-info: var(--info-400, var(--info));
+  --logs-debug: var(--muted-foreground);
   --logs-fg: var(--foreground);
   --logs-muted: var(--muted-foreground);
   --logs-line: rgb(148 163 184 / 18%);
@@ -24,7 +24,7 @@
   flex: 0 0 auto;
   padding: 0.25rem 0.5rem;
   overflow-x: auto;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  border-bottom: 1px solid var(--border-subtle, var(--border));
 }
 
 .tools {
@@ -130,7 +130,7 @@
   font: inherit;
 }
 .select option {
-  color: #0f172a;
+  color: var(--foreground);
 }
 
 .actions {
@@ -156,7 +156,7 @@
     color 150ms ease;
 }
 .iconButton:hover {
-  background: rgba(148, 163, 184, 0.14);
+  background: color-mix(in oklab, var(--muted-foreground) 14%, transparent);
   color: var(--logs-fg);
 }
 .iconButton[aria-pressed='true'] {
@@ -194,7 +194,7 @@
   border-left-color: var(--row-color);
 }
 .row:hover {
-  background: rgba(148, 163, 184, 0.08);
+  background: color-mix(in oklab, var(--muted-foreground) 8%, transparent);
 }
 .row[data-level='error'] {
   --row-color: var(--logs-error);
@@ -290,7 +290,7 @@
 
 .connection[data-state='live']::before {
   background: var(--logs-success);
-  box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--success-400, var(--success)) 60%, transparent);
   animation: logs-pulse 2s ease-out infinite;
 }
 
@@ -309,10 +309,10 @@
 
 @keyframes logs-pulse {
   70% {
-    box-shadow: 0 0 0 0.375rem rgba(74, 222, 128, 0);
+    box-shadow: 0 0 0 0.375rem color-mix(in oklab, var(--success-400, var(--success)) 0%, transparent);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--success-400, var(--success)) 0%, transparent);
   }
 }
 @media (prefers-reduced-motion: reduce) {

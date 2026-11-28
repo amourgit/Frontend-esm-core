@@ -14,30 +14,30 @@
   margin: 0;
   font-size: 1.125rem;
   font-weight: 300;
-  color: #fff;
+  color: var(--foreground);
   letter-spacing: -0.01em;
 }
 
 .seeAllBtn {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #2dd4bf;
+  color: var(--primary-400);
   background: none;
   border: none;
   cursor: pointer;
 }
 .seeAllBtn:hover {
-  color: #5eead4;
+  color: var(--primary-300);
 }
 
 .actionBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid color-mix(in oklab, var(--border-subtle, var(--border)) 100%, transparent);
   padding-bottom: 0.375rem;
   font-size: 0.75rem;
-  color: #cbd5e1;
+  color: var(--foreground);
 }
 
 .actionBarLeft {
@@ -56,15 +56,15 @@
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
-  color: #5eead4;
+  color: var(--primary-300);
   background: none;
   border: none;
   font-weight: 600;
   cursor: pointer;
 }
 .newBtn:hover {
-  color: #99f6e4;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--primary-200);
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
 }
 
 .newBtnIconPlus {
@@ -83,9 +83,9 @@
   margin-top: 0.25rem;
   width: 11rem;
   border-radius: 0.75rem;
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  background: var(--popover);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-2xl);
   padding: 0.25rem 0;
   z-index: 50;
   backdrop-filter: blur(20px);
@@ -97,7 +97,7 @@
   width: 100%;
   text-align: left;
   padding: 0.375rem 0.75rem;
-  color: #e2e8f0;
+  color: var(--foreground);
   background: none;
   border: none;
   display: flex;
@@ -106,33 +106,33 @@
   cursor: pointer;
 }
 .newMenuItem:hover {
-  background: rgba(45, 212, 191, 0.15);
-  color: #5eead4;
+  background: color-mix(in oklab, var(--primary) 15%, transparent);
+  color: var(--primary-300);
 }
 
 .newMenuIconFolder {
   width: 0.875rem;
   height: 0.875rem;
-  color: #fbbf24;
+  color: var(--warning-400);
 }
 
 .newMenuIconUpload {
   width: 0.875rem;
   height: 0.875rem;
-  color: #38bdf8;
+  color: var(--info-400);
 }
 
 .moreBtn {
   padding: 0.25rem;
   border-radius: 0.375rem;
-  color: #94a3b8;
+  color: var(--muted-foreground);
   background: none;
   border: none;
   cursor: pointer;
 }
 .moreBtn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--foreground);
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
 }
 
 .moreBtnIcon {
@@ -145,13 +145,13 @@
   flex-direction: column;
 }
 .list > * + * {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid color-mix(in oklab, var(--border-subtle, var(--border)) 60%, transparent);
 }
 
 .empty {
   padding: 1rem 0.5rem;
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: color-mix(in oklab, var(--foreground) 40%, transparent);
   text-align: center;
 }
 
@@ -166,7 +166,7 @@
   transition: background-color 0.15s;
 }
 .row:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
 }
 
 .rowLeft {
@@ -180,15 +180,15 @@
 .iconFolder {
   width: 1rem;
   height: 1rem;
-  color: #fbbf24;
-  fill: rgba(251, 191, 36, 0.2);
+  color: var(--warning-400);
+  fill: color-mix(in oklab, var(--warning) 20%, transparent);
   flex-shrink: 0;
 }
 
 .iconFile {
   width: 1rem;
   height: 1rem;
-  color: #94a3b8;
+  color: var(--muted-foreground);
   flex-shrink: 0;
 }
 
@@ -196,43 +196,43 @@
   width: 1rem;
   height: 1rem;
   border-radius: 0.125rem;
-  color: #fff;
+  color: var(--foreground);
   font-weight: 700;
   font-size: 0.5625rem;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .iconBadgeWord {
-  background: #2563eb;
+  background: var(--info-600);
 }
 
 .iconBadgeExcel {
-  background: #059669;
+  background: var(--success-600);
 }
 
 .iconBadgePowerpoint {
-  background: #ea580c;
+  background: var(--warning-600);
 }
 
 .docName {
   font-size: 0.75rem;
-  color: #e2e8f0;
+  color: var(--foreground);
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .row:hover .docName {
-  color: #5eead4;
+  color: var(--primary-300);
 }
 
 .docDate {
   font-size: 0.6875rem;
-  color: #64748b;
+  color: var(--muted-foreground);
   white-space: nowrap;
   flex-shrink: 0;
 }

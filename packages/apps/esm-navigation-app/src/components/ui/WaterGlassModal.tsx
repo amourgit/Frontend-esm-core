@@ -38,7 +38,7 @@ export const WaterGlassModal = forwardRef<HTMLDivElement, WaterGlassModalProps>(
       contentClassName = '',
       ...rest
     },
-    ref
+    ref,
   ) => {
     const alignmentClasses = {
       right: 'right-0',
@@ -53,10 +53,10 @@ export const WaterGlassModal = forwardRef<HTMLDivElement, WaterGlassModalProps>(
     return (
       <div
         ref={ref}
-        className={`${defaultPosition} z-[9999] text-xs text-slate-100 select-none overflow-hidden
-          bg-slate-950/90 backdrop-blur-3xl rounded-2xl border border-white/20
-          shadow-[0_16px_48px_0_rgba(0,0,0,0.65)]
-          before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-b before:from-white/[0.12] before:to-transparent before:pointer-events-none
+        className={`${defaultPosition} z-[9999] text-xs text-(--foreground) select-none overflow-hidden
+          bg-(--popover)/90 backdrop-blur-3xl rounded-2xl border border-(--border)
+          shadow-(--shadow-2xl)
+          before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-b before:from-(--foreground)/12 before:to-transparent before:pointer-events-none
           animate-in fade-in zoom-in-95 duration-150
           ${alignmentClasses}
           ${width || ''}
@@ -66,24 +66,16 @@ export const WaterGlassModal = forwardRef<HTMLDivElement, WaterGlassModalProps>(
       >
         {/* Inner Content Slot */}
         <div className={`relative z-10 p-1.5 ${contentClassName}`}>
-          {header && (
-            <div className="pb-1.5 mb-1.5 border-b border-white/10 px-2 pt-1">
-              {header}
-            </div>
-          )}
+          {header && <div className="pb-1.5 mb-1.5 border-b border-(--border) px-2 pt-1">{header}</div>}
 
           {/* Options Component or Children */}
           {optionsComponent || children}
 
-          {footer && (
-            <div className="pt-1.5 mt-1.5 border-t border-white/10 px-2 pb-1">
-              {footer}
-            </div>
-          )}
+          {footer && <div className="pt-1.5 mt-1.5 border-t border-(--border) px-2 pb-1">{footer}</div>}
         </div>
       </div>
     );
-  }
+  },
 );
 
 WaterGlassModal.displayName = 'WaterGlassModal';

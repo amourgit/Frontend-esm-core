@@ -19,7 +19,7 @@
   max-width: none;
   flex: 0 0 auto;
   object-fit: contain;
-  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 1px 4px color-mix(in oklab, var(--shadow-color, var(--foreground)) 30%, transparent));
 }
 @media (min-width: 640px) {
   .image {

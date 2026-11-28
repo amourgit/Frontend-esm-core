@@ -63,11 +63,30 @@ const NavigationContent: React.FC<TopBarState> = (props) => {
     [currentWorkspace, navigate],
   );
 
-  const { activeMenu, isActivePanel, togglePanel, hidePanel, closePanels, searchOpen, setSearchOpen, isMobile, isDesktop } =
-    props;
+  const {
+    activeMenu,
+    isActivePanel,
+    togglePanel,
+    hidePanel,
+    closePanels,
+    searchOpen,
+    setSearchOpen,
+    isMobile,
+    isDesktop,
+  } = props;
   // Objet stable : un nouvel `state` à chaque rendu relancerait `updateExtensionSlotState` des slots.
   const state = useMemo(
-    () => ({ activeMenu, isActivePanel, togglePanel, hidePanel, closePanels, searchOpen, setSearchOpen, isMobile, isDesktop }),
+    () => ({
+      activeMenu,
+      isActivePanel,
+      togglePanel,
+      hidePanel,
+      closePanels,
+      searchOpen,
+      setSearchOpen,
+      isMobile,
+      isDesktop,
+    }),
     [activeMenu, isActivePanel, togglePanel, hidePanel, closePanels, searchOpen, setSearchOpen, isMobile, isDesktop],
   );
 
@@ -86,7 +105,7 @@ const NavigationContent: React.FC<TopBarState> = (props) => {
             <button
               type="button"
               onClick={() => setShowFullNav(false)}
-              className="shrink-0 cursor-pointer rounded-lg bg-white/10 px-2 py-1 text-xs text-slate-300 transition-colors hover:bg-white/15 hover:text-white"
+              className="shrink-0 cursor-pointer rounded-lg bg-(--foreground)/10 px-2 py-1 text-xs text-(--foreground) transition-colors hover:bg-(--foreground)/15 hover:text-(--foreground)"
             >
               Mode Fil d'ariane
             </button>

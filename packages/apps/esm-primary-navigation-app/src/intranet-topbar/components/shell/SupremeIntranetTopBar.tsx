@@ -74,13 +74,13 @@ export function SupremeIntranetTopBar() {
   return (
     <div
       ref={menuRef}
-      className="w-full shrink-0 z-50 select-none relative font-sans text-slate-100 overflow-visible bg-transparent"
+      className="w-full shrink-0 z-50 select-none relative font-sans text-(--foreground) overflow-visible bg-transparent"
     >
       <TopBarUiProvider value={ui}>
-          <header className="w-full bg-transparent transition-colors overflow-visible flex flex-col">
-            {/* Pile de niveaux (1…N) : nombre et contenu déduits des éléments, extensions et de `topbar.levels` */}
-            <TopBarLevels config={config.topbar?.levels} dateRules={config.topbar?.announcements} skinFor={skinFor} />
-          </header>
+        <header className="w-full bg-transparent transition-colors overflow-visible flex flex-col">
+          {/* Pile de niveaux (1…N) : nombre et contenu déduits des éléments, extensions et de `topbar.levels` */}
+          <TopBarLevels config={config.topbar?.levels} dateRules={config.topbar?.announcements} skinFor={skinFor} />
+        </header>
       </TopBarUiProvider>
     </div>
   );

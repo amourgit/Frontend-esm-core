@@ -100,7 +100,7 @@ const TopBarLevel: React.FC<LevelProps> = ({ position, skin, regions, background
         <span
           aria-hidden="true"
           data-testid={`topbar-divider-${level}`}
-          className="mx-1 hidden h-5 w-px shrink-0 bg-white/10 peer-has-[>div:not(:empty)]:block"
+          className="mx-1 hidden h-5 w-px shrink-0 bg-(--border) peer-has-[>div:not(:empty)]:block"
         />
       )}
       <TopBarRegion level={level} region="center" entries={regions.center} className={skin.center} />

@@ -3,10 +3,10 @@
   background-color: var(--ui-layer-accent);
 }
 .toolbar button {
-  background-color: var(--ui-button-primary, #0f62fe);
+  background-color: var(--ui-button-primary, var(--primary));
 }
 .toolbar button:hover {
-  background-color: var(--ui-button-primary-hover, #0050e6);
+  background-color: var(--ui-button-primary-hover, var(--primary-hover, var(--primary-600)));
 }
 
 .alert {
@@ -18,5 +18,5 @@
 }
 
 .errorBackground {
-  background-color: #da1e28;
+  background-color: var(--destructive);
 }
