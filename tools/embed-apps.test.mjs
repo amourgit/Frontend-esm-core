@@ -312,6 +312,21 @@ test('sync : source par défaut = egen-config.json de l’app (url) ; déclarati
   assert.equal(runSync(syncRoot({ embed: [{ declaration: manifest(), grants: { iframe: { allow: ['usb'] } } }] })).status, 1, 'plafond iframe invalide');
 });
 
+test('parité : les listes blanches d’iframe de l’outillage sont celles du protocole publié', async (t) => {
+  let proto;
+  try {
+    proto = await import('@egen-civitas/esm-embed-protocol');
+  } catch {
+    return t.skip('@egen-civitas/esm-embed-protocol non installé (yarn install)');
+  }
+  assert.deepEqual([...IFRAME_SANDBOX_TOKENS], [...proto.IFRAME_SANDBOX_TOKENS]);
+  assert.deepEqual([...IFRAME_ALLOW_TOKENS], [...proto.IFRAME_ALLOW_TOKENS]);
+  // même verdict que le protocole sur les formes valides et invalides
+  for (const iframe of [IFRAME_REQ, { sandbox: ['allow-top-navigation'] }, { allow: ['usb'] }, { sandbox: ['allow-downloads', 'allow-downloads'] }, { autre: [] }, [], 'x']) {
+    assert.equal(checkIframe(iframe).length > 0, proto.validateIframeRights(iframe).length > 0, JSON.stringify(iframe));
+  }
+});
+
 // ── serve-prod : registry fusionné et embed-apps.json ───────────────────────
 async function waitFor(url, tries = 50) {
   for (let i = 0; i < tries; i++) {

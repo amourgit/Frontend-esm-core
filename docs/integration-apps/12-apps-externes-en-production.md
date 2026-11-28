@@ -46,7 +46,7 @@ Une app embarquée est une application **autonome dans une iframe** (Next.js, Pe
     { "manifest": "https://studio.exemple.org/egen-config.json",
       "grants": { "notifications": {}, "events": { "publish": ["app.studio.*"] },
                   "extensions": { "contribute": ["topbar-nav-slot", "shell-rail-left-slot"] },
-                  "iframe": { "sandbox": ["downloads", "modals", "popups-to-escape-sandbox"],
+                  "iframe": { "sandbox": ["allow-downloads", "allow-modals", "allow-popups-to-escape-sandbox"],
                               "allow": ["clipboard-read", "clipboard-write", "fullscreen"] } },
       "limits": { "requestsPerSecond": 50 },
       "config": { "studioApi": "https://api.exemple.org" } }

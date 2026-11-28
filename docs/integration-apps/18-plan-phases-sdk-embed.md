@@ -103,18 +103,18 @@ Décision du 2026-11-26 : **le SDK ne transporte que ce dont le Core est lui-mê
 > Sans cette phase, la migration P6 casse les trois apps : elles ont besoin de `allow-downloads`, `allow-modals`, `allow-popups-to-escape-sandbox` et `allow="clipboard-read; clipboard-write; fullscreen"`, impossibles avec le sandbox par défaut de `esm-embed-host`. Les droits doivent être **négociés** (l'app demande, l'opérateur approuve) — jamais figés dans le code (doc 17 §7 bis).
 
 **Framework**
-- [ ] P5c.1 Protocole : bloc `iframe` dans le manifeste (`iframe.sandbox[]`, `iframe.allow[]` — demande) et dans les grants approuvés (plafond) ; listes blanches strictes de jetons `sandbox` et `allow` ; `effectiveGrants` calcule l'intersection ; rejet explicite des jetons hors liste.
-- [ ] P5c.2 Hôte : `createEmbedHost` accepte les droits effectifs `iframe` et pose `sandbox` + `allow` sur l'iframe ; avertissement `allow-same-origin` + `allow-scripts` sur origine non Core (existant, à conserver).
-- [ ] P5c.3 Client : rien à exposer (droits invisibles pour l'app une fois accordés) ; documenter dans le README que les droits se demandent dans `egen-config.json`.
-- [ ] P5c.4 Testing : `createTestHost`/`egen-embed-check` valident la forme `iframe` (jetons connus, plafonds) ; tests des listes blanches.
-- [ ] P5c.5 Publié (changesets) ; tests Framework verts.
+- [x] P5c.1 Protocole : bloc `iframe` dans le manifeste (`iframe.sandbox[]`, `iframe.allow[]` — demande) et dans les grants approuvés (plafond) ; listes blanches strictes de jetons `sandbox` et `allow` ; `effectiveGrants` calcule l'intersection ; rejet explicite des jetons hors liste.
+- [x] P5c.2 Hôte : `createEmbedHost` accepte les droits effectifs `iframe` et pose `sandbox` + `allow` sur l'iframe ; avertissement `allow-same-origin` + `allow-scripts` sur origine non Core (existant, à conserver).
+- [x] P5c.3 Client : rien à exposer (droits invisibles pour l'app une fois accordés) ; documenter dans le README que les droits se demandent dans `egen-config.json`.
+- [x] P5c.4 Testing : `createTestHost`/`egen-embed-check` valident la forme `iframe` (jetons connus, plafonds) ; tests des listes blanches.
+- [x] P5c.5 Publié (changesets) ; tests Framework verts. — Fait le 2026-11-27 : Framework PR #160 (+ release #161) ; publié sur npm : `esm-embed-protocol` 0.5.0, `esm-embed-host` 0.5.0, `esm-embed-testing` 0.5.0, `esm-embed-client` 0.3.1. 165 tests (66/40/22/37), CI verte. `effectiveIframe` est un export distinct de `effectiveGrants` (même module de calcul, `iframe` n'étant pas une capacité).
 
 **Core**
 - [x] P5c.6 Outillage : `checkEmbedManifest`/`checkApproved` acceptent et valident `iframe` (mêmes listes blanches que le protocole — parité testée) ; le verrou fige la demande et le plafond.
-- [ ] P5c.7 (partiel : `embed-apps.json` transporte déjà `manifest.iframe` + `approved.iframe`, et `external-apps.status.json` journalise demandé vs approuvé — fait le 2026-11-27 ; **reste** : `EmbedFrame` → `createEmbedHost`, bloqué par Framework P5c.1–P5c.2 : `effectiveGrants` et l'option `iframe` de l'hôte ne sont pas encore publiés) transport des droits effectifs `iframe` jusqu'à `createEmbedHost` ; `external-apps.status.json` journalise demandé vs approuvé.
+- [x] P5c.7 `embed-apps.json` transporte `manifest.iframe` + `approved.iframe` ; `external-apps.status.json` journalise demandé vs approuvé ; `EmbedFrame` passe `effectiveIframe(manifest.iframe, approved.iframe)` à `createEmbedHost` (pages et vues d'extension) ; tests `root.test.tsx` (intersection, non-approuvé = socle seul). Parité des listes blanches outillage ↔ protocole 0.5.0 testée (`tools/embed-apps.test.mjs`).
 - [x] P5c.8 `egen-config.json` : l'app publie son propre fichier de déclaration à la racine de son URL (manifeste + `config` publique + `iframe` demandé) ; `external:sync`/`serve-prod` le lisent comme source par défaut, la déclaration `embed` de `external-apps.json` restant le **second recours** et le lieu de l'approbation. Tests d'outils.
   - ℹ Fait : `external-apps.json` → `embed[]` accepte `url` (voie normale : `<url>/egen-config.json`), `manifest` (URL/chemin) ou `declaration` (second recours, figée dans le verrou, `manifestSource: "inline"`) — une seule source par entrée ; la `config` publique du manifeste est fusionnée avec `embed[].config` (l'opérateur prime). 65 tests d'outils.
-- [ ] P5c.9 Docs 12, 17, 18 ; push + bilan.
+- [x] P5c.9 Docs 12, 17, 18 ; push + bilan.
 
 ## P5d — Toasts partagés (2026-11-26)
 
@@ -125,10 +125,10 @@ Demande : les apps externes transmettent leurs toasts au Core en temps réel, et
 - [x] P5d.4 Testing : hôte de test (dédoublonnage), 3 scénarios de conformité, vérificateur (rappel du modèle), simulateur.
 - [x] P5d.5 Core : adaptateur `esm-embed-app` (attribution à l'app, dédoublonnage 5 s par app+id, `id` non transmis à l'affichage), validation de la politique dans l'outillage (`grants.notifications`) ; docs 17 §5 ter ; 44 tests app, 60 tests outils.
 - [x] P5d.6 Poussé compatible avec `esm-embed-host` 0.3.0 publié (cast commenté sur le retour de `show`).
-- [ ] P5d.7 Après publication de la release Framework (PR #158) : `deps:egen`, retirer le cast de `providers.ts`, vérifier le bout en bout `{ displayed }`.
+- [x] P5d.7 Après publication de la release Framework (PR #158) : `deps:egen`, retirer le cast de `providers.ts`, vérifier le bout en bout `{ displayed }`. — Fait : `deps:egen` ciblé (`--ignore` de tous les autres paquets @egen-civitas : seules les plages `esm-embed-host`/`esm-embed-protocol` passent à `^0.5.0`), cast retiré de `providers.ts` (le type `void | boolean` de l'hôte 0.5.0 l'accepte).
 
 ## P6 — Migration des apps et compatibilité
-- [ ] P6.1 **tweakcn (pilote)** : publier `egen-config.json` à la racine (route `theme-studio`, `placement.rail`, `navigation`, `iframe` demandé : downloads/modals/popups-to-escape + clipboard/fullscreen, `config` publique), adopter `esm-embed-client` (langue, événements, **notifications via `egen.notify`/`useEgenNotify` — jamais de doublon de toast**, extensions) ; thème, session et API : directement auprès de leurs sources (Keycloak, service de thèmes), pas par le SDK ; **supprimer** `integrations/egen/esm-tweakcn-app/` et son workflow de release tarball ; basculer `external-apps.json` sur `embed`.
+- [ ] P6.1 **tweakcn (pilote)** : publier `egen-config.json` à la racine (route `theme-studio`, `placement.rail`, `navigation`, `iframe` demandé : allow-downloads/allow-modals/allow-popups-to-escape-sandbox + clipboard/fullscreen, `config` publique), adopter `esm-embed-client` (langue, événements, **notifications via `egen.notify`/`useEgenNotify` — jamais de doublon de toast**, extensions) ; thème, session et API : directement auprès de leurs sources (Keycloak, service de thèmes), pas par le SDK ; **supprimer** `integrations/egen/esm-tweakcn-app/` et son workflow de release tarball ; basculer `external-apps.json` sur `embed`.
 - [ ] P6.2 Character Factory : `egen-config.json` + client (navigation `none`) ; suppression de `integrations/egen/esm-character-app/`.
 - [ ] P6.3 Penpot : `egen-config.json` + client si le fork peut être modifié ; sinon injection du script v1.1 (`egen-bridge.js`) en attendant P8, sans toucher au dépôt Penpot amont (référence en lecture seule : fournir les fichiers à y ajouter côté opérateur).
 - [ ] P6.4 Dépréciation de `esm-nextjs-utils` (réexport + avertissement), changesets.
@@ -156,9 +156,9 @@ Demande : les apps externes transmettent leurs toasts au Core en temps réel, et
 - [ ] P8.5 Chaque app sert `egen-config.json` à la racine de son URL déployée et `frame-ancestors` limité à l'origine du Shell.
 
 **Framework**
-- [ ] P8.6 `esm-nextjs-utils` : supprimer le paquet (après la dépréciation P6.4) ; déplacer ou retirer `assets/egen-bridge.js` selon qu'une app déployée l'injecte encore.
-- [ ] P8.7 `esm-embed-host` : retirer le pont 1.1 (`handleLegacy`, `legacySend`, options `legacy`) quand plus aucune app ne parle `{ egen: 1 }` ; `esm-embed-protocol` : retirer `SUPPORTED_PROTOCOLS` 1 et les types legacy.
-- [ ] P8.8 `esm-integration-utils` : **conservé** (apps Module Federation) — vérifier qu'aucun doc ne le présente comme voie iframe.
+- [x] P8.6 `esm-nextjs-utils` : supprimer le paquet (après la dépréciation P6.4) ; déplacer ou retirer `assets/egen-bridge.js` selon qu'une app déployée l'injecte encore. — Fait le 2026-11-27 (Framework #160) : paquet et `egen-bridge.js` supprimés. **Reste opérateur** : `npm deprecate` des versions déjà publiées ; une app qui injecte encore `egen-bridge.js` (Penpot, P6.3) doit adopter le client avant redéploiement.
+- [x] P8.7 (fait le 2026-11-27, protocole 0.5.0 / hôte 0.5.0 : `SUPPORTED_PROTOCOLS = [2]`, pont 1.1 et option `legacy` retirés, option `sandbox` remplacée par `iframe`) `esm-embed-host` : retirer le pont 1.1 (`handleLegacy`, `legacySend`, options `legacy`) quand plus aucune app ne parle `{ egen: 1 }` ; `esm-embed-protocol` : retirer `SUPPORTED_PROTOCOLS` 1 et les types legacy.
+- [x] P8.8 `esm-integration-utils` : **conservé** (apps Module Federation) — vérifier qu'aucun doc ne le présente comme voie iframe.
 
 **Vérification finale**
 - [ ] P8.9 E2E : les trois apps fonctionnent en `kind: embed` (page, rail, TopBar, navigation partagée, notifications) ; `external-apps.status.json` ne contient plus que `kind: embed` ; `yarn external:check` propre ; tests Framework + Core + outils verts.
