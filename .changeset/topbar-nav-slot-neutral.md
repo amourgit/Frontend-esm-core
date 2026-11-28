@@ -1,6 +1,5 @@
 ---
 "@egen/esm-primary-navigation-app": patch
-"@egen/esm-ai-assistant-app": patch
 "@egen/esm-home-app": patch
 "@egen/esm-annuaire-app": patch
 "@egen/esm-informations-app": patch

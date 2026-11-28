@@ -6,14 +6,10 @@ import {
   getLocale,
   getSessionStore,
   getTenantId,
-  hasTool,
-  registerTool,
-  removeTool,
   showSnackbar,
   userHasAccess,
 } from '@egen-civitas/esm-framework';
 import { confirmDialog } from './confirm';
-import { embedToolId, toToolDefinition } from './ai-tools';
 import type { CoreServices, ExtensionInfo } from './providers';
 
 /** Clone JSON-sûr (une `meta` d'extension peut contenir des valeurs non transmissibles par postMessage). */
@@ -39,14 +35,26 @@ function isVisible(extensionId: string): boolean {
 export function listExtensions(slot: string): ExtensionInfo[] {
   return getAssignedExtensions(slot)
     .filter((e) => isVisible(e.id))
-    .map((e) => ({ name: e.name, moduleName: e.moduleName, order: getExtensionRegistration(e.id)?.order, meta: jsonSafe(e.meta as Record<string, unknown>) }));
+    .map((e) => ({
+      name: e.name,
+      moduleName: e.moduleName,
+      order: getExtensionRegistration(e.id)?.order,
+      meta: jsonSafe(e.meta as Record<string, unknown>),
+    }));
 }
 
 /** Branchement réel sur les services du Core (esm-framework). */
 export const coreServices: CoreServices = {
   getLocale: () => getLocale(),
   subscribeLocale(cb) {
-    const i18n = (window as unknown as { i18next?: { on?: (e: string, f: (l: string) => void) => void; off?: (e: string, f: (l: string) => void) => void } }).i18next;
+    const i18n = (
+      window as unknown as {
+        i18next?: {
+          on?: (e: string, f: (l: string) => void) => void;
+          off?: (e: string, f: (l: string) => void) => void;
+        };
+      }
+    ).i18next;
     if (!i18n?.on || !i18n.off) return () => undefined;
     i18n.on('languageChanged', cb);
     return () => i18n.off!('languageChanged', cb);
@@ -70,15 +78,5 @@ export const coreServices: CoreServices = {
         cb();
       }
     });
-  },
-  registerAiTools(moduleName, tools, invoke) {
-    for (const t of tools) {
-      const def = toToolDefinition(moduleName, t, invoke);
-      if (hasTool(def.id)) removeTool(def.id); // réenregistrement après rechargement de l'iframe
-      registerTool(def);
-    }
-  },
-  unregisterAiTools(moduleName, names) {
-    for (const n of names) removeTool(embedToolId(moduleName, n));
   },
 };

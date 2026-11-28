@@ -34,7 +34,6 @@ export { EMBED_APP_NAME };
 export const KNOWN_CONTAINERS = new Set([
   'egen-apps-container',
   'egen-top-nav-app-container',
-  'egen-ai-assistant-app-container',
   'egen-footer-app-container',
   'egen-page-background-container',
   'egen-workspaces-container',

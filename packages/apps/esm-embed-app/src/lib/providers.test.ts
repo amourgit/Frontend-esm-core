@@ -6,7 +6,14 @@ afterEach(() => {
 });
 import { availableCapabilities } from '@egen-civitas/esm-embed-host';
 import { CAPABILITY_IDS } from '@egen-civitas/esm-embed-protocol';
-import { createCoreProviders, createEventBridge, EGEN_EVENT, resetToastDedupe, TOAST_DEDUPE_MS, type CoreServices } from './providers';
+import {
+  createCoreProviders,
+  createEventBridge,
+  EGEN_EVENT,
+  resetToastDedupe,
+  TOAST_DEDUPE_MS,
+  type CoreServices,
+} from './providers';
 
 function fakeCore(over: Partial<CoreServices> = {}): CoreServices {
   return {
@@ -18,8 +25,6 @@ function fakeCore(over: Partial<CoreServices> = {}): CoreServices {
     log: vi.fn(),
     listExtensions: vi.fn(() => [{ name: 'nav-x', moduleName: '@egen/esm-x-app', meta: { label: 'X' } }]),
     subscribeExtensions: vi.fn(() => () => undefined),
-    registerAiTools: vi.fn(),
-    unregisterAiTools: vi.fn(),
     ...over,
   };
 }
@@ -55,22 +60,17 @@ describe('createCoreProviders (seulement ce dont le Core est la source)', () => 
     expect(got).toEqual([1]);
   });
 
-  it('outils IA et télémétrie relayés avec le module émetteur', () => {
+  it('télémétrie relayée avec le module émetteur', () => {
     const core = fakeCore();
     const p = createCoreProviders(core);
-    const invoke = async () => 1;
-    p.aiTools!.register('@a/b', [{ name: 't', description: 'd' }], invoke);
-    expect(core.registerAiTools).toHaveBeenCalledWith('@a/b', [{ name: 't', description: 'd' }], invoke);
-    p.aiTools!.unregister('@a/b', ['t']);
-    expect(core.unregisterAiTools).toHaveBeenCalledWith('@a/b', ['t']);
     p.telemetry!.log('warn', 'msg', { a: 1 }, { moduleName: '@a/b' });
     expect(core.log).toHaveBeenCalledWith('warn', 'msg', { a: 1 }, '@a/b');
   });
 
-  it('les 12 capacités du SDK sont servies, et seulement elles (aucune promesse non tenue, aucune capacité retirée)', () => {
+  it('les 11 capacités du SDK sont servies, et seulement elles (aucune promesse non tenue, aucune capacité retirée)', () => {
     const avail = availableCapabilities(createCoreProviders(fakeCore()));
     expect([...avail].sort()).toEqual([...CAPABILITY_IDS].sort());
-    expect(CAPABILITY_IDS).toHaveLength(12);
+    expect(CAPABILITY_IDS).toHaveLength(11);
     const providers = createCoreProviders(fakeCore()) as Record<string, unknown>;
     for (const removed of ['session', 'permissions', 'theme', 'api']) expect(providers[removed]).toBeUndefined();
   });
@@ -85,7 +85,11 @@ describe('toasts : le Core est l’afficheur (attribution, dédoublonnage)', () 
     await (p.notifications!.show as any)({ kind: 'success', title: 'Enregistré' }, ctx);
     await (p.notifications!.show as any)({ kind: 'error', title: 'Échec', subtitle: 'Réseau indisponible' }, ctx);
     expect(core.notify).toHaveBeenNthCalledWith(1, { kind: 'success', title: 'Enregistré', subtitle: 'Theme Studio' });
-    expect(core.notify).toHaveBeenNthCalledWith(2, { kind: 'error', title: 'Échec', subtitle: 'Theme Studio · Réseau indisponible' });
+    expect(core.notify).toHaveBeenNthCalledWith(2, {
+      kind: 'error',
+      title: 'Échec',
+      subtitle: 'Theme Studio · Réseau indisponible',
+    });
   });
 
   it('le même id n’est pas réaffiché dans la fenêtre de dédoublonnage ; l’app est informée (false)', async () => {
@@ -107,7 +111,9 @@ describe('toasts : le Core est l’afficheur (attribution, dédoublonnage)', () 
     await (p.notifications!.show as any)({ kind: 'info', title: 'x' }, ctx);
     expect(core.notify).toHaveBeenCalledTimes(2);
     await (p.notifications!.show as any)({ kind: 'info', title: 'y', id: 'same' }, ctx);
-    expect(await (p.notifications!.show as any)({ kind: 'info', title: 'y', id: 'same' }, { moduleName: '@autre/app' })).toBe(true);
+    expect(
+      await (p.notifications!.show as any)({ kind: 'info', title: 'y', id: 'same' }, { moduleName: '@autre/app' }),
+    ).toBe(true);
     expect(core.notify).toHaveBeenCalledTimes(4);
   });
 

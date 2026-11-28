@@ -1,30 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  ASSISTANT_MODES,
   Autocomplete,
   Combobox,
-  getSavedAssistantMode,
   isXboxAudioMuted,
   MORPH_SELECT_DEFAULT_TRANSITION,
-  preloadSplineScene,
-  saveAssistantMode,
-  LiveOrb,
   MorphSelect,
   MorphSelectContent,
   MorphSelectItem,
   MorphSelectTrigger,
   MorphSelectValue,
   playXboxSound,
-  PromptInput,
-  RECURSIVE_EROSION_DEFAULTS,
-  RecursiveErosionBackground,
-  SplineScene,
   toggleXboxAudio,
-  WaterGlassModal,
   type AutocompleteItemData,
   type ComboboxItemData,
-  type LiveOrbVariant,
   type XboxSoundType,
 } from '@egen-civitas/esm-framework';
 import styles from './component-showcase.module.css';
@@ -32,8 +21,7 @@ import styles from './component-showcase.module.css';
 // =============================================================================
 //  Vitrine — composants ajoutés récemment au styleguide
 //    • Sélections (Tailwind) : MorphSelect, Autocomplete, Combobox
-//    • Assistant IA : LiveOrb, SplineScene, PromptInput, RecursiveErosionBackground,
-//      WaterGlassModal, ASSISTANT_MODES, sons Xbox
+//    • Sons d'interface : playXboxSound
 //  Chaque composant est présenté avec ses variantes (une carte = une variante).
 //  Ce fichier n'utilise que les classes SCSS de la vitrine (aucune classe Tailwind
 //  propre) : le rendu des composants eux-mêmes vient du styleguide.
@@ -80,28 +68,6 @@ const MORPH_STATUSES = [
   { value: 'suspendu', label: 'Suspendu', description: 'Accès temporairement coupé' },
 ];
 
-const ORB_VARIANTS: Array<{
-  label: string;
-  props: {
-    variant: LiveOrbVariant;
-    color?: string;
-    eyeColor?: string;
-    interactive?: boolean;
-    blink?: boolean;
-    ears?: boolean;
-    earColors?: string[];
-  };
-}> = [
-  { label: 'white (défaut)', props: { variant: 'white' } },
-  { label: 'black', props: { variant: 'black' } },
-  { label: 'webgl (dégradé)', props: { variant: 'webgl' } },
-  { label: 'custom (couleurs libres)', props: { variant: 'custom', color: '#0f766e', eyeColor: '#ecfeff' } },
-  { label: 'sans suivi du pointeur', props: { variant: 'white', interactive: false } },
-  { label: 'sans clignement', props: { variant: 'black', blink: false } },
-  { label: 'sans oreilles', props: { variant: 'white', ears: false } },
-  { label: 'oreilles personnalisées', props: { variant: 'white', earColors: ['#22d3ee', '#a78bfa'] } },
-];
-
 const XBOX_SOUNDS: XboxSoundType[] = [
   'hover',
   'select',
@@ -118,8 +84,6 @@ const XBOX_SOUNDS: XboxSoundType[] = [
   'toastError',
   'toggle',
 ];
-
-const SPLINE_SCENE = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode';
 
 /**
  * Isole chaque bloc de la vitrine : si un composant plante (ex. export absent du shell
@@ -151,8 +115,6 @@ export class ShowcaseBoundary extends React.Component<
     return this.props.children;
   }
 }
-
-type Modal = 'right' | 'left' | 'center' | 'rich';
 
 export const Variant: React.FC<{ label: string; children: React.ReactNode; tall?: boolean }> = ({
   label,
@@ -507,280 +469,14 @@ const SelectionsShowcaseContent: React.FC = () => {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  Assistant IA
+//  Sons d'interface
 // ─────────────────────────────────────────────────────────────────────────────
-const AssistantShowcaseContent: React.FC = () => {
+const SoundsShowcaseContent: React.FC = () => {
   const { t } = useTranslation();
-
-  const [splineOn, setSplineOn] = useState(false);
-  const [lastPrompt, setLastPrompt] = useState('');
-  const [controlledPrompt, setControlledPrompt] = useState('');
-  const [erosionMode, setErosionMode] = useState<'dark' | 'light'>(RECURSIVE_EROSION_DEFAULTS.mode);
-  const [hue, setHue] = useState<number>(RECURSIVE_EROSION_DEFAULTS.hue);
-  const [saturation, setSaturation] = useState<number>(RECURSIVE_EROSION_DEFAULTS.saturation);
-  const [brightness, setBrightness] = useState<number>(RECURSIVE_EROSION_DEFAULTS.brightness);
-  const [modals, setModals] = useState<Record<Modal, boolean>>({
-    right: true,
-    left: false,
-    center: false,
-    rich: false,
-  });
   const [muted, setMuted] = useState(isXboxAudioMuted());
-  const [savedMode, setSavedMode] = useState(getSavedAssistantMode());
-
-  const toggleModal = (key: Modal) => setModals((prev) => ({ ...prev, [key]: !prev[key] }));
-
-  const modalLabels: Record<Modal, string> = {
-    right: 'align="right"',
-    left: 'align="left"',
-    center: 'align="center"',
-    rich: 'header + footer',
-  };
 
   return (
     <>
-      {/* ── LiveOrb ── */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>LiveOrb</h2>
-        <p className={styles.sectionDescription}>
-          {t(
-            'showcaseLiveOrbDescription',
-            'Tête 3D (type Baymax) aux oreilles lumineuses, dont le visage pivote pour suivre le pointeur (WebGL, repli CSS sans GPU) — variantes de matière, couleurs libres, oreilles optionnelles et colorables, suivi et clignement désactivables.',
-          )}
-        </p>
-        <div className={styles.variantsGrid}>
-          {ORB_VARIANTS.map((orb) => (
-            <Variant key={orb.label} label={orb.label}>
-              <div className={styles.stageCenter}>
-                <LiveOrb size={140} {...orb.props} />
-              </div>
-            </Variant>
-          ))}
-        </div>
-      </section>
-
-      {/* ── SplineScene ── */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>SplineScene</h2>
-        <p className={styles.sectionDescription}>
-          {t(
-            'showcaseSplineSceneDescription',
-            'Scène 3D Spline plein cadre (prop scene = URL .splinecode) — chargée à la demande car la scène pèse ~1,3 Mo.',
-          )}
-        </p>
-        <button type="button" className={styles.controlButton} onClick={() => setSplineOn((v) => !v)}>
-          {splineOn ? 'Décharger la scène' : 'Charger la scène 3D'}
-        </button>
-        {splineOn && (
-          <div className={styles.stageDark} style={{ height: 340, marginTop: '1rem' }}>
-            <SplineScene scene={SPLINE_SCENE} />
-          </div>
-        )}
-      </section>
-
-      {/* ── PromptInput ── */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>PromptInput</h2>
-        <p className={styles.sectionDescription}>
-          {t(
-            'showcasePromptInputDescription',
-            "Zone de saisie de l'assistant — choix du modèle et de l'effort, pièces jointes, envoi avec Entrée. Le callback onSubmit reçoit le texte et les métadonnées.",
-          )}
-        </p>
-        <div className={styles.variantsStack}>
-          <Variant label="Défaut">
-            <PromptInput
-              onSubmit={(value, meta) =>
-                setLastPrompt(`${value} — ${meta.model} / ${meta.effort} / ${meta.attachments.length} pièce(s)`)
-              }
-            />
-            <span className={styles.variantOutput}>Dernier envoi : {lastPrompt || '—'}</span>
-          </Variant>
-          <Variant label="Modèles, efforts et placeholder personnalisés · 1 pièce jointe max">
-            <PromptInput
-              placeholder="Pose une question sur tes documents GED…"
-              models={['EGEN Rapide', 'EGEN Expert']}
-              efforts={['Standard', 'Approfondi']}
-              maxAttachments={1}
-              onSubmit={(value, meta) => setLastPrompt(`${value} — ${meta.model} / ${meta.effort}`)}
-            />
-          </Variant>
-          <Variant label="Contrôlé (value / onChange)">
-            <PromptInput
-              value={controlledPrompt}
-              onChange={setControlledPrompt}
-              onSubmit={() => setControlledPrompt('')}
-            />
-            <span className={styles.variantOutput}>{controlledPrompt.length} caractère(s) saisi(s)</span>
-          </Variant>
-        </div>
-      </section>
-
-      {/* ── RecursiveErosionBackground ── */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>RecursiveErosionBackground</h2>
-        <p className={styles.sectionDescription}>
-          {t(
-            'showcaseRecursiveErosionDescription',
-            'Fond animé « sphère de particules » (iframe sandboxée) — mode clair/sombre, teinte, saturation et luminosité réglables.',
-          )}
-        </p>
-        <div className={styles.controls}>
-          <button
-            type="button"
-            className={styles.controlButton}
-            onClick={() => setErosionMode((m) => (m === 'dark' ? 'light' : 'dark'))}
-          >
-            Mode : {erosionMode}
-          </button>
-          <label className={styles.controlLabel}>
-            Teinte {hue}°
-            <input type="range" min={-180} max={180} value={hue} onChange={(e) => setHue(Number(e.target.value))} />
-          </label>
-          <label className={styles.controlLabel}>
-            Saturation {saturation.toFixed(1)}
-            <input
-              type="range"
-              min={0}
-              max={2}
-              step={0.1}
-              value={saturation}
-              onChange={(e) => setSaturation(Number(e.target.value))}
-            />
-          </label>
-          <label className={styles.controlLabel}>
-            Luminosité {brightness.toFixed(2)}
-            <input
-              type="range"
-              min={0.35}
-              max={1.65}
-              step={0.05}
-              value={brightness}
-              onChange={(e) => setBrightness(Number(e.target.value))}
-            />
-          </label>
-          <button
-            type="button"
-            className={styles.controlButton}
-            onClick={() => {
-              setErosionMode(RECURSIVE_EROSION_DEFAULTS.mode);
-              setHue(RECURSIVE_EROSION_DEFAULTS.hue);
-              setSaturation(RECURSIVE_EROSION_DEFAULTS.saturation);
-              setBrightness(RECURSIVE_EROSION_DEFAULTS.brightness);
-            }}
-          >
-            Réinitialiser
-          </button>
-        </div>
-        <div className={styles.stageDark} style={{ height: 300 }}>
-          <RecursiveErosionBackground mode={erosionMode} hue={hue} saturation={saturation} brightness={brightness} />
-        </div>
-      </section>
-
-      {/* ── WaterGlassModal ── */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>WaterGlassModal</h2>
-        <p className={styles.sectionDescription}>
-          {t(
-            'showcaseWaterGlassDescription',
-            "Panneau « verre d'eau » pour menus et popovers — alignement, largeur, slots header/footer. Se positionne par rapport au parent relatif.",
-          )}
-        </p>
-        <div className={styles.controls}>
-          {(Object.keys(modalLabels) as Modal[]).map((key) => (
-            <button key={key} type="button" className={styles.controlButton} onClick={() => toggleModal(key)}>
-              {modals[key] ? 'Masquer' : 'Afficher'} · {modalLabels[key]}
-            </button>
-          ))}
-        </div>
-        <div className={styles.stageDark} style={{ height: 300, position: 'relative', overflow: 'visible' }}>
-          {modals.right && (
-            <WaterGlassModal align="right" className="absolute" style={{ top: 8, width: 224 }}>
-              <div style={{ padding: 8 }}>align="right"</div>
-            </WaterGlassModal>
-          )}
-          {modals.left && (
-            <WaterGlassModal align="left" className="absolute" style={{ top: 8, width: 224 }}>
-              <div style={{ padding: 8 }}>align="left"</div>
-            </WaterGlassModal>
-          )}
-          {modals.center && (
-            <WaterGlassModal align="center" className="absolute" style={{ top: 96, width: 224 }}>
-              <div style={{ padding: 8 }}>align="center"</div>
-            </WaterGlassModal>
-          )}
-          {modals.rich && (
-            <WaterGlassModal
-              align="center"
-              className="absolute"
-              style={{ bottom: 12, width: 288 }}
-              header={<strong>Actions rapides</strong>}
-              footer={<small>Échap pour fermer</small>}
-            >
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: 6 }}>
-                <span>Nouveau dossier</span>
-                <span>Téléverser un fichier</span>
-                <span>Ouvrir la recherche GED</span>
-              </div>
-            </WaterGlassModal>
-          )}
-        </div>
-      </section>
-
-      {/* ── ASSISTANT_MODES ── */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>ASSISTANT_MODES</h2>
-        <p className={styles.sectionDescription}>
-          {t(
-            'showcaseAssistantModesDescription',
-            "Les 4 modes de l'assistant (données du styleguide : nom, accroche, principe, exemple, classes de couleur).",
-          )}
-        </p>
-        <div className={styles.variantsGrid}>
-          {Object.values(ASSISTANT_MODES).map((mode) => (
-            <Variant key={mode.id} label={`${mode.number} · ${mode.id}`}>
-              <strong>
-                {mode.emoji} {mode.name}
-              </strong>
-              <span className={styles.variantOutput}>{mode.tagline}</span>
-              <span>{mode.principle}</span>
-              <em className={styles.variantOutput}>Ex. : {mode.example}</em>
-            </Variant>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Persistance du mode + préchargement Spline ── */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>saveAssistantMode · getSavedAssistantMode · preloadSplineScene</h2>
-        <p className={styles.sectionDescription}>
-          {t(
-            'showcaseAssistantPersistenceDescription',
-            "Le mode de l'assistant est mémorisé (localStorage) et relu au prochain chargement ; preloadSplineScene précharge une scène 3D avant son affichage.",
-          )}
-        </p>
-        <div className={styles.controls}>
-          {Object.values(ASSISTANT_MODES).map((mode) => (
-            <button
-              key={mode.id}
-              type="button"
-              className={styles.controlButton}
-              data-active={savedMode === mode.id || undefined}
-              onClick={() => {
-                saveAssistantMode(mode.id);
-                setSavedMode(getSavedAssistantMode());
-              }}
-            >
-              {mode.emoji} {mode.name}
-            </button>
-          ))}
-          <span className={styles.variantOutput}>Mode mémorisé : {savedMode}</span>
-          <button type="button" className={styles.controlButton} onClick={() => preloadSplineScene(SPLINE_SCENE)}>
-            Précharger la scène Spline
-          </button>
-        </div>
-      </section>
-
       {/* ── Sons Xbox ── */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>playXboxSound</h2>
@@ -813,8 +509,8 @@ export const SelectionsShowcase: React.FC = () => (
   </ShowcaseBoundary>
 );
 
-export const AssistantShowcase: React.FC = () => (
-  <ShowcaseBoundary name="Assistant IA (LiveOrb · PromptInput · …)">
-    <AssistantShowcaseContent />
+export const SoundsShowcase: React.FC = () => (
+  <ShowcaseBoundary name="Sons d'interface (playXboxSound)">
+    <SoundsShowcaseContent />
   </ShowcaseBoundary>
 );

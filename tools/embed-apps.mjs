@@ -15,7 +15,7 @@
 export const EMBED_APP_NAME = '@egen/esm-embed-app';
 
 export const CAPABILITY_IDS = [
-  'tenant', 'locale', 'navigation', 'events', 'notifications', 'dialogs', 'flags', 'config', 'telemetry', 'ai-tools', 'extensions', 'lifecycle',
+  'tenant', 'locale', 'navigation', 'events', 'notifications', 'dialogs', 'flags', 'config', 'telemetry', 'extensions', 'lifecycle',
 ];
 /** Capacités accordées sans approbation (état d'interface du Core en lecture, sans risque). */
 export const DEFAULT_GRANT_CAPABILITIES = new Set(['tenant', 'locale', 'navigation', 'config', 'telemetry', 'lifecycle']);

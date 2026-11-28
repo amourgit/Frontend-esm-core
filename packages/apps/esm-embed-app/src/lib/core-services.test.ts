@@ -8,9 +8,6 @@ vi.mock('@egen-civitas/esm-framework', () => ({
   getLocale: vi.fn(),
   getSessionStore: vi.fn(),
   getTenantId: vi.fn(),
-  hasTool: vi.fn(),
-  registerTool: vi.fn(),
-  removeTool: vi.fn(),
   showSnackbar: vi.fn(),
   userHasAccess: vi.fn(),
 }));
@@ -18,9 +15,16 @@ vi.mock('@egen-civitas/esm-framework', () => ({
 import * as fw from '@egen-civitas/esm-framework';
 import { coreServices, listExtensions } from './core-services';
 
-const m = <T,>(f: unknown) => f as ReturnType<typeof vi.fn> & T;
+const m = <T>(f: unknown) => f as ReturnType<typeof vi.fn> & T;
 
-const assigned = (id: string, over: Record<string, unknown> = {}) => ({ id, name: id, moduleName: `@egen/${id}`, meta: { label: id }, config: null, ...over });
+const assigned = (id: string, over: Record<string, unknown> = {}) => ({
+  id,
+  name: id,
+  moduleName: `@egen/${id}`,
+  meta: { label: id },
+  config: null,
+  ...over,
+});
 
 let regs: Record<string, Record<string, unknown> | undefined>;
 let user: unknown;
@@ -29,14 +33,22 @@ beforeEach(() => {
   regs = {};
   user = { uuid: 'u' };
   m(fw.getExtensionRegistration).mockImplementation((id: string) => regs[id]);
-  m(fw.getSessionStore).mockImplementation(() => ({ getState: () => (user ? { loaded: true, session: { user } } : { loaded: false }) }));
+  m(fw.getSessionStore).mockImplementation(() => ({
+    getState: () => (user ? { loaded: true, session: { user } } : { loaded: false }),
+  }));
   m(fw.getFeatureFlag).mockReturnValue(true);
   m(fw.userHasAccess).mockReturnValue(true);
 });
 
 describe('listExtensions (le Core reste l’autorité d’affichage)', () => {
   it('ne retourne que les extensions enregistrées, visibles, avec des champs transmissibles', () => {
-    m(fw.getAssignedExtensions).mockReturnValue([assigned('a'), assigned('ghost'), assigned('flagged'), assigned('priv'), assigned('open')]);
+    m(fw.getAssignedExtensions).mockReturnValue([
+      assigned('a'),
+      assigned('ghost'),
+      assigned('flagged'),
+      assigned('priv'),
+      assigned('open'),
+    ]);
     regs = {
       a: { order: 2, privileges: undefined },
       flagged: { featureFlag: 'beta' },
@@ -102,18 +114,5 @@ describe('services du Core', () => {
     expect(coreServices.getLocale()).toBe('en');
     expect(coreServices.getTenantId()).toBe('acme');
     expect(coreServices.isFeatureEnabled('x')).toBe(true);
-  });
-
-  it('outils IA : enregistre, remplace un outil déjà présent (iframe rechargée), désenregistre', () => {
-    const invoke = async () => 1;
-    m(fw.hasTool).mockReturnValueOnce(false).mockReturnValueOnce(true);
-    coreServices.registerAiTools('@civitas/esm-studio-app', [{ name: 'a', description: 'A' }, { name: 'b', description: 'B' }], invoke);
-    expect(fw.registerTool).toHaveBeenCalledTimes(2);
-    expect(fw.removeTool).toHaveBeenCalledTimes(1);
-    expect(m(fw.removeTool).mock.calls[0][0]).toBe('embed.civitas-esm-studio-app.b');
-    expect(m(fw.registerTool).mock.calls[0][0]).toMatchObject({ id: 'embed.civitas-esm-studio-app.a', moduleName: '@civitas/esm-studio-app' });
-    m(fw.removeTool).mockClear();
-    coreServices.unregisterAiTools('@civitas/esm-studio-app', ['a']);
-    expect(fw.removeTool).toHaveBeenCalledWith('embed.civitas-esm-studio-app.a');
   });
 });

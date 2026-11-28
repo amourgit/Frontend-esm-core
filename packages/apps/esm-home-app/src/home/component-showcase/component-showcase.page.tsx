@@ -53,7 +53,7 @@ import {
   NotificationsShowcase,
   SitesShowcase,
 } from './framework-components-showcase.component';
-import { AssistantShowcase, SelectionsShowcase } from './new-components-showcase.component';
+import { SoundsShowcase, SelectionsShowcase } from './new-components-showcase.component';
 import styles from './component-showcase.module.css';
 
 // =============================================================================
@@ -1076,8 +1076,8 @@ const ComponentShowcasePage: React.FC = () => {
         {/* ── Nouveaux composants : sélections (MorphSelect, Autocomplete, Combobox) ── */}
         <SelectionsShowcase />
 
-        {/* ── Nouveaux composants : assistant IA (LiveOrb, SplineScene, PromptInput…) ── */}
-        <AssistantShowcase />
+        {/* ── Nouveaux composants : sons d'interface (playXboxSound) ── */}
+        <SoundsShowcase />
 
         {/* ── Composants du styleguide jusque-là absents de la vitrine ── */}
         <ContentShowcase />
