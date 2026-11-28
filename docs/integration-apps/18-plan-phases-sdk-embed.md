@@ -12,7 +12,7 @@ Suivi : cocher `[x]` dans ce fichier à la fin de chaque étape (mise à jour da
 | P3 | Hôte | F | `esm-embed-host` |
 | P4 | Test et simulateur | F | `esm-embed-testing` |
 | P5 | Intégration Core (`kind: embed`) | C (+F) | `esm-embed-app`, outils `external-apps`, `serve-prod`, verrou |
-| P5b | Recentrage du SDK (règle d'or) et extensions | F, C | 12 capacités, contributions de slots, rail, outils IA, dialogues, config |
+| P5b | Recentrage du SDK (règle d'or) et extensions | F, C | 12 capacités (11 depuis le retrait de `ai-tools`, protocole 0.5), contributions de slots, rail, dialogues, config |
 | P5c | Droits d'iframe négociés + `egen-config.json` | F, C | `sandbox`/`allow` demandés par l'app, approuvés par l'opérateur ; déclaration publiée par l'app |
 | P5d | Toasts partagés | F, C | `egen.notify`, politique `exclusive`/`rate`, dédoublonnage par `id` |
 | P6 | Migration des apps et compatibilité v1.1 | C, apps | tweakcn (pilote), Character, Penpot ; suppression des enveloppes |

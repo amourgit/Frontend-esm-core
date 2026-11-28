@@ -40,7 +40,6 @@ Le Core affiche une interface et rend des services d'interface ; il n'est **ni**
 | Langue, tenant, drapeaux, config de l'app | État d'interface et configuration du **Core** | Oui | Capacités `locale`, `tenant`, `flags`, `config` |
 | Événements, notifications, dialogues, navigation, cycle de vie | Interface du **Core** | Oui | Capacités du même nom |
 | Extensions (contribuer / découvrir) | Système d'extensions du **Core** | Oui | Capacité `extensions` + `extensions[]` du manifeste |
-| Outils IA | Canal IA du **Core** | Oui | Capacité `ai-tools` |
 
 Une demande de capacité retirée est **rejetée avec la raison et la voie à suivre** (`REMOVED_CAPABILITIES`), jamais ignorée en silence. `tenant` reste informatif et non autoritatif : le backend valide le tenant comme pour le Core (modèle « capture seule »).
 
@@ -71,7 +70,7 @@ Hôte (Shell)                                   App (iframe)
 
 | Type | Champs | Sens |
 | --- | --- | --- |
-| `req` | `id`, `cap`, `m`, `a` (tableau) | appel de méthode (les deux sens : hôte → app est permis pour les capacités déclarées « rappel », ex. `ai-tools`) |
+| `req` | `id`, `cap`, `m`, `a` (tableau) | appel de méthode (les deux sens : hôte → app est permis pour les capacités déclarées « rappel ») |
 | `res` | `id`, `ok`, `v` ou `e:{code,message}` | réponse |
 | `sub` / `unsub` | `id`, `cap`, `ev` / `sid` | abonnement à un événement de capacité |
 | `evt` | `sid`, `v` | événement poussé |
@@ -104,7 +103,6 @@ Limites par défaut (surchargeables par l'opérateur) : message ≤ 256 Kio · 1
 | `dialogs` | `confirm({ title, message, danger? })` → booléen (dialogue natif du Core) | — | refusé |
 | `flags` | `isEnabled(name)` (noms listés par le grant) | `change` | refusé |
 | `extensions` | `list(slot)` → métadonnées des extensions du slot (grant `discover`) | par slot : liste à jour | refusé |
-| `ai-tools` | `register(descripteurs[])` · `unregister(noms[])` ; (hôte → app) `invoke(nom, args)` | — | refusé (noms d'outils limités par motifs approuvés ; le backend IA garde l'autorité) |
 
 Toute capacité hors catalogue est refusée (`UNKNOWN`). Le catalogue vit dans `@egen-civitas/esm-embed-protocol`.
 
@@ -245,7 +243,7 @@ Règles :
 
 | Paquet | Dépôt | Rôle | Dépendances |
 | --- | --- | --- | --- |
-| `@egen-civitas/esm-embed-protocol` | Framework | types, enveloppes, catalogue de 12 capacités (+ `REMOVED_CAPABILITIES`), validateurs, manifeste et contributions d'extension, négociation, moteur RPC pur | aucune |
+| `@egen-civitas/esm-embed-protocol` | Framework | types, enveloppes, catalogue de 11 capacités (+ `REMOVED_CAPABILITIES`), validateurs, manifeste et contributions d'extension, négociation, moteur RPC pur | aucune |
 | `@egen-civitas/esm-embed-client` | Framework | côté app : `connectToEgen()`, façades typées par capacité, mode autonome, liaison `/react` (`useEgenLocale`, `useEgenTenant`, `useEgenExtensions`, `useEgenEvent`) | protocole |
 | `@egen-civitas/esm-embed-host` | Framework | côté Core : iframe, poignée de main, application des grants, interfaces de fournisseurs (`HostProviders`), navigation partagée, compatibilité du pont 1.1 (sans session) | protocole |
 | `@egen-civitas/esm-embed-testing` | Framework | hôte de test en mémoire, suite de conformité, simulateur (`egen-embed-sim`), vérificateur (`egen-embed-check`) | protocole, client, host |

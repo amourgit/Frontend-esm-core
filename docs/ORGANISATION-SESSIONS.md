@@ -8,7 +8,7 @@
 |---|---|---|---|
 | **Design / thème** | `framework/esm-theme`, `esm-styleguide`, `tooling/tailwind-preset`, apps du Core qui lisent le thème ; `docs/reforme-tokiforge/` | `docs/reforme-tokiforge/SUIVI.md` | `esm-theme`, `esm-styleguide`, `tailwind-preset` |
 | **Embarqué** (protocole v2, apps externes) | `framework/esm-embed-{protocol,host,client,testing}`, `apps/esm-embed-app`, `docs/integration-apps/15-18` | `docs/integration-apps/18-*.md` (plan par phases) | `esm-embed-*` |
-| **IA** | `framework/esm-ai-*`, `apps/esm-ai-assistant-app`, `docs/integration-ai-*.md` | `docs/integration-ai-interaction-agent.md` | `esm-ai-tools`, `esm-ai-channel`, `esm-ai-extensions`, `esm-ai-framework` |
+| **IA** | `framework/esm-ai-*` (retirés le 2026-11 : nouvelle architecture à venir), `docs/integration-ai-*.md` | `docs/integration-ai-interaction-agent.md` | `esm-ai-tools`, `esm-ai-channel`, `esm-ai-extensions`, `esm-ai-framework` |
 | Retouches d'interface | `esm-app-shell`, topbar, footer | — (messages de commit) | `esm-app-shell` |
 
 ## 2. Incohérences déjà observées (faits)
