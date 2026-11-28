@@ -1,4 +1,4 @@
-import { getAsyncLifecycle, getSyncLifecycle } from '@egen-civitas/esm-framework';
+import { getSyncLifecycle } from '@egen-civitas/esm-framework';
 import ChangeLanguageLinkComponent from './change-language/change-language-link.extension';
 import LanguageSwitcherComponent from './language-switcher/language-switcher.component';
 
@@ -16,6 +16,3 @@ export const languageSwitcher = getSyncLifecycle(LanguageSwitcherComponent, opti
 
 // Lien « Changer de langue » du menu utilisateur (slot `user-panel-slot`, alimenté par @egen/esm-user-profile-app).
 export const changeLanguageLink = getSyncLifecycle(ChangeLanguageLinkComponent, options);
-
-// Fenêtre de choix de la langue, ouverte par le bouton et par le lien.
-export const changeLanguageModal = getAsyncLifecycle(() => import('./change-language/change-language.modal'), options);

@@ -26,11 +26,5 @@
       "offline": true,
       "order": 1
     }
-  ],
-  "modals": [
-    {
-      "name": "change-language-modal",
-      "component": "changeLanguageModal"
-    }
   ]
 }

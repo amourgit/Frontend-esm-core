@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { showModal, useSession } from '@egen-civitas/esm-framework';
+import { useSession } from '@egen-civitas/esm-framework';
+import { ChangeLanguageCardModal } from '../change-language/change-language-card-modal.component';
 import { FLAG_BY_LOCALE } from './locale-flags';
 import { OptionButton } from './option-button.component';
 
@@ -23,13 +24,7 @@ const LanguageSwitcher: React.FC<TopBarState> = ({ searchOpen, isDesktop, isMobi
   const session = useSession();
   const locale = session?.locale ?? 'en';
   const flag = useMemo(() => FLAG_BY_LOCALE[locale] ?? '', [locale]);
-
-  const launchChangeLanguageModal = useCallback(() => {
-    const dispose = showModal('change-language-modal', {
-      closeModal: () => dispose(),
-      size: 'sm',
-    });
-  }, []);
+  const [modalOpen, setModalOpen] = useState(false);
 
   if (isMobile) return null;
   if (searchOpen && isDesktop === false) return null;
@@ -38,13 +33,14 @@ const LanguageSwitcher: React.FC<TopBarState> = ({ searchOpen, isDesktop, isMobi
     <div className="relative flex items-center overflow-visible">
       <OptionButton
         label={t('changeLanguage', 'Changer de langue')}
-        onClick={launchChangeLanguageModal}
+        onClick={() => setModalOpen(true)}
         icon={
           <span className="text-[1.05rem] leading-none" aria-hidden="true">
             {flag}
           </span>
         }
       />
+      <ChangeLanguageCardModal open={modalOpen} onOpenChange={setModalOpen} />
     </div>
   );
 };

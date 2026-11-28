@@ -1,7 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { capitalize } from 'lodash-es';
-import { Button, TranslateIcon, showModal, useSession } from '@egen-civitas/esm-framework';
+import { Button, TranslateIcon, useSession } from '@egen-civitas/esm-framework';
+import { ChangeLanguageCardModal } from './change-language-card-modal.component';
 import styles from './change-language-link.module.css';
 
 /**
@@ -18,13 +19,7 @@ function toBCP47(locale: string): string {
 function ChangeLanguageLink() {
   const { t } = useTranslation();
   const session = useSession();
-
-  const launchChangeLanguageModal = useCallback(() => {
-    const dispose = showModal('change-language-modal', {
-      closeModal: () => dispose(),
-      size: 'sm',
-    });
-  }, []);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const rawLocale = session?.locale;
   const bcp47Locale = rawLocale ? toBCP47(rawLocale) : 'en';
@@ -47,9 +42,10 @@ function ChangeLanguageLink() {
         <TranslateIcon size={20} />
         <p>{displayName}</p>
       </div>
-      <Button variant="ghost" size="sm" onClick={launchChangeLanguageModal}>
+      <Button variant="ghost" size="sm" onClick={() => setModalOpen(true)}>
         {t('change', 'Change')}
       </Button>
+      <ChangeLanguageCardModal open={modalOpen} onOpenChange={setModalOpen} />
     </li>
   );
 }

@@ -12,10 +12,11 @@ describe('routes.json', () => {
     );
   });
 
-  it("alimente le menu utilisateur (slot user-panel-slot) et déclare sa fenêtre", () => {
+  it('alimente le menu utilisateur (slot user-panel-slot)', () => {
     expect(routes.extensions.find((e) => e.name === 'change-language')).toEqual(
       expect.objectContaining({ slot: 'user-panel-slot', component: 'changeLanguageLink', order: 1 }),
     );
-    expect(routes.modals).toEqual([{ name: 'change-language-modal', component: 'changeLanguageModal' }]);
+    // La fenêtre de langue est un CardModal local aux déclencheurs — plus de route `modals`.
+    expect('modals' in routes).toBe(false);
   });
 });

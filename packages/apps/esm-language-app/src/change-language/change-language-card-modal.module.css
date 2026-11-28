@@ -1,0 +1,5 @@
+body .overlay {
+  background: color-mix(in srgb, var(--primary-600) 30%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
