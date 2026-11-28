@@ -10,3 +10,20 @@
     font-size: 10px;
   }
 }
+
+@media (max-width: 640px) {
+  :global(body .sm-scope[data-position='right'] .staggered-menu-panel),
+  :global(body .sm-scope[data-position='right'] .sm-prelayers),
+  :global(body .sm-scope[data-position='right'] .sm-close-frame) {
+    left: auto;
+    right: 0;
+    width: 80%;
+  }
+  :global(body .sm-scope[data-position='left'] .staggered-menu-panel),
+  :global(body .sm-scope[data-position='left'] .sm-prelayers),
+  :global(body .sm-scope[data-position='left'] .sm-close-frame) {
+    right: auto;
+    left: 0;
+    width: 80%;
+  }
+}

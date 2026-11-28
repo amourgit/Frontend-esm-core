@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { MenuToggleButton, StaggeredMenuPanel } from '@egen-civitas/esm-framework';
 import styles from './side-panel.module.css';
 import closeStyles from './side-panel-close.module.css';
+import backdropStyles from './side-panel-backdrop.module.css';
 
 // =============================================================================
 //  PANNEAU LATÉRAL — extension de la TopBar (StaggeredMenuPanel) + son bouton déclencheur
@@ -92,6 +93,12 @@ export function SidePanel({ className, searchOpen, isDesktop }: SidePanelProps) 
       />
       {createPortal(
         <>
+          <div
+            className={backdropStyles.backdrop}
+            data-open={isOpen ? 'true' : 'false'}
+            data-testid="menu-panel-backdrop"
+            aria-hidden="true"
+          />
           <StaggeredMenuPanel
             isOpen={isOpen}
             onClose={close}
