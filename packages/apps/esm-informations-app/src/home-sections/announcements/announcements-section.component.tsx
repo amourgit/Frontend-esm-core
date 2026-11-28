@@ -37,13 +37,13 @@ const LEVEL_STYLE: Record<
   AnnouncementLevel,
   { Icon: React.ComponentType<{ className?: string }>; badge: string; bar: string }
 > = {
-  Alerte: { Icon: TriangleAlert, badge: 'border-error-400/40 bg-error-500/15 text-error-300', bar: 'bg-error-400' },
+  Alerte: { Icon: TriangleAlert, badge: 'border-destructive/40 bg-destructive/15 text-destructive', bar: 'bg-destructive' },
   Officiel: {
     Icon: BadgeCheck,
-    badge: 'border-secondary-400/40 bg-secondary-500/15 text-secondary-300',
-    bar: 'bg-secondary-400',
+    badge: 'border-secondary/40 bg-secondary/15 text-secondary',
+    bar: 'bg-secondary',
   },
-  Info: { Icon: Info, badge: 'border-primary-400/40 bg-primary-500/15 text-primary-300', bar: 'bg-primary-400' },
+  Info: { Icon: Info, badge: 'border-primary/40 bg-primary/15 text-primary', bar: 'bg-primary' },
 };
 
 const FILTERS: Array<{ id: LevelFilter; label: string }> = [
@@ -74,7 +74,7 @@ function AnnouncementCard({ item, onSelect }: { item: AnnouncementItem; onSelect
         </span>
       </div>
 
-      <h3 className="m-0 text-[15px] font-semibold leading-snug text-foreground transition-colors group-hover:text-primary-300">
+      <h3 className="m-0 text-[15px] font-semibold leading-snug text-foreground transition-colors group-hover:text-primary">
         <SectionCardTitleButton onClick={() => onSelect?.(item)} className="line-clamp-2">
           {item.title}
         </SectionCardTitleButton>

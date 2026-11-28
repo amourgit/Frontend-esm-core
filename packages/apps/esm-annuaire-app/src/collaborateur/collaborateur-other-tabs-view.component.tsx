@@ -26,7 +26,7 @@ export function CollaborateurOtherTabsView({ activeTab, employee, onShowToast }:
       <div className="w-full flex flex-col gap-4">
         <div className="p-5 rounded-2xl border border-foreground/10 bg-foreground/[0.03] backdrop-blur-md">
           <div className="flex items-center gap-3 mb-4">
-            <History className="w-5 h-5 text-warning-400" />
+            <History className="w-5 h-5 text-warning-500" />
             <h3 className="text-base font-semibold text-foreground">Purchase & Assignment History</h3>
           </div>
           <div className="flex flex-col gap-3">
@@ -55,7 +55,7 @@ export function CollaborateurOtherTabsView({ activeTab, employee, onShowToast }:
                     {row.id} • {row.date}
                   </span>
                 </div>
-                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-success-500/20 text-success-300 border border-success-500/30">
+                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-success-500/20 text-success-500 border border-success-500/30">
                   {row.status}
                 </span>
               </div>
@@ -71,7 +71,7 @@ export function CollaborateurOtherTabsView({ activeTab, employee, onShowToast }:
       <div className="w-full flex flex-col gap-4">
         <div className="p-5 rounded-2xl border border-foreground/10 bg-foreground/[0.03] backdrop-blur-md">
           <div className="flex items-center gap-3 mb-4">
-            <Bookmark className="w-5 h-5 text-primary-400" />
+            <Bookmark className="w-5 h-5 text-primary" />
             <h3 className="text-base font-semibold text-foreground">Wishlist & Saved Items</h3>
           </div>
           <p className="text-sm text-muted-foreground">
@@ -87,7 +87,7 @@ export function CollaborateurOtherTabsView({ activeTab, employee, onShowToast }:
       <div className="w-full flex flex-col gap-4">
         <div className="p-5 rounded-2xl border border-foreground/10 bg-foreground/[0.03] backdrop-blur-md">
           <div className="flex items-center gap-3 mb-4">
-            <Award className="w-5 h-5 text-warning-400" />
+            <Award className="w-5 h-5 text-warning-500" />
             <h3 className="text-base font-semibold text-foreground">Loyalty & Badges Program</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -101,7 +101,7 @@ export function CollaborateurOtherTabsView({ activeTab, employee, onShowToast }:
                 key={b.title}
                 className="p-4 rounded-xl bg-foreground/[0.02] border border-foreground/10 flex flex-col gap-1"
               >
-                <span className="text-sm font-semibold text-warning-300">{b.title}</span>
+                <span className="text-sm font-semibold text-warning-500">{b.title}</span>
                 <span className="text-xs text-muted-foreground">{b.desc}</span>
               </div>
             ))}
@@ -116,7 +116,7 @@ export function CollaborateurOtherTabsView({ activeTab, employee, onShowToast }:
       <div className="w-full flex flex-col gap-4">
         <div className="p-5 rounded-2xl border border-foreground/10 bg-foreground/[0.03] backdrop-blur-md">
           <div className="flex items-center gap-3 mb-4">
-            <LifeBuoy className="w-5 h-5 text-info-400" />
+            <LifeBuoy className="w-5 h-5 text-info-500" />
             <h3 className="text-base font-semibold text-foreground">Support Tickets</h3>
           </div>
           <div className="flex flex-col gap-3">
@@ -144,7 +144,7 @@ export function CollaborateurOtherTabsView({ activeTab, employee, onShowToast }:
                     {t.id} • {t.date}
                   </span>
                 </div>
-                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-success-500/20 text-success-300 border border-success-500/30">
+                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-success-500/20 text-success-500 border border-success-500/30">
                   {t.status}
                 </span>
               </div>
@@ -160,7 +160,7 @@ export function CollaborateurOtherTabsView({ activeTab, employee, onShowToast }:
       <div className="w-full flex flex-col gap-4">
         <div className="p-5 rounded-2xl border border-foreground/10 bg-foreground/[0.03] backdrop-blur-md">
           <div className="flex items-center gap-3 mb-4">
-            <BarChart3 className="w-5 h-5 text-secondary-400" />
+            <BarChart3 className="w-5 h-5 text-secondary" />
             <h3 className="text-base font-semibold text-foreground">Performance Insights & Analytics</h3>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -189,7 +189,7 @@ export function CollaborateurOtherTabsView({ activeTab, employee, onShowToast }:
     <div className="w-full flex flex-col gap-4">
       <div className="p-5 rounded-2xl border border-foreground/10 bg-foreground/[0.03] backdrop-blur-md">
         <div className="flex items-center gap-3 mb-4">
-          <ActivityIcon className="w-5 h-5 text-success-400" />
+          <ActivityIcon className="w-5 h-5 text-success-500" />
           <h3 className="text-base font-semibold text-foreground">Journal d'Activité Récent</h3>
         </div>
         <div className="flex flex-col gap-3">

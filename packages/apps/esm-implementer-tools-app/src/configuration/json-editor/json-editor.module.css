@@ -6,11 +6,11 @@
   background-color: var(--ui-button-primary, var(--primary));
 }
 .toolbar button:hover {
-  background-color: var(--ui-button-primary-hover, var(--primary-hover, var(--primary-600)));
+  background-color: var(--ui-button-primary-hover, var(--primary-hover, var(--primary)));
 }
 
 .alert {
-  color: white;
+  color: var(--primary-foreground);
   display: flex;
   align-items: center;
   width: 100%;

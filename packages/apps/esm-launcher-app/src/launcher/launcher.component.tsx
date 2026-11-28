@@ -60,14 +60,14 @@ const Launcher: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpe
         badge={total > 9 ? '9+' : total}
         onClick={toggle}
         icon={<GridGlyph />}
-        className="text-(--primary-400) hover:text-(--primary-300)"
+        className="text-(--primary) hover:text-(--primary)"
       />
       {open && (
         <GlassPanel
           className={`${PANEL_CLASS} w-[calc(100vw-16px)] sm:w-80`}
           contentClassName="p-3"
           header={
-            <span className="font-semibold text-sm text-white tracking-tight">{t('applications', 'Applications')}</span>
+            <span className="font-semibold text-sm text-foreground tracking-tight">{t('applications', 'Applications')}</span>
           }
         >
           <div className={styles.grid} role="menu" aria-label={t('applications', 'Applications')}>

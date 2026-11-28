@@ -52,7 +52,7 @@
 }
 .segment:focus-visible,
 .action:focus-visible {
-  outline: 2px solid var(--primary-400);
+  outline: 2px solid var(--primary);
   outline-offset: 1px;
 }
 
@@ -63,7 +63,7 @@
 }
 .segment[aria-pressed='true'] {
   background: color-mix(in oklab, var(--primary) 22%, transparent);
-  color: var(--primary-300);
+  color: var(--primary);
   font-weight: 600;
 }
 
@@ -76,5 +76,5 @@
   margin-left: auto;
   font-size: 0.6875rem;
   font-weight: 700;
-  color: var(--primary-300);
+  color: var(--primary);
 }

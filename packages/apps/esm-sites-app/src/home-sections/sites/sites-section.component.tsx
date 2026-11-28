@@ -41,18 +41,18 @@ export function SitesSection({ sites, onSelectSite, onSeeAll }: SitesSectionProp
       <SectionGrid columns={{ base: 1, sm: 2, lg: 3 }} gap="md">
         {sites.map((site) => (
           <SectionCard as="article" key={site.id} className="gap-1.5">
-            <span className="flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-(--primary-300)">
+            <span className="flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-(--primary)">
               <MapPin className="size-3.5 shrink-0" />
               {site.city}
             </span>
-            <h3 className="m-0 text-[15px] font-semibold leading-snug text-(--foreground) transition-colors group-hover:text-(--primary-300)">
+            <h3 className="m-0 text-[15px] font-semibold leading-snug text-(--foreground) transition-colors group-hover:text-(--primary)">
               <SectionCardTitleButton onClick={() => onSelectSite?.(site)} className="line-clamp-2">
                 {site.name}
               </SectionCardTitleButton>
             </h3>
             <p className="m-0 line-clamp-2 text-xs leading-relaxed text-(--muted-foreground)">{site.address}</p>
             <span className="mt-auto flex items-center gap-1.5 border-t border-(--border) pt-3 text-[11px] text-(--foreground)">
-              <Users className="size-3.5 shrink-0 text-(--info-400)" />
+              <Users className="size-3.5 shrink-0 text-(--info)" />
               {site.employeeCount} collaborateurs
             </span>
           </SectionCard>

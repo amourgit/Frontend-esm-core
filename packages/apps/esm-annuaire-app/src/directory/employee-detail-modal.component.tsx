@@ -108,13 +108,13 @@ END:VCARD`;
     >
       <div className="relative w-full overflow-hidden text-muted-foreground">
         {/* En-tête bandeau */}
-        <div className="relative h-28 bg-gradient-to-r from-primary-900 via-popover to-secondary-900 px-6 py-4 flex items-start justify-between">
+        <div className="relative h-28 bg-gradient-to-r from-primary via-popover to-secondary px-6 py-4 flex items-start justify-between">
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-foreground/10 backdrop-blur-sm border border-foreground/20 text-foreground">
               {employee.department}
             </span>
             {employee.badge && (
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-warning-400/20 border border-warning-300/40 text-warning-300">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-warning-500/20 border border-warning-500/40 text-warning-500">
                 {employee.badge}
               </span>
             )}
@@ -135,7 +135,7 @@ END:VCARD`;
                 employee.status === 'available'
                   ? 'bg-success-500'
                   : employee.status === 'busy'
-                    ? 'bg-error-500'
+                    ? 'bg-destructive'
                     : 'bg-warning-500'
               }`}
             />
@@ -147,7 +147,7 @@ END:VCARD`;
               onClick={() => setShowQrCode(!showQrCode)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border transition-all ${
                 showQrCode
-                  ? 'bg-primary-500 text-foreground border-primary-400'
+                  ? 'bg-primary text-foreground border-primary'
                   : 'bg-muted-foreground hover:bg-muted-foreground text-muted-foreground border-700'
               }`}
             >
@@ -171,7 +171,7 @@ END:VCARD`;
                 onClose();
                 navigate(`/annuaire/${getEmployeeUuid(employee)}/details`);
               }}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 bg-gradient-to-r from-primary-500 to-success-500 hover:from-primary-400 hover:to-success-400 text-primary-foreground font-bold border border-primary-300 shadow-sm transition-all"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 bg-gradient-to-r from-primary to-success-500 hover:from-primary hover:to-success-500 text-primary-foreground font-bold border border-primary shadow-sm transition-all"
               title="Ouvrir la page profil détaillée"
             >
               <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
@@ -184,12 +184,12 @@ END:VCARD`;
         <div className="p-6 space-y-5 max-h-[calc(85vh-160px)] overflow-y-auto scrollbar-thin scrollbar-thumb-primary-500/20">
           <div>
             <h2 className="text-xl font-bold text-foreground tracking-tight">{employee.fullName}</h2>
-            <p className="text-sm text-primary-400 font-medium">{employee.role}</p>
+            <p className="text-sm text-primary font-medium">{employee.role}</p>
             <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
               <span>{employee.group}</span>
               <span>•</span>
               <span className="flex items-center gap-1 text-muted-foreground">
-                <MapPin className="w-3 h-3 text-primary-500" />
+                <MapPin className="w-3 h-3 text-primary" />
                 {employee.site}
               </span>
             </div>
@@ -218,14 +218,14 @@ END:VCARD`;
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="p-3 rounded-xl bg-muted-foreground/60 border border-700/60 flex items-center justify-between">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="p-2 rounded-lg bg-primary-500/10 text-primary-400">
+                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
                       <Mail className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] text-muted-foreground uppercase font-semibold">Email Professionnel</p>
                       <a
                         href={`mailto:${employee.email}`}
-                        className="text-xs font-medium text-primary-300 hover:underline truncate block"
+                        className="text-xs font-medium text-primary hover:underline truncate block"
                       >
                         {employee.email}
                       </a>
@@ -237,7 +237,7 @@ END:VCARD`;
                     title="Copier l'email"
                   >
                     {copiedField === 'Email' ? (
-                      <Check className="w-3.5 h-3.5 text-success-400" />
+                      <Check className="w-3.5 h-3.5 text-success-500" />
                     ) : (
                       <Copy className="w-3.5 h-3.5" />
                     )}
@@ -246,7 +246,7 @@ END:VCARD`;
 
                 <div className="p-3 rounded-xl bg-muted-foreground/60 border border-700/60 flex items-center justify-between">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="p-2 rounded-lg bg-secondary-500/10 text-secondary-400">
+                    <div className="p-2 rounded-lg bg-secondary/10 text-secondary">
                       <Phone className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
@@ -265,7 +265,7 @@ END:VCARD`;
                     title="Copier le numéro"
                   >
                     {copiedField === 'Téléphone' ? (
-                      <Check className="w-3.5 h-3.5 text-success-400" />
+                      <Check className="w-3.5 h-3.5 text-success-500" />
                     ) : (
                       <Copy className="w-3.5 h-3.5" />
                     )}
@@ -274,7 +274,7 @@ END:VCARD`;
 
                 <div className="p-3 rounded-xl bg-muted-foreground/60 border border-700/60 flex items-center justify-between">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="p-2 rounded-lg bg-info-500/10 text-info-400">
+                    <div className="p-2 rounded-lg bg-info-500/10 text-info-500">
                       <Building2 className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
@@ -290,7 +290,7 @@ END:VCARD`;
                     title="Copier le poste"
                   >
                     {copiedField === 'Poste' ? (
-                      <Check className="w-3.5 h-3.5 text-success-400" />
+                      <Check className="w-3.5 h-3.5 text-success-500" />
                     ) : (
                       <Copy className="w-3.5 h-3.5" />
                     )}
@@ -299,7 +299,7 @@ END:VCARD`;
 
                 <div className="p-3 rounded-xl bg-muted-foreground/60 border border-700/60 flex items-center justify-between">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="p-2 rounded-lg bg-warning-500/10 text-warning-400">
+                    <div className="p-2 rounded-lg bg-warning-500/10 text-warning-500">
                       <MapPin className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
@@ -313,7 +313,7 @@ END:VCARD`;
                     title="Copier le site"
                   >
                     {copiedField === 'Site' ? (
-                      <Check className="w-3.5 h-3.5 text-success-400" />
+                      <Check className="w-3.5 h-3.5 text-success-500" />
                     ) : (
                       <Copy className="w-3.5 h-3.5" />
                     )}
@@ -331,14 +331,14 @@ END:VCARD`;
               {/* Compétences / Expertises */}
               <div>
                 <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-primary-400" />
+                  <Sparkles className="w-3.5 h-3.5 text-primary" />
                   <span>Compétences & Domaines d'Expertise</span>
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {employee.skills.map((skill, idx) => (
                     <span
                       key={idx}
-                      className="px-2.5 py-1 rounded-md text-xs font-medium bg-muted-foreground text-primary-300 border border-primary-500/30"
+                      className="px-2.5 py-1 rounded-md text-xs font-medium bg-muted-foreground text-primary border border-primary/30"
                     >
                       {skill}
                     </span>
@@ -367,7 +367,7 @@ END:VCARD`;
                 playXboxSound('select');
                 window.location.href = `mailto:${employee.email}`;
               }}
-              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-info-600 hover:bg-info-500 text-foreground flex items-center gap-1.5 shadow-md transition-colors"
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-info-500 hover:bg-info-500/90 text-foreground flex items-center gap-1.5 shadow-md transition-colors"
             >
               <Mail className="w-3.5 h-3.5" />
               <span>Contacter via Outlook</span>
@@ -379,7 +379,7 @@ END:VCARD`;
                 playXboxSound('select');
                 if (onShowNotification) onShowNotification(`Chat Teams lancé avec ${employee.fullName}`, 'success');
               }}
-              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-secondary-600 hover:bg-secondary-500 text-foreground flex items-center gap-1.5 shadow-md transition-colors"
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-secondary hover:bg-secondary/90 text-foreground flex items-center gap-1.5 shadow-md transition-colors"
             >
               <Briefcase className="w-3.5 h-3.5" />
               <span>Discuter sur Teams</span>

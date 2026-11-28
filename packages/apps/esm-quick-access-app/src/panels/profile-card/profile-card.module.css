@@ -41,9 +41,9 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    color-mix(in oklab, var(--shadow-color) 60%, transparent),
+    var(--card),
     transparent 60%,
-    color-mix(in oklab, var(--shadow-color) 20%, transparent)
+    var(--card)
   );
 }
 
@@ -103,7 +103,7 @@
   padding: 0.25rem 0.625rem;
   border-radius: 9999px;
   background: color-mix(in oklab, var(--success) 10%, transparent);
-  color: var(--success-600);
+  color: var(--success);
   border: 1px solid color-mix(in oklab, var(--success) 30%, transparent);
   font-size: 0.6875rem;
   font-weight: 700;
@@ -226,7 +226,7 @@
   justify-content: space-between;
   padding: 1.25rem;
   border-bottom: 1px solid var(--border);
-  background: color-mix(in oklab, var(--muted) 60%, transparent);
+  background: var(--muted);
 }
 
 .editHeaderLeft {

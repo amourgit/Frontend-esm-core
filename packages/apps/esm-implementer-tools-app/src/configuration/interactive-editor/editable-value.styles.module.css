@@ -8,12 +8,12 @@
 
 .error {
   margin-left: 1rem;
-  color: var(--warning-500);
+  color: var(--warning);
   font-size: 11pt;
 }
 
 .overriddenValue {
-  color: var(--primary-700);
+  color: var(--primary);
 }
 
 .elementValue {

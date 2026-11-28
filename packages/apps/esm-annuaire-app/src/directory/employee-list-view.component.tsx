@@ -47,17 +47,17 @@ export const EmployeeListView: React.FC<EmployeeListViewProps> = ({ employees, o
                       <span
                         className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border border-900 ${
                           emp.status === 'available'
-                            ? 'bg-success-400'
+                            ? 'bg-success-500'
                             : emp.status === 'busy'
-                              ? 'bg-error-500'
-                              : 'bg-warning-400'
+                              ? 'bg-destructive'
+                              : 'bg-warning-500'
                         }`}
                       />
                     </div>
                     <div>
-                      <div className="font-bold text-foreground group-hover:text-primary-300">{emp.fullName}</div>
+                      <div className="font-bold text-foreground group-hover:text-primary">{emp.fullName}</div>
                       {emp.badge && (
-                        <span className="text-[9px] font-semibold text-warning-300 bg-warning-500/20 px-1.5 py-0.2 rounded-full border border-warning-400/30">
+                        <span className="text-[9px] font-semibold text-warning-500 bg-warning-500/20 px-1.5 py-0.2 rounded-full border border-warning-500/30">
                           {emp.badge}
                         </span>
                       )}
@@ -65,9 +65,9 @@ export const EmployeeListView: React.FC<EmployeeListViewProps> = ({ employees, o
                   </div>
                 </td>
                 <td className="py-3 px-4 text-muted-foreground font-medium">{emp.role}</td>
-                <td className="py-3 px-4 text-primary-300 font-medium">
+                <td className="py-3 px-4 text-primary font-medium">
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-primary-400 shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
                     <span>{emp.site}</span>
                   </div>
                 </td>
@@ -77,7 +77,7 @@ export const EmployeeListView: React.FC<EmployeeListViewProps> = ({ employees, o
                   <a
                     href={`mailto:${emp.email}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="text-primary-300 hover:text-primary-200 underline truncate max-w-[170px] inline-block"
+                    className="text-primary hover:text-primary underline truncate max-w-[170px] inline-block"
                   >
                     {emp.email}
                   </a>
@@ -98,7 +98,7 @@ export const EmployeeListView: React.FC<EmployeeListViewProps> = ({ employees, o
                     <button
                       type="button"
                       onClick={() => onSelect(emp)}
-                      className="p-1 rounded text-muted-foreground hover:text-primary-300 hover:bg-foreground/10"
+                      className="p-1 rounded text-muted-foreground hover:text-primary hover:bg-foreground/10"
                       title="Détails"
                     >
                       <ExternalLink className="w-4 h-4" />

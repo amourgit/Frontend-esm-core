@@ -268,7 +268,7 @@ export function GooeyInput({
           animate={isExpanded ? 'expanded' : 'collapsed'}
           transition={transition}
         >
-          <div className={cn('size-7 sm:size-8.5 rounded-full bg-white', classNames?.bubbleSurface)} />
+          <div className={cn('size-7 sm:size-8.5 rounded-full bg-card', classNames?.bubbleSurface)} />
         </motion.div>
 
         {/* Capsule liquide principale */}
@@ -279,7 +279,7 @@ export function GooeyInput({
           animate={isExpanded ? 'expanded' : 'collapsed'}
           transition={transition}
         >
-          <div className="h-full w-full rounded-full bg-white" />
+          <div className="h-full w-full rounded-full bg-card" />
         </motion.div>
       </div>
 
@@ -306,7 +306,7 @@ export function GooeyInput({
         >
           <SearchIcon
             layoutId={iconLayoutId}
-            className="text-(--primary-400) drop-shadow-[0_1px_2px_var(--shadow-color)]"
+            className="text-(--primary) drop-shadow-[0_1px_2px_var(--shadow-color)]"
           />
         </motion.div>
 
@@ -332,7 +332,7 @@ export function GooeyInput({
             {!isExpanded && (
               <SearchIcon
                 layoutId={iconLayoutId}
-                className="text-(--primary-400) shrink-0 drop-shadow-[0_1px_2px_var(--shadow-color)]"
+                className="text-(--primary) shrink-0 drop-shadow-[0_1px_2px_var(--shadow-color)]"
               />
             )}
 

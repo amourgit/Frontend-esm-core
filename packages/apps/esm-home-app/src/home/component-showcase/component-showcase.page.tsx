@@ -466,8 +466,8 @@ const ComponentShowcasePage: React.FC = () => {
   const warpColors: Array<{ label: string; value: string }> = [
     { label: 'error', value: 'var(--destructive)' },
     { label: 'primary', value: 'var(--primary)' },
-    { label: 'success', value: 'var(--success-500)' },
-    { label: 'warning', value: 'var(--warning-500)' },
+    { label: 'success', value: 'var(--success)' },
+    { label: 'warning', value: 'var(--warning)' },
   ];
   const [modalWarpColor, setModalWarpColor] = useState(warpColors[0].value);
   const [modalWarpGlow, setModalWarpGlow] = useState(true);
@@ -1096,8 +1096,8 @@ const ComponentShowcasePage: React.FC = () => {
         socialItems={demoStaggeredSocials}
         displaySocials
         displayItemNumbering
-        colors={['var(--secondary-300)', 'var(--primary-600)']}
-        accentColor="var(--primary-600)"
+        colors={['var(--secondary)', 'var(--primary)']}
+        accentColor="var(--primary)"
         closeOnClickAway
       />
     </div>

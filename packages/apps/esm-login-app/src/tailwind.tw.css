@@ -57,12 +57,12 @@
 
   /* Palette du fond dégradé animé */
   --login-grad-1a: var(--primary);
-  --login-grad-1b: var(--info-500);
-  --login-grad-2a: var(--secondary-400);
-  --login-grad-2b: var(--primary-400);
-  --login-grad-2c: var(--info-400);
+  --login-grad-1b: var(--info);
+  --login-grad-2a: var(--secondary);
+  --login-grad-2b: var(--primary);
+  --login-grad-2c: var(--info);
   --login-grad-3a: var(--destructive);
-  --login-grad-3b: var(--warning-500);
+  --login-grad-3b: var(--warning);
   --login-grad-accent: var(--accent);
 }
 

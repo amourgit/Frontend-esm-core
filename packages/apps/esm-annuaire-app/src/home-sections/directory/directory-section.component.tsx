@@ -48,19 +48,19 @@ export interface DirectorySectionProps {
 }
 
 const STATUS_DOT: Record<DirectoryStatus, string> = {
-  available: 'bg-success-400 ring-success-500/40',
-  busy: 'bg-error-500 ring-error-500/40',
-  meeting: 'bg-warning-400 ring-warning-500/40',
-  away: 'bg-warning-300 ring-warning-400/40',
+  available: 'bg-success-500 ring-success-500/40',
+  busy: 'bg-destructive ring-destructive/40',
+  meeting: 'bg-warning-500 ring-warning-500/40',
+  away: 'bg-warning-500 ring-warning-500/40',
   offline: 'bg-muted-foreground ring-500/40',
 };
 
 const BADGE_STYLE: Record<string, string> = {
-  MVP: 'border-warning-400/40 bg-warning-500/20 text-warning-300',
-  'Business Lead': 'border-success-400/40 bg-success-500/20 text-success-300',
-  Admin: 'border-secondary-400/40 bg-secondary-500/20 text-secondary-300',
+  MVP: 'border-warning-500/40 bg-warning-500/20 text-warning-500',
+  'Business Lead': 'border-success-500/40 bg-success-500/20 text-success-500',
+  Admin: 'border-secondary/40 bg-secondary/20 text-secondary',
 };
-const BADGE_DEFAULT = 'border-primary-400/40 bg-primary-500/20 text-primary-300';
+const BADGE_DEFAULT = 'border-primary/40 bg-primary/20 text-primary';
 
 function initials(fullName: string): string {
   return fullName
@@ -75,10 +75,10 @@ function initials(fullName: string): string {
 function Avatar({ member }: { member: DirectoryMember }) {
   const [failed, setFailed] = useState(false);
   const base =
-    'size-16 rounded-full ring-2 ring-foreground/10 shadow-lg transition-all group-hover:ring-primary-400/60';
+    'size-16 rounded-full ring-2 ring-foreground/10 shadow-lg transition-all group-hover:ring-primary/60';
   return failed || !member.avatar ? (
     <span
-      className={cx(base, 'flex items-center justify-center bg-primary-500/20 text-lg font-bold text-primary-200')}
+      className={cx(base, 'flex items-center justify-center bg-primary/20 text-lg font-bold text-primary')}
       aria-hidden="true"
     >
       {initials(member.fullName)}
@@ -96,7 +96,7 @@ function Avatar({ member }: { member: DirectoryMember }) {
 }
 
 const CONTACT_BTN =
-  'inline-flex size-8 items-center justify-center rounded-md bg-foreground/10 text-muted-foreground outline-none transition-all hover:bg-foreground/20 focus-visible:ring-2 focus-visible:ring-success-400 active:scale-95';
+  'inline-flex size-8 items-center justify-center rounded-md bg-foreground/10 text-muted-foreground outline-none transition-all hover:bg-foreground/20 focus-visible:ring-2 focus-visible:ring-success-500 active:scale-95';
 
 function MemberCard({
   member,
@@ -133,7 +133,7 @@ function MemberCard({
       </div>
 
       <div className="min-w-0 max-w-full">
-        <h3 className="m-0 text-sm font-bold tracking-tight text-foreground transition-colors group-hover:text-primary-300">
+        <h3 className="m-0 text-sm font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
           <SectionCardTitleButton onClick={() => onSelect?.(member)} className="truncate">
             {member.fullName}
           </SectionCardTitleButton>
@@ -141,7 +141,7 @@ function MemberCard({
         <p className="m-0 mt-0.5 line-clamp-2 min-h-8 text-[11px] font-medium leading-snug text-muted-foreground">
           {member.role}
         </p>
-        <p className="m-0 mt-1.5 flex items-center justify-center gap-1 text-[11px] text-primary-300">
+        <p className="m-0 mt-1.5 flex items-center justify-center gap-1 text-[11px] text-primary">
           <MapPin className="size-3 shrink-0" />
           <span className="truncate">{member.site}</span>
         </p>
@@ -170,7 +170,7 @@ function MemberCard({
             onClick={() => onOpenProfile(member)}
             title={`Ouvrir la fiche de ${member.fullName}`}
             aria-label={`Ouvrir la fiche de ${member.fullName}`}
-            className={cx(CONTACT_BTN, 'cursor-pointer border-0 p-0 hover:bg-primary-500/20 hover:text-primary-300')}
+            className={cx(CONTACT_BTN, 'cursor-pointer border-0 p-0 hover:bg-primary/20 hover:text-primary')}
           >
             <ExternalLink className="size-3.5" />
           </button>

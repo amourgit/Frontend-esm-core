@@ -18,16 +18,16 @@ export function CollaborateurAiReviewBanner({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="w-full relative rounded-2xl border border-secondary-400/25 bg-gradient-to-r from-secondary-500/10 via-secondary-600/5 to-secondary-500/10 backdrop-blur-md p-4 sm:p-5 flex items-center justify-between gap-4 overflow-hidden shadow-lg select-none"
+      className="w-full relative rounded-2xl border border-secondary/25 bg-gradient-to-r from-secondary/10 via-secondary/5 to-secondary/10 backdrop-blur-md p-4 sm:p-5 flex items-center justify-between gap-4 overflow-hidden shadow-lg select-none"
     >
       {/* Background soft ambient glow */}
-      <div className="absolute -left-10 -top-10 w-40 h-40 bg-secondary-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -left-10 -top-10 w-40 h-40 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Left content: Badge + Title + Description */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 min-w-0 z-10">
         {/* AI Review Analysis Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary-500/20 border border-secondary-400/40 text-secondary-200 text-xs font-semibold shadow-sm shrink-0">
-          <Sparkles className="w-3.5 h-3.5 text-secondary-300 animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary/20 border border-secondary/40 text-secondary text-xs font-semibold shadow-sm shrink-0">
+          <Sparkles className="w-3.5 h-3.5 text-secondary animate-pulse" />
           <span>AI Review Analysis</span>
         </div>
 
@@ -40,8 +40,8 @@ export function CollaborateurAiReviewBanner({
 
       {/* Right Icon Widget (Purple badge with quote / thumbs up) */}
       <div className="shrink-0 z-10 hidden sm:flex">
-        <div className="w-12 h-12 rounded-2xl bg-secondary-500/20 border border-secondary-400/35 flex items-center justify-center text-secondary-200 shadow-md backdrop-blur-md">
-          <MessageSquareQuote className="w-6 h-6 text-secondary-300" />
+        <div className="w-12 h-12 rounded-2xl bg-secondary/20 border border-secondary/35 flex items-center justify-center text-secondary shadow-md backdrop-blur-md">
+          <MessageSquareQuote className="w-6 h-6 text-secondary" />
         </div>
       </div>
     </motion.div>

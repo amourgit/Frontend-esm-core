@@ -7,12 +7,12 @@ import { type ConfigSchema } from '../config-schema';
 type Announcement = ConfigSchema['announcements'][number];
 
 const KIND_STYLES: Record<string, { box: string; Icon: React.ElementType }> = {
-  info: { box: 'border-primary-500/40 bg-primary-500/15', Icon: Info },
-  'info-square': { box: 'border-primary-500/40 bg-primary-500/15', Icon: Info },
-  success: { box: 'border-(--success-500)/40 bg-(--success-500)/15', Icon: CheckCircle2 },
-  warning: { box: 'border-(--warning-500)/40 bg-(--warning-500)/15', Icon: AlertTriangle },
-  'warning-alt': { box: 'border-(--warning-500)/40 bg-(--warning-500)/15', Icon: AlertTriangle },
-  error: { box: 'border-error-500/40 bg-error-500/15', Icon: XCircle },
+  info: { box: 'border-primary/40 bg-primary/15', Icon: Info },
+  'info-square': { box: 'border-primary/40 bg-primary/15', Icon: Info },
+  success: { box: 'border-(--success)/40 bg-(--success)/15', Icon: CheckCircle2 },
+  warning: { box: 'border-(--warning)/40 bg-(--warning)/15', Icon: AlertTriangle },
+  'warning-alt': { box: 'border-(--warning)/40 bg-(--warning)/15', Icon: AlertTriangle },
+  error: { box: 'border-destructive/40 bg-destructive/15', Icon: XCircle },
 };
 
 /** Bannières d'annonce configurables (`announcements`), empilées au-dessus du formulaire. */

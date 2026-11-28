@@ -115,7 +115,7 @@ export function CollaborateurReviewList({ onShowToast }: CollaborateurReviewList
                 setSelectedDuration('all');
                 setSelectedChannel('all');
               }}
-              className="mt-2 text-xs text-warning-400 hover:underline"
+              className="mt-2 text-xs text-warning-500 hover:underline"
             >
               Réinitialiser les filtres
             </button>

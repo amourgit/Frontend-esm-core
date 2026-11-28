@@ -64,7 +64,7 @@ export function CollaborateurTagsCard({ employee, onShowToast }: CollaborateurTa
               onClick={() => handleRemoveTag(tag)}
               className="opacity-40 hover:opacity-100 transition-opacity"
             >
-              <X className="w-3 h-3 text-muted-foreground hover:text-error-400" />
+              <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
             </button>
           </span>
         ))}
@@ -78,12 +78,12 @@ export function CollaborateurTagsCard({ employee, onShowToast }: CollaborateurTa
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
             placeholder="Nouveau tag..."
-            className="flex-1 px-3 py-1.5 rounded-lg bg-foreground/40 border border-foreground/20 text-xs text-foreground placeholder-400 outline-none focus:border-warning-400"
+            className="flex-1 px-3 py-1.5 rounded-lg bg-foreground/40 border border-foreground/20 text-xs text-foreground placeholder-400 outline-none focus:border-warning-500"
             autoFocus
           />
           <button
             type="submit"
-            className="px-3 py-1.5 rounded-lg bg-warning-400 text-primary-foreground font-semibold text-xs hover:bg-warning-300 transition-colors"
+            className="px-3 py-1.5 rounded-lg bg-warning-500 text-primary-foreground font-semibold text-xs hover:bg-warning-500 transition-colors"
           >
             Ajouter
           </button>

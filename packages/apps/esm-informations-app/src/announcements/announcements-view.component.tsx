@@ -9,9 +9,9 @@ import { AudienceBadge } from '../audience/audience-badge.component';
 import { ALL_ANNOUNCEMENTS, type AnnouncementLevel } from './announcements-data';
 
 const LEVEL_STYLES: Record<AnnouncementLevel, string> = {
-  Alerte: 'text-error-300',
-  Officiel: 'text-warning-300',
-  Info: 'text-primary-300',
+  Alerte: 'text-destructive',
+  Officiel: 'text-warning-500',
+  Info: 'text-primary',
 };
 
 interface AnnouncementsViewProps {
@@ -38,7 +38,7 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
     <div className="space-y-5 text-foreground py-1">
       <div className="pb-4 border-b border-foreground/10">
         <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-          <BellRing className="w-5 h-5 text-warning-300" aria-hidden />
+          <BellRing className="w-5 h-5 text-warning-500" aria-hidden />
           {t('announcementsTitle', 'Announcements & Flash News')}
         </h2>
         <p className="text-xs text-foreground mt-1">
@@ -57,7 +57,7 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
           onChange={(e) => setQuery(e.target.value)}
           placeholder={t('announcementsSearch', 'Search announcements…')}
           aria-label={t('announcementsSearch', 'Search announcements…')}
-          className="w-full pl-9 pr-9 py-2.5 rounded-xl bg-card/60 border border-foreground/10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary-400/50"
+          className="w-full pl-9 pr-9 py-2.5 rounded-xl bg-card/60 border border-foreground/10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
         />
         {query && (
           <button
@@ -88,7 +88,7 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
                     playXboxSound('select');
                     setOpenId(open ? null : ann.id);
                   }}
-                  className="w-full text-left p-4 rounded-xl bg-card/60 border border-foreground/10 hover:border-primary-400/40 transition-colors cursor-pointer space-y-2"
+                  className="w-full text-left p-4 rounded-xl bg-card/60 border border-foreground/10 hover:border-primary/40 transition-colors cursor-pointer space-y-2"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className={cn('text-xs font-bold', LEVEL_STYLES[ann.level])}>
@@ -104,7 +104,7 @@ export function AnnouncementsView({ audience = 'all' }: AnnouncementsViewProps) 
                   </div>
                   <h3 className="text-base font-bold text-foreground">{ann.title}</h3>
                   <div className="flex items-center justify-between gap-3 text-[11px]">
-                    <span className="text-primary-300 font-medium">{ann.date}</span>
+                    <span className="text-primary font-medium">{ann.date}</span>
                     <span className="text-muted-foreground">{ann.author}</span>
                   </div>
                   <AnimatePresence initial={false}>

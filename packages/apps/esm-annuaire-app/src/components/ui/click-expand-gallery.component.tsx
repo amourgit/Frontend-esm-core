@@ -173,32 +173,32 @@ export type ClickExpandGalleryProps<T = unknown> = {
 
 const DEFAULT_CLASSNAMES: Required<ClickExpandClassNames> = {
   item: 'rounded-2xl border border-foreground/10 bg-muted-foreground/60 shadow-lg backdrop-blur-md hover:border-foreground/20 hover:bg-muted-foreground/75',
-  itemOpen: 'rounded-2xl border border-primary-400/40 bg-popover/80 shadow-xl shadow-primary-500/10 backdrop-blur-md',
+  itemOpen: 'rounded-2xl border border-primary/40 bg-popover/80 shadow-xl shadow-primary/10 backdrop-blur-md',
   header: '',
-  focus: 'focus-visible:ring-primary-400/60',
+  focus: 'focus-visible:ring-primary/60',
   avatar: 'bg-muted-foreground ring-1 ring-foreground/15',
   title: 'text-sm font-bold text-foreground',
   subtitle: 'text-xs text-muted-foreground',
   chevron: 'text-muted-foreground group-hover:text-foreground',
   panel: 'border-t border-foreground/10',
-  detailIcon: 'bg-foreground/5 text-primary-400',
+  detailIcon: 'bg-foreground/5 text-primary',
   detailLabel: 'text-muted-foreground',
   detailValue: 'text-muted-foreground',
-  detailLink: 'hover:text-primary-300',
+  detailLink: 'hover:text-primary',
   tagsTitle: 'text-muted-foreground',
   tag: 'border border-foreground/10 bg-foreground/5 text-muted-foreground',
-  actionPrimary: 'bg-primary-500 text-primary-foreground shadow-lg hover:bg-primary-400',
+  actionPrimary: 'bg-primary text-primary-foreground shadow-lg hover:bg-primary/90',
   actionSecondary:
     'border border-foreground/15 bg-foreground/5 text-muted-foreground hover:bg-foreground/10 hover:text-foreground',
 };
 
 const DEFAULT_TONES: Record<ClickExpandTone, ClickExpandToneClasses> = {
   neutral: { dot: 'bg-muted-foreground', chip: 'border-foreground/15 bg-foreground/5 text-muted-foreground' },
-  accent: { dot: 'bg-primary-400', chip: 'border-primary-400/40 bg-primary-500/15 text-primary-200' },
-  success: { dot: 'bg-success-400', chip: 'border-success-400/30 bg-success-500/10 text-success-300' },
-  warning: { dot: 'bg-warning-400', chip: 'border-warning-400/30 bg-warning-500/10 text-warning-300' },
-  danger: { dot: 'bg-error-400', chip: 'border-error-400/30 bg-error-500/10 text-error-300' },
-  info: { dot: 'bg-info-400', chip: 'border-info-400/30 bg-info-500/10 text-info-300' },
+  accent: { dot: 'bg-primary', chip: 'border-primary/40 bg-primary/15 text-primary' },
+  success: { dot: 'bg-success-500', chip: 'border-success-500/30 bg-success-500/10 text-success-500' },
+  warning: { dot: 'bg-warning-500', chip: 'border-warning-500/30 bg-warning-500/10 text-warning-500' },
+  danger: { dot: 'bg-destructive', chip: 'border-destructive/30 bg-destructive/10 text-destructive' },
+  info: { dot: 'bg-info-500', chip: 'border-info-500/30 bg-info-500/10 text-info-500' },
 };
 
 /** Rayon de la photo [repos, ouvert], en % (50% = cercle). */
@@ -772,10 +772,10 @@ export default ClickExpandGallery;
 //      items={items}
 //      classNames={{
 //        item: 'rounded-xl border border-700 bg-muted-foreground',
-//        itemOpen: 'rounded-xl border border-secondary-400 bg-muted-foreground',
+//        itemOpen: 'rounded-xl border border-secondary bg-muted-foreground',
 //        title: 'text-base font-semibold text-foreground',
-//        actionPrimary: 'bg-secondary-500 text-foreground hover:bg-secondary-400',
-//        focus: 'focus-visible:ring-secondary-400/60',
+//        actionPrimary: 'bg-secondary text-foreground hover:bg-secondary/90',
+//        focus: 'focus-visible:ring-secondary/60',
 //      }}
 //    />
 //

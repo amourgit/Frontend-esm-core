@@ -387,9 +387,9 @@ export const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
               : { left: activeRect.left, width: activeRect.width, bottom: 0, height: 3 }
           }
           aria-hidden
-          className={cn('pointer-events-none absolute z-10 bg-primary-400', isVertical ? 'rounded-r' : 'rounded-full')}
+          className={cn('pointer-events-none absolute z-10 bg-primary', isVertical ? 'rounded-r' : 'rounded-full')}
           style={{
-            backgroundColor: 'var(--primary-400, #2dd4bf)',
+            backgroundColor: 'var(--primary)',
           }}
           transition={{
             damping: 34,
@@ -472,10 +472,10 @@ export const TabsTrigger = React.forwardRef<HTMLElement, TabsTriggerProps>(
         style={{
           ...style,
           color: isActive
-            ? 'var(--primary-300, #5eead4)'
+            ? 'var(--primary)'
             : isHover
-              ? 'var(--foreground, #f8fafc)'
-              : 'var(--muted-foreground, #94a3b8)',
+              ? 'var(--foreground)'
+              : 'var(--muted-foreground)',
         }}
         value={value}
       >

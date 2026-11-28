@@ -99,7 +99,7 @@ export function CollaborateurReviewFilterBar({
                   }`}
                 >
                   <span>{opt.label}</span>
-                  {selectedDuration === opt.id && <Check className="w-3.5 h-3.5 text-primary-400" />}
+                  {selectedDuration === opt.id && <Check className="w-3.5 h-3.5 text-primary" />}
                 </button>
               ))}
             </div>
@@ -141,7 +141,7 @@ export function CollaborateurReviewFilterBar({
                   }`}
                 >
                   <span>{opt.label}</span>
-                  {selectedChannel === opt.id && <Check className="w-3.5 h-3.5 text-primary-400" />}
+                  {selectedChannel === opt.id && <Check className="w-3.5 h-3.5 text-primary" />}
                 </button>
               ))}
             </div>

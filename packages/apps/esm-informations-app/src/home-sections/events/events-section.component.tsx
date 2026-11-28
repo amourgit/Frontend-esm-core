@@ -52,8 +52,8 @@ const MODES: Array<{ id: Mode; label: string }> = [
 ];
 
 const STATUS_CHIP: Partial<Record<HomeEventStatus, { label: string; className: string }>> = {
-  limited: { label: 'Places limitées', className: 'border-warning-400/30 bg-warning-950/80 text-warning-300' },
-  full: { label: 'Complet', className: 'border-error-400/30 bg-error-950/80 text-error-300' },
+  limited: { label: 'Places limitées', className: 'border-warning-500/30 bg-warning-500/80 text-warning-500' },
+  full: { label: 'Complet', className: 'border-destructive/30 bg-destructive/80 text-destructive' },
 };
 
 function EventCard({ event, onSelect }: { event: HomeEvent; onSelect?: (event: HomeEvent) => void }) {
@@ -61,7 +61,7 @@ function EventCard({ event, onSelect }: { event: HomeEvent; onSelect?: (event: H
   const time = event.endTime ? `${event.startTime} – ${event.endTime}` : event.startTime;
 
   return (
-    <article className="group relative flex min-w-0 cursor-pointer flex-col rounded-2xl has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-success-400">
+    <article className="group relative flex min-w-0 cursor-pointer flex-col rounded-2xl has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-success-500">
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card/40">
         <img
           src={event.image}
@@ -85,8 +85,8 @@ function EventCard({ event, onSelect }: { event: HomeEvent; onSelect?: (event: H
 
         <div className="absolute right-3 top-3 flex items-center gap-1.5">
           {event.isOnline ? (
-            <span className="inline-flex items-center gap-1 rounded-full border border-info-400/30 bg-info-950/80 px-2.5 py-1 text-[10px] font-semibold text-info-300 backdrop-blur-md">
-              <Video className="size-3 text-info-400" />
+            <span className="inline-flex items-center gap-1 rounded-full border border-info-500/30 bg-info-500/80 px-2.5 py-1 text-[10px] font-semibold text-info-500 backdrop-blur-md">
+              <Video className="size-3 text-info-500" />
               Hybride
             </span>
           ) : null}
@@ -104,10 +104,10 @@ function EventCard({ event, onSelect }: { event: HomeEvent; onSelect?: (event: H
       </div>
 
       <div className="flex flex-1 flex-col pb-2 pt-3.5">
-        <span className="truncate font-mono text-xs font-semibold uppercase tracking-wider text-success-400/90">
+        <span className="truncate font-mono text-xs font-semibold uppercase tracking-wider text-success-500/90">
           {event.category}
         </span>
-        <h3 className="m-0 mt-1 text-base font-bold leading-snug text-foreground transition-colors group-hover:text-success-300">
+        <h3 className="m-0 mt-1 text-base font-bold leading-snug text-foreground transition-colors group-hover:text-success-500">
           <SectionCardTitleButton onClick={() => onSelect?.(event)} className="line-clamp-2">
             {event.title}
           </SectionCardTitleButton>
@@ -116,17 +116,17 @@ function EventCard({ event, onSelect }: { event: HomeEvent; onSelect?: (event: H
 
         <div className="mt-3 flex flex-col gap-1 text-xs text-foreground">
           <span className="flex items-center gap-1.5">
-            <Clock className="size-3.5 shrink-0 text-success-400" />
+            <Clock className="size-3.5 shrink-0 text-success-500" />
             <span className="truncate font-medium">
               {event.dateLabel} · {time}
             </span>
           </span>
           <span className="flex items-center gap-1.5 text-muted-foreground">
-            <MapPin className="size-3.5 shrink-0 text-error-400" />
+            <MapPin className="size-3.5 shrink-0 text-destructive" />
             <span className="truncate">{event.location}</span>
           </span>
           <span className="flex items-center gap-1.5 text-muted-foreground">
-            <Users className="size-3.5 shrink-0 text-info-400" />
+            <Users className="size-3.5 shrink-0 text-info-500" />
             <span>
               {event.attendeesCount}
               {event.maxAttendees ? ` / ${event.maxAttendees}` : ''} inscrits

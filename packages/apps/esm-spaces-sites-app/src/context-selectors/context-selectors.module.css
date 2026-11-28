@@ -155,7 +155,7 @@
   border-color: var(--glass-border);
   color: var(--glass-text);
   box-shadow:
-    0 12px 40px color-mix(in oklab, var(--shadow-color, #000) 35%, transparent),
+    0 12px 40px color-mix(in oklab, var(--shadow-color) 35%, transparent),
     inset 0 1px 0 color-mix(in oklab, var(--foreground) 18%, transparent);
 }
 .selector > [role='listbox'] > button {
@@ -172,7 +172,7 @@
   color: var(--glass-muted);
 }
 .selector > [role='listbox'] > div {
-  background: color-mix(in oklab, var(--foreground) 15%, transparent);
+  background: var(--accent);
 }
 .selector > [role='listbox'] [role='option'] {
   padding: 0.25rem 0.5rem;
@@ -218,7 +218,7 @@
   border-color: var(--glass-border);
   color: var(--glass-text);
   box-shadow:
-    0 12px 40px color-mix(in oklab, var(--shadow-color, #000) 35%, transparent),
+    0 12px 40px color-mix(in oklab, var(--shadow-color) 35%, transparent),
     inset 0 1px 0 color-mix(in oklab, var(--foreground) 18%, transparent);
   width: 16rem;
   font-size: var(--sel-fs);
@@ -249,7 +249,7 @@
   color: var(--foreground);
 }
 .selectorSite :global(.egen-combobox-content) > div > div:first-child {
-  border-color: color-mix(in oklab, var(--border) 70%, transparent);
+  border-color: var(--border);
 }
 
 @media (min-width: 1024px) {

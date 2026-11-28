@@ -3,7 +3,7 @@
   border-radius: 1rem;
   overflow: hidden;
   border: 1px solid var(--border);
-  background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  background: var(--muted);
   backdrop-filter: blur(6px);
   box-shadow: var(--shadow-lg);
 }

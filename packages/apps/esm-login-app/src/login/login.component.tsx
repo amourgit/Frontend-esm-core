@@ -317,7 +317,7 @@ const Login: React.FC = () => {
                 className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: 'var(--login-bg-image)' }}
               />
-              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute inset-0 bg-(--overlay)" />
             </>
           )}
           {backgroundKind === 'color' && (

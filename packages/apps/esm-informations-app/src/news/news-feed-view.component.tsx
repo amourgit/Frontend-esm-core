@@ -303,7 +303,7 @@ export function NewsFeedView({ onShowNotification, audience = 'all' }: NewsFeedV
       <div className="w-full flex flex-col space-y-3 pt-1 pb-1">
         {/* Full-width Google-like Search Bar */}
         <div className="w-full relative group">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground group-focus-within:text-success-400 transition-colors">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground group-focus-within:text-success-500 transition-colors">
             <Search className="w-5 h-5" />
           </div>
           <input
@@ -311,7 +311,7 @@ export function NewsFeedView({ onShowNotification, audience = 'all' }: NewsFeedV
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Rechercher une actualité, un mot-clé, un auteur..."
-            className="w-full pl-12 pr-12 py-3 rounded-full bg-card/50 hover:bg-card/80 focus:bg-card border border-foreground/15 focus:border-success-400/80 text-foreground placeholder-muted-foreground text-sm shadow-lg focus:outline-none focus:ring-2 focus:ring-success-400/20 transition-all"
+            className="w-full pl-12 pr-12 py-3 rounded-full bg-card/50 hover:bg-card/80 focus:bg-card border border-foreground/15 focus:border-success-500/80 text-foreground placeholder-muted-foreground text-sm shadow-lg focus:outline-none focus:ring-2 focus:ring-success-500/20 transition-all"
           />
           {searchQuery && (
             <button
@@ -370,7 +370,7 @@ export function NewsFeedView({ onShowNotification, audience = 'all' }: NewsFeedV
                 setSearchQuery('');
                 setFilters([]);
               }}
-              className="mt-2 px-4 py-2 rounded-xl bg-success-600 hover:bg-success-500 text-foreground font-semibold text-xs cursor-pointer"
+              className="mt-2 px-4 py-2 rounded-xl bg-success-500 hover:bg-success-500/90 text-foreground font-semibold text-xs cursor-pointer"
             >
               Réinitialiser les filtres
             </button>

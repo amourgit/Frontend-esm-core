@@ -106,7 +106,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
 
           {/* Overlaid Date Badge */}
           <div className="absolute bottom-4 left-6 flex flex-col items-start leading-none drop-shadow-lg">
-            <span className="text-xs font-bold tracking-widest uppercase text-success-300 font-mono">
+            <span className="text-xs font-bold tracking-widest uppercase text-success-500 font-mono">
               {event.month}
             </span>
             <span className="text-4xl sm:text-5xl font-extrabold text-foreground mt-1">{event.day}</span>
@@ -118,13 +118,13 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
           {/* Header info */}
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-success-400 font-mono">
+              <span className="text-xs font-semibold uppercase tracking-wider text-success-500 font-mono">
                 {event.category}
               </span>
               <AudienceBadge audience={event.audience} />
               {event.isOnline && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-info-950/80 text-info-300 border border-info-400/30">
-                  <Video className="w-3 h-3 text-info-400" />
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-info-500/80 text-info-500 border border-info-500/30">
+                  <Video className="w-3 h-3 text-info-500" />
                   <span>Format Hybride / Teams</span>
                 </span>
               )}
@@ -135,7 +135,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
           {/* Meta Grid (Date, Time, Location, Capacity) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 p-4 rounded-2xl bg-foreground/[0.03] border border-foreground/10 text-xs">
             <div className="flex items-center gap-3 text-foreground">
-              <div className="p-2 rounded-xl bg-success-500/10 text-success-400">
+              <div className="p-2 rounded-xl bg-success-500/10 text-success-500">
                 <Clock className="w-4 h-4" />
               </div>
               <div>
@@ -147,7 +147,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
             </div>
 
             <div className="flex items-center gap-3 text-foreground">
-              <div className="p-2 rounded-xl bg-error-500/10 text-error-400">
+              <div className="p-2 rounded-xl bg-destructive/10 text-destructive">
                 <MapPin className="w-4 h-4" />
               </div>
               <div>
@@ -159,7 +159,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
             </div>
 
             <div className="flex items-center gap-3 text-foreground">
-              <div className="p-2 rounded-xl bg-warning-500/10 text-warning-400">
+              <div className="p-2 rounded-xl bg-warning-500/10 text-warning-500">
                 <Users className="w-4 h-4" />
               </div>
               <div>
@@ -180,7 +180,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
                   className="w-8 h-8 rounded-xl object-cover border border-foreground/10"
                 />
               ) : (
-                <div className="w-8 h-8 rounded-xl bg-secondary-500/10 text-secondary-400 flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center font-bold">
                   {event.organizer.name.charAt(0)}
                 </div>
               )}
@@ -222,7 +222,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
                 className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-xl bg-foreground/10 hover:bg-foreground/15 text-foreground font-medium text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
                 title="Télécharger l'événement pour Outlook / Google Calendar"
               >
-                <Download className="w-4 h-4 text-success-400" />
+                <Download className="w-4 h-4 text-success-500" />
                 <span>Exporter (.ics)</span>
               </button>
 
@@ -232,7 +232,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
                 className="px-3.5 py-2.5 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-foreground hover:text-foreground font-medium text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
                 title="Partager"
               >
-                {copied ? <Check className="w-4 h-4 text-success-400" /> : <Share2 className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-success-500" /> : <Share2 className="w-4 h-4" />}
                 <span>{copied ? 'Copié' : 'Partager'}</span>
               </button>
             </div>
@@ -243,7 +243,7 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
                   href={event.meetingUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-4 py-2.5 rounded-xl bg-info-600/80 hover:bg-info-600 text-foreground font-semibold text-xs flex items-center justify-center gap-2 transition-all"
+                  className="px-4 py-2.5 rounded-xl bg-info-500/80 hover:bg-info-500/90 text-foreground font-semibold text-xs flex items-center justify-center gap-2 transition-all"
                 >
                   <Video className="w-4 h-4" />
                   <span>Lien Teams</span>
@@ -255,8 +255,8 @@ export function EventDetailsModal({ event: eventProp, onClose, onShowNotificatio
                 onClick={handleRegister}
                 className={`flex-1 sm:flex-initial px-5 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg ${
                   isRegistered
-                    ? 'bg-error-500/20 text-error-300 border border-error-500/40 hover:bg-error-500/30'
-                    : 'bg-success-500 hover:bg-success-400 text-primary-foreground shadow-success-500/20'
+                    ? 'bg-destructive/20 text-destructive border border-destructive/40 hover:bg-destructive/30'
+                    : 'bg-success-500 hover:bg-success-500/90 text-primary-foreground shadow-success-500/20'
                 }`}
               >
                 {isRegistered ? (

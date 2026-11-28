@@ -125,7 +125,7 @@ const SitesListPage: React.FC = () => {
             <button
               type="button"
               onClick={reset}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-(--primary-500) hover:bg-(--primary-400) text-(--primary-foreground) shadow-(--shadow-lg) transition-all active:scale-95 cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-semibold bg-(--primary) hover:bg-(--primary) text-(--primary-foreground) shadow-(--shadow-lg) transition-all active:scale-95 cursor-pointer"
             >
               Réinitialiser les filtres
             </button>

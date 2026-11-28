@@ -73,8 +73,8 @@ export function NewsArticleCard({
 
         {/* Category Badge */}
         <div className="absolute top-3 left-3 z-10 flex flex-col items-start">
-          <span className="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold tracking-wide uppercase bg-success-500/90 text-foreground border border-success-400/40 backdrop-blur-md shadow-md flex items-center gap-1.5">
-            <Sparkles className="w-3 h-3 text-success-100" />
+          <span className="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold tracking-wide uppercase bg-success-500/90 text-foreground border border-success-500/40 backdrop-blur-md shadow-md flex items-center gap-1.5">
+            <Sparkles className="w-3 h-3 text-success-500" />
             {article.category}
           </span>
           <AudienceBadge audience={article.audience} className="mt-1.5" />
@@ -110,7 +110,7 @@ export function NewsArticleCard({
           {/* Metadata Header line: Author & Date */}
           <div className="flex items-center justify-between flex-wrap gap-2 text-xs text-muted-foreground font-medium">
             <div className="flex items-center gap-2 truncate">
-              <div className="w-5 h-5 rounded-full bg-success-500/20 text-success-300 border border-success-500/30 flex items-center justify-center font-bold text-[9px] shrink-0">
+              <div className="w-5 h-5 rounded-full bg-success-500/20 text-success-500 border border-success-500/30 flex items-center justify-center font-bold text-[9px] shrink-0">
                 {article.authorAvatar ? (
                   <img
                     src={article.authorAvatar}
@@ -124,7 +124,7 @@ export function NewsArticleCard({
                     .join('')
                 )}
               </div>
-              <span className="text-foreground font-semibold group-hover:text-success-300 transition-colors truncate">
+              <span className="text-foreground font-semibold group-hover:text-success-500 transition-colors truncate">
                 {article.author}
               </span>
               {article.authorRole && (
@@ -148,7 +148,7 @@ export function NewsArticleCard({
           </div>
 
           {/* Title */}
-          <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground tracking-tight leading-snug group-hover:text-success-300 transition-colors">
+          <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground tracking-tight leading-snug group-hover:text-success-500 transition-colors">
             {article.title}
           </h3>
 
@@ -165,7 +165,7 @@ export function NewsArticleCard({
                   key={tag}
                   className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-foreground/5 text-foreground border border-foreground/10 flex items-center gap-1 shrink-0"
                 >
-                  <Tag className="w-2.5 h-2.5 text-success-400" />
+                  <Tag className="w-2.5 h-2.5 text-success-500" />
                   {tag}
                 </span>
               ))}
@@ -185,7 +185,7 @@ export function NewsArticleCard({
             )}
             {article.likesCount !== undefined && (
               <span className="flex items-center gap-1">
-                <Heart className="w-3.5 h-3.5 text-error-400/80" />
+                <Heart className="w-3.5 h-3.5 text-destructive/80" />
                 {article.likesCount}
               </span>
             )}
@@ -201,8 +201,8 @@ export function NewsArticleCard({
             >
               {isCopied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-success-400" />
-                  <span className="text-success-400 text-[11px] hidden sm:inline">Copié</span>
+                  <Check className="w-3.5 h-3.5 text-success-500" />
+                  <span className="text-success-500 text-[11px] hidden sm:inline">Copié</span>
                 </>
               ) : (
                 <>
@@ -218,7 +218,7 @@ export function NewsArticleCard({
                 playXboxSound('select');
                 onArticleClick(article);
               }}
-              className="px-3 py-1.5 rounded-lg bg-success-600 hover:bg-success-500 text-foreground font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-md"
+              className="px-3 py-1.5 rounded-lg bg-success-500 hover:bg-success-500/90 text-foreground font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-md"
             >
               <span>Consulter</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />

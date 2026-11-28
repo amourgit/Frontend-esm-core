@@ -73,7 +73,7 @@ export function NewsArticleReaderModal({
           {/* Author, Date & Actions Bar */}
           <div className="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-foreground/10">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-success-500/20 text-success-300 border border-success-500/30 flex items-center justify-center font-bold text-sm">
+              <div className="w-10 h-10 rounded-full bg-success-500/20 text-success-500 border border-success-500/30 flex items-center justify-center font-bold text-sm">
                 {article.authorAvatar ? (
                   <img
                     src={article.authorAvatar}
@@ -106,7 +106,7 @@ export function NewsArticleReaderModal({
                 onClick={() => onBookmark(article)}
                 className={`p-2 px-3 rounded-xl border transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer ${
                   isBookmarked
-                    ? 'bg-success-500/20 border-success-500/40 text-success-300'
+                    ? 'bg-success-500/20 border-success-500/40 text-success-500'
                     : 'border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-foreground'
                 }`}
               >
@@ -121,8 +121,8 @@ export function NewsArticleReaderModal({
               >
                 {isCopied ? (
                   <>
-                    <Check className="w-4 h-4 text-success-400" />
-                    <span className="text-success-400">Lien copié</span>
+                    <Check className="w-4 h-4 text-success-500" />
+                    <span className="text-success-500">Lien copié</span>
                   </>
                 ) : (
                   <>
@@ -172,7 +172,7 @@ export function NewsArticleReaderModal({
                   key={t}
                   className="px-2.5 py-1 rounded-lg bg-foreground/5 border border-foreground/10 text-foreground text-xs flex items-center gap-1"
                 >
-                  <Tag className="w-3 h-3 text-success-400" />
+                  <Tag className="w-3 h-3 text-success-500" />
                   {t}
                 </span>
               ))}

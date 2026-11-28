@@ -34,7 +34,7 @@ export function CollaborateurRoleCard({ employee, onEdit, onShowToast }: Collabo
       {/* Role Pill as shown in image */}
       <div>
         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-foreground/10 border border-foreground/15 text-xs sm:text-sm font-medium text-muted-foreground">
-          <Briefcase className="w-3.5 h-3.5 text-warning-400" />
+          <Briefcase className="w-3.5 h-3.5 text-warning-500" />
           <span>{roleName}</span>
         </span>
       </div>

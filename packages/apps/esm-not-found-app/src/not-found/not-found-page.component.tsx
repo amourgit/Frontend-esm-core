@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 // Combined component for 404 page
 export default function NotFoundPage() {
   return (
-    <div className="w-full h-screen bg-black overflow-x-hidden flex justify-center items-center relative select-none">
+    <div className="w-full h-screen bg-foreground overflow-x-hidden flex justify-center items-center relative select-none">
       <MessageDisplay />
       <CharactersAnimation />
       <CircleAnimation />
@@ -58,15 +58,15 @@ function MessageDisplay() {
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <div className="text-[35px] font-semibold text-black m-[1%]">Page Not Found</div>
-        <div className="text-[80px] font-bold text-black m-[1%]">404</div>
-        <div className="text-[15px] w-1/2 min-w-[40%] text-center text-black m-[1%]">
+        <div className="text-[35px] font-semibold text-foreground m-[1%]">Page Not Found</div>
+        <div className="text-[80px] font-bold text-foreground m-[1%]">404</div>
+        <div className="text-[15px] w-1/2 min-w-[40%] text-center text-foreground m-[1%]">
           The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
         </div>
         <div className="flex gap-6 mt-8">
           <button
             onClick={handleGoBack}
-            className="text-black border-2 border-black hover:bg-black hover:text-white transition-all duration-300 ease-in-out px-6 py-2 h-auto text-base font-medium flex items-center gap-2 hover:scale-105 cursor-pointer"
+            className="text-foreground border-2 border-foreground hover:bg-foreground hover:text-background transition-all duration-300 ease-in-out px-6 py-2 h-auto text-base font-medium flex items-center gap-2 hover:scale-105 cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +87,7 @@ function MessageDisplay() {
           </button>
           <button
             onClick={handleGoHome}
-            className="bg-(--primary) text-(--primary-foreground) hover:bg-(--primary-hover, var(--primary-600)) transition-all duration-300 ease-in-out px-6 py-2 h-auto text-base font-medium flex items-center gap-2 hover:scale-105 cursor-pointer"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 ease-in-out px-6 py-2 h-auto text-base font-medium flex items-center gap-2 hover:scale-105 cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -278,7 +278,8 @@ function CircleAnimation() {
     const distanceX = canvas.width / 80;
     const growthRate = canvas.width / 1000;
 
-    context.fillStyle = 'white';
+    context.fillStyle =
+      getComputedStyle(document.documentElement).getPropertyValue('--background').trim() || 'white';
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     circulosRef.current.forEach((circulo) => {

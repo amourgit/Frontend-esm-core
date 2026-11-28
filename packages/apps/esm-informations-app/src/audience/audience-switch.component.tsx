@@ -44,7 +44,7 @@ export function AudienceSwitch({ value, onChange, counts, className }: AudienceS
             className={cn(
               'px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors cursor-pointer',
               active
-                ? 'bg-primary-500/20 text-primary-100 border-primary-400/50'
+                ? 'bg-primary/20 text-primary border-primary/50'
                 : 'bg-foreground/5 text-foreground border-foreground/10 hover:border-foreground/25 hover:text-foreground',
             )}
           >

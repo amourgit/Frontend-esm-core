@@ -24,7 +24,7 @@ export default function HomeAppToolbar() {
     >
       <span
         aria-hidden="true"
-        className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-(--primary-400) to-(--primary-600) text-[11px] font-bold text-(--primary-foreground)"
+        className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-(--primary) to-(--primary) text-[11px] font-bold text-(--primary-foreground)"
       >
         AC
       </span>

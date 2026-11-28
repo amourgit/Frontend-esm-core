@@ -58,11 +58,11 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
           <button
             type="button"
             onClick={handleCopyOrderId}
-            className="flex items-center gap-1.5 text-sm sm:text-base font-bold text-foreground hover:text-primary-300 transition-colors group"
+            className="flex items-center gap-1.5 text-sm sm:text-base font-bold text-foreground hover:text-primary transition-colors group"
             title="Copier la référence"
           >
             <span>{review.orderNumber}</span>
-            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary-300" />
+            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary" />
           </button>
 
           {/* Stars */}
@@ -71,7 +71,7 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
               <Star
                 key={idx}
                 className={`w-3.5 h-3.5 ${
-                  idx <= review.rating ? 'fill-warning-400 text-warning-400' : 'fill-foreground/10 text-foreground/20'
+                  idx <= review.rating ? 'fill-warning-500 text-warning-500' : 'fill-foreground/10 text-foreground/20'
                 }`}
               />
             ))}
@@ -83,11 +83,11 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
           <span
             className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
               isPublished
-                ? 'bg-success-500/20 text-success-300 border border-success-400/30'
+                ? 'bg-success-500/20 text-success-500 border border-success-500/30'
                 : 'bg-muted-foreground/20 text-muted-foreground border border-foreground/15'
             }`}
           >
-            <span className={`w-1.5 h-1.5 rounded-full ${isPublished ? 'bg-success-400' : 'bg-muted-foreground'}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${isPublished ? 'bg-success-500' : 'bg-muted-foreground'}`} />
             <span>{review.status}</span>
           </span>
         </div>
@@ -110,7 +110,7 @@ export function CollaborateurReviewCard({ review, onArchive, onShare, onShowToas
           <button
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-warning-400 hover:text-warning-300 font-medium ml-1 underline transition-colors"
+            className="text-warning-500 hover:text-warning-500 font-medium ml-1 underline transition-colors"
           >
             {isExpanded ? 'Show less' : 'Read more'}
           </button>

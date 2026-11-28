@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   font-size: 0.75rem;
-  color: color-mix(in oklab, var(--foreground) 60%, transparent);
+  color: var(--muted-foreground);
 }
 .breadcrumbSlot:empty {
   display: none;
@@ -31,5 +31,5 @@
 }
 .breadcrumbSlot :global(.breadcrumb-item a):hover,
 .breadcrumbSlot :global(.breadcrumb-item button):hover {
-  color: var(--primary-300);
+  color: var(--primary);
 }

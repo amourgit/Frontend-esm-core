@@ -36,8 +36,8 @@
   height: 2rem;
   padding: 0;
   color: var(--foreground);
-  background: color-mix(in oklab, var(--foreground) 6%, transparent);
-  border: 1px solid color-mix(in oklab, var(--foreground) 18%, transparent);
+  background: var(--muted);
+  border: 1px solid var(--border);
   border-radius: 999px;
   cursor: pointer;
   pointer-events: auto;
@@ -48,11 +48,11 @@
 }
 .closeButton:hover {
   opacity: 1;
-  background: color-mix(in oklab, var(--foreground) 12%, transparent);
+  background: var(--accent);
 }
 .closeButton:focus-visible {
   opacity: 1;
-  outline: 2px solid var(--primary-600);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 .closeButton svg {

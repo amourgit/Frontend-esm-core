@@ -71,7 +71,7 @@ export function CollaborateurDetailHeader({
             />
             <span
               className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-card ${
-                employee.status === 'busy' ? 'bg-error-500' : 'bg-success-400 ring-2 ring-success-500/30'
+                employee.status === 'busy' ? 'bg-destructive' : 'bg-success-500 ring-2 ring-success-500/30'
               }`}
               title={employee.statusLabel || 'En ligne'}
             />
@@ -92,8 +92,8 @@ export function CollaborateurDetailHeader({
 
             <div className="flex items-center gap-3 text-xs sm:text-sm text-muted-foreground/80 mt-0.5">
               {/* Active Status Pill */}
-              <div className="flex items-center gap-1.5 text-success-400 font-medium">
-                <span className="w-2 h-2 rounded-full bg-success-400 animate-pulse" />
+              <div className="flex items-center gap-1.5 text-success-500 font-medium">
+                <span className="w-2 h-2 rounded-full bg-success-500 animate-pulse" />
                 <span>Active</span>
               </div>
 
@@ -189,7 +189,7 @@ export function CollaborateurDetailHeader({
                   <span
                     className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
                       isActive
-                        ? 'bg-warning-400/20 text-warning-300 border border-warning-400/40'
+                        ? 'bg-warning-500/20 text-warning-500 border border-warning-500/40'
                         : 'bg-foreground/10 text-muted-foreground'
                     }`}
                   >
@@ -201,7 +201,7 @@ export function CollaborateurDetailHeader({
                 {isActive && (
                   <motion.div
                     layoutId="collaborateur-tab-active-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-warning-400 rounded-full"
+                    className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-warning-500 rounded-full"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}

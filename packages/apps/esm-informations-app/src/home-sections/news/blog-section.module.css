@@ -15,8 +15,8 @@
   width: 100%;
   overflow: hidden;
   border-radius: 1rem;
-  background: color-mix(in oklab, var(--shadow-color) 40%, transparent);
-  border: 1px solid color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 10%, transparent);
+  background: var(--card);
+  border: 1px solid var(--border);
 }
 
 .cardImage {
@@ -36,9 +36,9 @@
   right: 0.75rem;
   padding: 0.5rem;
   border-radius: 9999px;
-  border: 1px solid color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 15%, transparent);
-  background: color-mix(in oklab, var(--shadow-color) 60%, transparent);
-  color: var(--surface-inverse-foreground, var(--primary-foreground));
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--card-foreground);
   opacity: 0;
   transition: all 0.2s;
   cursor: pointer;
@@ -49,8 +49,8 @@
 
 .bookmarkBtnActive {
   opacity: 1;
-  background: var(--success-600);
-  color: var(--surface-inverse-foreground, var(--primary-foreground));
+  background: var(--success);
+  color: var(--success-foreground, var(--primary-foreground));
 }
 
 .bookmarkIcon {
@@ -67,7 +67,7 @@
 
 .cardMeta {
   font-size: 0.8125rem;
-  color: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 50%, transparent);
+  color: var(--muted-foreground);
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -76,7 +76,7 @@
 }
 
 .cardMetaDot {
-  color: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 30%, transparent);
+  color: var(--muted-foreground);
   font-weight: 700;
 }
 
@@ -84,18 +84,18 @@
   margin: 0.125rem 0 0.375rem;
   font-size: 1.125rem;
   font-weight: 700;
-  color: var(--surface-inverse-foreground, var(--primary-foreground));
+  color: var(--card-foreground);
   letter-spacing: -0.01em;
   line-height: 1.3;
 }
 .card:hover .cardTitle {
-  color: var(--success-400);
+  color: var(--success);
 }
 
 .cardDescription {
   margin: 0;
   font-size: 0.875rem;
-  color: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 70%, transparent);
+  color: var(--muted-foreground);
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -108,7 +108,7 @@
   flex-direction: column;
   max-height: 90vh;
   overflow: hidden;
-  color: var(--surface-inverse-foreground, var(--primary-foreground));
+  color: var(--card-foreground);
 }
 
 .modalBanner {
@@ -117,7 +117,7 @@
   width: 100%;
   flex-shrink: 0;
   overflow: hidden;
-  background: color-mix(in oklab, var(--shadow-color) 85%, transparent);
+  background: var(--card);
 }
 
 .modalBannerImage {
@@ -132,8 +132,8 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    color-mix(in oklab, var(--shadow-color) 80%, transparent),
-    color-mix(in oklab, var(--shadow-color) 40%, transparent),
+    var(--card),
+    var(--card),
     transparent
   );
 }
@@ -152,7 +152,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   background: color-mix(in oklab, var(--success) 90%, transparent);
-  color: var(--surface-inverse-foreground, var(--primary-foreground));
+  color: var(--card-foreground);
   margin-bottom: 0.5rem;
 }
 
@@ -170,7 +170,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  color: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 85%, transparent);
+  color: var(--card-foreground);
 }
 
 .modalAuthorRow {
@@ -181,7 +181,7 @@
   gap: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid
-    color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 10%, transparent);
+    var(--border);
 }
 
 .modalAuthorLeft {
@@ -195,7 +195,7 @@
   height: 2.5rem;
   border-radius: 9999px;
   background: color-mix(in oklab, var(--success) 20%, transparent);
-  color: var(--success-300);
+  color: var(--success);
   border: 1px solid color-mix(in oklab, var(--success) 30%, transparent);
   display: flex;
   align-items: center;
@@ -207,12 +207,12 @@
 .modalAuthorName {
   font-weight: 600;
   font-size: 0.875rem;
-  color: var(--surface-inverse-foreground, var(--primary-foreground));
+  color: var(--card-foreground);
 }
 
 .modalAuthorMeta {
   font-size: 0.75rem;
-  color: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 50%, transparent);
+  color: var(--muted-foreground);
   display: flex;
   gap: 0.5rem;
 }
@@ -226,9 +226,9 @@
 .modalActionBtn {
   padding: 0.5rem 0.75rem;
   border-radius: 0.75rem;
-  border: 1px solid color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 15%, transparent);
-  background: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 5%, transparent);
-  color: var(--surface-inverse-foreground, var(--primary-foreground));
+  border: 1px solid var(--border);
+  background: var(--muted);
+  color: var(--card-foreground);
   display: flex;
   align-items: center;
   gap: 0.375rem;
@@ -245,18 +245,18 @@
 .modalActionIconSuccess {
   width: 1rem;
   height: 1rem;
-  color: var(--success-400);
+  color: var(--success);
 }
 
 .modalActionSuccessLabel {
-  color: var(--success-400);
+  color: var(--success);
 }
 
 .modalLead {
   margin: 0;
   font-size: 1.0625rem;
   font-weight: 500;
-  color: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 75%, transparent);
+  color: var(--muted-foreground);
   line-height: 1.6;
   font-style: italic;
 }
@@ -265,16 +265,16 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  color: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 75%, transparent);
+  color: var(--muted-foreground);
   line-height: 1.65;
   font-size: 0.9375rem;
 }
 
 .modalFooter {
   padding: 1rem 1.5rem;
-  background: color-mix(in oklab, var(--shadow-color) 80%, transparent);
+  background: var(--card);
   border-top: 1px solid
-    color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 10%, transparent);
+    var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -282,20 +282,20 @@
 
 .modalFooterLabel {
   font-size: 0.75rem;
-  color: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 50%, transparent);
+  color: var(--muted-foreground);
   font-family: monospace;
 }
 
 .modalFooterBtn {
   padding: 0.5rem 1rem;
   border-radius: 0.75rem;
-  background: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 10%, transparent);
-  border: 1px solid color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 15%, transparent);
-  color: var(--surface-inverse-foreground, var(--primary-foreground));
+  background: var(--accent);
+  border: 1px solid var(--border);
+  color: var(--card-foreground);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
 }
 .modalFooterBtn:hover {
-  background: color-mix(in oklab, var(--surface-inverse-foreground, var(--primary-foreground)) 20%, transparent);
+  background: var(--accent);
 }

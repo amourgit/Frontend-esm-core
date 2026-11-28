@@ -291,7 +291,7 @@ export function DropdownNavigation({ navItems }: Props) {
                     {hasSubMenus && (
                       <ChevronDown
                         className={`h-3.5 w-3.5 text-(--muted-foreground) group-hover:text-(--foreground) duration-200 transition-transform relative z-10 shrink-0 ${
-                          openMenu === navItem.label ? 'rotate-180 text-(--primary-400)' : ''
+                          openMenu === navItem.label ? 'rotate-180 text-(--primary)' : ''
                         }`}
                       />
                     )}
@@ -344,7 +344,7 @@ export function DropdownNavigation({ navItems }: Props) {
                       key={`${idx}-${sub.title}`}
                     >
                       {sub.title ? (
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-(--primary-300) pb-1 mb-1 border-b border-(--border) flex items-center justify-between">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-(--primary) pb-1 mb-1 border-b border-(--border) flex items-center justify-between">
                           <span className="truncate">{sub.title}</span>
                         </div>
                       ) : null}
@@ -361,13 +361,13 @@ export function DropdownNavigation({ navItems }: Props) {
                                   setOpenMenu(null);
                                   setActiveNavItem(null);
                                 }}
-                                className="flex items-center gap-1.5 py-1 px-1.5 rounded-xl hover:bg-(--foreground)/8 text-(--foreground) hover:text-(--primary-200) transition-colors group/subitem cursor-pointer"
+                                className="flex items-center gap-1.5 py-1 px-1.5 rounded-xl hover:bg-(--foreground)/8 text-(--foreground) hover:text-(--primary) transition-colors group/subitem cursor-pointer"
                                 title={item.description || item.label}
                               >
-                                <div className="size-5 rounded-lg flex items-center justify-center bg-(--primary-400)/15 border border-(--primary-300)/30 text-(--primary-200) shrink-0 group-hover/subitem:bg-(--primary-400)/25 group-hover/subitem:text-(--primary-100) transition-colors">
+                                <div className="size-5 rounded-lg flex items-center justify-center bg-(--primary)/15 border border-(--primary)/30 text-(--primary) shrink-0 group-hover/subitem:bg-(--primary)/25 group-hover/subitem:text-(--primary) transition-colors">
                                   <Icon className="h-3 w-3 flex-none" />
                                 </div>
-                                <span className="text-[11px] font-medium text-(--foreground) group-hover/subitem:text-(--primary-100) transition-colors truncate">
+                                <span className="text-[11px] font-medium text-(--foreground) group-hover/subitem:text-(--primary) transition-colors truncate">
                                   {item.label}
                                 </span>
                               </a>

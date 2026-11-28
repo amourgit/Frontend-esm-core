@@ -53,7 +53,7 @@ export function EventCard({ event, onEventClick, onAddToCalendar, onShare, class
   return (
     <article
       onClick={handleCardClick}
-      className={`group relative flex flex-col w-full bg-transparent border-0 cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-success-400 rounded-2xl transition-all duration-300 ${className}`}
+      className={`group relative flex flex-col w-full bg-transparent border-0 cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-success-500 rounded-2xl transition-all duration-300 ${className}`}
     >
       {/* ── 1. Image Header with Overlaid Date Badge ── */}
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-card/40 select-none">
@@ -80,18 +80,18 @@ export function EventCard({ event, onEventClick, onAddToCalendar, onShare, class
         {/* Top-Right Badges: Online / Status */}
         <div className="absolute top-3 right-3 flex items-center gap-1.5">
           {event.isOnline && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-info-950/80 backdrop-blur-md text-info-300 border border-info-400/30 shadow-md">
-              <Video className="w-3 h-3 text-info-400" />
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-info-500/80 backdrop-blur-md text-info-500 border border-info-500/30 shadow-md">
+              <Video className="w-3 h-3 text-info-500" />
               <span>Hybride</span>
             </span>
           )}
           {event.status === 'limited' && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-warning-950/80 backdrop-blur-md text-warning-300 border border-warning-400/30">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-warning-500/80 backdrop-blur-md text-warning-500 border border-warning-500/30">
               Places limitées
             </span>
           )}
           {event.status === 'full' && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-error-950/80 backdrop-blur-md text-error-300 border border-error-400/30">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-destructive/80 backdrop-blur-md text-destructive border border-destructive/30">
               Complet
             </span>
           )}
@@ -102,7 +102,7 @@ export function EventCard({ event, onEventClick, onAddToCalendar, onShare, class
       <div className="flex flex-col flex-1 pt-3.5 pb-2 text-left">
         {/* Category */}
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-success-400/90 font-mono">
+          <span className="text-xs font-semibold uppercase tracking-wider text-success-500/90 font-mono">
             {event.category}
           </span>
           <AudienceBadge audience={event.audience} />
@@ -115,7 +115,7 @@ export function EventCard({ event, onEventClick, onAddToCalendar, onShare, class
         </div>
 
         {/* Title */}
-        <h3 className="mt-1 text-base sm:text-lg font-bold text-foreground group-hover:text-success-300 transition-colors line-clamp-2 leading-snug">
+        <h3 className="mt-1 text-base sm:text-lg font-bold text-foreground group-hover:text-success-500 transition-colors line-clamp-2 leading-snug">
           {event.title}
         </h3>
 
@@ -128,14 +128,14 @@ export function EventCard({ event, onEventClick, onAddToCalendar, onShare, class
         <div className="mt-3 space-y-1 text-xs text-foreground">
           {/* Date & Time */}
           <div className="flex items-center gap-1.5 text-foreground">
-            <Clock className="w-3.5 h-3.5 text-success-400 shrink-0" />
+            <Clock className="w-3.5 h-3.5 text-success-500 shrink-0" />
             <span className="font-medium">{event.dateLabel}</span>
             {event.endTime && <span className="text-muted-foreground text-[11px]">- {event.endTime}</span>}
           </div>
 
           {/* Location */}
           <div className="flex items-center gap-1.5 text-muted-foreground">
-            <MapPin className="w-3.5 h-3.5 text-error-400 shrink-0" />
+            <MapPin className="w-3.5 h-3.5 text-destructive shrink-0" />
             <span className="truncate">{event.location}</span>
           </div>
         </div>
@@ -151,7 +151,7 @@ export function EventCard({ event, onEventClick, onAddToCalendar, onShare, class
                 className="w-5 h-5 rounded-full object-cover shrink-0 border border-foreground/10"
               />
             ) : (
-              <div className="w-5 h-5 rounded-full bg-success-500/20 text-success-300 flex items-center justify-center text-[10px] font-bold">
+              <div className="w-5 h-5 rounded-full bg-success-500/20 text-success-500 flex items-center justify-center text-[10px] font-bold">
                 {event.organizer.name.charAt(0)}
               </div>
             )}
@@ -177,18 +177,18 @@ export function EventCard({ event, onEventClick, onAddToCalendar, onShare, class
             title={isAdded ? 'Ajouté à votre agenda !' : 'Ajouter à mon calendrier'}
             className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
               isAdded
-                ? 'bg-success-500/20 text-success-300'
+                ? 'bg-success-500/20 text-success-500'
                 : 'text-foreground hover:text-foreground hover:bg-foreground/10'
             }`}
           >
             {isAdded ? (
               <>
-                <Check className="w-4 h-4 text-success-400" />
+                <Check className="w-4 h-4 text-success-500" />
                 <span className="text-[11px]">Ajouté</span>
               </>
             ) : (
               <>
-                <CalendarPlus className="w-4 h-4 text-success-400 group-hover:scale-110 transition-transform" />
+                <CalendarPlus className="w-4 h-4 text-success-500 group-hover:scale-110 transition-transform" />
                 <span className="text-[11px]">Ajouter à l'agenda</span>
               </>
             )}
@@ -202,10 +202,10 @@ export function EventCard({ event, onEventClick, onAddToCalendar, onShare, class
               title="Copier le lien de l'événement"
               className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-colors cursor-pointer"
             >
-              {isCopied ? <Check className="w-3.5 h-3.5 text-success-400" /> : <Share2 className="w-3.5 h-3.5" />}
+              {isCopied ? <Check className="w-3.5 h-3.5 text-success-500" /> : <Share2 className="w-3.5 h-3.5" />}
             </button>
 
-            <span className="inline-flex items-center text-xs font-semibold text-success-400 group-hover:translate-x-0.5 transition-transform ml-1">
+            <span className="inline-flex items-center text-xs font-semibold text-success-500 group-hover:translate-x-0.5 transition-transform ml-1">
               <span>Détails</span>
               <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
             </span>

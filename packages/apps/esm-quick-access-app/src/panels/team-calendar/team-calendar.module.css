@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid color-mix(in oklab, var(--border-subtle, var(--border)) 100%, transparent);
+  border-bottom: 1px solid var(--border);
   padding-bottom: 0.25rem;
 }
 
@@ -42,11 +42,11 @@
 }
 
 .tabActive {
-  color: var(--primary-400);
-  border-bottom-color: var(--primary-400);
+  color: var(--primary);
+  border-bottom-color: var(--primary);
 }
 .tabActive:hover {
-  color: var(--primary-400);
+  color: var(--primary);
 }
 
 .refreshBtn {
@@ -59,7 +59,7 @@
 }
 .refreshBtn:hover {
   color: var(--foreground);
-  background: color-mix(in oklab, var(--foreground) 10%, transparent);
+  background: var(--accent);
 }
 
 .refreshIcon {
@@ -73,13 +73,13 @@
   min-height: 190px;
 }
 .list > * + * {
-  border-top: 1px solid color-mix(in oklab, var(--border-subtle, var(--border)) 100%, transparent);
+  border-top: 1px solid var(--border);
 }
 
 .empty {
   padding: 1rem 0.5rem;
   font-size: 0.8125rem;
-  color: color-mix(in oklab, var(--foreground) 40%, transparent);
+  color: var(--muted-foreground);
   text-align: center;
 }
 
@@ -93,14 +93,14 @@
   transition: background-color 0.15s;
 }
 .eventRow:hover {
-  background: color-mix(in oklab, var(--foreground) 5%, transparent);
+  background: var(--muted);
 }
 
 .dateBlock {
   width: 2.75rem;
   height: 3rem;
   border-radius: 0.5rem;
-  background: color-mix(in oklab, var(--shadow-color) 40%, transparent);
+  background: var(--card);
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -116,7 +116,7 @@
 .dateMonth {
   font-size: 0.625rem;
   font-weight: 600;
-  color: var(--primary-400);
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   line-height: 1;
@@ -151,7 +151,7 @@
   text-overflow: ellipsis;
 }
 .eventRow:hover .eventTitle {
-  color: var(--primary-300);
+  color: var(--primary);
 }
 
 .eventMetaRow {
@@ -172,7 +172,7 @@
 .eventMetaIcon {
   width: 0.75rem;
   height: 0.75rem;
-  color: color-mix(in oklab, var(--primary) 80%, transparent);
+  color: var(--primary);
 }
 
 .eventMetaIconMuted {
@@ -193,7 +193,7 @@
   color: var(--muted-foreground);
 }
 .eventRow:hover .eventCalIcon {
-  color: var(--primary-400);
+  color: var(--primary);
 }
 .eventCalIcon svg {
   width: 1rem;
@@ -207,7 +207,7 @@
   font-size: 0.75rem;
   color: var(--muted-foreground);
   padding-top: 0.5rem;
-  border-top: 1px solid color-mix(in oklab, var(--border-subtle, var(--border)) 100%, transparent);
+  border-top: 1px solid var(--border);
 }
 
 .pageBtn {

@@ -61,7 +61,7 @@ export const configSchema = {
       _type: Type.String,
       _default: DEFAULT_FOOTER_TEXT_COLOR,
       _description:
-        'Couleur des textes du footer (nom, accroche, liens, copyright). Toute couleur CSS valide (ex. « #000000 », « rgb(0, 0, 0) », « navy »). Le fond du footer est toujours blanc.',
+        'Couleur des textes du footer (nom, accroche, liens, copyright). Toute couleur CSS valide (ex. « #000000 », « rgb(0, 0, 0) », « navy »).',
       _validators: [validator(isCssColor, 'Doit être une couleur CSS valide (ex. #000000).')],
     },
   },

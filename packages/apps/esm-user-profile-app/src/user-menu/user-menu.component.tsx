@@ -53,10 +53,10 @@ const UserMenu: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpe
         aria-label={t('userMenuTooltip', 'Mon compte : {{name}}', { name: displayName })}
         title={displayName}
         data-tutorial-target="user-settings"
-        className={`w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full overflow-hidden border shadow-2xs shrink-0 ml-0.5 sm:ml-1 cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-(--primary-400)/30 flex items-center justify-center p-0 focus:outline-none aspect-square bg-linear-to-br from-(--primary-600) to-(--info-500) text-(--primary-foreground) text-[10px] font-bold ${
+        className={`w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full overflow-hidden border shadow-2xs shrink-0 ml-0.5 sm:ml-1 cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-(--primary)/30 flex items-center justify-center p-0 focus:outline-none aspect-square bg-linear-to-br from-(--primary) to-(--info) text-(--primary-foreground) text-[10px] font-bold ${
           open
-            ? 'border-(--primary-400) ring-2 ring-(--primary-400)/30'
-            : 'border-(--foreground)/30 hover:border-(--primary-400)'
+            ? 'border-(--primary) ring-2 ring-(--primary)/30'
+            : 'border-(--foreground)/30 hover:border-(--primary)'
         }`}
       >
         {initial}
@@ -68,9 +68,9 @@ const UserMenu: React.FC<TopBarState> = ({ isActivePanel, togglePanel, searchOpe
           contentClassName="p-2.5"
           header={
             <div className="flex items-center gap-2.5" role="menu" aria-label={t('userMenu', 'Menu utilisateur')}>
-              <div className="relative w-9 h-9 rounded-full flex items-center justify-center shrink-0 bg-linear-to-br from-(--primary-600) to-(--info-500) text-(--primary-foreground) text-sm font-bold border border-(--foreground)/20 shadow-xs">
+              <div className="relative w-9 h-9 rounded-full flex items-center justify-center shrink-0 bg-linear-to-br from-(--primary) to-(--info) text-(--primary-foreground) text-sm font-bold border border-(--foreground)/20 shadow-xs">
                 {initial}
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-(--success-400) ring-1 ring-(--background)" />
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-(--success) ring-1 ring-(--background)" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-(--primary-foreground) text-xs truncate">{displayName}</p>

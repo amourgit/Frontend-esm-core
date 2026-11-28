@@ -51,12 +51,12 @@ export function CollaborateurContactInfoCard({ employee, onEdit, onShowToast }: 
           className="group flex items-center justify-between px-3 py-2 rounded-xl bg-foreground/10 hover:bg-foreground/15 border border-foreground/15 text-xs sm:text-sm text-muted-foreground hover:text-foreground backdrop-blur-md transition-all text-left"
         >
           <div className="flex items-center gap-2 truncate">
-            <Mail className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary-300 shrink-0" />
+            <Mail className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
             <span className="truncate">{email}</span>
           </div>
           <span className="shrink-0 p-1 text-muted-foreground group-hover:text-foreground">
             {copiedKey === 'Email' ? (
-              <Check className="w-3.5 h-3.5 text-success-400" />
+              <Check className="w-3.5 h-3.5 text-success-500" />
             ) : (
               <Copy className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100" />
             )}
@@ -70,12 +70,12 @@ export function CollaborateurContactInfoCard({ employee, onEdit, onShowToast }: 
           className="group flex items-center justify-between px-3 py-2 rounded-xl bg-foreground/10 hover:bg-foreground/15 border border-foreground/15 text-xs sm:text-sm text-muted-foreground hover:text-foreground backdrop-blur-md transition-all text-left"
         >
           <div className="flex items-center gap-2 truncate">
-            <Phone className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary-300 shrink-0" />
+            <Phone className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
             <span className="font-mono text-xs">{phone}</span>
           </div>
           <span className="shrink-0 p-1 text-muted-foreground group-hover:text-foreground">
             {copiedKey === 'Téléphone' ? (
-              <Check className="w-3.5 h-3.5 text-success-400" />
+              <Check className="w-3.5 h-3.5 text-success-500" />
             ) : (
               <Copy className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100" />
             )}

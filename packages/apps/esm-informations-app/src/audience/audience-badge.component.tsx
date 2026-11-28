@@ -7,17 +7,17 @@ const META: Record<Audience, { label: string; icon: React.ReactNode; className: 
   interne: {
     label: 'Interne',
     icon: <Lock className="w-3 h-3" />,
-    className: 'bg-info-500/15 text-info-200 border-info-400/30',
+    className: 'bg-info-500/15 text-info-500 border-info-500/30',
   },
   extranet: {
     label: 'Extranet',
     icon: <Handshake className="w-3 h-3" />,
-    className: 'bg-secondary-500/15 text-secondary-200 border-secondary-400/30',
+    className: 'bg-secondary/15 text-secondary border-secondary/30',
   },
   public: {
     label: 'Public',
     icon: <Globe className="w-3 h-3" />,
-    className: 'bg-success-500/15 text-success-200 border-success-400/30',
+    className: 'bg-success-500/15 text-success-500 border-success-500/30',
   },
 };
 

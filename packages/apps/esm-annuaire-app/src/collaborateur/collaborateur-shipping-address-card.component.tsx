@@ -86,7 +86,7 @@ export function CollaborateurShippingAddressCard({
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
           <div className="relative flex items-center justify-center">
             <span className="w-7 h-7 rounded-full bg-warning-500/30 animate-ping absolute" />
-            <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-warning-500 to-warning-300 flex items-center justify-center text-primary-foreground shadow-lg border border-foreground/40 z-10">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-warning-500 to-warning-500 flex items-center justify-center text-primary-foreground shadow-lg border border-foreground/40 z-10">
               <MapPin className="w-3.5 h-3.5 fill-current" />
             </div>
           </div>
@@ -111,7 +111,7 @@ export function CollaborateurShippingAddressCard({
         <button
           type="button"
           onClick={handleViewMap}
-          className="text-xs text-warning-400 hover:text-warning-300 font-semibold underline underline-offset-2 shrink-0 transition-colors"
+          className="text-xs text-warning-500 hover:text-warning-500 font-semibold underline underline-offset-2 shrink-0 transition-colors"
         >
           View on Map
         </button>

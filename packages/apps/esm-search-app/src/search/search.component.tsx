@@ -59,7 +59,7 @@ const Search: React.FC<SearchProps> = ({ searchOpen, setSearchOpen, closePanels,
             setQuery('');
             setOpen(false);
           }}
-          className="text-xs text-(--primary-300) hover:text-(--foreground) font-semibold px-3.5 py-1.5 rounded-full backdrop-blur-md bg-(--foreground)/8 hover:bg-(--foreground)/16 border border-(--border) hover:border-(--primary-400)/40 shadow-(--shadow-sm) transition-all cursor-pointer shrink-0 whitespace-nowrap active:scale-95"
+          className="text-xs text-(--primary) hover:text-(--foreground) font-semibold px-3.5 py-1.5 rounded-full backdrop-blur-md bg-(--foreground)/8 hover:bg-(--foreground)/16 border border-(--border) hover:border-(--primary)/40 shadow-(--shadow-sm) transition-all cursor-pointer shrink-0 whitespace-nowrap active:scale-95"
           title={t('cancelSearch', 'Annuler la recherche')}
         >
           {t('cancel', 'Annuler')}

@@ -22,13 +22,13 @@ import backdropStyles from './side-panel-backdrop.module.css';
 // =============================================================================
 
 /** Couleur du bouton, calée sur le texte des options de la TopBar (foreground). */
-const TOGGLE_COLOR = 'var(--foreground, #f1f5f9)';
+const TOGGLE_COLOR = 'var(--foreground)';
 
 /**
  * Couches de couleur qui s'animent derrière le panneau à l'ouverture, avant que le panneau blanc n'apparaisse.
  * Mêmes teintes que la vitrine des composants (esm-home-app) : sans `colors`, le panneau s'ouvre sans l'animation.
  */
-const PANEL_LAYER_COLORS = ['var(--secondary-300)', 'var(--primary-600)'];
+const PANEL_LAYER_COLORS = ['var(--secondary)', 'var(--primary)'];
 
 /** Bouton de fermeture, dans le coin haut-droite du panneau, au-dessus de lui. */
 function PanelCloseButton({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -104,7 +104,7 @@ export function SidePanel({ className, searchOpen, isDesktop }: SidePanelProps) 
             onClose={close}
             position="right"
             colors={PANEL_LAYER_COLORS}
-            accentColor="var(--primary-600)"
+            accentColor="var(--primary)"
             closeOnClickAway
             showCloseButton={false}
           />

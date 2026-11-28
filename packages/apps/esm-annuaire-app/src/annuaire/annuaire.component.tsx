@@ -567,7 +567,7 @@ function SitePill({ active, onClick, reduceMotion, children }: SitePillProps) {
       onClick={onClick}
       aria-pressed={active}
       whileTap={reduceMotion ? undefined : { scale: 0.95 }}
-      className={`relative shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60 ${
+      className={`relative shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
         active
           ? 'border-transparent font-bold text-primary-foreground'
           : 'border-foreground/10 bg-foreground/5 text-foreground hover:bg-foreground/10'
@@ -576,7 +576,7 @@ function SitePill({ active, onClick, reduceMotion, children }: SitePillProps) {
       {active && (
         <motion.span
           layoutId="directory-site-pill"
-          className="absolute inset-0 rounded-full bg-primary-500 shadow-md shadow-primary-500/20"
+          className="absolute inset-0 rounded-full bg-primary shadow-md shadow-primary/20"
           transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 460, damping: 34 }}
         />
       )}
@@ -1072,7 +1072,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
         };
 
   const toolBtn =
-    'shrink-0 rounded-lg p-2 sm:p-1.5 transition-colors active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60';
+    'shrink-0 rounded-lg p-2 sm:p-1.5 transition-colors active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60';
 
   return (
     <div
@@ -1115,7 +1115,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
               {/* Côté Gauche : Champ de recherche compact + bouton Filtres (mobile) */}
               <div className="flex items-center gap-2 w-full sm:w-auto min-w-0">
                 <div className="relative group w-full sm:w-64 md:w-80 lg:w-96 max-w-md shrink-0">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground group-focus-within:text-primary-400 transition-colors">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground group-focus-within:text-primary transition-colors">
                     <Search className="w-3.5 h-3.5" />
                   </div>
                   <input
@@ -1127,7 +1127,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     }}
                     aria-label={t.searchAria}
                     placeholder={t.searchPlaceholder}
-                    className="w-full pl-9 pr-9 py-1.5 sm:py-2 rounded-full bg-card/60 hover:bg-card/80 focus:bg-card/90 border border-foreground/15 focus:border-primary-400/80 text-foreground placeholder-muted-foreground text-xs sm:text-sm shadow-md focus:outline-none focus:ring-2 focus:ring-primary-400/20 backdrop-blur-md transition-all truncate"
+                    className="w-full pl-9 pr-9 py-1.5 sm:py-2 rounded-full bg-card/60 hover:bg-card/80 focus:bg-card/90 border border-foreground/15 focus:border-primary/80 text-foreground placeholder-muted-foreground text-xs sm:text-sm shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20 backdrop-blur-md transition-all truncate"
                   />
                   <AnimatePresence>
                     {searchQuery && (
@@ -1161,16 +1161,16 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                   }}
                   aria-expanded={showFilters}
                   aria-controls="directory-filterbar"
-                  className={`md:hidden shrink-0 flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60 ${
+                  className={`md:hidden shrink-0 flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
                     showFilters || filters.length > 0
-                      ? 'border-primary-400/60 bg-primary-500/20 text-primary-200'
+                      ? 'border-primary/60 bg-primary/20 text-primary'
                       : 'border-foreground/15 bg-card/60 text-foreground'
                   }`}
                 >
                   <SlidersHorizontal className="w-3.5 h-3.5" />
                   <span>{t.filtersBtn}</span>
                   {filters.length > 0 && (
-                    <span className="min-w-[1.1rem] rounded-full bg-primary-500 px-1 text-center text-[10px] font-black leading-[1.1rem] text-primary-foreground">
+                    <span className="min-w-[1.1rem] rounded-full bg-primary px-1 text-center text-[10px] font-black leading-[1.1rem] text-primary-foreground">
                       {filters.length}
                     </span>
                   )}
@@ -1185,7 +1185,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.2 }}
                   aria-live="polite"
-                  className="shrink-0 text-xs font-mono font-bold text-primary-300 bg-primary-500/10 px-2.5 py-1 rounded-lg border border-primary-500/20"
+                  className="shrink-0 text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-lg border border-primary/20"
                 >
                   {filteredEmployees.length} / {employees.length}
                 </motion.span>
@@ -1225,7 +1225,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                 <button
                   type="button"
                   onClick={handleExportCSV}
-                  className={`${toolBtn} text-muted-foreground hover:text-success-400 hover:bg-success-500/10`}
+                  className={`${toolBtn} text-muted-foreground hover:text-success-500 hover:bg-success-500/10`}
                   title={t.exportCsv}
                   aria-label={t.exportCsv}
                 >
@@ -1235,7 +1235,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                 <button
                   type="button"
                   onClick={handleResetFilters}
-                  className={`${toolBtn} text-muted-foreground hover:text-error-400 hover:bg-error-500/10`}
+                  className={`${toolBtn} text-muted-foreground hover:text-destructive hover:bg-destructive/10`}
                   title={t.resetFilters}
                   aria-label={t.resetFilters}
                 >
@@ -1253,7 +1253,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     aria-pressed={viewMode === 'grid'}
                     className={`rounded p-1.5 sm:p-1 transition-colors ${
                       viewMode === 'grid'
-                        ? 'bg-primary-500 text-primary-foreground font-bold shadow-sm'
+                        ? 'bg-primary text-primary-foreground font-bold shadow-sm'
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
                     title={t.viewGrid}
@@ -1270,7 +1270,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     aria-pressed={viewMode === 'list'}
                     className={`rounded p-1.5 sm:p-1 transition-colors ${
                       viewMode === 'list'
-                        ? 'bg-primary-500 text-primary-foreground font-bold shadow-sm'
+                        ? 'bg-primary text-primary-foreground font-bold shadow-sm'
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
                     title={t.viewList}
@@ -1287,7 +1287,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     aria-pressed={viewMode === 'expand'}
                     className={`rounded p-1.5 sm:p-1 transition-colors ${
                       viewMode === 'expand'
-                        ? 'bg-primary-500 text-primary-foreground font-bold shadow-sm'
+                        ? 'bg-primary text-primary-foreground font-bold shadow-sm'
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
                     title={t.viewExpand}
@@ -1321,7 +1321,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
 
             {/* Ligne 4 : Pilules rapides par Site (Location) */}
             <div className="w-full min-w-0 flex items-center gap-2">
-              <div className="flex shrink-0 items-center gap-1 px-2.5 py-1 rounded-lg bg-foreground/5 border border-foreground/10 text-[11px] font-bold text-primary-400 backdrop-blur-md">
+              <div className="flex shrink-0 items-center gap-1 px-2.5 py-1 rounded-lg bg-foreground/5 border border-foreground/10 text-[11px] font-bold text-primary backdrop-blur-md">
                 <MapPin className="w-3 h-3" />
                 <span className="hidden sm:inline">{t.sitesLabel}</span>
               </div>
@@ -1358,7 +1358,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                         setSelectedSitePill(site.id);
                       }}
                     >
-                      <MapPin className={`w-3 h-3 ${isSelected ? 'text-primary-foreground' : 'text-primary-400'}`} />
+                      <MapPin className={`w-3 h-3 ${isSelected ? 'text-primary-foreground' : 'text-primary'}`} />
                       <span>{site.name}</span>
                       <span
                         className={`text-[10px] px-1.5 py-px rounded-full font-bold ${
@@ -1401,7 +1401,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     <button
                       type="button"
                       onClick={handleResetFilters}
-                      className="px-4 py-2 rounded-xl text-xs font-semibold bg-primary-500 hover:bg-primary-400 text-primary-foreground flex items-center gap-2 shadow-lg transition-all active:scale-95"
+                      className="px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 shadow-lg transition-all active:scale-95"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>{t.emptyReset}</span>
@@ -1488,7 +1488,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                         // Re-cliquer sur la lettre active revient à « Tous »
                         setSelectedLetter((prev) => (prev === letter && !isAll ? 'All' : letter));
                       }}
-                      className={`relative flex w-full flex-1 min-h-[22px] max-h-[30px] items-center justify-center rounded-lg font-bold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60 ${
+                      className={`relative flex w-full flex-1 min-h-[22px] max-h-[30px] items-center justify-center rounded-lg font-bold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
                         isAll ? 'text-[9px] tracking-tight' : 'text-[10px] sm:text-[11px]'
                       } ${
                         isSelected
@@ -1502,7 +1502,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                       {isSelected && (
                         <motion.span
                           layoutId="directory-letter-active"
-                          className="absolute inset-0 rounded-lg bg-primary-500 shadow-md shadow-primary-500/40 ring-1 ring-foreground/30"
+                          className="absolute inset-0 rounded-lg bg-primary shadow-md shadow-primary/40 ring-1 ring-foreground/30"
                           transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 500, damping: 36 }}
                         />
                       )}
@@ -1530,7 +1530,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
               >
                 <div className="min-w-0">
                   <h2 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2">
-                    <Network className="w-5 h-5 shrink-0 text-secondary-400" />
+                    <Network className="w-5 h-5 shrink-0 text-secondary" />
                     <span className="truncate">{t.orgTitle}</span>
                   </h2>
                   <p className="text-xs text-muted-foreground mt-0.5">{t.orgSubtitle}</p>
@@ -1546,7 +1546,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                     transition={{ duration: 0.3, delay: 0.05 }}
                     className="p-4 rounded-2xl bg-card/80 border border-foreground/15 text-foreground shadow-xl text-center max-w-sm w-full backdrop-blur-md"
                   >
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-primary-400">{t.orgTop}</span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-primary">{t.orgTop}</span>
                     <h4 className="font-bold text-sm mt-0.5">{t.orgDG}</h4>
                     <p className="text-xs text-muted-foreground">{t.orgDGSub}</p>
                   </motion.div>
@@ -1572,7 +1572,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                         className="min-w-0 p-4 rounded-2xl bg-card/60 border border-foreground/10 shadow-lg flex flex-col justify-between backdrop-blur-md"
                       >
                         <div>
-                          <div className="flex items-center gap-1.5 text-primary-400 mb-1">
+                          <div className="flex items-center gap-1.5 text-primary mb-1">
                             <MapPin className="w-3.5 h-3.5 shrink-0" />
                             <span className="text-[11px] font-bold uppercase truncate">{site.name}</span>
                           </div>
@@ -1584,7 +1584,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                               type="button"
                               key={m.id}
                               onClick={() => openEmployee(m, false)}
-                              className="flex w-full items-center gap-2 rounded-lg px-1 py-1 text-left text-xs text-foreground transition-colors hover:text-primary-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60"
+                              className="flex w-full items-center gap-2 rounded-lg px-1 py-1 text-left text-xs text-foreground transition-colors hover:text-primary hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
                             >
                               <img
                                 src={m.avatar}
@@ -1600,7 +1600,7 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
                             <button
                               type="button"
                               onClick={() => goToSite(site)}
-                              className="mt-1 flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1 text-left text-xs font-semibold text-primary-400 transition-colors hover:text-primary-300 hover:bg-primary-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60"
+                              className="mt-1 flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1 text-left text-xs font-semibold text-primary transition-colors hover:text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
                             >
                               <span className="truncate">{t.orgViewAll(members.length)}</span>
                               <ArrowRight className="w-3.5 h-3.5 shrink-0" />
@@ -1629,12 +1629,12 @@ export function AnnuairePage({ onShowNotification, employees: employeesProp, onR
               className="w-full max-w-3xl pt-2 pb-8 space-y-4"
             >
               <h2 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2">
-                <Info className="w-5 h-5 shrink-0 text-primary-400" />
+                <Info className="w-5 h-5 shrink-0 text-primary" />
                 <span>{t.aboutTitle}</span>
               </h2>
               <div className="space-y-3 text-xs sm:text-sm text-foreground leading-relaxed">
                 <p>{t.aboutP1}</p>
-                <div className="p-4 rounded-2xl bg-primary-500/10 border border-primary-500/30 text-primary-200">
+                <div className="p-4 rounded-2xl bg-primary/10 border border-primary/30 text-primary">
                   <h4 className="font-bold text-sm mb-1 text-foreground">{t.aboutSyncTitle}</h4>
                   <p>{t.aboutSyncText}</p>
                 </div>

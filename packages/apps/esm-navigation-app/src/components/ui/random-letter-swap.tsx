@@ -110,7 +110,7 @@ export function RandomLetterSwap({
           );
         })}
       </span>
-      {isActive && <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-(--success-400)/80 rounded-full" />}
+      {isActive && <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-(--success)/80 rounded-full" />}
     </div>
   );
 }

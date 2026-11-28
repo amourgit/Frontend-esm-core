@@ -48,9 +48,9 @@ export function CollaborateurRatingOverview({
                     <Star
                       className={`w-4 h-4 sm:w-5 sm:h-5 ${
                         filled
-                          ? 'fill-warning-400 text-warning-400'
+                          ? 'fill-warning-500 text-warning-500'
                           : isPartial
-                            ? 'fill-warning-400/60 text-warning-400'
+                            ? 'fill-warning-500/60 text-warning-500'
                             : 'fill-foreground/10 text-foreground/20'
                       }`}
                     />

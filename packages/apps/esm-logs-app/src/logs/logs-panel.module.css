@@ -1,13 +1,13 @@
 .panel,
 .tools {
-  --logs-error: var(--destructive-400, var(--destructive));
-  --logs-warn: var(--warning-400, var(--warning));
-  --logs-success: var(--success-400, var(--success));
-  --logs-info: var(--info-400, var(--info));
+  --logs-error: var(--destructive);
+  --logs-warn: var(--warning);
+  --logs-success: var(--success);
+  --logs-info: var(--info);
   --logs-debug: var(--muted-foreground);
   --logs-fg: var(--foreground);
   --logs-muted: var(--muted-foreground);
-  --logs-line: rgb(148 163 184 / 18%);
+  --logs-line: var(--border);
   color: var(--logs-fg);
   font-size: 0.75rem;
 }
@@ -156,7 +156,7 @@
     color 150ms ease;
 }
 .iconButton:hover {
-  background: color-mix(in oklab, var(--muted-foreground) 14%, transparent);
+  background: var(--muted);
   color: var(--logs-fg);
 }
 .iconButton[aria-pressed='true'] {
@@ -194,7 +194,7 @@
   border-left-color: var(--row-color);
 }
 .row:hover {
-  background: color-mix(in oklab, var(--muted-foreground) 8%, transparent);
+  background: var(--muted);
 }
 .row[data-level='error'] {
   --row-color: var(--logs-error);
@@ -290,7 +290,7 @@
 
 .connection[data-state='live']::before {
   background: var(--logs-success);
-  box-shadow: 0 0 0 0 color-mix(in oklab, var(--success-400, var(--success)) 60%, transparent);
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--success) 60%, transparent);
   animation: logs-pulse 2s ease-out infinite;
 }
 
@@ -309,10 +309,10 @@
 
 @keyframes logs-pulse {
   70% {
-    box-shadow: 0 0 0 0.375rem color-mix(in oklab, var(--success-400, var(--success)) 0%, transparent);
+    box-shadow: 0 0 0 0.375rem color-mix(in oklab, var(--success) 0%, transparent);
   }
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--success-400, var(--success)) 0%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--success) 0%, transparent);
   }
 }
 @media (prefers-reduced-motion: reduce) {

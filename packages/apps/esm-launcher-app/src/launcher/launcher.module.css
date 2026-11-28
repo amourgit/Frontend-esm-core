@@ -22,7 +22,7 @@
   transition: background-color 150ms;
 }
 .gridItem:hover {
-  background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  background: var(--muted);
 }
 
 .gridItemIcon {
@@ -30,7 +30,7 @@
   height: 32px;
   border-radius: 0.75rem;
   background: color-mix(in oklab, var(--primary) 16%, transparent);
-  color: var(--primary-300);
+  color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
